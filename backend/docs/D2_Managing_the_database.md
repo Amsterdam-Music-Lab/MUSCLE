@@ -31,4 +31,14 @@ Restart the backend container: (or alternatively rebuilt the containers as desci
 
 `docker start aml-experiments_server_1`
 
-[>Next](https://github.com/Amsterdam-Music-Lab/aml-experiments/wiki/6.-Debugging)
+### Backup the database to your local file system
+
+`docker compose exec db pg_dump aml -Fc > db_backup.dump`
+
+### Restore the database from your local filesystem
+
+`docker compose exec db dropdb aml`
+
+`docker compose exec db createdb aml`
+
+`docker compose exec -T db pg_restore -d aml < db_backup.dump`
