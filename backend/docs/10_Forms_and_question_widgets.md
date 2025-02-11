@@ -2,14 +2,14 @@
 
 As mentioned before, a `Trial` may contain a `Form`, which present one or more questions to the user. We have a choice of multiple question widgets:
 
-- [Autocomplete](https://amsterdam-music-lab.github.io/MUSCLE/?path=/story/question--autocomplete)  
-- [ButtonArray](https://amsterdam-music-lab.github.io/MUSCLE/?path=/story/question--button-array)  
-- [Checkboxes](https://amsterdam-music-lab.github.io/MUSCLE/?path=/story/question--checkboxes)  
-- [Dropdown](https://amsterdam-music-lab.github.io/MUSCLE/?path=/story/question--dropdown)  
-- [Radios](https://amsterdam-music-lab.github.io/MUSCLE/?path=/story/question--radios)  
-- [TextRange](https://amsterdam-music-lab.github.io/MUSCLE/?path=/story/question--text-range)  
-- [IconRange](https://amsterdam-music-lab.github.io/MUSCLE/?path=/story/question--icon-range)  
-- [String](https://amsterdam-music-lab.github.io/MUSCLE/?path=/story/question--default)  
+- [Autocomplete](https://amsterdam-music-lab.github.io/MUSCLE/storybook/?path=/story/question-question--autocomplete)
+- [ButtonArray](https://amsterdam-music-lab.github.io/MUSCLE/storybook/?path=/story/question-buttonarray--default)
+- [Checkboxes](https://amsterdam-music-lab.github.io/MUSCLE/storybook/?path=/story/question-question--checkboxes)
+- [Dropdown](https://amsterdam-music-lab.github.io/MUSCLE/storybook/?path=/story/question-question--dropdown)
+- [Radios](https://amsterdam-music-lab.github.io/MUSCLE/storybook/?path=/story/question-question--radios)
+- [TextRange](https://amsterdam-music-lab.github.io/MUSCLE/storybook/?path=/story/question-question--text-range)
+- [IconRange](https://amsterdam-music-lab.github.io/MUSCLE/storybook/?path=/story/question-question--icon-range)
+- [String](https://amsterdam-music-lab.github.io/MUSCLE/storybook/?path=/story/question-question--default)
 
 ## Initializing a Question
 An example of how a question is initialized in the Python backend:

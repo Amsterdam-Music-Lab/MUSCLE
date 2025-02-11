@@ -3,7 +3,7 @@
 After starting the containers through Docker, you can access Django's admin interface. This is used to create and change playlists, and to set up experiments.
 
 Navigate to <a href="http://localhost:8000/admin" target="_blank">localhost:8000/admin</a> to see the admin interface.
-<img width="941" alt="admin" src="https://github.com/Amsterdam-Music-Lab/MUSCLE/assets/11174072/40aff96c-a336-400b-8a47-4ce04d621a77">
+<img alt="admin" src="../assets/images/AdminLogin.png">
 
 Log in:
 - username: admin
