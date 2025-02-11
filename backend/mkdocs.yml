@@ -87,14 +87,15 @@ nav:
       - Question utils: 'question_utils.md'
       - Experiment actions: 'experiment_actions.md'
   - Developer documentation:
-    - 1. Compile and watch scss files: 'D1_Compile_and_watch_scss_files.md'
-    - 2. Managing the database: 'D2_Managing_the_database.md'
-    - 3. Debugging: 'D3_Debugging.md'
-    - 4. Installing python packages: 'D4_Installing_python_packages.md'
-    - 5. Management commands: 'D5_Management_commands.md'
-    - 6. Running tests: 'D6_Running_tests.md'
-    - 7. Storybook: 'D7_Storybook.md'
-    - 8. Troubleshooting: 'D8_Troubleshooting.md'
+    - 1. Running commands in the docker containers: 'D1_Running_commands_in_the_docker_containers.md'
+    - 2. Compile and watch scss files: 'D2_Compile_and_watch_scss_files.md'
+    - 3. Managing the database: 'D3_Managing_the_database.md'
+    - 4. Debugging: 'D4_Debugging.md'
+    - 5. Installing python packages: 'D5_Installing_python_packages.md'
+    - 6. Management commands: 'D6_Management_commands.md'
+    - 7. Running tests: 'D7_Running_tests.md'
+    - 8. Storybook: 'D8_Storybook.md'
+    - 9. Troubleshooting: 'D9_Troubleshooting.md'
   - Technical documentation:
     - Experiment app:
       - Experiment admin: 'experiment_admin.md'

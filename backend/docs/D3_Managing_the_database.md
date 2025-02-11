@@ -2,7 +2,8 @@
 
 The Docker infrastructure runs a PostgreSQL container. We can create backups of the database within this container, as well as restore the database.
 
-### Backup the PostgreSQL database
+## Backup the PostgreSQL database
+
 Run the following command in the console to back up the database:
 
 `docker-compose run --rm db bash -c "pg_dump aml -Fc > /backups/<filename>.dump"`
@@ -13,7 +14,7 @@ Use this command to make daily backups, numbered by the day of the month:
 
 The backups are stored on the docker volume `db_backup` which mirrors `/backups` from the Postgresql container.
 
-### Restore the postgreSQL database
+## Restore the postgreSQL database
 
 Always stop the backend container first:
 
@@ -31,11 +32,11 @@ Restart the backend container: (or alternatively rebuilt the containers as desci
 
 `docker start aml-experiments_server_1`
 
-### Backup the database to your local file system
+## Backup the database to your local file system
 
 `docker compose exec db pg_dump aml -Fc > db_backup.dump`
 
-### Restore the database from your local filesystem
+## Restore the database from your local filesystem
 
 `docker compose exec db dropdb aml`
 
