@@ -27,7 +27,7 @@ docker compose run --rm client yarn test
 To run the backend tests, run the following command:
 
 ```sh
-docker-compose run --rm server bash -c "python manage.py test"
+docker compose run --rm server python manage.py test
 
 # or use the script
 ./scripts/test-backend
