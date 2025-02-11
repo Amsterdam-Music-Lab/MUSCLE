@@ -100,7 +100,7 @@
     "msw-storybook-addon": "^2.0.4",
     "prop-types": "15.8.1",
     "storybook": "^8.6.0-alpha.1",
-    "vitest": "^2.1.4"
+    "vitest": "^2.1.9"
   },
   "msw": {
     "workerDirectory": [

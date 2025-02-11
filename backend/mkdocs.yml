@@ -62,11 +62,12 @@ nav:
     - 4. Creating playlists: '04_Creating_playlists.md'
     - 5. Creating an experiment: '05_Creating_an_experiment.md'
     - 6. Custom questions: '06_Custom_questions.md'
-    - 7. Actions overview: '07_Actions_overview.md'
-    - 8. Forms and question widgets: '08_Forms_and_question_widgets.md'
-    - 9. Playback and player widgets: '09_Playback_and_player_widgets.md'
-    - 10. Create a custom ruleset: '10_Create_custom_ruleset.md'
-    - 11. Exporting result data: '11_Exporting_result_data.md'
+    - 7. Customizing the look of an experiment: '07_Custom_theme.md'
+    - 8. Exporting result data: '08_Exporting_result_data.md'
+    - 9. Actions overview: '09_Actions_overview.md'
+    - 10. Forms and question widgets: '10_Forms_and_question_widgets.md'
+    - 11. Playback and player widgets: '11_Playback_and_player_widgets.md'
+    - 12. Create a custom ruleset: '12_Create_custom_ruleset.md'
   - Preview frontend components:
       - 'Storybook': 'https://amsterdam-music-lab.github.io/MUSCLE/storybook'
   - Ruleset documentation:

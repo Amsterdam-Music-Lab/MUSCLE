@@ -92,3 +92,12 @@ class FinalTest(TestCase):
         serialized = final.action()
         self.assertIn("percentile", serialized)
         self.assertIn("rank", serialized)
+
+    def test_wrap_final_text(self):
+        final = Final(self.session)
+        final.final_text = 'plain text'
+        serialized = final.action()
+        self.assertEqual(serialized.get('final_text'), '<center>plain text</center>')
+        final.final_text = '<p>wrapped text</p>'
+        serialized = final.action()
+        self.assertEqual(serialized.get('final_text'), final.final_text)

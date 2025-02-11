@@ -1,5 +1,7 @@
-from django.utils.translation import gettext_lazy as _
+import re
 from typing import Optional, Dict, TypedDict
+
+from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.types import FeedbackInfo
 from experiment.serializers import serialize_social_media_config, SocialMediaConfigConfiguration
@@ -143,7 +145,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
             "score": self.total_score,
             "percentile": self.percentile,
             "rank": self.rank,
-            "final_text": self.final_text,
+            "final_text": self.wrap_plain_final_text(),
             "button": self.button,
             "points": self.points,
             "action_texts": {
@@ -160,9 +162,6 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
             "logo": self.logo,
         }
 
-        if self.percentile is None:
-            response.pop("rank")
-
         return response
 
     def get_social_media_config(self, session: Session) -> Optional[SocialMediaConfigConfiguration]:
@@ -170,3 +169,12 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         if hasattr(experiment, "social_media_config") and experiment.social_media_config:
             return serialize_social_media_config(experiment.social_media_config, session.total_score())
         return None
+
+    def wrap_plain_final_text(self):
+        '''check if `final_text` starts with a html tag
+        If not, wrap it in a `<center>` element for better alignment
+        '''
+        tag_pattern = re.compile('<[a-z]*>')
+        if self.final_text and not re.match(tag_pattern, str(self.final_text)):
+            return f'<center>{self.final_text}</center>'
+        return self.final_text

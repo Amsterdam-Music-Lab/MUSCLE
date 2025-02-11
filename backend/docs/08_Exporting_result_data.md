@@ -4,7 +4,9 @@
 
 Using the admin interface you can export all relevant result data from the sessions of a specific block of an experiment.
 
-To do so, navigate to [localhost:8000/admin/experiment/block](http://localhost:8000/admin/experiment/block) and click the `Export JSON` button next to the block that you want to export.
+To do so, navigate to [localhost:8000/admin/experiment/](http://localhost:8000/admin/experiment/) and click the `Experimenter Dashboard` button next to the experiment for which you want to export data.
+
+Then, click "Export JSON" in the "Export Results" column.
 
 After downloading and extracting the zip file you will have 7 JSON files containing the raw data as it is stored in the database by Django :
 
@@ -377,3 +379,13 @@ You will be presented with a screen that lets you choose the fields that you wan
 ## The database structure
 [![muscle_db_visualized](https://github.com/user-attachments/assets/f0d97029-ec49-4bcc-8c84-8ed35b0937c0)](https://github.com/user-attachments/assets/f0d97029-ec49-4bcc-8c84-8ed35b0937c0)
 [*click to open the image to enable zoom functionality*](https://github.com/user-attachments/assets/f0d97029-ec49-4bcc-8c84-8ed35b0937c0)
+
+## Note on Timestamps
+
+All timestamps in JSON exports are in UTC time. This ensures consistency across different systems and time zones. Please also note that the timezone for this application is configurable via the `AML_TIME_ZONE` environment variable and defaults to "Europe/Amsterdam". To use a different timezone, update the `AML_TIME_ZONE` variable in your environment or in the .env file.
+
+Look for the following lines in the base_settings.py file in the backend/aml directory:
+```python
+USE_TZ = True
+TIME_ZONE = os.getenv("AML_TIME_ZONE", "Europe/Amsterdam")
+```
