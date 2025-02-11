@@ -90,8 +90,9 @@ def song_sync_recognition_score(result: Result, data: ScoringData) -> float:
         return math.ceil(timeout - time)
 
 
-def song_sync_continuation_score(result: Result, data: dict):
-    """Second step of the SongSync scoring, only happens if recognition score was nonzero.
+def song_sync_verification_score(result: Result, data: dict):
+    """Second step of the SongSync scoring, only happens if participant stated they know the song,
+    used to verify that the statement was truthful.
     After continuation of audio, participants need to decide whether it was continued in the correct place.
     If answered incorrectly, this function modifies the reaction time score of the previous step.
     """
@@ -111,6 +112,6 @@ SCORING_RULES = {
     'REVERSE_LIKERT': reverse_likert_score,
     'REACTION_TIME': reaction_time_score,
     'SONG_SYNC_RECOGNITION': song_sync_recognition_score,
-    'SONG_SYNC_CONTINUATION': song_sync_continuation_score,
+    'SONG_SYNC_VERIFICATION': song_sync_verification_score,
     'CATEGORIES_TO_LIKERT': categories_likert_score,
 }

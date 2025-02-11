@@ -112,7 +112,7 @@ class ScoreTest(TestCase):
             question_key='correct_place',
             session=self.session,
             section=self.section,
-            scoring_rule='SONG_SYNC_CONTINUATION',
+            scoring_rule='SONG_SYNC_VERIFICATION',
             expected_response='yes',
         )
         view = {
