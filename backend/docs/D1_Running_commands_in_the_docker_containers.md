@@ -8,7 +8,7 @@ To run a command in the server container you can use:
 
 `docker compose run server --rm <command>`
 
-To run a command in the postgresql container use:
+To run a command in the postgresql container you can use:
 
 `docker compose run db --rm <command>`
 
