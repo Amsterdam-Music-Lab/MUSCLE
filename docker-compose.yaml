@@ -1,7 +1,7 @@
 # Docker-compose definition for development
 services:
   db:
-    image: postgres:14
+    image: postgres:16
     environment:
       - POSTGRES_DB=${SQL_DATABASE}
       - POSTGRES_USER=${SQL_USER}
