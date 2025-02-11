@@ -4,9 +4,9 @@ One you've setup your experiment in the admin interface, you can run it by navig
 
 `localhost:3000/{your_experiment_slug}`
 
-This will set a cookie for the participant, which expires in 3 months. After that period, if the same participant starts another experiment, or another block in the same experiment, a new participant will be created in the database, making it impossible to link those results to the same participant.
-
 ## Running an experiment using a participant_id
+
+This will set a cookie for the participant, which expires in 3 months. After that period, if the same participant starts another experiment, or another block in the same experiment, a new participant will be created in the database, making it impossible to link those results to the same participant.
 
 To overcome this you can start an experiment with a `participant_id` in the URL. This can be any combination of letters and/or numbers.
 
