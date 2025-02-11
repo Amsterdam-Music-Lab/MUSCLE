@@ -37,7 +37,7 @@ To run a command in the postgresql container use:
 - CLick the 3 dots in the `actions` column of the container
 - Click `open in terminal`
 
-Now you can run your commands directly in terminal of the container.
+Now you can run your commands directly in the terminal of the container.
 
 ## Attach VScode to a container to run commands
 
