@@ -45,6 +45,14 @@ for group, questions in QUESTION_GROUPS_DEFAULT.items():
 
 
 def get_questions_from_series(questionseries_set):
+    """ Get Questions from a QuerySet of QuestionSeries
+
+    Args:
+        questionseries_set: QuerySet of QuestionSeries
+
+    Returns:
+        List of experiment.actions.form.Question objects
+    """
 
     keys_all = []
 
@@ -58,7 +66,16 @@ def get_questions_from_series(questionseries_set):
 
 
 def create_default_questions(question_model=Question, choice_model=Choice, question_group_model=QuestionGroup):
-    """Creates default questions and question groups in the database"""
+    """Creates default questions and question groups in the database. Can be used with historical models.
+
+    Args:
+        question_model: Question model
+        choice_model: Choice model
+        question_group_model: QuestionGroup model
+
+    Returns:
+        None
+    """
 
     for group_key, questions in QUESTION_GROUPS_DEFAULT.items():
 
@@ -132,6 +149,15 @@ def create_default_questions(question_model=Question, choice_model=Choice, quest
 
 
 def populate_translation_fields(lang, question_model=Question):
+    """ Populates django-modeltraslation model fields from translations in .po files.
+
+    Args:
+        lang (str): Language code
+        question_model: Question model. Can be used with historical models
+
+    Returns:
+        None
+    """
 
     lang_field = lang.replace("-","_")
 
@@ -163,7 +189,14 @@ def populate_translation_fields(lang, question_model=Question):
 
 
 def create_question_db(key):
-    """ Creates form.question object from a Question in the database with key"""
+    """ Creates experiment.actions.form.question object from a Question in the database with key
+
+    Args:
+        key: Key of Question
+
+    Retuns:
+        experiment.actions.form.Question object
+    """
 
     question = Question.objects.get(key=key)
 
