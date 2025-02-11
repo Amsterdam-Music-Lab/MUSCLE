@@ -68,6 +68,7 @@ nav:
     - 10. Forms and question widgets: '10_Forms_and_question_widgets.md'
     - 11. Playback and player widgets: '11_Playback_and_player_widgets.md'
     - 12. Create a custom ruleset: '12_Create_custom_ruleset.md'
+    - 13. Running an experiment: '13_Running_an_experiment.md'
   - Preview frontend components:
       - 'Storybook': 'https://amsterdam-music-lab.github.io/MUSCLE/storybook'
   - Ruleset documentation:
@@ -85,6 +86,16 @@ nav:
       - Participant utils: 'participant_utils.md'
       - Question utils: 'question_utils.md'
       - Experiment actions: 'experiment_actions.md'
+  - Developer documentation:
+    - 1. Running commands in the docker containers: 'D1_Running_commands_in_the_docker_containers.md'
+    - 2. Compile and watch scss files: 'D2_Compile_and_watch_scss_files.md'
+    - 3. Managing the database: 'D3_Managing_the_database.md'
+    - 4. Debugging: 'D4_Debugging.md'
+    - 5. Installing python packages: 'D5_Installing_python_packages.md'
+    - 6. Management commands: 'D6_Management_commands.md'
+    - 7. Running tests: 'D7_Running_tests.md'
+    - 8. Storybook: 'D8_Storybook.md'
+    - 9. Troubleshooting: 'D9_Troubleshooting.md'
   - Technical documentation:
     - Experiment app:
       - Experiment admin: 'experiment_admin.md'
