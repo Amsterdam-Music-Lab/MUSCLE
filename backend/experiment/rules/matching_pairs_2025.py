@@ -64,7 +64,6 @@ class MatchingPairs2025(MatchingPairsGame):
         accumulated_score = session.participant.session_set.aggregate(total_score=models.Sum("final_score"))[
             "total_score"
         ]
-        feedback_info = self.feedback_info()
         score = Final(
             session,
             title="Score",
@@ -72,7 +71,6 @@ class MatchingPairs2025(MatchingPairsGame):
             final_text=self._final_text(session),
             button={"text": "Next game", "link": self.get_experiment_url(session)},
             rank=self.rank(session, exclude_unfinished=False),
-            feedback_info=feedback_info,
             percentile=session.percentile_rank(exclude_unfinished=False),
         )
 
