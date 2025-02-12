@@ -451,12 +451,14 @@ class Block(models.Model):
             Fallback content
         """
         experiment = self.phase.experiment
-        experiment_fallback_language = experiment.get_fallback_content().language
+        experiment_fallback_content = experiment.get_fallback_content()
 
-        if not experiment_fallback_language:
+        if not experiment_fallback_content or not experiment_fallback_content.language:
             return None
 
-        fallback_content = self.translated_contents.filter(language=fallback_language).first()
+        experiment_fallback_language = experiment_fallback_content.language
+
+        fallback_content = self.translated_contents.filter(language=experiment_fallback_language).first()
 
         return fallback_content
 
