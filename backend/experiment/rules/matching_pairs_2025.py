@@ -37,11 +37,12 @@ class MatchingPairs2025(MatchingPairsGame):
         ),
     }
 
-    def next_round(self, session):
+    def next_round(self, session: Session):
         if session.get_rounds_passed() < 1:
+            has_played_before = self._has_played_before(session)
             intro_explainer = self.get_intro_explainer()
             playlist = PlaylistAction(session.block.playlists.all())
-            actions = [intro_explainer, playlist]
+            actions = [intro_explainer, playlist] if not has_played_before else [playlist]
             questions = self.get_open_questions(session)
             if questions:
                 intro_questions = Explainer(
