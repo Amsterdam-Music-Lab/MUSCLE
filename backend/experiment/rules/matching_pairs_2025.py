@@ -247,7 +247,7 @@ class MatchingPairs2025(MatchingPairsGame):
         highest_score = session.participant.session_set.aggregate(highest_score=models.Max("final_score"))[
             "highest_score"
         ]
-        game_score = session.total_score()
+        game_score = int(session.total_score())
         percentile = session.percentile_rank(exclude_unfinished=False)
         percentile_rounded = round(percentile)
 
@@ -265,7 +265,7 @@ class MatchingPairs2025(MatchingPairsGame):
             game_score=game_score,
             personal_best=_("Personal Best"),
             # personal best might not be updated yet in the database
-            best_score=max(highest_score, game_score),
+            best_score=max(int(highest_score), game_score),
             average=_("Average score"),
             avg_score=int(average_score),
         )
