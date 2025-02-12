@@ -240,13 +240,14 @@ class MatchingPairs2025(MatchingPairsGame):
 
         return least_played_sections
 
-    def _final_text(self, session):
+    def _final_text(self, session: Session):
         total_sessions = session.participant.session_set.count()
         total_score = session.participant.session_set.aggregate(total_score=models.Sum("final_score"))["total_score"]
         average_score = total_score / total_sessions if total_sessions > 0 else 0
         highest_score = session.participant.session_set.aggregate(highest_score=models.Max("final_score"))[
             "highest_score"
         ]
+        game_score = session.total_score()
         percentile = session.percentile_rank(exclude_unfinished=False)
         percentile_rounded = round(percentile)
 
@@ -261,9 +262,10 @@ class MatchingPairs2025(MatchingPairsGame):
         """.format(
             outperformed=_("You outperformed {}% of the players!").format(percentile_rounded),
             this_game=_("This game"),
-            game_score=session.final_score,
+            game_score=game_score,
             personal_best=_("Personal Best"),
-            best_score=highest_score,
+            # personal best might not be updated yet in the database
+            best_score=max(highest_score, game_score),
             average=_("Average score"),
             avg_score=int(average_score),
         )
