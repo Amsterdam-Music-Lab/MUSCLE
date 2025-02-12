@@ -453,8 +453,8 @@ class Block(models.Model):
         experiment = self.phase.experiment
         experiment_fallback_content = experiment.get_fallback_content()
 
-        if not experiment_fallback_content or not experiment_fallback_content.language:
-            return None
+        # if not experiment_fallback_content or not experiment_fallback_content.language:
+        #     return None
 
         experiment_fallback_language = experiment_fallback_content.language
 
