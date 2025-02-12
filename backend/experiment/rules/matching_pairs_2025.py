@@ -261,3 +261,7 @@ class MatchingPairs2025(MatchingPairsGame):
         )
 
         return final_text
+
+    def _get_percentile_rank(self):
+        # Custom percentile rank calculation
+        raise NotImplementedError
