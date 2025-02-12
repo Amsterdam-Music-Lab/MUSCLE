@@ -78,7 +78,7 @@ class MatchingPairs2025(MatchingPairsGame):
 
         return [score]
 
-    def get_matching_pairs_trial(self, session):
+    def get_matching_pairs_trial(self, session: Session):
         player_sections = self._select_sections(session)
         random.seed(self.random_seed)
         random.shuffle(player_sections)
@@ -98,7 +98,7 @@ class MatchingPairs2025(MatchingPairsGame):
 
         return trial
 
-    def _has_played_before(self, session) -> bool:
+    def _has_played_before(self, session: Session) -> bool:
         experiment = session.block.phase.experiment
         previous_games = Session.objects.filter(
             block__phase__experiment=experiment, participant=session.participant, block__rules=self.ID
@@ -107,7 +107,7 @@ class MatchingPairs2025(MatchingPairsGame):
 
         return previous_games_results.exists()
 
-    def _select_sections(self, session) -> list[Section]:
+    def _select_sections(self, session: Session) -> list[Section]:
         condition_type, condition = self._select_least_played_condition_type_condition_pair(session)
 
         sections = self._select_least_played_sections(session, condition_type, condition)
@@ -131,13 +131,13 @@ class MatchingPairs2025(MatchingPairsGame):
 
         return sections
 
-    def _select_least_played_condition_type_condition_pair(self, session) -> tuple[str, str]:
+    def _select_least_played_condition_type_condition_pair(self, session: Session) -> tuple[str, str]:
         condition_type = self._select_least_played_condition_type(session)
         condition = self._select_least_played_condition(session, condition_type)
 
         return (condition_type, condition)
 
-    def _select_least_played_condition_type(self, session) -> str:
+    def _select_least_played_condition_type(self, session: Session) -> str:
         least_played_participant_condition_types = self._select_least_played_session_condition_types(
             session, participant_specific=True
         )
@@ -158,7 +158,7 @@ class MatchingPairs2025(MatchingPairsGame):
 
         return random.choice(least_played_overall_condition_types)
 
-    def _select_least_played_session_condition_types(self, session, participant_specific=False) -> list[str]:
+    def _select_least_played_session_condition_types(self, session: Session, participant_specific=False) -> list[str]:
         playlist = session.playlist
         participant_sessions = (
             participant_specific and session.participant.session_set.all() or playlist.session_set.all()
@@ -179,7 +179,7 @@ class MatchingPairs2025(MatchingPairsGame):
         min_avg = min(condition_type_counts.values())
         return [ct for ct, val in condition_type_counts.items() if val == min_avg]
 
-    def _select_least_played_condition(self, session, condition_type) -> str:
+    def _select_least_played_condition(self, session: Session, condition_type) -> str:
         least_played_participant_conditions = self._select_least_played_session_conditions(
             session, condition_type, participant_specific=True
         )
@@ -198,7 +198,9 @@ class MatchingPairs2025(MatchingPairsGame):
 
         return random.choice(least_played_overall_conditions)
 
-    def _select_least_played_session_conditions(self, session, condition_type, participant_specific=False) -> list[str]:
+    def _select_least_played_session_conditions(
+        self, session: Session, condition_type, participant_specific=False
+    ) -> list[str]:
         playlist = session.playlist
         participant_sessions = (
             participant_specific and session.participant.session_set.all() or playlist.session_set.all()
@@ -219,7 +221,7 @@ class MatchingPairs2025(MatchingPairsGame):
         min_count = min(cond_play_counts.values())
         return [c for c, val in cond_play_counts.items() if val == min_count]
 
-    def _select_least_played_sections(self, session, condition_type, condition) -> list[Section]:
+    def _select_least_played_sections(self, session: Session, condition_type, condition) -> list[Section]:
         participant_result_sections = session.participant.result_set.filter(
             session__playlist=session.playlist
         ).values_list("section", flat=True)
