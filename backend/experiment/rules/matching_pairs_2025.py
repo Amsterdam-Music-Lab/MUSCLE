@@ -57,8 +57,12 @@ class MatchingPairs2025(MatchingPairsGame):
             trial = self.get_matching_pairs_trial(session)
             actions.append(trial)
             return actions
-        else:
-            return self._get_final_actions(session)
+
+        # Finish session and show final view
+        session.finish()
+        session.save()
+
+        return self._get_final_actions(session)
 
     def _get_final_actions(self, session: Session):
         accumulated_score = session.participant.session_set.aggregate(total_score=models.Sum("final_score"))[
