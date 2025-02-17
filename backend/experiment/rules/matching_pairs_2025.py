@@ -86,7 +86,7 @@ class MatchingPairs2025(MatchingPairsGame):
 
     def get_matching_pairs_trial(self, session: Session):
         player_sections = self._select_sections(session)
-        random.seed(self.random_seed)
+        random.seed()
         random.shuffle(player_sections)
 
         # Only show tutorial if participant has never played this game before
@@ -132,7 +132,7 @@ class MatchingPairs2025(MatchingPairsGame):
         else:
             sections += sections
 
-        random.seed(self.random_seed)
+        random.seed()
         random.shuffle(sections)
 
         return sections
@@ -160,7 +160,7 @@ class MatchingPairs2025(MatchingPairsGame):
             return least_played_overall_condition_types[0]
 
         # If there are still multiple condition types with the same lowest average play count overall per condition in the playlist, select one at random
-        random.seed(self.random_seed)
+        random.seed()
 
         return random.choice(least_played_overall_condition_types)
 
@@ -200,7 +200,7 @@ class MatchingPairs2025(MatchingPairsGame):
         if len(least_played_overall_conditions) == 1:
             return least_played_overall_conditions[0]
 
-        random.seed(self.random_seed)
+        random.seed()
 
         return random.choice(least_played_overall_conditions)
 
