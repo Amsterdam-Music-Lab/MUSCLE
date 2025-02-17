@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import Circle from "../Circle/Circle";
-import ListenCircle from "../ListenCircle/ListenCircle";
+import AnimatedCircleContent from "../AnimatedCircleContent/AnimatedCircleContent";
 
 interface AutoPlayProps {
     instruction?: string;
@@ -38,7 +38,7 @@ const AutoPlay = ({ instruction, showAnimation, playSection, startedPlaying, fin
                 />
                 <div className="circle-content">
                     {showAnimation
-                        ? <ListenCircle
+                        ? <AnimatedCircleContent
                             duration={responseTime}
                             histogramRunning={running}
                             countDownRunning={running}

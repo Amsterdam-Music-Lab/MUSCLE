@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import classNames from "classnames";
 
-import ListenFeedback from "../Listen/ListenFeedback";
-import CountDown from "../CountDown/CountDown";
+import Circle from "../Circle/Circle";
 import * as audio from "../../util/audio";
 import * as webAudio from "../../util/webAudio";
 import Section from "@/types/Section";
@@ -17,7 +16,7 @@ interface PreloadProps {
 }
 
 /** Preload is an experiment screen that continues after a given time or after an audio file has been preloaded */
-const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, onNext }: PreloadProps) => {
+const Preload = ({ sections, playMethod, duration, preloadMessage, onNext }: PreloadProps) => {
     const [audioAvailable, setAudioAvailable] = useState(false);
     const [overtime, setOvertime] = useState(false);
     const [loaderDuration, setLoaderDuration] = useState(duration);
@@ -84,14 +83,21 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, pageTitle, on
     }, [sections, playMethod, onNext]);
 
     return (
-        <ListenFeedback
-            className={classNames({ pulse: overtime || duration === 0 })}
-            pageTitle={pageTitle}
+        <div className={
+            "aha__preload d-flex flex-column justify-content-center align-items-center " +
+            classNames({ pulse: overtime || duration === 0 })
+        }>
+        <Circle
+            key={preloadMessage + duration}
             duration={loaderDuration}
-            instruction={preloadMessage}
             onFinish={onTimePassed}
-            circleContent={duration >= 1 && <CountDown duration={duration} />}
         />
+        {preloadMessage && (
+            <div className="instruction d-flex justify-content-center align-items-center">
+                <h3 className="text-center">{preloadMessage}</h3>
+            </div>
+        )}
+        </div>
     );
 };
 
