@@ -60,9 +60,9 @@ describe('Histogram', () => {
         expect(getComputedStyle(bars[2]).marginRight).to.equal('0px');
     });
 
-    it('applies the correct margin and background color', () => {
+    it('applies the correct background and padding color', () => {
         const { container } = render(
-            <Histogram marginLeft={20} marginTop={10} backgroundColor="red" />
+            <Histogram backgroundColor="red" padding="13px" />
         );
         const histogram = container.querySelector('.aha__histogram');
 
@@ -70,9 +70,8 @@ describe('Histogram', () => {
             throw new Error('Histogram not found');
         }
 
-        expect(getComputedStyle(histogram).marginLeft).to.equal('20px');
-        expect(getComputedStyle(histogram).marginTop).to.equal('10px');
         expect(getComputedStyle(histogram).backgroundColor).to.equal('red');
+        expect(getComputedStyle(histogram).padding).to.equal('13px');
     });
 
     it('applies the correct border radius', () => {
