@@ -48,7 +48,7 @@ def get_questions_from_series(questionseries_set):
     """ Get Questions from a QuerySet of QuestionSeries
 
     Args:
-        questionseries_set: QuerySet of QuestionSeries
+        questionseries_set (Queryset[QuestionSeries]): QuerySet of QuestionSeries
 
     Returns:
         List of experiment.actions.form.Question objects

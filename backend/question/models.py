@@ -101,7 +101,7 @@ class QuestionGroup(models.Model):
 
     Attributes:
         key (str): Unique identifier
-        questions: ManyToManyField to Questions that the QuestionGroup contains
+        questions (Queryset[Question]): ManyToManyField to Questions that the QuestionGroup contains
         editable (bool): QuestionGroup can be edited if True
 
     """
@@ -125,7 +125,7 @@ class QuestionSeries(models.Model):
         name (str): Name of the QuestionSeries
         block (Block): Block that contains QuestionSeries
         index (int):  Index of QuestionSeries within Block
-        questions: ManyToManyField to Questions that the QuestionSeries contains
+        questions (Queryset[Question]): ManyToManyField to Questions that the QuestionSeries contains
         randomize (bool): Randomize questions within QuestionSeries
     """
 
@@ -147,8 +147,8 @@ class QuestionInSeries(models.Model):
     """Question with its index in QuestionSeries
 
     Attributes:
-        question_series: QuestionSeries that contains the Question
-        question: Question linked to question_series
+        question_series (QuestionSeries): QuestionSeries that contains the Question
+        question (Question): Question linked to question_series
         index (int): Index of Question within QuestionSeries
     """
 

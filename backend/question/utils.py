@@ -8,7 +8,7 @@ def copy_shuffle(questions):
     """ Makes a shuffled copy of a sequence of questions.
 
     Args:
-    questions: A sequence of questions
+    questions (list[Question]): A list of questions
 
     Returns:
     A shuffled copy of questions
@@ -22,8 +22,8 @@ def total_unanswered_questions(participant, questions):
     """ Return how many questions have not been answered yet by the participant
 
     Args:
-        participant: Participant who answer questions
-        questions: Sequence of questions
+        participant (Participant): Participant who answer questions
+        questions (list[Question]): List of questions
 
     Returns:
         Number of unanswered questions
@@ -36,10 +36,10 @@ def question_by_key(key, questions, is_skippable=None, drop_choices=[]):
     """Return a copy of question with given key
 
     Args:
-        key: Key of question
-        questions: Sequence of questions
-        is_skippable: True will make the returned questions skippable
-        drop_choices: Choices in the question to be removed (if applicable)
+        key (str): Key of question
+        questions (list[Question]): List of questions
+        is_skippable (bool): True will make the returned questions skippable
+        drop_choices (list[str]): Choices in the question to be removed (if applicable)
 
     Returns:
         A copy of question
@@ -61,10 +61,10 @@ def unanswered_questions(participant, questions, randomize=False, cutoff_index=N
     """Generator to give next unasked profile question and prepare its result
 
     Args:
-        participant: participant who will be checked for unanswered questions
-        questions: list of questions from which to select an unanswered question
-        randomize: optionally, randomize order of questions
-        cutoff_index: Maximal index in a questions sequence to consider questions
+        participant (Participant): participant who will be checked for unanswered questions
+        questions (list[Questions]): list of questions from which to select an unanswered question
+        randomize (bool): optionally, randomize order of questions
+        cutoff_index (int): Maximal index in a questions sequence to consider questions
 
     Yields:
         Next unasked profile question
