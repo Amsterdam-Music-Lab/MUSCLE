@@ -19,18 +19,22 @@ class RhythmBatteryIntro(BaseRules):
         actions = []
         if round_number == 0:
             explainer = Explainer(
-                instruction=_(
-                    'General listening instructions:'),
+                instruction=_('General listening instructions:'),
                 steps=[
-                    Step(_(
-                        "To make sure that you can do the experiment as well as possible, please do it a quiet room with a stable internet connection."),
+                    Step(
+                        _(
+                            "To make sure that you can do the experiment as well as possible, please do it a quiet room with a stable internet connection."
+                        ),
                     ),
-                    Step(_("Please use headphones, and turn off sound notifications from other devices and applications (e.g., e-mail, phone messages)."),
-                         )],
+                    Step(
+                        _(
+                            "Please use headphones, and turn off sound notifications from other devices and applications (e.g., e-mail, phone messages)."
+                        ),
+                    ),
+                ],
                 step_numbers=True,
-                button_label=_('Ok')
+                button_label=_('Ok'),
             )
-            actions.append(self.get_intro_explainer())
             actions.append(explainer)
             key = 'quiet_room'
             result_pk = prepare_result(key, session, expected_response=key)

@@ -42,19 +42,11 @@ class Hooked(BaseRules):
                 "keys": QUESTION_GROUPS["DEMOGRAPHICS"],
                 "randomize": True,
             },  # 1. Demographic questions (7 questions)
-            {"name": "MSI_OTHER", "keys": ["msi_39_best_instrument"], "randomize": False},
             {
-                "name": "MSI_FG_GENERAL",
-                "keys": QUESTION_GROUPS["MSI_FG_GENERAL"],
-                "randomize": True,
-            },  # 2. General music sophistication
-            {
-                "name": "MSI_ALL",
-                "keys": QUESTION_GROUPS["MSI_ALL"],
-                "randomize": True,
-            },  # 3. Complete music sophistication (20 questions)
-            {"name": "STOMP20", "keys": QUESTION_GROUPS["STOMP20"], "randomize": True},  # 4. STOMP (20 questions)
-            {"name": "TIPI", "keys": QUESTION_GROUPS["TIPI"], "randomize": True},  # 5. TIPI (10 questions)
+                "name": "MSI_OTHER",
+                "keys": ["msi_39_best_instrument"],
+                "randomize": False,
+            },
         ]
 
     def get_intro_explainer(self):
