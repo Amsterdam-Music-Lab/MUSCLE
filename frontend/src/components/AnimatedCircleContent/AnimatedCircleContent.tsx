@@ -1,17 +1,17 @@
 import Histogram from "../Histogram/Histogram";
 import CountDown from "../CountDown/CountDown";
 
-interface ListenCircleProps {
+interface AnimatedCircleContentProps {
     duration: number;
     countDownRunning?: boolean;
     histogramRunning?: boolean;
 }
 
-const ListenCircle = ({
+const AnimatedCircleContent = ({
     duration,
     countDownRunning = true,
     histogramRunning = true
-}: ListenCircleProps) => {
+}: AnimatedCircleContentProps) => {
     return (
         <>
             <CountDown duration={duration} running={countDownRunning} />
@@ -22,4 +22,4 @@ const ListenCircle = ({
     );
 };
 
-export default ListenCircle;
+export default AnimatedCircleContent;
