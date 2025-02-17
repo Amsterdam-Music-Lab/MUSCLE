@@ -39,10 +39,14 @@ class MatchingPairs2025(MatchingPairsGame):
 
     def next_round(self, session: Session):
         if session.get_rounds_passed() < 1:
-            has_played_before = self._has_played_before(session)
             intro_explainer = self.get_intro_explainer()
             playlist = PlaylistAction(session.block.playlists.all())
-            actions = [intro_explainer, playlist] if not has_played_before else [playlist]
+
+            # TODO: Find a way to only show the intro explainer if the participant has not played this game before while avoiding the issue of an AudioContext not being available as the user hasn't interacted with the page yet
+            # has_played_before = self._has_played_before(session)
+            # actions = [intro_explainer, playlist] if not has_played_before else [playlist]
+            actions = [intro_explainer, playlist]
+
             questions = self.get_open_questions(session)
             if questions:
                 intro_questions = Explainer(
