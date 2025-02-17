@@ -3,7 +3,24 @@ from experiment.models import Block
 
 
 class Question(models.Model):
-    """A model that refers to a built-in or customized question"""
+    """Model for question asked during experiment
+
+    Attributes:
+        key (slug): Unique identifier
+        question (str): Question text
+        editable (bool): False for built-in questions. Key and type of a built-in question cannot be changed.
+        explainer (str): Question explainer text
+        type (str): Question type {"BooleanQuestion", "ChoiceQuestion", "NumberQuestion", "TextQuestion", "LikertQuestion", "LikertQuestionIcon", "AutoCompleteQuestion"}
+        scale_steps (int): Number of scale steps {5, 7} (applies to LikertQuestion, LikertQuestionIcon)
+        profile_scoring_rule (str): Profile scoring rule {"", "LIKERT", "REVERSE_LIKERT", "CATEGORIES_TO_LIKERT"} (ChoiceQuestion, LikertQuestion)
+        min_value (float): Minimal value (NumberQuestion)
+        max_value (float): Maximal value (NumberQuestion)
+        max_length (int): Maximal length (TextQuestion)
+        min_values (int): Minimum number of values to choose (ChoiceQuestion)
+        view (int): Question view {"BUTTON_ARRAY", "CHECKBOXES", "RADIOS", "DROPDOWN"} (ChoiceQuestion)
+        is_skippable (bool): If question can be skipped during experiment
+
+    """
 
     key = models.SlugField(primary_key=True, max_length=128)
     question = models.CharField(max_length=1024)
@@ -60,6 +77,15 @@ class Question(models.Model):
 
 
 class Choice(models.Model):
+    """ Choice model for Question with choices
+
+    Attributes:
+        key (slug): Unique identifier
+        text (str): Choice text
+        index (int): Index of choice within Question
+        question (Question): Question that contains the Choice
+
+    """
 
     key = models.SlugField(max_length=128)
     text = models.CharField()
@@ -71,7 +97,14 @@ class Choice(models.Model):
 
 
 class QuestionGroup(models.Model):
-    """Convenience model for groups of questions to add at once to Block QuestionSeries from admin"""
+    """Convenience model for groups of questions to add at once to Block QuestionSeries from admin
+
+    Attributes:
+        key (str): Unique identifier
+        questions (Queryset[Question]): ManyToManyField to Questions that the QuestionGroup contains
+        editable (bool): QuestionGroup can be edited if True
+
+    """
 
     key = models.CharField(primary_key=True, max_length=128)
     questions = models.ManyToManyField(Question)
@@ -86,7 +119,15 @@ class QuestionGroup(models.Model):
 
 
 class QuestionSeries(models.Model):
-    """Series of Questions asked in a Block"""
+    """Series of Questions asked in a Block
+
+    Attributes:
+        name (str): Name of the QuestionSeries
+        block (Block): Block that contains QuestionSeries
+        index (int):  Index of QuestionSeries within Block
+        questions (Queryset[Question]): ManyToManyField to Questions that the QuestionSeries contains
+        randomize (bool): Randomize questions within QuestionSeries
+    """
 
     name = models.CharField(default="", max_length=128)
     block = models.ForeignKey(Block, on_delete=models.CASCADE)
@@ -103,7 +144,13 @@ class QuestionSeries(models.Model):
 
 
 class QuestionInSeries(models.Model):
-    """Question with its index in QuestionSeries"""
+    """Question with its index in QuestionSeries
+
+    Attributes:
+        question_series (QuestionSeries): QuestionSeries that contains the Question
+        question (Question): Question linked to question_series
+        index (int): Index of Question within QuestionSeries
+    """
 
     question_series = models.ForeignKey(QuestionSeries, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
