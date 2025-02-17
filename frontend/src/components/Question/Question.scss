@@ -13,7 +13,7 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 2rem;
-    
+
     .question {
         flex-grow: 1;
         width: 100%;
@@ -28,7 +28,7 @@
             font-size: 1.3em;
         }
 
-        &:not(.title){
+        &:not(.emphasize-title){
             text-align: center;
         }
     }
@@ -40,7 +40,7 @@
         margin-bottom: 5px;
     }
 
-    
+
 }
 
 .expected-response {

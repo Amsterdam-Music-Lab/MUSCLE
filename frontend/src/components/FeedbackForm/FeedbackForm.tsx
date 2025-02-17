@@ -12,7 +12,6 @@ interface FeedbackFormProps {
     skipLabel: string;
     isSkippable: boolean;
     submitResult: submitResultType
-    emphasizeTitle?: boolean;
 }
 
 /** FeedbackForm */
@@ -23,7 +22,6 @@ const FeedbackForm = ({
     skipLabel,
     isSkippable,
     submitResult,
-    emphasizeTitle = false,
 }: FeedbackFormProps) => {
     const showSubmitButtons =
         form.filter((formElement) => formElement.submits).length === 0;
@@ -64,7 +62,6 @@ const FeedbackForm = ({
                         disabled={!formActive}
                         question={form[index]}
                         onChange={onChange}
-                        emphasizeTitle={emphasizeTitle}
                     />
                 ))}
                 {/* Continue button */}

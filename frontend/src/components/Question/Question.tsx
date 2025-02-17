@@ -14,12 +14,11 @@ import AutoComplete from "./_AutoComplete";
 
 import IQuestion, { QuestionViews } from "@/types/Question";
 
-interface QuestionProps {
+export interface QuestionProps {
     question: IQuestion;
     onChange: (value: string | number | boolean, id: number) => void;
     id: number;
     disabled?: boolean;
-    emphasizeTitle?: boolean;
 }
 
 /** Question is a block view that shows a question and handles storing the answer */
@@ -28,7 +27,6 @@ const Question = ({
     onChange,
     id,
     disabled = false,
-    emphasizeTitle = false,
 }: QuestionProps) => {
     const [value, setValue] = useState(question.value || "");
 
@@ -43,8 +41,6 @@ const Question = ({
             value,
             question,
             disabled,
-            style: question.style,
-            emphasizeTitle,
             onChange: registerChange,
         };
 
@@ -78,7 +74,7 @@ const Question = ({
             {question.explainer && (
                 <p className="explainer">{question.explainer}</p>
             )}
-            <h3 className={classNames({ title: emphasizeTitle })}>{question.question}</h3>
+            <h3 className={classNames(question.style)}>{question.question}</h3>
             <div className="question">{render(question.view)}</div>
             {question.expected_response &&
                 /* Will only be visible when the backend settings has TESTING=True */

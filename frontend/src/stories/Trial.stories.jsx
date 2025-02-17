@@ -16,7 +16,7 @@ const getDefaultFeedbackForm = (overrides = {}) => ({
         question: "1. Do you know this song?",
         is_skippable: false,
         submits: false,
-        style: "boolean",
+        style: {"boolean": true},
         choices: {
             yes: "fa-check",
             unsure: "fa-question",
@@ -31,7 +31,7 @@ const getDefaultFeedbackForm = (overrides = {}) => ({
         question: "2. How much do you like this song?",
         is_skippable: false,
         submits: false,
-        style: "gradient-7",
+        style: {"gradient-7": true},
         choices: {
             1: "fa-face-grin-hearts",
             2: "fa-face-grin",
@@ -109,7 +109,6 @@ export const Default = {
 export const BooleanColorScheme = {
     args: getDefaultArgs({
         config: {
-            style: "boolean",
             auto_advance: true,
             response_time: 1000,
             continue_label: "Continue",
@@ -122,7 +121,6 @@ export const BooleanColorScheme = {
 export const BooleanNegativeFirstColorScheme = {
     args: getDefaultArgs({
         config: {
-            style: "boolean-negative-first",
             auto_advance: true,
             response_time: 1000,
             continue_label: "Continue",
@@ -135,7 +133,6 @@ export const BooleanNegativeFirstColorScheme = {
 export const NeutralColorScheme = {
     args: getDefaultArgs({
         config: {
-            style: "neutral",
             auto_advance: true,
             response_time: 1000,
             continue_label: "Continue",
@@ -150,7 +147,7 @@ export const NeutralColorScheme = {
                     question: "1. Do you know this song?",
                     is_skippable: false,
                     submits: false,
-                    style: "neutral",
+                    style: {"neutral": true},
                     choices: {
                         yes: "fa-check",
                         unsure: "fa-question",
@@ -165,7 +162,7 @@ export const NeutralColorScheme = {
                     question: "2. How much do you like this song?",
                     is_skippable: false,
                     submits: false,
-                    style: "neutral",
+                    style: {"gradient-7": true},
                     choices: {
                         1: "fa-face-grin-hearts",
                         2: "fa-face-grin",
@@ -189,7 +186,6 @@ export const NeutralColorScheme = {
 export const NeutralInvertedColorScheme = {
     args: getDefaultArgs({
         config: {
-            style: "neutral-inverted",
             auto_advance: true,
             response_time: 1000,
             continue_label: "Continue",
@@ -204,7 +200,7 @@ export const NeutralInvertedColorScheme = {
                     question: "1. Do you know this song?",
                     is_skippable: false,
                     submits: false,
-                    style: "neutral-inverted",
+                    style: {"neutral-inverted": true},
                     choices: {
                         yes: "fa-check",
                         unsure: "fa-question",
@@ -219,7 +215,7 @@ export const NeutralInvertedColorScheme = {
                     question: "2. How much do you like this song?",
                     is_skippable: false,
                     submits: false,
-                    style: "neutral-inverted",
+                    style: {"gradient-7": true},
                     choices: {
                         1: "fa-face-grin-hearts",
                         2: "fa-face-grin",
@@ -269,9 +265,7 @@ export const ToontjeHoger4Absolute = {
             timeout_after_playback: null,
             stop_audio_after: 5,
             resume_play: false,
-            style: {
-                root: "neutral-inverted"
-            },
+            style: {"neutral-inverted": true},
             ID: "MULTIPLAYER",
             play_once: false,
             labels: [
@@ -289,7 +283,7 @@ export const ToontjeHoger4Absolute = {
                     question: "Welk fragment heeft de juiste toonhoogte?",
                     is_skippable: false,
                     submits: true,
-                    style: "neutral-inverted",
+                    style: {"neutral-inverted": true},
                     choices: {
                         A: "A",
                         B: "B"
@@ -304,16 +298,3 @@ export const ToontjeHoger4Absolute = {
     }),
     decorators: [getDecorator,],
 }
-
-export const Gradient7ColorScheme = {
-    args: getDefaultArgs({
-        config: {
-            style: "gradient-7",
-            auto_advance: true,
-            response_time: 1000,
-            continue_label: "Continue",
-            show_continue_button: true,
-        },
-    }),
-    decorators: [getDecorator,],
-};
