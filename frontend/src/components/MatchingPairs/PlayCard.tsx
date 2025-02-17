@@ -64,10 +64,6 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAni
                     data-testid="back"
                     className={classNames("back", { seen: section.seen })}
                 >
-                    {/* TODO: Remove this before merging PR */}
-                    <span style={{ margin: '1rem' }}>
-                        {section.group}
-                    </span>
                 </div>
             }
         </div>
