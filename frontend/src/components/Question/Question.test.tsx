@@ -1,6 +1,6 @@
 import { render, fireEvent, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import Question from './Question';
+import Question, {QuestionProps} from './Question';
 import { QuestionViews } from '@/types/Question';
 
 describe('Question Component', () => {
@@ -8,16 +8,18 @@ describe('Question Component', () => {
 
     const defaultProps = {
         question: {
+            key: 'test-question',
             question: 'Test Question',
             view: QuestionViews.STRING,
             value: '',
             choices: {
                 '1': 'One',
                 '2': 'Two',
-            }
+            },
+            style: {}
         },
         onChange: mockOnChange,
-        id: 'test-question',
+        id: 42,
     };
 
     const getProps = (props = {}) => ({ ...defaultProps, ...props });
@@ -58,12 +60,14 @@ describe('Question Component', () => {
         render(<Question {...defaultProps} />);
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: 'New Value' } });
-        expect(mockOnChange).toHaveBeenCalledWith('New Value', 'test-question');
+        expect(mockOnChange).toHaveBeenCalledWith('New Value', 42);
     });
 
-    it('applies emphasizeTitle class when emphasizeTitle prop is true', () => {
-        const { container } = render(<Question {...defaultProps} emphasizeTitle />);
-        expect(container.querySelector('.title')).toBeTruthy();
+    it('applies classNames if question.style is defined', () => {
+        const props = defaultProps;
+        props.question.style = 'some-style';
+        const { container } = render(<Question {...props} />);
+        expect(container.querySelector('.some-style')).toBeTruthy();
     });
 
     it('disables the input when disabled prop is true', () => {
