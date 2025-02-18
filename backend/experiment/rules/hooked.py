@@ -56,12 +56,12 @@ class Hooked(BaseRules):
             steps=[
                 Step(
                     _(
-                        "Do you recognise the song? Try to sing along. The faster you recognise songs, the more points you can earn."
+                        "Do you recognise the song? Try to hum along. The faster you recognise songs, the more points you can earn."
                     )
                 ),
                 Step(
                     _(
-                        "Do you really know the song? Keep singing or imagining the music while the sound is muted. The music is still playing: you just can’t hear it!"
+                        "Do you really know the song? Keep humming or imagining the music while the sound is muted. The music is still playing: you just can’t hear it!"
                     )
                 ),
                 Step(
@@ -305,7 +305,7 @@ class Hooked(BaseRules):
                         scoring_rule="REACTION_TIME",
                     ),
                     submits=True,
-                    style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST, ButtonStyle.LARGE_GAP],
+                    style=[ColorScheme.TOONTJEHOGER, ButtonStyle.LARGE_TEXT],
                 )
             ]
         )
