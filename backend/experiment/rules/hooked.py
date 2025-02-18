@@ -305,7 +305,7 @@ class Hooked(BaseRules):
                         scoring_rule="REACTION_TIME",
                     ),
                     submits=True,
-                    style=[ColorScheme.TOONTJEHOGER, ButtonStyle.LARGE_TEXT],
+                    style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST, ButtonStyle.LARGE_GAP],
                 )
             ]
         )
