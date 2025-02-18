@@ -23,7 +23,7 @@ const AutoPlay = ({ instruction, showAnimation, playSection, startedPlaying, fin
     }, [playSection, startedPlaying]);
 
     return (
-        <div>
+        <div className={"aha__autoplay d-flex flex-column justify-content-center align-items-center " + className}>
             <div className="circle">
                 <Circle
                     running={running}
@@ -49,13 +49,10 @@ const AutoPlay = ({ instruction, showAnimation, playSection, startedPlaying, fin
                     }
                 </div>
             </div>
-            <div className={"aha__listen d-flex flex-column justify-content-center align-items-center " + className}
-            >
-                {/* Instruction */}
-                {instruction && (<div className="instruction d-flex justify-content-center align-items-center">
-                    <h3 className="text-center">{instruction}</h3>
-                </div>)}
-            </div>
+            {/* Instruction */}
+            {instruction && (<div className="instruction d-flex justify-content-center align-items-center">
+                <h3 className="text-center">{instruction}</h3>
+            </div>)}
         </div>
     )
 }

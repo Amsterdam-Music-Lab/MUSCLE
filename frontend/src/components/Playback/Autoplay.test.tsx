@@ -9,8 +9,8 @@ vi.mock('../Circle/Circle', () => ({
     )),
 }));
 
-vi.mock('../ListenCircle/ListenCircle', () => ({
-    default: vi.fn(() => <div data-testid="mock-listen-circle">Mock Listen Circle</div>),
+vi.mock('../AnimatedCircleContent/AnimatedCircleContent', () => ({
+    default: vi.fn(() => <div data-testid="mock-circle-content">Mock Listen Circle Content</div>),
 }));
 
 describe('AutoPlay Component', () => {
@@ -33,14 +33,14 @@ describe('AutoPlay Component', () => {
         const { container } = render(<AutoPlay {...defaultProps} />);
         expect(container.querySelector('.circle')).toBeTruthy();
         expect(screen.getByTestId('mock-circle')).toBeTruthy();
-        expect(screen.getByTestId('mock-listen-circle')).toBeTruthy();
+        expect(screen.getByTestId('mock-circle-content')).toBeTruthy();
     });
 
     it('renders correctly without animation', () => {
         const { container } = render(<AutoPlay {...defaultProps} showAnimation={false} />);
         expect(container.querySelector('.circle')).toBeTruthy();
         expect(screen.getByTestId('mock-circle')).toBeTruthy();
-        expect(screen.queryByTestId('mock-listen-circle')).toBeFalsy();
+        expect(screen.queryByTestId('mock-circle-content')).toBeFalsy();
         expect(container.querySelector('.stationary')).toBeTruthy();
         expect(container.querySelector('.fa-headphones')).toBeTruthy();
     });
@@ -70,9 +70,9 @@ describe('AutoPlay Component', () => {
         expect(listenDiv.classList.contains(customClass)).toBe(true);
     });
 
-    it('applies default classes to listen div', () => {
+    it('applies default classes to surrounding div', () => {
         const { container } = render(<AutoPlay {...defaultProps} />);
-        const listenDiv = container.querySelector('.aha__listen');
+        const listenDiv = container.querySelector('.aha__autoplay');
         expect(listenDiv.classList.contains('d-flex')).toBe(true);
         expect(listenDiv.classList.contains('flex-column')).toBe(true);
         expect(listenDiv.classList.contains('justify-content-center')).toBe(true);
