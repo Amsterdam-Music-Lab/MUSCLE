@@ -30,7 +30,7 @@ class Hooked(BaseRules):
     # if the track continutes in the wrong place: maximal shift forward (in seconds)
     max_jitter = 15
     heard_before_time = 15  # response time for "Have you heard this song in previous rounds?"
-    question_offset = 5  # how many rounds will be presented without questions
+    question_offset = 1  # how many rounds will be presented without questions
     questions = True
     counted_result_keys = ["recognize", "heard_before"]
     play_method = "BUFFER"
