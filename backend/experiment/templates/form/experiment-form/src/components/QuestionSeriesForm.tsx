@@ -6,6 +6,7 @@ import { Select } from './form/Select';
 import { API_BASE_URL } from '../config';
 import { SelectedQuestionsTable } from './question-series/SelectedQuestionsTable';
 import { AvailableQuestionsTable } from './question-series/AvailableQuestionsTable';
+import { FiPlus } from 'react-icons/fi';
 
 interface QuestionSeriesFormProps {
   series: BlockQuestionSeries;
@@ -102,6 +103,27 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
     }
   };
 
+  const createNewQuestion = () => {
+    throw new Error('Function not implemented.');
+  };
+
+  const submitNewQuestion = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const questionText = formData.get('questionText') as string;
+    const questionKey = questionText.toLowerCase().replace(/\s+/g, '_');
+    const questionType = 'text'; // Default type, can be changed later
+    const newQuestion = {
+      key: questionKey,
+      question: questionText,
+      type: questionType,
+    };
+
+    // TODO: Post new question to the server
+    throw new Error('Function not implemented.');
+  };
+
   return (
     <div className='p-5 bg-gray-50 mt-4'>
       <div className="p-5 bg-white border rounded-md space-y-5">
@@ -167,7 +189,25 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
             onSearch={handleSearch}
             onSearchKeyDown={handleSearchKeyDown}
             onAddQuestion={handleAddQuestion}
+            onCreateNewQuestion={createNewQuestion}
           />
+
+          <form className="gap-2 flex items-end" onSubmit={submitNewQuestion}>
+            <div className="space-y-2">
+              <label className="text-gray-700 text-sm font-semibold">Create New Question</label>
+              <input
+                type="text"
+                name="questionText"
+                placeholder="What is your favorite artist?"
+                className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+              />
+            </div>
+            <button onClick={createNewQuestion} className="whitespace-nowrap px-4 py-2 border border-transparent rounded-md bg-blue-600 hover:bg-blue-800 text-white flex items-center gap-1">
+              <FiPlus />
+              Create New Question
+            </button>
+          </form>
+
         </div>
       </div>
     </div>

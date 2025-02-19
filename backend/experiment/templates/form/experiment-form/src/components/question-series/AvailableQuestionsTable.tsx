@@ -1,6 +1,7 @@
 import React from 'react';
 import { Question } from '../../types/types';
 import { FormField } from '../form/FormField';
+import { FiPlus } from 'react-icons/fi';
 
 interface AvailableQuestionsTableProps {
   questions: Question[];
@@ -9,6 +10,7 @@ interface AvailableQuestionsTableProps {
   onSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSearchKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onAddQuestion: (key: string) => void;
+  onCreateNewQuestion: () => void;
 }
 
 export function AvailableQuestionsTable({
@@ -18,6 +20,7 @@ export function AvailableQuestionsTable({
   onSearch,
   onSearchKeyDown,
   onAddQuestion,
+  onCreateNewQuestion,
 }: AvailableQuestionsTableProps) {
   return (
     <FormField label="Available Questions">
@@ -44,8 +47,8 @@ export function AvailableQuestionsTable({
                 <tr
                   key={question.key}
                   className={`border-t ${question.key === highlightedQuestionKey
-                      ? 'bg-blue-50'
-                      : 'hover:bg-gray-50'
+                    ? 'bg-blue-50'
+                    : 'hover:bg-gray-50'
                     }`}
                 >
                   <td className="px-4 py-2">{question.question}</td>
@@ -65,7 +68,20 @@ export function AvailableQuestionsTable({
               {questions.length === 0 && (
                 <tr>
                   <td colSpan={3} className="px-4 py-2 text-center text-gray-500">
-                    No questions found
+                    No questions found. Try a different search term
+                    {onCreateNewQuestion ? (
+                      <>
+                        or
+                        <button
+                          type="button"
+                          className="text-blue-600 hover:text-blue-800 ml-2 inline-flex items-center gap-1"
+                          onClick={onCreateNewQuestion}
+                        >
+                          Create a New Question
+                          <FiPlus />
+                        </button>
+                      </>
+                    ) : ''}
                   </td>
                 </tr>
               )}
