@@ -7,15 +7,16 @@ interface MarkdownEditorProps {
   onChange: (value: string) => void;
   rows?: number;
   field?: string;
+  className?: string;
 }
 
-export function MarkdownEditor({ field, value, onChange, rows = 10 }: MarkdownEditorProps) {
+export function MarkdownEditor({ field, value, onChange, rows = 10, className = '' }: MarkdownEditorProps) {
   const [isPreview, setIsPreview] = useState(false);
 
   const placeholder = `# ${field ? field : 'Markdown input'}\n\n**Write your _markdown_ content here...**`;
 
   return (
-    <div className="relative group">
+    <div className={`relative group ${className}`}>
       <div className="absolute right-2 top-2 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
         <button
           type="button"

@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
-import { Tabs } from './Tabs';
-import { FiPlus, FiTrash } from 'react-icons/fi';
+import React from 'react';
 import { TranslatedContent } from '../types/types';
-import { Flag } from './Flag';
-import { useNavigate, useParams } from 'react-router-dom';
-import { TranslatedContentForm } from './TranslatedContentForm';
+import { ISO_LANGUAGES } from "../constants";
+import { Select } from './form/Select';
+import { Input } from './form/Input';
+import { MarkdownEditor } from './form/MarkdownEditor';
+import { Button } from './Button';
+import { FiTrash2, FiPlus } from 'react-icons/fi';
 
 interface TranslatedContentFormsProps {
   contents: TranslatedContent[];
@@ -21,22 +22,6 @@ const defaultContent: TranslatedContent = {
 };
 
 export const TranslatedContentForms: React.FC<TranslatedContentFormsProps> = ({ contents, onChange }) => {
-  const navigate = useNavigate();
-  const { id: experimentId, language } = useParams();
-
-
-  // Find index of current language in contents
-  const languageInContents = contents.find(content => content.language === language);
-  const potentialContentIndex = parseInt(language ?? '0', 10);
-  const activeTabIndex = languageInContents ? contents.indexOf(languageInContents) : potentialContentIndex;
-
-  useEffect(() => {
-    // If we have contents but no language in URL, redirect to first language
-    if (contents.length > 0 && !language) {
-      const firstContent = contents[0];
-      navigate(`/experiments/${experimentId}/translated-content/${firstContent.language || '0'}`);
-    }
-  }, [contents, language, experimentId]);
 
   const handleAdd = () => {
     const newContent = {
@@ -46,82 +31,109 @@ export const TranslatedContentForms: React.FC<TranslatedContentFormsProps> = ({ 
     const updatedContents = [...contents, newContent].map((content, index) => ({ ...content, index }));
 
     onChange(updatedContents);
-    // Navigate to the new content's tab
-    navigate(`/experiments/${experimentId}/translated-content/${updatedContents.length - 1}`);
   };
 
   const handleRemove = (index: number) => {
     if (confirm('Are you sure you want to remove this translation?')) {
       onChange(contents.filter((_, i) => i !== index));
-      // Navigate to the closest tab
-      const nextIndex = Math.min(index, contents.length - 2);
-      navigate(`/experiments/${experimentId}/translated-content/${nextIndex}`);
     }
   };
 
-  const handleChange = (index: number, newContent: TranslatedContent) => {
-    const updatedContents = contents.map((content, i) => {
-      if (i === index) {
-        return { ...content, ...newContent };
-      }
-      return content;
-    });
-    onChange(updatedContents);
-  };
-
-  const getTabLabel = (content: TranslatedContent, index: number) => {
-    if (content.language) {
-      return <Flag languageCode={content.language} showLabel={true} />;
-    }
-    return `Translation ${index + 1}`;
-  };
-
-  const handleTabChange = (tabIndex: string | number) => {
-    if (tabIndex === 'new') {
-      handleAdd();
-    } else {
-      const content = contents[tabIndex as number];
-      navigate(`/experiments/${experimentId}/translated-content/${content.language || tabIndex}`);
-    }
+  const handleChange = (index: number, key: keyof TranslatedContent, value: string) => {
+    const updated = [...contents];
+    updated[index] = { ...updated[index], [key]: value };
+    onChange(updated);
   };
 
   return (
     <div className="">
-      <h3 className="text-lg font-medium mb-5">
-        Translated Content
-      </h3>
-
-      <Tabs
-        tabs={[
-          ...contents.map((content, index) => ({
-            id: index,
-            label: getTabLabel(content, index),
-          })),
-          {
-            id: 'new',
-            label: (
-              <div className="flex items-center gap-2">
-                <FiPlus className="w-4 h-4" />
-                <span>New Translation</span>
-              </div>
-            ),
-          }
-        ]}
-        wrap={true}
-        activeTab={activeTabIndex}
-        onTabChange={handleTabChange}
-        actions={[
-          {
-            icon: <FiTrash className="w-4 h-4" />,
-            title: 'Remove translation',
-            onClick: (tabId) => handleRemove(tabId as number),
-          },
-        ]}
-      />
-
-      {contents.length > 0 && !!contents[activeTabIndex] && (
-        <TranslatedContentForm content={contents[activeTabIndex]} onChange={(content) => handleChange(activeTabIndex, content)} />
-      )}
+      <h3 className="text-lg font-medium mb-5">Translated Content</h3>
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead>
+            <tr>
+              <th className="text-left p-2">Language</th>
+              <th className="text-left p-2">Name</th>
+              <th className="text-left p-2">Description</th>
+              <th className="text-left p-2">About Content</th>
+              <th className="text-left p-2">Social Media Message</th>
+              <th className="text-left p-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {contents.map((content, index) => (
+              <tr key={index} className="border-b">
+                <td className="p-2">
+                  <Select
+                    value={content.language}
+                    onChange={(e) => handleChange(index, 'language', e.target.value)}
+                    className='min-w-32 block'
+                  >
+                    <option value="">Select language</option>
+                    {Object.entries(ISO_LANGUAGES).map(([code, name]) => (
+                      <option key={code} value={code}>
+                        {name}
+                      </option>
+                    ))}
+                  </Select>
+                </td>
+                <td className="p-2">
+                  <Input
+                    type="text"
+                    value={content.name}
+                    onChange={(e) => handleChange(index, 'name', e.target.value)}
+                    required
+                    className='min-w-32'
+                  />
+                </td>
+                <td className="p-2">
+                  <MarkdownEditor
+                    value={content.description}
+                    onChange={(value) => handleChange(index, 'description', value)}
+                    rows={3}
+                    field="Description"
+                    className='min-w-64'
+                  />
+                </td>
+                <td className="p-2">
+                  <MarkdownEditor
+                    value={content.about_content}
+                    onChange={(value) => handleChange(index, 'about_content', value)}
+                    rows={3}
+                    field="About Content"
+                    className='min-w-64'
+                  />
+                </td>
+                <td className="p-2">
+                  <Input
+                    type="text"
+                    value={content.social_media_message}
+                    onChange={(e) => handleChange(index, 'social_media_message', e.target.value)}
+                    className='min-w-64'
+                  />
+                </td>
+                <td className="p-2">
+                  <Button
+                    variant="danger"
+                    icon={<FiTrash2 />}
+                    onClick={() => handleRemove(index)}
+                  >
+                    Remove
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <Button
+        variant="primary"
+        onClick={handleAdd}
+        className="mt-5 ml-2"
+        icon={<FiPlus />}
+      >
+        Add new translation
+      </Button>
     </div>
   );
 };
