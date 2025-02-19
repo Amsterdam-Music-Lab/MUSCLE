@@ -5,7 +5,7 @@ from section.models import Playlist
 from experiment.actions import Trial, Explainer, Step, Score, Final, Info, HTML
 from experiment.actions.form import ButtonArrayQuestion, Form
 from experiment.actions.playback import Autoplay
-from experiment.actions.styles import STYLE_TOONTJEHOGER
+from experiment.actions.styles import ColorScheme
 from experiment.models import Session
 from .base import BaseRules
 from experiment.utils import non_breaking_spaces
@@ -164,9 +164,11 @@ class ToontjeHoger1Mozart(BaseRules):
                 "E": "E",
             },
             view="BUTTON_ARRAY",
-            result_id=prepare_result(key, session, section=section, expected_response=expected_response),
+            result_id=prepare_result(
+                key, session, section=section, expected_response=expected_response
+            ),
             submits=True,
-            style=STYLE_TOONTJEHOGER,
+            style=[ColorScheme.TOONTJEHOGER],
         )
         form = Form([question])
 

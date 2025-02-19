@@ -1,4 +1,6 @@
-from .frontend_style import FrontendStyle
+from typing import Optional
+
+from .styles import FrontendStyle
 
 
 class BaseAction(object):
@@ -17,35 +19,34 @@ class BaseAction(object):
     Example:
         ```python
         class CustomAction(BaseAction):
-            ID = "CUSTOM"
+            view = "CUSTOM"
 
             def __init__(self, custom_data, style=None):
                 super().__init__(style=style)
                 self.custom_data = custom_data
         ```
 
-    Args:
-        style (FrontendStyle, optional): Style configuration for the frontend component.
-
     Note:
         When creating a new action type: \n
         1. Inherit from `BaseAction` \n
-        2. Define a unique `ID` class variable \n
+        2. Define a unique `view` class variable \n
         3. Initialize with required parameters \n
         4. Override `action()` method if custom serialization is needed
     """
 
-    ID = "BASE"
-    style = None
+    view = "BASE"
 
-    def __init__(self, style: FrontendStyle | None = None):
+    def __init__(self, style: Optional[list[str]] = None):
         """Initialize the base action with optional styling.
 
         Args:
-            style (FrontendStyle | None): Frontend styling configuration.
-                If None, default styling will be used.
+            style: list of class arguments to set in the frontend
         """
-        self.style = style
+        self.style = self._apply_style(style)
+
+    def _apply_style(self, style: list[str]) -> Optional[FrontendStyle]:
+        if style:
+            return FrontendStyle(style)
 
     def action(self) -> dict:
         """Serialize the action configuration for frontend consumption.
@@ -61,10 +62,7 @@ class BaseAction(object):
                 - 'style': Serialized style configuration if present
         """
         action_dict = self.__dict__
-        action_dict["view"] = self.ID
-
-        # Convert FrontendStyle object to dictionary if present and not already converted
-        if self.style is not None and type(self.style) is not dict:
-            action_dict["style"] = self.style.to_dict()
-
+        action_dict['view'] = self.view
+        if getattr(self, 'style', None):
+            action_dict['style'] = self.style.to_dict()
         return action_dict

@@ -1,6 +1,6 @@
 {
     "name": "muscle",
-    "version": "3.1.0",
+    "version": "3.2.0",
     "private": false,
     "description": "The MUSCLE platform is an application that provides an easy way to implement and run online listening experiments for music research.",
     "license": "MIT",

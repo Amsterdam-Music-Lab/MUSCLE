@@ -54,7 +54,7 @@ const Final = ({
                     <Rank cup={{ className: rank?.class, text: rank.text }} score={{ score, label: points }} />
                 </div>
             )}
-            {percentile !== undefined && (
+            {(typeof percentile === 'number' && percentile >= 0 && percentile <= 100) && (
                 <div className={classNames("aha__final-rank-bar-section", rank?.class)}>
                     <div data-testid="final-rank-bar-cursor" className="aha__final-rank-bar-cursor" style={{ left: `${percentile}%` }}></div>
                 </div>

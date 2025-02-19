@@ -1,8 +1,8 @@
-from typing import Dict, List, Union, Optional, Any, Literal
+from typing import Dict, List, Optional, Any, Literal
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
-from .styles import STYLE_NEUTRAL, STYLE_BOOLEAN_NEGATIVE_FIRST, STYLE_GRADIENT_7
+from .styles import ButtonStyle, ColorScheme
 from .base_action import BaseAction
 
 
@@ -22,7 +22,7 @@ class Question(BaseAction):
         question (str): The actual question text
         is_skippable (bool): Whether question can be skipped
         submits (bool): Whether answering submits the form
-        style (Union[str, Dict]): CSS class name(s) for styling
+        style Optional[list[str]]: CSS class name(s) set in the frontend for styling
 
     Example:
         ```python
@@ -32,7 +32,7 @@ class Question(BaseAction):
             explainer="Please enter your full name.",
             is_skippable=True,
             submits=True,
-            style="text-center",
+            style=[ColorScheme.BOOLEAN],
             view="STRING",
         )
         ```
@@ -51,7 +51,7 @@ class Question(BaseAction):
         question: str = "",
         is_skippable: bool = False,
         submits: bool = False,
-        style: Union[str, Dict] = STYLE_NEUTRAL,
+        style: list[str] = [ColorScheme.NEUTRAL.value],
     ) -> None:
         self.key = key
         self.view = view
@@ -60,7 +60,7 @@ class Question(BaseAction):
         self.result_id = result_id
         self.is_skippable = is_skippable
         self.submits = submits
-        self.style = style
+        self.style = self._apply_style(style)
 
     def action(self) -> Dict[str, Any]:
         if settings.TESTING and self.result_id:
@@ -69,7 +69,7 @@ class Question(BaseAction):
             result = Result.objects.get(pk=self.result_id)
             if result and result.expected_response:
                 self.expected_response = result.expected_response
-        return self.__dict__
+        return super().action()
 
 
 class NumberQuestion(Question):
@@ -130,7 +130,11 @@ class BooleanQuestion(Question):
         super().__init__(**kwargs)
         self.choices = choices or {"no": _("No"), "yes": _("Yes")}
         self.view = "BUTTON_ARRAY"
-        self.style = {STYLE_BOOLEAN_NEGATIVE_FIRST: True, "buttons-large-gap": True}
+        style = kwargs.get('style') or [
+            ColorScheme.BOOLEAN_NEGATIVE_FIRST,
+            ButtonStyle.LARGE_GAP,
+        ]
+        self.style = self._apply_style(style)
 
 
 class ChoiceQuestion(Question):
@@ -395,7 +399,7 @@ class LikertQuestionIcon(Question):
                 6: "fa-face-frown-open",
                 7: "fa-face-angry",
             }
-            self.style = STYLE_GRADIENT_7
+            self.style = self._apply_style([ColorScheme.GRADIENT_7])
 
 
 class Form(BaseAction):

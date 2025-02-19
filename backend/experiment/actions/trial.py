@@ -4,7 +4,6 @@ from typing import Optional, TypedDict
 from .base_action import BaseAction
 from experiment.actions.form import Form
 from experiment.actions.playback import Playback
-from .frontend_style import FrontendStyle
 
 
 class Config(TypedDict):
@@ -36,11 +35,6 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
         feedback_form (Optional[Form]): array of form elements
         title (Optional(str)): page title - defaults to empty
         config (Optional[Config]): configuration for the trial with options for response time, auto advance, listen first, show continue button, and continue label
-        style (FrontendStyle): style class to add to elements in form and playback
-            neutral: first element is blue, second is yellow, third is teal
-            neutral-inverted: first element is yellow, second is blue, third is teal
-            boolean: first element is green, second is red
-            boolean-negative-first: first element is red, second is green
 
     Example:
         ```python
@@ -70,7 +64,7 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
         Relates to client component: Trial.tsx
     """
 
-    ID = "TRIAL_VIEW"
+    view = "TRIAL_VIEW"
 
     def __init__(
         self,
@@ -79,7 +73,6 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
         feedback_form: Optional[Form] = None,
         title="",
         config: Optional[Config] = None,
-        style: FrontendStyle = FrontendStyle(),
     ):
         self.playback = playback
         self.html = html
@@ -94,7 +87,6 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
         }
         if config:
             self.config.update(config)
-        self.style = style
 
     def action(self):
         """
@@ -103,12 +95,10 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
         """
         # Create action
         action = {
-            "view": Trial.ID,
+            "view": self.view,
             "title": self.title,
             "config": self.config,
         }
-        if self.style:
-            action["style"] = self.style.to_dict()
         if self.playback:
             action["playback"] = self.playback.action()
         if self.html:

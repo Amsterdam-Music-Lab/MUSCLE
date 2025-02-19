@@ -4,7 +4,7 @@ The `Trial` object may also contain a `Playback` object, which can refer to one 
 
 - Autoplay (plays and optionally shows an animation)
 - PlayButton (starts audio on click)
-- ImagePlayer (a special case of PlayButton, can show an image aligned with the button_
+- ImagePlayer (a special case of PlayButton, can show an image aligned with the button)
 - MultiPlayer (multiple PlayButtons)
 - MatchingPairs (showing PlayButtons as cards, and perform special logic every time the user selects a "pair")
 

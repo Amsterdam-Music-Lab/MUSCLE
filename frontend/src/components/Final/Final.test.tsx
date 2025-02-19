@@ -185,7 +185,7 @@ describe('Final Component', () => {
         });
     });
 
-    it('Sets the rank cursor position correctly based on percentile', () => {
+    it('Sets the rank cursor position correctly when percentile is valid', () => {
         render(
             <BrowserRouter>
                 <Final
@@ -196,7 +196,6 @@ describe('Final Component', () => {
                 />
             </BrowserRouter>
         );
-
         const cursor = screen.getByTestId('final-rank-bar-cursor');
         expect(cursor.style.left).toBe('50%');
     });
@@ -212,11 +211,25 @@ describe('Final Component', () => {
                 />
             </BrowserRouter>
         );
-
         expect(document.body.contains(screen.queryByTestId('final-rank-bar-cursor'))).toBe(false);
     });
 
-    it('renders percentile/rank part when percentile is defined', () => {
+    it('does not render percentile/rank part when percentile is out of range', () => {
+        render(
+            <BrowserRouter>
+                <Final
+                    block={{ slug: 'test-block' }}
+                    participant="participant-id"
+                    score={100}
+                    final_text="<p>Final Text</p>"
+                    percentile={150}
+                />
+            </BrowserRouter>
+        );
+        expect(document.body.contains(screen.queryByTestId('final-rank-bar-cursor'))).toBe(false);
+    });
+
+    it('renders percentile/rank part when percentile is between 0 and 100', () => {
         render(
             <BrowserRouter>
                 <Final
@@ -228,7 +241,6 @@ describe('Final Component', () => {
                 />
             </BrowserRouter>
         );
-
         expect(document.body.contains(screen.queryByTestId('final-rank-bar-cursor'))).toBe(true);
     });
 });

@@ -7,7 +7,8 @@ dev_addr: '127.0.0.1:8080'
 
 markdown_extensions:
   - smarty
-  - toc
+  - toc:
+      permalink: '#'
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -47,6 +48,8 @@ plugins:
           heading_level: 3
           docstring_style: google
           show_if_no_docstring: false
+          show_docstring_raises: true
+          show_docstring_returns: true
 
 extra_css:
     - assets/css/style.css
@@ -59,19 +62,21 @@ nav:
     - 4. Creating playlists: '04_Creating_playlists.md'
     - 5. Creating an experiment: '05_Creating_an_experiment.md'
     - 6. Custom questions: '06_Custom_questions.md'
-    - 7. Actions overview: '07_Actions_overview.md'
-    - 8. Forms and question widgets: '08_Forms_and_question_widgets.md'
-    - 9. Playback and player widgets: '09_Playback_and_player_widgets.md'
-    - 10. Create a custom ruleset: '10_Create_custom_ruleset.md'
-    - 11. Exporting result data: '11_Exporting_result_data.md'
+    - 7. Customizing the look of an experiment: '07_Custom_theme.md'
+    - 8. Exporting result data: '08_Exporting_result_data.md'
+    - 9. Actions overview: '09_Actions_overview.md'
+    - 10. Forms and question widgets: '10_Forms_and_question_widgets.md'
+    - 11. Playback and player widgets: '11_Playback_and_player_widgets.md'
+    - 12. Create a custom ruleset: '12_Create_custom_ruleset.md'
+    - 13. Running an experiment: '13_Running_an_experiment.md'
   - Preview frontend components:
       - 'Storybook': 'https://amsterdam-music-lab.github.io/MUSCLE/storybook'
   - Ruleset documentation:
-    - Data models:      
-      - Experiment: 'experiment_models.md'      
+    - Data models:
+      - Experiment: 'experiment_models.md'
       - Image: 'image_models.md'
-      - Participant: 'participant_models.md'      
-      - Question: 'question_models.md'      
+      - Participant: 'participant_models.md'
+      - Question: 'question_models.md'
       - Result: 'result_models.md'
       - Section: 'section_models.md'
       - Session: 'session_models.md'
@@ -81,38 +86,48 @@ nav:
       - Participant utils: 'participant_utils.md'
       - Question utils: 'question_utils.md'
       - Experiment actions: 'experiment_actions.md'
+  - Developer documentation:
+    - 1. Running commands in the docker containers: 'D1_Running_commands_in_the_docker_containers.md'
+    - 2. Compile and watch scss files: 'D2_Compile_and_watch_scss_files.md'
+    - 3. Managing the database: 'D3_Managing_the_database.md'
+    - 4. Debugging: 'D4_Debugging.md'
+    - 5. Installing python packages: 'D5_Installing_python_packages.md'
+    - 6. Management commands: 'D6_Management_commands.md'
+    - 7. Running tests: 'D7_Running_tests.md'
+    - 8. Storybook: 'D8_Storybook.md'
+    - 9. Troubleshooting: 'D9_Troubleshooting.md'
   - Technical documentation:
-    - Experiment app:      
-      - Experiment admin: 'experiment_admin.md'      
+    - Experiment app:
+      - Experiment admin: 'experiment_admin.md'
       - Experiment serializers: 'experiment_serializers.md'
       - Experiment utils: 'experiment_utils.md'
       - Experiment views: 'experiment_views.md'
     - Image app:
-      - Image admin: 'image_admin.md'      
+      - Image admin: 'image_admin.md'
       - Image serializers: 'image_serializers.md'
       - Image validators: 'image_validators.md'
     - Participant app:
       - Participant admin: 'participant_admin.md'
       - Participant views: 'participant_views.md'
     - Question app:
-      - Question admin: 'question_admin.md'      
+      - Question admin: 'question_admin.md'
       - Question utils: 'question_utils.md'
       - Question views: 'question_views.md'
     - Result app:
-      - Result admin: 'result_admin.md'      
+      - Result admin: 'result_admin.md'
       - Result score: 'result_score.md'
       - Result utils: 'result_utils.md'
       - Result views: 'result_views.md'
     - Section app:
-      - Section admin: 'section_admin.md'      
+      - Section admin: 'section_admin.md'
       - Section views: 'section_views.md'
       - Section utils: 'section_utils.md'
       - Section validators: 'section_validators.md'
       - Section views: 'section_views.md'
     - Session app:
-      - Session admin: 'session_admin.md'      
+      - Session admin: 'session_admin.md'
       - Session views: 'session_views.md'
     - Theme app:
-      - Theme admin: 'theme_admin.md'      
+      - Theme admin: 'theme_admin.md'
       - Theme views: 'theme_views.md'
     - About this document: 'this_doc.md'

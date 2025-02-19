@@ -20,7 +20,6 @@ const defaultArgs = {
     id: 0,
     active: true,
     style: {},
-    emphasizeTitle: false,
 };
 
 const getArgs = (args = {}) => ({ ...defaultArgs, ...args });

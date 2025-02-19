@@ -47,6 +47,7 @@ services:
             - AML_LOCATION_PROVIDER=${AML_LOCATION_PROVIDER}
             - AML_SECRET_KEY=${AML_SECRET_KEY}
             - AML_SUBPATH=${AML_SUBPATH}
+            - AML_TIME_ZONE=${AML_TIME_ZONE}
             - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
             - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}
             - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
@@ -91,6 +92,7 @@ services:
             - VITE_HTML_BODY_CLASS=${FRONTEND_HTML_BODY_CLASS}
             - VITE_SENTRY_DSN=${FRONTEND_SENTRY_DSN}
             - VITE_STRICT=${FRONTEND_STRICT}
+            - VITE_PLAUSIBLE_DOMAIN=${FRONTEND_PLAUSIBLE_DOMAIN}
         restart: "no"
 
     # This service is responsible for serving
