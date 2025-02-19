@@ -36,6 +36,7 @@ const Login = ({ onLogin }: LoginProps) => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
+        <img src="/logo.png" alt="Logo" className="w-24 mx-auto mb-4" />
         <h2 className="text-2xl font-bold mb-6">Login</h2>
         {error && <div className="text-red-500 mb-4">{error}</div>}
         <form onSubmit={handleSubmit}>
