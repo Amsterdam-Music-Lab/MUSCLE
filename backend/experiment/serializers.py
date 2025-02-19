@@ -145,7 +145,7 @@ class BlockSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
     translated_contents = BlockTranslatedContentSerializer(many=True, required=False, read_only=False)
     playlists = PlaylistSerializer(many=True, required=False)
-    questionseries_set = QuestionSeriesSerializer(many=True, read_only=False)
+    questionseries_set = QuestionSeriesSerializer(many=True, read_only=False, required=False)
 
     class Meta:
         model = Block
@@ -167,6 +167,7 @@ class BlockSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         translated_contents_data = validated_data.pop("translated_contents", [])
         playlists_data = validated_data.pop("playlists", [])
+        question_series_data = validated_data.pop("questionseries_set", [])
         block = Block.objects.create(**validated_data)
 
         for content_data in translated_contents_data:
@@ -175,6 +176,11 @@ class BlockSerializer(serializers.ModelSerializer):
         for playlist_data in playlists_data:
             playlist = Playlist.objects.get(pk=playlist_data["id"])
             block.playlists.add(playlist)
+
+        for series_data in question_series_data:
+            series_serializer = QuestionSeriesSerializer(data=series_data)
+            series_serializer.is_valid(raise_exception=True)
+            series_serializer.save(block=block)
 
         return block
 
@@ -323,6 +329,7 @@ class ExperimentSerializer(serializers.ModelSerializer):
             instance.phases.exclude(id__in=existing_phase_ids).delete()
 
         return instance
+
 
 from django.utils.translation import gettext_lazy as _
 
