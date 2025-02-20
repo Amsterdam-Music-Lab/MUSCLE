@@ -78,3 +78,21 @@ export type Selection = {
   phaseIndex: number;
   blockIndex?: number;
 };
+
+export enum QuestionTypeEnum {
+  BooleanQuestion = "BooleanQuestion",
+  ChoiceQuestion = "ChoiceQuestion",
+  NumberQuestion = "NumberQuestion",
+  TextQuestion = "TextQuestion",
+  LikertQuestion = "LikertQuestion",
+  LikertQuestionIcon = "LikertQuestionIcon",
+  AutoCompleteQuestion = "AutoCompleteQuestion"
+}
+
+export type QuestionType = keyof typeof QuestionTypeEnum;
+
+export interface QuestionData {
+  key: string;
+  question: string;
+  type: QuestionType;
+}

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { BlockQuestionSeries, Question, QuestionGroup } from '../types/types';
+import { BlockQuestionSeries, Question, QuestionData, QuestionGroup, QuestionInSeries, QuestionTypeEnum } from '../types/types';
 import { FormField } from './form/FormField';
 import { Input } from './form/Input';
 import { Select } from './form/Select';
-import { API_BASE_URL } from '../config';
+import { API_BASE_URL, createQuestionQuestionAPIUrl } from '../config';
 import { SelectedQuestionsTable } from './question-series/SelectedQuestionsTable';
 import { AvailableQuestionsTable } from './question-series/AvailableQuestionsTable';
 import { FiPlus } from 'react-icons/fi';
+import useBoundStore from '../utils/store';
 
 interface QuestionSeriesFormProps {
   series: BlockQuestionSeries;
@@ -14,11 +15,13 @@ interface QuestionSeriesFormProps {
 }
 
 export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps) {
+  const addToast = useBoundStore(state => state.addToast);
   const [availableQuestions, setAvailableQuestions] = useState<Question[]>([]);
   const [questionGroups, setQuestionGroups] = useState<QuestionGroup[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   const [highlightedQuestionKey, setHighlightedQuestionKey] = useState<string | null>(null);
+  const [newQuestionText, setNewQuestionText] = useState('');
 
   useEffect(() => {
     fetch(API_BASE_URL + '/experiment/api/questions/')
@@ -104,24 +107,58 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
   };
 
   const createNewQuestion = () => {
-    throw new Error('Function not implemented.');
+    alert('Not implemented yet');
   };
 
-  const submitNewQuestion = (e: React.FormEvent) => {
+  const submitNewQuestion = async (
+    e: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLButtonElement>,
+    questionText: string
+  ) => {
+
     e.preventDefault();
 
-    const formData = new FormData(e.currentTarget);
-    const questionText = formData.get('questionText') as string;
-    const questionKey = questionText.toLowerCase().replace(/\s+/g, '_');
-    const questionType = 'text'; // Default type, can be changed later
-    const newQuestion = {
+    if (!questionText) return;
+
+    // the question key needs to be unique and a valid slug, so we can use the question text as a base and replace spaces with dashes, lowercase it and remove special characters
+    const questionKey = questionText
+      .toLowerCase()
+      .replace(/[^a-z0-9 ]/g, '')
+      .replace(/ /g, '_');
+    const questionType = QuestionTypeEnum.TextQuestion;
+    const newQuestion: QuestionData = {
       key: questionKey,
       question: questionText,
       type: questionType,
     };
+    const response = await fetch(createQuestionQuestionAPIUrl('questions'), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newQuestion),
+    });
+    const data = await response.json();
 
-    // TODO: Post new question to the server
-    throw new Error('Function not implemented.');
+    if (response.ok) {
+      setAvailableQuestions([...availableQuestions, data]);
+      handleAddQuestion(data.key);
+      setNewQuestionText('');
+    }
+
+    if (!response.ok) {
+      let message = 'Error creating question';
+
+      if (data?.key) {
+        message = `Error creating question: ${data.key}`;
+      }
+
+      addToast({
+        message,
+        duration: 5000,
+        level: 'error',
+      });
+      return;
+    }
   };
 
   return (
@@ -192,7 +229,7 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
             onCreateNewQuestion={createNewQuestion}
           />
 
-          <form className="gap-2 flex items-end" onSubmit={submitNewQuestion}>
+          <div className="gap-2 flex items-end" >
             <div className="space-y-2">
               <label className="text-gray-700 text-sm font-semibold">Create New Question</label>
               <input
@@ -200,13 +237,19 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
                 name="questionText"
                 placeholder="What is your favorite artist?"
                 className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                value={newQuestionText}
+                onChange={(e) => setNewQuestionText(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && submitNewQuestion(e, newQuestionText)}
               />
             </div>
-            <button onClick={createNewQuestion} className="whitespace-nowrap px-4 py-2 border border-transparent rounded-md bg-blue-600 hover:bg-blue-800 text-white flex items-center gap-1">
+            <button
+              type="button"
+              onClick={(e) => submitNewQuestion(e, newQuestionText)}
+              className="whitespace-nowrap px-4 py-2 border border-transparent rounded-md bg-blue-600 hover:bg-blue-800 text-white flex items-center gap-1">
               <FiPlus />
               Create New Question
             </button>
-          </form>
+          </div>
 
         </div>
       </div>
