@@ -3,6 +3,9 @@ import { QuestionTypeEnum, QuestionData, QuestionChoice } from '../types/types';
 import { Button } from './Button';
 import { FiMinus, FiPlus, FiSave } from 'react-icons/fi';
 import { Input } from './form/Input';
+import { FormField } from './form/FormField';
+import { Select } from './form/Select';
+import { Checkbox } from './form/Checkbox';
 
 interface QuestionFormProps {
   initialData?: QuestionData & {
@@ -113,8 +116,7 @@ export function QuestionForm({ className = "bg-white p-4", initialData, onSubmit
   return (
     <form onSubmit={handleSubmit} className={className}>
       {/* Question Key */}
-      <div className="mb-4">
-        <label className="block text-gray-700 mb-1">Question Key</label>
+      <FormField label="Question Key" error={error?.key} >
         <Input
           type="text"
           placeholder="UNIQUE_QUESTION_KEY"
@@ -123,12 +125,10 @@ export function QuestionForm({ className = "bg-white p-4", initialData, onSubmit
           className="w-full px-3 py-2 border rounded"
           required
         />
-        {error?.key && <p className="text-red-500 text-sm mt-1">{error.key}</p>}
-      </div>
+      </FormField>
 
       {/* Question Text */}
-      <div className="mb-4">
-        <label className="block text-gray-700 mb-1">Question Text</label>
+      <FormField label="Question Text" error={error?.question} >
         <input
           type="text"
           placeholder="What is your favorite color?"
@@ -137,13 +137,11 @@ export function QuestionForm({ className = "bg-white p-4", initialData, onSubmit
           className="w-full px-3 py-2 border rounded"
           required
         />
-        {error?.question && <p className="text-red-500">{error.question}</p>}
-      </div>
+      </FormField>
 
       {/* Question Type */}
-      <div className="mb-4">
-        <label className="block text-gray-700 mb-1">Question Type</label>
-        <select
+      <FormField label="Question Type" error={error?.type} >
+        <Select
           value={questionType}
           onChange={(e) => setQuestionType(e.target.value)}
           className="w-full px-3 py-2 border rounded"
@@ -155,35 +153,32 @@ export function QuestionForm({ className = "bg-white p-4", initialData, onSubmit
               {QuestionTypeEnum[type as keyof typeof QuestionTypeEnum]}
             </option>
           ))}
-        </select>
-      </div>
+        </Select>
+      </FormField>
 
       {/* Advanced Options */}
       <fieldset className="mb-4 border p-4 rounded">
         <legend className="px-2 text-gray-700">Advanced Options</legend>
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-1">Explainer</label>
-          <input
+        <FormField label="Explainer" error={error?.explainer} >
+          <Input
             type="text"
             value={explainer}
             placeholder="Optional explainer text"
             onChange={(e) => setExplainer(e.target.value)}
             className="w-full px-3 py-2 border rounded"
           />
-        </div>
+        </FormField>
         <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className={shouldShowScaleSteps ? '' : 'hidden'}>
-            <label className="block text-gray-700 mb-1">Scale Steps</label>
+          <FormField className={shouldShowScaleSteps ? '' : 'hidden'} label="Scale Steps" error={error?.scale_steps} >
             <input
               type="number"
               value={scaleSteps}
               onChange={(e) => setScaleSteps(parseInt(e.target.value))}
               className="w-full px-3 py-2 border rounded"
             />
-          </div>
-          <div className={shouldShowProfileScoringRule ? '' : 'hidden'}>
-            <label className="block text-gray-700 mb-1">Profile Scoring Rule</label>
-            <select
+          </FormField>
+          <FormField className={shouldShowProfileScoringRule ? '' : 'hidden'} label="Profile Scoring Rule" error={error?.profile_scoring_rule} >
+            <Select
               value={profileScoringRule}
               onChange={(e) => setProfileScoringRule(e.target.value)}
               className="w-full px-3 py-2 border rounded"
@@ -192,47 +187,42 @@ export function QuestionForm({ className = "bg-white p-4", initialData, onSubmit
               <option value="LIKERT">LIKERT</option>
               <option value="REVERSE_LIKERT">REVERSE_LIKERT</option>
               <option value="CATEGORIES_TO_LIKERT">CATEGORIES_TO_LIKERT</option>
-            </select>
-          </div>
-          <div className={shouldShowMinMaxValues ? '' : 'hidden'}>
-            <label className="block text-gray-700 mb-1">Min Value</label>
-            <input
+            </Select>
+          </FormField>
+          <FormField className={shouldShowMinMaxValues ? '' : 'hidden'} label="Min Value" error={error?.min_value} >
+            <Input
               type="number"
               value={minValue}
               onChange={(e) => setMinValue(parseFloat(e.target.value))}
               className="w-full px-3 py-2 border rounded"
             />
-          </div>
-          <div className={shouldShowMinMaxValues ? '' : 'hidden'}>
-            <label className="block text-gray-700 mb-1">Max Value</label>
-            <input
+          </FormField>
+          <FormField className={shouldShowMinMaxValues ? '' : 'hidden'} label="Max Value" error={error?.max_value} >
+            <Input
               type="number"
               value={maxValue}
               onChange={(e) => setMaxValue(parseFloat(e.target.value))}
               className="w-full px-3 py-2 border rounded"
             />
-          </div>
-          <div className={shouldShowMaxLength ? '' : 'hidden'}>
-            <label className="block text-gray-700 mb-1">Max Length</label>
-            <input
+          </FormField>
+          <FormField className={shouldShowMaxLength ? '' : 'hidden'} label="Max Length" error={error?.max_length} >
+            <Input
               type="number"
               value={maxLength}
               onChange={(e) => setMaxLength(parseInt(e.target.value))}
               className="w-full px-3 py-2 border rounded"
             />
-          </div>
-          <div className={shouldShowChoiceAdvanced ? '' : 'hidden'}>
-            <label className="block text-gray-700 mb-1">Min Values (for choices)</label>
-            <input
+          </FormField>
+          <FormField className={shouldShowChoiceAdvanced ? '' : 'hidden'} label="Min Values" error={error?.min_values} >
+            <Input
               type="number"
               value={minValues}
               onChange={(e) => setMinValues(parseInt(e.target.value))}
               className="w-full px-3 py-2 border rounded"
             />
-          </div>
-          <div className={shouldShowChoiceAdvanced ? '' : 'hidden'}>
-            <label className="block text-gray-700 mb-1">View</label>
-            <select
+          </FormField>
+          <FormField className={shouldShowChoiceAdvanced ? '' : 'hidden'} label="View" error={error?.view} >
+            <Select
               value={view}
               onChange={(e) => setView(e.target.value)}
               className="w-full px-3 py-2 border rounded"
@@ -242,61 +232,60 @@ export function QuestionForm({ className = "bg-white p-4", initialData, onSubmit
               <option value="CHECKBOXES">CHECKBOXES</option>
               <option value="RADIOS">RADIOS</option>
               <option value="DROPDOWN">DROPDOWN</option>
-            </select>
-          </div>
-          <div className="flex items-center">
-            <input
-              type="checkbox"
+            </Select>
+          </FormField>
+          <FormField className="flex items-center" label="Is Skippable" error={error?.is_skippable} >
+            <Checkbox
               checked={isSkippable}
               onChange={(e) => setIsSkippable(e.target.checked)}
               className="mr-2"
             />
-            <label className="text-gray-700">Is Skippable</label>
-          </div>
+          </FormField>
         </div>
+        {/* Choices (only for ChoiceQuestion type) */}
+        {questionType === QuestionTypeEnum.ChoiceQuestion && (
+          <FormField className="mb-4" label="Choices" error={error?.choices} >
+            {choices.map((choice, idx) => (
+              <div key={idx} className="flex mb-2">
+                <Input
+                  type="text"
+                  placeholder="Choice Key"
+                  value={choice.key}
+                  onChange={(e) => handleChoiceChange(idx, 'key', e.target.value)}
+                  className="w-1/3 px-3 py-2 border rounded mr-2"
+                  required
+                />
+                <Input
+                  type="text"
+                  placeholder="Choice Text"
+                  value={choice.text}
+                  onChange={(e) => handleChoiceChange(idx, 'text', e.target.value)}
+                  className="w-1/2 px-3 py-2 border rounded mr-2"
+                  required
+                />
+                <Button
+                  type="button"
+                  onClick={() => handleRemoveChoice(idx)}
+                  variant='danger'
+                  icon={<FiMinus />}
+                >
+                  Remove
+                </Button>
+              </div>
+            ))}
+            {choices.length === 0 && <p className="text-gray-500">No choices added yet.</p>}
+            <Button
+              type="button"
+              onClick={handleAddChoice}
+              icon={<FiPlus />}
+              className="mt-2"
+            >
+              Add Choice
+            </Button>
+          </FormField>
+        )}
       </fieldset>
 
-      {/* Choices (only for ChoiceQuestion type) */}
-      {questionType === QuestionTypeEnum.ChoiceQuestion && (
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-1">Choices</label>
-          {choices.map((choice, idx) => (
-            <div key={idx} className="flex mb-2">
-              <input
-                type="text"
-                placeholder="Choice Key"
-                value={choice.key}
-                onChange={(e) => handleChoiceChange(idx, 'key', e.target.value)}
-                className="w-1/3 px-3 py-2 border rounded mr-2"
-                required
-              />
-              <input
-                type="text"
-                placeholder="Choice Text"
-                value={choice.text}
-                onChange={(e) => handleChoiceChange(idx, 'text', e.target.value)}
-                className="w-1/2 px-3 py-2 border rounded mr-2"
-                required
-              />
-              <Button
-                type="button"
-                onClick={() => handleRemoveChoice(idx)}
-                variant='danger'
-                icon={<FiMinus />}
-              >
-                Remove
-              </Button>
-            </div>
-          ))}
-          <Button
-            type="button"
-            onClick={handleAddChoice}
-            icon={<FiPlus />}
-          >
-            Add Choice
-          </Button>
-        </div>
-      )}
 
       <div className="h-px bg-gray-300 my-4" />
 
