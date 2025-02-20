@@ -266,7 +266,7 @@ export function QuestionForm({ className = "bg-white p-4", initialData, onSubmit
                 <Button
                   type="button"
                   onClick={() => handleRemoveChoice(idx)}
-                  variant='danger'
+                  variant="dangerText"
                   icon={<FiMinus />}
                 >
                   Remove
