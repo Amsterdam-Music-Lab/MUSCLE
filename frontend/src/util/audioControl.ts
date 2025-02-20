@@ -10,7 +10,7 @@ export const playAudio = (section: Section, playMethod: PlaybackArgs['play_metho
 
         // Determine latency for current audio device
         latency = webAudio.getTotalLatency();
-        window.sessionStorage.setItem('audioLatency', latency.toString());
+        window.sessionStorage.setItem('audioLatency', latency);
         // Play audio
         webAudio.playBufferFrom(section.id.toString(), playheadShift);
 
@@ -21,7 +21,7 @@ export const playAudio = (section: Section, playMethod: PlaybackArgs['play_metho
         if (playMethod !== 'EXTERNAL') {
             // Determine latency for current audio device
             latency = webAudio.getTotalLatency();
-            window.sessionStorage.setItem('audioLatency', latency.toString());
+            window.sessionStorage.setItem('audioLatency', latency);
             webAudio.initWebAudio();
         }
 
