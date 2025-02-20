@@ -58,8 +58,10 @@ function QuestionFormPage() {
 
     addToast({ message: 'Question saved successfully!', level: 'success', duration: 3000 });
 
-    if (!id && json.id) {
-      navigate(`/questions/${json.id}`);
+    if (!id) {
+      const redirectUrl = `/questions/${json.key}/edit` || '/questions';
+      window.location
+        .replace(redirectUrl);
       return;
     }
   };
