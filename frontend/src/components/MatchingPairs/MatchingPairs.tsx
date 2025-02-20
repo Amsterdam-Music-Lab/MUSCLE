@@ -168,6 +168,14 @@ const MatchingPairs = ({
         return true;
     }
 
+    const getAudioLatency = () => {
+        if (window.sessionStorage.getItem('audioLatency') !== null) {
+            return window.sessionStorage.getItem('audioLatency');
+        } else {
+            return NaN;
+        }
+    }
+
     const checkMatchingPairs = async (index: number) => {
         const currentCard = sections[index];
         const turnedCards = sections.filter(s => s.turned);
@@ -183,7 +191,8 @@ const MatchingPairs = ({
                             turned: true,
                             noevents: true,
                             boardposition: index + 1,
-                            timestamp: performance.now()
+                            timestamp: performance.now(),
+                            audio_latency_ms: getAudioLatency()
                         };
                         return updatedCurrentCard;
                     }
@@ -216,7 +225,8 @@ const MatchingPairs = ({
                     turned: true,
                     noevents: true,
                     boardposition: index + 1,
-                    timestamp: performance.now()
+                    timestamp: performance.now(),
+                    audio_latency_ms: getAudioLatency()
                 };
                 setFirstCard(updatedCurrentCard);
                 setSections(prev => prev.map((section, i) => {
