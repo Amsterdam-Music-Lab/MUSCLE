@@ -9,7 +9,7 @@ class ChoiceSerializer(serializers.ModelSerializer):
 
 
 class QuestionSerializer(serializers.ModelSerializer):
-    choices = ChoiceSerializer(many=True, required=False)
+    choices = ChoiceSerializer(source="choice_set", many=True, required=False)
 
     class Meta:
         model = Question
@@ -31,14 +31,15 @@ class QuestionSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        choices_data = validated_data.pop("choices", [])
+        choices_data = validated_data.pop("choice_set", [])
         question = Question.objects.create(**validated_data)
         for choice_data in choices_data:
             Choice.objects.create(question=question, **choice_data)
         return question
 
     def update(self, instance, validated_data):
-        choices_data = validated_data.pop("choices", [])
+        choices_data = validated_data.pop("choice_set", [])
+
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
