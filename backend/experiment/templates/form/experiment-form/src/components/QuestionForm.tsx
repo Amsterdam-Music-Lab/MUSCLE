@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { QuestionTypeEnum, QuestionData, QuestionChoice } from '../types/types';
 import { Button } from './Button';
 import { FiMinus, FiPlus, FiSave } from 'react-icons/fi';
+import { Input } from './form/Input';
 
 interface QuestionFormProps {
   initialData?: QuestionData & {
@@ -28,9 +29,12 @@ interface QuestionFormProps {
     view?: string;
     is_skippable?: boolean;
   }) => void;
+  className?: string;
+  error?: { [key: string]: string };
+  loading?: boolean;
 }
 
-export function QuestionForm({ initialData, onSubmit }: QuestionFormProps) {
+export function QuestionForm({ className = "bg-white p-4", initialData, onSubmit, error }: QuestionFormProps) {
   const [questionKey, setQuestionKey] = useState(initialData?.key || '');
   const [questionText, setQuestionText] = useState(initialData?.question || '');
   const [questionType, setQuestionType] = useState(initialData?.type || '');
@@ -72,29 +76,46 @@ export function QuestionForm({ initialData, onSubmit }: QuestionFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({
+
+    const submissionData: QuestionData = {
       key: questionKey,
       question: questionText,
       type: questionType as QuestionTypeEnum,
       choices,
       explainer,
-      scale_steps: scaleSteps,
-      profile_scoring_rule: profileScoringRule,
-      min_value: minValue,
-      max_value: maxValue,
-      max_length: maxLength,
-      min_values: minValues,
-      view,
       is_skippable: isSkippable
-    });
+    }
+
+    if (shouldShowMinMaxValues) {
+      submissionData.min_value = minValue;
+      submissionData.max_value = maxValue;
+    }
+
+    if (shouldShowChoiceAdvanced) {
+      submissionData.view = view;
+    }
+
+    if (shouldShowProfileScoringRule) {
+      submissionData.profile_scoring_rule = profileScoringRule;
+    }
+
+    if (shouldShowScaleSteps) {
+      submissionData.scale_steps = scaleSteps;
+    }
+
+    if (shouldShowMaxLength) {
+      submissionData.max_length = maxLength;
+    }
+
+    onSubmit(submissionData);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-4 bg-white rounded shadow">
+    <form onSubmit={handleSubmit} className={className}>
       {/* Question Key */}
       <div className="mb-4">
         <label className="block text-gray-700 mb-1">Question Key</label>
-        <input
+        <Input
           type="text"
           placeholder="UNIQUE_QUESTION_KEY"
           value={questionKey}
@@ -102,6 +123,7 @@ export function QuestionForm({ initialData, onSubmit }: QuestionFormProps) {
           className="w-full px-3 py-2 border rounded"
           required
         />
+        {error?.key && <p className="text-red-500 text-sm mt-1">{error.key}</p>}
       </div>
 
       {/* Question Text */}
@@ -115,6 +137,7 @@ export function QuestionForm({ initialData, onSubmit }: QuestionFormProps) {
           className="w-full px-3 py-2 border rounded"
           required
         />
+        {error?.question && <p className="text-red-500">{error.question}</p>}
       </div>
 
       {/* Question Type */}

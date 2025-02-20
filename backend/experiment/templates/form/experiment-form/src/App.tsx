@@ -13,6 +13,7 @@ import { FiLogOut } from 'react-icons/fi';
 import { Toasts } from './components/Toasts';
 import useBoundStore from "./utils/store";
 import QuestionsOverview from './components/QuestionsOverview';
+import QuestionFormPage from './pages/QuestionFormPage';
 
 function App() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -89,6 +90,8 @@ function App() {
               <Route path="/experiments" element={<ExperimentsOverview />} />
               <Route path="/experiments/:id/*" element={<ExperimentForm />} />
               <Route path="/questions" element={<QuestionsOverview />} />
+              <Route path="/questions/new" element={<QuestionFormPage />} />
+              <Route path="/questions/:id/edit" element={<QuestionFormPage />} />
               <Route path="/" element={<ExperimentsOverview />} />
             </Routes>
           </div>

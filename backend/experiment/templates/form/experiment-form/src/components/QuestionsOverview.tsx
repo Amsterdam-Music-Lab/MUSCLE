@@ -66,7 +66,7 @@ const QuestionsOverview: React.FC = () => {
               {displayQuestions.map((question) => (
                 <tr key={question.key} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <Link to={`/questions/${question.key}`} className="text-blue-500 hover:underline">
+                    <Link to={`/questions/${question.key}/edit`} className="text-blue-500 hover:underline">
                       {question.key}
                     </Link>
                   </td>

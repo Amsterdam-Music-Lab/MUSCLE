@@ -96,10 +96,18 @@ export interface QuestionChoice {
   text: string;
   index: number;
 }
-
 export interface QuestionData {
   key: string;
   question: string;
   type: QuestionType;
   choices?: QuestionChoice[];
+  explainer?: string;
+  scale_steps?: number;
+  profile_scoring_rule?: string;
+  min_value?: number;
+  max_value?: number;
+  max_length?: number;
+  min_values?: number;
+  is_skippable?: boolean;
+  view?: string;
 }
