@@ -91,8 +91,15 @@ export enum QuestionTypeEnum {
 
 export type QuestionType = keyof typeof QuestionTypeEnum;
 
+export interface QuestionChoice {
+  key: string;
+  text: string;
+  index: number;
+}
+
 export interface QuestionData {
   key: string;
   question: string;
   type: QuestionType;
+  choices?: QuestionChoice[];
 }
