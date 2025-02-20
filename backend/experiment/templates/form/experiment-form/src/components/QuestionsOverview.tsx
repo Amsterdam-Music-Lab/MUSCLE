@@ -46,18 +46,18 @@ const QuestionsOverview: React.FC = () => {
   return (
     <Page title="Questions Overview">
       <div className={loadingClass}>
-        <div className='flex justify-between items-end flex-wrap gap-2 mb-4'>
-          <FormField label="Search" className='mb-0'>
+        <div className='flex justify-between items-end flex-wrap gap-4 mb-4'>
+          <div>
             <Input
               type="text"
               placeholder="Search questions..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full p-2 border rounded"
+              className="p-2 border rounded"
             />
-          </FormField>
+          </div>
           <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={changePage} />
-          <Link to="/questions/new" className="bg-indigo-600 text-white px-4 py-2 rounded">
+          <Link to="/questions/new" className="bg-emerald-500 text-white px-4 py-2 rounded">
             <FiPlusCircle className="inline mr-1" />
             New Question
           </Link>
@@ -86,7 +86,7 @@ const QuestionsOverview: React.FC = () => {
             </tbody>
           </table>
         </div>
-        <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={changePage} />
+        <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={changePage} className="mt-4" />
       </div>
     </Page>
   );

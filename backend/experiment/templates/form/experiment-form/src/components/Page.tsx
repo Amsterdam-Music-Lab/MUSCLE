@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { FiArrowLeft } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
 interface PageProps {
@@ -15,12 +16,13 @@ const Page = ({ title, children, backTo, backText = 'Back' }: PageProps) => {
         {backTo && (
           <Link
             to={backTo}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 inline-block mb-4"
+            className="inline-flex items-center justify-center rounded-md font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 mb-4"
           >
-            &lt; {backText}
+            <FiArrowLeft className="inline mr-1" />
+            {backText}
           </Link>
         )}
-        <h1 className="text-2xl font-bold">{title}</h1>
+        <h1 className="text-2xl font-bold font-rajdhani">{title}</h1>
       </div>
       {children}
     </div>

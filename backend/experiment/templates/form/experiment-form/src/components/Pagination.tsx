@@ -5,9 +5,10 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  className?: string;
 }
 
-const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
+const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange, className = '' }) => {
   if (totalPages <= 1) return null;
 
   const pages = [];
@@ -25,7 +26,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
   }
 
   return (
-    <div className="flex justify-center items-center gap-2 mt-4">
+    <div className={`flex justify-center items-center gap-2 ${className}`}>
       <Button
         onClick={() => onPageChange(currentPage - 1)}
         className="px-3 py-1 border"

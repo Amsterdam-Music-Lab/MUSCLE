@@ -7,6 +7,7 @@ import useBoundStore from '../utils/store';
 import { useState } from 'react';
 import { Button } from '../components/Button';
 import { FiArrowLeft } from 'react-icons/fi';
+import Page from '../components/Page';
 
 const emptyFormData = {
   key: '',
@@ -75,18 +76,9 @@ function QuestionFormPage() {
   }
 
   return (
-    <div className="p-4">
-      <Button
-        variant="secondary"
-        icon={<FiArrowLeft />}
-        className="mb-4"
-        onClick={(_e) => navigate('/questions')}
-      >
-        {`Back to Questions Overview`}
-      </Button>
-      <h2 className="text-2xl font-bold mb-4">{id ? 'Edit Question' : 'New Question'}</h2>
+    <Page title={id ? 'Edit Question' : 'New Question'} backText='Back to Questions Overview' backTo='/questions'>
       <QuestionForm initialData={id ? data : emptyFormData} onSubmit={handleSubmit} error={submitError} />
-    </div>
+    </Page>
   );
 }
 

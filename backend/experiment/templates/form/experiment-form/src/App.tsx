@@ -83,9 +83,6 @@ function App() {
             </div>
           </nav>
           <div className={`absolute right-0 bg-gray-100 min-h-screen p-4 transition max-w-full ${isCollapsed ? 'left-16' : 'left-40 xl:left-48'}`}>
-            <h1 className="text-4xl font-bold mb-8">
-              MUSCLE forms
-            </h1>
             <Routes>
               <Route path="/experiments" element={<ExperimentsOverview />} />
               <Route path="/experiments/:id/*" element={<ExperimentForm />} />
