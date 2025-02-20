@@ -139,7 +139,7 @@ def song_sync(
                         "correct_place",
                         session,
                         section=section,
-                        scoring_rule="SONG_SYNC_CONTINUATION",
+                        scoring_rule="SONG_SYNC_VERIFICATION",
                         json_data={"continuation_offset": jitter},
                         expected_response="yes" if continuation_correctness else "no",
                     ),

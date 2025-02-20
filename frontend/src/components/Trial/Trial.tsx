@@ -173,9 +173,6 @@ const Trial = (props: TrialProps) => {
                     skipLabel={feedback_form.skip_label}
                     isSkippable={feedback_form.is_skippable}
                     submitResult={makeResult}
-                // emphasizeTitle={feedback_form.is_profile}
-                // TODO: if we want left-aligned text with a pink divider,
-                // make this style option available again (used in Question.scss)
                 />
             )}
             {preloadReady && !feedback_form && config.show_continue_button && (

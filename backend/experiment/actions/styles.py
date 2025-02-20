@@ -30,9 +30,9 @@ class ButtonStyle(StrEnum):
     LARGE_GAP = "buttons-large-gap"
     LARGE_TEXT = "buttons-large-text"
 
-
 class TextStyle(StrEnum):
     INVISIBLE = "invisible-text"
+    EMPHASIZE_TITLE = "emphasize-title"
 
 
 class FrontendStyle:
