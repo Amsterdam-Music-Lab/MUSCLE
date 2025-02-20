@@ -46,8 +46,8 @@ const QuestionsOverview: React.FC = () => {
   return (
     <Page title="Questions Overview">
       <div className={loadingClass}>
-        <div className='flex justify-between items-center mb-4'>
-          <FormField label="Search">
+        <div className='flex justify-between items-end flex-wrap gap-2 mb-4'>
+          <FormField label="Search" className='mb-0'>
             <Input
               type="text"
               placeholder="Search questions..."
@@ -56,12 +56,12 @@ const QuestionsOverview: React.FC = () => {
               className="w-full p-2 border rounded"
             />
           </FormField>
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={changePage} />
           <Link to="/questions/new" className="bg-indigo-600 text-white px-4 py-2 rounded">
             <FiPlusCircle className="inline mr-1" />
             New Question
           </Link>
         </div>
-        <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={changePage} />
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white shadow-md rounded">
             <thead className="bg-gray-100">
