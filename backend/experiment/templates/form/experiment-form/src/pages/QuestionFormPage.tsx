@@ -5,6 +5,8 @@ import { createQuestionAPIUrl } from '../config';
 import { QuestionData } from '../types/types';
 import useBoundStore from '../utils/store';
 import { useState } from 'react';
+import { Button } from '../components/Button';
+import { FiArrowLeft } from 'react-icons/fi';
 
 const emptyFormData = {
   key: '',
@@ -72,6 +74,14 @@ function QuestionFormPage() {
 
   return (
     <div className="p-4">
+      <Button
+        variant="secondary"
+        icon={<FiArrowLeft />}
+        className="mb-4"
+        onClick={(_e) => navigate('/questions')}
+      >
+        {`Back to Questions Overview`}
+      </Button>
       <h2 className="text-2xl font-bold mb-4">{id ? 'Edit Question' : 'New Question'}</h2>
       <QuestionForm initialData={id ? data : emptyFormData} onSubmit={handleSubmit} error={submitError} />
     </div>
