@@ -184,16 +184,13 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
           </FormField>
         </div>
 
-        <FormField label="Randomize">
-          <label className="flex items-center space-x-3">
-            <input
-              type="checkbox"
-              checked={series.randomize}
-              onChange={(e) => onChange({ ...series, randomize: e.target.checked })}
-              className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 h-5 w-5"
-            />
-            <span className="text-gray-700">Randomize questions</span>
-          </label>
+        <FormField label="Randomize" className="flex items-start">
+          <Input
+            type="checkbox"
+            checked={series.randomize}
+            onChange={(e) => onChange({ ...series, randomize: e.target.checked })}
+            className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 h-5 w-5"
+          />
         </FormField>
 
         <FormField label="Add Questions from Group">
