@@ -14,8 +14,8 @@ export const createExperimentEntityUrl = (entity: string, id?: string) => {
 export const createExperimentAPIUrl = (path: string) => {
   return `${EXPERIMENT_API_BASE_URL}/${path}/`;
 }
-export const createQuestionAPIUrl = (entity: string) => createEntityUrl('question', entity);
+export const createQuestionAPIUrl = (entity: string, id?: string) => createEntityUrl('question', entity, id);
 
-export const createQuestionQuestionAPIUrl = (entity: string) => createQuestionAPIUrl(entity);
+export const createQuestionQuestionAPIUrl = (entity: string, id?: string) => createQuestionAPIUrl(entity, id);
 
 export const TOKEN_URL = `${BASE_URL}/api/token/`;

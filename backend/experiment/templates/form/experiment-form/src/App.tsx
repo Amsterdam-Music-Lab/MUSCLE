@@ -4,7 +4,7 @@ import {
   Routes,
   Link,
 } from "react-router-dom";
-import { AiTwotoneExperiment } from "react-icons/ai";
+import { AiFillQuestionCircle, AiTwotoneExperiment } from "react-icons/ai";
 import ExperimentsOverview from './components/ExperimentsOverview';
 import ExperimentForm from './components/ExperimentForm';
 import Login from './components/Login';
@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { FiLogOut } from 'react-icons/fi';
 import { Toasts } from './components/Toasts';
 import useBoundStore from "./utils/store";
+import QuestionsOverview from './components/QuestionsOverview';
 
 function App() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -61,6 +62,14 @@ function App() {
                   {!isCollapsed && 'Experiments'}
                 </div>
               </Link>
+              <Link to="/questions"
+                className="transition text-blue-500 hover:bg-gray-100 rounded flex items-center gap-2"
+                title="Questions">
+                <AiFillQuestionCircle className="block min-w-5 h-5" />
+                <div className="flex-shrink-1">
+                  {!isCollapsed && 'Questions'}
+                </div>
+              </Link>
               <button
                 onClick={handleLogout}
                 className="transition text-red-500 hover:bg-gray-100 rounded flex items-center gap-2"
@@ -79,6 +88,7 @@ function App() {
             <Routes>
               <Route path="/experiments" element={<ExperimentsOverview />} />
               <Route path="/experiments/:id/*" element={<ExperimentForm />} />
+              <Route path="/questions" element={<QuestionsOverview />} />
               <Route path="/" element={<ExperimentsOverview />} />
             </Routes>
           </div>
