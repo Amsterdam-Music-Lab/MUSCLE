@@ -4,6 +4,7 @@ import useFetch from '../hooks/useFetch';
 import { createQuestionAPIUrl } from '../config';
 import { Question } from '../types/types';
 import { Link } from 'react-router-dom';
+import Pagination from './Pagination';
 
 const url = createQuestionAPIUrl('questions');
 const itemsPerPage = 25;
@@ -18,7 +19,7 @@ const QuestionsOverview: React.FC = () => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
       setCurrentPage(1);
-    }, 300);
+    }, 50);
     return () => clearTimeout(handler);
   }, [searchTerm]);
 
@@ -36,33 +37,6 @@ const QuestionsOverview: React.FC = () => {
     setCurrentPage(page);
   };
 
-  const renderPagination = () => {
-    if (totalPages <= 1) return null;
-    const pages = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(
-        <button
-          key={i}
-          onClick={() => changePage(i)}
-          className={`px-3 py-1 border ${i === currentPage ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'}`}
-        >
-          {i}
-        </button>
-      );
-    }
-    return (
-      <div className="flex justify-center items-center gap-2 mt-4">
-        <button onClick={() => changePage(currentPage - 1)} className="px-3 py-1 border" disabled={currentPage === 1}>
-          &lt;
-        </button>
-        {pages}
-        <button onClick={() => changePage(currentPage + 1)} className="px-3 py-1 border" disabled={currentPage === totalPages}>
-          &gt;
-        </button>
-      </div>
-    );
-  };
-
   if (error) return <div className="text-center p-4 text-red-500">Error: {error}</div>;
   const loadingClass = loading ? 'opacity-50 pointer-events-none' : '';
 
@@ -78,7 +52,7 @@ const QuestionsOverview: React.FC = () => {
             className="w-full p-2 border rounded"
           />
         </div>
-        {renderPagination()}
+        <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={changePage} />
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white shadow-md rounded">
             <thead className="bg-gray-100">
@@ -103,7 +77,7 @@ const QuestionsOverview: React.FC = () => {
             </tbody>
           </table>
         </div>
-        {renderPagination()}
+        <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={changePage} />
       </div>
     </Page>
   );
