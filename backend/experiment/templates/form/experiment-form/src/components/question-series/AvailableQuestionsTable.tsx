@@ -1,7 +1,9 @@
 import React from 'react';
 import { Question } from '../../types/types';
 import { FormField } from '../form/FormField';
-import { FiPlus } from 'react-icons/fi';
+import { FiExternalLink, FiPlus } from 'react-icons/fi';
+import { Button } from '../Button';
+import { Link } from 'react-router-dom';
 
 interface AvailableQuestionsTableProps {
   questions: Question[];
@@ -54,14 +56,24 @@ export function AvailableQuestionsTable({
                   <td className="px-4 py-2">{question.question}</td>
                   <td className="px-4 py-2">{question.type}</td>
                   <td className="px-4 py-2 text-center">
-                    <button
+                    <Button
                       type="button"
                       onClick={() => onAddQuestion(question.key)}
-                      className="text-green-600 hover:text-green-800 p-1 whitespace-nowrap"
+                      variant='successText'
+                      className='whitespace-nowrap'
                       title="Add question"
                     >
                       Add +
-                    </button>
+                    </Button>
+                    <Link
+                      to={`/questions/${question.key}/edit`}
+                      target='_blank'
+                      className="flex items-center gap-1 text-indigo-600 hover:text-indigo-500 whitespace-nowrap px-3 py-1.5"
+                      title="Edit question"
+                    >
+                      Edit
+                      <FiExternalLink />
+                    </Link>
                   </td>
                 </tr>
               ))}

@@ -8,6 +8,7 @@ import { SelectedQuestionsTable } from './question-series/SelectedQuestionsTable
 import { AvailableQuestionsTable } from './question-series/AvailableQuestionsTable';
 import { FiPlus } from 'react-icons/fi';
 import useBoundStore from '../utils/store';
+import { Button } from './Button';
 
 interface QuestionSeriesFormProps {
   series: BlockQuestionSeries;
@@ -226,10 +227,9 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
             onCreateNewQuestion={createNewQuestion}
           />
 
-          <div className="gap-2 flex items-end" >
-            <div className="space-y-2">
-              <label className="text-gray-700 text-sm font-semibold">Create New Question</label>
-              <input
+          <div className="gap-2 flex justify-between items-end" >
+            <FormField className="space-y-2 mb-0 w-full" label='Create New Question'>
+              <Input
                 type="text"
                 name="questionText"
                 placeholder="What is your favorite artist?"
@@ -238,14 +238,14 @@ export function QuestionSeriesForm({ series, onChange }: QuestionSeriesFormProps
                 onChange={(e) => setNewQuestionText(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && submitNewQuestion(e, newQuestionText)}
               />
-            </div>
-            <button
+            </FormField>
+            <Button
               type="button"
               onClick={(e) => submitNewQuestion(e, newQuestionText)}
               className="whitespace-nowrap px-4 py-2 border border-transparent rounded-md bg-blue-600 hover:bg-blue-800 text-white flex items-center gap-1">
               <FiPlus />
               Create New Question
-            </button>
+            </Button>
           </div>
 
         </div>
