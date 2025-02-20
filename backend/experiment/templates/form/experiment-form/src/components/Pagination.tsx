@@ -16,7 +16,8 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
       <Button
         key={i}
         onClick={() => onPageChange(i)}
-        className={`px-3 py-1 border ${i === currentPage ? 'bg-blue-500 text-white' : '!bg-white !text-blue-500'}`}
+        className="px-3 py-1 border"
+        variant={i === currentPage ? 'primary' : 'primaryInverted'}
       >
         {i}
       </Button>
@@ -29,6 +30,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
         onClick={() => onPageChange(currentPage - 1)}
         className="px-3 py-1 border"
         disabled={currentPage === 1}
+        variant="primaryInverted"
       >
         &lt;
       </Button>
@@ -37,6 +39,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
         onClick={() => onPageChange(currentPage + 1)}
         className="px-3 py-1 border"
         disabled={currentPage === totalPages}
+        variant="primaryInverted"
       >
         &gt;
       </Button>

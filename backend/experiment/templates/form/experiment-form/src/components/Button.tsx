@@ -5,7 +5,10 @@ interface ButtonProps {
   children: ReactNode;
   onClick?: (e?: React.MouseEvent) => void;
   type?: 'button' | 'submit' | 'reset';
-  variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'warning';
+  variant?:
+  | 'primary' | 'secondary' | 'danger' | 'success' | 'warning'
+  | 'primaryInverted' | 'secondaryInverted' | 'dangerInverted' | 'successInverted' | 'warningInverted'
+  | 'primaryText' | 'secondaryText' | 'dangerText' | 'successText' | 'warningText';
   size?: 'sm' | 'md' | 'lg';
   icon?: ReactNode;
   to?: string;
@@ -19,6 +22,18 @@ const variantStyles = {
   danger: 'bg-red-500 hover:bg-red-600 text-white',
   success: 'bg-emerald-500 hover:bg-emerald-600 text-white',
   warning: 'bg-amber-500 hover:bg-amber-600 text-white',
+  // inverted variants
+  primaryInverted: 'bg-white border border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white',
+  secondaryInverted: 'bg-white border border-gray-300 text-gray-800 hover:bg-gray-300 hover:text-gray-900',
+  dangerInverted: 'bg-white border border-red-500 text-red-500 hover:bg-red-500 hover:text-white',
+  successInverted: 'bg-white border border-emerald-500 text-emerald-500 hover:bg-emerald-500 hover:text-white',
+  warningInverted: 'bg-white border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white',
+  // text-only variants
+  primaryText: 'text-indigo-600 hover:underline',
+  secondaryText: 'text-gray-800 hover:underline',
+  dangerText: 'text-red-500 hover:underline',
+  successText: 'text-emerald-500 hover:underline',
+  warningText: 'text-amber-500 hover:underline',
 };
 
 const sizeStyles = {
