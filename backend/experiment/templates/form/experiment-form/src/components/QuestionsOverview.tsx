@@ -5,6 +5,9 @@ import { createQuestionAPIUrl } from '../config';
 import { Question } from '../types/types';
 import { Link } from 'react-router-dom';
 import Pagination from './Pagination';
+import { Input } from './form/Input';
+import { FormField } from './form/FormField';
+import { FiPlusCircle } from 'react-icons/fi';
 
 const url = createQuestionAPIUrl('questions');
 const itemsPerPage = 25;
@@ -43,14 +46,20 @@ const QuestionsOverview: React.FC = () => {
   return (
     <Page title="Questions Overview">
       <div className={loadingClass}>
-        <div className="mb-4">
-          <input
-            type="text"
-            placeholder="Search questions..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full p-2 border rounded"
-          />
+        <div className='flex justify-between items-center mb-4'>
+          <FormField label="Search">
+            <Input
+              type="text"
+              placeholder="Search questions..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full p-2 border rounded"
+            />
+          </FormField>
+          <Link to="/questions/new" className="bg-indigo-600 text-white px-4 py-2 rounded">
+            <FiPlusCircle className="inline mr-1" />
+            New Question
+          </Link>
         </div>
         <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={changePage} />
         <div className="overflow-x-auto">
