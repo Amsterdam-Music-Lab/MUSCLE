@@ -3,6 +3,7 @@ import classNames from "classnames";
 
 import { scoreIntermediateResult } from "@/API";
 import useBoundStore from "@/util/stores";
+import { getAudioLatency } from "@/util/time";
 
 import PlayCard from "./PlayCard";
 import { Card } from "@/types/Section";
@@ -168,19 +169,11 @@ const MatchingPairs = ({
         return true;
     }
 
-    const getAudioLatency = () => {
-        if (window.sessionStorage.getItem('audioLatency') !== null) {
-            return window.sessionStorage.getItem('audioLatency');
-        } else {
-            return NaN;
-        }
-    }
-
     const checkMatchingPairs = async (index: number) => {
-        const currentCard = sections[index];
+
         const turnedCards = sections.filter(s => s.turned);
 
-        let updatedCurrentCard;
+        let updatedCurrentCard: Card;
 
         if (turnedCards.length < 2) {
             if (turnedCards.length === 1) {
@@ -194,18 +187,17 @@ const MatchingPairs = ({
                             timestamp: performance.now(),
                             audio_latency_ms: getAudioLatency()
                         };
+                        setSecondCard(updatedCurrentCard);
                         return updatedCurrentCard;
                     }
                     return { ...section, noevents: true };
                 }));
 
-                setSecondCard(updatedCurrentCard);
-
                 try {
                     const scoreResponse = await scoreIntermediateResult({
                         session,
                         participant,
-                        result: { "start_of_turn": startOfTurn, first_card: firstCard, second_card: updatedCurrentCard, overlay_was_shown: overlayWasShown, },
+                        result: { "start_of_turn": startOfTurn, first_card: firstCard, second_card: secondCard, overlay_was_shown: overlayWasShown, },
                     });
                     if (!scoreResponse) {
                         throw new Error('We cannot currently proceed with the game. Try again later');

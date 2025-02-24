@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import classNames from "classnames";
 
-import { getCurrentTime, getTimeSince } from "@/util/time";
+import { getAudioLatency, getCurrentTime, getTimeSince } from "@/util/time";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
