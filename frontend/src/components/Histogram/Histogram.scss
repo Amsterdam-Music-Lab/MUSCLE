@@ -1,10 +1,9 @@
 .aha__histogram {
     display: flex;
     aspect-ratio: 1/1;
-    transform: scaleY(-1);
-    margin-top: -10px;
+    padding: 10px;
 
-    div {
+    .aha__histogram-bar {
         border-radius: 1.5px;
         background: white;
         transition: height 1s ease-out;

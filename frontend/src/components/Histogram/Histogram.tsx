@@ -6,9 +6,8 @@ interface HistogramProps {
     bars?: number;
     spacing?: number;
     running?: boolean;
-    marginLeft?: number;
-    marginTop?: number;
     backgroundColor?: string;
+    padding?: string;
     borderRadius?: string;
     random?: boolean;
     /**
@@ -23,10 +22,9 @@ const Histogram: React.FC<HistogramProps> = ({
     bars = 8,
     spacing = 4,
     running = true,
-    marginLeft = 0,
-    marginTop = 0,
     backgroundColor = undefined,
     borderRadius = '0.15rem',
+    padding,
     random = false,
     interval = 200,
 }) => {
@@ -107,20 +105,17 @@ const Histogram: React.FC<HistogramProps> = ({
         <div
             className={classNames('aha__histogram', { active: running })}
             style={{
-                height: '100%',
-                marginLeft,
-                marginTop,
                 backgroundColor,
-                width: '100%',
+                padding: padding ? padding : undefined,
                 borderRadius,
-                border: backgroundColor ? `10px solid ${backgroundColor}` : undefined,
                 display: 'flex',
-                alignItems: 'flex-start',
+                alignItems: 'flex-end',
             }}
         >
             {Array.from({ length: bars }, (_, index) => (
                 <div
                     key={index}
+                    className='aha__histogram-bar'
                     style={{
                         width: barWidth,
                         height: `${(frequencyData[index] / 255) * 100}%`,

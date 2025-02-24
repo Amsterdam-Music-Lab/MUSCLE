@@ -5,19 +5,45 @@ from result.utils import prepare_profile_result
 
 
 def copy_shuffle(questions):
+    """ Makes a shuffled copy of a sequence of questions.
+
+    Args:
+    questions (list[Question]): A list of questions
+
+    Returns:
+    A shuffled copy of questions
+    """
     qcopy = deepcopy(questions)
     random.shuffle(qcopy)
     return qcopy
 
 
 def total_unanswered_questions(participant, questions):
-    """ Return how many questions have not been answered yet by the participant"""
+    """ Return how many questions have not been answered yet by the participant
+
+    Args:
+        participant (Participant): Participant who answer questions
+        questions (list[Question]): List of questions
+
+    Returns:
+        Number of unanswered questions
+    """
     profile_questions = participant.profile().values_list('question_key', flat=True)
     return len([question for question in questions if question.key not in profile_questions])
 
 
 def question_by_key(key, questions, is_skippable=None, drop_choices=[]):
-    """Return question by given key"""
+    """Return a copy of question with given key
+
+    Args:
+        key (str): Key of question
+        questions (list[Question]): List of questions
+        is_skippable (bool): True will make the returned questions skippable
+        drop_choices (list[str]): Choices in the question to be removed (if applicable)
+
+    Returns:
+        A copy of question
+    """
     for question in questions:
         if question.key == key:
             q = deepcopy(question)
@@ -33,9 +59,16 @@ def question_by_key(key, questions, is_skippable=None, drop_choices=[]):
 
 def unanswered_questions(participant, questions, randomize=False, cutoff_index=None):
     """Generator to give next unasked profile question and prepare its result
-    - participant: participant who will be checked for unanswered questions
-    - questions: list of questions from which to select an unanswered question
-    - optionally, randomize order of questions
+
+    Args:
+        participant (Participant): participant who will be checked for unanswered questions
+        questions (list[Questions]): list of questions from which to select an unanswered question
+        randomize (bool): optionally, randomize order of questions
+        cutoff_index (int): Maximal index in a questions sequence to consider questions
+
+    Yields:
+        Next unasked profile question
+
     """
     if randomize:
         random.shuffle(questions)

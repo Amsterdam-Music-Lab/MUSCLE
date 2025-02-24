@@ -310,7 +310,7 @@ class HookedTest(TestCase):
     def test_hooked_china(self):
         block = Block.objects.get(slug="huang_2022")
         block.add_default_question_series()
-        playlist = Playlist.objects.get(name="普通话")
+        playlist = Playlist.objects.get(name="Cantpop")
         playlist._update_sections()
         session = Session.objects.create(block=block, participant=self.participant, playlist=playlist)
         rules = session.block_rules()
