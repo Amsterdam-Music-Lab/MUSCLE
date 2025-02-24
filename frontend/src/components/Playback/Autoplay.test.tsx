@@ -9,8 +9,12 @@ vi.mock('../Circle/Circle', () => ({
     )),
 }));
 
-vi.mock('../AnimatedCircleContent/AnimatedCircleContent', () => ({
-    default: vi.fn(() => <div data-testid="mock-circle-content">Mock Listen Circle Content</div>),
+vi.mock('../CountDown/CountDown', () => ({
+    default: vi.fn(() => <div data-testid="mock-countdown">Mock Countdown</div>),
+}));
+
+vi.mock('../Histogram/Histogram', () => ({
+    default: vi.fn(() => <div data-testid="mock-histogram">Mock Histogram</div>),
 }));
 
 describe('AutoPlay Component', () => {
@@ -33,14 +37,16 @@ describe('AutoPlay Component', () => {
         const { container } = render(<AutoPlay {...defaultProps} />);
         expect(container.querySelector('.circle')).toBeTruthy();
         expect(screen.getByTestId('mock-circle')).toBeTruthy();
-        expect(screen.getByTestId('mock-circle-content')).toBeTruthy();
+        expect(screen.queryByTestId('mock-countdown')).toBeTruthy();
+        expect(screen.queryByTestId('mock-histogram')).toBeTruthy();
     });
 
     it('renders correctly without animation', () => {
         const { container } = render(<AutoPlay {...defaultProps} showAnimation={false} />);
         expect(container.querySelector('.circle')).toBeTruthy();
         expect(screen.getByTestId('mock-circle')).toBeTruthy();
-        expect(screen.queryByTestId('mock-circle-content')).toBeFalsy();
+        expect(screen.queryByTestId('mock-countdown')).toBeFalsy();
+        expect(screen.queryByTestId('mock-histogram')).toBeFalsy();
         expect(container.querySelector('.stationary')).toBeTruthy();
         expect(container.querySelector('.fa-headphones')).toBeTruthy();
     });
@@ -66,7 +72,7 @@ describe('AutoPlay Component', () => {
     it('applies custom className', () => {
         const customClass = 'custom-class';
         const { container } = render(<AutoPlay {...defaultProps} className={customClass} />);
-        const listenDiv = container.querySelector('.aha__listen');
+        const listenDiv = container.querySelector('.aha__autoplay');
         expect(listenDiv.classList.contains(customClass)).toBe(true);
     });
 

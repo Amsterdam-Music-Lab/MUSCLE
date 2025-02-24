@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 
 import Circle from "../Circle/Circle";
-import AnimatedCircleContent from "../AnimatedCircleContent/AnimatedCircleContent";
+import CountDown from "../CountDown/CountDown";
+import Histogram from "../Histogram/Histogram";
 
 interface AutoPlayProps {
     instruction?: string;
@@ -38,11 +39,13 @@ const AutoPlay = ({ instruction, showAnimation, playSection, startedPlaying, fin
                 />
                 <div className="circle-content">
                     {showAnimation
-                        ? <AnimatedCircleContent
-                            duration={responseTime}
-                            histogramRunning={running}
-                            countDownRunning={running}
-                        />
+                        ?
+                        <div>
+                            <CountDown duration={responseTime} running={running} />
+                            <div className="aha__histogram-container">
+                                <Histogram running={running} />
+                            </div>
+                        </div>
                         : <div className="stationary">
                             <span className="fa-solid fa-headphones fa-6x"></span>
                         </div>
