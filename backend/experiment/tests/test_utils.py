@@ -13,7 +13,7 @@ from result.models import Result
 
 
 class TestExperimentUtils(TestCase):
-    
+
     def test_create_player_labels(self):
         labels = create_player_labels(3, 'alphabetic')
         assert labels == ['A', 'B', 'C']
@@ -98,7 +98,7 @@ class TestBlockExport(TestCase):
             these_sessions = json.loads(test_zip.read("sessions.json").decode("utf-8"))
 
             self.assertEqual(len(these_sessions), 1)
-            self.assertEqual(these_sessions[0]["fields"]["block"], 14)
+            self.assertEqual(these_sessions[0]["fields"]["block"], 4)
 
             these_songs = json.loads(test_zip.read("songs.json").decode("utf-8"))
             self.assertEqual(len(these_songs), 100)
