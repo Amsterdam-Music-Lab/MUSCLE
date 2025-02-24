@@ -1,13 +1,17 @@
 from os.path import join
 
-from django.http import Http404, HttpRequest, FileResponse
+from django.http import Http404, HttpRequest, FileResponse, HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.conf import settings
 from django.shortcuts import redirect
 
-from .models import Section
+from .models import Playlist, Section
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 
-def get_section(request: HttpRequest, section_id: int) -> Section:
+def get_section(
+    request: HttpRequest, section_id: int
+) -> Section | HttpResponsePermanentRedirect | HttpResponseRedirect | FileResponse:
     """Get section by given id"""
     try:
         section = Section.objects.get(pk=section_id)
@@ -23,7 +27,7 @@ def get_section(request: HttpRequest, section_id: int) -> Section:
         # Advantage: low server load
         # Disadvantage: exposes url
 
-        if str(section.filename).startswith('http'):
+        if str(section.filename).startswith("http"):
             # external link, redirect
             return redirect(str(section.filename))
 
@@ -51,7 +55,7 @@ def get_section(request: HttpRequest, section_id: int) -> Section:
         response = FileResponse(open(filepath, "rb"))
 
         # Header is required to make seeking work in Chrome
-        response['Accept-Ranges'] = 'bytes'
+        response["Accept-Ranges"] = "bytes"
 
         # Response may log a ConnectionResetError on the development server
         # This has no effect on serving the file
@@ -59,3 +63,10 @@ def get_section(request: HttpRequest, section_id: int) -> Section:
 
     except Section.DoesNotExist:
         raise Http404("Section does not exist")
+
+
+@api_view(["GET"])
+def playlists(request):
+    """Return a list of all playlists"""
+    playlists = [{"id": playlist.id, "name": playlist.name} for playlist in Playlist.objects.all()]
+    return Response(playlists)

@@ -34,10 +34,16 @@ defusedxml==0.7.1
 django==4.2.18
     # via
     #   -r /server/requirements.in/base.txt
+    #   django-appconf
     #   django-cors-headers
     #   django-inline-actions
     #   django-markup
     #   django-modeltranslation
+    #   django-select2
+    #   djangorestframework
+    #   djangorestframework-simplejwt
+django-appconf==1.0.6
+    # via django-select2
 django-cors-headers==4.0.0
     # via -r /server/requirements.in/base.txt
 django-inline-actions==2.4.0
@@ -47,6 +53,14 @@ django-markup[all-filter-dependencies,all_filter_dependencies]==1.8.1
 django-modeltranslation==0.19.9
     # via -r /server/requirements.in/base.txt
 django-nested-admin==4.1.1
+    # via -r /server/requirements.in/base.txt
+django-select2==8.2.1
+    # via -r /server/requirements.in/base.txt
+djangorestframework==3.15.2
+    # via
+    #   -r /server/requirements.in/base.txt
+    #   djangorestframework-simplejwt
+djangorestframework-simplejwt==5.3.1
     # via -r /server/requirements.in/base.txt
 docutils==0.20.1
     # via
@@ -131,6 +145,8 @@ pygments==2.17.2
     # via
     #   django-markup
     #   mkdocs-material
+pyjwt==2.10.1
+    # via djangorestframework-simplejwt
 pymdown-extensions==10.7.1
     # via
     #   mkdocs-material

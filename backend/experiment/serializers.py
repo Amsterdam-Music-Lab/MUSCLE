@@ -3,14 +3,333 @@ from typing import Optional, TypedDict, Literal
 
 from django_markup.markup import formatter
 from django.utils.translation import activate, get_language
+from rest_framework import serializers
 
 from experiment.actions.consent import Consent
 from image.serializers import serialize_image
 from participant.models import Participant
-from result.models import Result
 from session.models import Session
 from theme.serializers import serialize_theme
-from .models import Block, Experiment, Phase, SocialMediaConfig
+from .models import Block, Experiment, Phase, SocialMediaConfig, ExperimentTranslatedContent, BlockTranslatedContent
+from section.models import Playlist
+from question.models import QuestionSeries, QuestionInSeries, Question
+
+
+class ExperimentTranslatedContentSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+
+    class Meta:
+        model = ExperimentTranslatedContent
+        fields = ["id", "index", "language", "name", "description", "about_content", "social_media_message"]
+
+
+class BlockTranslatedContentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BlockTranslatedContent
+        fields = ["language", "name", "description"]
+
+
+class PlaylistSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+
+    class Meta:
+        model = Playlist
+        fields = ["id", "name"]
+
+
+class QuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = [
+            "key",
+            "question",
+            "type",
+            "is_skippable",
+            "explainer",
+            "scale_steps",
+            "profile_scoring_rule",
+            "min_value",
+            "max_value",
+            "max_length",
+            "min_values",
+            "view",
+        ]
+
+
+class QuestionInSeriesSerializer(serializers.ModelSerializer):
+    question = QuestionSerializer(read_only=False)
+    question_key = serializers.SlugRelatedField(
+        source="question", queryset=Question.objects.all(), write_only=True, slug_field="key"
+    )
+
+    class Meta:
+        model = QuestionInSeries
+        fields = ["id", "question", "question_key", "index"]
+
+    def to_internal_value(self, data):
+        if isinstance(data, str):
+            # Handle the case where only a question key is provided
+            return {"question_key": data}
+        return super().to_internal_value(data)
+
+
+class QuestionSeriesSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+    questions = serializers.ListField(
+        child=serializers.DictField(child=serializers.CharField(), allow_empty=False), write_only=True, required=False
+    )
+
+    class Meta:
+        model = QuestionSeries
+        fields = [
+            "id",
+            "name",
+            "index",
+            "randomize",
+            "questions",
+        ]
+
+    def create(self, validated_data):
+        questions_data = validated_data.pop("questions", [])
+        question_series = QuestionSeries.objects.create(**validated_data)
+        self._handle_questions(question_series, questions_data)
+        return question_series
+
+    def update(self, instance, validated_data):
+        questions_data = validated_data.pop("questions", [])
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # Clear existing questions and create new ones
+        self._handle_questions(instance, questions_data)
+        return instance
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["questions"] = [
+            {"key": q.question.key, "index": q.index} for q in instance.questioninseries_set.all()
+        ]
+        return representation
+
+    def _handle_questions(self, question_series, questions_data):
+        # Get existing questions
+        existing_questions = {qs.question.key: qs for qs in question_series.questioninseries_set.all()}
+
+        # Create set of new question keys
+        new_question_keys = set()
+
+        for question_data in questions_data:
+            question_key = question_data["key"]
+            question_index = question_data.get("index", 0)
+            new_question_keys.add(question_key)
+
+            if question_key not in existing_questions:
+                # Only create new questions that don't exist
+                question = Question.objects.get(key=question_key)
+                QuestionInSeries.objects.create(
+                    question_series=question_series, question=question, index=question_index
+                )
+            else:
+                # Update index of existing question
+                existing_questions[question_key].index = question_index
+                existing_questions[question_key].save()
+
+        # Remove questions that are not in the new set
+        question_series.questioninseries_set.filter(
+            question__key__in=set(existing_questions.keys()) - new_question_keys
+        ).delete()
+
+
+class BlockSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+    translated_contents = BlockTranslatedContentSerializer(many=True, required=False, read_only=False)
+    playlists = PlaylistSerializer(many=True, required=False)
+    questionseries_set = QuestionSeriesSerializer(many=True, read_only=False, required=False)
+
+    class Meta:
+        model = Block
+        fields = [
+            "id",
+            "index",
+            "slug",
+            "rounds",
+            "bonus_points",
+            "rules",
+            "translated_contents",
+            "playlists",
+            "questionseries_set",
+        ]
+        extra_kwargs = {
+            "slug": {"validators": []},
+        }
+
+    def create(self, validated_data):
+        translated_contents_data = validated_data.pop("translated_contents", [])
+        playlists_data = validated_data.pop("playlists", [])
+        question_series_data = validated_data.pop("questionseries_set", [])
+        block = Block.objects.create(**validated_data)
+
+        for content_data in translated_contents_data:
+            BlockTranslatedContent.objects.create(block=block, **content_data)
+
+        for playlist_data in playlists_data:
+            playlist = Playlist.objects.get(pk=playlist_data["id"])
+            block.playlists.add(playlist)
+
+        for series_data in question_series_data:
+            series_serializer = QuestionSeriesSerializer(data=series_data)
+            series_serializer.is_valid(raise_exception=True)
+            series_serializer.save(block=block)
+
+        return block
+
+    def update(self, instance, validated_data):
+        translated_contents_data = validated_data.pop("translated_contents", [])
+        playlists_data = validated_data.pop("playlists", [])
+        question_series_data = validated_data.pop("questionseries_set", [])
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        BlockTranslatedContent.objects.filter(block=instance).delete()
+        for content_data in translated_contents_data:
+            BlockTranslatedContent.objects.create(block=instance, **content_data)
+
+        existing_playlist_ids = set()
+        for playlist_data in playlists_data:
+            playlist_id = playlist_data.get("id")
+            if playlist_id:
+                playlist = Playlist.objects.get(pk=playlist_id)
+                instance.playlists.add(playlist)
+                existing_playlist_ids.add(playlist.id)
+
+        # Delete removed playlists
+        instance.playlists.exclude(id__in=existing_playlist_ids).delete()
+
+        # Handle question series
+        if question_series_data is not None:
+            existing_series_ids = set()
+
+            for series_data in question_series_data:
+                series_id = series_data.get("id")
+                if series_id:
+                    series = QuestionSeries.objects.get(id=series_id)
+                    series_serializer = QuestionSeriesSerializer(series, data=series_data)
+                else:
+                    series_serializer = QuestionSeriesSerializer(data=series_data)
+
+                if series_serializer.is_valid(raise_exception=True):
+                    series = series_serializer.save(block=instance)
+                    existing_series_ids.add(series.id)
+
+            # Delete removed series
+            instance.questionseries_set.exclude(id__in=existing_series_ids).delete()
+
+        instance.save()
+
+        return instance
+
+
+class PhaseSerializer(serializers.ModelSerializer):
+    blocks = BlockSerializer(many=True, required=False)
+
+    class Meta:
+        model = Phase
+        fields = ["id", "index", "dashboard", "randomize", "blocks"]
+
+
+class ExperimentSerializer(serializers.ModelSerializer):
+    translated_content = ExperimentTranslatedContentSerializer(many=True, required=False)
+    phases = PhaseSerializer(many=True, required=False)
+
+    class Meta:
+        model = Experiment
+        fields = ["id", "slug", "active", "translated_content", "phases"]
+
+    def create(self, validated_data):
+        translated_content_data = validated_data.pop("translated_content", [])
+        phases_data = validated_data.pop("phases", [])
+        experiment = Experiment.objects.create(**validated_data)
+
+        for content_data in translated_content_data:
+            ExperimentTranslatedContent.objects.create(experiment=experiment, **content_data)
+
+        for phase_data in phases_data:
+            blocks_data = phase_data.pop("blocks", [])
+            phase = Phase.objects.create(experiment=experiment, **phase_data)
+
+            for block_data in blocks_data:
+                Block.objects.create(phase=phase, **block_data)
+
+        return experiment
+
+    def update(self, instance, validated_data):
+        translated_content_data = validated_data.pop("translated_content", [])
+        phases_data = validated_data.pop("phases", [])
+
+        # Update experiment fields
+        instance.slug = validated_data.get("slug", instance.slug)
+        instance.active = validated_data.get("active", instance.active)
+        instance.save()
+
+        # Update translated content
+        if translated_content_data is not None:
+            existing_content_ids = set()
+
+            # Update or create translated content
+            for content_data in translated_content_data:
+                content_id = content_data.get("id")
+
+                if content_id:
+                    content, _ = ExperimentTranslatedContent.objects.update_or_create(
+                        id=content_id, experiment=instance, defaults=content_data
+                    )
+                else:
+                    content = ExperimentTranslatedContent.objects.create(experiment=instance, **content_data)
+                existing_content_ids.add(content.id)
+
+            # Delete removed content
+            instance.translated_content.exclude(id__in=existing_content_ids).delete()
+
+        # Update phases
+        if phases_data is not None:
+            existing_phase_ids = set()
+
+            # Update or create phases
+            for phase_data in phases_data:
+                blocks_data = phase_data.pop("blocks", [])
+                phase_id = phase_data.get("id")
+
+                if phase_id:
+                    phase, _ = Phase.objects.update_or_create(id=phase_id, experiment=instance, defaults=phase_data)
+                else:
+                    phase = Phase.objects.create(experiment=instance, **phase_data)
+                existing_phase_ids.add(phase.id)
+
+                # Handle blocks for this phase
+                existing_block_ids = set()
+
+                for block_data in blocks_data:
+                    block_id = block_data.get("id")
+
+                    if block_id:
+                        block_instance = Block.objects.get(pk=block_id)
+                        block_serializer = BlockSerializer(block_instance, data=block_data, partial=True)
+                    else:
+                        block_serializer = BlockSerializer(data=block_data, partial=True)
+                    block_serializer.is_valid(raise_exception=True)
+                    block = block_serializer.save(phase=phase)
+                    existing_block_ids.add(block.id)
+
+                # Delete removed blocks
+                phase.blocks.exclude(id__in=existing_block_ids).delete()
+
+            # Delete removed phases
+            instance.phases.exclude(id__in=existing_phase_ids).delete()
+
+        return instance
+
 
 from django.utils.translation import gettext_lazy as _
 

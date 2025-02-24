@@ -44,3 +44,12 @@ mkdocs-material
 
 # Translate fields in Django models
 django-modeltranslation
+
+# Django multiselect with search
+django-select2
+
+# Django REST framework
+djangorestframework
+
+# Django REST JWT
+djangorestframework-simplejwt
