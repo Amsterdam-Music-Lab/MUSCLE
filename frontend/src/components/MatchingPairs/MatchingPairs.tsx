@@ -3,6 +3,7 @@ import classNames from "classnames";
 
 import { scoreIntermediateResult } from "@/API";
 import useBoundStore from "@/util/stores";
+import { getAudioLatency } from "@/util/time";
 
 import PlayCard from "./PlayCard";
 import { Card } from "@/types/Section";
@@ -169,28 +170,29 @@ const MatchingPairs = ({
     }
 
     const checkMatchingPairs = async (index: number) => {
-        const currentCard = sections[index];
-        const turnedCards = sections.filter(s => s.turned);
 
-        let updatedCurrentCard;
+        const turnedCards = sections.filter(s => s.turned);
+        const section = sections[index];
+
+        let updatedCurrentCard: Card;
 
         if (turnedCards.length < 2) {
             if (turnedCards.length === 1) {
+                updatedCurrentCard = {
+                    ...section,
+                    turned: true,
+                    noevents: true,
+                    boardposition: index + 1,
+                    timestamp: performance.now(),
+                    audio_latency_ms: getAudioLatency()
+                };
+                setSecondCard(updatedCurrentCard);
                 setSections(prev => prev.map((section, i) => {
                     if (i === index) {
-                        updatedCurrentCard = {
-                            ...section,
-                            turned: true,
-                            noevents: true,
-                            boardposition: index + 1,
-                            timestamp: performance.now()
-                        };
                         return updatedCurrentCard;
                     }
                     return { ...section, noevents: true };
                 }));
-
-                setSecondCard(updatedCurrentCard);
 
                 try {
                     const scoreResponse = await scoreIntermediateResult({
@@ -210,13 +212,13 @@ const MatchingPairs = ({
                     return;
                 }
             } else {
-                const section = sections[index];
                 updatedCurrentCard = {
                     ...section,
                     turned: true,
                     noevents: true,
                     boardposition: index + 1,
-                    timestamp: performance.now()
+                    timestamp: performance.now(),
+                    audio_latency_ms: getAudioLatency()
                 };
                 setFirstCard(updatedCurrentCard);
                 setSections(prev => prev.map((section, i) => {

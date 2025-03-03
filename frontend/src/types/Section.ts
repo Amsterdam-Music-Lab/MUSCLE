@@ -13,6 +13,7 @@ export interface Card extends Section {
     boardposition: number;
     timestamp: number;
     response_interval_ms: number | string;
+    audio_latency_ms?: number;
 }
 
 export default Section;

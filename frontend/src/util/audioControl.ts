@@ -9,7 +9,8 @@ export const playAudio = (section: Section, playMethod: PlaybackArgs['play_metho
     if (playMethod === 'BUFFER') {
 
         // Determine latency for current audio device
-        latency = webAudio.getTotalLatency()
+        latency = webAudio.getTotalLatency();
+        window.sessionStorage.setItem('audioLatency', latency);
         // Play audio
         webAudio.playBufferFrom(section.id.toString(), playheadShift);
 
@@ -19,7 +20,8 @@ export const playAudio = (section: Section, playMethod: PlaybackArgs['play_metho
         // Only initialize webaudio if section is hosted local
         if (playMethod !== 'EXTERNAL') {
             // Determine latency for current audio device
-            latency = webAudio.getTotalLatency()
+            latency = webAudio.getTotalLatency();
+            window.sessionStorage.setItem('audioLatency', latency);
             webAudio.initWebAudio();
         }
 
