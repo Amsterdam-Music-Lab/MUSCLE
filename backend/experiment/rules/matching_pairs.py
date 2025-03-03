@@ -141,14 +141,14 @@ class MatchingPairsGame(BaseRules):
         second_section = Section.objects.get(pk=second_card["id"])
         second_card["filename"] = str(second_section.filename)
         if first_section.group == second_section.group:
-            if "seen" in second_card and second_card["seen"]:
+            if second_card.get("seen"):
                 score = 20
                 given_response = "match"
             else:
                 score = 10
                 given_response = "lucky match"
         else:
-            if "seen" in second_card and second_card["seen"]:
+            if second_card.get("seen"):
                 score = -10
                 given_response = "misremembered"
             else:
