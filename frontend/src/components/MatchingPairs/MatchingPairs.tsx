@@ -122,7 +122,6 @@ const MatchingPairs = ({
                 return {
                     ...section,
                     matchClass: fbclass,
-                    seen: true
                 };
             }
             return section;
@@ -174,22 +173,21 @@ const MatchingPairs = ({
         const turnedCards = sections.filter(s => s.turned);
         const section = sections[index];
 
-        let updatedCurrentCard: Card;
+        const updatedCurrentCard = {
+            ...section,
+            turned: true,
+            noevents: true,
+            boardposition: index + 1,
+            timestamp: performance.now(),
+            audio_latency_ms: getAudioLatency()
+        }
 
         if (turnedCards.length < 2) {
             if (turnedCards.length === 1) {
-                updatedCurrentCard = {
-                    ...section,
-                    turned: true,
-                    noevents: true,
-                    boardposition: index + 1,
-                    timestamp: performance.now(),
-                    audio_latency_ms: getAudioLatency()
-                };
                 setSecondCard(updatedCurrentCard);
                 setSections(prev => prev.map((section, i) => {
                     if (i === index) {
-                        return updatedCurrentCard;
+                        return { ...updatedCurrentCard, seen: true}
                     }
                     return { ...section, noevents: true };
                 }));
@@ -212,18 +210,10 @@ const MatchingPairs = ({
                     return;
                 }
             } else {
-                updatedCurrentCard = {
-                    ...section,
-                    turned: true,
-                    noevents: true,
-                    boardposition: index + 1,
-                    timestamp: performance.now(),
-                    audio_latency_ms: getAudioLatency()
-                };
                 setFirstCard(updatedCurrentCard);
                 setSections(prev => prev.map((section, i) => {
                     if (i === index) {
-                        return updatedCurrentCard;
+                        return {...updatedCurrentCard, seen: true};
                     }
                     return section;
                 }));
