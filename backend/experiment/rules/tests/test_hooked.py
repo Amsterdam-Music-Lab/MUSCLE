@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
+import csv
 from unittest.mock import Mock
+from unittest import skip
 
 from experiment.actions import Explainer, Final, Score, Trial
 from experiment.models import Experiment, Phase, Block, ExperimentTranslatedContent, SocialMediaConfig
@@ -331,3 +333,55 @@ class HookedTest(TestCase):
         questions = rules.question_series[0]["keys"][0:3]
         for question in questions:
             self.assertIn(question, keys)
+
+
+class SectionSelectionTest(TestCase):
+    fixtures = ["playlist", "experiment"]
+    n_runs = 200
+
+    @skip(
+        "This is not a unit test, but a simulation to check the distribution of selected sections"
+    )
+    def test_section_selection_teletunes(self):
+        playlist = Playlist.objects.get(name='Teletunes')
+        playlist._update_sections()
+        block = Block.objects.get(slug='teletunes')
+        participant = Participant.objects.create()
+        rules = block.get_rules()
+        selected_sections = []
+        for run in range(self.n_runs):
+            session = Session.objects.create(
+                participant=participant, block=block, playlist=playlist
+            )
+            rules.plan_sections(session)
+            plan = session.json_data.get('plan')
+            heard_before_offset = session.json_data.get('heard_before_offset')
+            for round_number in range(heard_before_offset):
+                condition = plan[round_number]
+                section = rules.select_song_sync_section(session, condition)
+                played_sections = session.json_data.get("played_sections", [])
+                played_sections.append(section.id)
+                session.save_json_data({"played_sections": played_sections})
+                selected_sections.append(section.pk)
+        sections = list(Section.objects.all())
+        with open(f"{block.slug}-{self.n_runs}.csv", "w+") as output_file:
+            fc = csv.DictWriter(
+                output_file,
+                fieldnames=["section", "song", "n_times_selected"],
+            )
+            fc.writeheader()
+            for section in sections:
+                n_times_selected = len(
+                    [
+                        selected
+                        for selected in selected_sections
+                        if selected == section.pk
+                    ]
+                )
+                fc.writerow(
+                    {
+                        "section": section.pk,
+                        "song": section.song.artist,
+                        "n_times_selected": n_times_selected,
+                    }
+                )
