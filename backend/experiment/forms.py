@@ -239,7 +239,6 @@ class BlockTranslatedContentForm(ModelForm):
 class BlockForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
-        self.add_translated_content()
 
         choices = tuple()
         for i in BLOCK_RULES:
