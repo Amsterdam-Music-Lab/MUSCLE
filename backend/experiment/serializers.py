@@ -7,7 +7,6 @@ from django.utils.translation import activate, get_language
 from experiment.actions.consent import Consent
 from image.serializers import serialize_image
 from participant.models import Participant
-from result.models import Result
 from session.models import Session
 from theme.serializers import serialize_theme
 from .models import Block, Experiment, Phase, SocialMediaConfig
