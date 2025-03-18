@@ -17,12 +17,21 @@ from .validators import markdown_html_validator, block_slug_validator, experimen
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 
 
+def consent_upload_path(experiment) -> str:
+    """Generate path to save consent file based on experiment.slug and language
+    Returns:
+        upload_to (str): Path for uploading the consent file
+    """
+    folder_name = experiment.slug
+    language = get_language()
+    return join("consent", folder_name, f"consent_{language}")
+
+
 class Experiment(models.Model):
     """A model to allow nesting multiple phases with blocks into a 'parent' experiment
 
     Attributes:
         slug (str): Slug
-        translated_content (Queryset[ExperimentTranslatedContent]): Translated content
         theme_config (theme.ThemeConfig): ThemeConfig instance
         active (bool): Set experiment active
         social_media_config (SocialMediaConfig): SocialMediaConfig instance
@@ -30,22 +39,37 @@ class Experiment(models.Model):
     """
 
     slug = models.SlugField(
-        db_index=True, max_length=64, unique=True, null=True, validators=[experiment_slug_validator]
+        db_index=True,
+        max_length=64,
+        unique=True,
+        null=True,
+        validators=[experiment_slug_validator],
     )
-    translated_content = models.QuerySet["ExperimentTranslatedContent"]
+    name = models.CharField(max_length=64, default="")
+    description = models.TextField(blank=True, default="")
+    consent = models.FileField(
+        upload_to=consent_upload_path,
+        blank=True,
+        default="",
+        validators=[markdown_html_validator()],
+    )
+    about_content = models.TextField(blank=True, default="")
+    social_media_message = models.TextField(
+        blank=True,
+        help_text=_(
+            "Content for social media sharing. Use {points} and {experiment_name} as placeholders."
+        ),
+        default="I scored {points} points in {experiment_name}!",
+    )
+    disclaimer = models.TextField(blank=True, default="")
+    privacy = models.TextField(blank=True, default="")
     theme_config = models.ForeignKey("theme.ThemeConfig", blank=True, null=True, on_delete=models.SET_NULL)
     active = models.BooleanField(default=True)
     social_media_config: Optional["SocialMediaConfig"]
     phases: models.QuerySet["Phase"]
 
     def __str__(self):
-        translated_content = self.get_fallback_content()
-        return translated_content.name if translated_content else self.slug
-
-    @property
-    def name(self):
-        content = self.get_fallback_content()
-        return content.name if content and content.name else ""
+        return self.name or self.slug
 
     class Meta:
         verbose_name_plural = "Experiments"
@@ -96,74 +120,6 @@ class Experiment(models.Model):
             all_feedback |= Feedback.objects.filter(block=block)
         return all_feedback
 
-    def get_fallback_content(self) -> "ExperimentTranslatedContent":
-        """Get fallback content for the experiment
-
-        Returns:
-            Translated content
-        """
-
-        return self.translated_content.order_by("index").first()
-
-    def get_translated_content(self, language: str, fallback: bool = True) -> "ExperimentTranslatedContent":
-        """Get content for a specific language
-
-        Args:
-            language: Language code
-            fallback: Return fallback language if language isn't available
-
-        Returns:
-            Translated content
-        """
-
-        content = self.translated_content.filter(language=language).first()
-
-        if not content and fallback:
-            fallback_content = self.get_fallback_content()
-
-            if not fallback_content:
-                raise ValueError("No fallback content found for experiment")
-
-            return fallback_content
-
-        if not content:
-            raise ValueError(f"No content found for language {language}")
-
-        return content
-
-    def get_current_content(self, fallback: bool = True) -> "ExperimentTranslatedContent":
-        """Get content for the 'current' language
-
-        Args:
-            fallback: Return fallback language if language isn't available
-
-        Returns:
-            Translated content
-        """
-
-        language = get_language()
-        return self.get_translated_content(language, fallback)
-
-
-def consent_upload_path(instance: Experiment, filename: str) -> str:
-    """Generate path to save consent file based on experiment.slug and language
-
-    Args:
-        instance (Experiment): Experiment instance to determine folder name
-        filename (str): Name of the consent file to be uploaded
-
-    Returns:
-        upload_to (str): Path for uploading the consent file
-
-    Note:
-        Used by the Block model for uploading consent file
-    """
-    experiment = instance.experiment
-    folder_name = experiment.slug
-    language = instance.language
-
-    return join("consent", folder_name, f"{language}-{filename}")
-
 
 class Phase(models.Model):
     """Root entity for configuring experiment phases
@@ -181,9 +137,9 @@ class Phase(models.Model):
     randomize = models.BooleanField(default=False, help_text="Randomize the order of the blocks in this phase.")
 
     def __str__(self):
-        default_content = self.experiment.get_fallback_content()
-        experiment_name = default_content.name if default_content else None
-        compound_name = experiment_name or self.experiment.slug or "Unnamed experiment"
+        compound_name = (
+            self.experiment.name or self.experiment.slug or "Unnamed experiment"
+        )
         return f"{compound_name} ({self.index})"
 
     class Meta:
@@ -195,7 +151,7 @@ class Block(models.Model):
 
     Attributes:
         phase (Phase): The phase this block belongs to
-        index (int): Index of this phase
+        index (int): Index of this block in the phase
         playlists (list(section.models.Playlist)): The playlist(s) used in this block
         image (image.models.Image): Image that will be showed on the dashboard
         slug (str): Slug for this block
@@ -203,16 +159,21 @@ class Block(models.Model):
         rounds (int): Number of rounds
         bonus_points (int): Bonus points
         rules (str): The rules used for this block
-        translated_content (BlockTranslatedContent): Translated content
         theme_config (theme.models.ThemeConfig): Theme settings
     """
 
     phase = models.ForeignKey(Phase, on_delete=models.CASCADE, related_name="blocks", blank=True, null=True)
+    slug = models.SlugField(
+        db_index=True, max_length=64, unique=True, validators=[block_slug_validator]
+    )
     index = models.IntegerField(default=0, help_text="Index of the block in the phase. Lower numbers come first.")
+
+    name = models.CharField(max_length=64, default="")
+    description = models.TextField(blank=True, default="")
+
     playlists = models.ManyToManyField("section.Playlist", blank=True)
 
     image = models.ForeignKey(Image, on_delete=models.SET_NULL, blank=True, null=True)
-    slug = models.SlugField(db_index=True, max_length=64, unique=True, validators=[block_slug_validator])
 
     rounds = models.PositiveIntegerField(default=10)
     bonus_points = models.PositiveIntegerField(default=0)
@@ -221,25 +182,7 @@ class Block(models.Model):
     theme_config = models.ForeignKey(ThemeConfig, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
-        # If this block is unsaved or being deleted (has no PK),
-        # avoid calling get_fallback_content() (which does a DB query).
-        if not self.pk:
-            # Provide a fallback label or just return self.slug if present.
-            return self.slug or "Deleted/Unsaved Block"
-
-        content = self.get_fallback_content()
-        return content.name if content and content.name else self.slug
-
-    @property
-    def name(self):
-        """Name of the block, which will be used for dashboards"""
-        content = self.get_fallback_content()
-        return content.name if content and content.name else ""
-
-    @property
-    def description(self):
-        content = self.get_fallback_content()
-        return content.description if content and content.description else ""
+        return self.name if self.name else self.slug
 
     def session_count(self) -> int:
         """Number of sessions
@@ -444,59 +387,11 @@ class Block(models.Model):
                         question_series=qs, question=Question.objects.get(pk=question), index=i + 1
                     )
 
-    def get_fallback_content(self) -> "BlockTranslatedContent | None":
-        """Get fallback content for the block
-
-        Returns:
-            Fallback content
-        """
-        experiment = self.phase.experiment
-        experiment_fallback_content = experiment.get_fallback_content()
-
-        if not experiment_fallback_content or not experiment_fallback_content.language:
-            return None
-
-        experiment_fallback_language = experiment_fallback_content.language
-
-        fallback_content = self.translated_contents.filter(language=experiment_fallback_language).first()
-
-        return fallback_content
-
-    def get_translated_content(self, language: str, fallback: bool = True) -> "BlockTranslatedContent":
-        """Get content for a specific language
-
-        Returns:
-            Translated content
-        """
-
-        content = self.translated_contents.filter(language=language).first()
-
-        if not content and fallback:
-            fallback_content = self.get_fallback_content()
-
-            if not fallback_content:
-                raise ValueError("No fallback content found for block")
-
-            return fallback_content
-
-        if not content:
-            raise ValueError(f"No content found for language {language}")
-
-        return content
-
-    def get_current_content(self, fallback: bool = True) -> "BlockTranslatedContent":
-        """Get content for the 'current' language
-
-        Returns:
-            Translated content
-
-        """
-        language = get_language()
-        return self.get_translated_content(language, fallback)
-
 
 class TranslatedContent(models.Model):
-    language = models.CharField(default="en", blank=True, choices=language_choices, max_length=2)
+    language = models.CharField(
+        default="en", blank=True, choices=language_choices, max_length=2
+    )
 
     class Meta:
         abstract = True
@@ -517,17 +412,24 @@ class ExperimentTranslatedContent(TranslatedContent):
         privacy (str): Privacy statement text
     """
 
-    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="translated_content")
+    experiment = models.ForeignKey(
+        Experiment, on_delete=models.CASCADE, related_name="translated_content"
+    )
     index = models.IntegerField(default=0)
     name = models.CharField(max_length=64, default="")
     description = models.TextField(blank=True, default="")
     consent = models.FileField(
-        upload_to=consent_upload_path, blank=True, default="", validators=[markdown_html_validator()]
+        upload_to=consent_upload_path,
+        blank=True,
+        default="",
+        validators=[markdown_html_validator()],
     )
     about_content = models.TextField(blank=True, default="")
     social_media_message = models.TextField(
         blank=True,
-        help_text=_("Content for social media sharing. Use {points} and {experiment_name} as placeholders."),
+        help_text=_(
+            "Content for social media sharing. Use {points} and {experiment_name} as placeholders."
+        ),
         default="I scored {points} points in {experiment_name}!",
     )
     disclaimer = models.TextField(blank=True, default="")
@@ -549,7 +451,9 @@ class BlockTranslatedContent(TranslatedContent):
 
     """
 
-    block = models.ForeignKey(Block, on_delete=models.CASCADE, related_name="translated_contents")
+    block = models.ForeignKey(
+        Block, on_delete=models.CASCADE, related_name="translated_contents"
+    )
     name = models.CharField(max_length=64, default="")
     description = models.TextField(blank=True, default="")
 
@@ -621,9 +525,8 @@ class SocialMediaConfig(models.Model):
         Raises:
             ValueError: If required parameters are missing when needed
         """
-        translated_content = self.experiment.get_current_content()
-        social_message = translated_content.social_media_message
-        experiment_name = translated_content.name
+        social_message = self.experimenttext.social_media_message
+        experiment_name = self.experimenttext.name
 
         if social_message:
             has_placeholders = "{points}" in social_message and "{experiment_name}" in social_message
@@ -645,8 +548,5 @@ class SocialMediaConfig(models.Model):
         }
 
     def __str__(self):
-        fallback_content = self.experiment.get_fallback_content()
-        if fallback_content:
-            return f"Social Media for {fallback_content.name}"
-
-        return f"Social Media for {self.experiment.slug}"
+        social_media_description = self.experimenttext.name or self.experiment.slug
+        return f"Social Media for {social_media_description}"

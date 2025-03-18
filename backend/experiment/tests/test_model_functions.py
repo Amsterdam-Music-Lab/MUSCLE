@@ -1,7 +1,7 @@
 from django.test import TestCase
 from session.models import Session
 from participant.models import Participant
-from experiment.models import Block, Experiment, Phase, ExperimentTranslatedContent
+from experiment.models import Block, Experiment, Phase, ExperimentText
 
 
 class TestModelBlock(TestCase):
@@ -21,8 +21,8 @@ class TestModelExperiment(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.experiment = Experiment.objects.create()
-        cls.experiment_translated_content = ExperimentTranslatedContent.objects.create(
-            experiment=cls.experiment, language="en", name="test_experiment", description="test_description"
+        cls.experiment_texts = ExperimentText.objects.create(
+            experiment=cls.experiment, name="test_experiment"
         )
         cls.participant1 = Participant.objects.create(participant_id_url="001")
         cls.participant2 = Participant.objects.create(participant_id_url="002")

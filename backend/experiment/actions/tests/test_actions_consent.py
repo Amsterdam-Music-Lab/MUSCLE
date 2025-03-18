@@ -47,18 +47,15 @@ class ConsentTest(TestCase):
 
     def test_uploaded_markdown_rendering(self):
         experiment = Experiment.objects.get(slug="MARKDOWN")
-        content = experiment.get_fallback_content()
-        consent = Consent(content.consent)
+        consent = Consent(experiment.text.consent)
         self.assertEqual(consent.text, "<h1>test</h1>")
 
     def test_uploaded_html_rendering(self):
         experiment = Experiment.objects.get(slug="HTML")
-        content = experiment.get_fallback_content()
-        consent = Consent(content.consent)
+        consent = Consent(experiment.text.consent)
         self.assertEqual(consent.text, "<h1>test</h1>")
 
     def test_template_language_rendering(self):
         experiment = Experiment.objects.get(slug="TEMPLATE")
-        content = experiment.get_fallback_content()
-        consent = Consent(content.consent)
+        consent = Consent(experiment.text.consent)
         self.assertEqual(consent.text, "<p>test</p>")
