@@ -32,11 +32,14 @@ class TestScore(unittest.TestCase):
         self.assertEqual(
             score.config, {'show_section': True, 'show_total_score': True})
         self.assertEqual(score.icon, "icon-test")
-        self.assertEqual(score.texts, {
-            'score': 'Total Score',
-            'next': 'Next',
-            'listen_explainer': 'You listened to:'
-        })
+        self.assertEqual(
+            scoretext,
+            {
+                'score': 'Total Score',
+                'next': 'Next',
+                'listen_explainer': 'You listened to:',
+            },
+        )
         self.assertEqual(score.timer, 5)
 
     def test_initialization_minimal_parameters(self):
@@ -48,11 +51,14 @@ class TestScore(unittest.TestCase):
         self.assertEqual(
             score.config, {'show_section': False, 'show_total_score': False})
         self.assertIsNone(score.icon)
-        self.assertEqual(score.texts, {
-            'score': 'Total Score',
-            'next': 'Next',
-            'listen_explainer': 'You listened to:'
-        })
+        self.assertEqual(
+            scoretext,
+            {
+                'score': 'Total Score',
+                'next': 'Next',
+                'listen_explainer': 'You listened to:',
+            },
+        )
         self.assertIsNone(score.timer)
 
     def test_action_serialization(self):

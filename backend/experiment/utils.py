@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from django.core import serializers
 from django.utils import timezone
 
-from experiment.models import Experiment, Phase, Block, BlockTranslatedContent, Feedback
+from experiment.models import Experiment, Block, Feedback
 from result.models import Result
 from participant.models import Participant
 from section.models import Song, Section
@@ -112,71 +112,6 @@ def format_label(number: int, label_style: str) -> str:
         return roman.toRoman(number + 1)
     else:
         return str(number + 1)
-
-
-def get_flag_emoji(country_code):
-    # If the country code is not provided or is empty, return "Unknown"
-    if not country_code:
-        return "🏳️"
-
-    # Convert the country code to uppercase
-    country_code = country_code.upper()
-
-    # Calculate the Unicode code points for the flag emoji
-    flag_emoji = "".join([chr(127397 + ord(char)) for char in country_code])
-
-    return flag_emoji
-
-
-def get_missing_content_block(block: Block) -> List[str]:
-    block_experiment = block.phase.experiment
-
-    languages = block_experiment.translated_content.values_list("language", flat=True)
-
-    missing_languages = []
-
-    for language in languages:
-        block_content = BlockTranslatedContent.objects.filter(block=block, language=language)
-        if not block_content:
-            missing_languages.append(language)
-
-    return missing_languages
-
-
-# Returns a list of a tuple containing the Block and a list of missing languages
-def get_missing_content_blocks(experiment: Experiment) -> List[Tuple[Block, List[str]]]:
-    languages = experiment.translated_content.values_list("language", flat=True)
-
-    associated_phases = Phase.objects.filter(experiment=experiment)
-    associated_blocks = Block.objects.filter(phase__in=associated_phases)
-
-    missing_content_blocks = []
-
-    for block in associated_blocks:
-        missing_languages = []
-        for language in languages:
-            block_content = BlockTranslatedContent.objects.filter(block=block, language=language)
-            if not block_content:
-                missing_languages.append(language)
-
-        if len(missing_languages) > 0:
-            missing_content_blocks.append((block, missing_languages))
-
-    return missing_content_blocks
-
-
-def check_missing_translations(experiment: Experiment) -> str:
-    warnings = []
-
-    missing_content_blocks = get_missing_content_blocks(experiment)
-
-    for block, missing_languages in missing_content_blocks:
-        missing_language_flags = [get_flag_emoji(language) for language in missing_languages]
-        warnings.append(f"Block {block.slug} does not have content in {', '.join(missing_language_flags)}")
-
-    warnings_text = "\n".join(warnings)
-
-    return warnings_text
 
 
 def consent_upload_path(instance: Experiment, filename: str) -> str:

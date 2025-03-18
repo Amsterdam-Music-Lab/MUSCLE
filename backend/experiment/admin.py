@@ -8,42 +8,28 @@ from django.utils.html import format_html
 
 from nested_admin import NestedModelAdmin, NestedStackedInline, NestedTabularInline
 
-from experiment.utils import (
-    check_missing_translations,
-    get_flag_emoji,
-    get_missing_content_blocks,
-)
-
 from experiment.models import (
     Block,
+    BlockText,
     Experiment,
+    ExperimentText,
     Phase,
-    Feedback,
     SocialMediaConfig,
-    ExperimentTranslatedContent,
-    BlockTranslatedContent,
-    ExperimentTranslatedContent,
 )
-from question.admin import QuestionSeriesInline
 from experiment.forms import (
     BlockForm,
     BlockTranslatedContentForm,
     ExperimentForm,
     ExperimentTranslatedContentForm,
-    ExportForm,
-    TemplateForm,
     SocialMediaConfigForm,
-    EXPORT_TEMPLATES,
 )
-from section.models import Section, Song
-from result.models import Result
-from participant.models import Participant
+from question.admin import QuestionSeriesInline
 from question.models import QuestionSeries, QuestionInSeries
 from .utils import export_json_results
 
 
-class BlockTranslatedContentInline(NestedTabularInline):
-    model = BlockTranslatedContent
+class BlockTextInline(NestedTabularInline):
+    model = BlockText
     form = BlockTranslatedContentForm
     extra = 0
     fields = [
@@ -57,16 +43,15 @@ class BlockTranslatedContentInline(NestedTabularInline):
         return False
 
 
-class ExperimentTranslatedContentInline(NestedStackedInline):
-    model = ExperimentTranslatedContent
+class ExperimentTextInline(NestedStackedInline):
+    model = ExperimentText
     form = ExperimentTranslatedContentForm
-    template = "admin/translated_content.html"
     extra = 1
 
 
 class BlockInline(NestedStackedInline):
     model = Block
-    inlines = [BlockTranslatedContentInline, QuestionSeriesInline]
+    inlines = [BlockTextInline, QuestionSeriesInline]
     form = BlockForm
     autocomplete_fields = ["playlists"]
     classes = ["wide"]
@@ -113,7 +98,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
     inline_actions = ["experimenter_dashboard", "duplicate"]
     form = ExperimentForm
     inlines = [
-        ExperimentTranslatedContentInline,
+        ExperimentTextInline,
         PhaseInline,
         SocialMediaConfigInline,
     ]
@@ -122,9 +107,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         css = {"all": ("experiment_admin.css",)}
 
     def name(self, obj):
-        content = obj.get_fallback_content()
-
-        return content.name if content else "No name"
+        return obj.name or "No name"
 
     def redirect_to_overview(self):
         return redirect(reverse("admin:experiment_experiment_changelist"))
@@ -187,7 +170,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 )
 
             # order_by is inserted here to prevent a query error
-            exp_contents = obj.translated_content.order_by("name").all()
+            exp_contents = obj.text.order_by("name").all()
             # order_by is inserted here to prevent a query error
             exp_phases = obj.phases.order_by("index").all()
 
@@ -218,7 +201,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 # Duplicate blocks in this phase
                 for block in these_blocks:
                     # order_by is inserted here to prevent a query error
-                    block_contents = block.translated_contents.order_by('name').all()
+                    block_contents = blocktext.order_by('name').all()
                     these_playlists = block.playlists.all()
                     question_series = QuestionSeries.objects.filter(block=block)
 
@@ -324,10 +307,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
     def remarks(self, obj):
         remarks_array = []
 
-        # Check if there is any translated content
-        content = obj.translated_content.first()
-
-        if not content:
+        if not obj.text.name:
             remarks_array.append(
                 {
                     "level": "warning",
@@ -336,29 +316,12 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 }
             )
 
-        has_consent = (
-            obj.translated_content.filter(consent__isnull=False)
-            .exclude(consent="")
-            .first()
-        )
-
-        if not has_consent:
+        if not obj.text.consent:
             remarks_array.append(
                 {
                     "level": "info",
                     "message": "📋 No consent form",
                     "title": "You may want to add a consent form (approved by an ethical board) to this experiment.",
-                }
-            )
-
-        missing_content_block_translations = check_missing_translations(obj)
-
-        if missing_content_block_translations:
-            remarks_array.append(
-                {
-                    "level": "warning",
-                    "message": "🌍 Missing block content",
-                    "title": missing_content_block_translations,
                 }
             )
 
@@ -424,8 +387,7 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
     def related_experiment(self, obj):
         url = reverse("admin:experiment_experiment_change", args=[obj.experiment.pk])
-        content = obj.experiment.get_fallback_content()
-        experiment_name = content.name if content else "No name"
+        experiment_name = obj.experiment.name or "No name"
         return format_html('<a href="{}">{}</a>', url, experiment_name)
 
     def blocks(self, obj):
@@ -447,7 +409,7 @@ class BlockTranslatedContentAdmin(admin.ModelAdmin):
 
     def blocks(self, obj):
         # Block is manytomany, so we need to find it through the related name
-        blocks = Block.objects.filter(translated_contents=obj)
+        blocks = Block.objects.filter(texts=obj)
 
         if not blocks:
             return "No block"

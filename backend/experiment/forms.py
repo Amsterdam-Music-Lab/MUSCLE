@@ -10,9 +10,9 @@ from django.forms import (
 )
 from experiment.models import (
     Experiment,
-    ExperimentTranslatedContent,
+    ExperimentText,
     Block,
-    BlockTranslatedContent,
+    BlockText,
     SocialMediaConfig,
 )
 from experiment.rules import BLOCK_RULES
@@ -215,31 +215,30 @@ class ExperimentTranslatedContentForm(TranslatedContentInline, ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
-        self.fields["about_content"].widget = MarkdownPreviewTextInput()
-        self.fields['disclaimer'].widget = MarkdownPreviewTextInput()
-        self.fields['privacy'].widget = MarkdownPreviewTextInput()
-        self.fields["description"].widget.attrs["style"] = "height:40px"
-        self.fields["social_media_message"].widget.attrs["style"] = "height:15px"
+        # self.fields["about_content"].widget = MarkdownPreviewTextInput()
+        # self.fields['disclaimer'].widget = MarkdownPreviewTextInput()
+        # self.fields['privacy'].widget = MarkdownPreviewTextInput()
+        # self.fields["description"].widget.attrs["style"] = "height:40px"
+        # self.fields["social_media_message"].widget.attrs["style"] = "height:15px"
 
     class Meta:
-        model = ExperimentTranslatedContent
+        model = ExperimentText
         fields = "__all__"
 
 class BlockTranslatedContentForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
-        self.fields["description"].widget.attrs["style"] = "height:40px"
+        # self.fields["description"].widget.attrs["style"] = "height:40px"
 
     class Meta:
-        model = BlockTranslatedContent
+        model = BlockText
         fields = "__all__"
 
 
 class BlockForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
-        self.add_translated_content()
 
         choices = tuple()
         for i in BLOCK_RULES:
@@ -247,25 +246,6 @@ class BlockForm(ModelForm):
         choices += (("", "---------"),)
 
         self.fields["rules"] = ChoiceField(choices=sorted(choices))
-
-    def add_translated_content(self):
-        block = self.instance
-        if not block.phase:
-            return
-        experiment_contents = block.phase.experiment.translated_content.all()
-        experiment_languages = experiment_contents.values_list('language')
-        for etc in experiment_contents:
-            btc, created = BlockTranslatedContent.objects.get_or_create(
-                language=etc.language, block=block
-            )
-            if created:
-                btc.name = f"{etc.name}:{block.slug}"
-                btc.save()
-        # delete all BlockTranslatedContents of languages not defined on experiment level
-        deprecated_block_contents = BlockTranslatedContent.objects.exclude(
-            language__in=experiment_languages
-        )
-        deprecated_block_contents.delete()
 
     def clean_playlists(self):
         # Check if there is a rules id selected and key exists

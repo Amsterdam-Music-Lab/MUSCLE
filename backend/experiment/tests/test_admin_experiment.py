@@ -3,7 +3,7 @@ from django.contrib.admin.sites import AdminSite
 from django.urls import reverse
 from django.utils.html import format_html
 from experiment.admin import ExperimentAdmin, PhaseAdmin
-from experiment.models import Block, Experiment, Phase, ExperimentTranslatedContent, BlockTranslatedContent
+from experiment.models import Block, BlockText, Experiment, ExperimentText, Phase
 from section.models import Playlist
 from theme.models import ThemeConfig
 from question.models import QuestionSeries, QuestionInSeries, Question
@@ -68,15 +68,14 @@ class PhaseAdminTest(TestCase):
         related_experiment = self.admin.related_experiment(phase)
         expected_url = reverse("admin:experiment_experiment_change", args=[experiment.pk])
         expected_related_experiment = format_html(
-            '<a href="{}">{}</a>', expected_url, experiment.get_fallback_content().name
+            '<a href="{}">{}</a>', expected_url, experiment.name
         )
         self.assertEqual(related_experiment, expected_related_experiment)
 
     def test_experiment_with_no_blocks(self):
         experiment = Experiment.objects.create(slug="no-blocks")
-        ExperimentTranslatedContent.objects.create(
+        ExperimentText.objects.create(
             experiment=experiment,
-            language="en",
             name="No Blocks",
         )
         phase = Phase.objects.create(
@@ -87,9 +86,8 @@ class PhaseAdminTest(TestCase):
 
     def test_experiment_with_blocks(self):
         experiment = Experiment.objects.create(slug="with-blocks")
-        ExperimentTranslatedContent.objects.create(
+        ExperimentText.create(
             experiment=experiment,
-            language="en",
             name="With Blocks",
         )
         phase = Phase.objects.create(
@@ -109,15 +107,10 @@ class TestDuplicateExperiment(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.experiment = Experiment.objects.create(slug="original")
-        ExperimentTranslatedContent.objects.create(
+        ExperimentText.objects.create(
             experiment=cls.experiment,
-            language="en",
-            name="original experiment",
-        )
-        ExperimentTranslatedContent.objects.create(
-            experiment=cls.experiment,
-            language="nl",
-            name="origineel experiment",
+            name_en="original experiment",
+            name_nl="origineel experiment",
         )
         cls.first_phase = Phase.objects.create(
             index=1, randomize=False, dashboard=True, experiment=cls.experiment
@@ -149,53 +142,33 @@ class TestDuplicateExperiment(TestCase):
 
         cls.questions_in_series = QuestionInSeries.objects.all()
 
-        BlockTranslatedContent.objects.create(
+        BlockText.objects.create(
             block=cls.block1,
-            language="en",
-            name="First block",
-            description="Block1 description"
+            name_en="First block",
+            description_en="Block1 description",
+            name_nl="Eerste blok",
+            description_nl="Block1 omschrijving",
         )
-        BlockTranslatedContent.objects.create(
-            block=cls.block1,
-            language="nl",
-            name="Eerste blok",
-            description="Block1 omschrijving"
-        )
-        BlockTranslatedContent.objects.create(
+        BlockText.objects.create(
             block=cls.block2,
-            language="en",
-            name="Second block",
-            description="Block2 description"
+            name_en="Second block",
+            description_en="Block2 description",
+            name_nl="Tweede blok",
+            description_nl="Block2 omschrijving",
         )
-        BlockTranslatedContent.objects.create(
-            block=cls.block2,
-            language="nl",
-            name="Tweede blok",
-            description="Block2 omschrijving"
-        )
-        BlockTranslatedContent.objects.create(
+        BlockText.objects.create(
             block=cls.block3,
-            language="en",
-            name="Third block",
-            description="Block3 description"
+            name_en="Third block",
+            description_en="Block3 description",
+            name_nl="Derde blok",
+            description_nl="Block3 omschrijving",
         )
-        BlockTranslatedContent.objects.create(
-            block=cls.block3,
-            language="nl",
-            name="Derde blok",
-            description="Block3 omschrijving"
-        )
-        BlockTranslatedContent.objects.create(
+        BlockText.objects.create(
             block=cls.block4,
-            language="en",
-            name="Fourth block",
-            description="Block4 description"
-        )
-        BlockTranslatedContent.objects.create(
-            block=cls.block4,
-            language="nl",
-            name="Vierde blok",
-            description="Block4 omschrijving"
+            name_en="Fourth block",
+            description_en="Block4 description",
+            name_nl="Vierde blok",
+            description_nl="Block4 omschrijving",
         )
 
     def setUp(self):
@@ -209,13 +182,13 @@ class TestDuplicateExperiment(TestCase):
 
         new_exp = Experiment.objects.last()
         all_experiments = Experiment.objects.all()
-        all_exp_content = ExperimentTranslatedContent.objects.all()
+        all_exp_content = ExperimentText.objects.all()
 
         all_phases = Phase.objects.all()
 
         all_blocks = Block.objects.all()
         last_block = Block.objects.last()
-        all_block_content = BlockTranslatedContent.objects.all()
+        all_block_content = BlockText.objects.all()
         new_block1 = Block.objects.get(slug="block1-duplitest")
 
         all_question_series = QuestionSeries.objects.all()

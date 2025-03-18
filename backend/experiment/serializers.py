@@ -21,19 +21,6 @@ def serialize_actions(actions):
     return actions.action()
 
 
-def get_experiment_translated_content(experiment):
-    language_code = get_language()[0:2]
-
-    translated_content = experiment.get_translated_content(language_code)
-
-    if not translated_content:
-        raise ValueError("No translated content found for this experiment")
-
-    # set language cookie to the first available translation for this experiment
-    activate(translated_content.language)
-    return translated_content
-
-
 def serialize_experiment(experiment: Experiment) -> dict:
     """Serialize experiment
 
@@ -44,31 +31,30 @@ def serialize_experiment(experiment: Experiment) -> dict:
         Basic info about an experiment
     """
 
-    translated_content = get_experiment_translated_content(experiment)
-
     serialized = {
         "slug": experiment.slug,
-        "name": translated_content.name,
-        "description": formatter(translated_content.description, filter_name="markdown"),
+        "name": experimenttext.name,
     }
 
-    if translated_content.consent:
-        serialized["consent"] = Consent(translated_content.consent).action()
-    elif experiment.get_fallback_content() and experiment.get_fallback_content().consent:
-        serialized["consent"] = Consent(experiment.get_fallback_content().consent).action()
+    texts = experimenttext
+
+    if texts.consent:
+        serialized["consent"] = Consent(texts.consent).action()
 
     if experiment.theme_config:
         serialized["theme"] = serialize_theme(experiment.theme_config)
 
-    if translated_content.about_content:
-        serialized["aboutContent"] = formatter(translated_content.about_content, filter_name="markdown")
+    if texts.about_content:
+        serialized["aboutContent"] = formatter(
+            texts.about_content, filter_name="markdown"
+        )
         serialized["backButtonText"] = _("Back")
 
-    if translated_content.disclaimer:
-        serialized["disclaimer"] = formatter(translated_content.disclaimer, filter_name="markdown")
+    if texts.disclaimer:
+        serialized["disclaimer"] = formatter(texts.disclaimer, filter_name="markdown")
 
-    if translated_content.privacy:
-        serialized["privacy"] = formatter(translated_content.privacy, filter_name="markdown")
+    if texts.privacy:
+        serialized["privacy"] = formatter(texts.privacy, filter_name="markdown")
 
     if hasattr(experiment, "social_media_config") and experiment.social_media_config:
         serialized["socialMedia"] = serialize_social_media_config(experiment.social_media_config)

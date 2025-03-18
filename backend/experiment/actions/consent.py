@@ -75,7 +75,7 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
         ```
 
     Note:
-        - The text file is normally uploaded via the admin interface for the experiment, so most of the time (and by default) you will use an experiment's `translated_content.consent` file.
+        - The text file is normally uploaded via the admin interface for the experiment, so most of the time (and by default) you will use an experiment's `texts.consent` file.
         - This component is used in conjunction with the frontend Consent.tsx component
         - HTML templates can use Django template language
         - Markdown files are automatically converted to HTML

@@ -6,11 +6,11 @@ from image.models import Image
 from experiment.serializers import serialize_phase
 from experiment.models import (
     Block,
-    BlockTranslatedContent,
+    BlockText,
     Experiment,
     Phase,
     SocialMediaConfig,
-    ExperimentTranslatedContent,
+    ExperimentText,
 )
 from experiment.rules.rhythm_battery_intro import RhythmBatteryIntro
 from participant.models import Participant
@@ -28,7 +28,7 @@ class TestExperimentViews(TestCase):
             slug="test_series",
             theme_config=theme_config,
         )
-        ExperimentTranslatedContent.objects.create(
+        ExperimentText.objects.create(
             experiment=experiment,
             language="en",
             name="Test Series",
@@ -137,7 +137,7 @@ class TestExperimentViews(TestCase):
         )
         self.intermediate_phase.experiment = experiment
         self.intermediate_phase.save()
-        ExperimentTranslatedContent.objects.create(
+        ExperimentText.objects.create(
             experiment=experiment,
             language="en",
             name="Test Experiment",
@@ -177,31 +177,18 @@ class TestExperimentViews(TestCase):
         total_score_2 = serialized_coll_2["totalScore"]
         self.assertEqual(total_score_2, 16)
 
-    def test_experiment_get_translated_content(self):
-        """Test get_translated_content method"""
-        experiment = Experiment.objects.get(slug="test_series")
-        translated_content = experiment.get_translated_content("en")
-        self.assertEqual(translated_content.name, "Test Series")
-
-    def test_experiment_get_fallback_content(self):
-        """Test get_fallback_content method"""
+    def test_experiment_translation(self):
+        """Test translations of experiment texts"""
 
         experiment = Experiment.objects.create(slug="test_experiment_translated_content")
         self.intermediate_phase.experiment = experiment
         self.intermediate_phase.save()
-        ExperimentTranslatedContent.objects.create(
+        ExperimentText.objects.create(
             experiment=experiment,
-            index=0,
-            language="en",
-            name="Test Experiment Fallback Content",
-            description="Test experiment description in English.",
-        )
-        ExperimentTranslatedContent.objects.create(
-            experiment=experiment,
-            index=1,
-            language="es",
-            name="Experimento de Prueba",
-            description="Descripción de la experimento de prueba en español.",
+            name_en="Test Experiment Translation",
+            description_en="Test experiment description in English.",
+            name_nl="Probeersel",
+            description_nl="Eens kijken of vertaling werkt.",
         )
 
         session = self.client.session
@@ -214,28 +201,30 @@ class TestExperimentViews(TestCase):
             headers={"Accept-Language": "en-Gb"},
         )
         # since English translation is available, the English content should be returned
-        self.assertEqual(response.json().get("name"), "Test Experiment Fallback Content")
+        self.assertEqual(response.json().get("name"), "Test Experiment Translation")
 
         # request experiment with language set to Spanish
-        response = self.client.get("/experiment/test_experiment_translated_content/", headers={"Accept-Language": "es"})
+        response = self.client.get(
+            "/experiment/test_experiment_translated_content/",
+            headers={"Accept-Language": "nl"},
+        )
 
         # since Spanish translation is available, the Spanish content should be returned
-        self.assertEqual(response.json().get("name"), "Experimento de Prueba")
+        self.assertEqual(response.json().get("name"), "Probeersel")
 
         # request experiment with language set to Dutch
         response = self.client.get("/experiment/test_experiment_translated_content/", headers={"Accept-Language": "nl"})
 
         # since no Dutch translation is available, the fallback content should be returned
         self.assertEqual(
-            response.json().get("name"), "Test Experiment Fallback Content"
+            response.json().get("description"), "Eens kijken of vertaling werkt."
         )
 
     def test_get_block(self):
         # Create a block
         experiment = Experiment.objects.create(slug="test-experiment")
-        ExperimentTranslatedContent.objects.create(
+        ExperimentText.objects.create(
             experiment=experiment,
-            language="en",
             name="Test Experiment",
             description="Test Description",
             consent=SimpleUploadedFile("test-consent.md", b"test consent"),
@@ -250,11 +239,10 @@ class TestExperimentViews(TestCase):
             bonus_points=42,
             phase=phase,
         )
-        BlockTranslatedContent.objects.create(
+        BlockText.objects.create(
             block=block,
             name="Test Block",
             description="This is a test block",
-            language="en",
         )
         participant = Participant.objects.create()
         participant.save()
