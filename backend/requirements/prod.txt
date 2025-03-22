@@ -58,7 +58,7 @@ ghp-import==2.1.0
     # via mkdocs
 griffe==1.2.0
     # via mkdocstrings-python
-gunicorn==22.0.0
+gunicorn==23.0.0
     # via -r requirements.in/prod.txt
 html5lib==1.1
     # via textile
