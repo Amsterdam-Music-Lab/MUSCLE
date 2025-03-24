@@ -1,12 +1,17 @@
 from django.conf import settings
 from django.contrib import admin, messages
 from django.shortcuts import render, redirect
-
-from inline_actions.admin import InlineActionsModelAdminMixin
 from django.urls import reverse
 from django.utils.html import format_html
 
+from inline_actions.admin import InlineActionsModelAdminMixin
+from modeltranslation.admin import (
+    TabbedTranslationAdmin,
+    TranslationStackedInline,
+    TranslationTabularInline,
+)
 from nested_admin import NestedModelAdmin, NestedStackedInline, NestedTabularInline
+
 
 from experiment.models import (
     Block,
@@ -28,10 +33,9 @@ from question.models import QuestionSeries, QuestionInSeries
 from .utils import export_json_results
 
 
-class BlockTextInline(NestedTabularInline):
+class BlockTextInline(NestedStackedInline, TranslationTabularInline):
     model = BlockText
-    form = BlockTranslatedContentForm
-    extra = 0
+    # form = BlockTranslatedContentForm
     fields = [
         "name",
         "description",
@@ -43,10 +47,8 @@ class BlockTextInline(NestedTabularInline):
         return False
 
 
-class ExperimentTextInline(NestedStackedInline):
+class ExperimentTextInline(NestedTabularInline, TranslationTabularInline):
     model = ExperimentText
-    form = ExperimentTranslatedContentForm
-    extra = 1
 
 
 class BlockInline(NestedStackedInline):
@@ -170,7 +172,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 )
 
             # order_by is inserted here to prevent a query error
-            exp_contents = obj.text.order_by("name").all()
+            exp_text = obj.text
             # order_by is inserted here to prevent a query error
             exp_phases = obj.phases.order_by("index").all()
 
@@ -181,13 +183,12 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
             exp_copy.slug = f"{obj.slug}{slug_extension}"
             exp_copy.save()
 
-            # Duplicate experiment translated content objects
-            for content in exp_contents:
-                exp_content_copy = content
-                exp_content_copy.pk = None
-                exp_content_copy._state.adding = True
-                exp_content_copy.experiment = exp_copy
-                exp_content_copy.save()
+            # Duplicate experiment text
+            exp_text_copy = exp_text
+            exp_text_copy.pk = None
+            exp_text_copy._state.adding = True
+            exp_text_copy.experiment = exp_copy
+            exp_text_copy.save()
 
             # Duplicate phases
             for phase in exp_phases:
@@ -201,7 +202,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 # Duplicate blocks in this phase
                 for block in these_blocks:
                     # order_by is inserted here to prevent a query error
-                    block_contents = blocktext.order_by('name').all()
+                    block_text = block.text
                     these_playlists = block.playlists.all()
                     question_series = QuestionSeries.objects.filter(block=block)
 
@@ -213,14 +214,12 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                     block_copy.save()
                     block_copy.playlists.set(these_playlists)
 
-                    # Duplicate Block translated content objects
-                    for content in block_contents:
-                        block_content_copy = content
-                        block_content_copy.pk = None
-                        block_content_copy._state.adding = True
-                        block_content_copy.block = block_copy
-                        block_content_copy.save()
-
+                    # Duplicate Block text
+                    block_text_copy = block_text
+                    block_text_copy.pk = None
+                    block_text_copy._state.adding = True
+                    block_text_copy.block = block_copy
+                    block_text_copy.save()
                     # Duplicate the Block QuestionSeries
                     for series in question_series:
                         all_in_series = QuestionInSeries.objects.filter(
@@ -354,10 +353,10 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         super().save_model(request, obj, form, change)
 
         # Check for missing translations after saving
-        missing_content_blocks = get_missing_content_blocks(obj)
+        missing_text_blocks = get_missing_text_blocks(obj)
 
-        if missing_content_blocks:
-            for block, missing_languages in missing_content_blocks:
+        if missing_text_blocks:
+            for block, missing_languages in missing_text_blocks:
                 missing_language_flags = [
                     get_flag_emoji(language) for language in missing_languages
                 ]
