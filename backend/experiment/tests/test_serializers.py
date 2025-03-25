@@ -4,9 +4,7 @@ from django.utils import timezone
 
 from experiment.models import (
     Block,
-    BlockTranslatedContent,
     Experiment,
-    ExperimentTranslatedContent,
     Phase,
 )
 from experiment.serializers import get_upcoming_block, serialize_block, serialize_phase
@@ -98,10 +96,6 @@ class SerializerTest(TestCase):
             ),
             theme_config=create_theme_config(),
             phase=self.phase1,
-        )
-        BlockTranslatedContent.objects.create(
-            block=block,
-            language="en",
             name="Test Block",
             description="This is a test block",
         )

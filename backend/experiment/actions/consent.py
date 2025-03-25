@@ -101,7 +101,7 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
     ) -> None:
         # Determine which text to use
         if text != "":
-            # Uploaded consent via file field: block.consent (High priority)
+            # Uploaded consent via file field: experiment.consent (High priority)
             with text.open("r") as f:
                 dry_text = f.read()
             render_format = get_render_format(text.url)
@@ -115,6 +115,7 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
             render_format = "HTML"
         # render text fot the consent component
         self.text = render_html_or_markdown(dry_text, render_format)
+        breakpoint()
         self.title = title
         self.confirm = confirm
         self.deny = deny

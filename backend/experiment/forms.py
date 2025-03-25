@@ -10,9 +10,7 @@ from django.forms import (
 )
 from experiment.models import (
     Experiment,
-    ExperimentTranslatedContent,
     Block,
-    BlockTranslatedContent,
     SocialMediaConfig,
 )
 from experiment.rules import BLOCK_RULES
@@ -197,43 +195,6 @@ class ExperimentForm(ModelForm):
     class Media:
         js = ["experiment_form.js"]
         css = {"all": ["experiment_form.css"]}
-
-
-class TranslatedContentInline(Form):
-
-    class Media:
-        js = ["translated_content.js"]
-        css = {"all": ["translated_content.css"]}
-
-    def clean(self):
-        cleaned_data = super().clean()
-        # provide instance id in cleaned data, as the custom form doesn't do that
-        cleaned_data['id'] = self.instance.id
-
-
-class ExperimentTranslatedContentForm(TranslatedContentInline, ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        super(ModelForm, self).__init__(*args, **kwargs)
-        self.fields["about_content"].widget = MarkdownPreviewTextInput()
-        self.fields['disclaimer'].widget = MarkdownPreviewTextInput()
-        self.fields['privacy'].widget = MarkdownPreviewTextInput()
-        self.fields["description"].widget.attrs["style"] = "height:40px"
-        self.fields["social_media_message"].widget.attrs["style"] = "height:15px"
-
-    class Meta:
-        model = ExperimentTranslatedContent
-        fields = "__all__"
-
-class BlockTranslatedContentForm(ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        super(ModelForm, self).__init__(*args, **kwargs)
-        # self.fields["description"].widget.attrs["style"] = "height:40px"
-
-    class Meta:
-        model = BlockTranslatedContent
-        fields = "__all__"
 
 
 class BlockForm(ModelForm):

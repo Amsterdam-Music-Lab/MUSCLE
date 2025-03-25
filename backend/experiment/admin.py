@@ -144,8 +144,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 )
 
             # order_by is inserted here to prevent a query error
-            exp_contents = obj.text.order_by("name").all()
-            # order_by is inserted here to prevent a query error
             exp_phases = obj.phases.order_by("index").all()
 
             # Duplicate Experiment object
@@ -154,14 +152,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
             exp_copy._state.adding = True
             exp_copy.slug = f"{obj.slug}{slug_extension}"
             exp_copy.save()
-
-            # Duplicate experiment translated content objects
-            for content in exp_contents:
-                exp_content_copy = content
-                exp_content_copy.pk = None
-                exp_content_copy._state.adding = True
-                exp_content_copy.experiment = exp_copy
-                exp_content_copy.save()
 
             # Duplicate phases
             for phase in exp_phases:
@@ -175,7 +165,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 # Duplicate blocks in this phase
                 for block in these_blocks:
                     # order_by is inserted here to prevent a query error
-                    block_contents = blocktext.order_by('name').all()
                     these_playlists = block.playlists.all()
                     question_series = QuestionSeries.objects.filter(block=block)
 
@@ -186,14 +175,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                     block_copy.phase = phase_copy
                     block_copy.save()
                     block_copy.playlists.set(these_playlists)
-
-                    # Duplicate Block translated content objects
-                    for content in block_contents:
-                        block_content_copy = content
-                        block_content_copy.pk = None
-                        block_content_copy._state.adding = True
-                        block_content_copy.block = block_copy
-                        block_content_copy.save()
 
                     # Duplicate the Block QuestionSeries
                     for series in question_series:
@@ -281,7 +262,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
     def remarks(self, obj):
         remarks_array = []
 
-        if not obj.text.name:
+        if not obj.name:
             remarks_array.append(
                 {
                     "level": "warning",
@@ -290,7 +271,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 }
             )
 
-        if not obj.text.consent:
+        if not obj.consent:
             remarks_array.append(
                 {
                     "level": "info",
@@ -307,12 +288,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                     "title": "No issues found.",
                 }
             )
-
-        # TODO: Check if all theme configs support the same languages as the experiment
-        # Implement this when the theme configs have been updated to support multiple languages
-
-        # TODO: Check if all social media configs support the same languages as the experiment
-        # Implement this when the social media configs have been updated to support multiple languages
 
         return format_html(
             "\n".join(
@@ -372,29 +347,5 @@ class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
         return format_html(", ".join([block.slug for block in blocks]))
 
-
-class BlockTranslatedContentAdmin(admin.ModelAdmin):
-    list_display = ["name", "block", "language"]
-    list_filter = ["language"]
-    search_fields = [
-        "name",
-        "block__name",
-    ]
-
-    def blocks(self, obj):
-        # Block is manytomany, so we need to find it through the related name
-        blocks = Block.objects.filter(texts=obj)
-
-        if not blocks:
-            return "No block"
-
-        return format_html(
-            ", ".join(
-                [
-                    f'<a href="/admin/experiment/block/{block.id}/change/">{block.name}</a>'
-                    for block in blocks
-                ]
-            )
-        )
 
 admin.site.register(Experiment, ExperimentAdmin)

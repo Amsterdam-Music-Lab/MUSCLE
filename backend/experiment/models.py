@@ -17,12 +17,12 @@ from .validators import markdown_html_validator, block_slug_validator, experimen
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 
 
-def consent_upload_path(experiment) -> str:
+def consent_upload_path(instance, filename) -> str:
     """Generate path to save consent file based on experiment.slug and language
     Returns:
         upload_to (str): Path for uploading the consent file
     """
-    folder_name = experiment.slug
+    folder_name = instance.slug
     language = get_language()
     return join("consent", folder_name, f"consent_{language}")
 
@@ -32,6 +32,13 @@ class Experiment(models.Model):
 
     Attributes:
         slug (str): Slug
+        name (str): Name of the experiment
+        description (str): Description
+        consent (FileField): Consent text markdown or html
+        about_content (str): About text
+        social_media_message (str): Message to post with on social media. Can contain {points} and {experiment_name} placeholders
+        disclaimer (str): Disclaimer text
+        privacy (str): Privacy statement text
         theme_config (theme.ThemeConfig): ThemeConfig instance
         active (bool): Set experiment active
         social_media_config (SocialMediaConfig): SocialMediaConfig instance
@@ -152,9 +159,11 @@ class Block(models.Model):
     Attributes:
         phase (Phase): The phase this block belongs to
         index (int): Index of this block in the phase
+        slug (str): Slug for this block
+        name (str): Block name
+        description (str): Description
         playlists (list(section.models.Playlist)): The playlist(s) used in this block
         image (image.models.Image): Image that will be showed on the dashboard
-        slug (str): Slug for this block
         active (bool): Is this block active?
         rounds (int): Number of rounds
         bonus_points (int): Bonus points
@@ -388,83 +397,6 @@ class Block(models.Model):
                     )
 
 
-class TranslatedContent(models.Model):
-    language = models.CharField(
-        default="en", blank=True, choices=language_choices, max_length=2
-    )
-
-    class Meta:
-        abstract = True
-
-
-class ExperimentTranslatedContent(TranslatedContent):
-    """Translated content for an Experiment
-
-    Attributes:
-        experiment (Experiment): Associated experiment
-        index (int): Index
-        language (str): Language code
-        description (str): Description
-        consent (FileField): Consent text markdown or html
-        about_content (str): About text
-        social_media_message (str): Message to post with on social media. Can contain {points} and {experiment_name} placeholders
-        disclaimer (str): Disclaimer text
-        privacy (str): Privacy statement text
-    """
-
-    experiment = models.ForeignKey(
-        Experiment, on_delete=models.CASCADE, related_name="translated_content"
-    )
-    index = models.IntegerField(default=0)
-    name = models.CharField(max_length=64, default="")
-    description = models.TextField(blank=True, default="")
-    consent = models.FileField(
-        upload_to=consent_upload_path,
-        blank=True,
-        default="",
-        validators=[markdown_html_validator()],
-    )
-    about_content = models.TextField(blank=True, default="")
-    social_media_message = models.TextField(
-        blank=True,
-        help_text=_(
-            "Content for social media sharing. Use {points} and {experiment_name} as placeholders."
-        ),
-        default="I scored {points} points in {experiment_name}!",
-    )
-    disclaimer = models.TextField(blank=True, default="")
-    privacy = models.TextField(blank=True, default="")
-
-    class Meta:
-        unique_together = ["experiment", "language"]
-        ordering = ["index"]
-
-
-class BlockTranslatedContent(TranslatedContent):
-    """Translated content for a Block
-
-    Attributes:
-        block (Block): Associated block
-        language (str): Language code
-        name (str): Block name
-        description (str): Description
-
-    """
-
-    block = models.ForeignKey(
-        Block, on_delete=models.CASCADE, related_name="translated_contents"
-    )
-    name = models.CharField(max_length=64, default="")
-    description = models.TextField(blank=True, default="")
-
-    def __str__(self):
-        return f"Block text: {ISO_LANGUAGES.get(self.language)}"
-
-    class Meta:
-        # Assures that there is only one translation per language
-        unique_together = ["block", "language"]
-
-
 class Feedback(models.Model):
     """A model for adding feedback to an experiment block
 
@@ -525,8 +457,8 @@ class SocialMediaConfig(models.Model):
         Raises:
             ValueError: If required parameters are missing when needed
         """
-        social_message = self.experimenttext.social_media_message
-        experiment_name = self.experimenttext.name
+        social_message = self.experiment.social_media_message
+        experiment_name = self.experiment.name
 
         if social_message:
             has_placeholders = "{points}" in social_message and "{experiment_name}" in social_message
@@ -548,5 +480,5 @@ class SocialMediaConfig(models.Model):
         }
 
     def __str__(self):
-        social_media_description = self.experimenttext.name or self.experiment.slug
+        social_media_description = self.experiment.name or self.experiment.slug
         return f"Social Media for {social_media_description}"

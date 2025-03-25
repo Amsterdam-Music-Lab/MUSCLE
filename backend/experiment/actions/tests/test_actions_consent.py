@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from experiment.models import Experiment, ExperimentTranslatedContent
+from experiment.models import Experiment
 from experiment.actions.consent import Consent
 
 
@@ -10,26 +10,18 @@ class ConsentTest(TestCase):
     def setUpTestData(cls):
         Experiment.objects.create(
             slug="MARKDOWN",
-        )
-        ExperimentTranslatedContent.objects.create(
-            experiment=Experiment.objects.get(slug="MARKDOWN"),
-            language="en",
-            consent=SimpleUploadedFile("consent.md", b"#test", content_type="text/html"),
+            consent=SimpleUploadedFile(
+                "consent.md", b"#test", content_type="text/html"
+            ),
         )
         Experiment.objects.create(
             slug="HTML",
-        )
-        ExperimentTranslatedContent.objects.create(
-            experiment=Experiment.objects.get(slug="HTML"),
-            language="en",
-            consent=SimpleUploadedFile("consent.html", b"<h1>test</h1>", content_type="text/html"),
+            consent=SimpleUploadedFile(
+                "consent.html", b"<h1>test</h1>", content_type="text/html"
+            ),
         )
         Experiment.objects.create(
             slug="TEMPLATE",
-        )
-        ExperimentTranslatedContent.objects.create(
-            experiment=Experiment.objects.get(slug="TEMPLATE"),
-            language="en",
             consent=SimpleUploadedFile(
                 "template.html",
                 b"{% load i18n %}{% blocktranslate %}<p>test</p>{% endblocktranslate %}",
@@ -47,15 +39,16 @@ class ConsentTest(TestCase):
 
     def test_uploaded_markdown_rendering(self):
         experiment = Experiment.objects.get(slug="MARKDOWN")
-        consent = Consent(experiment.text.consent)
+        consent = Consent(experiment.consent)
+        breakpoint()
         self.assertEqual(consent.text, "<h1>test</h1>")
 
     def test_uploaded_html_rendering(self):
         experiment = Experiment.objects.get(slug="HTML")
-        consent = Consent(experiment.text.consent)
+        consent = Consent(experiment.consent)
         self.assertEqual(consent.text, "<h1>test</h1>")
 
     def test_template_language_rendering(self):
         experiment = Experiment.objects.get(slug="TEMPLATE")
-        consent = Consent(experiment.text.consent)
+        consent = Consent(experiment.consent)
         self.assertEqual(consent.text, "<p>test</p>")

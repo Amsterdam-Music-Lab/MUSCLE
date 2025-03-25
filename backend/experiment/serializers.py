@@ -2,12 +2,10 @@ from random import shuffle
 from typing import Optional, TypedDict, Literal
 
 from django_markup.markup import formatter
-from django.utils.translation import activate, get_language
 
 from experiment.actions.consent import Consent
 from image.serializers import serialize_image
 from participant.models import Participant
-from result.models import Result
 from session.models import Session
 from theme.serializers import serialize_theme
 from .models import Block, Experiment, Phase, SocialMediaConfig
@@ -34,28 +32,29 @@ def serialize_experiment(experiment: Experiment) -> dict:
 
     serialized = {
         "slug": experiment.slug,
-        "name": experimenttext.name,
+        "name": experiment.name,
+        "description": experiment.description,
     }
 
-    texts = experimenttext
-
-    if texts.consent:
-        serialized["consent"] = Consent(texts.consent).action()
+    if experiment.consent:
+        serialized["consent"] = Consent(experiment.consent).action()
 
     if experiment.theme_config:
         serialized["theme"] = serialize_theme(experiment.theme_config)
 
-    if texts.about_content:
+    if experiment.about_content:
         serialized["aboutContent"] = formatter(
-            texts.about_content, filter_name="markdown"
+            experiment.about_content, filter_name="markdown"
         )
         serialized["backButtonText"] = _("Back")
 
-    if texts.disclaimer:
-        serialized["disclaimer"] = formatter(texts.disclaimer, filter_name="markdown")
+    if experiment.disclaimer:
+        serialized["disclaimer"] = formatter(
+            experiment.disclaimer, filter_name="markdown"
+        )
 
-    if texts.privacy:
-        serialized["privacy"] = formatter(texts.privacy, filter_name="markdown")
+    if experiment.privacy:
+        serialized["privacy"] = formatter(experiment.privacy, filter_name="markdown")
 
     if hasattr(experiment, "social_media_config") and experiment.social_media_config:
         serialized["socialMedia"] = serialize_social_media_config(experiment.social_media_config)

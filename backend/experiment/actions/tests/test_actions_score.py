@@ -33,7 +33,7 @@ class TestScore(unittest.TestCase):
             score.config, {'show_section': True, 'show_total_score': True})
         self.assertEqual(score.icon, "icon-test")
         self.assertEqual(
-            scoretext,
+            score.text,
             {
                 'score': 'Total Score',
                 'next': 'Next',
@@ -52,7 +52,7 @@ class TestScore(unittest.TestCase):
             score.config, {'show_section': False, 'show_total_score': False})
         self.assertIsNone(score.icon)
         self.assertEqual(
-            scoretext,
+            score.text,
             {
                 'score': 'Total Score',
                 'next': 'Next',

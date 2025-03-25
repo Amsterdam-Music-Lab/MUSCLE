@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 from experiment.actions import Explainer
-from experiment.models import Experiment, ExperimentTranslatedContent, Block
+from experiment.models import Experiment, Block
 from experiment.rules.rhythm_battery_final import RhythmBatteryFinal
 from participant.models import Participant
 from section.models import Playlist
@@ -15,11 +15,9 @@ class TestRhythmBatteryFinal(TestCase):
         create_default_questions()
         Experiment.objects.create(
             slug="MARKDOWN_EXPERIMENT",
-        )
-        ExperimentTranslatedContent.objects.create(
-            experiment=Experiment.objects.get(slug="MARKDOWN_EXPERIMENT"),
-            language="en",
-            consent=SimpleUploadedFile("consent.md", b"# test", content_type="text/html"),
+            consent=SimpleUploadedFile(
+                "consent.md", b"# test", content_type="text/html"
+            ),
         )
         block = Block.objects.create(slug="test_md", rules=RhythmBatteryFinal.ID)
         block.add_default_question_series()

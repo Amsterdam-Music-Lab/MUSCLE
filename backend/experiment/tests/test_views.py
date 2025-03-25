@@ -6,11 +6,9 @@ from image.models import Image
 from experiment.serializers import serialize_phase
 from experiment.models import (
     Block,
-    BlockText,
     Experiment,
     Phase,
     SocialMediaConfig,
-    ExperimentText,
 )
 from experiment.rules.rhythm_battery_intro import RhythmBatteryIntro
 from participant.models import Participant
@@ -27,10 +25,6 @@ class TestExperimentViews(TestCase):
         experiment = Experiment.objects.create(
             slug="test_series",
             theme_config=theme_config,
-        )
-        ExperimentText.objects.create(
-            experiment=experiment,
-            language="en",
             name="Test Series",
             description="Test Description",
             social_media_message="Please play this Test experiment!",
@@ -134,15 +128,11 @@ class TestExperimentViews(TestCase):
         experiment = Experiment.objects.create(
             slug="no_social_media",
             theme_config=create_theme_config(name="no_social_media"),
-        )
-        self.intermediate_phase.experiment = experiment
-        self.intermediate_phase.save()
-        ExperimentText.objects.create(
-            experiment=experiment,
-            language="en",
             name="Test Experiment",
             description="Test Description",
         )
+        self.intermediate_phase.experiment = experiment
+        self.intermediate_phase.save()
         response = self.client.get("/experiment/no_social_media/")
         self.assertEqual(response.status_code, 200)
         self.assertNotIn("socialMedia", response.json())
@@ -180,16 +170,15 @@ class TestExperimentViews(TestCase):
     def test_experiment_translation(self):
         """Test translations of experiment texts"""
 
-        experiment = Experiment.objects.create(slug="test_experiment_translated_content")
-        self.intermediate_phase.experiment = experiment
-        self.intermediate_phase.save()
-        ExperimentText.objects.create(
-            experiment=experiment,
+        experiment = Experiment.objects.create(
+            slug="test_experiment_translated_content",
             name_en="Test Experiment Translation",
             description_en="Test experiment description in English.",
             name_nl="Probeersel",
             description_nl="Eens kijken of vertaling werkt.",
         )
+        self.intermediate_phase.experiment = experiment
+        self.intermediate_phase.save()
 
         session = self.client.session
         session["participant_id"] = self.participant.id
@@ -222,9 +211,8 @@ class TestExperimentViews(TestCase):
 
     def test_get_block(self):
         # Create a block
-        experiment = Experiment.objects.create(slug="test-experiment")
-        ExperimentText.objects.create(
-            experiment=experiment,
+        experiment = Experiment.objects.create(
+            slug="test-experiment",
             name="Test Experiment",
             description="Test Description",
             consent=SimpleUploadedFile("test-consent.md", b"test consent"),
@@ -238,9 +226,6 @@ class TestExperimentViews(TestCase):
             rounds=3,
             bonus_points=42,
             phase=phase,
-        )
-        BlockText.objects.create(
-            block=block,
             name="Test Block",
             description="This is a test block",
         )

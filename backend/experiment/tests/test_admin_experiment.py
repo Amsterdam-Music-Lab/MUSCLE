@@ -3,7 +3,7 @@ from django.contrib.admin.sites import AdminSite
 from django.urls import reverse
 from django.utils.html import format_html
 from experiment.admin import ExperimentAdmin, PhaseAdmin
-from experiment.models import Block, BlockText, Experiment, ExperimentText, Phase
+from experiment.models import Block, Experiment, Phase
 from section.models import Playlist
 from theme.models import ThemeConfig
 from question.models import QuestionSeries, QuestionInSeries, Question
@@ -27,10 +27,6 @@ class TestExperimentAdmin(TestCase):
     def setUpTestData(self):
         self.experiment = Experiment.objects.create(
             slug="TEST",
-        )
-        ExperimentTranslatedContent.objects.create(
-            experiment=self.experiment,
-            language="en",
             name="test",
             description="test description very long like the tea of oolong and the song of the bird in the morning",
         )
@@ -60,8 +56,9 @@ class PhaseAdminTest(TestCase):
         self.admin = PhaseAdmin(model=Phase, admin_site=AdminSite)
 
     def test_phase_admin_related_experiment_method(self):
-        experiment = Experiment.objects.create(slug="test-experiment")
-        ExperimentTranslatedContent.objects.create(experiment=experiment, language="en", name="Test Experiment")
+        experiment = Experiment.objects.create(
+            slug="test-experiment", name="Test Experiment"
+        )
         phase = Phase.objects.create(
             index=1, randomize=False, experiment=experiment, dashboard=True
         )
@@ -73,9 +70,8 @@ class PhaseAdminTest(TestCase):
         self.assertEqual(related_experiment, expected_related_experiment)
 
     def test_experiment_with_no_blocks(self):
-        experiment = Experiment.objects.create(slug="no-blocks")
-        ExperimentText.objects.create(
-            experiment=experiment,
+        experiment = Experiment.objects.create(
+            slug="no-blocks",
             name="No Blocks",
         )
         phase = Phase.objects.create(
@@ -85,9 +81,8 @@ class PhaseAdminTest(TestCase):
         self.assertEqual(blocks, "No blocks")
 
     def test_experiment_with_blocks(self):
-        experiment = Experiment.objects.create(slug="with-blocks")
-        ExperimentText.create(
-            experiment=experiment,
+        experiment = Experiment.objects.create(
+            slug="with-blocks",
             name="With Blocks",
         )
         phase = Phase.objects.create(
@@ -106,9 +101,8 @@ class PhaseAdminTest(TestCase):
 class TestDuplicateExperiment(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.experiment = Experiment.objects.create(slug="original")
-        ExperimentText.objects.create(
-            experiment=cls.experiment,
+        cls.experiment = Experiment.objects.create(
+            slug="original",
             name_en="original experiment",
             name_nl="origineel experiment",
         )
@@ -122,10 +116,42 @@ class TestDuplicateExperiment(TestCase):
         cls.playlist2 = Playlist.objects.create(name="second")
         cls.theme = ThemeConfig.objects.create(name='test_theme')
 
-        cls.block1 = Block.objects.create(slug="block1", phase=cls.first_phase, theme_config=cls.theme)
-        cls.block2 = Block.objects.create(slug="block2", phase=cls.first_phase, theme_config=cls.theme)
-        cls.block3 = Block.objects.create(slug="block3", phase=cls.second_phase, theme_config=cls.theme)
-        cls.block4 = Block.objects.create(slug="block4", phase=cls.second_phase, theme_config=cls.theme)
+        cls.block1 = Block.objects.create(
+            slug="block1",
+            phase=cls.first_phase,
+            name_en="First block",
+            description_en="Block1 description",
+            name_nl="Eerste blok",
+            description_nl="Block1 omschrijving",
+            theme_config=cls.theme,
+        )
+        cls.block2 = Block.objects.create(
+            slug="block2",
+            phase=cls.first_phase,
+            name_en="Second block",
+            description_en="Block2 description",
+            name_nl="Tweede blok",
+            description_nl="Block2 omschrijving",
+            theme_config=cls.theme,
+        )
+        cls.block3 = Block.objects.create(
+            slug="block3",
+            phase=cls.second_phase,
+            name_en="Third block",
+            description_en="Block3 description",
+            name_nl="Derde blok",
+            description_nl="Block3 omschrijving",
+            theme_config=cls.theme,
+        )
+        cls.block4 = Block.objects.create(
+            slug="block4",
+            phase=cls.second_phase,
+            name_en="Fourth block",
+            description_en="Block4 description",
+            name_nl="Vierde blok",
+            description_nl="Block4 omschrijving",
+            theme_config=cls.theme,
+        )
 
         cls.block1.playlists.add(cls.playlist1)
         cls.block1.playlists.add(cls.playlist2)
@@ -135,41 +161,12 @@ class TestDuplicateExperiment(TestCase):
         cls.questions = Question.objects.all()
         index = 0
         for question in cls.questions:
-            QuestionInSeries.objects.create(question_series = cls.question_series,
-                                            question=question,
-                                            index=index)
+            QuestionInSeries.objects.create(
+                question_series=cls.question_series, question=question, index=index
+            )
             index += 1
 
         cls.questions_in_series = QuestionInSeries.objects.all()
-
-        BlockText.objects.create(
-            block=cls.block1,
-            name_en="First block",
-            description_en="Block1 description",
-            name_nl="Eerste blok",
-            description_nl="Block1 omschrijving",
-        )
-        BlockText.objects.create(
-            block=cls.block2,
-            name_en="Second block",
-            description_en="Block2 description",
-            name_nl="Tweede blok",
-            description_nl="Block2 omschrijving",
-        )
-        BlockText.objects.create(
-            block=cls.block3,
-            name_en="Third block",
-            description_en="Block3 description",
-            name_nl="Derde blok",
-            description_nl="Block3 omschrijving",
-        )
-        BlockText.objects.create(
-            block=cls.block4,
-            name_en="Fourth block",
-            description_en="Block4 description",
-            name_nl="Vierde blok",
-            description_nl="Block4 omschrijving",
-        )
 
     def setUp(self):
         self.admin = ExperimentAdmin(model=Experiment, admin_site=AdminSite)
@@ -182,26 +179,22 @@ class TestDuplicateExperiment(TestCase):
 
         new_exp = Experiment.objects.last()
         all_experiments = Experiment.objects.all()
-        all_exp_content = ExperimentText.objects.all()
 
         all_phases = Phase.objects.all()
 
         all_blocks = Block.objects.all()
         last_block = Block.objects.last()
-        all_block_content = BlockText.objects.all()
         new_block1 = Block.objects.get(slug="block1-duplitest")
 
         all_question_series = QuestionSeries.objects.all()
         all_questions = Question.objects.all()
 
         self.assertEqual(all_experiments.count(), 2)
-        self.assertEqual(all_exp_content.count(), 4)
         self.assertEqual(new_exp.slug, 'original-duplitest')
 
         self.assertEqual(all_phases.count(), 4)
 
         self.assertEqual(all_blocks.count(), 8)
-        self.assertEqual(all_block_content.count(), 16)
         self.assertEqual(last_block.slug, 'block4-duplitest')
         self.assertEqual(last_block.theme_config.name, 'test_theme')
 

@@ -4,9 +4,7 @@ from image.models import Image
 from theme.models import ThemeConfig
 from experiment.models import (
     Block,
-    BlockText,
     Experiment,
-    ExperimentText,
     Phase,
 )
 from participant.models import Participant
@@ -27,8 +25,9 @@ class BlockModelTest(TestCase):
             logo_image=logo_image,
             background_image=background_image,
         )
-        experiment = Experiment.objects.create(slug="test-experiment")
-        ExperimentText.objects.create(experiment=experiment, name="Experiment name")
+        experiment = Experiment.objects.create(
+            slug="test-experiment", name="Experiment name"
+        )
         cls.phase = Phase.objects.create(experiment=experiment)
         block = Block.objects.create(
             phase=cls.phase,
@@ -37,9 +36,6 @@ class BlockModelTest(TestCase):
             bonus_points=10,
             rules="RHYTHM_BATTERY_FINAL",
             theme_config=ThemeConfig.objects.get(name="Default"),
-        )
-        BlockText.objects.create(
-            block=block,
             name="Test Block",
             description="Test block description",
         )
@@ -53,17 +49,6 @@ class BlockModelTest(TestCase):
             phase=self.phase, slug="test-block-no-content"
         )
         self.assertEqual(str(block_no_content), "test-block-no-content")
-
-    def test_block_str_without_pk(self):
-        block_no_pk = Block.objects.create(phase=self.phase)
-        BlockText.objects.create(
-            block=block_no_pk,
-            name="Not yet deleted test block",
-            description="Deleted test block description",
-        )
-        self.assertEqual(str(block_no_pk), "Not yet deleted test block")
-        block_no_pk.delete()
-        self.assertEqual(str(block_no_pk), "Deleted/Unsaved Block")
 
     def test_block_session_count(self):
         block = Block.objects.get(slug="test-block")
@@ -148,10 +133,8 @@ class ExperimentModelTest(TestCase):
     def setUpTestData(cls):
         cls.experiment = Experiment.objects.create(
             slug="test-series",
-        )
-        ExperimentText.objects.create(
-            experiment=cls.experiment,
-            name="Experimento de Prueba",
+            name="Test Experiment",
+            name_pt="Experimento de Prueba",
             description="Descripción de la experimento de prueba en español.",
         )
 
