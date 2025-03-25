@@ -1,5 +1,7 @@
 import React from "react";
 import useBoundStore from "@/util/stores";
+import classNames from "classnames";
+import CirclesBackground from "@/components/MCGTheme/CirclesBackground";
 
 interface PageProps {
     className?: string;
@@ -10,12 +12,21 @@ interface PageProps {
 const Page = ({ className, children }: PageProps) => {
 
     const theme = useBoundStore((state) => state.theme);
-    const backgroundImageUrl = theme?.backgroundUrl || '/public/images/background.jpg';
+    
+    // @BC mark MCG theme as .mcg
+    // @BC no default bg '/public/images/background.jpg', instead add .no-background
+    const hasBackground = Boolean(theme?.backgroundUrl)
 
     return (
-        <div className={"aha__page " + (className ? className : "")} style={{ backgroundImage: `url(${backgroundImageUrl})` }}>
-            {children}
-        </div>
+        <>
+            <div 
+                className={classNames('aha__page', className, !hasBackground && 'no-background', theme?.name == "MCG" && "mcg" )} 
+                style={!hasBackground ? null : {backgroundImage: `url(${theme.backgroundUrl})`} }
+            >
+                {children}
+            </div>
+            {theme?.name == "MCG" && <CirclesBackground color1="yellow" color2="pink" numCircles={30} />}
+        </>
     );
 };
 

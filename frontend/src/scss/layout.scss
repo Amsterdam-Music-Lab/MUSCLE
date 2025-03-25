@@ -1,14 +1,16 @@
 body.root {
     user-select: none;
     font-size: 16px;
-    background-image: url("/public/images/background.jpg");
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
+    // background-image: url("/public/images/background.jpg");
+    // background-size: cover;
+    // background-position: center center;
+    // background-repeat: no-repeat;
     min-height: 100vh;
 
     /* disable pinch zoom on iOS */
     touch-action: manipulation;
+
+    // font-family: "Inter", sans-serif;
 }
 
 #root {

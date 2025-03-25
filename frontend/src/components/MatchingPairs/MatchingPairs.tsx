@@ -11,6 +11,11 @@ import Participant from "@/types/Participant";
 import Overlay from "../Overlay/Overlay";
 import { ScoreFeedbackDisplay } from "@/types/Playback";
 
+import Timeline, { getTimeline } from "@/components/MCGTheme/Timeline";
+import PlayingBoard from "@/components/MatchingPairs/PlayingBoard";
+import TuneTwins from "@/components/MCGTheme/logos/TuneTwins"
+import Score from "@/components/MCGTheme/Score";
+
 export const SCORE_FEEDBACK_DISPLAY: { [key: string]: ScoreFeedbackDisplay } = {
     SMALL_BOTTOM_RIGHT: 'small-bottom-right',
     LARGE_TOP: 'large-top',
@@ -48,7 +53,7 @@ const MatchingPairs = ({
     const yPosition = useRef(-1);
     const [firstCard, setFirstCard] = useState<Card | null>(null);
     const [secondCard, setSecondCard] = useState<Card | null>(null);
-    const [feedbackText, setFeedbackText] = useState('Pick a card');
+    const [feedbackText, setFeedbackText] = useState('Pick a card...');
     const [feedbackClass, setFeedbackClass] = useState('');
     const [score, setScore] = useState<number | null>(null);
     const [total, setTotal] = useState(bonusPoints);
@@ -96,23 +101,27 @@ const MatchingPairs = ({
         switch (score) {
             case 10:
                 fbclass = 'fblucky';
-                setFeedbackText('Lucky match');
+                setFeedbackText(
+                    ['Lucky guess!', 'Lucky you!', 'This is your lucky day!'][Math.floor(Math.random()*2)]
+                );
                 break;
             case 20:
                 fbclass = 'fbmemory';
-                setFeedbackText('Good job!');
+                setFeedbackText(
+                    ['Well done!', 'Good job!', 'Nice!', 'Excellent!'][Math.floor(Math.random() * 4)]
+                );
                 break;
             case 0:
                 fbclass = 'fbnomatch';
-                setFeedbackText('No match');
+                setFeedbackText('Those cards don\'t match.');
                 break;
             case -10:
                 fbclass = 'fbmisremembered';
-                setFeedbackText('Misremembered');
+                setFeedbackText('Nope, that\'s no match...');
                 break;
             default:
                 setFeedbackClass('');
-                setFeedbackText('');
+                setFeedbackText('Pick a card...');
         }
         setFeedbackClass(fbclass);
 
@@ -225,7 +234,7 @@ const MatchingPairs = ({
                     }
                     return section;
                 }));
-                setFeedbackText('');
+                setFeedbackText('Pick another card...');
             }
         }
     };
@@ -259,48 +268,70 @@ const MatchingPairs = ({
             submitResult({});
             setFeedbackText('');
         } else {
-            setFeedbackText('Pick a card');
+            setFeedbackText('Pick a card...');
             setScore(null);
             setFeedbackClass('');
         }
     }
 
+    const timeline = getTimeline(["dot", "dot", "star-4", "dot", "dot", "star-5", "dot", "dot", "star-6", "dot", "dot", "star-7"])
+
     return (
         <div className="aha__matching-pairs">
-            <div>
-                {scoreFeedbackDisplay !== SCORE_FEEDBACK_DISPLAY.HIDDEN &&
-                    <ScoreFeedback
-                        score={score}
-                        total={total}
-                        feedbackClass={feedbackClass}
-                        feedbackText={feedbackText}
-                        scoreFeedbackDisplay={scoreFeedbackDisplay}
-                    />}
+            
+            <div className="mp-container">
+                
+                    <div className="mp-header">
+                        {scoreFeedbackDisplay !== SCORE_FEEDBACK_DISPLAY.HIDDEN &&
+                            <ScoreFeedback
+                                score={score}
+                                total={total}
+                                feedbackClass={feedbackClass}
+                                feedbackText={feedbackText}
+                                scoreFeedbackDisplay={scoreFeedbackDisplay}
+                            />
+                        }
+                    </div>
 
-                <div className={classNames("playing-board", columnCount === 3 && "playing-board--three-columns")}>
-                    {sections.map((_section, index) => (
-                        <PlayCard
-                            key={index}
-                            onClick={() => {
-                                playSection(index);
-                                checkMatchingPairs(index);
-                            }}
-                            registerUserClicks={registerUserClicks}
-                            playing={playerIndex === index}
-                            section={sections[index]}
-                            showAnimation={showAnimation}
-                            view={view}
-                        />
-                    )
-                    )}
-                </div>
-                <div
-                    className="matching-pairs__overlay"
-                    onClick={finishTurn}
-                    style={{ display: inBetweenTurns ? 'block' : 'none' }}
-                    data-testid="overlay"
-                ></div>
+                    <div className="mp-main">
+                        <div className="board">
+                            <PlayingBoard columns={4}>
+                                {sections.map((_section, index) => (
+                                    <PlayCard
+                                        key={index}
+                                        onClick={() => {
+                                            playSection(index);
+                                            checkMatchingPairs(index);
+                                        }}
+                                        registerUserClicks={registerUserClicks}
+                                        playing={playerIndex === index}
+                                        section={sections[index]}
+                                        showAnimation={showAnimation}
+                                        view={view} />
+                                    )
+                                )}
+                            </PlayingBoard>
+                        </div>
+                        <div className="timeline-container px-3 px-md-5 mt-3 w-100">
+                            <Timeline timeline={timeline} step={5} />
+                        </div>
+
+                    </div>
+                
+                {/* <div className="mp-footer flex-grow-1 d-flex flex-column justify-content-around" style={{flexBasis:"100px"}}>
+                    <div className="d-block d-md-none d-flex flex-row justify-content-center">
+                        <div style={{width: "150px"}}><TuneTwins fill="#ddd" /></div>
+                    </div>
+                </div> */}
+                
             </div>
+
+            <div
+                className="matching-pairs__overlay"
+                onClick={finishTurn}
+                style={{ display: inBetweenTurns ? 'block' : 'none' }}
+                data-testid="overlay" />
+
             <Overlay
                 isOpen={tutorialOverlayState.isOpen}
                 title={tutorialOverlayState.title}
@@ -330,21 +361,36 @@ const ScoreFeedback = ({
     feedbackClass,
     total,
 }: ScoreFeedbackProps) => {
+    
     return (
         <div className={
             classNames(
-                "matching-pairs__score-feedback row justify-content-between",
+                "matching-pairs__score-feedback", "d-flex", "flex-column", "justify-content-center",
                 { "matching-pairs__score-feedback--small-bottom-right": scoreFeedbackDisplay === SCORE_FEEDBACK_DISPLAY.SMALL_BOTTOM_RIGHT },
             )}
         >
-            <div className="col-6 align-self-start">
-                <div className={classNames("matching-pairs__feedback", feedbackClass)}>
-                    {score} <br /> {feedbackText}
-                </div>
+            
+            <div className="label pb-2 d-none d-md-inline-block">Total score</div>
+            <div data-testid="score" className={`matching-pairs__score ${total == 0 ? 'zero' : (total > 0 ? 'positive' : 'negative')}`}>
+                <span className="value">
+                    <span className="sign">{ total >= 0 ? "" : "-"}</span>
+                    {Math.abs(total)}
+                </span>
+                <span className="points">points</span>
             </div>
-            <div className="col-6 align-self-end">
-                <div data-testid="score" className="matching-pairs__score">Score: <br />{total}</div>
+            
+            <div className={classNames("matching-pairs__feedback", "pt-2", feedbackClass)} style={{minHeight: "4em"}}>
+                <span class="text">{feedbackText}</span>{' '}
+                {feedbackClass !== "" && <span class="font-weight-bold">{ 
+                    score === 0 ? "You got 0 points." : (score > 0 
+                        ? `+${score} points` 
+                        : `${score} points`
+                    )
+                }</span>}
+                
             </div>
+            
+            
         </div>
     )
 }

@@ -21,7 +21,7 @@ const Explainer = ({ instruction, button_label, steps = [], timer = null, onNext
     }, [onNext, timer])
 
     return (
-        <div data-testid="explainer" className="aha__explainer">
+        <div data-testid="explainer" className="aha__explainer mx-auto mt-5">
             <h3 className="title">{instruction}</h3>
 
             <ul>

@@ -31,3 +31,17 @@
         @include btn-style($negative);
     }
 }
+
+.mcg {
+//     .aha__button {
+//         width: 100%;
+//         border-radius: .5em;
+//         @extend .bg-red-pink;
+//         border: unset;
+//         // border: 5px solid #ffffff22;
+        
+//     }
+    .btn {
+        font-family: Inter !important;
+    }
+}

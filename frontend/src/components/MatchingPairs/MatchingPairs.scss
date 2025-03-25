@@ -1,111 +1,140 @@
-@import url('https://fonts.googleapis.com/css2?family=Rajdhani&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=Rajdhani&display=swap');
+@import "../../scss/variables.scss";
 
-@media (min-aspect-ratio: 1/1) {
-    $card: 16vh;
+.mcg {
+    .aha__matching-pairs {
+        height: 100vh;
+
+        // Center vertically
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    
+        .mp-container {
+            .mp-header {
+                flex-grow: 0;
+                text-align: center;
+            }
+
+            .mp-main {
+                flex-grow: 1;
+            }
+        }
+    }
 }
 
+// Landscape
+@media (min-aspect-ratio: 1/1),
+    screen and (min-width: $breakpoint-md) {
+    .mcg {
+        .mp-container {
+            display: flex;
+            flex-direction: row;
+            
+            .mp-header {
+                flex-basis: 30%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding: 0 1em;
+            }
+
+            .mp-main {
+                position: relative;
+                flex-grow: 0;
+                // max-width: 80vw;
+            }
+
+            .timeline-container {
+                width: 85vh;
+                max-width: 85vh;
+            }
+
+            .mcg-playing-board {
+                max-height: 85vh;
+            }
+        }
+    }
+}
+
+// Portrait
 @media (max-aspect-ratio: 1/1) {
-    $card: 18vw;
-}
-
-.aha__page .container {
-    padding-top: 2vh;
-}
-
-.aha__matching-pairs {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-@media (min-aspect-ratio: 1/1)  {
-    .playing-board {
-        grid-template-columns: 16vh 16vh 16vh 16vh;
-        column-gap: 1.5vh;
-        row-gap: 1.5vh;
-
-        &.playing-board--three-columns {
-            grid-template-columns: 16vh 16vh 16vh;
+    .mp-container {
+        flex-direction: column;
+        .mp-header {
+            padding: 1em 0;
         }
     }
 }
 
-@media (max-aspect-ratio: 1/1)  {
-    .playing-board {
-        grid-template-columns: 18vw 18vw 18vw 18vw;
-        column-gap: 2vw;
-        row-gap: 2vw;
-
-        &.playing-board--three-columns {
-            grid-template-columns: 18vw 18vw 18vw;
-        }
-    }
-}
-
-.playing-board {
-    display: inline-grid;
-}
 
 .matching-pairs__score-feedback {
+    color: #666;
 
-    font-weight: 700;
+    .label {
+        color: #ccc;
+    }
 
-    &--small-bottom-right {
-        position: fixed;
-        justify-content: flex-end;
-        bottom: 0;
-        right: 0;
-        text-align: right;
-        font-size: 0.5rem;
-        backface-visibility: hidden;
-        font-weight: normal;
-
-        .matching-pairs__feedback, .matching-pairs__score {
-            float: none;
+    .matching-pairs__feedback {
+        
+        &.fbnomatch {
+            // color: $gray;
         }
-    }
+        &.fblucky {
+            // color: $yellow;
+        }
+        &.fbmemory {
+            // color: $teal;
+        }
+        &.fbmisremembered {
+            // color: $red;
+        }
+        // &.nomessage {
+        //     // opacity: 0;
+        // }
+    } 
 }
-
-.matching-pairs__feedback, .matching-pairs__score {
-    font-family: 'Rajdhani', sans-serif;
-    line-height: 1;
-    text-align: center;
-    padding-bottom: .7rem;
-    font-size: 95%;
-    width: auto;
-
-    @media(min-width: 900px) {
-        font-size: 150%;
-    }
-}
-
-.matching-pairs__feedback {
-    float: left;
-    color: white;
-
-    &.fbnomatch {
-        color: $gray;
-    }
-    &.fblucky {
-        color: $yellow;
-    }
-    &.fbmemory {
-        color: $teal;
-    }
-    &.fbmisremembered {
-        color: $red;
-    }
-    &.nomessage {
-        opacity: 0;
-    }
-} 
 
 .matching-pairs__score {
-    float: right;
+    // The total score
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    .value {
+        font-size: 5rem;
+        line-height: .85;
+        font-weight: 900;
+    }
+
+    .points {
+        color: #ccc;
+        font-weight: 600;
+        display: none;
+    }
 
     &.noscore {
         opacity: 0;
+    }
+
+    .value, .label {
+        background: linear-gradient(70deg, #FFB14C -50%, #D843E2 600%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    // &.negative .value {
+    //     background: linear-gradient(70deg, #FFB14C -500%, #D843E2 300%);
+    //     -webkit-background-clip: text;
+    //     background-clip: text;
+    //     color: transparent;
+    // }
+}
+
+@media screen and (max-width: 768px) {
+    .matching-pairs__score .value {
+        font-size: 4rem;
     }
 }
 

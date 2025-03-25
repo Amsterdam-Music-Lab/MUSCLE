@@ -8,8 +8,6 @@
     overflow-y: auto;
     overflow-x: hidden;
 
-    color: white;
-
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -21,10 +19,38 @@
         }
     }
 
-    .container {
+    // BC only apply the max width to direct children of .aha_page
+    & > .container {
         @media (min-width: 720px) {
             max-width: 600px !important;
             padding-top: 5vh;
         }
+    }
+}
+
+// @BC MCG theme-specific styling
+.mcg.aha__page {
+    font-family: Inter, sans-serif;
+
+    .aha__explainer {
+        max-width: 500px;
+        background: #fff;
+        border-radius: 1em;
+        padding: 2em;
+        box-shadow: 0 0 2em rgba(0,0,0,0.1);
+    }
+
+    .aha__trial {
+        position: relative;
+        background-color: #fff;
+        height: 100%;
+    }
+
+    .circles-background {
+        position: absolute;
+        top:0;
+        width: 100%;
+        height: 100%;
+        z-index: -10;
     }
 }

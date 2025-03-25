@@ -243,9 +243,12 @@ const Block = () => {
                 unmountOnExit
             >
                 {(!loadingBlock && block) || view === "ERROR" ? (
+                    /* @BC: use a fullwidth page & hide app bar if the theme is called MCG (very hacky) */
                     <DefaultPage
                         title={state.title}
                         className={className}
+                        fullwidth={theme?.name === 'MCG'}
+                        showAppBar={theme?.name !== 'MCG'}
                     >
                         {render()}
 

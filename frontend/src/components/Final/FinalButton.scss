@@ -1,0 +1,11 @@
+.mcg .mcg-btn {
+    border-radius: .5em;
+    border: 5px solid #ffffff99;
+    box-sizing: border-box;
+    width: 100%;
+
+    &:hover {
+        border-color: #fff
+    }
+
+}

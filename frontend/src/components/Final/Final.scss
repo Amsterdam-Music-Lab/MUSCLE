@@ -12,26 +12,35 @@
     .aha__final-rank-bar-section {
         position: relative;
         height: 10px;
-        border: 2px solid $gold;
-        border-top: 0;
+        border-top: 2px solid $gold;
         margin-top: 50px;
-        margin: 50px auto 0;
+        // margin: 50px auto 0;
         max-width: 480px;
         width: 100%;
+        padding: .5em;
 
         .aha__final-rank-bar-cursor {
             position: absolute;
-            top: -5px;
-            height: 20px;
+            top: -1rem;
+            border-radius:10em;
+            // height: 20px;
             width: 2px;
-            background: $gold;
+            background:  linear-gradient(90deg, #FFB14C 0%, #D843E2 100%);
+
+            span {
+                color: #fff;
+                font-size: .8rem;
+                float: right;
+                padding: .3em;
+                padding-right: .6em;
+            }
         }
 
         &.diamond {
             border-color: $diamond;
 
             .aha__final-rank-bar-cursor {
-                background: $diamond;
+                // background: $diamond;
             }
         }
 
@@ -39,7 +48,7 @@
             border-color: $platinum;
 
             .aha__final-rank-bar-cursor {
-                background: $platinum;
+                // background: $platinum;
             }
         }
 
@@ -47,7 +56,7 @@
             border-color: $gold;
 
             .aha__final-rank-bar-cursor {
-                background: $gold;
+                // background: $gold;
             }
         }
 
@@ -55,7 +64,7 @@
             border-color: white;
 
             .aha__final-rank-bar-cursor {
-                background: white;
+                // background: white;
             }
         }
 
@@ -63,7 +72,7 @@
             border-color: $bronze;
 
             .aha__final-rank-bar-cursor {
-                background: $bronze;
+                // background: $bronze;
             }
         }
 
@@ -71,7 +80,7 @@
             border-color: $plastic;
 
             .aha__final-rank-bar-cursor {
-                background: $plastic;
+                // background: $plastic;
             }
         }
     }

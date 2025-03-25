@@ -1,6 +1,3 @@
-$playButtonHighDisplay: 18vw;
-$playButtonWideDisplay: 16vh;
-
 @keyframes memory {
     20% {
         transform: scale(1.15);
@@ -71,10 +68,45 @@ $playButtonWideDisplay: 16vh;
 }
 
 .aha__play-card {
+    // Note that the cards need not be square: this is a consequence
+    // of being in a square container
+    
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 20%;
+    box-shadow: 0 0 2em rgba(0,0,0,0.1);
+    
+    transition: transform ease-out 400ms, box-shadow ease-out 400ms;
+    transform-style: preserve-3d;
+    perspective: 1000px; // Required for 3d flipping effect
+
+    & > div {
+        // Ensure the back and front fill the entire card. 
+        width: 100%;
+        height: 100%;
+    }
+
+    &:hover {
+        transform: rotateY(30deg) rotateX(3deg);
+    }
+
+    &.turned {
+        // Flip the card 180deg
+        transform: rotateY(180deg);
+    }
 
     &.disabled {
         pointer-events: none;
-        opacity: 0;
+        
+        // Format card as empty slot
+        @extend .bg-inset-xs, .sharp-border;
+        
+        // Prevent the card from flipping back again:
+        transform: rotateY(180deg); 
+        
+        .back {
+            background: unset !important;
+        }
     }
 
     &.fbnomatch, &.fbmisremembered {
@@ -100,8 +132,6 @@ $playButtonWideDisplay: 16vh;
     }
 
     .front {
-        border-radius : .5rem;
-
         &--visual {
             overflow: hidden;
 
@@ -115,21 +145,8 @@ $playButtonWideDisplay: 16vh;
     }
 
     .back {
-        background-color: $gray;
-        border-radius: .5rem;
-    }
-
-    @media(min-aspect-ratio: 1/1) {
-        .back, .turned {
-            width: $playButtonWideDisplay;
-            height: $playButtonWideDisplay;
-        }
-    }
-
-    @media(max-aspect-ratio: 1/1) {
-        .back, .turned {
-            width: $playButtonHighDisplay;
-            height: $playButtonHighDisplay;
-        }
+        @extend .bg-subtle-yellow-pink;
+        display: flex;
+        justify-content: center;
     }
 }

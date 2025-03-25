@@ -1,77 +1,81 @@
 import classNames from "classnames";
-
-import Histogram from "../Histogram/Histogram";
 import { API_ROOT } from "@/config";
 import { Card } from "@/types/Section";
+import Histogram from "../Histogram/Histogram";
 
-interface PlayCardProps {
-    onClick: () => void;
-    registerUserClicks: (x: number, y: number) => void;
-    playing: boolean;
-    section: Card;
-    view: string;
-    showAnimation: boolean;
+const PlayingCardFront = ({ src, name }: {src: string, name: string}) => {
+  const url = src.startsWith("http") ? src : API_ROOT + src
+  return (
+    <div data-testid="front" className="front front--visual">
+      <img src={url} alt={name} />
+    </div>
+  )
 }
 
-const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAnimation }: PlayCardProps) => {
-    const getImgSrc = (url: string) => {
-        if (url.startsWith("http")) {
-            return url;
-        }
-        return API_ROOT + url;
-    }
-    const matchClass = showAnimation ? section.matchClass : '';
+const PlayingCardBack = ({ seen, group }: { seen: boolean, group: number }) => {
+  return (
+    <div data-testid="back" className={classNames("back", { seen })}>
+      {/* TODO: Remove this before merging PR */}
+      <span className="d-flex flex-column justify-content-center text-white">
+        {group}
+      </span>
+    </div>
+  )
+}
 
-    const histogramBars = showAnimation ? 5 : 0;
+interface PlayCardProps {
+  onClick: () => void;
+  registerUserClicks: (x: number, y: number) => void;
+  playing: boolean;
+  section: Card;
+  view: string;
+  showAnimation: boolean;
+}
 
-    return (
-        <div
-            data-testid="play-card"
-            className={
-                classNames(
-                    "aha__play-card",
-                    matchClass,
-                    { turned: section.turned },
-                    { noevents: section.noevents },
-                    { disabled: section.inactive },
-                )
-            }
-            onClick={event => {
-                registerUserClicks(event.clientX, event.clientY);
-                onClick();
-            }}
-            role="button"
-        >
-            {section.turned ?
-                view === 'visual' ?
-                    <div
-                        data-testid="front"
-                        className="front front--visual"
-                    >
-                        <img src={getImgSrc(section.url)} alt={section.name} />
-                    </div>
-                    :
-                    <Histogram
-                        running={playing}
-                        bars={histogramBars}
-                        backgroundColor="purple"
-                        borderRadius=".5rem"
-                        random={true}
-                        interval={200}
-                    />
-                :
-                <div
-                    data-testid="back"
-                    className={classNames("back", { seen: section.seen })}
-                >
-                    {/* TODO: Remove this before merging PR */}
-                    <span style={{ margin: '1rem' }}>
-                        {section.group}
-                    </span>
-                </div>
-            }
-        </div>
-    );
+const PlayCard = ({
+  onClick,
+  registerUserClicks,
+  playing,
+  section,
+  view,
+  showAnimation
+}: PlayCardProps) => {
+  const matchClass = showAnimation ? section.matchClass : '';
+  const histogramBars = showAnimation ? 5 : 0;
+
+  return (
+    <div
+      data-testid="play-card"
+      className={
+        classNames(
+          "aha__play-card",
+          matchClass,
+          { turned: section.turned },
+          { noevents: section.noevents },
+          { disabled: section.inactive },
+        )
+      }
+      onClick={event => {
+        registerUserClicks(event.clientX, event.clientY);
+        onClick();
+      }}
+      role="button"
+    >
+      { 
+        section.turned === false
+          ? <PlayingCardBack seen={section.seen} group={section.group} />
+          : view === 'visual'
+            ? <PlayingCardFront src={section.url} name={section.name} />
+            : <Histogram
+                running={playing}
+                bars={histogramBars}
+                backgroundColor="purple"
+                borderRadius=".75rem"
+                random={true}
+                interval={200} />
+      }
+    </div>
+  );
 };
 
 export default PlayCard;

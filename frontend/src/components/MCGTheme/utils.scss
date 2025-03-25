@@ -1,0 +1,221 @@
+@import "../../scss/variables.scss";
+
+$indigo: #2B2BEE;
+$pink: #D843E2;
+$red: #FA5577;
+$yellow: #FFB14C;
+$teal: #39D7B8 !default;
+$colors: (
+    "indigo": $indigo, 
+    "pink": $pink, 
+    "red": $red, 
+    "yellow": $yellow, 
+    "teal": $teal
+);
+
+.mcg {
+    
+    // Gradient classes
+    @each $name1, $color1 in $colors {
+        @each $name2, $color2 in $colors {
+            @if $name1 != $name2 {
+                .bg-#{$name1}-#{$name2} {
+                    background: linear-gradient(70deg, $color1 -50%, $color2 150%);
+                }
+                
+                .bg-subtle-#{$name1}-#{$name2} {
+                    background: linear-gradient(70deg, $color1 -10%, $color2 500%);
+                }
+
+                .fill-#{$name1}-#{$name2} {
+                    fill: linear-gradient(70deg, $color1 -50%, $color2 150%);
+                }
+                
+
+                .text-#{$name1}-#{$name2} {
+                    background: linear-gradient(70deg, $color1 -10%, $color2 110%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+
+                    // To make sure it's not too wide
+                    display: inline-block;
+                }
+
+                .text-subtle-#{$name1}-#{$name2} {
+                    background: linear-gradient(70deg, $color1 -10%, $color2 400%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+
+                    // To make sure it's not too wide
+                    display: inline-block;
+                }
+            }
+            
+        }
+    }
+
+    .bg-transparent {
+        background: transparent !important;
+    }
+
+    .text-light-gray {
+        color: #ddd;
+    }
+
+    .text-grey {
+        color: #999;
+    }
+
+    .bolder {
+        font-weight: bolder;
+    }
+    .fw-black {
+        font-weight: 900;
+    }
+    .fw-semibold {
+        font-weight: 600;
+    }
+
+    .rounded-sm {
+        border-radius: .75em !important;
+    }
+
+    .rounded-lg {
+        border-radius: 1.5em !important;
+    }
+
+    .bg-inset-xs {
+        background: #fff;
+        box-shadow: 0 0 .75em rgba(0,0,0,0.03) inset;
+    }
+
+    .bg-inset-sm {
+        background: #fff;
+        box-shadow: 0 0 1em rgba(0,0,0,0.05) inset;
+    }
+
+    .bg-inset-lg {
+        background: #fff;
+        box-shadow: 0 0 1.5em rgba(0,0,0,0.04) inset;
+    }
+
+    .sharp-border {
+        border: 1px solid #f5f5f5;
+    }
+
+    
+    .aspect-square {
+        aspect-ratio: 1;
+    }
+
+    // A square grid that gets the number of columns from a --columns variable
+    .square-grid {
+        display: grid;
+        grid-template-columns: repeat(var(--columns, 4), 1fr);
+
+        & > * {
+            @extend .aspect-square;
+        }
+    }
+
+    .animate-rotate {
+        transform-origin: center center;
+        -webkit-animation: clockwise 15s infinite linear;
+        -moz-animation: clockwise 15s infinite linear;
+        animation: clockwise 15s infinite linear;
+    }
+
+    @-moz-keyframes clockwise {
+        0% {
+            -moz-transform: rotate(0deg);
+        }
+        100% {
+            -moz-transform: rotate(360deg);
+        }
+    }
+
+    @keyframes clockwise {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+}
+
+
+// Effectively a Bootstrap 5 feature::after
+// https://getbootstrap.com/docs/5.0/layout/breakpoints/
+@mixin media-breakpoint-up($point) {
+    @if $point == xs {
+        @content;
+    }
+    @else if $point == sm {
+      @media (min-width: $breakpoint-sm) { @content; }
+    }
+    @else if $point == md {
+      @media (min-width: $breakpoint-md) { @content; }
+    }
+    @else if $point == lg {
+      @media (min-width: $breakpoint-lg) { @content; }
+    }
+    @else if $point == xl {
+        @media (min-width: $breakpoint-xl) { @content; }
+      }
+}
+
+@mixin media-breakpoint-down($point) {
+    @if $point == xs {
+        @content;
+    }
+    @else if $point == sm {
+      @media (max-width: $breakpoint-sm) { @content; }
+    }
+    @else if $point == md {
+      @media (max-width: $breakpoint-md) { @content; }
+    }
+    @else if $point == lg {
+      @media (max-width: $breakpoint-lg) { @content; }
+    }
+    @else if $point == xl {
+        @media (max-width: $breakpoint-xl) { @content; }
+      }
+}
+
+
+@mixin flush {
+    // Remove border radius and left/right border
+    border-radius: unset;
+    border-right: 0;
+    border-left: 0;
+}
+
+// Extra small
+@include media-breakpoint-down(xs) {
+    .mcg {
+        .xs-flush {
+            @include flush;
+        }
+    }
+}
+
+// Small
+@include media-breakpoint-down(sm) {
+    .mcg {
+        .sm-flush {
+            @include flush;
+        }
+    }
+}
+
+// Medium
+@include media-breakpoint-down(md) {
+    .mcg {
+        .md-flush {
+            @include flush;
+        }
+    }
+}

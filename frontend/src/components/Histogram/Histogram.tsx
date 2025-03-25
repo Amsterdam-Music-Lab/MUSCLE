@@ -21,7 +21,7 @@ interface HistogramProps {
 
 const Histogram: React.FC<HistogramProps> = ({
     bars = 8,
-    spacing = 4,
+    spacing = .4,
     running = true,
     marginLeft = 0,
     marginTop = 0,
@@ -101,7 +101,8 @@ const Histogram: React.FC<HistogramProps> = ({
         };
     }, [running, bars, shouldRandomize, interval]);
 
-    const barWidth = `calc((100% - ${(bars - 1) * spacing}px) / ${bars})`;
+    // @BC bar width adjusted dynamically (using flex-grow: 1); 
+    // only specify the gap between them (as a percentage)
 
     return (
         <div
@@ -110,10 +111,9 @@ const Histogram: React.FC<HistogramProps> = ({
                 height: '100%',
                 marginLeft,
                 marginTop,
-                backgroundColor,
+                gap: `${spacing * 100 / bars}%`,
                 width: '100%',
                 borderRadius,
-                border: backgroundColor ? `10px solid ${backgroundColor}` : undefined,
                 display: 'flex',
                 alignItems: 'flex-start',
             }}
@@ -122,10 +122,8 @@ const Histogram: React.FC<HistogramProps> = ({
                 <div
                     key={index}
                     style={{
-                        width: barWidth,
                         height: `${(frequencyData[index] / 255) * 100}%`,
                         backgroundColor: 'currentColor',
-                        marginRight: index < bars - 1 ? spacing : 0,
                         transition: shouldRandomize
                             ? `height ${interval / 1000}s ease`
                             : 'height 0.05s ease',
