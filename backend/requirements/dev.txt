@@ -38,7 +38,7 @@ defusedxml==0.7.1
     # via genbadge
 dill==0.3.8
     # via pylint
-django==4.2.18
+django==4.2.20
     # via
     #   -r /server/requirements.in/base.txt
     #   django-cors-headers
@@ -74,7 +74,7 @@ idna==3.7
     # via requests
 isort==5.13.2
     # via pylint
-jinja2==3.1.5
+jinja2==3.1.6
     # via
     #   mkdocs
     #   mkdocs-material

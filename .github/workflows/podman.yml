@@ -65,6 +65,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Create .env file
         run: |
+          echo Deploying branch ${{ github.ref }} with commit ${{ github.sha }} to test environment
           touch .env
           echo "VITE_API_ROOT=$FRONTEND_API_ROOT" >> .env
           echo "VITE_EXPERIMENT_SLUG=$FRONTEND_EXPERIMENT_SLUG" >> .env
@@ -250,6 +251,7 @@ jobs:
       FRONTEND_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
       FRONTEND_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
       FRONTEND_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
+      FRONTEND_PLAUSIBLE_DOMAIN: ${{ vars.FRONTEND_PLAUSIBLE_DOMAIN || '' }}
 
       # Secrets
       AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
@@ -279,6 +281,7 @@ jobs:
           echo "VITE_HTML_OG_URL=$FRONTEND_HTML_OG_URL" >> .env
           echo "VITE_HTML_BODY_CLASS=$FRONTEND_HTML_BODY_CLASS" >> .env
           echo "VITE_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
+          echo "VITE_PLAUSIBLE_DOMAIN=$FRONTEND_PLAUSIBLE_DOMAIN" >> .env
           cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build

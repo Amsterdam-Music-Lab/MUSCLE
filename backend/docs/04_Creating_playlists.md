@@ -15,21 +15,21 @@ Each time the playlist is saved with `Process csv` checked, the sections are upd
 ### Uploading Sound files through the admin interface:
 
 - Click `Add playlist` at `localhost:8000/admin/section/playlist/` 
-![AdminOverview](https://github.com/Amsterdam-Music-Lab/MUSCLE/assets/11174072/80280295-1ab5-479c-b001-120a6a4f608e)
+![AdminOverview](../assets/images/addPlaylist.png)
 - Give your playlist a name. Note that this name will also be used to name the folder where the sound files will be stored on the server, so make sure this name is unique.
 - Leave the `Csv` field empty, `Process Csv` unchecked and click `SAVE`. Your playlist will now appear in the list when you click on "Playlists" on the left.
-![PlaylistEmpty](https://github.com/Amsterdam-Music-Lab/MUSCLE/assets/11174072/dd210ede-9926-479a-a636-ef8f31143ce8)
+![PlaylistEmpty](../assets/images/csvPlaylist.png)
 - Click `Add sections` next to your playlist.
-![AddSection](https://github.com/Amsterdam-Music-Lab/MUSCLE/assets/11174072/a4176951-1347-401b-9b70-a071780f065a)
+![AddSection](../assets/images/addSections.png)
 -  You can add some attributes for your sections now, or leave these blank.
   -  When either the `artist` or the `name` field is filled a `Song` object will be created for these sections.
   -  The `Tag` and `group` attributes can be used as identifiers in your rules file.
-![Add sections](https://github.com/Amsterdam-Music-Lab/MUSCLE/assets/49793452/a280cb9e-15bd-40e8-8b7a-d358f60be078)
+![Add sections](../assets/images/addSections2.png)
 - Click `Add sections` to upload your files to the server and add the sections to the database.
 
 Click on the name of your new playlist and notice that the `Csv` field is now filled with the attributes of the sections and the metadata of its sounds.
 
-![View playlist](https://github.com/Amsterdam-Music-Lab/MUSCLE/assets/49793452/264679c2-ec43-4fc5-a16f-ab7841d18923)
+![View playlist](../assets/images/changePlaylist.png)
 
 
 ### Manually uploading sound files
@@ -44,7 +44,7 @@ Running a production server you can use SSH or FTP to upload your sound files to
 This will create a file named `audiofiles.csv` in the folder of your sound files.
 
 - Click `Add playlist` at `localhost:8000/admin/section/playlist/`
-![AdminOverview](https://github.com/Amsterdam-Music-Lab/MUSCLE/assets/11174072/80280295-1ab5-479c-b001-120a6a4f608e)
+![AdminOverview](../assets/images/generateCsv.png)
 - Give your playlist a name
 - Paste the (edited) content of `audiofiles.csv` into the csv field.
 - Check `Process Csv` and click `SAVE`
@@ -55,10 +55,10 @@ This will create `section` objects for your sound files with the attributes from
 
 ### Through the admin interface
 - Click `Edit sections` at `http://localhost:8000/admin/section/playlist/`
-![ClickEditSections](https://github.com/Amsterdam-Music-Lab/MUSCLE/assets/11174072/4c532a39-9e1b-4325-a3a8-2485ca185a58)
+![ClickEditSections](../assets/images/editSections.png)
 - Now you can alter the information of the sections in a table:
-![Edit sections](https://github.com/Amsterdam-Music-Lab/MUSCLE/assets/49793452/fa21f73d-8832-457f-b26a-1c0cafc7ea6f)
 
+![Edit sections](../assets/images/editSections2.png)
 ### Through the `Csv` field:
 - Copy the `Csv` field of your playlist in your CSV editor and make the necessary changes.
 - Paste the content of your CSV file back into the `Csv` field of your playlist.

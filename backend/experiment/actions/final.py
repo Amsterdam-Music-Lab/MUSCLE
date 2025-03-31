@@ -115,7 +115,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         feedback_info: FeedbackInfo | None = None,
         total_score: Optional[float] = None,
         logo: Optional[LogoConfiguration] = None,
-        percentile: Optional[float] = None,  # new argument
+        percentile: Optional[float] = None,
     ):
         self.session = session
         self.title = title
@@ -171,10 +171,10 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         return None
 
     def wrap_plain_final_text(self):
-        '''check if `final_text` starts with a html tag
+        """check if `final_text` starts with a html tag
         If not, wrap it in a `<center>` element for better alignment
-        '''
-        tag_pattern = re.compile('<[a-z]*>')
+        """
+        tag_pattern = re.compile("<[a-z]*>")
         if self.final_text and not re.match(tag_pattern, str(self.final_text)):
-            return f'<center>{self.final_text}</center>'
+            return f"<center>{self.final_text}</center>"
         return self.final_text

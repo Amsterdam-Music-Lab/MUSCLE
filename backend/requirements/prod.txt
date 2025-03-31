@@ -31,7 +31,7 @@ coverage==7.3.2
     # via -r /server/requirements.in/base.txt
 defusedxml==0.7.1
     # via genbadge
-django==4.2.18
+django==4.2.20
     # via
     #   -r /server/requirements.in/base.txt
     #   django-cors-headers
@@ -58,13 +58,13 @@ ghp-import==2.1.0
     # via mkdocs
 griffe==1.2.0
     # via mkdocstrings-python
-gunicorn==22.0.0
+gunicorn==23.0.0
     # via -r requirements.in/prod.txt
 html5lib==1.1
     # via textile
 idna==3.7
     # via requests
-jinja2==3.1.5
+jinja2==3.1.6
     # via
     #   mkdocs
     #   mkdocs-material

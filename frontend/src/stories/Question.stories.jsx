@@ -15,12 +15,11 @@ export const Default = {
             explainer: "This is the explainer",
             view: "STRING",
             value: "",
+            style: {},
         },
         onChange: () => { },
         id: 0,
         active: true,
-        style: {},
-        emphasizeTitle: false,
     },
     decorators: [
         (Story) => (
@@ -40,12 +39,11 @@ export const WithOnChange = {
             explainer: "This is the explainer",
             view: "STRING",
             value: "",
+            style: {},
         },
         onChange: (value, id) => alert(`Question ${id} changed to ${value}`),
         id: 0,
         active: true,
-        style: {},
-        emphasizeTitle: false,
     },
     decorators: [
         (Story) => (
@@ -65,12 +63,11 @@ export const WithDisabledTrue = {
             explainer: "This is the explainer",
             view: "STRING",
             value: "",
+            style: {},
         },
         onChange: () => { },
         id: 0,
         disabled: true,
-        style: {},
-        emphasizeTitle: false,
     },
     decorators: [
         (Story) => (
@@ -90,37 +87,11 @@ export const WithEmphasizeTitle = {
             explainer: "This is the explainer",
             view: "STRING",
             value: "",
+            style: {"emphasize-title": true},
         },
         onChange: () => { },
         id: 0,
         active: true,
-        style: {},
-        emphasizeTitle: true,
-    },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
-};
-
-export const WithStyle = {
-    args: {
-        question: {
-            question: "This is the question",
-            explainer: "This is the explainer",
-            view: "STRING",
-            value: "",
-        },
-        onChange: () => { },
-        id: 0,
-        active: true,
-        style: { backgroundColor: "red" },
-        emphasizeTitle: false,
     },
     decorators: [
         (Story) => (
@@ -141,12 +112,11 @@ export const Checkboxes = {
             view: "CHECKBOXES",
             value: "",
             choices: ["Choice 1", "Choice 2", "Choice 3"],
+            style: {},
         },
         onChange: () => { },
         id: 0,
         active: true,
-        style: {},
-        emphasizeTitle: false,
     },
     decorators: [
         (Story) => (
@@ -167,12 +137,11 @@ export const Dropdown = {
             view: "DROPDOWN",
             value: "",
             choices: ["Choice 1", "Choice 2", "Choice 3"],
+            style: {},
         },
         onChange: () => { },
         id: 0,
         active: true,
-        style: {},
-        emphasizeTitle: false,
     },
     decorators: [
         (Story) => (
@@ -201,12 +170,11 @@ export const Autocomplete = {
                 "Turkey",
                 "United States",
             ],
+            style: {},
         },
         onChange: () => { },
         id: 0,
         active: true,
-        style: {},
-        emphasizeTitle: false,
     },
     decorators: [
         (Story) => (
@@ -233,12 +201,11 @@ export const Radios = {
             view: "RADIOS",
             value: "",
             choices: ["Choice 1", "Choice 2", "Choice 3"],
+            style: {},
         },
         onChange: () => { },
         id: 0,
         active: true,
-        style: {},
-        emphasizeTitle: false,
     },
     decorators: [
         (Story) => (
@@ -267,12 +234,11 @@ export const Range = {
             choices: ["Choice 1", "Choice 2", "Choice 3"],
             min_value: 1,
             max_value: 42,
+            style: {},
         },
         onChange: () => { },
         id: 0,
         active: true,
-        style: {},
-        emphasizeTitle: false,
     },
     decorators: [
         (Story) => {
@@ -301,12 +267,11 @@ export const TextRange = {
             view: "TEXT_RANGE",
             value: "",
             choices: ["Choice 1", "Choice 2", "Choice 3"],
+            style: {},
         },
         onChange: () => { },
         id: 0,
         active: true,
-        style: {},
-        emphasizeTitle: false,
     },
     decorators: [
         (Story) => {
@@ -338,12 +303,11 @@ export const IconRange = {
             choices: ["fa-globe", "fa-pencil", "fa-bicycle"],
             min_value: 1,
             max_value: 42,
+            style: {},
         },
         onChange: () => { },
         id: 0,
         active: true,
-        style: {},
-        emphasizeTitle: false,
     },
     decorators: [
         (Story) => {

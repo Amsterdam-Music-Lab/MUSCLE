@@ -17,7 +17,7 @@ class Command(BaseCommand):
             management.call_command("createsuperuser", "--no-input")
             print("Created superuser")
         if Experiment.objects.count() == 0:
-            experiment = Experiment.objects.create(slug="test")
+            experiment = Experiment.objects.create(slug="gold-msi")
             phase = Phase.objects.create(experiment=experiment)
             playlist = Playlist.objects.create(name="Empty Playlist")
             block = Block.objects.create(

@@ -9,8 +9,12 @@ vi.mock('../Circle/Circle', () => ({
     )),
 }));
 
-vi.mock('../ListenCircle/ListenCircle', () => ({
-    default: vi.fn(() => <div data-testid="mock-listen-circle">Mock Listen Circle</div>),
+vi.mock('../CountDown/CountDown', () => ({
+    default: vi.fn(() => <div data-testid="mock-countdown">Mock Countdown</div>),
+}));
+
+vi.mock('../Histogram/Histogram', () => ({
+    default: vi.fn(() => <div data-testid="mock-histogram">Mock Histogram</div>),
 }));
 
 describe('AutoPlay Component', () => {
@@ -33,14 +37,16 @@ describe('AutoPlay Component', () => {
         const { container } = render(<AutoPlay {...defaultProps} />);
         expect(container.querySelector('.circle')).toBeTruthy();
         expect(screen.getByTestId('mock-circle')).toBeTruthy();
-        expect(screen.getByTestId('mock-listen-circle')).toBeTruthy();
+        expect(screen.queryByTestId('mock-countdown')).toBeTruthy();
+        expect(screen.queryByTestId('mock-histogram')).toBeTruthy();
     });
 
     it('renders correctly without animation', () => {
         const { container } = render(<AutoPlay {...defaultProps} showAnimation={false} />);
         expect(container.querySelector('.circle')).toBeTruthy();
         expect(screen.getByTestId('mock-circle')).toBeTruthy();
-        expect(screen.queryByTestId('mock-listen-circle')).toBeFalsy();
+        expect(screen.queryByTestId('mock-countdown')).toBeFalsy();
+        expect(screen.queryByTestId('mock-histogram')).toBeFalsy();
         expect(container.querySelector('.stationary')).toBeTruthy();
         expect(container.querySelector('.fa-headphones')).toBeTruthy();
     });
@@ -66,13 +72,13 @@ describe('AutoPlay Component', () => {
     it('applies custom className', () => {
         const customClass = 'custom-class';
         const { container } = render(<AutoPlay {...defaultProps} className={customClass} />);
-        const listenDiv = container.querySelector('.aha__listen');
+        const listenDiv = container.querySelector('.aha__autoplay');
         expect(listenDiv.classList.contains(customClass)).toBe(true);
     });
 
-    it('applies default classes to listen div', () => {
+    it('applies default classes to surrounding div', () => {
         const { container } = render(<AutoPlay {...defaultProps} />);
-        const listenDiv = container.querySelector('.aha__listen');
+        const listenDiv = container.querySelector('.aha__autoplay');
         expect(listenDiv.classList.contains('d-flex')).toBe(true);
         expect(listenDiv.classList.contains('flex-column')).toBe(true);
         expect(listenDiv.classList.contains('justify-content-center')).toBe(true);

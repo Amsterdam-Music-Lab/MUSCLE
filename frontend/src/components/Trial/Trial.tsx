@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import classNames from "classnames";
 
-import { getCurrentTime, getTimeSince } from "@/util/time";
+import { getAudioLatency, getCurrentTime, getTimeSince } from "@/util/time";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
@@ -77,6 +77,7 @@ const Trial = (props: TrialProps) => {
             await onResult(
                 {
                     decision_time: getAndStoreDecisionTime(),
+                    audio_latency_ms: getAudioLatency(),
                     form,
                     config,
                 },
@@ -113,6 +114,14 @@ const Trial = (props: TrialProps) => {
         // keep decisionTime in sessionStorage to be used by subsequent renders
         window.sessionStorage.setItem('decisionTime', decisionTime.toString());
         return decisionTime;
+    }
+
+    const getAudioLatency = () => {
+        if (window.sessionStorage.getItem('audioLatency') !== null) {
+            return window.sessionStorage.getItem('audioLatency');
+        } else {
+            return NaN;
+        }
     }
 
     const finishedPlaying = useCallback(() => {
@@ -164,9 +173,6 @@ const Trial = (props: TrialProps) => {
                     skipLabel={feedback_form.skip_label}
                     isSkippable={feedback_form.is_skippable}
                     submitResult={makeResult}
-                // emphasizeTitle={feedback_form.is_profile}
-                // TODO: if we want left-aligned text with a pink divider,
-                // make this style option available again (used in Question.scss)
                 />
             )}
             {preloadReady && !feedback_form && config.show_continue_button && (

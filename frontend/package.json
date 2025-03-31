@@ -6,7 +6,7 @@
   "dependencies": {
     "@sentry/react": "^8.40.0",
     "@vitejs/plugin-react": "^4.2.1",
-    "axios": ">=1.7.4",
+    "axios": ">=1.8.2",
     "classnames": "^2.2.6",
     "email-validator": "^2.0.4",
     "file-saver": "^2.0.5",
@@ -100,7 +100,7 @@
     "msw-storybook-addon": "^2.0.4",
     "prop-types": "15.8.1",
     "storybook": "^8.6.0-alpha.1",
-    "vitest": "^2.1.4"
+    "vitest": "^2.1.9"
   },
   "msw": {
     "workerDirectory": [
