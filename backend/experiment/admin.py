@@ -60,7 +60,7 @@ class SocialMediaConfigInline(NestedStackedInline):
 
 class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
     list_display = (
-        "name",
+        "experiment_name",
         "slug_link",
         "remarks",
         "active",
@@ -80,8 +80,10 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
     class Media:
         css = {"all": ("experiment_admin.css",)}
 
-    def name(self, obj):
+    def experiment_name(self, obj):
         return obj.name or "No name"
+
+    experiment_name.short_description = "Name"
 
     def redirect_to_overview(self):
         return redirect(reverse("admin:experiment_experiment_changelist"))
