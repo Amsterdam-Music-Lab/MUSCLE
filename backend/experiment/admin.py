@@ -6,6 +6,7 @@ from inline_actions.admin import InlineActionsModelAdminMixin
 from django.urls import reverse
 from django.utils.html import format_html
 
+from modeltranslation.admin import TabbedTranslationAdmin, TranslationTabularInline
 from nested_admin import NestedModelAdmin, NestedStackedInline, NestedTabularInline
 
 from experiment.models import (
@@ -65,11 +66,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         "remarks",
         "active",
     )
-    fields = [
-        "slug",
-        "active",
-        "theme_config",
-    ]
     inline_actions = ["experimenter_dashboard", "duplicate"]
     form = ExperimentForm
     inlines = [
@@ -299,24 +295,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 ]
             )
         )
-
-    def save_model(self, request, obj, form, change):
-        # Save the model
-        super().save_model(request, obj, form, change)
-
-        # Check for missing translations after saving
-        missing_content_blocks = get_missing_content_blocks(obj)
-
-        if missing_content_blocks:
-            for block, missing_languages in missing_content_blocks:
-                missing_language_flags = [
-                    get_flag_emoji(language) for language in missing_languages
-                ]
-                self.message_user(
-                    request,
-                    f"Block {block.slug} does not have content in {', '.join(missing_language_flags)}",
-                    level=messages.WARNING,
-                )
 
 
 class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):

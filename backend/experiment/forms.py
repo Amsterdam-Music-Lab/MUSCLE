@@ -186,11 +186,19 @@ class MarkdownPreviewTextInput(TextInput):
 
 
 class ExperimentForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(ModelForm, self).__init__(*args, **kwargs)
+        print(self.fields)
+        self.fields["about_content"].widget = MarkdownPreviewTextInput()
+        # self.fields['disclaimer'].widget = MarkdownPreviewTextInput()
+        # self.fields['privacy'].widget = MarkdownPreviewTextInput()
+        # self.fields["description"].widget.attrs["style"] = "height:40px"
+        # self.fields["social_media_message"].widget.attrs["style"] = "height:15px"
+
     class Meta:
         model = Experiment
-        fields = [
-            "slug",
-        ]
+        fields = "__all__"
 
     class Media:
         js = ["experiment_form.js"]
@@ -242,6 +250,8 @@ class BlockForm(ModelForm):
         fields = [
             "index",
             "slug",
+            "name",
+            "description",
             "rules",
             "rounds",
             "bonus_points",
@@ -250,6 +260,7 @@ class BlockForm(ModelForm):
             "theme_config",
         ]
         help_texts = {
+            "name": "The name and description will be displayed in dashboard mode.",
             "image": "An image that will be displayed on the experiment page and as a meta image in search engines.",
             "slug": "The slug is used to identify the block in the URL so you can access it on the web as follows: app.amsterdammusiclab.nl/{slug} <br>\
             It must be unique, lowercase and contain only letters, numbers, and hyphens. Nor can it start with any of the following reserved words: admin, server, block, participant, result, section, session, static.",
