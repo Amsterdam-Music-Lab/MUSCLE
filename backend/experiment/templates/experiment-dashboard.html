@@ -205,7 +205,7 @@
                 <!-- Export results for this block as JSON -->
                 <form action="" method="post">
                     {% csrf_token %}{% render_inline_action_fields %}
-                    <input type="hidden" name="export-block" maxlength="128" id="export-block" value="{{ block.id }}">
+                    <input type="hidden" name="export-block" maxlength="128" id="export-block" value="{{ block.slug }}">
                     <input type="submit" name="_export" value="Export JSON" />
                 </form>
             </td>
