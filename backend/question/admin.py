@@ -1,7 +1,9 @@
-from django.contrib import admin
-from django.db import models
+from copy import deepcopy
 
+from django.db import models
+from django.contrib import admin
 from django.forms import CheckboxSelectMultiple
+from django.utils.translation import gettext_lazy as _
 
 from nested_admin import NestedTabularInline
 from modeltranslation.admin import TabbedTranslationAdmin, TranslationTabularInline
@@ -35,9 +37,27 @@ class ChoiceInline(TranslationTabularInline):
     extra = 0
     show_change_link = True
 
+
+@admin.action(description=_("Duplicate selected questions"))
+def duplicate_question(modeladmin, request, queryset):
+    questions = queryset
+    for question in questions:
+        question_copy = deepcopy(question)
+        question_copy.key = f"{question.key}_copy"
+        question_copy.save()
+        if question.choice_set.count():
+            for choice in list(question.choice_set.all()):
+                choice_copy = choice
+                choice_copy.pk = None
+                choice_copy._state.adding = True
+                choice_copy.question = question_copy
+                choice_copy.save()
+
+
 class QuestionAdmin(TabbedTranslationAdmin):
 
     form = QuestionForm
+    actions = [duplicate_question]
 
     def get_fieldsets(self, request, obj=None):
 

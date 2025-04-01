@@ -1,4 +1,6 @@
-from io import text_encoding
+from django.conf import settings
+from django.utils import translation
+
 from .demographics import DEMOGRAPHICS, EXTRA_DEMOGRAPHICS, DEMOGRAPHICS_OTHER
 from .goldsmiths import MSI_F1_ACTIVE_ENGAGEMENT, MSI_F2_PERCEPTUAL_ABILITIES, MSI_F3_MUSICAL_TRAINING, MSI_F4_SINGING_ABILITIES, MSI_F5_EMOTIONS, MSI_OTHER, MSI_FG_GENERAL, MSI_ALL
 from .languages import LANGUAGE, LANGUAGE_OTHER
@@ -8,10 +10,15 @@ from .tipi import TIPI
 from .other import OTHER
 import random
 from .models import QuestionGroup, Question, Choice
-from experiment.actions.form import BooleanQuestion, ChoiceQuestion, LikertQuestion, LikertQuestionIcon, NumberQuestion, TextQuestion, AutoCompleteQuestion#, #RangeQuestion
-from django.conf import settings
-from django.utils import translation
-import sys
+from experiment.actions.form import (
+    BooleanQuestion,
+    ChoiceQuestion,
+    LikertQuestion,
+    LikertQuestionIcon,
+    NumberQuestion,
+    TextQuestion,
+    AutoCompleteQuestion,
+)
 from question.profile_scoring_rules import PROFILE_SCORING_RULES
 
 # Default QuestionGroups used by command createquestions
