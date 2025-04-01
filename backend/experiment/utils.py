@@ -198,10 +198,11 @@ def consent_upload_path(instance: Experiment, filename: str) -> str:
 
     join("consent", folder_name, f"{language}-{filename}")
 
-def export_json_results(block):
-    """Export block JSON data as zip archive, force download"""
 
-    this_block = Block.objects.get(id=block)
+def block_export_json_results(block_slug: str) -> ZipFile:
+    """Export block JSON data as zip archive"""
+
+    this_block = Block.objects.get(slug=block_slug)
     # Init empty querysets
     all_results = Result.objects.none()
     all_songs = Song.objects.none()
@@ -262,13 +263,17 @@ def export_json_results(block):
             "feedback.json",
             data=str(serializers.serialize("json", all_feedback.order_by("pk"))),
         )
+    return zip_buffer
 
-    # create forced download response
+
+def get_block_json_export_as_repsonse(block_slug: str):
+    '''Create a download response for the admin experimenter dashboard'''
+    zip_buffer = block_export_json_results(block_slug)
     response = HttpResponse(zip_buffer.getbuffer())
     response["Content-Type"] = "application/x-zip-compressed"
     response["Content-Disposition"] = (
         'attachment; filename="'
-        + this_block.slug
+        + block_slug
         + "-"
         + timezone.now().isoformat()
         + '.zip"'

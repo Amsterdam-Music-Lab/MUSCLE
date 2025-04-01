@@ -18,7 +18,6 @@ from experiment.models import (
     Block,
     Experiment,
     Phase,
-    Feedback,
     SocialMediaConfig,
     ExperimentTranslatedContent,
     BlockTranslatedContent,
@@ -30,16 +29,11 @@ from experiment.forms import (
     BlockTranslatedContentForm,
     ExperimentForm,
     ExperimentTranslatedContentForm,
-    ExportForm,
-    TemplateForm,
     SocialMediaConfigForm,
-    EXPORT_TEMPLATES,
 )
-from section.models import Section, Song
-from result.models import Result
-from participant.models import Participant
+
 from question.models import QuestionSeries, QuestionInSeries
-from .utils import export_json_results
+from .utils import get_block_json_export_as_repsonse
 
 
 class BlockTranslatedContentInline(NestedTabularInline):
@@ -277,8 +271,8 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
         """Open researchers dashboard for an experiment"""
 
         if "_export" in request.POST:
-            blockId = request.POST.get("export-block")
-            return export_json_results(blockId)
+            block_slug = request.POST.get("export-block")
+            return get_block_json_export_as_repsonse(block_slug)
 
         all_blocks = obj.associated_blocks()
         all_participants = obj.current_participants()
