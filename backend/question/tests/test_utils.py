@@ -4,8 +4,8 @@ from experiment.models import Block
 from participant.models import Participant
 from result.models import Result
 from session.models import Session
-from .demographics import DEMOGRAPHICS
-from .utils import unanswered_questions, total_unanswered_questions
+from question.demographics import DEMOGRAPHICS
+from question.utils import unanswered_questions, total_unanswered_questions
 from question.questions import create_default_questions
 
 
