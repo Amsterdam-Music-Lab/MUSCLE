@@ -1,0 +1,42 @@
+.mcg-timeline {
+    // background-color: #ff000011;
+    --spine-width: 4px;
+
+    // The spine is slightly smaller than the timeline so that the
+    // start and end are fully below the final symbols.
+    --spine-padding: 2px;
+
+    .symbols {
+        position: relative;
+        z-index: 11;
+
+        .svg-wrapper {
+            display: flex;
+            justify-content: center;
+            position: relative;
+            top: 50%;
+        }
+    }
+
+    .spine {
+        position: absolute;
+        left: var(--spine-padding);
+        top: 50%;
+        margin-top: calc(-1 * var(--spine-width) / 2);
+        width: calc(100% - 2 * var(--spine-padding));
+        height: var(--spine-width);
+        z-index: 10;
+        
+        .spine-bg,
+        .spine-progress {
+            position: absolute;
+            height: 100%;
+            border-radius: 10em;
+        }
+
+        .spine-bg {
+            width: 100%;
+            background-color: #eee;
+        }
+    }
+}

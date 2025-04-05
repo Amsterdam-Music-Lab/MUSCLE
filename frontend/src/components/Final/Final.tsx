@@ -14,9 +14,9 @@ import { Final as FinalAction } from "@/types/Action";
 import classNames from "@/util/classNames";
 
 import TuneTwins from "@/components/MCGTheme/logos/TuneTwins"
-import Timeline, { getTimeline } from "@/components/MCGTheme/Timeline";
-import { SVGStar } from "@/components/MCGTheme/svg/star";
-import { colors } from "@/components/MCGTheme/colors";
+import Timeline, { getTimeline } from "@/components/Timeline/Timeline";
+import { SVGStar } from "@/components/SVG/SVGStar";
+import { colors } from "@/components/MCGTheme/colors"; // TODO remove this
 import ProgressBar from "@/components/MCGTheme/ProgressBar";
 import Score from "@/components/MCGTheme/Score";
 import ScoreBoard from "./ScoreBoard";

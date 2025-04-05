@@ -1,7 +1,7 @@
 import React from "react";
 import useBoundStore from "@/util/stores";
 import classNames from "classnames";
-import CirclesBackground from "@/components/MCGTheme/CirclesBackground";
+import GradientCircles from "@/components/GradientCircles/GradientCircles";
 
 interface PageProps {
     className?: string;
@@ -25,7 +25,7 @@ const Page = ({ className, children }: PageProps) => {
             >
                 {children}
             </div>
-            {theme?.name == "MCG" && <CirclesBackground color1="yellow" color2="pink" numCircles={30} />}
+            {theme?.name == "MCG" && <GradientCircles color1="yellow" color2="pink" numCircles={30} />}
         </>
     );
 };
