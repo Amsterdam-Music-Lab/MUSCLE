@@ -21,6 +21,14 @@ export const Default = {
     decorators: [decorator]
 };
 
+export const ManyPoints = {
+    args: {
+        size: 100,
+        numPoints: 8
+    },
+    decorators: [decorator]
+};
+
 export const LowSharpness = {
     args: {
         size: 100,
