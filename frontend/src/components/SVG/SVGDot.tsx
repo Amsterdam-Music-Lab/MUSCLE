@@ -1,6 +1,6 @@
 import "react"
-import { colors } from "../colors";
-import { SVGGradient, gradientId } from "./gradient";
+import { colors } from "../MCGTheme/colors"; // TODO remove this
+import { SVGGradient, gradientId } from "./SVGGradient";
 
 interface SVGDotProps {
   size?: number;

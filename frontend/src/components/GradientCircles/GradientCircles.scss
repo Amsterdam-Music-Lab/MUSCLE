@@ -1,0 +1,26 @@
+.gradient-circles {
+    --z-index: -2;
+    --blur: 0px;
+    
+    .gradient-circles-wrapper,
+    .gradient-circles-blur,
+    .gradient-circles-blur div {
+        position: absolute;
+        width: 100%;
+        height: 100%;   
+    }
+
+    .gradient-circles-wrapper {
+        overflow: hidden;
+        z-index: calc(var(--z-index) - 2);
+    }
+
+    .gradient-circles-blur {
+        overflow: hidden;
+        z-index: calc(var(--z-index) - 1);
+
+        div {
+            backdrop-filter: blur(var(--blur));
+        }
+    }
+}

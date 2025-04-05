@@ -3,20 +3,18 @@ interface CircleProps {
     cx: number;
     cy: number;
     r: number;
+    fill: string;
     rotate: number;
-    from: string;
-    to: string;
     dur: number;
     animate: boolean;
 }
 
-function Circle({
+export function SVGCircle({
   cx,
   cy,
   r,
+  fill,
   rotate,
-  from,
-  to,
   dur,
   animate = true,
   ...props
@@ -27,8 +25,7 @@ function Circle({
       cx={cx}
       cy={cy}
       r={r}
-      fill={`url(#gradient-${from}-${to})`}
-      className="gradient-circle"
+      fill={fill}
       {...props}
     >
       {!dur || !animate ? null : (
