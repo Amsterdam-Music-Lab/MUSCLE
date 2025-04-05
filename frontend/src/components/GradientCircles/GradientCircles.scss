@@ -1,4 +1,12 @@
-.gradient-circles {
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ * 
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+ .gradient-circles {
     --z-index: -2;
     --blur: 0px;
     
@@ -22,5 +30,11 @@
         div {
             backdrop-filter: blur(var(--blur));
         }
+    }
+
+    svg {
+        object-fit: cover;
+        min-height: 100%;
+        min-width: 100%;
     }
 }

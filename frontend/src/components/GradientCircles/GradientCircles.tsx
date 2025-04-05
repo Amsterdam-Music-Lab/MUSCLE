@@ -1,45 +1,53 @@
-import * as React from "react";
-import GradientCirclesSVG from "./GradientCirclesSVG";
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ * 
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+import React from "react";
+import GradientCirclesSVG, { BasicGradientCirclesProps } from "./GradientCirclesSVG";
 import "./GradientCircles.scss";
 
-interface GradientCirclesProps {
-    color1?: string;
-    color2?: string;
+interface GradientCirclesProps extends React.HTMLAttributes<HTMLDivElement>,BasicGradientCirclesProps {
+    /** The size of the blur in pixels */
     blur?: number;
-    numCircles?: number;
-    animate?: boolean;
-    meanDuration?: number;
-    minRadiusFactor?: number;
 }
 
 /**
  * A div filled with randomly positioned gradient circles, and
  * an optional blur over it. The circles can also be animated, in
  * which case the gradient will slowly rotate. The colors, number 
- * of circles, and the blur can all be set.
- * 
- * Note that the duration of the animation is random, but you can 
- * set the mean duration. The radius of the circles is also randomly
- * determined using minRadius + 10^(1 + 3 * rand) where rand is a 
- * random float between 0 and 1. minRadius determines the smallest 
- * circles.
+ * of circles, and the blur can all be set. See GradientCirclesSVG
+ * for more details.
  */
 export default function GradientCircles({
-  color1 = "#ff0000",
-  color2 = "#0000ff",
+  color1,
+  color2,
   blur = 0,
-  gradientOffset = 0,
   animate = false,
-  numCircles = 12,
-  minRadiusFactor = null,
-  meanDuration = null,
+  gradientOffset,
+  numCircles,
+  minRadiusFactor,
+  meanDuration,
+  aspect,
+  height,
+  ...props
 } : GradientCirclesProps) {
+  const {style, className, ...rest} = props;
   return (
-    <div className="gradient-circles" style={{"--blur": `${blur}px`}}>
+    <div 
+      className={`gradient-circles ${className}`} 
+      style={{"--blur": `${blur}px`, ...style}} 
+      {...rest}
+    >
       <div className="gradient-circles-wrapper">
         <GradientCirclesSVG 
           color1={color1} 
           color2={color2} 
+          aspect={aspect}
+          height={height}
           animate={animate} 
           gradientOffset={gradientOffset}
           numCircles={numCircles} 
