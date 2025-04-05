@@ -1,25 +1,39 @@
-import "react"
-import { colors } from "../MCGTheme/colors"; // TODO remove this
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ * 
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+import React from "react"
 import { SVGGradient, gradientId } from "./SVGGradient";
+
+
+interface CreateStarPathProps {
+  /** The x-coordinate of the center */
+  cx: number;
+
+  /** The y-coordinate of the center */
+  cy: number;
+
+  /** Number of points of the star */
+  numPoints: number;
+
+  /** Inner radius of the star */
+  innerRadius: number;
+
+  /** The outer radius of the star */
+  outerRadius: number;
+}
 
 /**
  * Return the path string of an star with a given number of points and a 
  * given inner- and outer radius.
- * 
- * @param {number} cx 
- * @param {number} cy 
- * @param {number} numPoints 
- * @param {number} innerRadius 
- * @param {number} outerRadius 
- * @returns {str}
  */
-const createStarPath = (
-  cx: number,
-  cy: number,
-  numPoints: number,
-  innerRadius: number,
-  outerRadius: number
-): string => {
+function createStarPath({
+  cx, cy, numPoints, innerRadius, outerRadius
+}: CreateStarPathProps): string {
   let path = "";
   const angle = (Math.PI * 2) / numPoints; // Angle between points
 
@@ -33,62 +47,140 @@ const createStarPath = (
   return path + " Z"; // Close the path
 };
 
-interface SVGStarProps {
+
+interface BasicSVGStarProps {
+
+  /** Number of points of the star */
   numPoints?: number;
+
+  /** 
+   * The sharpness of the star, a value between 0 and 1.
+   * For sharpness=0, the star becomes a polygon (no points), and 
+   * for sharpenss=1, the points are infinitely sharp, so invisible.
+   */
   sharpness?: number;
+
+  /** Size of the star */
   size?: number;
+
+  /** Fill */
   fill?: string;
-  fillFrom?: string,
-  fillTo?: string,
+
+  /** Fill of the star when showCircle=true. Defaults to white. */
+  starFill?: string;
+
+  /** Starting color of the gradient. Only used when fill is not set. */
+  color1?: string;
+  
+  /** Ending color of the gradient. Only used when fill is not set. */
+  color2?: string;
+
+  /** 
+   * Whether to show a circle around the star. 
+   * When showCircle is false, starFill is ignored, and the star is filled with either
+   * the fill color (if provided) or the gradient. StrokeWidthFactor is then also ignored.
+   */
+  showCircle?: boolean;
+  
+  /** 
+   * Whether to animate the star by rotating it. Note that this
+   * only adds an 'animate-rotate' class, so the animation should be set in CSS.
+   */
   animate?: boolean;
-  className?: string;
-  strokeWidthFactor?: number;
+
+  /** The width of the circle's stroke as a fraction of the stars' size */
+  circleStrokeWidth?: number;
+
+  /** Color of the circle stroke. Defaults to a very transparent white. */
+  circleStroke: string;
+
+  /** 
+   * The maximum size of the star, relative to the size of the circle. 
+   * When maxRadiusFactor=1, the star is exactly as big as the circle. If 
+   * showCircle is false, then maxRadiusFactor is also set to 1. 
+   * When maxRadiusFactor=0, the star is infinitely small.
+   */
+  starSize?: number;
 }
 
-export const SVGStar = ({
+
+/** 
+ * All SVG properties are allowed, except width, height and viewBox 
+ */
+interface SVGStarProps 
+  extends 
+    BasicSVGStarProps, 
+    Omit<React.SVGProps<SVGSVGElement>, 'width' | 'height' | 'viewBox'> {};
+
+
+/**
+ * An SVG star in an optional circle. The number of points and the sharpness of the
+ * star can be varied. When the circle is shown, it is by default filled with a gradient,
+ * with the star shown in white, and with a very light white border aroudn the circle.
+ * All this can be customized. When no circle is shown, the star is filled with the 
+ * gradient (or the fill, if passed). 
+ */
+export default function SVGStar({
   numPoints = 5,
-  sharpness = .6,
   size = 20,
-  fill = undefined,
-  fillFrom = colors['red'],
-  fillTo = colors['pink'],
+  fill,
+  color1 = "#ff0000",
+  color2 = "#0000ff",
+  starFill = "#ffffff",
   animate = true,
-  className = undefined,
-  strokeWidthFactor = 0.2,
-  ...props // we only need style, reallly, but still
-}: SVGStarProps) => {
+  showCircle = true,
+  starSize = .7,
+  sharpness = .6,
+  circleStrokeWidth = 0.2,
+  circleStroke = "#ffffff33",
+  ...props
+}: SVGStarProps) {
+
   // Use a gradient fill by default
   const id = gradientId()
-  if (fill === undefined) {
+  const useGradient = fill === undefined;
+  if (useGradient) {
     fill = `url(#${id})`
   }
 
+  // If no circle is shown, use maximum star size.
+  if(!showCircle) {
+    starSize = 1;
+  }
+
   const center = size / 2; // Center the star
-  const strokeWidth = strokeWidthFactor * size
-  const outerRadius = (size * .7) / 2; // Maximum radius is half the size
+  const strokeWidth = circleStrokeWidth * size;
+  const outerRadius = (size * starSize) / 2;
   const innerRadius = (1 - sharpness) * outerRadius; // Scale inner radius
-  const pathData = createStarPath(center, center, numPoints, innerRadius, outerRadius);
+  const pathData = createStarPath({
+    cx: center, 
+    cy: center, 
+    numPoints, 
+    innerRadius, 
+    outerRadius
+  });
 
   return (
     <svg
       width={size}
       height={size}
       viewBox={`0 0 ${size} ${size}`}
-      className={className}
       {...props}
     >
       <g className={animate ? "animate-rotate" : ""}>
-        <circle
+        {showCircle && <circle
           cx={size / 2} cy={size / 2} r={(size - 1) / 2}
           fill={fill}
           strokeWidth={strokeWidth}
-          stroke="#ffffff33"
-        />
-        <path d={pathData} fill="white" />
+          stroke={circleStroke}
+        />}
+        <path d={pathData} fill={showCircle ? starFill : fill} />
       </g>
-      <defs>
-        <SVGGradient id={id} from={fillFrom} to={fillTo} />
-      </defs>
+      { useGradient && (
+        <defs>
+          <SVGGradient id={id} from={color1} to={color2} />
+        </defs>
+      )}
     </svg>
   );
 };

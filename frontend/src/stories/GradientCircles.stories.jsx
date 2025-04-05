@@ -1,7 +1,7 @@
-import GradientCircles from "../components/GradientCircles/GradientCircles";
+import GradientCircles from "@/components/GradientCircles/GradientCircles";
 
 export default {
-    title: "GradientCircles/GradientCircles",
+    title: "SVG/GradientCircles",
     component: GradientCircles,
     parameters: {
         layout: "fullscreen",
