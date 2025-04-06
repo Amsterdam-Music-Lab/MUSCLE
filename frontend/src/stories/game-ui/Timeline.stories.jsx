@@ -15,11 +15,12 @@ const decorator = (Story) => (
 );
 
 export default {
-    title: "Timeline/Timeline",
+    title: "Game UI/Timeline",
     component: Timeline,
     parameters: {
         layout: "fullscreen",
     },
+    tags: ["autodocs"]
 };
 
 export const Default = {

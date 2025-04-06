@@ -59,7 +59,7 @@ const Final = ({
   const totalScore = 1234;
   
   const hasPercentile = typeof percentile === 'number' && percentile >= 0 && percentile <= 100;
-  const timeline = getTimeline(["dot", "dot", "star-4", "dot", "dot", "star-5", "dot", "dot", "star-6", "dot", "dot", "star-7"])
+  const timeline = getTimeline({symbols: ["dot", "dot", "star-4", "dot", "dot", "star-5", "dot", "dot", "star-6", "dot", "dot", "star-7"]})
   const step = 2
 
   return (

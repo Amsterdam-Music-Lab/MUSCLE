@@ -6,14 +6,24 @@ export default {
     parameters: {
         layout: "fullscreen",
     },
+    tags: ["autodocs"]
 };
 
-export const Default = {};
+const decorator = (Story) => (
+    <div style={{ minHeight: "300px" }}>
+        <Story />
+    </div>
+);
+
+export const Default = {
+    decorators: [decorator]
+};
 
 export const Blurred = {
     args: {
         blur: 30
     },
+    decorators: [decorator]
 };
 
 export const Aurora = {
@@ -26,6 +36,7 @@ export const Aurora = {
             endColor: "#00ff00"
         },
     },
+    decorators: [decorator]
 };
 
 export const YellowPink = {
@@ -38,6 +49,7 @@ export const YellowPink = {
         animate: true,
         numCircles: 30
     },
+    decorators: [decorator]
 };
 
 export const RadiusAndDuration = {
@@ -47,5 +59,6 @@ export const RadiusAndDuration = {
         minRadiusFactor: .01,
         meanDuration: 2,
     },
+    decorators: [decorator]
 };
 

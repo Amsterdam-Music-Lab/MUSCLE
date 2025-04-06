@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import ProfileView from "../components/Profile/ProfileView";
 
 export default {
-    title: "Profile/ProfileView",
+    title: "User/ProfileView",
     component: ProfileView,
     parameters: {
         layout: "fullscreen",

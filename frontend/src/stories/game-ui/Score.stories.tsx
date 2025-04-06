@@ -1,13 +1,14 @@
 import { BrowserRouter as Router } from "react-router-dom";
 
-import Score from "../components/Score/Score";
+import Score from "@/components/Score/Score";
 
 export default {
-  title: "Score/Score",
+  title: "Game UI/Score",
   component: Score,
   parameters: {
     layout: "fullscreen",
   },
+  tags: ["autodocs"],
   argTypes: {
     scoreClass: {
       control: {

@@ -6,6 +6,7 @@ export default {
     parameters: {
         layout: "fullscreen",
     },
+    tags: ["autodocs"]
 };
 
 const decorator = (Story) => (
@@ -52,9 +53,8 @@ export const StarSize = {
 export const NoCircle = {
     args: {
         size: 100,
-        sharpness: 0.3,
-        starFill: { startColor: "#ff0000", endColor: "#0000ff", angle: 90 },
         showCircle: false,
+        starFill: { startColor: "#ff0000", endColor: "#0000ff", angle: 90 },
     },
     decorators: [decorator]
 };

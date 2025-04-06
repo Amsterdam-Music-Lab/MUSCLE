@@ -1,9 +1,9 @@
 import { BrowserRouter as Router } from "react-router-dom";
 
-import Final from "../components/Final/Final";
+import Final from "@/components/Final/Final";
 
 export default {
-    title: "Final/Final",
+    title: "Experiment/Final",
     component: Final,
     parameters: {
         layout: "fullscreen",

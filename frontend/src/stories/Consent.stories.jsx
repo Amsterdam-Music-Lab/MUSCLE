@@ -1,4 +1,4 @@
-import Consent from "../components/Consent/Consent";
+import Consent from "@/components/Consent/Consent";
 
 const defaultArgs = {
     title: "This is the title",
@@ -16,7 +16,7 @@ const defaultArgs = {
 const getArgs = (args = {}) => ({ ...defaultArgs, ...args });
 
 export default {
-    title: "Consent/Consent",
+    title: "Experiment/Consent",
     component: Consent,
     parameters: {
         layout: "fullscreen",

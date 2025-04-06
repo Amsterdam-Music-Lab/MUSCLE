@@ -274,7 +274,7 @@ const MatchingPairs = ({
         }
     }
 
-    const timeline = getTimeline(["dot", "dot", "star-4", "dot", "dot", "star-5", "dot", "dot", "star-6", "dot", "dot", "star-7"])
+    const timeline = getTimeline({symbols: ["dot", "dot", "star-4", "dot", "dot", "star-5", "dot", "dot", "star-6", "dot", "dot", "star-7"]})
 
     return (
         <div className="aha__matching-pairs">

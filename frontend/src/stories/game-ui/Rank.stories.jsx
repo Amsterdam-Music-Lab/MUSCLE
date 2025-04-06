@@ -1,13 +1,13 @@
 import { BrowserRouter as Router } from "react-router-dom";
-
-import Rank from "../components/Rank/Rank";
+import Rank from "@/components/Rank/Rank";
 
 export default {
-    title: "Rank/Rank",
+    title: "Game UI/Rank",
     component: Rank,
     parameters: {
         layout: "fullscreen",
     },
+    tags: ["autodocs"],
 };
 
 function getCupData(overrides = {}) {

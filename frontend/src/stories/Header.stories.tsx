@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Header from "../components/Experiment/Header/Header";
 
 export default {
-    title: "Header/Header",
+    title: "Experiment/Header",
     component: Header,
     parameters: {
         layout: "fullscreen",
