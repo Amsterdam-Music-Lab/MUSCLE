@@ -23,11 +23,9 @@ interface GradientCirclesProps extends React.HTMLAttributes<HTMLDivElement>,Basi
  * for more details.
  */
 export default function GradientCircles({
-  color1,
-  color2,
+  fill,
   blur = 0,
   animate = false,
-  gradientOffset,
   numCircles,
   minRadiusFactor,
   meanDuration,
@@ -44,12 +42,10 @@ export default function GradientCircles({
     >
       <div className="gradient-circles-wrapper">
         <GradientCirclesSVG 
-          color1={color1} 
-          color2={color2} 
+          fill={fill} 
           aspect={aspect}
           height={height}
           animate={animate} 
-          gradientOffset={gradientOffset}
           numCircles={numCircles} 
           meanDuration={meanDuration}
           minRadiusFactor={minRadiusFactor}

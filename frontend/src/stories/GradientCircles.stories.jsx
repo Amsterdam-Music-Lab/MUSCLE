@@ -21,16 +21,20 @@ export const Aurora = {
         blur: 30,
         numCircles: 100,
         animate: true,
-        color1: "#000066",
-        color2: "#00ff00"
+        fill: {
+            startColor: "#000066",
+            endColor: "#00ff00"
+        },
     },
 };
 
 export const YellowPink = {
     args: {
-        color1: '#FFB14C',
-        color2: '#D843E2',
-        gradientOffset: 0.35,
+        fill: { 
+            startColor: "#FFB14C",
+            endColor: "#D843E2",
+            scale: 1.3
+        },
         animate: true,
         numCircles: 30
     },

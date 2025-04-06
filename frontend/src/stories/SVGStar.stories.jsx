@@ -24,7 +24,8 @@ export const Default = {
 export const ManyPoints = {
     args: {
         size: 100,
-        numPoints: 8
+        numPoints: 8,
+        fill: "red"
     },
     decorators: [decorator]
 };
@@ -32,7 +33,8 @@ export const ManyPoints = {
 export const LowSharpness = {
     args: {
         size: 100,
-        sharpness: 0.3
+        sharpness: 0.3,
+        fill: { startColor: "#ff0000", endColor: "#0000ff" }
     },
     decorators: [decorator]
 };
@@ -41,7 +43,8 @@ export const LowSharpness = {
 export const StarSize = {
     args: {
         size: 100,
-        starSize: .5
+        starSize: .5,
+        fill: { startColor: "#ff0000", endColor: "#0000ff" }
     },
     decorators: [decorator]
 };
@@ -50,6 +53,7 @@ export const NoCircle = {
     args: {
         size: 100,
         sharpness: 0.3,
+        starFill: { startColor: "#ff0000", endColor: "#0000ff", angle: 90 },
         showCircle: false,
     },
     decorators: [decorator]
@@ -66,8 +70,8 @@ export const Green = {
 export const GreenGradientYellowStroke = {
     args: {
         size: 100,
-        color1: "#006600",
-        color2: "#00dd00",
+        fill: { startColor: "#006600", endColor: "#00dd00" },
+        starFill: { startColor: "#999900", endColor: "#ffff00" },
         circleStroke: "#ffff00cc",
         circleStrokeWidth: .15,
     },

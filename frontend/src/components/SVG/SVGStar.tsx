@@ -7,8 +7,8 @@
  */
 
 import React from "react"
-import { SVGGradient, gradientId } from "./SVGGradient";
-
+import SVGGradient from "./SVGGradient";
+import { type SVGFill } from "./types";
 
 interface CreateStarPathProps {
   /** The x-coordinate of the center */
@@ -63,17 +63,11 @@ interface BasicSVGStarProps {
   /** Size of the star */
   size?: number;
 
-  /** Fill */
-  fill?: string;
+  /** Fill: an SVG fill object specifying either a fill or a col */
+  fill?: SVGFill;
 
   /** Fill of the star when showCircle=true. Defaults to white. */
-  starFill?: string;
-
-  /** Starting color of the gradient. Only used when fill is not set. */
-  color1?: string;
-  
-  /** Ending color of the gradient. Only used when fill is not set. */
-  color2?: string;
+  starFill?: SVGFill;
 
   /** 
    * Whether to show a circle around the star. 
@@ -92,7 +86,7 @@ interface BasicSVGStarProps {
   circleStrokeWidth?: number;
 
   /** Color of the circle stroke. Defaults to a very transparent white. */
-  circleStroke: string;
+  circleStroke?: string;
 
   /** 
    * The maximum size of the star, relative to the size of the circle. 
@@ -110,22 +104,20 @@ interface BasicSVGStarProps {
 interface SVGStarProps 
   extends 
     BasicSVGStarProps, 
-    Omit<React.SVGProps<SVGSVGElement>, 'width' | 'height' | 'viewBox'> {};
+    Omit<React.SVGProps<SVGSVGElement>, 'width' | 'height' | 'viewBox'> 
+  {};
 
 
 /**
  * An SVG star in an optional circle. The number of points and the sharpness of the
  * star can be varied. When the circle is shown, it is by default filled with a gradient,
- * with the star shown in white, and with a very light white border aroudn the circle.
- * All this can be customized. When no circle is shown, the star is filled with the 
- * gradient (or the fill, if passed). 
+ * with the star shown in white, and with a very light white border around the circle.
+ * All this can be customized.
  */
 export default function SVGStar({
   numPoints = 5,
   size = 20,
   fill,
-  color1 = "#ff0000",
-  color2 = "#0000ff",
   starFill = "#ffffff",
   animate = true,
   showCircle = true,
@@ -137,12 +129,6 @@ export default function SVGStar({
 }: SVGStarProps) {
   // A unique id to reference svg elements
   const id = `${Math.random().toString(16).slice(2)}`
-
-  // Use a gradient fill by default
-  const useGradient = fill === undefined;
-  if (useGradient) {
-    fill = `url(#gradient-${id})`
-  }
 
   // If no circle is shown, use maximum star size.
   if(!showCircle) {
@@ -182,20 +168,21 @@ export default function SVGStar({
             </mask>
           </>
         )}
-        { useGradient && (
-          <SVGGradient id={`gradient-${id}`} from={color1} to={color2} />
-        )}
+        { typeof(fill) === "object" && <SVGGradient id={`circle-gradient-${id}`} {...fill} />}
+        { typeof(starFill) === "object" && <SVGGradient id={`star-gradient-${id}`} {...starFill} />}
       </defs>
 
       <g className={animate ? "animate-rotate" : ""}>
         <use 
           href={`#circle-${id}`} 
           mask={showCircle ? `url(#mask-${id})` : undefined} 
-          fill={fill}
+          fill={typeof(fill) === "object" ? `url(#circle-gradient-${id})` : fill}
           strokeWidth={strokeWidth}
           stroke={circleStroke}
           />
-        <path d={pathData} fill={showCircle ? starFill : fill} />
+        <path 
+          d={pathData} 
+          fill={typeof(starFill) === "object" ? `url(#star-gradient-${id})` : starFill} />
       </g>
     </svg>
   );

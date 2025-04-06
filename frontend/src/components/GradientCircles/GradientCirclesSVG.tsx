@@ -7,16 +7,13 @@
  */
 
 import React from "react";
-import { gradientId, SVGGradient } from "@/components/SVG/SVGGradient";
+import SVGGradient from "@/components/SVG/SVGGradient";
 import { SVGCircle } from "@/components/SVG/SVGCircle";
-
+import { type SVGGradientFill } from "@/components/SVG/types";
 
 export interface BasicGradientCirclesProps {
   /** Starting color of the linear gradient */
-  color1: string;
-
-  /** End color of the linear gradient */
-  color2: string;
+  fill: SVGGradientFill;
 
   /** The aspect ratio of the SVG */
   aspect?: number;
@@ -26,12 +23,6 @@ export interface BasicGradientCirclesProps {
 
   /** The number of circles in the SVG */
   numCircles?: number;
-
-  /** 
-   * Offset for the endpoints of the gradients. 
-   * When >0 the endpoints are moved outside of the gradient. 
-   */
-  gradientOffset?: number;
   
   /** Whether to rotate the gradients */
   animate?: boolean
@@ -51,7 +42,10 @@ export interface BasicGradientCirclesProps {
 }
 
 
-interface GradientCirclesSVGProps extends React.SVGAttributes<SVGSVGElement>, BasicGradientCirclesProps {}
+interface GradientCirclesSVGProps 
+  extends 
+    React.SVGAttributes<SVGSVGElement>, 
+    BasicGradientCirclesProps {};
 
 
 /**
@@ -64,12 +58,10 @@ interface GradientCirclesSVGProps extends React.SVGAttributes<SVGSVGElement>, Ba
  * where rand is a random float between 0 and 1.
  */
 export default function GradientCirclesSVG({
-  color1 = "#ff0000",
-  color2 = "#0000ff",
+  fill = { startColor: "#ff0000", endColor: "#0000ff", scale: 1.4 },
   aspect = 1,
   height = 2000,
   numCircles = 12,
-  gradientOffset = 0.35,
   animate = true,
   meanDuration = 5,
   minRadiusFactor = 0.2,
@@ -78,7 +70,7 @@ export default function GradientCirclesSVG({
   
   const width = height * aspect;
   const minRadius = minRadiusFactor * width;
-  const id = gradientId()
+  const id = `${Math.random().toString(16).slice(2)}`
   const circleData = Array.from({ length: numCircles })
     .map(() => ({
       cx: Math.random() * width,
@@ -86,7 +78,7 @@ export default function GradientCirclesSVG({
       r: minRadius + Math.pow(10, 1 + 3 * Math.random()),
       rotate: Math.random() * 360,
       dur: meanDuration + Math.random() * meanDuration,
-      fill: `url(#${id})`,
+      fill: `url(#gradient-${id})`,
       animate: animate
     }))
     .sort((a, b) => (a.r - b.r) * Math.random() < 0);
@@ -100,11 +92,11 @@ export default function GradientCirclesSVG({
       xmlns="http://www.w3.org/2000/svg"
       {...rest}
     >
-      <g clipPath="url(#clip-path)">
+      <g clipPath={`url(#clip-path-${id})`}>
         <rect
           width={width}
           height={height}
-          fill={`url(#${id})`}
+          fill={`url(#gradient-${id})`}
         />
         {circleData.map((circle, i) => (
           <SVGCircle key={i} {...circle} />
@@ -112,16 +104,9 @@ export default function GradientCirclesSVG({
       </g>
 
       <defs>
-        <SVGGradient 
-          id={id}
-          from={color1} 
-          to={color2} 
-          x1={-1 * gradientOffset} 
-          y1={0} 
-          x2={1 + gradientOffset} 
-          y2={0} />
-        <clipPath id="clip-path">
-          <rect width={width} height={height} fill={`url(#${id})`} />
+        <SVGGradient id={`gradient-${id}`} {...fill} />
+        <clipPath id={`clip-path-${id}`}>
+          <rect width={width} height={height} fill={`url(#gradient-${id})`} />
         </clipPath>
       </defs>
     </svg>
