@@ -54,3 +54,22 @@ export const NoCircle = {
     },
     decorators: [decorator]
 };
+
+export const Green = {
+    args: {
+        size: 100,
+        fill: "#008800",
+    },
+    decorators: [decorator]
+};
+
+export const GreenGradientYellowStroke = {
+    args: {
+        size: 100,
+        color1: "#006600",
+        color2: "#00dd00",
+        circleStroke: "#ffff00cc",
+        circleStrokeWidth: .15,
+    },
+    decorators: [decorator]
+};

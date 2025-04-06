@@ -135,12 +135,13 @@ export default function SVGStar({
   circleStroke = "#ffffff33",
   ...props
 }: SVGStarProps) {
+  // A unique id to reference svg elements
+  const id = `${Math.random().toString(16).slice(2)}`
 
   // Use a gradient fill by default
-  const id = gradientId()
   const useGradient = fill === undefined;
   if (useGradient) {
-    fill = `url(#${id})`
+    fill = `url(#gradient-${id})`
   }
 
   // If no circle is shown, use maximum star size.
@@ -167,20 +168,35 @@ export default function SVGStar({
       viewBox={`0 0 ${size} ${size}`}
       {...props}
     >
+      <defs>
+        { showCircle && (
+          <>
+            {/* We mask the circle by itself to get an 'inner stroke' */}
+            <circle
+              id={`circle-${id}`}
+              cx={size / 2} cy={size / 2} r={(size - 1) / 2}
+            />
+            <mask id={`mask-${id}`}>
+              <rect x="0" y="0" width={size} height={size} fill="black" />
+              <use href={`#circle-${id}`} fill="white"/>
+            </mask>
+          </>
+        )}
+        { useGradient && (
+          <SVGGradient id={`gradient-${id}`} from={color1} to={color2} />
+        )}
+      </defs>
+
       <g className={animate ? "animate-rotate" : ""}>
-        {showCircle && <circle
-          cx={size / 2} cy={size / 2} r={(size - 1) / 2}
+        <use 
+          href={`#circle-${id}`} 
+          mask={showCircle ? `url(#mask-${id})` : undefined} 
           fill={fill}
           strokeWidth={strokeWidth}
           stroke={circleStroke}
-        />}
+          />
         <path d={pathData} fill={showCircle ? starFill : fill} />
       </g>
-      { useGradient && (
-        <defs>
-          <SVGGradient id={id} from={color1} to={color2} />
-        </defs>
-      )}
     </svg>
   );
 };
