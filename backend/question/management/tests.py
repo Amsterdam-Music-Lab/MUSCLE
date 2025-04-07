@@ -13,6 +13,8 @@ class CreateQuestionsTest(TestCase):
         self.assertEqual(
             len(Question.objects.all()), 176
         )  # Only built-in questions in test database
-        self.assertEqual(len(QuestionGroup.objects.all()), 18) # Only built-in question groups in test database
+        self.assertEqual(
+            len(QuestionGroup.objects.all()), 20
+        )  # Only built-in question groups in test database
         self.assertEqual(len(Question.objects.filter(key='dgf_country_of_origin')), 1)
         self.assertEqual(len(QuestionGroup.objects.filter(key='DEMOGRAPHICS')), 1)

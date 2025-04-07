@@ -8,7 +8,7 @@ from .musicgens import MUSICGENS_17_W_VARIANTS
 from .stomp import STOMP
 from .tipi import TIPI
 from .other import OTHER
-from .thatsmysong import THATS_MY_SONG_QUESTIONS
+from .thatsmysong import THATS_MY_SONG_QUESTIONS_FIXED, THATS_MY_SONG_QUESTIONS_RANDOM
 import random
 from .models import QuestionGroup, Question, Choice
 from experiment.actions.form import (
@@ -42,7 +42,8 @@ QUESTION_GROUPS_DEFAULT = {
     "OTHER": OTHER,
     "DEMOGRAPHICS_OTHER": DEMOGRAPHICS_OTHER,
     "LANGUAGE_OTHER": LANGUAGE_OTHER,
-    "THATS_MY_SONG": THATS_MY_SONG_QUESTIONS,
+    "THATS_MY_SONG_FIXED": THATS_MY_SONG_QUESTIONS_FIXED,
+    "THATS_MY_SONG_RANDOM": THATS_MY_SONG_QUESTIONS_RANDOM,
 }
 
 QUESTIONS = {}
