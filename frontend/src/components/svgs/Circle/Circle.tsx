@@ -9,7 +9,7 @@ interface CircleProps {
     animate: boolean;
 }
 
-export function SVGCircle({
+export default function Circle({
   cx,
   cy,
   r,

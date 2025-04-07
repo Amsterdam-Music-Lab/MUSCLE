@@ -1,8 +1,8 @@
-import SVGDot from "@/components/SVG/SVGDot";
+import { Dot } from "@/components/svgs";
 
 export default {
     title: "SVG/Dot",
-    component: SVGDot,
+    component: Dot,
     parameters: {
         layout: "fullscreen",
     },

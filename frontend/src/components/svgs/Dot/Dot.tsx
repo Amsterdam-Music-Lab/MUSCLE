@@ -7,15 +7,15 @@
  */
 
 import React from "react";
-import SVGGradient from "./SVGGradient";
-import { type SVGFill } from "./types";
+import { Gradient } from "../Gradient";
+import { type Fill } from "../types";
 
 interface BasicSVGDotProps {
   /** Size of the dot */
   size?: number;
 
   /** Fill object or string */
-  fill?: SVGFill;
+  fill?: Fill;
 
   /** Whether to animate the object */
   animate?: boolean;
@@ -45,7 +45,7 @@ export default function SVGDot({
       {...props}
     >
       <defs>
-        {typeof(fill) === 'object' && <SVGGradient id={`gradient-${id}`} {...fill} />}
+        {typeof(fill) === 'object' && <Gradient id={`gradient-${id}`} {...fill} />}
       </defs> 
       <circle 
         cx={size / 2} 

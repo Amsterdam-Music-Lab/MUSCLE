@@ -1,4 +1,4 @@
-import Timeline, { getTimeline } from "@/components/Timeline/Timeline";
+import Timeline, { getTimeline } from "./Timeline";
 
 const timeline = getTimeline({
     symbols: ['dot', 'dot', 'star-4', 'dot', 'dot', 'star-5', 'dot', 'dot', 'star-6'],

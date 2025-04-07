@@ -8,18 +8,18 @@
 
 // TODO move these type definitions elsewhere?
 
-export type SVGSolidFill = string;
+export type SolidFill = string;
 
-export type SVGGradientFill = {
+export type GradientFill = {
   /** 
    * The start color of the gradient. 
-   * If not specified, SVGGradient will use the variable --start-color 
+   * If not specified, Gradient will use the variable --start-color 
    */
   startColor?: string;
 
   /** 
    * The end color of the gradient 
-   * If not specified, SVGGradient will use the variable --end-color
+   * If not specified, Gradient will use the variable --end-color
    */
   endColor?: string;
   
@@ -35,4 +35,4 @@ export type SVGGradientFill = {
 }
 
 /** An SVG fill */
-export type SVGFill = SVGSolidFill | SVGGradientFill;
+export type Fill = SolidFill | GradientFill;

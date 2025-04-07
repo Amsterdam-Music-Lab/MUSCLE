@@ -6,18 +6,18 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import { SVGGradientFill } from "./types";
+import { GradientFill } from "../types";
 
-interface SVGGradientProps 
+interface GradientProps 
   extends 
-    SVGGradientFill, 
+    GradientFill, 
     Omit<JSX.IntrinsicElements["linearGradient"], "x1" | "y1" | "x2" | "y2"> 
   {};
 
 /**
  * An SVG gradient defined by two colors, an angle and a scale.
  */
-export default function SVGGradient({
+export default function Gradient({
   id,
   startColor,
   endColor,
@@ -25,7 +25,7 @@ export default function SVGGradient({
   scale = 1,
   gradientUnits = 'objectBoundingBox',
   ...props
-}: SVGGradientProps) {
+}: GradientProps) {
   const angleRad = angle * (Math.PI / 180);
   const cx = .5; 
   const cy = .5;

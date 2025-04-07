@@ -7,8 +7,8 @@
  */
 
 import React from "react"
-import SVGGradient from "./SVGGradient";
-import { type SVGFill } from "./types";
+import { Gradient } from "../Gradient";
+import { type Fill } from "../types";
 
 interface CreateStarPathProps {
   /** The x-coordinate of the center */
@@ -64,10 +64,10 @@ interface BasicSVGStarProps {
   size?: number;
 
   /** Fill: an SVG fill object specifying either a fill or a col */
-  fill?: SVGFill;
+  fill?: Fill;
 
   /** Fill of the star when showCircle=true. Defaults to white. */
-  starFill?: SVGFill;
+  starFill?: Fill;
 
   /** 
    * Whether to show a circle around the star. 
@@ -168,8 +168,8 @@ export default function SVGStar({
             </mask>
           </>
         )}
-        { typeof(fill) === "object" && <SVGGradient id={`circle-gradient-${id}`} {...fill} />}
-        { typeof(starFill) === "object" && <SVGGradient id={`star-gradient-${id}`} {...starFill} />}
+        { typeof(fill) === "object" && <Gradient id={`circle-gradient-${id}`} {...fill} />}
+        { typeof(starFill) === "object" && <Gradient id={`star-gradient-${id}`} {...starFill} />}
       </defs>
 
       <g className={animate ? "animate-rotate" : ""}>

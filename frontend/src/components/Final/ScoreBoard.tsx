@@ -6,7 +6,7 @@ import Timeline, { TIMELINE_SYMBOLS, TimelineConfig } from "@/components/Timelin
 import { SVGStar } from "@/components/SVG/SVGStar";
 import { colors } from "@/components/MCGTheme/colors";
 import ProgressBar from "@/components/MCGTheme/ProgressBar";
-import Score from "@/components/MCGTheme/Score";
+import { ScoreDisplay as Score } from "@/components/game";
 
 import "./ScoreBoard.scss";
 

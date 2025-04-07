@@ -11,7 +11,7 @@ import Participant from "@/types/Participant";
 import Overlay from "../Overlay/Overlay";
 import { ScoreFeedbackDisplay } from "@/types/Playback";
 
-import Timeline, { getTimeline } from "@/components/Timeline/Timeline";
+import { Timeline, getTimeline } from "@/components/game";
 import PlayingBoard from "@/components/MatchingPairs/PlayingBoard";
 import TuneTwins from "@/components/MCGTheme/logos/TuneTwins"
 import Score from "@/components/MCGTheme/Score";

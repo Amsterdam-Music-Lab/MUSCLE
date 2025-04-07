@@ -1,7 +1,7 @@
 import React from "react";
 import useBoundStore from "@/util/stores";
 import classNames from "classnames";
-import GradientCircles from "@/components/GradientCircles/GradientCircles";
+import { GradientCircles } from "@/components/svgs";
 
 interface PageProps {
     className?: string;

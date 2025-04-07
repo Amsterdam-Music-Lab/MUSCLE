@@ -6,21 +6,20 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import SVGStar from "@/components/SVG/SVGStar";
-import SVGDot from "@/components/SVG/SVGDot";
-import { SVGFill } from "../SVG/types";
-import "./Timeline.scss";
+import classNames from "classnames"
+import { Star, Dot, Fill } from "@/components/svgs";
+import styles from "./Timeline.module.scss";
 
 type TimelineSymbolName = 'dot' | 'star' | 'star-4' | 'star-5' | 'star-6' | 'star-7' | null;
 
 export const TIMELINE_SYMBOLS = {
-  'dot': ({ ...props }) => <SVGDot {...props} />,
-  'star': ({ ...props }) => <SVGStar numPoints={5} {...props} />,
-  'star-4': ({ ...props }) => <SVGStar numPoints={4} {...props} />,
-  'star-5': ({ ...props }) => <SVGStar numPoints={5} {...props} />,
-  'star-6': ({ ...props }) => <SVGStar numPoints={6} {...props} />,
-  'star-7': ({ ...props }) => <SVGStar numPoints={7} {...props} />,
-  'star-8': ({ ...props }) => <SVGStar numPoints={8} {...props} />
+  'dot': ({ ...props }) => <Dot {...props} />,
+  'star': ({ ...props }) => <Star numPoints={5} {...props} />,
+  'star-4': ({ ...props }) => <Star numPoints={4} {...props} />,
+  'star-5': ({ ...props }) => <Star numPoints={5} {...props} />,
+  'star-6': ({ ...props }) => <Star numPoints={6} {...props} />,
+  'star-7': ({ ...props }) => <Star numPoints={7} {...props} />,
+  'star-8': ({ ...props }) => <Star numPoints={8} {...props} />
 }
 
 export type TimelineConfig = Array<{
@@ -82,10 +81,10 @@ interface TimelineProps {
   step: number;
 
   /** Fill of past symbols: everything up to and including the current step */
-  fillPast?: SVGFill;
+  fillPast?: Fill;
   
   /** Fill of the future steps: everything after the current step */
-  fillFuture?: SVGFill;
+  fillFuture?: Fill;
 
   /** The background of the 'past' spine. If fillPast is a string, spineBgPast defaults to that. */
   spineBgPast?: string;
@@ -136,15 +135,15 @@ export default function Timeline({
   }
 
   return (
-    <div className="timeline" style={{
+    <div className={styles.timeline} style={{
       '--spine-bg-past': spineBgPast, '--spine-bg-future': spineBgFuture
     }}>
       {timeline.map((symbol, idx) => {
         const Symbol = symbol.symbol ? TIMELINE_SYMBOLS[symbol.symbol] : null;
         return (
-          <div className="step" key={idx}>
+          <div className={styles.step} key={idx}>
             {showSymbols && Symbol && (
-              <div className="symbol">
+              <div className={styles.symbol}>
                 <Symbol
                   size={symbol.size}
                   fill={idx < step ? fillPast : fillFuture}
@@ -153,8 +152,8 @@ export default function Timeline({
                 />
               </div>
             )}
-            {showSpine && (
-              <div className={`spine-segment ${idx < step && 'active'}`} />
+            {showSpine && idx >= 1 && (
+              <div className={classNames(styles.spineSegment, idx < step && styles.active)} />
             )}
           </div>
         )

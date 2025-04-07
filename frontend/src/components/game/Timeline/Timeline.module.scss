@@ -1,0 +1,65 @@
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ * 
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+ 
+ .timeline {
+    --z-index: 100;
+
+    // Width of the spine
+    --spine-width: 4px;
+    
+    // The spine is slightly smaller than the timeline so that the
+    // start and end are fully below the final symbols.
+    --spine-padding: 2px;
+    
+    // Background of the past and future spine
+    --spine-bg-future: #eee;
+    --spine-bg-past: #000;
+
+    position: relative;
+    display: flex;
+    justify-content: stretch;
+}
+
+.step {
+    position: relative;
+    flex-grow: 1;
+
+    // All steps grow, except the first.
+    // This is to ensure the steps are evenly spaced and
+    // fill the entire timeline
+    &:first-of-type {
+        flex-grow: 0;
+    }
+}
+
+.symbol {
+    display: flex;
+    justify-content: right;
+    position: relative;
+    top: 50%;
+    z-index: var(--z-index);
+
+    svg {
+        position: relative;
+    }
+}
+
+.spineSegment {
+    position: absolute;
+    top: 50%;
+    right: var(--spine-padding);
+    height: var(--spine-width);
+    margin-top: calc(-.5 * var(--spine-width));
+    width: 100%;
+    z-index: calc(var(--z-index) - 1);
+    background: var(--spine-bg-future);
+
+    &.active {
+        background: var(--spine-bg-past);
+    }
+}

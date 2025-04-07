@@ -1,8 +1,8 @@
-import SVGStar from "@/components/SVG/SVGStar";
+import { Star } from "@/components/svgs";
 
 export default {
     title: "SVG/Star",
-    component: SVGStar,
+    component: Star,
     parameters: {
         layout: "fullscreen",
     },

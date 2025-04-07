@@ -7,13 +7,13 @@
  */
 
 import React from "react";
-import SVGGradient from "@/components/SVG/SVGGradient";
-import { SVGCircle } from "@/components/SVG/SVGCircle";
-import { type SVGGradientFill } from "@/components/SVG/types";
+import { Gradient } from "../Gradient";
+import { Circle } from "../Circle";
+import { type GradientFill } from "../types";
 
 export interface BasicGradientCirclesProps {
   /** Starting color of the linear gradient */
-  fill: SVGGradientFill;
+  fill: GradientFill;
 
   /** The aspect ratio of the SVG */
   aspect?: number;
@@ -99,12 +99,12 @@ export default function GradientCirclesSVG({
           fill={`url(#gradient-${id})`}
         />
         {circleData.map((circle, i) => (
-          <SVGCircle key={i} {...circle} />
+          <Circle key={i} {...circle} />
         ))}
       </g>
 
       <defs>
-        <SVGGradient id={`gradient-${id}`} {...fill} />
+        <Gradient id={`gradient-${id}`} {...fill} />
         <clipPath id={`clip-path-${id}`}>
           <rect width={width} height={height} fill={`url(#gradient-${id})`} />
         </clipPath>

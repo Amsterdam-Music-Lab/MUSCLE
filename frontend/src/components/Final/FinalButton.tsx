@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "@/components/MCGTheme/utils.scss";
+import "@/scss/utils.scss";
 import "./FinalButton.scss";
 
 interface FinalButtonProps {

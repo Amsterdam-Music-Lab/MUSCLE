@@ -1,4 +1,4 @@
-@import "../../scss/variables.scss";
+@import "./variables.scss";
 
 $indigo: #2B2BEE;
 $pink: #D843E2;
@@ -13,7 +13,7 @@ $colors: (
     "teal": $teal
 );
 
-.mcg {
+// .mcg {
     
     // Gradient classes
     @each $name1, $color1 in $colors {
@@ -71,9 +71,11 @@ $colors: (
     .bolder {
         font-weight: bolder;
     }
+
     .fw-black {
         font-weight: 900;
     }
+    
     .fw-semibold {
         font-weight: 600;
     }
@@ -144,7 +146,7 @@ $colors: (
             transform: rotate(360deg);
         }
     }
-}
+// }
 
 
 // Effectively a Bootstrap 5 feature::after

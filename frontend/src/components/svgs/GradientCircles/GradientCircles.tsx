@@ -7,8 +7,9 @@
  */
 
 import React from "react";
+import classNames from "classnames";
 import GradientCirclesSVG, { BasicGradientCirclesProps } from "./GradientCirclesSVG";
-import "./GradientCircles.scss";
+import styles from "./GradientCircles.module.scss";
 
 interface GradientCirclesProps extends React.HTMLAttributes<HTMLDivElement>,BasicGradientCirclesProps {
     /** The size of the blur in pixels */
@@ -36,11 +37,11 @@ export default function GradientCircles({
   const {style, className, ...rest} = props;
   return (
     <div 
-      className={`gradient-circles ${className}`} 
+      className={classNames(styles.gradientCircles, className)} 
       style={{"--blur": `${blur}px`, ...style}} 
       {...rest}
     >
-      <div className="gradient-circles-wrapper">
+      <div className={styles.innerWrapper}>
         <GradientCirclesSVG 
           fill={fill} 
           aspect={aspect}
@@ -51,7 +52,7 @@ export default function GradientCircles({
           minRadiusFactor={minRadiusFactor}
           />
       </div>
-      {blur !== 0 && <div className="gradient-circles-blur"><div /></div>}
+      {blur !== 0 && <div className={styles.blur}><div /></div>}
     </div>
   );
 }
