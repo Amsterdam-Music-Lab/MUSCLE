@@ -99,4 +99,22 @@ MG_SCORING_RULES = {
     "P17_3": "LIKERT"
 }
 
-PROFILE_SCORING_RULES = {**MSI_SCORING_RULES, **MG_SCORING_RULES}
+TMS_SCORING_RULES = {
+    "VB_1": "LIKERT",
+    "VB_2": "LIKERT",
+    "VB_3": "LIKERT",
+    "VB_4": "LIKERT",
+    "VB_5": "LIKERT",
+    "VB_6": "LIKERT",
+    "VB_7": "LIKERT",
+    "VB_8": "LIKERT",
+    "VB_9": "LIKERT",
+    "VB_10": "LIKERT",
+    "VB_11": "LIKERT",
+    "VB_12": "LIKERT",
+    "VB_13": "REVERSE_LIKERT",
+    "VB_14": "LIKERT",
+    "VB_15": "LIKERT",
+}
+
+PROFILE_SCORING_RULES = {**MSI_SCORING_RULES, **MG_SCORING_RULES, **TMS_SCORING_RULES}
