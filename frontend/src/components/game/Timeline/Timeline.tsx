@@ -7,7 +7,7 @@
  */
 
 import classNames from "classnames"
-import { Star, Dot, Fill } from "@/components/svgs";
+import { Star, Dot, Fill } from "@/components/svg";
 import styles from "./Timeline.module.scss";
 
 type TimelineSymbolName = 'dot' | 'star' | 'star-4' | 'star-5' | 'star-6' | 'star-7' | null;

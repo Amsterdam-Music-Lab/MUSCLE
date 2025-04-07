@@ -2,8 +2,7 @@ import classNames from "@/util/classNames";
 
 // Local imports
 import TuneTwins from "@/components/MCGTheme/logos/TuneTwins"
-import Timeline, { TIMELINE_SYMBOLS, TimelineConfig } from "@/components/Timeline/Timeline";
-import { SVGStar } from "@/components/SVG/SVGStar";
+import Timeline, { TIMELINE_SYMBOLS, TimelineConfig } from "@/components/game/Timeline/Timeline";
 import { colors } from "@/components/MCGTheme/colors";
 import ProgressBar from "@/components/MCGTheme/ProgressBar";
 import { ScoreDisplay as Score } from "@/components/game";

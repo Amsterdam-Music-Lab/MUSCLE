@@ -1,4 +1,4 @@
-import { GradientCircles } from "@/components/svgs";
+import GradientCircles from "./GradientCircles";
 
 export default {
     title: "SVG/GradientCircles",

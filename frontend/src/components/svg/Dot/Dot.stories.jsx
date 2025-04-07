@@ -1,4 +1,4 @@
-import { Dot } from "@/components/svgs";
+import Dot from "./Dot";
 
 export default {
     title: "SVG/Dot",
