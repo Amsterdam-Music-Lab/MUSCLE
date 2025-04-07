@@ -6,6 +6,4 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export * from './Timeline';
-export * from './ScoreDisplay';
-export * from "./ScoreBoard";
+export { default as ScoreBoard } from './ScoreBoard';

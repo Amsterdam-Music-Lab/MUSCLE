@@ -5,9 +5,10 @@ import TuneTwins from "@/components/MCGTheme/logos/TuneTwins"
 import Timeline, { TIMELINE_SYMBOLS, TimelineConfig } from "@/components/game/Timeline/Timeline";
 import { colors } from "@/components/MCGTheme/colors";
 import ProgressBar from "@/components/MCGTheme/ProgressBar";
-import { ScoreDisplay as Score } from "@/components/game";
+import { ScoreDisplay as Score } from "../ScoreDisplay";
 
-import "./ScoreBoard.scss";
+// TODO use scoped scss
+import "./ScoreBoard.module.scss";
 
 
 const SectionLabel = ({ children, className, ...props }) => (
@@ -31,9 +32,9 @@ const Trophy = ({ name }: { name: string }) => {
 }
 
 interface ScoreBoardProps {
-  score: number;
-  totalScore: number;
-  percentile: number;
+  score?: number;
+  totalScore?: number;
+  percentile?: number;
   timeline?: TimelineConfig;
   step?: number;
   percentileCutoff: number;
@@ -43,24 +44,23 @@ interface ScoreBoardProps {
   showTrophy: true;
 }
 
-const ScoreBoard = ({
+export default function ScoreBoard({
   score,
   totalScore,
   percentile,
-  timeline = null,
-  step = null,
+  timeline,
+  step,
   percentileCutoff = 30,
   showPercentile = true,
   showScores = true,
   showTimeline = true,
   showTrophy = true
-}: FinalProps) => {
+}: ScoreBoardProps) {
 
   const hasPercentile = typeof percentile === 'number' && percentile >= 0 && percentile <= 100;
-  const hasTimeline = timeline !== null && step !== null;
+  const hasTimeline = timeline !== undefined && step !== undefined;
   const hasTrophy = hasTimeline && timeline[step].trophy
-  const trophyName = timeline[step].symbol
-  const Trophy = hasTrophy ? TIMELINE_SYMBOLS[trophyName] || null : null;
+  const Trophy = hasTrophy ? TIMELINE_SYMBOLS[timeline[step].symbol] || null : null;
 
   return (
     <div className="score-board card bg-inset-sm rounded-lg">
@@ -78,7 +78,7 @@ const ScoreBoard = ({
         {/* Star */}
         {showTrophy && hasTrophy &&
           <div className="trophy position-absolute d-flex justify-content-end w-100">
-            <p class="label text-white font-weight-bolder">You've earned a star!</p>
+            <p className="label text-white font-weight-bolder">You've earned a star!</p>
             <div className="position-absolute">
               {Trophy &&
                 <Trophy
@@ -91,7 +91,7 @@ const ScoreBoard = ({
           </div>
         }
 
-        <div class="list-group list-group-flush bg-transparent">
+        <div className="list-group list-group-flush bg-transparent">
 
           {/* Percentile */}
           {showPercentile && hasPercentile && percentile > 0 && (
@@ -116,7 +116,7 @@ const ScoreBoard = ({
           {/* Ranking */}
           {/* Note that falls back gracefully when score or totalScore are missing. */}
           {showScores && (
-            <div class="list-group-item p-4 bg-transparent">
+            <div className="list-group-item p-4 bg-transparent">
               {/* <SectionLabel>Your scores</SectionLabel> */}
               <div className="d-flex">
                 <div style={{ width: "50%" }}><Score score={score} label="Last game" /></div>
@@ -127,7 +127,7 @@ const ScoreBoard = ({
 
           {/* Progress */}
           {showTimeline && hasTimeline && (
-            <div class="list-group-item p-4 bg-transparent">
+            <div className="list-group-item p-4 bg-transparent">
               {/* The label should depend on the step in the timeline */}
               <SectionLabel>Your progress...</SectionLabel>
               <Timeline timeline={timeline} step={step + 1} spine={true} />
@@ -139,11 +139,10 @@ const ScoreBoard = ({
       {/* End of capture */}
 
       {/* Share and options */}
-      <div class="list-group-item p-4 bg-transparent border-left-0 border-right-0 border-bottom-0">
+      <div className="list-group-item p-4 bg-transparent border-left-0 border-right-0 border-bottom-0">
         <button className="btn bg-indigo-red text-white rounded-lg px-4 py-1">Share</button>
       </div>
     </div>
   );
 };
 
-export default ScoreBoard;
