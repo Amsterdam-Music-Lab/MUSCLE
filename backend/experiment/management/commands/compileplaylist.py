@@ -23,10 +23,12 @@ class Command(BaseCommand):
         parser.add_argument('directory',
                             type=str,
                             help="Directory of audio files, relative to upload folder")
-        parser.add_argument('--experiment',
-                            type=str,
-                            default=None,
-                            help="Provide the ID of the experiment for which the playlist should be compiled")
+        parser.add_argument(
+            '--block',
+            type=str,
+            default=None,
+            help="Provide the ID of the block rules for which the playlist should be compiled",
+        )
         parser.add_argument('--artist_default',
                             type=str,
                             default='default',
@@ -43,13 +45,14 @@ class Command(BaseCommand):
         name = options.get('artist_default')
         upload_dir = settings.MEDIA_ROOT
         playlist_dir = join(upload_dir, directory)
-        search_critera = glob('{}/*.wav'.format(playlist_dir)) + \
-            glob('{}/*.mp3'.format(playlist_dir))
+        search_critera = glob(f'{playlist_dir}/**/*.wav', recursive=True) + glob(
+            f'{playlist_dir}/**/*.mp3', recursive=True
+        )
         song_names_option = options.get('song_names')
         if song_names_option:
             with open(join(playlist_dir, song_names_option)) as json_file:
                 song_names = json.load(json_file)
-        block_option = options.get('experiment')
+        block_option = options.get('block')
         with open(join(playlist_dir, 'audiofiles.csv'), 'w+') as f:
             csv_writer = csv.writer(f)
             for i, audio_file in enumerate(search_critera):
@@ -64,7 +67,7 @@ class Command(BaseCommand):
                     song_name = basename(audio_file)[:-4]
                 elif block_option:
                     rules = BLOCK_RULES.get(block_option)
-                    info = rules.get_info_playlist(rules, audio_file_clean)
+                    info = rules.get_info_playlist(rules, audio_file)
                     artist_name = info.get('artist')
                     song_name = info.get('song')
                     tag = info.get('tag')

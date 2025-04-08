@@ -1,3 +1,4 @@
+from os.path import split
 import random
 
 from django.utils.translation import gettext_lazy as _
@@ -13,13 +14,11 @@ from .matching_pairs import MatchingPairsGame
 
 
 class MatchingPairs2025(MatchingPairsGame):
-    """This is the working version of the Matching Pairs game for the 2025 Tunetwins experiment. The difference between this version and the original Matching Pairs game is that this version has some additional tutorial messages. These messages are intended to help the user understand the game. The tutorial messages are as follows:
-    - no_match: This was not a match, so you get 0 points. Please try again to see if you can find a matching pair.
-    - lucky_match: You got a matching pair, but you didn't hear both cards before. This is considered a lucky match. You get 10 points.
-    - memory_match: You got a matching pair. You get 20 points.
-    - misremembered: You thought you found a matching pair, but you didn't. This is considered a misremembered pair. You lose 10 points.
-
+    """This is the working version of the Matching Pairs game for the 2025 Tunetwins experiment.
+    The difference between this version and the original Matching Pairs game is that this version has some additional tutorial messages.
+    These messages are intended to help the user understand the game.
     The tutorial messages are displayed to the user in an overlay on the game screen.
+    There is also additional logic to balance condition types (degradations vs. original) and difficulty levels.
     """
 
     ID = "MATCHING_PAIRS_2025"
@@ -86,7 +85,6 @@ class MatchingPairs2025(MatchingPairsGame):
 
     def get_matching_pairs_trial(self, session: Session):
         player_sections = self._select_sections(session)
-        random.seed()
         random.shuffle(player_sections)
 
         # Only show tutorial if participant has never played this game before
@@ -114,32 +112,39 @@ class MatchingPairs2025(MatchingPairsGame):
         return previous_games_results.exists()
 
     def _select_sections(self, session: Session) -> list[Section]:
-        condition_type, condition = self._select_least_played_condition_type_condition_pair(session)
+        condition_type, condition = (
+            self._select_least_played_condition_type_difficulty_pair(session)
+        )
 
         sections = self._select_least_played_sections(session, condition_type, condition)
 
         if not sections:
             raise ValueError(
-                "No sections found for condition type {} and condition {}".format(condition_type, condition)
+                "No sections found for condition type {} and difficulty {}".format(
+                    condition_type, condition
+                )
             )
 
         # if condition type not 'original', select the equivalent original sections
         if condition_type != "O":
-            originals_sections = session.playlist.section_set.filter(tag__startswith="O")
+            originals_sections = session.playlist.section_set.filter(group="O")
             # Select equivalents by group number, e.g. a T2 with a group number of 1 will have an equivalent O2 with a group number of 1
-            equivalents = originals_sections.filter(group__in=[section.group for section in sections])
+            equivalents = originals_sections.filter(
+                song__in=[section.song for section in sections]
+            )
             sections += equivalents
         else:
             sections += sections
 
-        random.seed()
         random.shuffle(sections)
 
         return sections
 
-    def _select_least_played_condition_type_condition_pair(self, session: Session) -> tuple[str, str]:
+    def _select_least_played_condition_type_difficulty_pair(
+        self, session: Session
+    ) -> tuple[str, str]:
         condition_type = self._select_least_played_condition_type(session)
-        condition = self._select_least_played_condition(session, condition_type)
+        condition = self._select_least_played_difficulty(session, condition_type)
 
         return (condition_type, condition)
 
@@ -160,8 +165,6 @@ class MatchingPairs2025(MatchingPairsGame):
             return least_played_overall_condition_types[0]
 
         # If there are still multiple condition types with the same lowest average play count overall per condition in the playlist, select one at random
-        random.seed()
-
         return random.choice(least_played_overall_condition_types)
 
     def _select_least_played_session_condition_types(self, session: Session, participant_specific=False) -> list[str]:
@@ -169,42 +172,43 @@ class MatchingPairs2025(MatchingPairsGame):
         participant_sessions = (
             participant_specific and session.participant.session_set.all() or playlist.session_set.all()
         )
-        all_tags = playlist.section_set.values_list("tag", flat=True).distinct()
+        condition_types = playlist.section_set.values_list(
+            "group", flat=True
+        ).distinct()
         # Extract the first character as the 'condition_type'
-        condition_types = {tag[0] for tag in all_tags}
         condition_type_counts = {ct: 0.0 for ct in condition_types}
 
         for psession in participant_sessions:
             played = psession.json_data.get("conditions", [])
             for ptype, _pcond in played:
                 # Count how many distinct tags exist for this condition type
-                total_for_ptype = sum(1 for t in all_tags if t[0] == ptype)
+                total_for_ptype = sum(1 for t in condition_types if t == ptype)
                 if total_for_ptype:
                     condition_type_counts[ptype] += 1.0 / total_for_ptype
 
         min_avg = min(condition_type_counts.values())
         return [ct for ct, val in condition_type_counts.items() if val == min_avg]
 
-    def _select_least_played_condition(self, session: Session, condition_type) -> str:
-        least_played_participant_conditions = self._select_least_played_session_conditions(
-            session, condition_type, participant_specific=True
+    def _select_least_played_difficulty(self, session: Session, condition_type) -> str:
+        least_played_participant_difficulty = (
+            self._select_least_played_session_difficulty(
+                session, condition_type, participant_specific=True
+            )
         )
 
-        if len(least_played_participant_conditions) == 1:
-            return least_played_participant_conditions[0]
+        if len(least_played_participant_difficulty) == 1:
+            return least_played_participant_difficulty[0]
 
-        least_played_overall_conditions = self._select_least_played_session_conditions(
+        least_played_overall_difficulty = self._select_least_played_session_difficulty(
             session, condition_type, participant_specific=False
         )
 
-        if len(least_played_overall_conditions) == 1:
-            return least_played_overall_conditions[0]
+        if len(least_played_overall_difficulty) == 1:
+            return least_played_overall_difficulty[0]
 
-        random.seed()
+        return random.choice(least_played_overall_difficulty)
 
-        return random.choice(least_played_overall_conditions)
-
-    def _select_least_played_session_conditions(
+    def _select_least_played_session_difficulty(
         self, session: Session, condition_type, participant_specific=False
     ) -> list[str]:
         playlist = session.playlist
@@ -212,10 +216,10 @@ class MatchingPairs2025(MatchingPairsGame):
             participant_specific and session.participant.session_set.all() or playlist.session_set.all()
         )
         # All tags starting with condition_type
-        relevant_tags = playlist.section_set.filter(tag__startswith=condition_type).values_list("tag", flat=True)
-        # The second char is the condition number
-        unique_conds = {t[1] for t in relevant_tags}
-        cond_play_counts = {c: 0 for c in unique_conds}
+        relevant_tags = playlist.section_set.filter(group=condition_type).values_list(
+            "tag", flat=True
+        )
+        cond_play_counts = {c: 0 for c in relevant_tags}
 
         for psession in participant_sessions:
             played = psession.json_data.get("conditions", [])
@@ -227,14 +231,16 @@ class MatchingPairs2025(MatchingPairsGame):
         min_count = min(cond_play_counts.values())
         return [c for c, val in cond_play_counts.items() if val == min_count]
 
-    def _select_least_played_sections(self, session: Session, condition_type, condition) -> list[Section]:
+    def _select_least_played_sections(
+        self, session: Session, condition_type: str, difficulty: str
+    ) -> list[Section]:
         participant_result_sections = session.participant.result_set.filter(
             session__playlist=session.playlist
         ).values_list("section", flat=True)
 
-        # Combine first and second char to form the tag
-        combined_tag = f"{condition_type}{condition}"
-        sections = session.playlist.section_set.filter(tag=combined_tag)
+        sections = session.playlist.section_set.filter(
+            group=condition_type, tag=difficulty
+        )
 
         # Count the number of times each section has been played by the participant
         section_play_counts = {section: 0 for section in sections}
@@ -262,14 +268,16 @@ class MatchingPairs2025(MatchingPairsGame):
 
         final_text = """
         <p>{outperformed}</p>
-        
+
         <table>
             <tr><td>{this_game}</td><td>{game_score}</td></tr>
             <tr><td>{personal_best}</td><td>{best_score}</td></tr>
             <tr><td>{average}</td><td>{avg_score}</td></tr>
         </table>
         """.format(
-            outperformed=_("You outperformed {}% of the players!").format(percentile_rounded),
+            outperformed=_("You outperformed {}% of the players!").format(
+                percentile_rounded
+            ),
             this_game=_("This game"),
             game_score=game_score,
             personal_best=_("Personal Best"),
@@ -284,3 +292,15 @@ class MatchingPairs2025(MatchingPairsGame):
     def _get_percentile_rank(self):
         # Custom percentile rank calculation
         raise NotImplementedError
+
+    def get_info_playlist(self, section_path: str):
+        path, filename = split(section_path)
+        filename_components = filename.split('_')
+        output = {'artist': filename_components[1], 'song': filename_components[2]}
+        head, tail = split(path)
+        if tail == 'O':
+            output.update({'group': 'Original', 'tag': 0})
+        else:
+            top_directory = split(head)[1]
+            output.update({'group': top_directory, 'tag': tail[1]})
+        return output
