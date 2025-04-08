@@ -12,7 +12,7 @@ import classNames from "@/util/classNames";
 import TuneTwins from "@/components/MCGTheme/logos/TuneTwins"
 import Timeline, { TIMELINE_SYMBOLS, TimelineConfig } from "@/components/game/Timeline/Timeline";
 import { colors } from "@/components/MCGTheme/colors";
-import ProgressBar from "@/components/MCGTheme/ProgressBar";
+import { ScoreBar } from "../ScoreBar";
 import { ScoreDisplay as Score } from "../ScoreDisplay";
 
 // TODO use scoped scss
@@ -169,14 +169,14 @@ export default function ScoreBoard({
                 <><SectionLabel style={{ maxWidth: "70%" }}>
                   {renderTemplate(templates.percentileAboveCutoff, templateData)}
                 </SectionLabel>
-                  <ProgressBar progress={percentile} />
+                  <ScoreBar value={percentile} />
                 </>
                 : <>
                   <SectionLabel>
                     {console.log(renderTemplate(templates.percentileBelowCutoff, templateData))}
                     {renderTemplate(templates.percentileBelowCutoff, templateData)}
                     </SectionLabel>
-                  <ProgressBar progress={percentileCutoff} />
+                  <ScoreBar value={percentileCutoff} />
                 </>}
                 
             </div>
