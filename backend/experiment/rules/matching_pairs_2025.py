@@ -38,13 +38,11 @@ class MatchingPairs2025(MatchingPairsGame):
 
     def next_round(self, session: Session):
         if session.get_rounds_passed() < 1:
-            intro_explainer = self.get_intro_explainer()
-            playlist = PlaylistAction(session.block.playlists.all())
-
-            # TODO: Find a way to only show the intro explainer if the participant has not played this game before while avoiding the issue of an AudioContext not being available as the user hasn't interacted with the page yet
-            # has_played_before = self._has_played_before(session)
-            # actions = [intro_explainer, playlist] if not has_played_before else [playlist]
-            actions = [intro_explainer, playlist]
+            actions = (
+                [self.get_intro_explainer()]
+                if not self._has_played_before(session)
+                else []
+            )
 
             questions = self.get_open_questions(session)
             if questions:
@@ -57,6 +55,8 @@ class MatchingPairs2025(MatchingPairsGame):
                 )
                 actions.append(intro_questions)
                 actions.extend(questions)
+            if not actions:
+                actions.append(self.get_short_explainer())
             trial = self.get_matching_pairs_trial(session)
             actions.append(trial)
             return actions
@@ -66,6 +66,9 @@ class MatchingPairs2025(MatchingPairsGame):
         session.save()
 
         return self._get_final_actions(session)
+
+    def get_short_explainer(self):
+        return Explainer("Click to start!", steps=[])
 
     def _get_final_actions(self, session: Session):
         accumulated_score = session.participant.session_set.aggregate(total_score=models.Sum("final_score"))[
@@ -139,6 +142,11 @@ class MatchingPairs2025(MatchingPairsGame):
         random.shuffle(sections)
 
         return sections
+
+    def evaluate_sections_equal(
+        self, first_section: Section, second_section: Section
+    ) -> bool:
+        return first_section.song == second_section.song
 
     def _select_least_played_condition_type_difficulty_pair(
         self, session: Session
@@ -299,7 +307,7 @@ class MatchingPairs2025(MatchingPairsGame):
         output = {'artist': filename_components[1], 'song': filename_components[2]}
         head, tail = split(path)
         if tail == 'O':
-            output.update({'group': 'Original', 'tag': 0})
+            output.update({'group': 'O', 'tag': 0})
         else:
             top_directory = split(head)[1]
             output.update({'group': top_directory, 'tag': tail[1]})
