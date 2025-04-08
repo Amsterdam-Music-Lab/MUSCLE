@@ -45,9 +45,9 @@ class Command(BaseCommand):
         name = options.get('artist_default')
         upload_dir = settings.MEDIA_ROOT
         playlist_dir = join(upload_dir, directory)
-        search_critera = glob(f'{playlist_dir}/**/*.wav', recursive=True) + glob(
-            f'{playlist_dir}/**/*.mp3', recursive=True
-        )
+        search_criteria = glob(
+            '**/*.wav', root_dir=playlist_dir, recursive=True
+        ) + glob('**/*.mp3', root_dir=playlist_dir, recursive=True)
         song_names_option = options.get('song_names')
         if song_names_option:
             with open(join(playlist_dir, song_names_option)) as json_file:
@@ -55,12 +55,12 @@ class Command(BaseCommand):
         block_option = options.get('block')
         with open(join(playlist_dir, 'audiofiles.csv'), 'w+') as f:
             csv_writer = csv.writer(f)
-            for i, audio_file in enumerate(search_critera):
+            for i, audio_file in enumerate(search_criteria):
                 # set defaults
                 artist_name = name
                 song_name = name
                 tag = group = '0'
-                filename = join(directory, basename(audio_file))
+                filename = join(directory, audio_file)
                 audio_file_clean = splitext(basename(audio_file))[0]
                 if song_names_option:
                     artist_name = song_names[audio_file_clean]
@@ -75,7 +75,7 @@ class Command(BaseCommand):
                 else:
                     song_name = audio_file_clean
                 start_position = 0.0
-                with audioread.audio_open(audio_file) as f:
+                with audioread.audio_open(join(playlist_dir, audio_file)) as f:
                     duration = f.duration
                 group_tag_option = options.get('tag_group')
                 if group_tag_option:
