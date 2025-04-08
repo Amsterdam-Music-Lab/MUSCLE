@@ -1,4 +1,12 @@
-@keyframes starAnimation {
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ * 
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+ 
+ @keyframes starAnimation {
     0% {
       transform: scale(0);
       opacity: 0;

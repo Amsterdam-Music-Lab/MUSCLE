@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ * 
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
 import classNames from "@/util/classNames";
 
 // Local imports
@@ -31,17 +39,64 @@ const Trophy = ({ name }: { name: string }) => {
   )
 }
 
+export function renderTemplate(
+  template: string,
+  data: Record<string, string | number>
+): string {
+  return template.replace(/{{\s*(\w+)\s*}}/g, (_, key) => {
+    const value = data[key];
+    return value !== undefined ? String(value) : '';
+  });
+}
+
+const defaultLabels = {
+  score: "Last game",
+  totalScore: "Total score",
+  percentileAboveCutoff: "Congrats! You did better than {{percentile}}% of players at this level",
+  percentileBelowCutoff: "Congrats! You did better than {{percentileCutoff}}% of players at this level",
+  trophy: "Yay, you've earned a star!",
+  timeline: "Your progress",
+}
+
 interface ScoreBoardProps {
   score?: number;
+
+  /** Total score */
   totalScore?: number;
+
+  /** The percentile */
   percentile?: number;
+
+  /** The timeline configuration */
   timeline?: TimelineConfig;
+
+  /** The current step on the timeline */
   step?: number;
+
+  /** The percentile cutoff below which another message is shown. */
   percentileCutoff: number;
+
+  /** An optional logo displayed at the top */
+  logo: React.ReactNode;
+
+  /** Whether to show the percentile progres bar */
   showPercentile: boolean;
+
+  /** Whether to show the scores */
   showScores: boolean;
+
+  /** Whether to show the timelie */
   showTimeline: boolean;
-  showTrophy: true;
+
+  /** Whether to sho the trophy */
+  showTrophy: boolean;
+
+  /** 
+   * Labels used in the scoreboard. These are template strings of the form
+   * "You scored {{score}} points". You can access the variables score, totalScore
+   * percentile, percentileCutoff, step, numSteps.
+   */
+  labels?: Record<string, string>
 }
 
 export default function ScoreBoard({
@@ -50,17 +105,30 @@ export default function ScoreBoard({
   percentile,
   timeline,
   step,
+  logo,
   percentileCutoff = 30,
   showPercentile = true,
   showScores = true,
   showTimeline = true,
-  showTrophy = true
+  showTrophy = true,
+  labels = {},
 }: ScoreBoardProps) {
 
   const hasPercentile = typeof percentile === 'number' && percentile >= 0 && percentile <= 100;
   const hasTimeline = timeline !== undefined && step !== undefined;
   const hasTrophy = hasTimeline && timeline[step].trophy
   const Trophy = hasTrophy ? TIMELINE_SYMBOLS[timeline[step].symbol] || null : null;
+
+  // Label templates
+  const templates = {...defaultLabels, ...labels}
+  const templateData = {
+    score, 
+    totalScore, 
+    percentile: Math.round(percentile),
+    percentileCutoff, 
+    step,
+    numSteps: timeline?.length,
+  }
 
   return (
     <div className="score-board card bg-inset-sm rounded-lg">
@@ -71,14 +139,14 @@ export default function ScoreBoard({
       <div className="capture position-relative">
 
         {/* TuneTwins logo */}
-        <div className="pl-2 px-4">
-          <TuneTwins width="200px" />
-        </div>
+        {logo && <div className="pl-2 px-4">{logo}</div>}
 
         {/* Star */}
         {showTrophy && hasTrophy &&
           <div className="trophy position-absolute d-flex justify-content-end w-100">
-            <p className="label text-white font-weight-bolder">You've earned a star!</p>
+            <p className="label text-white font-weight-bolder">
+              {renderTemplate(templates.trophy, templateData)}
+            </p>
             <div className="position-absolute">
               {Trophy &&
                 <Trophy
@@ -99,14 +167,15 @@ export default function ScoreBoard({
               {percentile > percentileCutoff
                 ?
                 <><SectionLabel style={{ maxWidth: "70%" }}>
-                  Congrats! You did better than{" "}
-                  <span className="bolder">{`${Math.round(percentile)}%`}</span>{" "}
-                  of players at this level
+                  {renderTemplate(templates.percentileAboveCutoff, templateData)}
                 </SectionLabel>
                   <ProgressBar progress={percentile} />
                 </>
                 : <>
-                  <SectionLabel>{`Well done! You did better than <${percentileCutoff}% of people at this level.`}</SectionLabel>
+                  <SectionLabel>
+                    {console.log(renderTemplate(templates.percentileBelowCutoff, templateData))}
+                    {renderTemplate(templates.percentileBelowCutoff, templateData)}
+                    </SectionLabel>
                   <ProgressBar progress={percentileCutoff} />
                 </>}
                 
@@ -119,8 +188,12 @@ export default function ScoreBoard({
             <div className="list-group-item p-4 bg-transparent">
               {/* <SectionLabel>Your scores</SectionLabel> */}
               <div className="d-flex">
-                <div style={{ width: "50%" }}><Score score={score} label="Last game" /></div>
-                <div style={{ width: "50%" }}><Score score={totalScore} label="Total score" /></div>
+                <div style={{ width: "50%" }}>
+                  <Score score={score} label={renderTemplate(templates.score, templateData)} />
+                </div>
+                <div style={{ width: "50%" }}>
+                  <Score score={totalScore} label={renderTemplate(templates.totalScore, templateData)} />
+                </div>
               </div>
             </div>
           )}
@@ -129,7 +202,7 @@ export default function ScoreBoard({
           {showTimeline && hasTimeline && (
             <div className="list-group-item p-4 bg-transparent">
               {/* The label should depend on the step in the timeline */}
-              <SectionLabel>Your progress...</SectionLabel>
+              <SectionLabel>{renderTemplate(templates.timeline, templateData)}</SectionLabel>
               <Timeline timeline={timeline} step={step + 1} spine={true} />
             </div>
           )}

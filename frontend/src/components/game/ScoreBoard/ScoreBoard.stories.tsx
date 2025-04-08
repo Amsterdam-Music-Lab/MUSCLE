@@ -7,6 +7,7 @@
  */
 
 import ScoreBoard from "./ScoreBoard";
+import { getTimeline } from "../Timeline";
 
 const decorator = (Story) => (
   <div style={{ padding: "1rem", background: "#f5f5f5" }}>
@@ -31,4 +32,46 @@ export const Default = {
   },
   decorators: [decorator]
 };
+
+
+export const BelowCutoff = {
+  args: {
+    score: 123,
+    totalScore: 456,
+    percentile: 20,
+    percentileCutoff: 25,
+  },
+  decorators: [decorator]
+};
+
+const timeline = getTimeline({
+    symbols: ['dot', 'dot', 'star-4', 'dot', 'dot', 'star-5', 'dot', 'dot', 'star-6'],
+})
+
+export const Timeline = {
+  args: {
+    score: 123,
+    totalScore: 456,
+    percentile: 59,
+    timeline: timeline,
+    step: 5
+  },
+  decorators: [decorator]
+};
+
+export const CustomLabels = {
+  args: {
+    score: 123,
+    totalScore: 456,
+    percentile: 59,
+    timeline: timeline,
+    step: 5,
+    labels: {
+      score: "You've earned points!",
+      totalScore: "Total of {{totalScore}} points!"
+    }
+  },
+  decorators: [decorator]
+};
+
 
