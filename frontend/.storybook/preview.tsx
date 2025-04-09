@@ -3,6 +3,7 @@ import "../public/vendor/bootstrap/bootstrap.min.css";
 import "../src/index.scss";
 import { initAudioListener } from "../src/util/audio";
 import { initWebAudioListener } from "../src/util/webAudio";
+import { ThemeProvider } from "../src/theme/ThemeProvider";
 
 // Init audio listener
 initAudioListener();
@@ -14,6 +15,13 @@ initialize({
         url: './mockServiceWorker.js',
     },
 });
+
+const withThemeProvider = (Story) => (
+    <ThemeProvider>
+      <Story />
+    </ThemeProvider>
+  );
+  
 
 /** @type { import('@storybook/react').Preview } */
 const preview = {
@@ -27,6 +35,7 @@ const preview = {
     },
     // Provide the MSW addon loader globally
     loaders: [mswLoader],
+    decorators: [withThemeProvider],
 };
 
 

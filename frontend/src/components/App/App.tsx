@@ -22,6 +22,8 @@ import { InternalRedirect } from "../InternalRedirect/InternalRedirect";
 import Helmet from "@/components/Helmet/Helmet";
 import Redirect from "@/components/Redirect/Redirect";
 
+import { ThemeProvider } from "@/theme/ThemeProvider";
+
 // App is the root component of our application
 const App = () => {
     const error = useBoundStore(state => state.error);
@@ -58,7 +60,7 @@ const App = () => {
     }
 
     return (
-        <>
+        <ThemeProvider>
             <Helmet />
             <Router className="aha__app">
                 <ConditionalRender condition={!!participant} fallback={<LoaderContainer />}>
@@ -92,7 +94,7 @@ const App = () => {
                     </Routes>
                 </ConditionalRender>
             </Router >
-        </>
+        </ThemeProvider>
     );
 };
 
