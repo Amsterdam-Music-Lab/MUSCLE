@@ -39,8 +39,7 @@ export const Alternative = {
     decorators: [decorator]
 };
 
-
-export const FancyFill = {
+export const CustomFill = {
     args: {
         timeline: timeline,
         step: 4,
@@ -63,6 +62,33 @@ export const NoSpine = {
         timeline: timeline,
         step: 5,
         showSpine: false,
+    },
+    decorators: [decorator]
+};
+
+export const NoVariant = {
+    args: {
+        timeline: timeline2,
+        step: 7,
+        variant: null
+    },
+    decorators: [decorator]
+};
+
+export const PrimaryVariant = {
+    args: {
+        timeline: timeline2,
+        step: 7,
+        variant: "primary"
+    },
+    decorators: [decorator]
+};
+
+export const SecondaryVariant = {
+    args: {
+        timeline: timeline2,
+        step: 7,
+        variant: "secondary"
     },
     decorators: [decorator]
 };

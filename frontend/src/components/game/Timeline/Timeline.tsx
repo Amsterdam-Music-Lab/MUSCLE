@@ -8,7 +8,9 @@
 
 import classNames from "classnames"
 import { Star, Dot, Fill } from "@/components/svg";
-import styles from "./Timeline.module.scss";
+import styles from "./Timeline.module.scss"
+import { type Variant } from "@/theme/themes";
+import { getVariantFill } from "@/util/getVariantFill";
 
 type TimelineSymbolName = 'dot' | 'star' | 'star-4' | 'star-5' | 'star-6' | 'star-7' | null;
 
@@ -100,6 +102,9 @@ interface TimelineProps {
 
   /** Whether to show the symbols at all (or just the spine) */
   showSymbols?: boolean;
+
+  /** Theme variant. If set, this overrides fillPast. */
+  variant?: Variant;
 }
 
 /**
@@ -115,7 +120,11 @@ export default function Timeline({
   animate = true,
   showSpine = true,
   showSymbols = true,
-}: TimelineProps) {  
+  variant="primary",
+}: TimelineProps) {
+  if(variant){
+    fillPast = getVariantFill(variant);
+  }
   // Determine default bg fill of the spine:
   // Use the fillPast/future colors if they are strings, 
   // or make a gradient otherwise.
