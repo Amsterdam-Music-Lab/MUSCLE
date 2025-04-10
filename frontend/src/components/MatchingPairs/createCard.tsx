@@ -12,7 +12,7 @@ import { AudioCard } from "./AudioCard";
 import { VisualCard } from "./VisualCard";
 import { Card } from "./Card";
 
-interface CreateCardProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface CreateCardProps extends React.HTMLAttributes<HTMLDivElement> {
   /** The view type */
   type: "visual" | "audio";
   
