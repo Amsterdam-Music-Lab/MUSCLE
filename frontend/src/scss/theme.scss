@@ -1,0 +1,60 @@
+body,
+.theme-root {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-color: var(--background, #fff);
+  background-image: var(--background-url, "");
+
+  font-family: var(--font-family, sans-serif);
+  font-size: 16px;
+}
+
+
+// Gradients
+
+@function gradient-fill(
+  $start-color, 
+  $end-color, 
+  $scale: 1,
+  $offset: 0, 
+  $angle: 70, 
+) {
+  @return linear-gradient(
+    calc(#{$angle} * 1deg),
+    #{$start-color} calc(100% * #{$offset} - 100% * (#{$scale} - 1)),
+    #{$end-color} calc(100% * #{$offset} + 100% + 100% * (#{$scale} - 1))
+  );
+}
+
+.fill-primary,
+.text-fill-primary {
+  background: gradient-fill(
+    var(--primary-start-color),
+    var(--primary-end-color),
+    var(--primary-scale, 1),
+    var(--primary-offset, 0),
+    var(--primary-angle, 70),
+  )
+}
+
+.fill-secondary,
+.text-fill-secondary {
+  background: gradient-fill(
+    var(--secondary-start-color),
+    var(--secondary-end-color),
+    var(--secondary-scale, 1),
+    var(--secondary-offset, 0),
+    var(--secondary-angle, 70),
+  )
+}
+
+.text-fill-primary, 
+.text-fill-secondary {
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  // To make sure it's not too wide
+  display: inline-block;
+}
