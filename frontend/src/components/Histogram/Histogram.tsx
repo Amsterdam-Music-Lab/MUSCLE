@@ -1,137 +1,111 @@
 import React, { useEffect, useRef, useState } from 'react';
-import classNames from 'classnames';
 import useBoundStore from '@/util/stores';
+import { BarPlot, BarPlotProps } from '@/components/game';
 
-interface HistogramProps {
+export interface HistogramProps extends BarPlotProps {
+    /** The number of bars in the histogram */
     bars?: number;
-    spacing?: number;
+
+    /** Whether the histogram is being updated */
     running?: boolean;
-    marginLeft?: number;
-    marginTop?: number;
-    backgroundColor?: string;
-    borderRadius?: string;
+
+    /** 
+     * Whether to randomize bar heights. If no buffer is present, the
+     * histogram will also be random.
+     */
     random?: boolean;
+
     /**
      * If `random` is `true`, this prop sets the update interval in milliseconds.
-     * Default is 100 ms.
-     * Ignored when `random` is `false`.
+     * Default is 100 ms. Ignored when `random` is `false`.
      */
     interval?: number;
 }
 
+
+/**
+ * A continuously updated histogram showing either random data
+ * or the frequency data from the audio context. Note that the 
+ * component mostly provides the frequency data, the actual visualization
+ * is handled by the BarPlot component.
+ */
 const Histogram: React.FC<HistogramProps> = ({
     bars = 8,
-    spacing = .4,
     running = true,
-    marginLeft = 0,
-    marginTop = 0,
-    backgroundColor = undefined,
-    borderRadius = '0.15rem',
     random = false,
     interval = 200,
+    ...props
 }) => {
-    const [frequencyData, setFrequencyData] = useState<Uint8Array>(new Uint8Array(bars));
-
+    const [data, setData] = useState<Uint8Array>(new Uint8Array(bars));
     const currentAction = useBoundStore((state) => state.currentAction);
-    const isBuffer = currentAction?.playback?.play_method === 'BUFFER';
-
-    const shouldRandomize = random || !isBuffer;
-
     const animationFrameRef = useRef<number>();
     const intervalRef = useRef<number>();
 
+    const isBuffer = currentAction?.playback?.play_method === 'BUFFER';
+    const randomize = random || !isBuffer;
+
+    const stopAnimation = () => {
+        if (animationFrameRef.current) {
+            cancelAnimationFrame(animationFrameRef.current);
+        }
+    }
+
+    const stopInterval = () => {
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+        }
+    }
+
     useEffect(() => {
         if (!running) {
-            if (animationFrameRef.current) {
-                cancelAnimationFrame(animationFrameRef.current);
-            }
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current);
-            }
-            const emptyHistogram = new Uint8Array(bars);
-            setFrequencyData(emptyHistogram);
+            stopAnimation()
+            stopInterval();
+            setData(new Uint8Array(bars));
             return;
         }
 
-        const updateFrequencyData = () => {
-            let dataWithoutExtremes: Uint8Array;
+        // Update the histogram data
+        const update = () => {
+            let newData: Uint8Array;
 
-            if (shouldRandomize) {
+            if (randomize) {
                 // Generate random frequency data
-                dataWithoutExtremes = new Uint8Array(bars);
+                newData = new Uint8Array(bars);
                 for (let i = 0; i < bars; i++) {
-                    dataWithoutExtremes[i] = Math.floor(Math.random() * 256);
+                    newData[i] = Math.floor(Math.random() * 256);
                 }
-                setFrequencyData(dataWithoutExtremes);
+                setData(newData);
             } else if (window.audioContext && window.analyzer) {
-                const data = new Uint8Array(bars + 3);
-                window.analyzer.getByteFrequencyData(data);
+                const freqData = new Uint8Array(bars + 3);
+                window.analyzer.getByteFrequencyData(freqData);
                 // Remove the lower end of the frequency data
-                dataWithoutExtremes = data.slice(3, bars + 3);
-                setFrequencyData(dataWithoutExtremes);
-                animationFrameRef.current = requestAnimationFrame(updateFrequencyData);
+                newData = freqData.slice(3, bars + 3);
+                setData(newData);
+                animationFrameRef.current = requestAnimationFrame(update);
                 return; // Exit the function to prevent setting another interval
             } else {
-                dataWithoutExtremes = new Uint8Array(bars);
-                setFrequencyData(dataWithoutExtremes);
+                newData = new Uint8Array(bars);
+                setData(newData);
             }
         };
 
-        if (shouldRandomize) {
-            // Use setInterval when shouldRandomize is true
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current);
-            }
-            intervalRef.current = window.setInterval(updateFrequencyData, interval);
+        if (randomize) {
+            stopInterval();
+            intervalRef.current = window.setInterval(update, interval);
         } else {
-            // Use requestAnimationFrame when shouldRandomize is false
-            if (animationFrameRef.current) {
-                cancelAnimationFrame(animationFrameRef.current);
-            }
-            animationFrameRef.current = requestAnimationFrame(updateFrequencyData);
+            stopAnimation();
+            animationFrameRef.current = requestAnimationFrame(update);
         }
 
         return () => {
-            if (animationFrameRef.current) {
-                cancelAnimationFrame(animationFrameRef.current);
-            }
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current);
-            }
+            stopAnimation();
+            stopInterval();
         };
-    }, [running, bars, shouldRandomize, interval]);
 
-    // @BC bar width adjusted dynamically (using flex-grow: 1); 
-    // only specify the gap between them (as a percentage)
+    }, [running, bars, randomize, interval]);
 
-    return (
-        <div
-            className={classNames('aha__histogram', { active: running })}
-            style={{
-                height: '100%',
-                marginLeft,
-                marginTop,
-                gap: `${spacing * 100 / bars}%`,
-                width: '100%',
-                borderRadius,
-                display: 'flex',
-                alignItems: 'flex-start',
-            }}
-        >
-            {Array.from({ length: bars }, (_, index) => (
-                <div
-                    key={index}
-                    style={{
-                        height: `${(frequencyData[index] / 255) * 100}%`,
-                        backgroundColor: 'currentColor',
-                        transition: shouldRandomize
-                            ? `height ${interval / 1000}s ease`
-                            : 'height 0.05s ease',
-                    }}
-                />
-            ))}
-        </div>
-    );
+    return <BarPlot data={[...data]} min={0} max={255} {...props} />
+
 };
 
 export default Histogram;
