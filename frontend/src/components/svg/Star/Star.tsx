@@ -8,7 +8,9 @@
 
 import React from "react"
 import { Gradient } from "../Gradient";
+import { type Variant } from "@/theme/themes";
 import { type Fill } from "../types";
+import { getVariantFill } from "../../../util/getVariantFill";
 
 interface CreateStarPathProps {
   /** The x-coordinate of the center */
@@ -95,6 +97,9 @@ interface BasicSVGStarProps {
    * When maxRadiusFactor=0, the star is infinitely small.
    */
   starSize?: number;
+
+  /** Theme variant. If set, this overrides the fill. */
+  variant?: Variant;
 }
 
 
@@ -125,6 +130,7 @@ export default function SVGStar({
   sharpness = .6,
   circleStrokeWidth = 0.2,
   circleStroke = "#ffffff33",
+  variant,
   ...props
 }: SVGStarProps) {
   // A unique id to reference svg elements
@@ -133,6 +139,10 @@ export default function SVGStar({
   // If no circle is shown, use maximum star size.
   if(!showCircle) {
     starSize = 1;
+  }
+  
+  if(variant) {
+    fill = getVariantFill(variant);
   }
 
   const center = size / 2; // Center the star

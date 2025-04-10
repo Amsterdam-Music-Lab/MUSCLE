@@ -77,3 +77,19 @@ export const GreenGradientYellowStroke = {
     },
     decorators: [decorator]
 };
+
+export const PrimaryVariant = {
+    args: {
+        size: 100,
+        variant: "primary"
+    },
+    decorators: [decorator]
+};
+
+export const SecondaryVariant = {
+    args: {
+        size: 100,
+        variant: "secondary"
+    },
+    decorators: [decorator]
+};
