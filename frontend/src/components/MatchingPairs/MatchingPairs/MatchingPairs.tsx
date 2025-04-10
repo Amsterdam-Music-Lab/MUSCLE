@@ -1,20 +1,21 @@
+// TODO DO NOT USE YET
+
 import { useRef, useState } from "react";
 import classNames from "classnames";
 
 import { scoreIntermediateResult } from "@/API";
 import useBoundStore from "@/util/stores";
 
-import PlayCard from "./PlayCard";
-import { Card } from "@/types/Section";
+import { type CardType } from "@/types/Section";
 import Session from "@/types/Session";
 import Participant from "@/types/Participant";
-import Overlay from "../Overlay/Overlay";
+import Overlay from "../../Overlay/Overlay";
 import { ScoreFeedbackDisplay } from "@/types/Playback";
 
 import { Timeline, getTimeline } from "@/components/game";
-import PlayingBoard from "@/components/MatchingPairs/PlayingBoard";
-import TuneTwins from "@/components/MCGTheme/logos/TuneTwins"
-import Score from "@/components/MCGTheme/Score";
+import { Board } from "../Board";
+import createCard from "../createCard";
+
 
 export const SCORE_FEEDBACK_DISPLAY: { [key: string]: ScoreFeedbackDisplay } = {
     SMALL_BOTTOM_RIGHT: 'small-bottom-right',
@@ -24,7 +25,7 @@ export const SCORE_FEEDBACK_DISPLAY: { [key: string]: ScoreFeedbackDisplay } = {
 
 interface MatchingPairsProps {
     playSection: (index: number) => void;
-    sections: Card[];
+    sections: CardType[];
     playerIndex: number;
     showAnimation: boolean;
     finishedPlaying: () => void;
@@ -81,8 +82,6 @@ const MatchingPairs = ({
         content: '',
         completed: [] as ScoreType[],
     });
-
-    const columnCount = sections.length > 6 ? 4 : 3;
 
     const participant = useBoundStore(state => state.participant) as Participant;
     const session = useBoundStore(state => state.session) as Session;
@@ -245,15 +244,15 @@ const MatchingPairs = ({
 
         const updatedSections = sections.map(section => {
             if (score === 10 || score === 20) {
-                if (section.id === firstCard?.id || section.id === secondCard?.id) {
-                    section.inactive = true;
-                }
+              if (section.id === firstCard?.id || section.id === secondCard?.id) {
+                section.inactive = true;
+              }
             }
             return {
-                ...section,
-                turned: false,
-                noevents: false,
-                matchClass: ''
+              ...section,
+              turned: false,
+              noevents: false,
+              matchClass: ''
             };
         });
 
@@ -274,75 +273,77 @@ const MatchingPairs = ({
         }
     }
 
-    const timeline = getTimeline({symbols: ["dot", "dot", "star-4", "dot", "dot", "star-5", "dot", "dot", "star-6", "dot", "dot", "star-7"]})
+    const timeline = getTimeline({
+      symbols: [
+        "dot", "dot", "star-4", "dot", "dot", "star-5", "dot", "dot", "star-6", "dot", "dot", "star-7"
+      ]
+    })
 
     return (
-        <div className="aha__matching-pairs">
+      <div className="aha__matching-pairs">
+        <div className="mp-container">
+          <div className="mp-header">
+            {scoreFeedbackDisplay !== SCORE_FEEDBACK_DISPLAY.HIDDEN &&
+              <ScoreFeedback
+                score={score}
+                total={total}
+                feedbackClass={feedbackClass}
+                feedbackText={feedbackText}
+                scoreFeedbackDisplay={scoreFeedbackDisplay}
+              />
+            }
+          </div>
+
+          <div className="mp-main">
+            <div className="board">
+              <Board columns={4}>
+                {sections.map((card, index) => (
+                  createCard({
+                    key: index,
+                    type: view,
+                    card,
+                    onClick: () => {
+                      playSection(index);
+                      checkMatchingPairs(index);
+                    },
+                    registerUserClicks,
+                    playing: playerIndex === index,
+                    animate: showAnimation,
+                  })
+                ))}
+              </Board>
+            </div>
             
-            <div className="mp-container">
-                
-                    <div className="mp-header">
-                        {scoreFeedbackDisplay !== SCORE_FEEDBACK_DISPLAY.HIDDEN &&
-                            <ScoreFeedback
-                                score={score}
-                                total={total}
-                                feedbackClass={feedbackClass}
-                                feedbackText={feedbackText}
-                                scoreFeedbackDisplay={scoreFeedbackDisplay}
-                            />
-                        }
-                    </div>
-
-                    <div className="mp-main">
-                        <div className="board">
-                            <PlayingBoard columns={4}>
-                                {sections.map((_section, index) => (
-                                    <PlayCard
-                                        key={index}
-                                        onClick={() => {
-                                            playSection(index);
-                                            checkMatchingPairs(index);
-                                        }}
-                                        registerUserClicks={registerUserClicks}
-                                        playing={playerIndex === index}
-                                        section={sections[index]}
-                                        showAnimation={showAnimation}
-                                        view={view} />
-                                    )
-                                )}
-                            </PlayingBoard>
-                        </div>
-                        <div className="timeline-container px-3 px-md-5 mt-3 w-100">
-                            <Timeline timeline={timeline} step={5} />
-                        </div>
-
-                    </div>
-                
-                {/* <div className="mp-footer flex-grow-1 d-flex flex-column justify-content-around" style={{flexBasis:"100px"}}>
-                    <div className="d-block d-md-none d-flex flex-row justify-content-center">
-                        <div style={{width: "150px"}}><TuneTwins fill="#ddd" /></div>
-                    </div>
-                </div> */}
-                
+            <div className="timeline-container px-3 px-md-5 mt-3 w-100">
+              <Timeline timeline={timeline} step={5} />
             </div>
 
-            <div
-                className="matching-pairs__overlay"
-                onClick={finishTurn}
-                style={{ display: inBetweenTurns ? 'block' : 'none' }}
-                data-testid="overlay" />
-
-            <Overlay
-                isOpen={tutorialOverlayState.isOpen}
-                title={tutorialOverlayState.title}
-                content={tutorialOverlayState.content}
-                onClose={() => {
-                    finishTurn();
-                    setTutorialOverlayState({ ...tutorialOverlayState, isOpen: false });
-                }}
-            />
+          </div>
+            
+          {/* <div className="mp-footer flex-grow-1 d-flex flex-column justify-content-around" style={{flexBasis:"100px"}}>
+              <div className="d-block d-md-none d-flex flex-row justify-content-center">
+                  <div style={{width: "150px"}}><TuneTwins fill="#ddd" /></div>
+              </div>
+          </div> */}
+            
         </div>
 
+        <div
+          className="matching-pairs__overlay"
+          onClick={finishTurn}
+          style={{ display: inBetweenTurns ? 'block' : 'none' }}
+          data-testid="overlay" />
+
+        <Overlay
+          isOpen={tutorialOverlayState.isOpen}
+          title={tutorialOverlayState.title}
+          content={tutorialOverlayState.content}
+          onClose={() => {
+            finishTurn();
+            setTutorialOverlayState({ ...tutorialOverlayState, isOpen: false });
+          }}
+        />
+      </div>
     )
 }
 

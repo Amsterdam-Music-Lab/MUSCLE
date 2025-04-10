@@ -1,0 +1,52 @@
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ * 
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+ @import "@/scss/utils.scss";
+
+.board {
+    border-radius: 5%;
+    padding: 3em;
+    min-width: 200px;
+    min-height: 200px;;
+
+    // .square-grid
+    & > div {
+        gap: 1.5em;
+    }
+}
+
+.slot {
+    @extend .bg-inset-xs, .sharp-border;
+    
+    // TODO
+    border-radius: 1.5em;
+
+    & > div {
+        height: 100%;
+    }
+}
+
+@include media-breakpoint-down(md) {
+    .board {
+        padding: 1rem;
+
+        .square-grid {
+            gap: 1rem;
+        }
+    }
+}
+
+@media (max-aspect-ratio: 1/1), (max-height: 500px) {
+    .board {
+        padding: 1rem;
+
+        .square-grid {
+            gap: 1rem;
+        }
+    }
+}
