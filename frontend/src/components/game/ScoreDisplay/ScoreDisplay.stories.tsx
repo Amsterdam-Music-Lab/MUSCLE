@@ -9,7 +9,7 @@
 import ScoreDisplay from "./ScoreDisplay";
 
 const decorator = (Story) => (
-  <div style={{ padding: "1rem", background: "#f5f5f5" }}>
+  <div style={{ padding: "1rem" }}>
       <Story />
   </div>
 );
@@ -63,6 +63,30 @@ export const HTMLAttributes = {
     score: -200,
     label: "Another score",
     style: { background: "#fff", padding: "1em"  },
+  },
+  decorators: [decorator]
+};
+
+export const NoVariant = {
+  args: {
+    score: -200,
+    variant: null
+  },
+  decorators: [decorator]
+};
+
+export const PrimaryVariant = {
+  args: {
+    score: -200,
+    variant: "primary"
+  },
+  decorators: [decorator]
+};
+
+export const SecondaryVariant = {
+  args: {
+    score: -200,
+    variant: "secondary"
   },
   decorators: [decorator]
 };

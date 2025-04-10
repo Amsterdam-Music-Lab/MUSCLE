@@ -8,6 +8,7 @@
 
 import React from "react"
 import classNames from "classnames";
+import { Variant } from "@/theme/themes";
 import "./ScoreDisplay.scss"
 
 interface ScoreProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -25,6 +26,9 @@ interface ScoreProps extends React.HTMLAttributes<HTMLDivElement> {
 
   /** The size of the score in rems. Default 4 */
   size: number;
+
+  /** The variant color */
+  variant: Variant;
 }
 
 /**
@@ -37,6 +41,7 @@ export default function ScoreDisplay({
   units = "pts",
   size = 4, 
   placeholder="??",
+  variant="primary",
   ...props
 }: ScoreProps) {
   const { className, style, ...rest } = props;
@@ -47,8 +52,8 @@ export default function ScoreDisplay({
       {...rest}
     >
       <div className="score">
-        <div className={`value ${score ? 'text-subtle-yellow-pink' : 'text-light-gray'}`}>{score || placeholder}</div>
-        {(units && score) && <span className="units small text-subtle-yellow-pink">{units}</span>}
+        <div className={`value ${score ? `text-fill-${variant}` : 'text-light-gray'}`}>{score || placeholder}</div>
+        {(units && score) && <span className={`text-fill-${variant} units small`}>{units}</span>}
       </div>
       {label && <div className="label text-muted small">{label}</div>}
     </div>
