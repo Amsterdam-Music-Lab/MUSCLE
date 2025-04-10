@@ -30,3 +30,11 @@ export const Gradient = {
     },
     decorators: [decorator]
 };
+
+export const Variant = {
+    args: {
+        size: 100,
+        variant: "primary"
+    },
+    decorators: [decorator]
+};
