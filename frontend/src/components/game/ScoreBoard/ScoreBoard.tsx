@@ -6,6 +6,7 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+import React from "react";
 import classNames from "@/util/classNames";
 
 // Local imports
@@ -14,20 +15,21 @@ import Timeline, { TIMELINE_SYMBOLS, TimelineConfig } from "@/components/game/Ti
 import { colors } from "@/components/MCGTheme/colors";
 import { ScoreBar } from "../ScoreBar";
 import { ScoreDisplay as Score } from "../ScoreDisplay";
-
+import { renderTemplate } from "@/util/renderTemplate";
+import { Star } from "@/components/svg";
 // TODO use scoped scss
 import "./ScoreBoard.module.scss";
 
 
-const SectionLabel = ({ children, className, ...props }) => (
-  <p className={classNames("d-block text-indigo-red fw-semibold mb-2", className)} {...props}>
+const SectionLabel = ({ children, className, variant="primary", ...props }) => (
+  <p className={classNames(`text-fill-${variant}`, "d-block fw-semibold mb-2", className)} {...props}>
     {children}
   </p>
 )
 
 const Trophy = ({ name }: { name: string }) => {
   if (!TIMELINE_SYMBOLS.includes(name)) return null;
-  const Symbol = TIMELINE_SYMBOLS[name]
+  const Symbol = TIMELINE_SYMBOLS[name] as Star
   return (
     <div className="position-absolute" style={{ right: "1em", zIndex: 20, top: "0em" }}>
       <Symbol
@@ -37,16 +39,6 @@ const Trophy = ({ name }: { name: string }) => {
         strokeWidthFactor={.15} />
     </div>
   )
-}
-
-export function renderTemplate(
-  template: string,
-  data: Record<string, string | number>
-): string {
-  return template.replace(/{{\s*(\w+)\s*}}/g, (_, key) => {
-    const value = data[key];
-    return value !== undefined ? String(value) : '';
-  });
 }
 
 const defaultLabels = {
@@ -169,14 +161,13 @@ export default function ScoreBoard({
                 <><SectionLabel style={{ maxWidth: "70%" }}>
                   {renderTemplate(templates.percentileAboveCutoff, templateData)}
                 </SectionLabel>
-                  <ScoreBar value={percentile} />
+                  <ScoreBar value={percentile} variant="primary" />
                 </>
                 : <>
                   <SectionLabel>
-                    {console.log(renderTemplate(templates.percentileBelowCutoff, templateData))}
                     {renderTemplate(templates.percentileBelowCutoff, templateData)}
                     </SectionLabel>
-                  <ScoreBar value={percentileCutoff} />
+                  <ScoreBar value={percentileCutoff} variant="primary" />
                 </>}
                 
             </div>
@@ -189,10 +180,16 @@ export default function ScoreBoard({
               {/* <SectionLabel>Your scores</SectionLabel> */}
               <div className="d-flex">
                 <div style={{ width: "50%" }}>
-                  <Score score={score} label={renderTemplate(templates.score, templateData)} />
+                  <Score 
+                    score={score} 
+                    label={renderTemplate(templates.score, templateData)} 
+                    variant="secondary" />
                 </div>
                 <div style={{ width: "50%" }}>
-                  <Score score={totalScore} label={renderTemplate(templates.totalScore, templateData)} />
+                  <Score 
+                    score={totalScore} 
+                    label={renderTemplate(templates.totalScore, templateData)} 
+                    variant="secondary" />
                 </div>
               </div>
             </div>
@@ -203,7 +200,7 @@ export default function ScoreBoard({
             <div className="list-group-item p-4 bg-transparent">
               {/* The label should depend on the step in the timeline */}
               <SectionLabel>{renderTemplate(templates.timeline, templateData)}</SectionLabel>
-              <Timeline timeline={timeline} step={step + 1} spine={true} />
+              <Timeline timeline={timeline} step={step + 1} spine={true} variant="primary" />
             </div>
           )}
         </div>

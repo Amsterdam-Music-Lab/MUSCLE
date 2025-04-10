@@ -52,7 +52,7 @@ export const Timeline = {
   args: {
     score: 123,
     totalScore: 456,
-    percentile: 59,
+    percentile: 59.123,
     timeline: timeline,
     step: 5
   },
