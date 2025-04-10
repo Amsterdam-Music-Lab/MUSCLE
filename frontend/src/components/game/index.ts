@@ -10,3 +10,4 @@ export * from './Timeline';
 export * from './ScoreDisplay';
 export * from "./ScoreBoard";
 export * from "./ScoreBar";
+export * from "./BarPlot"
