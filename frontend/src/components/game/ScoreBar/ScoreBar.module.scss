@@ -7,22 +7,39 @@
  */
  
  @keyframes scoreBarAppear {
-    0% {
-        transform: translateX(-100%);
-    }
-    20% {
-        transform: translateX(-100%);
-    }
-    100% {
-        transform: translateX(0%)
-    }
+  0% {
+      transform: translateX(-100%);
+  }
+  20% {
+      transform: translateX(-100%);
+  }
+  100% {
+      transform: translateX(0%)
+  }
 }
 
 .scoreBar {
-    --score-bar-height: 2.5em;
-    height: var(--score-bar-height);
+  --score-bar-height: 2em;
+  height: var(--score-bar-height);
+  display: flex;
+  overflow: hidden;
+  
+  & > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    color: #fff;
+    text-align: right;
+    white-space: nowrap;
+    padding: 0 1em;
+
+    background-color: #333;
+
+    transition: width 0.5s ease-in-out;
+  }
 }
 
 .scoreBar.animate div {
-    animation: 1500ms ease-out 0s 1 scoreBarAppear;
+  animation: 1500ms ease-out 0s 1 scoreBarAppear;
 }

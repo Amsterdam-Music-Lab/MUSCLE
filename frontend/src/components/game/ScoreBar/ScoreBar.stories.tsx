@@ -9,13 +9,13 @@
 import ScoreBar from "./ScoreBar";
 
 const decorator = (Story) => (
-  <div style={{ padding: "1rem", background: "#f5f5f5" }}>
+  <div style={{ padding: "1rem" }}>
       <Story />
   </div>
 );
 
 export default {
-  title: "UI/ScoreBar",
+  title: "Game UI/ScoreBar",
   component: ScoreBar,
   parameters: {
       layout: "fullscreen",
@@ -32,12 +32,22 @@ export const Default = {
 };
 
 
-export const DifferentRange = {
+export const NegativeRange = {
   args: {
     min: -50,
     max: 250,
     value: 80,
-    template: "{{value}} points"
+    template: "{{value}} points",
+  },
+  decorators: [decorator]
+};
+
+export const PositiveRange = {
+  args: {
+    min: 50,
+    max: 150,
+    value: 80,
+    template: "{{value}} points",
   },
   decorators: [decorator]
 };
@@ -46,6 +56,32 @@ export const NoAnimation = {
   args: {
     animate: false,
     value: 20
+  },
+  decorators: [decorator]
+}
+
+
+export const NoVariant = {
+  args: {
+    value: 40,
+    variant: null,
+  },
+  decorators: [decorator]
+}
+
+
+export const PrimaryVariant = {
+  args: {
+    value: 40,
+    variant: "primary",
+  },
+  decorators: [decorator]
+}
+
+export const SecondaryVariant = {
+  args: {
+    value: 40,
+    variant: "secondary",
   },
   decorators: [decorator]
 }

@@ -8,23 +8,28 @@
 
 import React from "react"
 import classNames from "classnames"
-import styles from "./Scorebar.module.scss";
+import styles from "./ScoreBar.module.scss";
+import { Variant } from "@/theme/themes";
+import { renderTemplate } from "@/util/renderTemplate";
 
 interface ScoreBarProps extends React.HTMLAttributes<HTMLDivElement> {
   /** The value to show */
-  value: number;
+  value?: number;
   
   /** Minimum value (default 0) */
-  min: number;
+  min?: number;
 
   /** The maximum value (default 100). */
-  max: number;
+  max?: number;
   
   /** A template string for the value, default "{{value}%""} */
-  template: string;
+  template?: string;
 
   /** Whether to animate the bar */
-  animate: boolean;
+  animate?: boolean;
+
+  /** Type of fill */
+  variant?: Variant;
 }
 
 /**
@@ -34,26 +39,34 @@ export default function ScoreBar({
   value = 0,
   min = 0,
   max = 100,
-  template="{{value}}%",
+  template="{{roundedValue}}%",
   animate = true,
-  ...props
+  variant="primary",
+  className,
+  ...rest
 }: ScoreBarProps) {
   const clampedValue = Math.min(Math.max(min, value), max);
-  const percentage = Math.round((clampedValue / (max - min)) * 100);
-  const {className, ...rest} = props
+  const percentage = Math.round(((clampedValue - min) / (max - min)) * 100);
+  const templateData = {
+    value, 
+    roundedValue: Math.round(value), 
+    percentage, 
+    roundedPercentage: Math.round(percentage)
+  }
+  const label = renderTemplate(template, templateData)
   return (
     <div 
-      className={classNames(styles.scoreBar, animate && styles.animate, "progress rounded-sm bg-inset-sm", className)}
+      className={classNames(styles.scoreBar, animate && styles.animate, "rounded-sm bg-inset-sm", className)}
       {...rest}
     >
       <div
-        className="progress-bar bg-indigo-red rounded-sm pr-2 text-right"
+        className={classNames(`fill-${variant}`, "rounded-sm small")}
         role="progressbar"
         style={{ width: `${percentage}%` }}
         aria-valuenow={value}
         aria-valuemin={min}
         aria-valuemax={max}>
-        {template.replace('{{value}}', value)}
+        {label}
       </div>
     </div>
   )
