@@ -3,26 +3,24 @@ import { type Card as CardData } from "@/types/Section";
 import PlayingBoard from "../PlayingBoard";
 import PlayCard from "../PlayCard";
 
-interface MatchingPairsBoardProps 
-  extends Omit<CreateCardProps, "playing" | "key", "onClick"> 
-  {
-    cards: CardData[],
-    columns: number;
-    playerIndex: number;
-    checkMatchingPairs: (index: number) => void;
-    playSection: (index: number) => void;
-  }
+interface MatchingPairsBoardProps
+  extends Omit<CreateCardProps, "playing" | "key" | "onClick" | "card"> {
+  cards: CardData[];
+  columns: number;
+  playerIndex: number;
+  checkMatchingPairs: (index: number) => void;
+  playSection: (index: number) => void;
+}
 
 function MatchingPairsBoard({
   type, // view
   cards, // sections
-  registerUserClicks,
   playerIndex,
   animate, // showAnimation
   columns = 4,
   playSection,
-  checkMatchingPairs
-}) {
+  checkMatchingPairs,
+}: MatchingPairsBoardProps) {
   return (
     <div className="board">
       <PlayingBoard columns={columns}>
@@ -30,19 +28,19 @@ function MatchingPairsBoard({
           <PlayCard
             key={index}
             onClick={() => {
-                playSection(index);
-                checkMatchingPairs(index);
+              playSection(index);
+              checkMatchingPairs(index);
             }}
-            registerUserClicks={registerUserClicks}
+            registerUserClicks={() => {}}
             playing={playerIndex === index}
             section={card}
             showAnimation={animate}
-            view={type} />
-          )
-        )}
+            view={type}
+          />
+        ))}
       </PlayingBoard>
     </div>
-  )
+  );
 }
 
-export default MatchingPairsBoard
+export default MatchingPairsBoard;
