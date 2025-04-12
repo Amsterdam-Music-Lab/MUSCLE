@@ -1,4 +1,4 @@
-import { Card } from "@/types/Section";
+import { CardData } from "./useMatchingPairs";
 import { Tutorial } from "./useTutorial";
 
 /**
@@ -51,9 +51,9 @@ export function updateCards(cards: Card[], updates: Partial<Card>): Card[] {
  * of all the cards.
  */
 export function updateFlippedCards(
-  cards: Card[],
-  updates: Partial<Card>
-): Card[] {
+  cards: CardData[],
+  updates: Partial<CardData>
+): CardData[] {
   return cards.map((card) =>
     card.turned ? { ...card, ...updates } : { ...card }
   );

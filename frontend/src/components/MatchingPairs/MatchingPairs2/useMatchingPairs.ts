@@ -7,10 +7,17 @@
  */
 
 import { useState } from "react";
-import { Card, Card as CardData } from "@/types/Section";
-import { updateCards, updateFlippedCards } from "./utils";
-import { scoreToMatchType } from "./utils";
+import { Session } from "@sentry/react";
+import { Card } from "@/types/Section";
+import Participant from "@/types/Participant";
 import useBoundStore from "@/util/stores";
+import { updateCards, updateFlippedCards } from "./utils";
+
+// TODO rename turned ==> selected
+
+export interface CardData extends Card {
+  comparisonResult?: ComparisonResult;
+}
 
 export enum GameState {
   DEFAULT = "DEFAULT",
@@ -29,55 +36,106 @@ export const isTurnComplete = (gameState: GameState) =>
   gameState === GameState.COMPLETED_NO_MATCH ||
   gameState === GameState.COMPLETED_MISREMEMBERED;
 
-export const MATCH_TYPES = {
-  lucky: {
-    name: "lucky",
-    score: 10,
-    gameState: GameState.COMPLETED_LUCKY_MATCH,
-  },
-  memory: {
-    name: "memory",
-    score: 20,
-    gameState: GameState.COMPLETED_LUCKY_MATCH,
-  },
-  nomatch: {
-    name: "nomatch",
-    className: "fbnomatch",
-    score: 0,
-    gameState: GameState.COMPLETED_NO_MATCH,
-  },
-  misremembered: {
-    name: "misremembered",
-    score: -10,
-    gameState: GameState.COMPLETED_MISREMEMBERED,
-  },
-  default: {
-    name: "default",
-  },
-};
+export interface MatchingPairsStates {
+  gameState: GameState;
+  setGameState: React.Dispatch<React.SetStateAction<GameState>>;
+  cards: CardData[];
+  setCards: React.Dispatch<React.SetStateAction<CardData[]>>;
+  score: number | null;
+  setScore: React.Dispatch<React.SetStateAction<number | null>>;
+  total: number;
+  setTotal: React.Dispatch<React.SetStateAction<number>>;
+  startOfTurn: number;
+  setStartOfTurn: React.Dispatch<React.SetStateAction<number>>;
+}
+
+/**
+ * The possible outcomes of a comparison between two cards.
+ */
+export enum ComparisonResult {
+  LUCKY_MATCH = "LUCKY_MATCH",
+  MEMORY_MATCH = "MEMORY_MATCH",
+  NO_MATCH = "NO_MATCH",
+  MISREMEMBERED = "MISREMEMBERED",
+}
+
+export interface CompareCardsProps extends MatchingPairsStates {
+  /** Participant object */
+  participant: Participant | null;
+
+  /** Session object */
+  session: Session | null;
+}
 
 interface useMatchingPairsProps {
-  initialCards: CardData[];
-  initialScore: number;
+  /** The list of cards */
+  cards: CardData[];
+
+  /** A function that compares two cards and returns a score */
   compareCards: (
     card1: CardData,
     card2: CardData,
-    props: any
-  ) => Promise<number | void>;
-  onFinishTurn?: () => void;
-  onFinishGame?: () => void;
-  onMatch?: (any) => void;
+    props: CompareCardsProps
+  ) => Promise<[ComparisonResult, number] | void>;
+
+  /**
+   * The initial score the game starts with. This will default to the
+   * bonus points, if the block has set any, or zero otherwise.
+   */
+  initialScore?: number;
+
+  /**
+   * Hook called before selecting a pair of cards. The first two arguments are
+   * the two cards (in the order they were selected), the second argument is an
+   * object with all states and state setters for the game.
+   */
+  beforeSelectPair?: (
+    card1: CardData,
+    card2: CardData,
+    states: MatchingPairsStates
+  ) => void;
+
+  /**
+   * Hook called after selecting a pair of cards and completing the comparison.
+   * The first argument will be the result of the comparison, the second an
+   * object with all states and state setters for the game.
+   */
+  afterSelectPair?: (
+    result: ComparisonResult,
+    states: MatchingPairsStates
+  ) => void;
+
+  /**
+   * Hook called on finishing a turn. An object with all states and state setters
+   * is passed to the hook.
+   */
+  onTurnEnd?: (states: MatchingPairsStates) => void;
+
+  /**
+   * Hook called on finishing the entire game.
+   * An object with all states and state setters is passed to the hook.
+   */
+  onGameEnd?: (states: MatchingPairsStates) => void;
 }
 
-export function useMatchingPairsLogic({
-  initialCards,
+export function useMatchingPairs({
+  cards: initialCards,
   initialScore,
-  onFinishTurn = () => {},
-  onFinishGame = () => {},
   compareCards = async () => {},
-  onMatch = () => {},
+  beforeSelectPair = () => {},
+  afterSelectPair = () => {},
+  onTurnEnd = () => {},
+  onGameEnd = () => {},
 }: useMatchingPairsProps) {
+  // Variables bound to global store
+  const block = useBoundStore((s) => s.block);
+  const participant = useBoundStore((s) => s.participant);
+  const session = useBoundStore((s) => s.session);
   const setError = useBoundStore((s) => s.setError);
+
+  // Use bonus points if set as default initialScore, unless something
+  // else is provided.
+  initialScore = initialScore ?? block?.bonus_points ?? 0;
 
   // New state to track card states
   const [cards, setCards] = useState<CardData[]>(() =>
@@ -87,16 +145,31 @@ export function useMatchingPairsLogic({
       noevents: false,
       inactive: false,
       seen: false,
-      matchClass: "",
     }))
   );
-
   const [gameState, setGameState] = useState<GameState>(GameState.DEFAULT);
   const [score, setScore] = useState<number | null>(null);
-  const [total, setTotal] = useState(initialScore);
-  const [startOfTurn, setStartOfTurn] = useState(performance.now());
+  const [total, setTotal] = useState<number>(initialScore);
+  const [startOfTurn, setStartOfTurn] = useState<number>(performance.now());
 
-  const flipCard = async (index: number) => {
+  // Object with all states. This is passed around to all hooks
+  const allStates: MatchingPairsStates = {
+    gameState,
+    setGameState,
+    cards,
+    setCards,
+    score,
+    setScore,
+    total,
+    setTotal,
+    startOfTurn,
+    setStartOfTurn,
+  };
+
+  /**
+   * Function that selects the card with the given index.
+   */
+  const selectCard = async (index: number) => {
     const flippedCards = cards.filter((s) => s.turned);
     const card = cards[index];
     const updatedCard = {
@@ -117,6 +190,9 @@ export function useMatchingPairsLogic({
 
     // One card has been flipped, this is the second
     else if (flippedCards.length === 1) {
+      const [card1, card2] = [flippedCards[0], updatedCard];
+      beforeSelectPair(card1, card2, allStates);
+
       setCards((prev) =>
         prev.map((card, i) =>
           i === index ? updatedCard : { ...card, noevents: true }
@@ -124,37 +200,41 @@ export function useMatchingPairsLogic({
       );
 
       // Process the response
-      let score;
+      let result, resultScore;
       try {
-        const props = { startOfTurn };
-        score = await compareCards(flippedCards[0] as Card, updatedCard, props);
+        const props: CompareCardsProps = { participant, session, ...allStates };
+        const outcome = await compareCards(card1, card2, props);
+        if (!outcome) throw new Error();
+        [result, resultScore] = outcome;
       } catch {
         setError("We cannot currently proceed with the game. Try again later");
         return;
       }
 
-      // Assuming there is no error...
-      if (score) {
-        const matchType = scoreToMatchType(score, MATCH_TYPES);
-        setScore(score);
-        setTotal(total + score);
-        setGameState(matchType.gameState);
-        onMatch(matchType);
+      // Update all states
+      setScore(resultScore);
+      setTotal(total + resultScore);
+      const updates = { seen: true, comparisonResult: result };
+      setCards((prev) => updateFlippedCards(prev, updates));
+      setGameState(GameState[`COMPLETED_${result}`]);
 
-        // Add a feedback class to the flipped cards
-        setCards((prev) =>
-          updateFlippedCards(prev, {
-            matchClass: matchType.className,
-            seen: true,
-          })
-        );
-      }
+      // Call hook
+      afterSelectPair(result, allStates);
     }
   };
 
-  const finishTurn = () => {
-    onFinishTurn();
+  /**
+   * Function that ends the current turn, and prepares the board
+   * for the next turn. If all cards have been removed from the board,
+   * the game ends and onGameEnd is called.
+   *
+   * Note that the function is only executed if the current turn has
+   * indeed been completed.
+   */
+  const endTurn = () => {
+    if (!isTurnComplete(gameState)) return;
     setStartOfTurn(performance.now());
+    onTurnEnd(allStates);
 
     // Inactivate the flipped cards if there was a match
     let updatedCards = cards as CardData[];
@@ -163,7 +243,7 @@ export function useMatchingPairsLogic({
     }
 
     // Reset all cards
-    const updates = { turned: false, noevents: false, matchClass: "" };
+    const updates = { turned: false, noevents: false, comparisonResult: null };
     updatedCards = updateCards(updatedCards, updates);
 
     // Update states
@@ -172,25 +252,12 @@ export function useMatchingPairsLogic({
     // Check if the board is empty
     if (updatedCards.filter((s) => s.inactive).length === cards.length) {
       setGameState(GameState.BOARD_COMPLETED);
-      onFinishGame();
+      onGameEnd(allStates);
     } else {
       setScore(null);
       setGameState(GameState.DEFAULT);
     }
   };
 
-  return {
-    gameState,
-    setGameState,
-    cards,
-    setCards,
-    score,
-    setScore,
-    total,
-    setTotal,
-    startOfTurn,
-    setStartOfTurn,
-    finishTurn,
-    flipCard,
-  };
+  return { ...allStates, endTurn, selectCard };
 }
