@@ -15,9 +15,6 @@ class TestRhythmBatteryFinal(TestCase):
         create_default_questions()
         Experiment.objects.create(
             slug="MARKDOWN_EXPERIMENT",
-            consent=SimpleUploadedFile(
-                "consent.md", b"# test", content_type="text/html"
-            ),
         )
         block = Block.objects.create(slug="test_md", rules=RhythmBatteryFinal.ID)
         block.add_default_question_series()
