@@ -1,0 +1,122 @@
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ * 
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+.matchingPairs {
+  height: 100vh;
+
+  // Center vertically
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.mpHeader {
+  flex-grow: 0;
+  text-align: center;
+}
+
+.mpMain {
+  flex-grow: 1;
+}
+
+///
+/// Animations
+///
+
+@keyframes memory {
+  20% {
+    transform: scale(1.15);
+  }
+  40% {
+    transform: scale(1);
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  80% {
+    transform: scale(1);
+  }
+  95% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes lucky {
+  40% {
+    transform: scale(1.15);
+  }
+  80% {
+    transform: scale(1);
+  }
+  95% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes nomatch {
+  10% {
+    transform: rotate(13deg);
+  }
+  20% {
+    transform: rotate(-13deg);
+  }
+  30% {
+    transform: rotate(11deg);
+  }
+  40% {
+    transform: rotate(-11deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  60% {
+    transform: rotate(-10deg);
+  }
+  70% {
+    transform: rotate(8deg);
+  }
+  80% {
+    transform: rotate(-8deg);
+  }
+  95% {
+    transform: rotate(5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+$delay: 50ms;
+
+.nomatch,
+.misremembered {
+  animation-delay: $delay;
+  animation-duration: 0.7s;
+  animation-name: nomatch;
+  animation-iteration-count: 1;
+}
+
+.lucky {
+  animation-delay: $delay;
+  animation-duration: 0.55s;
+  animation-name: lucky;
+  animation-iteration-count: 1;
+}
+
+.memory {
+  animation-delay: $delay;
+  animation-duration: 0.8s;
+  animation-name: memory;
+  animation-iteration-count: 1;
+}

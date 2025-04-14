@@ -8,7 +8,7 @@ import AutoPlay from "./Autoplay";
 import PlayButton from "../PlayButton/PlayButton";
 import MultiPlayer from "./MultiPlayer";
 import ImagePlayer from "./ImagePlayer";
-import MatchingPairs from "../MatchingPairs/MatchingPairs";
+import {MatchingPairsInterface as MatchingPairs} from "../MatchingPairs";
 import Preload from "../Preload/Preload";
 import { AUTOPLAY, BUTTON, IMAGE, MATCHINGPAIRS, MULTIPLAYER, PRELOAD, PlaybackArgs, PlaybackView } from "@/types/Playback";
 
