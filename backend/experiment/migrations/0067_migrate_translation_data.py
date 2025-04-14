@@ -37,6 +37,8 @@ class Migration(migrations.Migration):
         ExperimentTranslatedContent = apps.get_model('experiment', 'ExperimentTranslatedContent')
         for exp in Experiment.objects.all():
             etcs = ExperimentTranslatedContent.objects.filter(experiment=exp)
+            if not etcs.exists():
+                continue
             min_index = etcs.order_by('index').first().index
             for etc in etcs.all():
                 lang_code = 'zh_hans' if etc.language == 'zh' else etc.language

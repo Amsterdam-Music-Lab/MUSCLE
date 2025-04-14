@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 from django.template import Template, Context
 from django_markup.markup import formatter
 from django.core.files import File
+from django.utils.translation import gettext_lazy as _
 
 from typing import Literal
 
@@ -97,7 +98,12 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
                 ea sea expetenda suscipiantur contentiones."
 
     def __init__(
-        self, text: File, title: str = "Informed consent", confirm: str = "I agree", deny: str = "Stop", url: str = ""
+        self,
+        text: File,
+        title: str = "Informed consent",
+        confirm: str = _("I agree"),
+        deny: str = _("Stop"),
+        url: str = "",
     ) -> None:
         # Determine which text to use
         if text != "":
@@ -115,7 +121,6 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
             render_format = "HTML"
         # render text fot the consent component
         self.text = render_html_or_markdown(dry_text, render_format)
-        breakpoint()
         self.title = title
         self.confirm = confirm
         self.deny = deny

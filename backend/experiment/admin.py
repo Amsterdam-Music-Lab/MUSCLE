@@ -6,7 +6,7 @@ from inline_actions.admin import InlineActionsModelAdminMixin
 from django.urls import reverse
 from django.utils.html import format_html
 
-from modeltranslation.admin import TabbedTranslationAdmin, TranslationTabularInline
+from modeltranslation.admin import TabbedTranslationAdmin
 from nested_admin import NestedModelAdmin, NestedStackedInline, NestedTabularInline
 
 from experiment.models import (
@@ -59,7 +59,9 @@ class SocialMediaConfigInline(NestedStackedInline):
         return 1
 
 
-class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
+class ExperimentAdmin(
+    InlineActionsModelAdminMixin, NestedModelAdmin, TabbedTranslationAdmin
+):
     list_display = (
         "experiment_name",
         "slug_link",

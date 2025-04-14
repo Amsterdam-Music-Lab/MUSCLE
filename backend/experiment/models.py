@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _, get_language
 from django.contrib.postgres.fields import ArrayField
 from django.db.models.query import QuerySet
+
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from theme.models import ThemeConfig
 from image.models import Image
@@ -24,7 +25,7 @@ def consent_upload_path(instance, filename) -> str:
     """
     folder_name = instance.slug
     language = get_language()
-    return join("consent", folder_name, f"consent_{language}")
+    return join("consent", folder_name, f"consent_{language}", filename)
 
 
 class Experiment(models.Model):

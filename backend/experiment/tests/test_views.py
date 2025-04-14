@@ -1,4 +1,7 @@
-from django.test import TestCase
+from os.path import dirname, join
+from shutil import rmtree
+
+from django.test import override_settings, TestCase
 from django.utils import timezone
 from django.core.files.uploadedfile import SimpleUploadedFile
 
@@ -16,6 +19,7 @@ from participant.utils import PARTICIPANT_KEY
 from session.models import Session
 from theme.models import ThemeConfig, FooterConfig, HeaderConfig
 
+here = dirname(__file__)
 
 class TestExperimentViews(TestCase):
     @classmethod
@@ -37,6 +41,11 @@ class TestExperimentViews(TestCase):
         cls.block3 = Block.objects.create(slug="block3", phase=cls.intermediate_phase)
         cls.final_phase = Phase.objects.create(experiment=experiment, index=3)
         cls.block4 = Block.objects.create(slug="block4", phase=cls.final_phase)
+
+    @classmethod
+    def tearDownClass(cls):
+        rmtree(join(here, 'consent'))
+        return super().tearDownClass()
 
     def setUp(self):
         session = self.client.session
@@ -209,6 +218,7 @@ class TestExperimentViews(TestCase):
             response.json().get("description"), "Eens kijken of vertaling werkt."
         )
 
+    @override_settings(MEDIA_ROOT=here)
     def test_get_block(self):
         # Create a block
         experiment = Experiment.objects.create(

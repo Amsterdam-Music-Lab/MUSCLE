@@ -38,7 +38,7 @@ class TestExperimentAdmin(TestCase):
         self.assertEqual(
             ExperimentAdmin.list_display,
             (
-                "name",
+                "experiment_name",
                 "slug_link",
                 "remarks",
                 "active",

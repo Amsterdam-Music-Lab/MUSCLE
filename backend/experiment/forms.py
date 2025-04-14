@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.forms import (
     CheckboxSelectMultiple,
     ChoiceField,
@@ -8,6 +9,8 @@ from django.forms import (
     Select,
     TextInput,
 )
+from django.utils.translation import gettext_lazy as _
+
 from experiment.models import (
     Experiment,
     Block,
@@ -189,16 +192,28 @@ class ExperimentForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
-        print(self.fields)
-        self.fields["about_content"].widget = MarkdownPreviewTextInput()
-        # self.fields['disclaimer'].widget = MarkdownPreviewTextInput()
-        # self.fields['privacy'].widget = MarkdownPreviewTextInput()
-        # self.fields["description"].widget.attrs["style"] = "height:40px"
-        # self.fields["social_media_message"].widget.attrs["style"] = "height:15px"
+        for language in settings.MODELTRANSLATION_LANGUAGES:
+            language = language.replace('-', '_')
+            desc_field = f"description_{language}"
+            self.fields[desc_field].widget.attrs["style"] = "height:40px"
+            soc_field = f"social_media_message_{language}"
+            self.fields[soc_field].widget.attrs["style"] = "height:15px"
 
     class Meta:
         model = Experiment
         fields = "__all__"
+        help_texts = {}
+        for language in settings.MODELTRANSLATION_LANGUAGES:
+            for field_name in ["about_content", "disclaimer", "privacy"]:
+                language = language.replace("-", "_")
+                lang_field_name = f"{field_name}_{language}"
+                help_texts.update(
+                    {
+                        lang_field_name: _(
+                            "You can enter plain text, html or markdown here."
+                        )
+                    }
+                )
 
     class Media:
         js = ["experiment_form.js"]
@@ -247,27 +262,17 @@ class BlockForm(ModelForm):
 
     class Meta:
         model = Block
-        fields = [
-            "index",
-            "slug",
-            "name",
-            "description",
-            "rules",
-            "rounds",
-            "bonus_points",
-            "playlists",
-            "image",
-            "theme_config",
-        ]
+        fields = "__all__"
         help_texts = {
-            "name": "The name and description will be displayed in dashboard mode.",
-            "image": "An image that will be displayed on the experiment page and as a meta image in search engines.",
-            "slug": "The slug is used to identify the block in the URL so you can access it on the web as follows: app.amsterdammusiclab.nl/{slug} <br>\
-            It must be unique, lowercase and contain only letters, numbers, and hyphens. Nor can it start with any of the following reserved words: admin, server, block, participant, result, section, session, static.",
+            "name": _("The name and description will be displayed in dashboard mode."),
+            "image": _(
+                "An image that will be displayed on the experiment page and as a meta image in search engines."
+            ),
+            "slug": _(
+                "The slug is used to identify the block in the URL so you can access it on the web as follows: app.amsterdammusiclab.nl/{slug} <br>\
+            It must be unique, lowercase and contain only letters, numbers, and hyphens. Nor can it start with any of the following reserved words: admin, server, block, participant, result, section, session, static."
+            ),
         }
-
-    class Media:
-        css = {"all": ["block_admin.css"]}
 
 
 class ExportForm(Form):
