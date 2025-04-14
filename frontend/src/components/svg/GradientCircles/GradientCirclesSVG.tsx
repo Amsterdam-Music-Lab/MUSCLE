@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2025 Bas Cornelissen
  * SPDX-License-Identifier: MIT
- * 
+ *
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
@@ -23,38 +23,35 @@ export interface BasicGradientCirclesProps {
 
   /** The number of circles in the SVG */
   numCircles?: number;
-  
-  /** Whether to rotate the gradients */
-  animate?: boolean
 
-  /** 
-   * The mean duration of the animation (when animate=true). 
-   * Note that the actual duration is computed as  meanDuration + Math.random() * meanDuration 
+  /** Whether to rotate the gradients */
+  animate?: boolean;
+
+  /**
+   * The mean duration of the animation (when animate=true).
+   * Note that the actual duration is computed as  meanDuration + Math.random() * meanDuration
    */
   meanDuration?: number;
 
-  /** 
-   * The minimum radius as a fraction of the SVGs width. 
-   * A radius is then sampled using minRadius + 10^(1 + 3 * rand) 
-   * where rand is a random float between 0 and 1. 
+  /**
+   * The minimum radius as a fraction of the SVGs width.
+   * A radius is then sampled using minRadius + 10^(1 + 3 * rand)
+   * where rand is a random float between 0 and 1.
    */
   minRadiusFactor?: number;
 }
 
-
-interface GradientCirclesSVGProps 
-  extends 
-    React.SVGAttributes<SVGSVGElement>, 
-    BasicGradientCirclesProps {};
-
+interface GradientCirclesSVGProps
+  extends React.SVGAttributes<SVGSVGElement>,
+    BasicGradientCirclesProps {}
 
 /**
  * An SVG filled with randomly positioned gradient circles, which
- * can also be animated by rotating the gradient. The colors, number 
- * of circles, and the blur can all be set. Note that the duration of 
- * the animation is random, but you can  set the mean duration. The 
- * radius of the circles is also randomly determined using 
- *    minRadius + 10^(1 + 3 * rand) 
+ * can also be animated by rotating the gradient. The colors, number
+ * of circles, and the blur can all be set. Note that the duration of
+ * the animation is random, but you can  set the mean duration. The
+ * radius of the circles is also randomly determined using
+ *    minRadius + 10^(1 + 3 * rand)
  * where rand is a random float between 0 and 1.
  */
 export default function GradientCirclesSVG({
@@ -67,10 +64,9 @@ export default function GradientCirclesSVG({
   minRadiusFactor = 0.2,
   ...props
 }: GradientCirclesSVGProps) {
-  
   const width = height * aspect;
   const minRadius = minRadiusFactor * width;
-  const id = `${Math.random().toString(16).slice(2)}`
+  const id = `${Math.random().toString(16).slice(2)}`;
   const circleData = Array.from({ length: numCircles })
     .map(() => ({
       cx: Math.random() * width,
@@ -79,7 +75,7 @@ export default function GradientCirclesSVG({
       rotate: Math.random() * 360,
       dur: meanDuration + Math.random() * meanDuration,
       fill: `url(#gradient-${id})`,
-      animate: animate
+      animate: animate,
     }))
     .sort((a, b) => (a.r - b.r) * Math.random() < 0);
 
@@ -93,11 +89,7 @@ export default function GradientCirclesSVG({
       {...rest}
     >
       <g clipPath={`url(#clip-path-${id})`}>
-        <rect
-          width={width}
-          height={height}
-          fill={`url(#gradient-${id})`}
-        />
+        <rect width={width} height={height} fill={`url(#gradient-${id})`} />
         {circleData.map((circle, i) => (
           <Circle key={i} {...circle} />
         ))}

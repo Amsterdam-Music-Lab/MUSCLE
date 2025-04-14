@@ -1,12 +1,11 @@
-
 interface CircleProps {
-    cx: number;
-    cy: number;
-    r: number;
-    fill: string;
-    rotate: number;
-    dur: number;
-    animate: boolean;
+  cx: number;
+  cy: number;
+  r: number;
+  fill: string;
+  rotate: number;
+  dur: number;
+  animate: boolean;
 }
 
 export default function Circle({
@@ -19,15 +18,9 @@ export default function Circle({
   animate = true,
   ...props
 }: CircleProps) {
-  const styles = {}
+  const styles = {};
   return (
-    <circle
-      cx={cx}
-      cy={cy}
-      r={r}
-      fill={fill}
-      {...props}
-    >
+    <circle cx={cx} cy={cy} r={r} fill={fill} {...props}>
       {!dur || !animate ? null : (
         <animateTransform
           attributeName="transform"

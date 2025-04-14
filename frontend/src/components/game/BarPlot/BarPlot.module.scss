@@ -5,8 +5,8 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
- 
- .plot {
+
+.plot {
   display: flex;
   justify-content: space-between;
   gap: calc(30% / var(--num-bars, 1));
@@ -26,4 +26,3 @@
   border-radius: 10em;
   transition: height 0.3s ease-out;
 }
-

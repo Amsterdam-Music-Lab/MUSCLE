@@ -5,49 +5,48 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
- 
- @keyframes starAnimation {
-    0% {
-      transform: scale(0);
-      opacity: 0;
-    }
-    60% {
-        transform: scale(.5);
-        opacity: 1;
-    }
-    80% {
-        transform: scale(1.1);
-    }
-    90% {
-        transform: scale(.95);
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
+
+@keyframes starAnimation {
+  0% {
+    transform: scale(0);
+    opacity: 0;
   }
+  60% {
+    transform: scale(0.5);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(1.1);
+  }
+  90% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
 
 .score-board {
-    .capture {
-        margin-top: 1.5em;
-        
+  .capture {
+    margin-top: 1.5em;
+  }
+
+  .trophy {
+    top: 0.5em;
+    z-index: 10;
+
+    svg {
+      margin-right: 1em;
+      animation: 700ms ease-in 0s 1 starAnimation;
     }
 
-    .trophy {
-        top: .5em;
-        z-index: 10;
-
-        svg {
-            margin-right: 1em;
-            animation: 700ms ease-in 0s 1 starAnimation;
-        }
-        
-        .label {
-            position: absolute;
-            font-size: 1.5em;
-            transform: rotate(-3deg);
-            top: -3em;
-            right: .5em;
-        }
+    .label {
+      position: absolute;
+      font-size: 1.5em;
+      transform: rotate(-3deg);
+      top: -3em;
+      right: 0.5em;
     }
+  }
 }

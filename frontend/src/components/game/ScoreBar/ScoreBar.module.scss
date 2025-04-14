@@ -5,16 +5,16 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
- 
- @keyframes scoreBarAppear {
+
+@keyframes scoreBarAppear {
   0% {
-      transform: translateX(-100%);
+    transform: translateX(-100%);
   }
   20% {
-      transform: translateX(-100%);
+    transform: translateX(-100%);
   }
   100% {
-      transform: translateX(0%)
+    transform: translateX(0%);
   }
 }
 
@@ -23,7 +23,7 @@
   height: var(--score-bar-height);
   display: flex;
   overflow: hidden;
-  
+
   & > div {
     display: flex;
     flex-direction: column;

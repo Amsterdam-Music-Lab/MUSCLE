@@ -1,35 +1,42 @@
 /**
  * Copyright (c) 2025 Bas Cornelissen
  * SPDX-License-Identifier: MIT
- * 
+ *
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import classNames from "classnames"
+import classNames from "classnames";
 import { Star, Dot, Fill } from "@/components/svg";
-import styles from "./Timeline.module.scss"
+import styles from "./Timeline.module.scss";
 import { type Variant } from "@/theme/themes";
 import { getVariantFill } from "@/util/getVariantFill";
 
-type TimelineSymbolName = 'dot' | 'star' | 'star-4' | 'star-5' | 'star-6' | 'star-7' | null;
+type TimelineSymbolName =
+  | "dot"
+  | "star"
+  | "star-4"
+  | "star-5"
+  | "star-6"
+  | "star-7"
+  | null;
 
 export const TIMELINE_SYMBOLS = {
-  'dot': ({ ...props }) => <Dot {...props} />,
-  'star': ({ ...props }) => <Star numPoints={5} {...props} />,
-  'star-4': ({ ...props }) => <Star numPoints={4} {...props} />,
-  'star-5': ({ ...props }) => <Star numPoints={5} {...props} />,
-  'star-6': ({ ...props }) => <Star numPoints={6} {...props} />,
-  'star-7': ({ ...props }) => <Star numPoints={7} {...props} />,
-  'star-8': ({ ...props }) => <Star numPoints={8} {...props} />
-}
+  dot: ({ ...props }) => <Dot {...props} />,
+  star: ({ ...props }) => <Star numPoints={5} {...props} />,
+  "star-4": ({ ...props }) => <Star numPoints={4} {...props} />,
+  "star-5": ({ ...props }) => <Star numPoints={5} {...props} />,
+  "star-6": ({ ...props }) => <Star numPoints={6} {...props} />,
+  "star-7": ({ ...props }) => <Star numPoints={7} {...props} />,
+  "star-8": ({ ...props }) => <Star numPoints={8} {...props} />,
+};
 
 export type TimelineConfig = Array<{
-  symbol: TimelineSymbolName,
-  size: number,
-  animate: boolean,
-  trophy: boolean
-}>
+  symbol: TimelineSymbolName;
+  size: number;
+  animate: boolean;
+  trophy: boolean;
+}>;
 
 interface GetTimelineProps {
   /** A list of symbol names such as ["dot", "star-4", "dot", ...]  */
@@ -50,29 +57,29 @@ interface GetTimelineProps {
 
 /**
  * Utility function that returns a timeline configuration object from a
- * sequence of timeline symbols. A timeline configuration is simply a list 
- * of objects that define the symbol, its size, whether it is a trophy and 
+ * sequence of timeline symbols. A timeline configuration is simply a list
+ * of objects that define the symbol, its size, whether it is a trophy and
  * whether it should be animated.
  */
 export function getTimeline({
   symbols,
-  dotSize=10,
+  dotSize = 10,
   trophySize,
-  animate=false,
-  showDots=true
+  animate = false,
+  showDots = true,
 }: GetTimelineProps): TimelineConfig {
   trophySize = trophySize || dotSize * 3;
-  const dotSymbol = showDots ? "dot" : null
-  return symbols.map(symbol => ({
+  const dotSymbol = showDots ? "dot" : null;
+  return symbols.map((symbol) => ({
     symbol: symbol == "dot" ? dotSymbol : symbol,
     size: symbol == "dot" ? dotSize : trophySize,
     trophy: symbol !== "dot",
     animate: symbol == "dot" ? false : animate,
-  }))
+  }));
 }
 
 interface TimelineProps {
-  /** 
+  /**
    * A timeline configuration object. This should be a list of objects specifying
    * the symbol name, the size, whether it is a trophy and whether it is animated.
    * A configuration object can be created using the getTimeline function.
@@ -84,7 +91,7 @@ interface TimelineProps {
 
   /** Fill of past symbols: everything up to and including the current step */
   fillPast?: Fill;
-  
+
   /** Fill of the future steps: everything after the current step */
   fillFuture?: Fill;
 
@@ -120,33 +127,37 @@ export default function Timeline({
   animate = true,
   showSpine = true,
   showSymbols = true,
-  variant="primary",
+  variant = "primary",
 }: TimelineProps) {
-  if(variant){
+  if (variant) {
     fillPast = getVariantFill(variant);
   }
   // Determine default bg fill of the spine:
-  // Use the fillPast/future colors if they are strings, 
+  // Use the fillPast/future colors if they are strings,
   // or make a gradient otherwise.
-  if(!spineBgPast) {
-    if(typeof(fillPast) == "string") {
-      spineBgPast = fillPast
+  if (!spineBgPast) {
+    if (typeof fillPast == "string") {
+      spineBgPast = fillPast;
     } else {
-      spineBgPast = `linear-gradient(90deg, ${fillPast.startColor} -300%, ${fillPast.endColor} 300%)`
+      spineBgPast = `linear-gradient(90deg, ${fillPast.startColor} -300%, ${fillPast.endColor} 300%)`;
     }
   }
-  if(!spineBgFuture) {
-    if(typeof(fillFuture) == "string") {
-      spineBgFuture = fillFuture
+  if (!spineBgFuture) {
+    if (typeof fillFuture == "string") {
+      spineBgFuture = fillFuture;
     } else {
-      spineBgFuture = `linear-gradient(90deg, ${fillFuture.startColor} -200%, ${fillFuture.endColor} 200%)`
+      spineBgFuture = `linear-gradient(90deg, ${fillFuture.startColor} -200%, ${fillFuture.endColor} 200%)`;
     }
   }
 
   return (
-    <div className={styles.timeline} style={{
-      '--spine-bg-past': spineBgPast, '--spine-bg-future': spineBgFuture
-    }}>
+    <div
+      className={styles.timeline}
+      style={{
+        "--spine-bg-past": spineBgPast,
+        "--spine-bg-future": spineBgFuture,
+      }}
+    >
       {timeline.map((symbol, idx) => {
         const Symbol = symbol.symbol ? TIMELINE_SYMBOLS[symbol.symbol] : null;
         return (
@@ -162,11 +173,16 @@ export default function Timeline({
               </div>
             )}
             {showSpine && idx >= 1 && (
-              <div className={classNames(styles.spineSegment, idx < step && styles.active)} />
+              <div
+                className={classNames(
+                  styles.spineSegment,
+                  idx < step && styles.active
+                )}
+              />
             )}
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }

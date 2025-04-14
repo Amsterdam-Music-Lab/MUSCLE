@@ -5,31 +5,31 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
- 
+
 @import "@/scss/utils.scss";
 
 .score-display {
-    --score-display-font-size: 4;
+  --score-display-font-size: 4;
 
-    .score {
-        position: relative;
+  .score {
+    position: relative;
 
-        .value {
-            @extend .fw-black;
+    .value {
+      @extend .fw-black;
 
-            display: inline-block;
-            line-height: .8;
-            font-size: calc(var(--score-display-font-size) * 1rem);
-        }
-
-        .units {
-            @extend .fw-semibold;
-
-            position: absolute;
-        }
-
-        .label {
-            @extend .fw-semibold;
-        }
+      display: inline-block;
+      line-height: 0.8;
+      font-size: calc(var(--score-display-font-size) * 1rem);
     }
+
+    .units {
+      @extend .fw-semibold;
+
+      position: absolute;
+    }
+
+    .label {
+      @extend .fw-semibold;
+    }
+  }
 }
