@@ -1,11 +1,11 @@
-import { Tutorial } from "./useTutorial";
+import { type Tutorial } from "@/types/tutorial";
 
 /**
  * Utility that creates a proper Tutorial instance from an object mapping
  * matchTypes to the tutorial steps. This should be redundant as soon as
  * the tutorial is handed down properly.
  */
-export function processTutorial(tutorial: { [key: string]: string }) {
+export function convertTutorial(tutorial: { [key: string]: string }) {
   const tutorialObj: Tutorial = { steps: [] };
   if (tutorial) {
     Object.keys(tutorial).forEach((matchType) => {

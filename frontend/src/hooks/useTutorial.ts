@@ -6,50 +6,18 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import React from "react";
 import { useState } from "react";
+import { type Tutorial, type TutorialStep } from "@/types/tutorial";
 
-/**
- * A tutorial object.
- * Note that it is not a list of steps, as this object may be extended
- * with other properties (e.g. description, title, ...)
- */
-export interface Tutorial {
-  steps: TutorialStep[];
-}
+const DEFAULT_CONFIG = {
+  disableCompleted: true,
+  allowMultipleActiveSteps: false,
+  inferOrder: true,
+};
 
-export interface TutorialStep {
-  /** A unique identifier for the step  */
-  id: string;
-
-  /** Title of the current step */
-  title?: string;
-
-  /** The content shown for this step */
-  content?: string | React.ReactNode;
-
-  /** Whether this step is visible */
-  visible?: boolean;
-
-  /** Whether this step has been completed */
-  completed?: boolean;
-
-  /** Order of the steps. */
-  order?: number;
-}
-
-interface UseTutorialProps {
+interface UseTutorialProps extends Omit<Tutorial, "steps"> {
   /** The tutorial object */
   tutorial: Tutorial;
-
-  /** Whether to disable completed steps (default: true) */
-  disableCompleted?: boolean;
-
-  /** Allow multiple steps to be active at the same time? (default: false) */
-  allowMultipleActiveSteps?: boolean;
-
-  /** Whether to infer the order of the steps from the input (default: true) */
-  inferOrder?: boolean;
 }
 
 /**
@@ -59,18 +27,18 @@ interface UseTutorialProps {
  * can then visualize in whatever way fits you. If `allowMultipleActiveSteps` is
  * true, you can use `getActiveSteps` to get all active steps.
  */
-export const useTutorial = ({
-  tutorial,
-  disableCompleted = true,
-  inferOrder = true,
-  allowMultipleActiveSteps = false,
-}: UseTutorialProps) => {
+export const useTutorial = ({ tutorial, ...config }: UseTutorialProps) => {
+  // Determine configuration: default values, values in the tutorial object,
+  // or finally overrides passed to the hook.
+  const { steps: _steps, ...rest } = tutorial;
+  config = { ...DEFAULT_CONFIG, ...rest, ...config };
+
   const [steps, setSteps] = useState<Record<string, TutorialStep>>(() => {
     const initialSteps: Record<string, TutorialStep> = {};
     tutorial.steps.forEach((step, index) => {
       initialSteps[step.id] = {
         ...step,
-        order: inferOrder ? index : step.order,
+        order: config.inferOrder ? index : step.order,
         completed: step.completed ?? false,
         visible: step.visible ?? false,
       };
@@ -83,13 +51,13 @@ export const useTutorial = ({
    */
   const showStep = (id: string) => {
     if (!steps[id]) return;
-    if (disableCompleted && steps[id].completed) return;
+    if (config.disableCompleted && steps[id].completed) return;
     if (steps[id].visible) return;
 
     setSteps((prevSteps) => {
       const updatedSteps = { ...prevSteps };
 
-      if (!allowMultipleActiveSteps) {
+      if (!config.allowMultipleActiveSteps) {
         // Hide all other steps if multiple active steps are not allowed
         Object.keys(updatedSteps).forEach((key) => {
           updatedSteps[key].visible = false;
@@ -128,7 +96,7 @@ export const useTutorial = ({
    * when allowMultipleActiveSteps is true.
    */
   const getActiveStep = () => {
-    if (allowMultipleActiveSteps === false) {
+    if (config.allowMultipleActiveSteps === false) {
       return getActiveSteps()[0] || null;
     } else {
       throw new Error(
