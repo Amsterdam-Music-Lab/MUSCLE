@@ -5,19 +5,19 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-import React from "react";
+import type { HTMLAttributes } from "react";
 import classNames from "classnames";
 import { ScoreDisplay } from "@/components/game";
 import styles from "./ScoreFeedback.module.scss";
 
-interface FeedbackProps extends React.HTMLProps<HTMLDivElement> {
+interface FeedbackProps extends HTMLAttributes<HTMLDivElement> {
   turnScore?: number;
   totalScore?: number;
   totalScoreLabel?: string;
   children?: React.ReactNode;
 }
 
-export default function Feedback({
+export default function ScoreFeedback({
   turnScore,
   totalScore = 0,
   totalScoreLabel = "Total score",

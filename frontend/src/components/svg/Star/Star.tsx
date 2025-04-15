@@ -10,7 +10,7 @@ import React from "react";
 import { Gradient } from "../Gradient";
 import { type Variant } from "@/theme/themes";
 import { type Fill } from "../types";
-import { getVariantFill } from "../../../util/getVariantFill";
+import { useVariantFill } from "@/hooks/useVariantFill";
 
 interface CreateStarPathProps {
   /** The x-coordinate of the center */
@@ -109,7 +109,10 @@ interface BasicSVGStarProps {
  */
 interface SVGStarProps
   extends BasicSVGStarProps,
-    Omit<React.SVGProps<SVGSVGElement>, "width" | "height" | "viewBox"> {}
+    Omit<
+      React.SVGProps<SVGSVGElement>,
+      "width" | "height" | "viewBox" | "fill"
+    > {}
 
 /**
  * An SVG star in an optional circle. The number of points and the sharpness of the
@@ -139,9 +142,8 @@ export default function SVGStar({
     starSize = 1;
   }
 
-  if (variant) {
-    fill = getVariantFill(variant);
-  }
+  const variantFill = useVariantFill(variant ?? "primary") ?? "#000";
+  fill = fill ?? variantFill;
 
   const center = size / 2; // Center the star
   const strokeWidth = circleStrokeWidth * size;

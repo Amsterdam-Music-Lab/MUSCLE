@@ -6,13 +6,13 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import React from "react";
+import type { HTMLAttributes, ReactNode } from "react";
+import type { Variant } from "@/theme/themes";
+import { Children } from "react";
 import classNames from "classnames";
 import styles from "./Card.module.scss";
-import { Variant } from "@/theme/themes";
 
-export interface CardProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "id"> {
+export interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, "id"> {
   /** Whether the card is flipped (i.e., the front is shown) */
   flipped?: boolean;
 
@@ -25,7 +25,7 @@ export interface CardProps
   /** Theme variant for the back. Ignored when a CardBack child is found. */
   variantBack?: Variant;
 
-  label?: React.ReactNode | string;
+  label?: ReactNode | string;
 }
 
 /**
@@ -45,7 +45,7 @@ function Card({
   ...props
 }: CardProps) {
   // Find child cards
-  const childrenArray = React.Children.toArray(children);
+  const childrenArray = Children.toArray(children);
   let front = childrenArray.find((child: any) => child.type === Card.Front);
   let back = childrenArray.find((child: any) => child.type === Card.Back);
 
@@ -84,7 +84,7 @@ function Card({
   );
 }
 
-interface CardFrontProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface CardFrontProps extends HTMLAttributes<HTMLDivElement> {}
 
 Card.Front = function CardFront({ className, ...props }: CardFrontProps) {
   return (
@@ -96,7 +96,7 @@ Card.Front = function CardFront({ className, ...props }: CardFrontProps) {
   );
 };
 
-interface CardBackProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface CardBackProps extends HTMLAttributes<HTMLDivElement> {}
 
 Card.Back = function CardBack({ className, ...props }: CardBackProps) {
   return (

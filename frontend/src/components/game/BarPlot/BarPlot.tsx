@@ -6,13 +6,12 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import React from "react";
+import { type CSSProperties, type HTMLAttributes } from "react";
 import classNames from "classnames";
 import { Variant } from "@/theme/themes";
-
 import styles from "./BarPlot.module.scss";
 
-export interface BarPlotProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface BarPlotProps extends HTMLAttributes<HTMLDivElement> {
   /** An array of numbers */
   data: number[];
 
@@ -43,13 +42,15 @@ export default function BarPlot({
   variant = "primary",
   color,
 }: BarPlotProps) {
-  min = min === undefined ? Math.min(...data) : min;
-  max = max === undefined ? Math.max(...data) : max;
-  const bars = data.map((val: number) => ((val - min) / (max - min)) * 100);
+  if (min === undefined) min = Math.min(...data) ?? 0;
+  if (max === undefined) max = Math.max(...data) ?? 100;
+  const bars = data.map((val: number) => ((val - min!) / (max! - min!)) * 100);
   return (
     <div
       className={styles.plot}
-      style={{ "--num-bars": bars.length, "--bar-color": color }}
+      style={
+        { "--num-bars": bars.length, "--bar-color": color } as CSSProperties
+      }
     >
       {bars.map((height, index) => (
         <div key={index} className={styles.column}>

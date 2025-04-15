@@ -6,13 +6,13 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import React from "react";
+import type { HTMLAttributes } from "react";
+import type { Variant } from "@/theme/themes";
 import classNames from "classnames";
-import styles from "./ScoreBar.module.scss";
-import { Variant } from "@/theme/themes";
 import { renderTemplate } from "@/util/renderTemplate";
+import styles from "./ScoreBar.module.scss";
 
-interface ScoreBarProps extends React.HTMLAttributes<HTMLDivElement> {
+interface ScoreBarProps extends HTMLAttributes<HTMLDivElement> {
   /** The value to show */
   value?: number;
 
@@ -48,8 +48,8 @@ export default function ScoreBar({
   const clampedValue = Math.min(Math.max(min, value), max);
   const percentage = Math.round(((clampedValue - min) / (max - min)) * 100);
   const templateData = {
-    value,
-    roundedValue: Math.round(value),
+    value: clampedValue,
+    roundedValue: Math.round(clampedValue),
     percentage,
     roundedPercentage: Math.round(percentage),
   };
@@ -67,8 +67,9 @@ export default function ScoreBar({
       <div
         className={classNames(`fill-${variant}`, "rounded-sm small")}
         role="progressbar"
+        data-testid="scorebar"
         style={{ width: `${percentage}%` }}
-        aria-valuenow={value}
+        aria-valuenow={clampedValue}
         aria-valuemin={min}
         aria-valuemax={max}
       >

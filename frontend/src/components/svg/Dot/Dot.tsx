@@ -10,7 +10,7 @@ import React from "react";
 import { Gradient } from "../Gradient";
 import { type Fill } from "../types";
 import { type Variant } from "@/theme/themes";
-import { getVariantFill } from "../../../util/getVariantFill";
+import { useVariantFill } from "@/hooks/useVariantFill";
 
 interface BasicSVGDotProps {
   /** Size of the dot */
@@ -27,7 +27,10 @@ interface BasicSVGDotProps {
 }
 
 interface SVGDotProps
-  extends Omit<React.SVGProps<SVGSVGElement>, "width" | "height" | "viewBox">,
+  extends Omit<
+      React.SVGProps<SVGSVGElement>,
+      "width" | "height" | "viewBox" | "fill"
+    >,
     BasicSVGDotProps {}
 
 /**
@@ -41,9 +44,9 @@ export default function SVGDot({
   ...props
 }: SVGDotProps) {
   const id = `${Math.random().toString(16).slice(2)}`;
-  if (variant) {
-    fill = getVariantFill(variant);
-  }
+  const variantFill = useVariantFill(variant ?? "primary") ?? "#000";
+  fill = fill ?? variantFill;
+
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} {...props}>
       <defs>

@@ -6,12 +6,12 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import React from "react";
+import type { HTMLAttributes, CSSProperties } from "react";
+import type { Variant } from "@/theme/themes";
 import classNames from "classnames";
-import { Variant } from "@/theme/themes";
 import "./ScoreDisplay.scss";
 
-interface ScoreProps extends React.HTMLAttributes<HTMLDivElement> {
+interface ScoreProps extends HTMLAttributes<HTMLDivElement> {
   /** The score */
   score?: number;
 
@@ -48,7 +48,7 @@ export default function ScoreDisplay({
   return (
     <div
       className={classNames("score-display", className)}
-      style={{ "--score-display-font-size": size, ...style }}
+      style={{ "--score-display-font-size": size, ...style } as CSSProperties}
       {...rest}
     >
       <div className="score">

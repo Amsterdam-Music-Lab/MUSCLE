@@ -6,11 +6,16 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import React from "react";
+import {
+  Children,
+  isValidElement,
+  type CSSProperties,
+  type HTMLAttributes,
+} from "react";
 import classNames from "classnames";
 import styles from "./Board.module.scss";
 
-interface BoardProps extends React.HTMLAttributes<HTMLDivElement> {
+interface BoardProps extends HTMLAttributes<HTMLDivElement> {
   /** The number of columns */
   columns: number;
 }
@@ -20,7 +25,7 @@ interface BoardProps extends React.HTMLAttributes<HTMLDivElement> {
  * with a given number of columns.
  */
 function Board({ columns = 4, children, className, ...props }: BoardProps) {
-  const childrenArray = React.Children.toArray(children);
+  const childrenArray = Children.toArray(children);
   return (
     <div
       className={classNames(
@@ -30,9 +35,15 @@ function Board({ columns = 4, children, className, ...props }: BoardProps) {
       )}
       {...props}
     >
-      <div className="square-grid" style={{ "--columns": columns }}>
+      <div
+        className="square-grid"
+        style={{ "--columns": columns } as CSSProperties}
+      >
         {childrenArray.map((child, i) => (
-          <div key={child.key ?? i} className={classNames(styles.slot)}>
+          <div
+            key={isValidElement(child) && child.key ? child.key : i}
+            className={classNames(styles.slot)}
+          >
             {child}
           </div>
         ))}

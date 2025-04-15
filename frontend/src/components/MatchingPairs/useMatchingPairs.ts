@@ -5,18 +5,18 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
+import type Participant from "@/types/Participant";
+import { type Session } from "@sentry/react";
 
 import { useState } from "react";
-import { Session } from "@sentry/react";
-import Participant from "@/types/Participant";
 import useBoundStore from "@/util/stores";
-import { updateSelectedCards, applyCardUpdates } from "./utils";
+import { applyCardUpdates } from "./utils";
 
 export interface MPCard {
   id: number;
   selected?: boolean;
-  hasBeenSelected?: boolean;
   disabled?: boolean;
+  hasBeenSelected?: boolean;
   lastSelectedAt?: number;
   data?: any;
 }
@@ -25,11 +25,10 @@ export interface MPStates<Card> {
   /** The cards */
   cards: Card[];
 
-  /** Function to update the cards */
-  // setCards: React.Dispatch<React.SetStateAction<Card[]>>;
-
-  /** The curre */
+  /** The score in the current turn */
   turnScore: number | null;
+
+  /** The total score */
   totalScore: number;
   successfulMatch: boolean | null;
   startOfTurn: number;
@@ -170,6 +169,7 @@ export function useMatchingPairs<ComparisonResult, Card extends MPCard>({
     const updatedCard = {
       ...card,
       selected: true,
+      hasBeenSelected: true,
       lastSelectedAt: performance.now(),
     };
 
@@ -227,15 +227,7 @@ export function useMatchingPairs<ComparisonResult, Card extends MPCard>({
         result,
         ...allStates,
       });
-      setCards(
-        applyCardUpdates(
-          typeof updaterAfter === "function" ? updaterAfter : undefined,
-          (prev) =>
-            prev.map((card) =>
-              card.selected ? { ...card, hasBeenSelected: true } : { ...card }
-            )
-        )
-      );
+      if (typeof updaterAfter === "function") setCards(updaterAfter);
     }
   };
 

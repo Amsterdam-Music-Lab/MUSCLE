@@ -1,4 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+import { FC, useEffect, useRef, useState } from "react";
 import useBoundStore from "@/util/stores";
 import { BarPlot, BarPlotProps } from "@/components/game";
 
@@ -29,7 +37,7 @@ export interface HistogramProps
  * component mostly provides the frequency data, the actual visualization
  * is handled by the BarPlot component.
  */
-const Histogram: React.FC<HistogramProps> = ({
+const Histogram: FC<HistogramProps> = ({
   bars = 8,
   running = true,
   random = false,
