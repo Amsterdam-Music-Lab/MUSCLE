@@ -9,55 +9,39 @@
 import React from "react";
 import classNames from "@/util/classNames";
 
-// Local imports
-import TuneTwins from "@/components/MCGTheme/logos/TuneTwins";
+// import TuneTwins from "@/components/MCGTheme/logos/TuneTwins";
 import Timeline, {
   TIMELINE_SYMBOLS,
   TimelineConfig,
 } from "@/components/game/Timeline/Timeline";
-import { colors } from "@/components/MCGTheme/colors";
 import { ScoreBar } from "../ScoreBar";
 import { ScoreDisplay as Score } from "../ScoreDisplay";
 import { renderTemplate } from "@/util/renderTemplate";
-import { Star } from "@/components/svg";
+
 // TODO use scoped scss
-import "./ScoreBoard.module.scss";
+import styles from "./ScoreBoard.module.scss";
+
+interface SectionLabelProps extends React.HTMLProps<HTMLParagraphElement> {
+  variant?: "primary" | "secondary" | "tertiary";
+}
 
 const SectionLabel = ({
   children,
-  className,
   variant = "primary",
-  ...props
-}) => (
+  className,
+  ...paragraphProps
+}: SectionLabelProps) => (
   <p
     className={classNames(
+      styles.sectionLabel,
       `text-fill-${variant}`,
-      "d-block fw-semibold mb-2",
       className
     )}
-    {...props}
+    {...paragraphProps}
   >
     {children}
   </p>
 );
-
-const Trophy = ({ name }: { name: string }) => {
-  if (!TIMELINE_SYMBOLS.includes(name)) return null;
-  const Symbol = TIMELINE_SYMBOLS[name] as Star;
-  return (
-    <div
-      className="position-absolute"
-      style={{ right: "1em", zIndex: 20, top: "0em" }}
-    >
-      <Symbol
-        fillFrom={colors["red"]}
-        fillTo={colors["pink"]}
-        size={110}
-        strokeWidthFactor={0.15}
-      />
-    </div>
-  );
-};
 
 const defaultLabels = {
   score: "Last game",
@@ -129,46 +113,46 @@ export default function ScoreBoard({
     typeof percentile === "number" && percentile >= 0 && percentile <= 100;
   const hasTimeline = timeline !== undefined && step !== undefined;
   const hasTrophy = hasTimeline && timeline[step].trophy;
-  const Trophy = hasTrophy
-    ? TIMELINE_SYMBOLS[timeline[step].symbol] || null
-    : null;
+  const Trophy =
+    hasTrophy && timeline[step].symbol
+      ? TIMELINE_SYMBOLS[timeline[step].symbol]
+      : null;
 
   // Label templates
   const templates = { ...defaultLabels, ...labels };
   const templateData = {
     score,
     totalScore,
-    percentile: Math.round(percentile),
+    percentile: percentile !== undefined ? Math.round(percentile) : undefined,
     percentileCutoff,
     step,
     numSteps: timeline?.length,
   };
 
   return (
-    <div className="score-board card bg-inset-sm rounded-lg">
+    <div className={classNames(styles.scoreBoard, "card")}>
       {/* Capture this */}
       {/* A square card that fits inside the rounded card and should be captured */}
       {/* as an image for sharing on social media */}
-      <div className="capture position-relative">
+      <div className={styles.capture}>
         {/* TuneTwins logo */}
         {logo && <div className="pl-2 px-4">{logo}</div>}
 
         {/* Star */}
         {showTrophy && hasTrophy && (
-          <div className="trophy position-absolute d-flex justify-content-end w-100">
-            <p className="label text-white font-weight-bolder">
+          <div className={styles.trophy}>
+            <p className={styles.trophyLabel}>
               {renderTemplate(templates.trophy, templateData)}
             </p>
-            <div className="position-absolute">
-              {Trophy && (
-                <Trophy
-                  fillFrom={colors["red"]}
-                  fillTo={colors["pink"]}
-                  size={100}
-                  strokeWidthFactor={0.15}
-                />
-              )}
-            </div>
+
+            {Trophy && (
+              <Trophy
+                className={styles.trophyIcon}
+                variant="secondary"
+                size={100}
+                circleStrokeWidth={0.15}
+              />
+            )}
           </div>
         )}
 

@@ -6,11 +6,13 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+import React from "react";
 import classNames from "classnames";
 import { Star, Dot, Fill } from "@/components/svg";
-import styles from "./Timeline.module.scss";
 import { type Variant } from "@/theme/themes";
-import { getVariantFill } from "@/util/getVariantFill";
+import { useVariantFill } from "@/hooks/useVariantFill";
+
+import styles from "./Timeline.module.scss";
 
 type TimelineSymbolName =
   | "dot"
@@ -71,10 +73,10 @@ export function getTimeline({
   trophySize = trophySize || dotSize * 3;
   const dotSymbol = showDots ? "dot" : null;
   return symbols.map((symbol) => ({
-    symbol: symbol == "dot" ? dotSymbol : symbol,
-    size: symbol == "dot" ? dotSize : trophySize,
+    symbol: symbol === "dot" ? dotSymbol : symbol,
+    size: symbol === "dot" ? dotSize : (trophySize as number),
     trophy: symbol !== "dot",
-    animate: symbol == "dot" ? false : animate,
+    animate: symbol === "dot" ? false : animate,
   }));
 }
 
@@ -120,17 +122,17 @@ interface TimelineProps {
 export default function Timeline({
   timeline,
   step = 0,
-  fillPast = "#000000",
+  fillPast,
   fillFuture = "#eeeeee",
   spineBgPast,
   spineBgFuture,
   animate = true,
   showSpine = true,
   showSymbols = true,
-  variant = "primary",
+  variant,
 }: TimelineProps) {
-  if (variant) {
-    fillPast = getVariantFill(variant);
+  if (fillPast === undefined) {
+    fillPast = useVariantFill(variant || "primary") ?? "#000";
   }
   // Determine default bg fill of the spine:
   // Use the fillPast/future colors if they are strings,
@@ -150,14 +152,13 @@ export default function Timeline({
     }
   }
 
+  const style = {
+    "--spine-bg-past": spineBgPast,
+    "--spine-bg-future": spineBgFuture,
+  } as React.CSSProperties;
+
   return (
-    <div
-      className={styles.timeline}
-      style={{
-        "--spine-bg-past": spineBgPast,
-        "--spine-bg-future": spineBgFuture,
-      }}
-    >
+    <div className={styles.timeline} style={style}>
       {timeline.map((symbol, idx) => {
         const Symbol = symbol.symbol ? TIMELINE_SYMBOLS[symbol.symbol] : null;
         return (
