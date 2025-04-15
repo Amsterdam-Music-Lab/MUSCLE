@@ -131,9 +131,9 @@ export default function Timeline({
   showSymbols = true,
   variant,
 }: TimelineProps) {
-  if (fillPast === undefined) {
-    fillPast = useVariantFill(variant || "primary") ?? "#000";
-  }
+  const variantFill = useVariantFill(variant ?? "primary") ?? "#000";
+  fillPast = fillPast ?? variantFill;
+
   // Determine default bg fill of the spine:
   // Use the fillPast/future colors if they are strings,
   // or make a gradient otherwise.
