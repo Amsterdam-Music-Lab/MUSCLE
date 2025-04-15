@@ -8,11 +8,11 @@ import PlayCard from "./PlayCard";
 import { Card } from "@/types/Section";
 import Session from "@/types/Session";
 import Participant from "@/types/Participant";
-import Overlay from "../Overlay/Overlay";
+import Overlay from "@/components/Overlay/Overlay";
 import { ScoreFeedbackDisplay } from "@/types/Playback";
 
 import { Timeline, getTimeline } from "@/components/game";
-import PlayingBoard from "@/components/MatchingPairs/PlayingBoard";
+import PlayingBoard from "./PlayingBoard";
 
 export const SCORE_FEEDBACK_DISPLAY: { [key: string]: ScoreFeedbackDisplay } = {
   SMALL_BOTTOM_RIGHT: "small-bottom-right",

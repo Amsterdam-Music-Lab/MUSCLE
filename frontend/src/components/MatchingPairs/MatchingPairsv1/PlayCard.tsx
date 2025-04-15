@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { API_ROOT } from "@/config";
 import { Card } from "@/types/Section";
-import Histogram from "../Histogram/Histogram";
+import Histogram from "@/components/Histogram/Histogram";
 import "./PlayCard.scss"
 
 const PlayingCardFront = ({ src, name }: {src: string, name: string}) => {
