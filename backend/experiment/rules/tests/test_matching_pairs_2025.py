@@ -3,7 +3,7 @@ from django.test import TestCase
 from experiment.models import Block, Experiment, Phase
 from participant.models import Participant
 from result.models import Result
-from section.models import Playlist, Section
+from section.models import Playlist, Section, Song
 from session.models import Session
 from question.questions import create_default_questions
 
@@ -38,12 +38,6 @@ class MatchingPairs2025Test(TestCase):
             {'artist': 'H', 'name': 'F19'},
             {'artist': 'H', 'name': 'F1'},
             {'artist': 'H', 'name': 'F20'},
-            {'artist': 'P', 'name': 'F11'},
-            {'artist': 'P', 'name': 'F12'},
-            {'artist': 'P', 'name': 'F3'},
-            {'artist': 'P', 'name': 'F6'},
-            {'artist': 'P', 'name': 'F9'},
-            {'artist': 'Sa', 'name': 'F1'},
         ]
         conditions = [
             {"type": "O", "difficulties": ["0"]},
@@ -239,7 +233,7 @@ class MatchingPairs2025Test(TestCase):
     def test_select_least_played_condition_type_difficulty_pair(self):
         """The methods to select a condition type and a condition are made so that the participant
         will never play the same condition type condition combination before playing all other condition type condition combinations.
-        E.g., assuming we have the following combos: [O1, T1, T2, T3, T4, T5, F1, F2, F3, F4, F5],
+        E.g., assuming we have the following combos: [O0, TD1, TD2, TD3, T4, T5, F1, F2, F3, F4, F5],
         the participant will play all of them (in least played overall / random order) before playing any of them again.
         We thus want to test if there are no repetitions in the selected sections if a participant plays 11 blocks.
         """
@@ -293,14 +287,25 @@ class MatchingPairs2025Test(TestCase):
         for pair in selected_condition_type_difficulty_pairs:
             self.assertEqual(selected_condition_type_difficulty_pairs.count(pair), 5)
 
+    def create_fake_results(self, session, n_results=5, score=1) -> list[int]:
+        songs = Song.objects.all().values_list('id', flat=True)[:n_results]
+        for song in songs:
+            result, _created = Result.objects.get_or_create(
+                participant=session.participant,
+                question_key=f"song_{song}",
+            )
+            result.score = score
+            result.save()
+        return songs
+
     def test_select_sections_original_condition(self):
         """Test that _select_sections returns correct number of sections for original condition"""
         session = Session.objects.create(block=self.block, participant=self.participant, playlist=self.playlist)
 
         # Mock the condition selection to force "original" condition
-        self.rules._select_least_played_condition_type_difficulty_pair = lambda x: (
-            "O",
-            "0",
+        self.rules._select_least_played_condition_difficulty_pair = lambda x: (
+            'O',
+            '0',
         )
 
         sections = self.rules._select_sections(session)
@@ -317,7 +322,7 @@ class MatchingPairs2025Test(TestCase):
         session = Session.objects.create(block=self.block, participant=self.participant, playlist=self.playlist)
 
         # Mock the condition selection to force "temporal" condition
-        self.rules._select_least_played_condition_type_difficulty_pair = lambda x: (
+        self.rules._select_least_played_condition_difficulty_pair = lambda x: (
             "TD",
             "1",
         )
@@ -345,7 +350,7 @@ class MatchingPairs2025Test(TestCase):
         session = Session.objects.create(block=self.block, participant=self.participant, playlist=self.playlist)
 
         # Mock the condition selection to force "frequency" condition
-        self.rules._select_least_played_condition_type_difficuly_pair = lambda x: (
+        self.rules._select_least_played_condition_difficulty_pair = lambda x: (
             "SD",
             "1",
         )
@@ -367,6 +372,36 @@ class MatchingPairs2025Test(TestCase):
         frequency_groups = {s.song for s in frequency_sections}
         original_groups = {s.song for s in original_sections}
         self.assertEqual(frequency_groups, original_groups)
+
+    def test_select_sections_unplayed(self):
+        """test that we get preferably unplayed songs"""
+        session = Session.objects.create(
+            block=self.block, participant=self.participant, playlist=self.playlist
+        )
+        song_ids = self.create_fake_results(session, 2, 1)
+        sections = self.rules._select_sections(session)
+        for section in sections:
+            self.assertNotIn(section.song.id, song_ids)
+
+    def test_select_sections_least_played(self):
+        """Test that we get preferably the least played sections"""
+        session = Session.objects.create(
+            block=self.block, participant=self.participant, playlist=self.playlist
+        )
+        # fake that all songs have been played
+        faked_plays = self.create_fake_results(session, 10, 1)
+        # fake that 5 songs have been played twice
+        multiple_plays = self.create_fake_results(session, 5, 2)
+        single_plays = [p for p in faked_plays if p not in multiple_plays]
+        song_ids = list(
+            set([section.song.id for section in self.rules._select_sections(session)])
+        )
+        for m in single_plays:
+            self.assertIn(m, song_ids)
+        self.assertEqual(
+            len(list(set(song_ids).intersection(set(multiple_plays)))),
+            self.rules.num_pairs - len(single_plays),
+        )
 
     def test_has_played_before_returns_false(self):
         """Test that _has_played_before returns False when there are no previous results."""

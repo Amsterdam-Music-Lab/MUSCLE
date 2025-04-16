@@ -5,13 +5,26 @@ from django.utils.translation import gettext_lazy as _
 from django.db import models
 
 from result.models import Result
-from section.models import Section
+from section.models import Section, Song
 from session.models import Session
 
-from experiment.actions import Explainer, Final, Playlist as PlaylistAction, Trial
+from experiment.actions import Explainer, Final, Trial
 from experiment.actions.playback import MatchingPairs
 from .matching_pairs import MatchingPairsGame
 
+POSSIBLE_CONDITIONS = [
+    ["O", 0],
+    ["TD", 1],
+    ["TD", 2],
+    ["TD", 3],
+    ["TD", 4],
+    ["TD", 5],
+    ["SD", 1],
+    ["SD", 2],
+    ["SD", 3],
+    ["SD", 4],
+    ["SD", 5],
+]
 
 class MatchingPairs2025(MatchingPairsGame):
     """This is the working version of the Matching Pairs game for the 2025 Tunetwins experiment.
@@ -115,25 +128,28 @@ class MatchingPairs2025(MatchingPairsGame):
         return previous_games_results.exists()
 
     def _select_sections(self, session: Session) -> list[Section]:
-        condition_type, condition = (
-            self._select_least_played_condition_type_difficulty_pair(session)
+        condition, difficulty = self._select_least_played_condition_difficulty_pair(
+            session
         )
 
-        sections = self._select_least_played_sections(session, condition_type, condition)
+        songs = self._select_least_played_songs(session)
 
-        if not sections:
+        sections = list(
+            session.playlist.section_set.filter(
+                song__pk__in=songs, group=condition, tag=difficulty
+            )
+        )
+        if not len(sections) == self.num_pairs:
             raise ValueError(
-                "No sections found for condition type {} and difficulty {}".format(
-                    condition_type, condition
+                "Not enough sections found for condition {} and difficulty {}".format(
+                    condition, difficulty
                 )
             )
 
         # if condition type not 'original', select the equivalent original sections
-        if condition_type != "O":
-            originals_sections = session.playlist.section_set.filter(group="O")
-            # Select equivalents by group number, e.g. a T2 with a group number of 1 will have an equivalent O2 with a group number of 1
-            equivalents = originals_sections.filter(
-                song__in=[section.song for section in sections]
+        if condition != "O":
+            equivalents = list(
+                session.playlist.section_set.filter(group="O", song__in=songs)
             )
             sections += equivalents
         else:
@@ -148,120 +164,68 @@ class MatchingPairs2025(MatchingPairsGame):
     ) -> bool:
         return first_section.song == second_section.song
 
-    def _select_least_played_condition_type_difficulty_pair(
+    def _select_least_played_condition_difficulty_pair(
         self, session: Session
     ) -> tuple[str, str]:
-        condition_type = self._select_least_played_condition_type(session)
-        condition = self._select_least_played_difficulty(session, condition_type)
-
-        return (condition_type, condition)
-
-    def _select_least_played_condition_type(self, session: Session) -> str:
-        least_played_participant_condition_types = self._select_least_played_session_condition_types(
-            session, participant_specific=True
+        condition_results = session.participant.result_set.filter(
+            question_key__startswith='condition'
         )
-
-        if len(least_played_participant_condition_types) == 1:
-            return least_played_participant_condition_types[0]
-
-        # If there are multiple condition types with the same lowest average play count per condition in the playlist for the current participant, select the one that has the lowest play count overall per condition in the playlist
-        least_played_overall_condition_types = self._select_least_played_session_condition_types(
-            session, participant_specific=False
+        if len(condition_results) == 11:
+            # all conditions have been played, return the least played
+            least_played = condition_results.order_by('score').first()
+            least_played.score += 1
+            least_played.save()
+            cond, difficulty = least_played.question_key.split('_')[1:]
+            return cond, difficulty
+        elif len(condition_results) == 0:
+            cond, difficulty = random.choice(POSSIBLE_CONDITIONS)
+        else:
+            played_conditions = [
+                cond.split('_')
+                for cond in condition_results.values_list('question_key')
+            ]
+            unplayed_conditions = [
+                cond for cond in POSSIBLE_CONDITIONS if cond not in played_conditions
+            ]
+            cond, difficulty = random.choice(unplayed_conditions)
+        question_key = f"condition_{cond}_{difficulty}"
+        Result.objects.create(
+            participant=session.participant, question_key=question_key, score=1
         )
+        return cond, difficulty
 
-        if len(least_played_overall_condition_types) == 1:
-            return least_played_overall_condition_types[0]
-
-        # If there are still multiple condition types with the same lowest average play count overall per condition in the playlist, select one at random
-        return random.choice(least_played_overall_condition_types)
-
-    def _select_least_played_session_condition_types(self, session: Session, participant_specific=False) -> list[str]:
-        playlist = session.playlist
-        participant_sessions = (
-            participant_specific and session.participant.session_set.all() or playlist.session_set.all()
+    def _select_least_played_songs(self, session: Session) -> list[int]:
+        songs = list(
+            session.playlist.section_set.values_list('song', flat=True).distinct().all()
         )
-        condition_types = playlist.section_set.values_list(
-            "group", flat=True
-        ).distinct()
-        # Extract the first character as the 'condition_type'
-        condition_type_counts = {ct: 0.0 for ct in condition_types}
-
-        for psession in participant_sessions:
-            played = psession.json_data.get("conditions", [])
-            for ptype, _pcond in played:
-                # Count how many distinct tags exist for this condition type
-                total_for_ptype = sum(1 for t in condition_types if t == ptype)
-                if total_for_ptype:
-                    condition_type_counts[ptype] += 1.0 / total_for_ptype
-
-        min_avg = min(condition_type_counts.values())
-        return [ct for ct, val in condition_type_counts.items() if val == min_avg]
-
-    def _select_least_played_difficulty(self, session: Session, condition_type) -> str:
-        least_played_participant_difficulty = (
-            self._select_least_played_session_difficulty(
-                session, condition_type, participant_specific=True
+        random.shuffle(songs)
+        participant_results = session.participant.result_set.filter(
+            question_key__startswith='song'
+        ).order_by('score')
+        if not participant_results.count():
+            selected_songs = songs[: self.num_pairs]
+        else:
+            participant_songs = [
+                int(result.question_key.split('_')[1]) for result in participant_results
+            ]
+            unplayed_songs = [song for song in songs if song not in participant_songs]
+            if len(unplayed_songs) >= self.num_pairs:
+                selected_songs = unplayed_songs[: self.num_pairs]
+            else:
+                selected_songs = [
+                    *unplayed_songs,
+                    *participant_songs,
+                ][: self.num_pairs]
+        for song in selected_songs:
+            result, created = Result.objects.get_or_create(
+                participant=session.participant, question_key=f"song_{song}"
             )
-        )
-
-        if len(least_played_participant_difficulty) == 1:
-            return least_played_participant_difficulty[0]
-
-        least_played_overall_difficulty = self._select_least_played_session_difficulty(
-            session, condition_type, participant_specific=False
-        )
-
-        if len(least_played_overall_difficulty) == 1:
-            return least_played_overall_difficulty[0]
-
-        return random.choice(least_played_overall_difficulty)
-
-    def _select_least_played_session_difficulty(
-        self, session: Session, condition_type, participant_specific=False
-    ) -> list[str]:
-        playlist = session.playlist
-        participant_sessions = (
-            participant_specific and session.participant.session_set.all() or playlist.session_set.all()
-        )
-        # All tags starting with condition_type
-        relevant_tags = playlist.section_set.filter(group=condition_type).values_list(
-            "tag", flat=True
-        )
-        cond_play_counts = {c: 0 for c in relevant_tags}
-
-        for psession in participant_sessions:
-            played = psession.json_data.get("conditions", [])
-            for ptype, pcond in played:
-                if ptype != condition_type:
-                    continue
-                cond_play_counts[pcond] += 1
-
-        min_count = min(cond_play_counts.values())
-        return [c for c, val in cond_play_counts.items() if val == min_count]
-
-    def _select_least_played_sections(
-        self, session: Session, condition_type: str, difficulty: str
-    ) -> list[Section]:
-        participant_result_sections = session.participant.result_set.filter(
-            session__playlist=session.playlist
-        ).values_list("section", flat=True)
-
-        sections = session.playlist.section_set.filter(
-            group=condition_type, tag=difficulty
-        )
-
-        # Count the number of times each section has been played by the participant
-        section_play_counts = {section: 0 for section in sections}
-
-        for participant_result_section in participant_result_sections:
-            section_play_counts[participant_result_section] += 1
-
-        # Return the num_pairs amount of sections that have been played the least amount of times
-        least_played_sections = sorted(section_play_counts.keys(), key=lambda section: section_play_counts[section])[
-            : self.num_pairs
-        ]
-
-        return least_played_sections
+            if created:
+                result.score = 1
+            else:
+                result.score += 1
+            result.save()
+        return selected_songs
 
     def _final_text(self, session: Session):
         total_sessions = session.participant.session_set.count()
