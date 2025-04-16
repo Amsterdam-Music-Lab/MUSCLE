@@ -13,17 +13,17 @@ from experiment.actions.playback import MatchingPairs
 from .matching_pairs import MatchingPairsGame
 
 POSSIBLE_CONDITIONS = [
-    ["O", 0],
-    ["TD", 1],
-    ["TD", 2],
-    ["TD", 3],
-    ["TD", 4],
-    ["TD", 5],
-    ["SD", 1],
-    ["SD", 2],
-    ["SD", 3],
-    ["SD", 4],
-    ["SD", 5],
+    ["O", "0"],
+    ["TD", "1"],
+    ["TD", "2"],
+    ["TD", "3"],
+    ["TD", "4"],
+    ["TD", "5"],
+    ["SD", "1"],
+    ["SD", "2"],
+    ["SD", "3"],
+    ["SD", "4"],
+    ["SD", "5"],
 ]
 
 class MatchingPairs2025(MatchingPairsGame):
@@ -181,8 +181,8 @@ class MatchingPairs2025(MatchingPairsGame):
             cond, difficulty = random.choice(POSSIBLE_CONDITIONS)
         else:
             played_conditions = [
-                cond.split('_')
-                for cond in condition_results.values_list('question_key')
+                cond.split('_')[1:]
+                for cond in condition_results.values_list('question_key', flat=True)
             ]
             unplayed_conditions = [
                 cond for cond in POSSIBLE_CONDITIONS if cond not in played_conditions
