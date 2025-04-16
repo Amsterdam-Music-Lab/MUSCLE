@@ -6,7 +6,6 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export * from "./types";
 export * from "./Gradient";
 export * from "./Star";
 export * from "./Dot";

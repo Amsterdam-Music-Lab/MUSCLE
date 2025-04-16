@@ -6,10 +6,10 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import React from "react";
+import type { CSSProperties } from "react";
+import type { Variant } from "@/theme/themes";
 import classNames from "classnames";
 import { Star, Dot, Fill } from "@/components/svg";
-import { type Variant } from "@/theme/themes";
 import { useVariantFill } from "@/hooks/useVariantFill";
 
 import styles from "./Timeline.module.scss";
@@ -155,7 +155,7 @@ export default function Timeline({
   const style = {
     "--spine-bg-past": spineBgPast,
     "--spine-bg-future": spineBgFuture,
-  } as React.CSSProperties;
+  } as CSSProperties;
 
   return (
     <div className={styles.timeline} style={style}>
