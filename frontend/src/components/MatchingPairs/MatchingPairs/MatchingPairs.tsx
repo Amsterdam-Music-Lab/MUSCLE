@@ -136,7 +136,7 @@ interface MatchingPairsProps {
   animate: boolean;
 
   /** Called when a card is selected */
-  onSelectCard?: (card: MPCard, index: number) => void;
+  onSelectCard?: (card: MPCard) => void;
 
   onTurnEnd: (states: MPStates<MPCard>) => void;
 
@@ -162,6 +162,11 @@ export default function MatchingPairs({
 }: MatchingPairsProps) {
   // Game state that flags UI changes
   const [gameState, setGameState] = useState<GameState>(GameState.DEFAULT);
+
+  const beforeSelectCard: UseMPProps["beforeSelectCard"] = ({ card }) => {
+    setGameState(GameState.CARD_SELECTED);
+    onSelectCard(card);
+  };
 
   const afterSelectFirstCard: UseMPProps["afterSelectFirstCard"] = ({
     card,
@@ -220,6 +225,7 @@ export default function MatchingPairs({
         ComparisonResult.LUCKY_MATCH,
         ComparisonResult.MEMORY_MATCH,
       ],
+      beforeSelectCard,
       afterSelectFirstCard,
       afterSelectPair,
       onTurnEnd,
@@ -257,7 +263,7 @@ export default function MatchingPairs({
             onClick={() => {
               if (gameState.startsWith("COMPLETED")) endTurn();
             }}
-            items={cards.map((card, index) => {
+            items={cards.map((card) => {
               const sharedProps = {
                 flipped: card.selected,
                 disabled: card.disabled,
@@ -269,8 +275,11 @@ export default function MatchingPairs({
                   key={card.id}
                   className={card.className}
                   onClick={() => {
+                    // Note that nothing else should be called here. In particular,
+                    // the hook onSelectCard is called via the hook beforeSelectCard.
+                    // In this way, the useMatchingPairs hook can ensure that disabled
+                    // cards do not respond (more principled than e.g. a .noEvents class)
                     selectCard(card.id);
-                    onSelectCard(card, index);
                   }}
                 >
                   {type === "visual" ? (

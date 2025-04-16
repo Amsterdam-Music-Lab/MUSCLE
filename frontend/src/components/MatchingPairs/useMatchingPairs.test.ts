@@ -233,4 +233,22 @@ describe("useMatchingPairs", () => {
     await playCompleteTurn(result, 1, 2);
     expect(onGameEnd).toHaveBeenCalled();
   });
+
+  test("Check that onSelectCard is not called for disabled cards", async () => {
+    const onSelectCard = vi.fn();
+
+    const { result } = renderHook(() =>
+      useMatchingPairs({
+        cards: [
+          { id: 1, data: "A", disabled: true },
+          { id: 2, data: "A", disabled: true },
+        ],
+        compareCards: async () => ["match", 10],
+        successfulComparisons: ["match"],
+        beforeSelectCard: ({ card }) => onSelectCard(card),
+      })
+    );
+    await playCompleteTurn(result, 1, 2);
+    expect(onSelectCard).not.toHaveBeenCalled();
+  });
 });

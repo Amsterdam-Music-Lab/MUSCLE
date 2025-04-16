@@ -65,6 +65,15 @@ export interface UseMatchingPairsProps<ComparisonResult, Card> {
   initialScore?: number;
 
   /**
+   * Hook called before selecting a card, but only after checking
+   * if that card can indeed be called. Use this hook to make changes
+   * to the UI that should not happen for disabled cards.
+   */
+  beforeSelectCard?: (
+    props: { card: Card } & MPStates<Card>
+  ) => CardUpdater<Card> | void;
+
+  /**
    * Hook called after selecting the first card.
    */
   afterSelectFirstCard?: (
@@ -114,6 +123,7 @@ export function useMatchingPairs<ComparisonResult, Card extends MPCard>({
   successfulComparisons,
   initialScore,
   compareCards = async () => {},
+  beforeSelectCard = () => {},
   afterSelectFirstCard = () => {},
   beforeSelectPair = () => {},
   afterSelectPair = () => {},
@@ -134,9 +144,9 @@ export function useMatchingPairs<ComparisonResult, Card extends MPCard>({
   const [cards, setCards] = useState<Card[]>(() =>
     initialCards.map((card) => ({
       ...card,
-      selected: false,
-      disabled: false,
-      hasBeenSelected: false,
+      selected: card.selected ?? false,
+      disabled: card.disabled ?? false,
+      hasBeenSelected: card.hasBeenSelected ?? false,
     }))
   );
   const [turnScore, setTurnScore] = useState<number | null>(null);
@@ -165,6 +175,12 @@ export function useMatchingPairs<ComparisonResult, Card extends MPCard>({
     // You cannot select a disabled card, nor an already selected card.
     if (card.disabled) return;
     if (selected.length === 1 && selected[0].id === card.id) return;
+
+    // Only call hook after checking if the card can be selected
+    const beforeSelectCardUpdates = beforeSelectCard({ card, ...allStates });
+    if (typeof beforeSelectCardUpdates == "function") {
+      setCards(beforeSelectCardUpdates);
+    }
 
     const updatedCard = {
       ...card,
