@@ -22,7 +22,7 @@ const decorator = (Story) => {
   setParticipant({ id: 1, csrf_token: "123" });
 
   return (
-    <div id="root" style={{ width: "100%", height: "100%", padding: "1rem" }}>
+    <div id="root" style={{ width: "100%", height: "100%" }}>
       <Story />
     </div>
   );

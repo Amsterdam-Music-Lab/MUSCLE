@@ -1,223 +1,222 @@
 @import "./variables.scss";
 
-$indigo: #2B2BEE;
-$pink: #D843E2;
-$red: #FA5577;
-$yellow: #FFB14C;
-$teal: #39D7B8 !default;
+$indigo: #2b2bee;
+$pink: #d843e2;
+$red: #fa5577;
+$yellow: #ffb14c;
+$teal: #39d7b8 !default;
 $colors: (
-    "indigo": $indigo, 
-    "pink": $pink, 
-    "red": $red, 
-    "yellow": $yellow, 
-    "teal": $teal
+  "indigo": $indigo,
+  "pink": $pink,
+  "red": $red,
+  "yellow": $yellow,
+  "teal": $teal,
 );
 
-// .mcg {
-    
-    // Gradient classes
-    @each $name1, $color1 in $colors {
-        @each $name2, $color2 in $colors {
-            @if $name1 != $name2 {
-                .bg-#{$name1}-#{$name2} {
-                    background: linear-gradient(70deg, $color1 -50%, $color2 150%);
-                }
-                
-                .bg-subtle-#{$name1}-#{$name2} {
-                    background: linear-gradient(70deg, $color1 -10%, $color2 500%);
-                }
+// Gradient classes
+@each $name1, $color1 in $colors {
+  @each $name2, $color2 in $colors {
+    @if $name1 != $name2 {
+      .bg-#{$name1}-#{$name2} {
+        background: linear-gradient(70deg, $color1 -50%, $color2 150%);
+      }
 
-                .fill-#{$name1}-#{$name2} {
-                    fill: linear-gradient(70deg, $color1 -50%, $color2 150%);
-                }
-                
+      .bg-subtle-#{$name1}-#{$name2} {
+        background: linear-gradient(70deg, $color1 -10%, $color2 500%);
+      }
 
-                .text-#{$name1}-#{$name2} {
-                    background: linear-gradient(70deg, $color1 -10%, $color2 110%);
-                    -webkit-background-clip: text;
-                    background-clip: text;
-                    color: transparent;
+      .fill-#{$name1}-#{$name2} {
+        fill: linear-gradient(70deg, $color1 -50%, $color2 150%);
+      }
 
-                    // To make sure it's not too wide
-                    display: inline-block;
-                }
+      .text-#{$name1}-#{$name2} {
+        background: linear-gradient(70deg, $color1 -10%, $color2 110%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
 
-                .text-subtle-#{$name1}-#{$name2} {
-                    background: linear-gradient(70deg, $color1 -10%, $color2 400%);
-                    -webkit-background-clip: text;
-                    background-clip: text;
-                    color: transparent;
+        // To make sure it's not too wide
+        display: inline-block;
+      }
 
-                    // To make sure it's not too wide
-                    display: inline-block;
-                }
-            }
-            
-        }
+      .text-subtle-#{$name1}-#{$name2} {
+        background: linear-gradient(70deg, $color1 -10%, $color2 400%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+
+        // To make sure it's not too wide
+        display: inline-block;
+      }
     }
+  }
+}
 
-    .bg-transparent {
-        background: transparent !important;
-    }
+.bg-transparent {
+  background: transparent !important;
+}
 
-    .text-light-gray {
-        color: #ddd;
-    }
+.text-light-gray {
+  color: #ddd;
+}
 
-    .text-grey {
-        color: #999;
-    }
+.text-grey {
+  color: #999;
+}
 
-    .bolder {
-        font-weight: bolder;
-    }
+.bolder {
+  font-weight: bolder;
+}
 
-    .fw-black {
-        font-weight: 900;
-    }
-    
-    .fw-semibold {
-        font-weight: 600;
-    }
+.fw-black {
+  font-weight: 900;
+}
 
-    .rounded-sm {
-        border-radius: .75em !important;
-    }
+.fw-semibold {
+  font-weight: 600;
+}
 
-    .rounded-lg {
-        border-radius: 1.5em !important;
-    }
+.rounded-sm {
+  border-radius: 0.75em !important;
+}
 
-    .bg-inset-xs {
-        background: #fff;
-        box-shadow: 0 0 .75em rgba(0,0,0,0.03) inset;
-    }
+.rounded-lg {
+  border-radius: 1.5em !important;
+}
 
-    .bg-inset-sm {
-        background: #fff;
-        box-shadow: 0 0 1em rgba(0,0,0,0.05) inset;
-    }
+.bg-inset-xs {
+  background: #fff;
+  box-shadow: 0 0 0.75em rgba(0, 0, 0, 0.03) inset;
+}
 
-    .bg-inset-lg {
-        background: #fff;
-        box-shadow: 0 0 1.5em rgba(0,0,0,0.04) inset;
-    }
+.bg-inset-sm {
+  background: #fff;
+  box-shadow: 0 0 1em rgba(0, 0, 0, 0.05) inset;
+}
 
-    .sharp-border {
-        border: 1px solid #f5f5f5;
-    }
+.bg-inset-lg {
+  background: #fff;
+  box-shadow: 0 0 1.5em rgba(0, 0, 0, 0.04) inset;
+}
 
-    
-    .aspect-square {
-        aspect-ratio: 1;
-    }
+.sharp-border {
+  border: 1px solid #f5f5f5;
+}
 
-    // A square grid that gets the number of columns from a --columns variable
-    .square-grid {
-        display: grid;
-        grid-template-columns: repeat(var(--columns, 4), 1fr);
+.aspect-square {
+  aspect-ratio: 1;
+}
 
-        & > * {
-            @extend .aspect-square;
-        }
-    }
+// A square grid that gets the number of columns from a --columns variable
+.square-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--columns, 4), 1fr);
 
-    .animate-rotate {
-        transform-origin: center center;
-        -webkit-animation: clockwise 15s infinite linear;
-        -moz-animation: clockwise 15s infinite linear;
-        animation: clockwise 15s infinite linear;
-    }
+  & > * {
+    @extend .aspect-square;
+  }
+}
 
-    @-moz-keyframes clockwise {
-        0% {
-            -moz-transform: rotate(0deg);
-        }
-        100% {
-            -moz-transform: rotate(360deg);
-        }
-    }
+.animate-rotate {
+  transform-origin: center center;
+  -webkit-animation: clockwise 15s infinite linear;
+  -moz-animation: clockwise 15s infinite linear;
+  animation: clockwise 15s infinite linear;
+}
 
-    @keyframes clockwise {
-        0% {
-            transform: rotate(0deg);
-        }
-        100% {
-            transform: rotate(360deg);
-        }
-    }
+@-moz-keyframes clockwise {
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@keyframes clockwise {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 // }
-
 
 // Effectively a Bootstrap 5 feature::after
 // https://getbootstrap.com/docs/5.0/layout/breakpoints/
 @mixin media-breakpoint-up($point) {
-    @if $point == xs {
-        @content;
+  @if $point == xs {
+    @content;
+  } @else if $point == sm {
+    @media (min-width: $breakpoint-sm) {
+      @content;
     }
-    @else if $point == sm {
-      @media (min-width: $breakpoint-sm) { @content; }
+  } @else if $point == md {
+    @media (min-width: $breakpoint-md) {
+      @content;
     }
-    @else if $point == md {
-      @media (min-width: $breakpoint-md) { @content; }
+  } @else if $point == lg {
+    @media (min-width: $breakpoint-lg) {
+      @content;
     }
-    @else if $point == lg {
-      @media (min-width: $breakpoint-lg) { @content; }
+  } @else if $point == xl {
+    @media (min-width: $breakpoint-xl) {
+      @content;
     }
-    @else if $point == xl {
-        @media (min-width: $breakpoint-xl) { @content; }
-      }
+  }
 }
 
 @mixin media-breakpoint-down($point) {
-    @if $point == xs {
-        @content;
+  @if $point == xs {
+    @content;
+  } @else if $point == sm {
+    @media (max-width: $breakpoint-sm) {
+      @content;
     }
-    @else if $point == sm {
-      @media (max-width: $breakpoint-sm) { @content; }
+  } @else if $point == md {
+    @media (max-width: $breakpoint-md) {
+      @content;
     }
-    @else if $point == md {
-      @media (max-width: $breakpoint-md) { @content; }
+  } @else if $point == lg {
+    @media (max-width: $breakpoint-lg) {
+      @content;
     }
-    @else if $point == lg {
-      @media (max-width: $breakpoint-lg) { @content; }
+  } @else if $point == xl {
+    @media (max-width: $breakpoint-xl) {
+      @content;
     }
-    @else if $point == xl {
-        @media (max-width: $breakpoint-xl) { @content; }
-      }
+  }
 }
 
-
 @mixin flush {
-    // Remove border radius and left/right border
-    border-radius: unset;
-    border-right: 0;
-    border-left: 0;
+  // Remove border radius and left/right border
+  border-radius: unset !important;
+  border-right: 0;
+  border-left: 0;
+}
+
+.flush {
+  @include flush;
 }
 
 // Extra small
 @include media-breakpoint-down(xs) {
-    .mcg {
-        .xs-flush {
-            @include flush;
-        }
-    }
+  .xs-flush {
+    @include flush;
+  }
 }
 
 // Small
 @include media-breakpoint-down(sm) {
-    .mcg {
-        .sm-flush {
-            @include flush;
-        }
-    }
+  .sm-flush {
+    @include flush;
+  }
 }
 
 // Medium
 @include media-breakpoint-down(md) {
-    .mcg {
-        .md-flush {
-            @include flush;
-        }
-    }
+  .md-flush {
+    @include flush;
+  }
 }

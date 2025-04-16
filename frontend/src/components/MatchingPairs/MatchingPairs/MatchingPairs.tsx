@@ -122,6 +122,18 @@ const compareCards = async (
   }
 };
 
+/** A component that shows card labels, but only in development */
+const DevCardLabel = ({ children }) =>
+  children !== undefined &&
+  import.meta.env.DEV && (
+    <div
+      style={{ opacity: 0.5 }}
+      className="text-light d-flex flex-column justify-content-center small"
+    >
+      {children}
+    </div>
+  );
+
 // Type of the hook used for typing callbacks like afterSelectPair
 type UseMPProps = UseMatchingPairsProps<ComparisonResult, MPCard>;
 
@@ -267,6 +279,7 @@ export default function MatchingPairs({
               const sharedProps = {
                 flipped: card.selected,
                 disabled: card.disabled,
+                label: <DevCardLabel children={card.data?.group} />,
               };
 
               // Return cards (in a container div to isolate the transformations)
@@ -284,13 +297,6 @@ export default function MatchingPairs({
                 >
                   {type === "visual" ? (
                     <VisualCard
-                      label={
-                        card.data.group !== undefined && import.meta.env.DEV && (
-                          <span style={{ opacity: 0.3 }} className="text-light">
-                            {card.data?.group}
-                          </span>
-                        )
-                      }
                       src={card.data?.src}
                       alt={card.data?.alt}
                       {...sharedProps}
@@ -298,13 +304,6 @@ export default function MatchingPairs({
                   ) : (
                     <AudioCard
                       key={card.id}
-                      label={
-                        card.data.group !== undefined && import.meta.env.DEV && (
-                          <span style={{ opacity: 0.3 }} className="text-light">
-                            {card.data?.group}
-                          </span>
-                        )
-                      }
                       running={card.playing}
                       {...sharedProps}
                     />
