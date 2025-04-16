@@ -285,9 +285,9 @@ export default function MatchingPairs({
                   {type === "visual" ? (
                     <VisualCard
                       label={
-                        import.meta.env.DEV && (
+                        card.data.group !== undefined && import.meta.env.DEV && (
                           <span style={{ opacity: 0.3 }} className="text-light">
-                            card.data?.group
+                            {card.data?.group}
                           </span>
                         )
                       }
@@ -299,7 +299,7 @@ export default function MatchingPairs({
                     <AudioCard
                       key={card.id}
                       label={
-                        import.meta.env.DEV && (
+                        card.data.group !== undefined && import.meta.env.DEV && (
                           <span style={{ opacity: 0.3 }} className="text-light">
                             {card.data?.group}
                           </span>
