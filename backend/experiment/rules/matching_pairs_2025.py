@@ -35,7 +35,7 @@ class MatchingPairs2025(MatchingPairsGame):
     """
 
     ID = "MATCHING_PAIRS_2025"
-    num_pairs = 8
+    num_pairs = 2
     tutorial = {
         "no_match": _(
             "This was not a match, so you get 0 points. Please try again to see if you can find a matching pair."
