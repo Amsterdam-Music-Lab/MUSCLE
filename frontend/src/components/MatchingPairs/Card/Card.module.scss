@@ -8,6 +8,8 @@
 
 @import "@/scss/utils.scss";
 
+$transitionDuration: 500ms;
+
 .card {
   // Note that the cards need not be square: this is a consequence
   // of being in a square container
@@ -20,23 +22,18 @@
 
   box-shadow: 0 0 2em rgba(0, 0, 0, 0.1);
 
-  transition: transform ease-out 400ms, box-shadow ease-out 400ms,
-    opacity ease-out 400ms;
+  transition: transform ease-out $transitionDuration,
+    opacity ease-out $transitionDuration;
   transform-style: preserve-3d;
   perspective: 1000px; // Required for 3d flipping effect
 }
 
-.card:not(.disabled):hover {
-  // transform: scale(1.06) box-shadow: 0 0 2em rgba(0, 0, 0, 0.2);
-  // transform: rotateY(20deg) rotateX(3deg);
+.card:not(.disabled):not(.flipped):hover {
+  transform: rotateY(25deg) rotateX(3deg);
 }
 
 .flipped {
   transform: rotateY(180deg);
-
-  // &:not(.disabled):hover {
-  //   transform: rotateY(160deg) rotateX(3deg);
-  // }
 }
 
 .front,
@@ -56,5 +53,7 @@
 }
 
 .disabled {
+  transition-duration: 300ms;
   opacity: 0;
+  pointer-events: none;
 }

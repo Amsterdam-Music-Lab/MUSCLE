@@ -20,15 +20,15 @@
   }
 }
 
-.slot {
+.slot:not(.invisible) {
   @extend .bg-inset-xs, .sharp-border;
 
   // TODO
   border-radius: 1.5em;
+}
 
-  & > div {
-    height: 100%;
-  }
+.slot > div {
+  height: 100%;
 }
 
 @include media-breakpoint-down(md) {

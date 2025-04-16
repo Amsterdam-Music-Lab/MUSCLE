@@ -24,6 +24,7 @@ import { Board } from "../Board";
 import { VisualCard } from "../VisualCard";
 import { AudioCard } from "../AudioCard";
 import styles from "./MatchingPairs.module.scss";
+import classNames from "classnames";
 
 interface MPCard extends GenericMPCard {
   playing?: boolean;
@@ -107,7 +108,6 @@ const compareCards = async (
     },
   });
   if (!response) throw new Error();
-  console.log(response);
   switch (response.score) {
     case 20:
       return [ComparisonResult.MEMORY_MATCH, response.score];
@@ -177,11 +177,20 @@ export default function MatchingPairs({
     card2,
   }) => {
     setGameState(GameState[`COMPLETED_${result}`]);
-    const className = animate ? CARD_CLASSES[result] : undefined;
     return (prev: MPCard[]) =>
       prev.map((c) => {
-        if (c.id === card1.id) return { ...c, playing: undefined, className };
-        if (c.id === card2.id) return { ...c, playing: true, className };
+        if (c.id === card1.id)
+          return {
+            ...c,
+            playing: undefined,
+            className: classNames(animate && CARD_CLASSES[result]),
+          };
+        if (c.id === card2.id)
+          return {
+            ...c,
+            playing: true,
+            className: classNames(animate && CARD_CLASSES[result]),
+          };
         return { ...c };
       });
   };
@@ -248,15 +257,14 @@ export default function MatchingPairs({
             onClick={() => {
               if (gameState.startsWith("COMPLETED")) endTurn();
             }}
-          >
-            {cards.map((card, index) => {
+            items={cards.map((card, index) => {
               const sharedProps = {
                 flipped: card.selected,
                 disabled: card.disabled,
               };
 
               // Return cards (in a container div to isolate the transformations)
-              return (
+              return [
                 <div
                   key={card.id}
                   className={card.className}
@@ -267,7 +275,13 @@ export default function MatchingPairs({
                 >
                   {type === "visual" ? (
                     <VisualCard
-                      label={card.data?.group}
+                      label={
+                        import.meta.env.DEV && (
+                          <span style={{ opacity: 0.3 }} className="text-light">
+                            card.data?.group
+                          </span>
+                        )
+                      }
                       src={card.data?.src}
                       alt={card.data?.alt}
                       {...sharedProps}
@@ -275,15 +289,27 @@ export default function MatchingPairs({
                   ) : (
                     <AudioCard
                       key={card.id}
-                      label={card.data?.group}
+                      label={
+                        import.meta.env.DEV && (
+                          <span style={{ opacity: 0.3 }} className="text-light">
+                            {card.data?.group}
+                          </span>
+                        )
+                      }
                       running={card.playing}
                       {...sharedProps}
                     />
                   )}
-                </div>
-              );
+                </div>,
+
+                // Hide slots when card is not disabled so the visual effects
+                // look cleaner
+                {
+                  invisible: card.disabled === false,
+                },
+              ];
             })}
-          </Board>
+          />
         </div>
       </div>
     </div>
