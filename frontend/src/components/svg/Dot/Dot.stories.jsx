@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
 import Dot from "./Dot";
 
 export default {
@@ -10,7 +18,7 @@ export default {
 };
 
 const decorator = (Story) => (
-  <div style={{ padding: "1rem", background: "#f5f5f5" }}>
+  <div style={{ padding: "1rem" }}>
     <Story />
   </div>
 );

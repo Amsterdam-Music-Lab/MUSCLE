@@ -6,14 +6,18 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import React from "react";
+import type { SVGAttributes } from "react";
+import type { Variant } from "@/theme/themes";
 import { Gradient } from "../Gradient";
 import { Circle } from "../Circle";
+import { useVariantFill } from "@/hooks/useVariantFill";
 import { type GradientFill } from "../types";
 
 export interface BasicGradientCirclesProps {
+  variant?: Variant;
+
   /** Starting color of the linear gradient */
-  fill: GradientFill;
+  fill?: GradientFill;
 
   /** The aspect ratio of the SVG */
   aspect?: number;
@@ -42,7 +46,7 @@ export interface BasicGradientCirclesProps {
 }
 
 interface GradientCirclesSVGProps
-  extends React.SVGAttributes<SVGSVGElement>,
+  extends SVGAttributes<SVGSVGElement>,
     BasicGradientCirclesProps {}
 
 /**
@@ -55,7 +59,8 @@ interface GradientCirclesSVGProps
  * where rand is a random float between 0 and 1.
  */
 export default function GradientCirclesSVG({
-  fill = { startColor: "#ff0000", endColor: "#0000ff", scale: 1.4 },
+  variant,
+  fill,
   aspect = 1,
   height = 2000,
   numCircles = 12,
@@ -64,6 +69,15 @@ export default function GradientCirclesSVG({
   minRadiusFactor = 0.2,
   ...props
 }: GradientCirclesSVGProps) {
+  console.log(variant);
+  // Default to theme variant
+  const variantFill = useVariantFill(variant ?? "primary") ?? {
+    startColor: "#ff0000",
+    endColor: "#0000ff",
+    scale: 1.4,
+  };
+  fill = fill ?? variantFill;
+
   const width = height * aspect;
   const minRadius = minRadiusFactor * width;
   const id = `${Math.random().toString(16).slice(2)}`;

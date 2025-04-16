@@ -6,7 +6,7 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import { GradientFill } from "../types";
+import { GradientFill } from "@/types/svg";
 
 interface GradientProps
   extends GradientFill,

@@ -6,54 +6,14 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import React from "react";
-import { Gradient } from "../Gradient";
-import { type Variant } from "@/theme/themes";
-import { type Fill } from "../types";
+import type { SVGProps } from "react";
+import type { Variant } from "@/theme/themes";
+import type { Fill } from "@/types/svg";
 import { useVariantFill } from "@/hooks/useVariantFill";
+import { Gradient } from "../Gradient";
+import createStarPath from "./createStarPath";
 
-interface CreateStarPathProps {
-  /** The x-coordinate of the center */
-  cx: number;
-
-  /** The y-coordinate of the center */
-  cy: number;
-
-  /** Number of points of the star */
-  numPoints: number;
-
-  /** Inner radius of the star */
-  innerRadius: number;
-
-  /** The outer radius of the star */
-  outerRadius: number;
-}
-
-/**
- * Return the path string of an star with a given number of points and a
- * given inner- and outer radius.
- */
-function createStarPath({
-  cx,
-  cy,
-  numPoints,
-  innerRadius,
-  outerRadius,
-}: CreateStarPathProps): string {
-  let path = "";
-  const angle = (Math.PI * 2) / numPoints; // Angle between points
-
-  for (let i = 0; i < numPoints * 2; i++) {
-    const r = i % 2 === 0 ? outerRadius : innerRadius;
-    const x = cx + r * Math.cos((i * angle) / 2);
-    const y = cy + r * Math.sin((i * angle) / 2);
-    path += i === 0 ? `M ${x},${y}` : ` L ${x},${y}`;
-  }
-
-  return path + " Z"; // Close the path
-}
-
-interface BasicSVGStarProps {
+interface BasicStarProps {
   /** Number of points of the star */
   numPoints?: number;
 
@@ -107,12 +67,9 @@ interface BasicSVGStarProps {
 /**
  * All SVG properties are allowed, except width, height and viewBox
  */
-interface SVGStarProps
-  extends BasicSVGStarProps,
-    Omit<
-      React.SVGProps<SVGSVGElement>,
-      "width" | "height" | "viewBox" | "fill"
-    > {}
+interface StarProps
+  extends BasicStarProps,
+    Omit<SVGProps<SVGSVGElement>, "width" | "height" | "viewBox" | "fill"> {}
 
 /**
  * An SVG star in an optional circle. The number of points and the sharpness of the
@@ -120,7 +77,7 @@ interface SVGStarProps
  * with the star shown in white, and with a very light white border around the circle.
  * All this can be customized.
  */
-export default function SVGStar({
+export default function Star({
   numPoints = 5,
   size = 20,
   fill,
@@ -133,7 +90,7 @@ export default function SVGStar({
   circleStroke = "#ffffff33",
   variant,
   ...props
-}: SVGStarProps) {
+}: StarProps) {
   // A unique id to reference svg elements
   const id = `${Math.random().toString(16).slice(2)}`;
 

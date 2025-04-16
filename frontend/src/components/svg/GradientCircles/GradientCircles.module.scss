@@ -27,12 +27,10 @@
 
 .innerWrapper {
   overflow: hidden;
-  z-index: calc(var(--z-index) - 2);
 }
 
 .blur {
   overflow: hidden;
-  z-index: calc(var(--z-index) - 1);
 
   div {
     backdrop-filter: blur(var(--blur));

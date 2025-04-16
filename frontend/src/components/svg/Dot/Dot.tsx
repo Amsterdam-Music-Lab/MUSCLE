@@ -6,13 +6,13 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import React from "react";
+import type { SVGProps } from "react";
+import type { Fill } from "@/types/svg";
+import type { Variant } from "@/theme/themes";
 import { Gradient } from "../Gradient";
-import { type Fill } from "../types";
-import { type Variant } from "@/theme/themes";
 import { useVariantFill } from "@/hooks/useVariantFill";
 
-interface BasicSVGDotProps {
+interface BasicDotProps {
   /** Size of the dot */
   size?: number;
 
@@ -26,23 +26,23 @@ interface BasicSVGDotProps {
   variant?: Variant;
 }
 
-interface SVGDotProps
+interface DotProps
   extends Omit<
-      React.SVGProps<SVGSVGElement>,
+      SVGProps<SVGSVGElement>,
       "width" | "height" | "viewBox" | "fill"
     >,
-    BasicSVGDotProps {}
+    BasicDotProps {}
 
 /**
  * A simple SVG dot with a given size and fill. The dot can be animated.
  */
-export default function SVGDot({
+export default function Dot({
   size = 20,
   fill,
   animate = false,
   variant,
   ...props
-}: SVGDotProps) {
+}: DotProps) {
   const id = `${Math.random().toString(16).slice(2)}`;
   const variantFill = useVariantFill(variant ?? "primary") ?? "#000";
   fill = fill ?? variantFill;

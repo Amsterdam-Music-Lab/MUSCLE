@@ -10,12 +10,19 @@ export default {
 };
 
 const decorator = (Story) => (
-  <div style={{ minHeight: "300px" }}>
+  <div style={{ height: "400px", position: "relative" }}>
     <Story />
   </div>
 );
 
 export const Default = {
+  decorators: [decorator],
+};
+
+export const SecondaryVariant = {
+  args: {
+    variant: "secondary",
+  },
   decorators: [decorator],
 };
 
