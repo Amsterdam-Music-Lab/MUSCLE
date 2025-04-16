@@ -1,3 +1,6 @@
+@import "@/scss/variables.scss";
+@import "@/scss/elements.scss";
+
 .aha__button {
     transition: opacity 0.3s ease-out, background-color 0.3s ease-out;
     opacity: 1;

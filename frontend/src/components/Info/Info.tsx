@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import Button from "../Button/Button";
+import { Button } from "@/components/ui";
 import { Info as InfoAction } from "@/types/Action";
 
 export interface InfoProps extends InfoAction {

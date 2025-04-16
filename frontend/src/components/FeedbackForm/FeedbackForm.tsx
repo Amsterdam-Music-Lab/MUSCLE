@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import Question from "../Question/Question";
-import Button from "../Button/Button";
+import { Button } from "@/components/ui";
 import IQuestion from "@/types/Question";
 import { submitResultType } from "@/hooks/useResultHandler";
 

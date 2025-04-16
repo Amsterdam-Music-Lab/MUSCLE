@@ -5,7 +5,7 @@ import { getCurrentTime, getTimeSince } from "@/util/time";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
-import Button from "../Button/Button";
+import { Button } from "@/components/ui";
 import { OnResultType } from "@/hooks/useResultHandler";
 import { TrialConfig } from "@/types/Trial";
 import { Trial as TrialAction } from "@/types/Action";

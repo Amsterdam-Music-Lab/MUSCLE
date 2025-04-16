@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import Button from "../Button/Button";
+import { Button } from "@/components/ui";
 import { Explainer as ExplainerAction } from "@/types/Action";
 
 export interface ExplainerProps extends ExplainerAction {

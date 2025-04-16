@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import './Overlay.scss';
-import Button from '../Button/Button';
+import { Button } from "@/components/ui";
 
 interface OverlayProps {
   isOpen: boolean;

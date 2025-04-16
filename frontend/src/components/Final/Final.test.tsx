@@ -1,5 +1,6 @@
 import { vi, expect, describe, it } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { renderWithProviders as render } from '@/util/testUtils/renderWithProviders';
 import { BrowserRouter } from 'react-router-dom';
 import * as API from '../../API';
 

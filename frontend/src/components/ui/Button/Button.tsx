@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import classNames from "classnames";
-import { audioInitialized } from "../../util/audio";
+import { audioInitialized } from "@/util/audio";
+import "./Button.scss"
 
 interface ButtonProps {
     title: string;

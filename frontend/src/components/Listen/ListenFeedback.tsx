@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import Circle from "../Circle/Circle";
-import Button from "../Button/Button";
+import { Button } from "@/components/ui";
 
 interface ListenFeedbackProps {
     circleContent?: React.ReactNode;

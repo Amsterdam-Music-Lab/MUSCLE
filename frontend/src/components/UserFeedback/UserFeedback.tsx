@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { postFeedback } from '../../API';
-import Button from '../Button/Button';
+import { Button } from "@/components/ui";
 import HTML from '../HTML/HTML';
 import classNames from '@/util/classNames';
 import { FeedbackInfo } from '@/types/Block';
