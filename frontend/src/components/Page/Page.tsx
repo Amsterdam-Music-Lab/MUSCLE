@@ -27,8 +27,8 @@ const Page = ({ className, children }: PageProps) => {
         )}
         style={
           !hasBackground
-            ? null
-            : { backgroundImage: `url(${theme.backgroundUrl})` }
+            ? { zIndex: 1 }
+            : { backgroundImage: `url(${theme.backgroundUrl})`, zIndex: 1 }
         }
       >
         {children}

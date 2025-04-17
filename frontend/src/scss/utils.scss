@@ -220,3 +220,41 @@ $colors: (
     @include flush;
   }
 }
+
+.hover-color-change {
+  position: relative;
+  overflow: hidden; // clip the pseudo-element
+  isolation: isolate; // ensure stacking context
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--overlay-color, white);
+    mix-blend-mode: overlay;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 0;
+  }
+
+  &:hover::before {
+    opacity: var(--overlay-opacity, 0.25);
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.hover-lighter {
+  --overlay-color: #fff;
+  --overlay-opacity: 0.25;
+  @extend .hover-color-change;
+}
+
+.hover-darker {
+  --overlay-color: #000;
+  --overlay-opacity: 0.25;
+  @extend .hover-color-change;
+}

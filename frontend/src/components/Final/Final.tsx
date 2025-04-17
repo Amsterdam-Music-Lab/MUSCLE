@@ -9,10 +9,9 @@ import { finalizeSession } from "../../API";
 import useBoundStore from "../../util/stores";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 import UserFeedback from "../UserFeedback/UserFeedback";
-import FinalButton from "./FinalButton";
 import { Final as FinalAction } from "@/types/Action";
 import classNames from "@/util/classNames";
-
+import { LinkButton } from "@/components/ui";
 import { ScoreBoard, getTimeline } from "@/components/game";
 
 export interface FinalProps extends FinalAction {
@@ -41,7 +40,6 @@ const Final = ({
   logo,
   percentile,
 }: FinalProps) => {
-
   const session = useBoundStore((state) => state.session);
   const navigate = useNavigate();
 
@@ -51,68 +49,84 @@ const Final = ({
 
   // To be implemented!
   const totalScore = 1234;
-  
-  const hasPercentile = typeof percentile === 'number' && percentile >= 0 && percentile <= 100;
-  const timeline = getTimeline({symbols: ["dot", "dot", "star-4", "dot", "dot", "star-5", "dot", "dot", "star-6", "dot", "dot", "star-7"]})
-  const step = 2
+
+  const hasPercentile =
+    typeof percentile === "number" && percentile >= 0 && percentile <= 100;
+  const timeline = getTimeline({
+    symbols: [
+      "dot",
+      "dot",
+      "star-4",
+      "dot",
+      "dot",
+      "star-5",
+      "dot",
+      "dot",
+      "star-6",
+      "dot",
+      "dot",
+      "star-7",
+    ],
+  });
+  const step = 2;
 
   return (
-    <div className="aha__final p-3 d-flex flex-column justify-content-center pt-5 mx-auto mt-5"  style={{maxWidth: "500px"}}>
-
+    <div
+      className="aha__final p-3 d-flex flex-column justify-content-center pt-5 mx-auto mt-5"
+      style={{ maxWidth: "500px" }}
+    >
       <ScoreBoard
         score={score}
         totalScore={totalScore}
         percentile={percentile}
         timeline={timeline}
-        step={7} />
+        step={7}
+      />
 
-        {/* Medal */}
-        {/* <div class="list-group-item">
+      {/* Medal */}
+      {/* <div class="list-group-item">
           {rank && <div className="text-center">
             <Rank cup={{ className: rank?.class, text: rank.text }} score={{ score, label: points }} />
           </div>}
         </div> */}
-        
-        {/* Also contains the statistics */}
-        {/* <div className="aha__final-text">
+
+      {/* Also contains the statistics */}
+      {/* <div className="aha__final-text">
               <div dangerouslySetInnerHTML={{ __html: final_text }} />
           </div> */}
 
-        {button && (
-          <div className="text-center pt-4">
-            <FinalButton
-              button={button}
-              onNext={onNext}
-            />
-          </div>
-        )}
+      {button && (
+        <div className="text-center pt-4">
+          <LinkButton link={button.link} onNext={onNext}>{button.text}</LinkButton>
+        </div>
+      )}
 
-        {logo && (
-          <div className="text-center pt-4">
-            <a href={logo.link}>
-              <img src={logo.image} width="100%" alt="Logo" />
-            </a>
-          </div>
-        )}
+      {logo && (
+        <div className="text-center pt-4">
+          <a href={logo.link}>
+            <img src={logo.image} width="100%" alt="Logo" />
+          </a>
+        </div>
+      )}
 
-        {social && <Social social={social} />}
+      {social && <Social social={social} />}
 
-        {show_profile_link && (
-          <div className=" mt-2 d-flex justify-content-center">
-            <a className="home text-center" href={URLS.AMLHome}>
-              {action_texts.all_experiments}
-            </a>
-            <div
-              data-testid="profile-link"
-              className="home text-center"
-              onClick={() => navigate(URLS.profile)}
-            >
-              {action_texts.profile}
-            </div>
+      {show_profile_link && (
+        <div className=" mt-2 d-flex justify-content-center">
+          <a className="home text-center" href={URLS.AMLHome}>
+            {action_texts.all_experiments}
+          </a>
+          <div
+            data-testid="profile-link"
+            className="home text-center"
+            onClick={() => navigate(URLS.profile)}
+          >
+            {action_texts.profile}
           </div>
-        )}
-        
-        {/* <div className="card border-0 bg-inset-sm rounded-lg py-5 mt-5">
+        </div>
+      )}
+
+      {/* <div className="card border-0 bg-inset-sm rounded-lg py-5 mt-5">
           {show_participant_link && (
             <ParticipantLink
               participantIDOnly={participant_id_only}
@@ -124,7 +138,6 @@ const Final = ({
             feedbackInfo={feedback_info}
           />)}
         </div> */}
-      
     </div>
   );
 };

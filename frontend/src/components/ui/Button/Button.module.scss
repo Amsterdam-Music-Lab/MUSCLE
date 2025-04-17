@@ -1,0 +1,131 @@
+@import "@/scss/variables.scss";
+@import "@/scss/elements.scss";
+@import "@/scss/utils.scss";
+
+$color: red;
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem; // ~6px
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+  transition: background-color 0.2s ease, transform 0.1s ease, outline 0.1s ease;
+  color: white;
+
+  outline: 3px solid #ffffff55;
+  outline-offset: -3px; // pull it in to align with edges
+
+  &:hover {
+    // background-color: #0056b3;
+    // transform: rotateY(25deg) rotateX(3deg);
+  }
+
+  &:active {
+    transform: scale(0.96);
+    outline: inherit;
+  }
+
+  &:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  &.animate-rotate {
+    animation: rotate 2s linear infinite;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// .button {
+//   border-radius: 0.5rem;
+
+//   background-color: $color;
+//   color: white;
+//   transition: opacity 0.3s ease-out, background-color 0.3s ease-out;
+//   opacity: 1;
+
+//   &:hover:not(.disabled):not(:disabled) {
+//     background-color: darken($color, 10%);
+//     color: white;
+//   }
+
+//   &:focus,
+//   &.checked {
+//     box-shadow: 0 0 0 0.2rem rgba($color, 0.5);
+//   }
+
+//   &.border-outside {
+//     box-shadow: 0 0 0 0.2em rgba($color, 0.5);
+//   }
+
+//   &:disabled {
+//     transition: background-color 0.3s ease-out;
+//     opacity: 0.5;
+//     cursor: not-allowed;
+//   }
+// }
+
+// .aha__button {
+//   transition: opacity 0.3s ease-out, background-color 0.3s ease-out;
+//   opacity: 1;
+//   &.disabled,
+//   &:disabled {
+//     transition: background-color 0.3s ease-out;
+//     opacity: 0.5;
+//     cursor: not-allowed;
+//   }
+
+// &.primary {
+//     @include btn-style($primary);
+// }
+
+// &.secondary {
+//     @include btn-style($secondary);
+// }
+
+// &.success {
+//     @include btn-style($success);
+// }
+
+// &.positive {
+//     @include btn-style($positive);
+// }
+
+// &.warning {
+//     @include btn-style($warning);
+// }
+
+// &.negative {
+//     @include btn-style($negative);
+// }
+// }
+
+// .mcg {
+//   //     .aha__button {
+//   //         width: 100%;
+//   //         border-radius: .5em;
+//   //         @extend .bg-red-pink;
+//   //         border: unset;
+//   //         // border: 5px solid #ffffff22;
+
+//   //     }
+//   .btn {
+//     font-family: Inter !important;
+//   }
+// }

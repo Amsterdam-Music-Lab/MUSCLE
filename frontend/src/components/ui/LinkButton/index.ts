@@ -6,5 +6,4 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export { default as Button } from "./Button";
-export type { ButtonProps } from "./Button";
+export { default as LinkButton } from "./LinkButton";

@@ -7,8 +7,8 @@
  */
 
 .gradientCircles {
-  --z-index: -2;
   --blur: 0px;
+  isolation: isolate;
 
   svg {
     object-fit: cover;
@@ -27,12 +27,12 @@
 
 .innerWrapper {
   overflow: hidden;
-  z-index: var(--z-index);
+  z-index: 1;
 }
 
 .blur {
   overflow: hidden;
-  z-index: calc(var(--z-index) + 1);
+  z-index: 2;
 
   div {
     backdrop-filter: blur(var(--blur));
