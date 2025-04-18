@@ -68,7 +68,7 @@ const Overlay: React.FC<OverlayProps> = ({
         </div>
 
         <div className="footer">
-          <Button onClick={() => onClose()} className='primary' title="Continue" clickOnce={false} />
+          <Button onClick={() => onClose()} className='primary' title="Continue" allowMultipleClicks={true} />
         </div>
       </div>
     </div>

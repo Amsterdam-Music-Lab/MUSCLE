@@ -1,12 +1,13 @@
 import type { AnchorHTMLAttributes, ElementType, ReactNode } from "react";
 import type { LinkProps } from "react-router-dom";
 import type { Variant } from "@/theme/themes";
-import type { ButtonProps } from "../Button";
+import type { ButtonProps, GetButtonClassesProps } from "../Button/Button";
 
 import classNames from "classnames";
 import { Link } from "react-router-dom";
-import { Button } from "../Button";
+import Button, { getButtonClasses } from "../Button/Button";
 import "./LinkButton.module.scss";
+import styles from "./LinkButton.module.scss";
 import buttonStyles from "../Button/Button.module.scss";
 
 type ElementProps<T extends ElementType> = T extends "a"
@@ -17,14 +18,11 @@ type ElementProps<T extends ElementType> = T extends "a"
   ? LinkProps
   : Record<string, unknown>;
 
-type BaseProps = {
+interface BaseProps extends GetButtonClassesProps {
   link?: string;
-  variant?: Variant;
-  // clickOnce?: boolean;
-  // title?: string;
   children?: ReactNode;
   className?: string;
-};
+}
 
 type LinkButtonProps<T extends ElementType> = BaseProps & ElementProps<T>;
 
@@ -40,15 +38,25 @@ function LinkButton<T extends ElementType = "button">({
   className,
   children,
   variant,
+  size,
+  outline,
+  stretch,
+  rounded,
   ...props
 }: LinkButtonProps<T>) {
+  const classes = getButtonClasses(
+    {
+      variant,
+      size,
+      outline,
+      stretch,
+      rounded
+    },
+    className
+  );
+
   props = {
     "data-testid": "button-link",
-    className: classNames(
-      className,
-      buttonStyles.button
-      // "btn btn-primary btn-lg mcg-btn bg-subtle-yellow-pink"
-    ),
     variant,
     children,
     ...props,
@@ -57,15 +65,17 @@ function LinkButton<T extends ElementType = "button">({
   let Component;
   if (!link) {
     Component = Button;
+    props = { className, ...props };
   } else if (isRelativeUrl(link)) {
     Component = "Link";
-    props = { to: `/redirect${link}`, ...props };
+    props = { to: `/redirect${link}`, className: classes, ...props };
   } else {
     Component = "a";
     props = {
       href: link,
       target: "_blank",
       rel: "noopener noreferrer",
+      className: classNames(classes, styles.anchorButton),
       ...props,
     };
   }

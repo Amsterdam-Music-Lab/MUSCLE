@@ -39,9 +39,11 @@ const Explainer = ({ instruction, button_label, steps = [], timer = null, onNext
                 <Button
                     className="btn-primary anim anim-fade-in anim-speed-300"
                     onClick={onNext}
-                    title={button_label}
                     style={{ animationDelay: steps.length * 300 + "ms" }}
-                />
+                    stretch={true}
+                    size="lg"
+                    // variant="secondary"
+                >{button_label}</Button>
             </div>
         </div>
     );

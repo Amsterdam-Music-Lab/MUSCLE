@@ -6,6 +6,7 @@ export default {
   parameters: {
     layout: "fullscreen",
   },
+  tags: ["autodocs"],
 };
 
 const decorator = (Story) => (
@@ -43,6 +44,16 @@ export const NoLink = {
     onClick: () => {
       window.alert("Click!");
     },
+  },
+  decorators: [decorator],
+};
+
+export const Size = {
+  args: {
+    children: "Google",
+    link: "/",
+    size: "lg",
+    variant: "secondary",
   },
   decorators: [decorator],
 };

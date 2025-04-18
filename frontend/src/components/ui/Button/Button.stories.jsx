@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui";
+import { Button } from "./Button";
 
 export default {
   title: "UI/Button",
@@ -6,12 +6,13 @@ export default {
   parameters: {
     layout: "fullscreen",
   },
+  tags: ["autodocs"],
 };
 
 const decorator = (Story) => (
   <div
     style={{
-      maxWidth: "200px",
+      maxWidth: "300px",
       height: "100%",
       padding: "1rem",
       background: "#eee",
@@ -37,10 +38,51 @@ export const VeryLong = {
   decorators: [decorator],
 };
 
-export const Inactive = {
+export const Stretch = {
+  args: {
+    title: "Stretched link",
+    stretch: true,
+  },
+  decorators: [decorator],
+};
+
+export const Small = {
+  args: {
+    title: "Small button",
+    size: "sm",
+  },
+  decorators: [decorator],
+};
+
+export const Medium = {
+  args: {
+    title: "Medium",
+    size: "md",
+  },
+  decorators: [decorator],
+};
+
+export const Large = {
+  args: {
+    title: "Large",
+    size: "lg",
+  },
+  decorators: [decorator],
+};
+
+export const NoOutline = {
+  args: {
+    title: "Large",
+    size: "lg",
+    outline: false,
+  },
+  decorators: [decorator],
+};
+
+export const Disabled = {
   args: {
     title: "Click me",
-    onClick: () => {},
+    disabled: true,
   },
   decorators: [decorator],
 };

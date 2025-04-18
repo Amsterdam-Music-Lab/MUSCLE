@@ -233,11 +233,11 @@ $colors: (
     background: var(--overlay-color, white);
     mix-blend-mode: overlay;
     opacity: 0;
-    transition: opacity 0.2s ease;
+    transition: opacity 200ms ease;
     z-index: 0;
   }
 
-  &:hover::before {
+  &:not(:disabled):hover::before {
     opacity: var(--overlay-opacity, 0.25);
   }
 
@@ -249,12 +249,12 @@ $colors: (
 
 .hover-lighter {
   --overlay-color: #fff;
-  --overlay-opacity: 0.25;
+  --overlay-opacity: 0.2;
   @extend .hover-color-change;
 }
 
 .hover-darker {
   --overlay-color: #000;
-  --overlay-opacity: 0.25;
+  --overlay-opacity: 0.3;
   @extend .hover-color-change;
 }

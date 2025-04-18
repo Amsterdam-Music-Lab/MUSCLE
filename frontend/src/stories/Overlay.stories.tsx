@@ -18,7 +18,7 @@ const meta: Meta<typeof Overlay> = {
                         onClick={() => setIsOpen(true)}
                         title="Open Overlay"
                         className='primary'
-                        clickOnce={false}
+                        allowMultipleClicks={true}
                     />
 
                     <Story
