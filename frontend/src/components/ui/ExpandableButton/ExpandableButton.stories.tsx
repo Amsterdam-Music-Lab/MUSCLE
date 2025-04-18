@@ -58,7 +58,7 @@ export const Default = {
     title: "Click me",
     children: (
       <Options>
-        <span key="option1">Option 1 asdfasdf asdf</span>
+        <span key="option1">Option 1</span>
         <span key="option2">Option 2</span>
         <span key="option3">Option 3</span>
       </Options>
@@ -102,7 +102,17 @@ export const Disabled = {
     title: "More",
     disabled: true,
     expanded: true,
-    children: "Hallo!",
+    children: "Hello!",
+  },
+  decorators: [decorator],
+};
+
+export const Rounded = {
+  args: {
+    title: "More",
+    rounded: true,
+    expanded: true,
+    children: "Hello!",
   },
   decorators: [decorator],
 };

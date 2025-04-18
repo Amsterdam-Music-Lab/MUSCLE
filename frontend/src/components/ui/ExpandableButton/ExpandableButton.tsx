@@ -29,11 +29,11 @@ export default function ExpandableButton({
   children,
   className,
   expanded = false,
-  rounded = false,
+  disabled = false,
+  rounded = true,
   size,
   variant,
   outline,
-  disabled = false,
   buttonProps = {},
 
   ...divProps
