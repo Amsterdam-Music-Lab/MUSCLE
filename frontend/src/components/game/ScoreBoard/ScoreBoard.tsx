@@ -6,22 +6,21 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+import type { HTMLProps, ReactNode } from "react";
 import type { ShareConfig } from "@/types/share";
+import type { TimelineConfig } from "@/types/timeline";
 
-import React from "react";
 import classNames from "@/util/classNames";
-import Timeline, {
-  TIMELINE_SYMBOLS,
-  TimelineConfig,
-} from "@/components/game/Timeline/Timeline";
-import { ScoreBar } from "../ScoreBar";
-import { ScoreDisplay as Score } from "../ScoreDisplay";
 import { renderTemplate } from "@/util/renderTemplate";
 import { ShareOptions, ExpandableButton } from "@/components/ui";
+import { Timeline } from "@/components/game";
+import { TIMELINE_SYMBOLS } from "@/components/game/Timeline/Timeline";
+import { ScoreBar } from "../ScoreBar";
+import { ScoreDisplay as Score } from "../ScoreDisplay";
 
 import styles from "./ScoreBoard.module.scss";
 
-interface SectionLabelProps extends React.HTMLProps<HTMLParagraphElement> {
+interface SectionLabelProps extends HTMLProps<HTMLParagraphElement> {
   variant?: "primary" | "secondary" | "tertiary";
 }
 
@@ -44,7 +43,7 @@ const SectionLabel = ({
 );
 
 const defaultLabels = {
-  score: "Last game",
+  turnScore: "Last game",
   totalScore: "Total score",
   percentileAboveCutoff:
     "Congrats! You did better than {{percentile}}% of players at this level",
@@ -54,8 +53,9 @@ const defaultLabels = {
   timeline: "Your progress",
 };
 
-interface ScoreBoardProps {
-  score?: number;
+export interface ScoreBoardProps {
+  /** Score in the last turn */
+  turnScore?: number;
 
   /** Total score */
   totalScore?: number;
@@ -64,32 +64,32 @@ interface ScoreBoardProps {
   percentile?: number;
 
   /** The percentile cutoff below which another message is shown. */
-  percentileCutoff: number;
+  percentileCutoff?: number;
 
   /** The timeline configuration */
   timeline?: TimelineConfig;
 
   /** The current step on the timeline */
-  step?: number;
+  timelineStep?: number;
 
   shareConfig?: ShareConfig;
 
   /** An optional logo displayed at the top */
-  logo: React.ReactNode;
+  logo?: ReactNode;
 
   /** Whether to show the percentile progres bar */
-  showPercentile: boolean;
+  showPercentile?: boolean;
 
   /** Whether to show the scores */
-  showScores: boolean;
+  showScores?: boolean;
 
   /** Whether to show the timelie */
-  showTimeline: boolean;
+  showTimeline?: boolean;
 
   /** Whether to sho the trophy */
-  showTrophy: boolean;
+  showTrophy?: boolean;
 
-  showShare: boolean;
+  showShare?: boolean;
 
   /**
    * Labels used in the scoreboard. These are template strings of the form
@@ -100,12 +100,12 @@ interface ScoreBoardProps {
 }
 
 export default function ScoreBoard({
-  score,
+  turnScore,
   totalScore,
   percentile,
   percentileCutoff = 30,
   timeline,
-  step,
+  timelineStep,
   shareConfig,
   logo,
   showPercentile = true,
@@ -118,21 +118,21 @@ export default function ScoreBoard({
   showShare = showShare && Boolean(shareConfig);
   const hasPercentile =
     typeof percentile === "number" && percentile >= 0 && percentile <= 100;
-  const hasTimeline = timeline !== undefined && step !== undefined;
-  const hasTrophy = hasTimeline && timeline[step].trophy;
+  const hasTimeline = timeline !== undefined && timelineStep !== undefined;
+  const hasTrophy = hasTimeline && timeline[timelineStep].trophy;
   const Trophy =
-    hasTrophy && timeline[step].symbol
-      ? TIMELINE_SYMBOLS[timeline[step].symbol]
+    hasTrophy && timeline[timelineStep].symbol
+      ? TIMELINE_SYMBOLS[timeline[timelineStep].symbol]
       : null;
 
   // Label templates
   const templates = { ...defaultLabels, ...labels };
   const templateData = {
-    score,
+    turnScore,
     totalScore,
     percentile: percentile !== undefined ? Math.round(percentile) : undefined,
     percentileCutoff,
-    step,
+    timelineStep,
     numSteps: timeline?.length,
   };
 
@@ -199,8 +199,8 @@ export default function ScoreBoard({
               <div className="d-flex">
                 <div style={{ width: "50%" }}>
                   <Score
-                    score={score}
-                    label={renderTemplate(templates.score, templateData)}
+                    score={turnScore}
+                    label={renderTemplate(templates.turnScore, templateData)}
                     variant="secondary"
                   />
                 </div>
@@ -224,7 +224,7 @@ export default function ScoreBoard({
               </SectionLabel>
               <Timeline
                 timeline={timeline}
-                step={step + 1}
+                step={timelineStep + 1}
                 spine={true}
                 variant="primary"
               />

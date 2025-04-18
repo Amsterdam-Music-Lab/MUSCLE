@@ -7,7 +7,7 @@
  */
 
 import type { SVGAttributes } from "react";
-import type { Variant } from "@/theme/themes";
+import type { Variant } from "@/types/themeProvider";
 import { Gradient } from "../Gradient";
 import { Circle } from "../Circle";
 import { useVariantFill } from "@/hooks/useVariantFill";
@@ -69,7 +69,6 @@ export default function GradientCirclesSVG({
   minRadiusFactor = 0.2,
   ...props
 }: GradientCirclesSVGProps) {
-  console.log(variant);
   // Default to theme variant
   const variantFill = useVariantFill(variant ?? "primary") ?? {
     startColor: "#ff0000",

@@ -5,9 +5,9 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
+import type { Variant } from "@/types/themeProvider";
+import type { GradientFill } from "@/types/svg";
 import { useTheme } from "@/theme/ThemeProvider";
-import { type Variant } from "@/theme/themes";
-import { type GradientFill } from "@/components/svg/types";
 
 /**
  * Hook that returns the fill for a given variant,

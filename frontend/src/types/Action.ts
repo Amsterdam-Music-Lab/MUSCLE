@@ -1,4 +1,4 @@
-import ShareConfig from "@/types/share";
+import { ShareConfig } from "@/types/share";
 import Block, { FeedbackInfo } from "@/types/Block";
 import Participant from "@/types/Participant";
 import { PlaybackArgs } from "./Playback";

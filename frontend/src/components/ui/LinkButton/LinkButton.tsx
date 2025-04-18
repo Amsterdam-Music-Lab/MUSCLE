@@ -9,9 +9,8 @@
 import type { AnchorHTMLAttributes, ElementType, ReactNode } from "react";
 import type { LinkProps } from "react-router-dom";
 import type { ButtonProps, GetButtonClassesProps } from "../Button/Button";
-
-import classNames from "classnames";
 import { Link } from "react-router-dom";
+import classNames from "classnames";
 import Button, { getButtonClasses } from "../Button/Button";
 import "./LinkButton.module.scss";
 import styles from "./LinkButton.module.scss";
@@ -77,8 +76,12 @@ export default function LinkButton<T extends ElementType = "button">({
     Component = Button;
     props = { className, ...props };
   } else if (isRelativeUrl(link)) {
-    Component = "Link";
-    props = { to: `/redirect${link}`, className: classes, ...props };
+    Component = Link;
+    props = { 
+      to: `/redirect${link}`, 
+      className: classNames(styles.anchorButton, classes), 
+      ...props 
+    };
   } else {
     Component = "a";
     props = {

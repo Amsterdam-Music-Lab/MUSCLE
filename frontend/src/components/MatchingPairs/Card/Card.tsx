@@ -7,7 +7,7 @@
  */
 
 import type { HTMLAttributes, ReactNode } from "react";
-import type { Variant } from "@/theme/themes";
+import type { Variant } from "@/types/themeProvider";
 import { Children } from "react";
 import classNames from "classnames";
 import styles from "./Card.module.scss";

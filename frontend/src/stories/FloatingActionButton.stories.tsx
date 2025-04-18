@@ -1,4 +1,4 @@
-import UserFeedback from "@/components/UserFeedback/UserFeedback";
+import { UserFeedbackForm } from "@/components/user";
 import FloatingActionButton from "@/components/FloatingActionButton/FloatingActionButton";
 
 export default {
@@ -24,7 +24,7 @@ const userFeedbackProps = {
 
 export const Default = {
     args: {
-        children: <UserFeedback {...userFeedbackProps} />,
+        children: <UserFeedbackForm {...userFeedbackProps} />,
     },
     decorators: [
         (Story) => (
@@ -40,7 +40,7 @@ export const Default = {
 export const TopLeft = {
     args: {
         position: "top-left",
-        children: <UserFeedback {...userFeedbackProps} />,
+        children: <UserFeedbackForm {...userFeedbackProps} />,
     },
     decorators: [
         (Story) => (
@@ -56,7 +56,7 @@ export const TopLeft = {
 export const TopRight = {
     args: {
         position: "top-right",
-        children: <UserFeedback {...userFeedbackProps} />,
+        children: <UserFeedbackForm {...userFeedbackProps} />,
     },
     decorators: [
         (Story) => (
@@ -72,7 +72,7 @@ export const TopRight = {
 export const BottomLeft = {
     args: {
         position: "bottom-left",
-        children: <UserFeedback {...userFeedbackProps} />,
+        children: <UserFeedbackForm {...userFeedbackProps} />,
     },
     decorators: [
         (Story) => (
@@ -88,7 +88,7 @@ export const BottomLeft = {
 export const BottomRight = {
     args: {
         position: "bottom-right",
-        children: <UserFeedback {...userFeedbackProps} />,
+        children: <UserFeedbackForm {...userFeedbackProps} />,
     },
     decorators: [
         (Story) => (
@@ -104,7 +104,7 @@ export const BottomRight = {
 export const CenterLeft = {
     args: {
         position: "center-left",
-        children: <UserFeedback {...userFeedbackProps} />,
+        children: <UserFeedbackForm {...userFeedbackProps} />,
     },
     decorators: [
         (Story) => (
@@ -120,7 +120,7 @@ export const CenterLeft = {
 export const CenterRight = {
     args: {
         position: "center-right",
-        children: <UserFeedback {...userFeedbackProps} />,
+        children: <UserFeedbackForm {...userFeedbackProps} />,
     },
     decorators: [
         (Story) => (

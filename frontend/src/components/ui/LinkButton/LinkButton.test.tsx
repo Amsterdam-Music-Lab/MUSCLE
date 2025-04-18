@@ -9,6 +9,7 @@
 import "@testing-library/jest-dom";
 import { describe, expect, it, vi } from "vitest";
 import { fireEvent } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
 import LinkButton, { isRelativeUrl } from "./LinkButton";
 import buttonStyles from "../Button/Button.module.scss";
@@ -24,14 +25,16 @@ describe("LinkButton component", () => {
 
   it("renders as a React Router Link when a relative URL is provided", () => {
     const { getByTestId } = render(
-      <LinkButton link="/relative-path" variant="secondary">
-        Go to page
-      </LinkButton>
+      <MemoryRouter>
+        <LinkButton link="/relative-path" variant="secondary">
+          Go to page
+        </LinkButton>
+      </MemoryRouter>
     );
 
     const link = getByTestId("button-link");
-    expect(link.tagName).toBe("LINK");
-    expect(link).toHaveAttribute("to", "/redirect/relative-path");
+    expect(link.tagName).toBe("A");
+    expect(link).toHaveAttribute("href", "/redirect/relative-path");
     expect(link).toHaveTextContent("Go to page");
   });
 

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Cup from "../Cup/Cup";
 import { URLS } from "@/config";
-import ParticipantLink from "../ParticipantLink/ParticipantLink";
+import { ParticipantLink } from "@/components/user";
 
 export interface ProfileViewProps {
     messages: {

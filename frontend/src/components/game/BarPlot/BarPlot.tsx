@@ -7,8 +7,8 @@
  */
 
 import { type CSSProperties, type HTMLAttributes } from "react";
+import type { Variant } from "@/types/themeProvider";
 import classNames from "classnames";
-import { Variant } from "@/theme/themes";
 import styles from "./BarPlot.module.scss";
 
 export interface BarPlotProps extends HTMLAttributes<HTMLDivElement> {

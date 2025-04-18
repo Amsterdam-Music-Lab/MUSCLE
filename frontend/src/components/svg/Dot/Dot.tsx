@@ -8,7 +8,7 @@
 
 import type { SVGProps } from "react";
 import type { Fill } from "@/types/svg";
-import type { Variant } from "@/theme/themes";
+import type { Variant } from "@/types/themeProvider";
 import { Gradient } from "../Gradient";
 import { useVariantFill } from "@/hooks/useVariantFill";
 

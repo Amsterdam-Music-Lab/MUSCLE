@@ -7,7 +7,7 @@
  */
 
 import type { HTMLAttributes } from "react";
-import type { Variant } from "@/theme/themes";
+import type { Variant } from "@/types/themeProvider";
 import classNames from "classnames";
 import { renderTemplate } from "@/util/renderTemplate";
 import styles from "./ScoreBar.module.scss";

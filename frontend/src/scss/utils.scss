@@ -77,11 +77,19 @@ $colors: (
 }
 
 .rounded-sm {
-  border-radius: 0.75em !important;
+  border-radius: calc(0.75rem * var(--border-radius));
+}
+
+.rounded-md {
+  border-radius: calc(1rem * var(--border-radius));
 }
 
 .rounded-lg {
-  border-radius: 1.5em !important;
+  border-radius: calc(1.5rem * var(--border-radius));
+}
+
+.rounded {
+  border-radius: 100em;
 }
 
 .bg-inset-xs {

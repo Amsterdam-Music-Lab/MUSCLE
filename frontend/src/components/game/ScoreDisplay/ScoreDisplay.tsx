@@ -7,7 +7,7 @@
  */
 
 import type { HTMLAttributes, CSSProperties } from "react";
-import type { Variant } from "@/theme/themes";
+import type { Variant } from "@/types/themeProvider";
 import classNames from "classnames";
 import "./ScoreDisplay.scss";
 

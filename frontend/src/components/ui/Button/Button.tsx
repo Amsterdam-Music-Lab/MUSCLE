@@ -6,12 +6,12 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import { type ButtonHTMLAttributes, type TouchEvent, useRef } from "react";
+import { type ButtonHTMLAttributes, type TouchEvent } from "react";
+import type { Variant } from "@/types/themeProvider";
 import { useState } from "react";
 import classNames from "classnames";
 import { audioInitialized } from "@/util/audio";
 import styles from "./Button.module.scss";
-import { Variant } from "@/theme/themes";
 
 export interface GetButtonClassesProps {
   /** Theme color variant to use */

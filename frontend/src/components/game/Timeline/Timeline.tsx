@@ -7,21 +7,13 @@
  */
 
 import type { CSSProperties } from "react";
-import type { Variant } from "@/theme/themes";
+import type { Variant } from "@/types/themeProvider";
+import type { TimelineSymbolName, TimelineConfig } from "@/types/timeline";
+import type { Fill } from "@/types/svg";
 import classNames from "classnames";
-import { Star, Dot, Fill } from "@/components/svg";
+import { Star, Dot } from "@/components/svg";
 import { useVariantFill } from "@/hooks/useVariantFill";
-
 import styles from "./Timeline.module.scss";
-
-type TimelineSymbolName =
-  | "dot"
-  | "star"
-  | "star-4"
-  | "star-5"
-  | "star-6"
-  | "star-7"
-  | null;
 
 export const TIMELINE_SYMBOLS = {
   dot: ({ ...props }) => <Dot {...props} />,
@@ -32,13 +24,6 @@ export const TIMELINE_SYMBOLS = {
   "star-7": ({ ...props }) => <Star numPoints={7} {...props} />,
   "star-8": ({ ...props }) => <Star numPoints={8} {...props} />,
 };
-
-export type TimelineConfig = Array<{
-  symbol: TimelineSymbolName;
-  size: number;
-  animate: boolean;
-  trophy: boolean;
-}>;
 
 interface GetTimelineProps {
   /** A list of symbol names such as ["dot", "star-4", "dot", ...]  */

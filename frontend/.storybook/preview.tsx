@@ -1,10 +1,13 @@
+import type { ThemeName } from '../src/types/themeProvider';
+import React from 'react';
 import { initialize, mswLoader } from 'msw-storybook-addon'
-import "../public/vendor/bootstrap/bootstrap.min.css";
-import "../src/index.scss";
 import { initAudioListener } from "../src/util/audio";
 import { initWebAudioListener } from "../src/util/webAudio";
-import { ThemeProvider } from "@/theme/ThemeProvider";
-import { themes, type ThemeName } from '@/theme/themes';
+import { MemoryRouter } from "react-router-dom";
+import { themes } from '../src/theme/themes';
+import { ThemeProvider } from "../src/theme/ThemeProvider";
+import "../public/vendor/bootstrap/bootstrap.min.css";
+import "../src/index.scss";
 
 // Init audio listener
 initAudioListener();
@@ -26,10 +29,12 @@ const withThemeProvider = (Story, context) => {
     const theme = themes[themeName] ?? themes.default;
 
     return (
-        <ThemeProvider useTheme={theme}>
-            <div className="theme-root">
-                <Story />
-            </div>
+        <ThemeProvider defaultTheme={theme}>
+            <MemoryRouter>
+                <div className="theme-root">
+                    <Story />
+                </div>
+            </MemoryRouter>
         </ThemeProvider>
     );
 }
