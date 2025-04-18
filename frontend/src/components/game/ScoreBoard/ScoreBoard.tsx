@@ -6,10 +6,10 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+import type { ShareConfig } from "@/types/share";
+
 import React from "react";
 import classNames from "@/util/classNames";
-
-// import TuneTwins from "@/components/MCGTheme/logos/TuneTwins";
 import Timeline, {
   TIMELINE_SYMBOLS,
   TimelineConfig,
@@ -17,8 +17,8 @@ import Timeline, {
 import { ScoreBar } from "../ScoreBar";
 import { ScoreDisplay as Score } from "../ScoreDisplay";
 import { renderTemplate } from "@/util/renderTemplate";
+import { ShareOptions, ExpandableButton } from "@/components/ui";
 
-// TODO use scoped scss
 import styles from "./ScoreBoard.module.scss";
 
 interface SectionLabelProps extends React.HTMLProps<HTMLParagraphElement> {
@@ -63,14 +63,16 @@ interface ScoreBoardProps {
   /** The percentile */
   percentile?: number;
 
+  /** The percentile cutoff below which another message is shown. */
+  percentileCutoff: number;
+
   /** The timeline configuration */
   timeline?: TimelineConfig;
 
   /** The current step on the timeline */
   step?: number;
 
-  /** The percentile cutoff below which another message is shown. */
-  percentileCutoff: number;
+  shareConfig?: ShareConfig;
 
   /** An optional logo displayed at the top */
   logo: React.ReactNode;
@@ -87,6 +89,8 @@ interface ScoreBoardProps {
   /** Whether to sho the trophy */
   showTrophy: boolean;
 
+  showShare: boolean;
+
   /**
    * Labels used in the scoreboard. These are template strings of the form
    * "You scored {{score}} points". You can access the variables score, totalScore
@@ -99,16 +103,19 @@ export default function ScoreBoard({
   score,
   totalScore,
   percentile,
+  percentileCutoff = 30,
   timeline,
   step,
+  shareConfig,
   logo,
-  percentileCutoff = 30,
   showPercentile = true,
   showScores = true,
   showTimeline = true,
   showTrophy = true,
+  showShare = true,
   labels = {},
 }: ScoreBoardProps) {
+  showShare = showShare && Boolean(shareConfig);
   const hasPercentile =
     typeof percentile === "number" && percentile >= 0 && percentile <= 100;
   const hasTimeline = timeline !== undefined && step !== undefined;
@@ -228,11 +235,13 @@ export default function ScoreBoard({
       {/* End of capture */}
 
       {/* Share and options */}
-      <div className="list-group-item p-4 bg-transparent border-left-0 border-right-0 border-bottom-0">
-        <button className="btn bg-indigo-red text-white rounded-lg px-4 py-1">
-          Share
-        </button>
-      </div>
+      {showShare && (
+        <div className="list-group-item p-4 bg-transparent border-left-0 border-right-0 border-bottom-0">
+          <ExpandableButton title="Share" rounded={true} variant="secondary">
+            <ShareOptions config={shareConfig!} />
+          </ExpandableButton>
+        </div>
+      )}
     </div>
   );
 }

@@ -82,3 +82,24 @@ export const CustomLabels = {
   },
   decorators: [decorator],
 };
+
+export const Sharing = {
+  args: {
+    score: 123,
+    totalScore: 456,
+    percentile: 59,
+    timeline: timeline,
+    step: 5,
+    shareConfig: {
+      channels: ["facebook", "twitter", "clipboard"],
+      url: "https://google.com",
+      content: "Test",
+      tags: [],
+    },
+    labels: {
+      score: "You've earned points!",
+      totalScore: "Total of {{totalScore}} points!",
+    },
+  },
+  decorators: [decorator],
+};

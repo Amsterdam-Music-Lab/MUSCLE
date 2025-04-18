@@ -5,7 +5,5 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-export * from "./Button";
-export * from "./LinkButton";
-export * from "./ExpandableButton";
-export * from "./ShareOptions";
+
+export { default as ShareOptions } from "./ShareOptions";

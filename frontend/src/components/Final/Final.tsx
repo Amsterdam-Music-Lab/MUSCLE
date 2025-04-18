@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Rank from "../Rank/Rank";
-import Social from "@/components/Social/Social";
+import { ShareOptions } from "@/components/ui";
 
 import { URLS } from "@/config";
 import { finalizeSession } from "../../API";
@@ -97,7 +97,9 @@ const Final = ({
 
       {button && (
         <div className="text-center pt-4">
-          <LinkButton link={button.link} onNext={onNext}>{button.text}</LinkButton>
+          <LinkButton link={button.link} onNext={onNext}>
+            {button.text}
+          </LinkButton>
         </div>
       )}
 
@@ -109,7 +111,7 @@ const Final = ({
         </div>
       )}
 
-      {social && <Social social={social} />}
+      {social && <ShareOptions config={social} />}
 
       {show_profile_link && (
         <div className=" mt-2 d-flex justify-content-center">
