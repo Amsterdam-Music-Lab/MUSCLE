@@ -5,9 +5,9 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-@import "@/scss/variables.scss";
-@import "@/scss/elements.scss";
-@import "@/scss/utils.scss";
+// @import "@/scss/variables.scss";
+// @import "@/scss/elements.scss";
+// @import "@/scss/utils.scss";
 
 .button {
   display: inline-flex;
@@ -28,6 +28,11 @@
 
   &:not(:disabled):active {
     transform: scale(0.96);
+  }
+
+  &::before {
+    // Fix safari bug: don't show overlay outside button
+    border-radius: inherit;
   }
 
   &:disabled {
@@ -80,13 +85,4 @@
 
 .stretch {
   width: 100%;
-}
-
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
