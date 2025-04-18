@@ -1,6 +1,13 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
 import type { AnchorHTMLAttributes, ElementType, ReactNode } from "react";
 import type { LinkProps } from "react-router-dom";
-import type { Variant } from "@/theme/themes";
 import type { ButtonProps, GetButtonClassesProps } from "../Button/Button";
 
 import classNames from "classnames";
@@ -8,7 +15,6 @@ import { Link } from "react-router-dom";
 import Button, { getButtonClasses } from "../Button/Button";
 import "./LinkButton.module.scss";
 import styles from "./LinkButton.module.scss";
-import buttonStyles from "../Button/Button.module.scss";
 
 type ElementProps<T extends ElementType> = T extends "a"
   ? AnchorHTMLAttributes<HTMLAnchorElement>
@@ -29,11 +35,11 @@ type LinkButtonProps<T extends ElementType> = BaseProps & ElementProps<T>;
 /**
  * Test whether an url is relative
  */
-const isRelativeUrl = (url: string): boolean => {
+export const isRelativeUrl = (url: string): boolean => {
   return url ? url.startsWith("/") : false;
 };
 
-function LinkButton<T extends ElementType = "button">({
+export default function LinkButton<T extends ElementType = "button">({
   link,
   className,
   children,
@@ -50,7 +56,7 @@ function LinkButton<T extends ElementType = "button">({
       size,
       outline,
       stretch,
-      rounded
+      rounded,
     },
     className
   );
@@ -58,6 +64,10 @@ function LinkButton<T extends ElementType = "button">({
   props = {
     "data-testid": "button-link",
     variant,
+    size,
+    outline,
+    rounded,
+    stretch,
     children,
     ...props,
   };
@@ -81,5 +91,3 @@ function LinkButton<T extends ElementType = "button">({
   }
   return <Component {...(props as any)} />;
 }
-
-export default LinkButton;

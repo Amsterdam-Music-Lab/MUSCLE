@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
 @import "@/scss/variables.scss";
 @import "@/scss/elements.scss";
 @import "@/scss/utils.scss";
@@ -25,17 +32,26 @@
 
   &:disabled {
     cursor: unset;
+  }
+
+  &:disabled::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #fff;
     opacity: 0.5;
+    z-index: 2;
   }
 }
 
 .rounded {
-  border-radius: 100em; 
+  border-radius: 100em;
 }
 
 .sm {
   font-size: 0.8rem;
   padding: 0.25em 0.75em;
+  --outline-size: 1px;
 
   &.outline {
     --outline-size: 0px;
@@ -74,81 +90,3 @@
     transform: rotate(360deg);
   }
 }
-
-// .button {
-//   border-radius: 0.5rem;
-
-//   background-color: $color;
-//   color: white;
-//   transition: opacity 0.3s ease-out, background-color 0.3s ease-out;
-//   opacity: 1;
-
-//   &:hover:not(.disabled):not(:disabled) {
-//     background-color: darken($color, 10%);
-//     color: white;
-//   }
-
-//   &:focus,
-//   &.checked {
-//     box-shadow: 0 0 0 0.2rem rgba($color, 0.5);
-//   }
-
-//   &.border-outside {
-//     box-shadow: 0 0 0 0.2em rgba($color, 0.5);
-//   }
-
-//   &:disabled {
-//     transition: background-color 0.3s ease-out;
-//     opacity: 0.5;
-//     cursor: not-allowed;
-//   }
-// }
-
-// .aha__button {
-//   transition: opacity 0.3s ease-out, background-color 0.3s ease-out;
-//   opacity: 1;
-//   &.disabled,
-//   &:disabled {
-//     transition: background-color 0.3s ease-out;
-//     opacity: 0.5;
-//     cursor: not-allowed;
-//   }
-
-// &.primary {
-//     @include btn-style($primary);
-// }
-
-// &.secondary {
-//     @include btn-style($secondary);
-// }
-
-// &.success {
-//     @include btn-style($success);
-// }
-
-// &.positive {
-//     @include btn-style($positive);
-// }
-
-// &.warning {
-//     @include btn-style($warning);
-// }
-
-// &.negative {
-//     @include btn-style($negative);
-// }
-// }
-
-// .mcg {
-//   //     .aha__button {
-//   //         width: 100%;
-//   //         border-radius: .5em;
-//   //         @extend .bg-red-pink;
-//   //         border: unset;
-//   //         // border: 5px solid #ffffff22;
-
-//   //     }
-//   .btn {
-//     font-family: Inter !important;
-//   }
-// }

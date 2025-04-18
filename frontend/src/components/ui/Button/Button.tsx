@@ -1,4 +1,13 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
 import { type ButtonHTMLAttributes, type TouchEvent, useRef } from "react";
+import { useState } from "react";
 import classNames from "classnames";
 import { audioInitialized } from "@/util/audio";
 import styles from "./Button.module.scss";
@@ -54,8 +63,10 @@ export function getButtonClasses(
 export interface ButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onClick" | "value">,
     GetButtonClassesProps {
-  value: string | boolean;
-  onClick: (value?: string | boolean) => void;
+  value?: string | boolean;
+
+  // TODO is this used?
+  onClick?: (value?: string | boolean) => void;
 
   /** Whether you can click multiple times. Defaults to false! */
   allowMultipleClicks?: boolean;
@@ -67,9 +78,9 @@ export interface ButtonProps
 const Button = ({
   title,
   children,
-  onClick,
+  onClick = () => {},
   className,
-  disabled = false,
+  disabled: initialDisabled = false,
   value,
   allowMultipleClicks = false,
   variant = "primary",
@@ -79,14 +90,13 @@ const Button = ({
   rounded = true,
   ...btnProps
 }: ButtonProps) => {
-  const clicked = useRef(false);
-  
+  const [disabled, setDisabled] = useState(initialDisabled);
+  // const clicked = useRef(false);
 
   // Only handle the first click
   const clickOnceGuard = () => {
-    if (allowMultipleClicks) onClick(value);
-    if (disabled || clicked.current) return;
-    clicked.current = true;
+    if (disabled === true) return;
+    if (allowMultipleClicks === false) setDisabled(true);
     onClick(value);
   };
 
@@ -114,7 +124,7 @@ const Button = ({
         className
       )}
       onClick={clickOnceGuard}
-      disabled={disabled || (!allowMultipleClicks && clicked.current)}
+      disabled={disabled === true}
       tabIndex={0}
       onKeyDown={clickOnceGuard}
       type="button"
