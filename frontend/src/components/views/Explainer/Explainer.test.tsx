@@ -6,7 +6,8 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
 import { vi, describe, it, expect } from "vitest";
 
 import Explainer from "./Explainer";
