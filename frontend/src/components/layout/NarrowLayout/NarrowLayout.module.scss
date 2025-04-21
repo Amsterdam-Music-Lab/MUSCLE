@@ -8,6 +8,7 @@
 
 .narrowLayout {
   max-width: var(--narrow-layout-max-width, 600px);
+  min-width: var(--narrow-layout-min-width, 260px);
   margin: auto;
   padding-top: 2rem;
   padding-bottom: 2rem;

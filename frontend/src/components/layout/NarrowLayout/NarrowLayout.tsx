@@ -23,7 +23,7 @@ export interface NarrowLayoutProps extends HTMLAttributes<HTMLDivElement> {
 export default function NarrowLayout({
   className,
   maxWidth = 500,
-  flush = true,
+  flush = false,
   children,
   ...divProps
 }: NarrowLayoutProps) {
