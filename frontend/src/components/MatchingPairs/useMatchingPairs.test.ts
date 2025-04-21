@@ -251,4 +251,31 @@ describe("useMatchingPairs", () => {
     await playCompleteTurn(result, 1, 2);
     expect(onSelectCard).not.toHaveBeenCalled();
   });
+
+  test("hasBeenSelected is set to true only after selecting two cards and ending the turn", async () => {
+    const { result } = renderHook(() =>
+      useMatchingPairs<ComparisonResult, Card>(getProps() as UseMPProps)
+    );
+
+    // Select the first card
+    await selectCard(result, 1);
+    let hasBeenSelectedCards = result.current.cards.filter(
+      (c) => c.hasBeenSelected
+    );
+    expect(hasBeenSelectedCards.length).toBe(0);
+
+    // Select the second card; still shouldn't be true until endTurn
+    await selectCard(result, 2);
+    hasBeenSelectedCards = result.current.cards.filter(
+      (c) => c.hasBeenSelected
+    );
+    expect(hasBeenSelectedCards.length).toBe(0);
+
+    // Now end the turn
+    await endTurn(result);
+    hasBeenSelectedCards = result.current.cards.filter(
+      (c) => c.hasBeenSelected
+    );
+    expect(hasBeenSelectedCards.length).toBe(2);
+  });
 });
