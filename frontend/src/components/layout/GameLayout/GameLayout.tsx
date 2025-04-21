@@ -97,7 +97,6 @@ function GameLayout({
 
   for (const child of allChildren) {
     if (!isValidElement(child)) continue;
-    console.log(child);
     switch (child.type) {
       case GameLayout.Header:
         header = child;
