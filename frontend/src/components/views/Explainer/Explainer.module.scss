@@ -36,9 +36,8 @@
   margin-right: 1em;
   display: inline-block;
   margin-top: -0.25em;
-  $size: 2em;
-  width: $size;
-  height: $size;
+  width: var(--explainer-number-size, 2em);
+  height: var(--explainer-number-size, 2em);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -46,4 +45,17 @@
   background-color: #eee;
   text-align: center;
   @extend .rounded, .bolder;
+}
+
+@include media-breakpoint-down(sm) {
+  .explainer {
+    --explainer-number-size: 1.5em;
+    ul {
+      padding: 0;
+    }
+    .number {
+      margin-top: 0;
+      margin-right: 0.5em;
+    }
+  }
 }
