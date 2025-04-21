@@ -1,0 +1,24 @@
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+@import "@/scss/utils";
+@import "@/scss/theme";
+
+.knockout {
+  @extend .rounded-md;
+  padding: var(--logo-padding, 10%);
+
+  background: gradient-fill(
+    var(--logo-bg-start-color),
+    var(--logo-bg-end-color),
+    var(--logo-bg-scale, 1),
+    var(--logo-bg-offset, 0),
+    var(--logo-bg-angle, 70)
+  );
+  background-color: var(--logo-bg-color);
+}
