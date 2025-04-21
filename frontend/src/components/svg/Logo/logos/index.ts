@@ -10,8 +10,9 @@ import UvA from "./UvA";
 import MCG from "./MCG";
 import AML from "./AML";
 import TuneTwins from "./TuneTwins";
+import NWO from "./NWO";
 
-export const components = { AML, MCG, TuneTwins, UvA };
+export const components = { AML, MCG, TuneTwins, UvA, NWO };
 
 export const logos = Object.fromEntries(
   Object.values(components).map((Component) => [Component._name, Component])
