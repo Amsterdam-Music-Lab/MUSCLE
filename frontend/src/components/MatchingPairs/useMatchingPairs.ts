@@ -185,7 +185,6 @@ export function useMatchingPairs<ComparisonResult, Card extends MPCard>({
     const updatedCard = {
       ...card,
       selected: true,
-      hasBeenSelected: true,
       lastSelectedAt: performance.now(),
     };
 
@@ -269,9 +268,24 @@ export function useMatchingPairs<ComparisonResult, Card extends MPCard>({
           // Inactivate flipped cards if there was a match, and deselect all cards
           return prev.map((card) => {
             if (card.selected && successfulMatch) {
-              return { ...card, selected: false, disabled: true };
+              // A selected and matching card
+              return {
+                ...card,
+                selected: false,
+                disabled: true,
+                hasBeenSelected: true,
+              };
+            } else if (card.selected) {
+              // A selected non-matching card
+              return {
+                ...card,
+                selected: false,
+                hasBeenSelected: true,
+              };
+            } else {
+              // Not selected
+              return { ...card };
             }
-            return { ...card, selected: false };
           });
         }
       )

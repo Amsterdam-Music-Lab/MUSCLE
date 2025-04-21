@@ -6,10 +6,4 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export * from "./Timeline";
-export * from "./ScoreDisplay";
-export * from "./ScoreBoard";
-export * from "./ScoreBar";
-export * from "./ScoreFeedback";
-export * from "./BarPlot";
-export * from "./TutorialMessage";
+export { default as TutorialMessage } from "./TutorialMessage";

@@ -5,15 +5,21 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-
+import type { Tutorial } from "@/types/tutorial";
 import type { Card as CardData } from "@/types/Section";
 import type { MatchingPairsProps as MatchingPairsInterfaceProps } from "../MatchingPairsv1/MatchingPairs";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import classNames from "classnames";
-import { processTutorial } from "../utils";
 import { scoreIntermediateResult } from "@/API";
-import { ScoreFeedback } from "@/components/game";
+import { useTutorial } from "@/hooks/useTutorial";
+import { GameLayout } from "@/components/layout";
+import {
+  Timeline,
+  getTimeline,
+  ScoreFeedback,
+  TutorialMessage,
+} from "@/components/game";
 import {
   useMatchingPairs,
   CompareCardsProps,
@@ -21,9 +27,7 @@ import {
   MPStates,
   UseMatchingPairsProps,
 } from "../useMatchingPairs";
-import { Tutorial, useTutorial } from "../useTutorial";
-import { GameLayout } from "@/components/layout";
-import { Timeline, getTimeline } from "@/components/game";
+import { convertTutorial } from "../utils";
 import { Board } from "../Board";
 import { VisualCard } from "../VisualCard";
 import { AudioCard } from "../AudioCard";
@@ -175,6 +179,12 @@ interface MatchingPairsProps {
   /** Called when the game ends */
   onGameEnd?: (states: MPStates<MPCard>) => void;
 
+  /**
+   * If set, after selecting two cards, the board is automatically reset
+   * after this number of seconds. Defaults to 10 seconds.
+   */
+  endTurnAfterInterval?: number;
+
   /** Tutorial object */
   tutorial?: Tutorial;
 }
@@ -190,10 +200,16 @@ export default function MatchingPairs({
   onSelectCard = () => {},
   onTurnEnd: onTurnEndCallback = () => {},
   onGameEnd: onGameEndCallback = () => {}, // submitResult,
+  endTurnAfterInterval = 10,
   tutorial = TUTORIAL,
 }: MatchingPairsProps) {
   // Game state that flags UI changes
   const [gameState, setGameState] = useState<GameState>(GameState.DEFAULT);
+
+  // Tutorial
+  let { showStep, completeStep, getActiveSteps } = useTutorial({
+    tutorial,
+  });
 
   const beforeSelectCard: UseMPProps["beforeSelectCard"] = ({ card }) => {
     setGameState(GameState.CARD_SELECTED);
@@ -214,6 +230,9 @@ export default function MatchingPairs({
     card2,
   }) => {
     setGameState(GameState[`COMPLETED_${result}`]);
+
+    // Show tutorial
+    showStep(result.toLocaleLowerCase());
     return (prev: MPCard[]) =>
       prev.map((c) => {
         if (c.id === card1.id)
@@ -235,6 +254,11 @@ export default function MatchingPairs({
   const onTurnEnd: UseMPProps["onTurnEnd"] = (states) => {
     setGameState(GameState.DEFAULT);
     onTurnEndCallback(states);
+
+    // Finish tutorial step
+    getActiveSteps().map((step) => completeStep(step.id));
+
+    // Return cards updater
     return (prev: MPCard[]) =>
       prev.map((c) => ({
         ...c,
@@ -264,11 +288,14 @@ export default function MatchingPairs({
       onGameEnd,
     });
 
-  // Tutorial
-  // let { showStep, completeStep, getActiveStep } = useTutorial({ tutorial });
-  // showStep("start");
-  // const activeTutorialStep = getActiveStep();
+  // Automatically reset the board after a specified time interval
+  useEffect(() => {
+    if (!endTurnAfterInterval || !gameState.startsWith("COMPLETED")) return;
+    const timeout = setTimeout(endTurn, endTurnAfterInterval * 1000);
+    return () => clearTimeout(timeout); // cleanup on unmount or if matched changes
+  }, [gameState, endTurn]);
 
+  // Feedback meessage
   let feedback;
   const feedbackContentList = FEEDBACK[gameState]?.content;
   if (feedbackContentList) {
@@ -283,11 +310,14 @@ export default function MatchingPairs({
           <ScoreFeedback
             turnScore={turnScore ?? undefined}
             totalScore={totalScore ?? 0}
-            totalScoreLabel=""
+            totalScoreLabel="Total score"
           >
             {feedback}
-            {/* <p>{activeTutorialStep?.content}</p> */}
           </ScoreFeedback>
+
+          {getActiveSteps().map((step) => (
+            <TutorialMessage key={step.id} {...step} />
+          ))}
         </GameLayout.Header>
         <GameLayout.Main className={styles.main}>
           <Board
@@ -361,6 +391,15 @@ export function MatchingPairsInterface({
   view,
 }: MatchingPairsInterfaceProps) {
   // TODO Tutorial
+  tutorial = {
+    lucky_match:
+      "You got a matching pair, but you didn't hear both cards before. This is considered a lucky match. You get 10 points.",
+    memory_match: "You got a matching pair. You get 20 points.",
+    misremembered:
+      "You thought you found a matching pair, but you didn't. This is considered a misremembered pair. You lose 10 points.",
+    no_match:
+      "This was not a match, so you get 0 points. Please try again to see if you can find a matching pair.",
+  };
   const cards = sections.map(
     (section, index) =>
       ({
@@ -379,6 +418,7 @@ export function MatchingPairsInterface({
         playSection(card.id);
         // TODO set card.playing to true if playerIndex === index?
       }}
+      tutorial={convertTutorial(tutorial)}
     />
   );
 }

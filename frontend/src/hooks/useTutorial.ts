@@ -106,6 +106,7 @@ export const useTutorial = ({ tutorial, ...config }: UseTutorialProps) => {
   };
 
   return {
+    steps,
     showStep,
     completeStep,
     getActiveSteps,
