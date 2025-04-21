@@ -6,6 +6,9 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+/**
+ * Return a copy of the object where specified keys have been omitted.
+ */
 export function omit<T extends object, K extends keyof T>(
   obj: T,
   keys: K[]
