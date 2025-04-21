@@ -19,6 +19,7 @@ import { ScoreBar } from "../ScoreBar";
 import { ScoreDisplay as Score } from "../ScoreDisplay";
 
 import styles from "./ScoreBoard.module.scss";
+import { Logo } from "@/components/svg";
 
 interface SectionLabelProps extends HTMLProps<HTMLParagraphElement> {
   variant?: "primary" | "secondary" | "tertiary";
@@ -143,7 +144,13 @@ export default function ScoreBoard({
       {/* as an image for sharing on social media */}
       <div className={styles.capture}>
         {/* TuneTwins logo */}
-        {logo && <div className="pl-2 px-4">{logo}</div>}
+        <div style={{ display: "flex", justifyContent: "start" }}>
+          <Logo
+            name="tunetwins"
+            variant="primary"
+            style={{ height: "2.5em", marginLeft: "1em" }}
+          />
+        </div>
 
         {/* Star */}
         {showTrophy && hasTrophy && (
