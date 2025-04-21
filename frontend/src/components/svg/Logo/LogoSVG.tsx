@@ -12,7 +12,10 @@ import { Gradient } from "../Gradient";
 
 interface LogoSVGProps
   extends LogoBaseProps,
-    Omit<SVGAttributes<SVGSVGElement>, "fill" | "type"> {
+    Omit<
+      SVGAttributes<SVGSVGElement>,
+      "fill" | "type" | "preserveAspectRatio" | "width" | "height"
+    > {
   width: number;
   height: number;
 }
@@ -30,6 +33,7 @@ export default function LogoSVG({
       viewBox={`0 0 ${width} ${height}`}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid meet"
       {...svgProps}
     >
       <rect width={width} height={height} />

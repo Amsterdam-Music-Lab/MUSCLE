@@ -9,6 +9,17 @@
 @import "@/scss/utils";
 @import "@/scss/theme";
 
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
 .knockout {
   @extend .rounded-md;
   padding: var(--logo-padding, 10%);

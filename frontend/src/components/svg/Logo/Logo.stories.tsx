@@ -114,3 +114,9 @@ export const UvaLockup = {
     type: "lockup",
   },
 };
+
+export const NWO = {
+  args: {
+    name: "nwo",
+  },
+};
