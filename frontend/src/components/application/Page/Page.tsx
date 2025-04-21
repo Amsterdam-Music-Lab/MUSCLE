@@ -2,8 +2,8 @@ import type { HTMLAttributes, ReactNode } from "react";
 import classNames from "classnames";
 import useBoundStore from "@/util/stores";
 import { useTheme } from "@/theme/ThemeProvider";
-import AppBar from "@/components/AppBar/AppBar";
 import { GradientCircles } from "@/components/svg";
+import { AppBar } from "../AppBar";
 import styles from "./Page.module.scss";
 
 interface PageProps extends HTMLAttributes<HTMLDivElement> {
