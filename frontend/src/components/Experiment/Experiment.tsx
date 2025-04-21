@@ -9,7 +9,7 @@ import useBoundStore from "../../util/stores";
 import { useExperiment } from "@/API";
 import Consent from "../Consent/Consent";
 import Footer from "../Footer/Footer";
-import DefaultPage from "../Page/DefaultPage";
+import { Page } from "@/components/application";
 import Loading from "../Loading/Loading";
 import ExperimentAbout from "./ExperimentAbout/ExperimentAbout";
 import ExperimentDashboard from "./ExperimentDashboard/ExperimentDashboard";
@@ -64,9 +64,9 @@ const Experiment = () => {
             ...experiment.consent,
         }
         return (
-            <DefaultPage className='aha__consent-wrapper' title={experiment.name}>
+            <Page className='aha__consent-wrapper' title={experiment.name}>
                 <Consent {...attrs} />
-            </DefaultPage>
+            </Page>
         )
     }
 

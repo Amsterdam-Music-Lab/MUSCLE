@@ -1,0 +1,157 @@
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+@import "@/scss/utils";
+@import "@/scss/variables";
+
+$gap: 0.5em;
+
+.wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  &,
+  &[data-orientation="portrait"] {
+    flex-direction: column;
+  }
+  &[data-orientation="landscape"] {
+    flex-direction: row;
+  }
+}
+
+.constrainAspectRatio {
+  // Ensure
+  container-type: size;
+
+  &[data-orientation="landscape"] > div {
+    max-width: calc(100cqh * var(--min-aspect-landscape, 4 / 3));
+  }
+
+  &[data-orientation="portrait"] > div {
+    max-height: calc(100cqw * var(--min-aspect-portrait, 2));
+  }
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+@media (min-width: $breakpoint-sm), (min-height: $breakpoint-sm) {
+  .container {
+    padding: 1rem;
+  }
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: $gap;
+
+  [data-orientation="portrait"] & {
+    flex-direction: column;
+  }
+}
+
+.mainRow,
+.mainCol {
+  flex: 1;
+}
+
+.mainRow {
+  // flex-grow: 0.9;
+}
+
+.sideCol {
+  flex-basis: 25%;
+}
+
+.main {
+  container-type: size;
+  display: flex;
+  justify-content: center;
+
+  [data-orientation="portrait"] & {
+    flex-direction: row;
+  }
+  [data-orientation="landscape"] & {
+    flex-direction: column;
+  }
+}
+
+.square {
+  aspect-ratio: 1 / 1;
+
+  &,
+  [data-orientation="landscape"] & {
+    width: min(100cqw, 100cqh);
+    height: min(100cqw, 100cqh);
+  }
+
+  [data-orientation="portrait"] & {
+    height: min(100cqw, 100cqh);
+    width: min(100cqw, 100cqh);
+  }
+}
+
+.footerLeft {
+  flex-basis: 25%;
+}
+
+.debug {
+  .container,
+  .header,
+  .main,
+  .footer,
+  .footerLeft,
+  .footerRight {
+    min-height: 1em;
+    min-width: 1em;
+  }
+
+  &.landscape {
+    border: 1px solid blue;
+  }
+
+  &.portrait {
+    border: 1px solid red;
+  }
+
+  .container {
+    background-color: #ffff0033;
+  }
+
+  .header {
+    background-color: #ff000033;
+  }
+
+  .main {
+    background-color: #0000ff33;
+  }
+
+  .square {
+    background-color: yellow;
+  }
+
+  .footer {
+    // background-color: #00ff0033;
+  }
+
+  .footerLeft {
+    background-color: #00ff0033;
+  }
+
+  .footerRight {
+    background-color: #00000066;
+  }
+}

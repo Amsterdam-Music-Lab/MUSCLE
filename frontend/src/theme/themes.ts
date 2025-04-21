@@ -6,7 +6,7 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import type { Theme} from "@/types/themeProvider"
+import type { Theme } from "@/types/themeProvider";
 
 const indigo = "#2B2BEE";
 const pink = "#D843E2";
@@ -14,7 +14,6 @@ const red = "#FA5577";
 const yellow = "#FFB14C";
 const teal = "#39D7B8";
 const green = "#00b612";
-
 
 export const mcgLight: Theme = {
   name: "mcgLight",
@@ -42,6 +41,10 @@ export const mcgLight: Theme = {
     offset: -2.5,
     angle: -60,
   },
+  fullwidth: true,
+  showAppBar: false,
+  showGradientCircles: true,
+  showBackgroundImage: false,
 };
 
 export const mcgDark: Theme = {

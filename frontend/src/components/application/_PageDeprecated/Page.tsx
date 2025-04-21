@@ -1,6 +1,6 @@
 import React from "react";
-import useBoundStore from "@/util/stores";
 import classNames from "classnames";
+import useBoundStore from "@/util/stores";
 import { GradientCircles } from "@/components/svg";
 
 interface PageProps {
@@ -11,6 +11,7 @@ interface PageProps {
 /** Page is a single page in the application */
 const Page = ({ className, children }: PageProps) => {
   const theme = useBoundStore((state) => state.theme);
+  console.log(theme);
 
   // @BC mark MCG theme as .mcg
   // @BC no default bg '/public/images/background.jpg', instead add .no-background
@@ -22,8 +23,8 @@ const Page = ({ className, children }: PageProps) => {
         className={classNames(
           "aha__page",
           className,
-          !hasBackground && "no-background",
-          theme?.name == "MCG" && "mcg"
+          !hasBackground && "no-background"
+          // theme?.name == "MCG" && "mcg"
         )}
         style={
           !hasBackground

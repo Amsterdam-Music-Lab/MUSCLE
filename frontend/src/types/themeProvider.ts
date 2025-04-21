@@ -59,4 +59,12 @@ export interface Theme {
 
   /** Default, medium border radius in rem. */
   borderRadius: number;
+
+  fullwidth?: boolean;
+
+  showAppBar?: boolean;
+
+  showGradientCircles: boolean;
+
+  showBackgroundImage: boolean;
 }

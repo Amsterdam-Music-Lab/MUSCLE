@@ -19,6 +19,7 @@ import { Final as FinalAction } from "@/types/Action";
 import { InputGroup, InputLabel, LinkButton } from "@/components/ui";
 import { ScoreBoard, getTimeline } from "@/components/game";
 import styles from "./Final.module.scss";
+import { NarrowLayout } from "@/components/layout";
 
 export interface FinalProps
   extends FinalAction,
@@ -77,7 +78,7 @@ const Final = ({
   }, [session, participant]);
 
   return (
-    <div className={classNames(styles.final, className)} {...divProps}>
+    <NarrowLayout className={classNames(styles.final, className)} {...divProps}>
       <ScoreBoard
         turnScore={turnScore}
         totalScore={totalScore}
@@ -90,7 +91,9 @@ const Final = ({
       {button && (
         <LinkButton
           link={button.link}
-          onClick={() => { onNext() }}
+          onClick={() => {
+            onNext();
+          }}
           stretch={true}
           rounded={false}
           size="lg"
@@ -131,7 +134,7 @@ const Final = ({
           </a>
         </div>
       )}
-    </div>
+    </NarrowLayout>
   );
 };
 

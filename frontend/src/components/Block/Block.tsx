@@ -5,9 +5,8 @@ import classNames from "classnames";
 
 import useBoundStore from "@/util/stores";
 import { getNextRound, useBlock } from "@/API";
-import DefaultPage from "@/components/Page/DefaultPage";
-import Explainer from "@/components/Explainer/Explainer";
-import { Final } from "@/components/pages";
+import { Page } from "@/components/application";
+import { Explainer, Final } from "@/components/views";
 import Loading from "@/components/Loading/Loading";
 import Playlist from "@/components/Playlist/Playlist";
 import Score from "@/components/Score/Score";
@@ -21,12 +20,14 @@ import Session from "@/types/Session";
 import { Action } from "@/types/Action";
 import { Round } from "@/types/Round";
 
-// Block handles the main (experiment) block flow:
-// - Loads the block and participant
-// - Renders the view based on the state that is provided by the server
-// - It handles sending results to the server
-// - Implements participant_id as URL parameter, e.g. http://localhost:3000/bat?participant_id=johnsmith34
-//   Empty URL parameter "participant_id" is the same as no URL parameter at all
+/**
+ * Block handles the main (experiment) block flow:
+ * - Loads the block and participant
+ * - Renders the view based on the state that is provided by the server
+ * - It handles sending results to the server
+ * - Implements participant_id as URL parameter, e.g. http://localhost:3000/bat?participant_id=johnsmith34
+ * Empty URL parameter "participant_id" is the same as no URL parameter at all
+ */
 const Block = () => {
   const { slug } = useParams();
   const startState = { view: "LOADING" } as Action;
@@ -168,7 +169,7 @@ const Block = () => {
       onResult,
       onNext,
       playlist,
-      key,
+      // key,
       ...state,
     };
 
@@ -177,25 +178,34 @@ const Block = () => {
       // Block views
       // -------------------------
       case "TRIAL_VIEW":
-        return <Trial {...attrs} />;
+        return <Trial key={key} {...attrs} />;
 
       // Information & Scoring
       // -------------------------
       case "EXPLAINER":
-        return <Explainer {...attrs} />;
+        return (
+          <Explainer
+            key={key}
+            instruction={attrs.instruction}
+            button_label={attrs.button_label}
+            steps={attrs.steps}
+            timer={attrs.timer}
+            onNext={attrs.onNext}
+          />
+        );
       case "SCORE":
-        return <Score {...attrs} />;
+        return <Score key={key} {...attrs} />;
       case "FINAL":
-        return <Final {...attrs} />;
+        return <Final key={key} {...attrs} />;
 
       // Generic / helpers
       // -------------------------
       case "PLAYLIST":
-        return <Playlist {...attrs} />;
+        return <Playlist key={key} {...attrs} />;
       case "LOADING":
         return <Loading key={key} {...attrs} />;
       case "INFO":
-        return <Info {...attrs} />;
+        return <Info key={key} {...attrs} />;
       case "REDIRECT":
         window.location.replace(state.url);
         return null;
@@ -229,12 +239,10 @@ const Block = () => {
           unmountOnExit
         >
           {(!loadingBlock && block) || view === "ERROR" ? (
-            /* @BC: use a fullwidth page & hide app bar if the theme is called MCG (very hacky) */
-            <DefaultPage
+            <Page
               title={state.title}
               className={className}
-              fullwidth={theme?.name === "MCG"}
-              showAppBar={theme?.name !== "MCG"}
+              showGradientCircles={view !== "TRIAL_VIEW"}
             >
               {render()}
 
@@ -248,7 +256,7 @@ const Block = () => {
                   />
                 </FloatingActionButton>
               )}
-            </DefaultPage>
+            </Page>
           ) : (
             <div className="loader-container">
               <Loading loadingText={loadingText} />

@@ -1,4 +1,4 @@
-import DefaultPage from "../Page/DefaultPage";
+import { Page } from "@/components/application";
 import Loading from "../Loading/Loading";
 import { useParticipantScores } from "../../API";
 import ProfileView, { ProfileViewProps } from "./ProfileView";
@@ -13,7 +13,7 @@ const Profile = () => {
     }
 
     return (
-        <DefaultPage title="Profile" className="aha__profile">
+        <Page title="Profile" className="aha__profile">
             {data ? (
                 <ProfileView {...data} />
             ) : (
@@ -23,7 +23,7 @@ const Profile = () => {
                     loading your profile
                 </p>
             )}
-        </DefaultPage>
+        </Page>
     );
 };
 
