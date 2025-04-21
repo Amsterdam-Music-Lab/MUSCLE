@@ -196,7 +196,28 @@ const Block = () => {
       case "SCORE":
         return <Score key={key} {...attrs} />;
       case "FINAL":
-        return <Final key={key} {...attrs} />;
+        return (
+          <Final
+            key={key}
+            block={attrs.block}
+            participant={attrs.participant}
+            action_texts={attrs.action_texts}
+            button={attrs.button}
+            onNext={attrs.onNext}
+            show_participant_link={attrs.show_participant_link}
+            participant_id_only={attrs?.participant_id_only}
+            show_profile_link={attrs.show_profile_link}
+            social={attrs.social}
+            feedback_info={attrs.feedback_info}
+            percentile={attrs.percentile}
+            score={attrs.score}
+            totalScore={undefined} // TODO
+            timeline={undefined}
+            timelineStep={undefined}
+            // final_text={attrs.final_text}
+            // points={attrs.points}
+          />
+        );
 
       // Generic / helpers
       // -------------------------

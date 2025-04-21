@@ -13,6 +13,7 @@ import { Button, Card } from "@/components/ui";
 import { Explainer as ExplainerAction } from "@/types/Action";
 import { NarrowLayout } from "@/components/layout";
 import styles from "./Explainer.module.scss";
+import { Logo } from "@/components/svg";
 
 export interface ExplainerProps
   extends ExplainerAction,
@@ -49,6 +50,7 @@ const Explainer = ({
       className={classNames(styles.container, className)}
       {...divProps}
     >
+      <Logo name="tunetwins" fill="#fff" style={{ height: "3em" }} />
       <Card data-testid="explainer" className={classNames(styles.explainer)}>
         <Card.Header title={title}>{instruction}</Card.Header>
 

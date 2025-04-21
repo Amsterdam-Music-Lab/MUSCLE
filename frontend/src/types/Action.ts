@@ -64,8 +64,9 @@ export interface Final {
   block: Block;
   participant: Participant;
   score: number;
+  totalScore?: number;
   percentile?: number;
-  final_text: string | TrustedHTML;
+  final_text?: string | TrustedHTML;
   action_texts: {
     all_experiments: string;
     profile: string;
@@ -80,12 +81,12 @@ export interface Final {
   show_profile_link: boolean;
   social: ShareConfig;
   feedback_info?: FeedbackInfo;
-  points: string;
-  rank: {
+  points?: string;
+  rank?: {
     class: string;
     text: string;
   };
-  logo: {
+  logo?: {
     image: string;
     link: string;
   };

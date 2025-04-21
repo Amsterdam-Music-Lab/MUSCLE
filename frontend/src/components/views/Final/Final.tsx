@@ -20,6 +20,7 @@ import { InputGroup, InputLabel, LinkButton } from "@/components/ui";
 import { ScoreBoard, getTimeline } from "@/components/game";
 import styles from "./Final.module.scss";
 import { NarrowLayout } from "@/components/layout";
+import { Logo } from "@/components/svg";
 
 export interface FinalProps
   extends FinalAction,
@@ -52,7 +53,6 @@ const DEFAULT_TIMELINE = getTimeline({
 const Final = ({
   block,
   participant,
-  final_text: _, //ignored?
   action_texts: userLinkTexts,
   button,
   onNext,
@@ -61,17 +61,19 @@ const Final = ({
   show_profile_link,
   social: shareConfig,
   feedback_info,
-  points,
-  rank,
-  logo,
   percentile,
   score: turnScore,
   totalScore, // TODO
   timeline, // TODO
   timelineStep = 0, // TODO
   className,
+  // Deprecated options
+  // final_text,
+  // points,
+  // rank,
   ...divProps
-}: FinalProps) => {
+}: // logo,
+FinalProps) => {
   const session = useBoundStore((state) => state.session);
   useEffect(() => {
     finalizeSession({ session: session!, participant });
@@ -127,13 +129,25 @@ const Final = ({
         />
       )}
 
-      {logo && (
+      {/* {logo && (
         <div className="text-center pt-4">
           <a href={logo.link}>
             <img src={logo.image} width="100%" alt="Logo" />
           </a>
         </div>
-      )}
+      )} */}
+
+      <div style={{ marginTop: "1rem", padding: "1rem", opacity: 0.5 }}>
+        <div style={{ display: "flex", gap: "2em" }}>
+          <Logo name="nwo" fill="#fff" style={{ height: "2.5em" }} />
+          <Logo name="uva" fill="#fff" style={{ height: "1.5em" }} />
+          <Logo name="aml" fill="#fff" style={{ height: "1.5em" }} />
+          <Logo name="mcg" fill="#fff" style={{ height: "1.5em" }} />
+        </div>
+        <p className="small" style={{ color: "#fff", marginTop: "1em" }}>
+          Some disclaimer...
+        </p>
+      </div>
     </NarrowLayout>
   );
 };
