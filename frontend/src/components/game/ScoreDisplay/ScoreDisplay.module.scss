@@ -8,28 +8,33 @@
 
 @import "@/scss/utils.scss";
 
-.score-display {
+.scoreDisplay {
   --score-display-font-size: 4;
+}
+.score {
+  position: relative;
+}
 
-  .score {
-    position: relative;
+.scoreValue {
+  @extend .fw-black;
 
-    .value {
-      @extend .fw-black;
+  display: inline-block;
+  line-height: 0.8;
+  font-size: calc(var(--score-display-font-size) * 1rem);
+}
 
-      display: inline-block;
-      line-height: 0.8;
-      font-size: calc(var(--score-display-font-size) * 1rem);
-    }
+.scoreUnits {
+  @extend .fw-semibold;
 
-    .units {
-      @extend .fw-semibold;
+  position: absolute;
+}
 
-      position: absolute;
-    }
+.scoreLabel {
+  @extend .fw-semibold;
+}
 
-    .label {
-      @extend .fw-semibold;
-    }
+@include media-breakpoint-down(sm) {
+  .scoreValue {
+    font-size: calc(var(--score-display-font-size) * 0.75rem);
   }
 }

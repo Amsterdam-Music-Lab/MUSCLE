@@ -11,6 +11,7 @@ import { it, describe, expect } from "vitest";
 import { screen } from "@testing-library/react";
 import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
 import ScoreDisplay from "./ScoreDisplay";
+import styles from "./ScoreDisplay.module.scss";
 
 describe("ScoreDisplay", () => {
   it("renders score with units and label", () => {
@@ -47,7 +48,7 @@ describe("ScoreDisplay", () => {
 
   it("applies font size using CSS variable", () => {
     const { container } = render(<ScoreDisplay score={10} size={5} />);
-    const root = container.querySelector(".score-display")!;
+    const root = container.querySelector(`.${styles.scoreDisplay}`)!;
     expect(root.style.getPropertyValue("--score-display-font-size")).toBe("5");
   });
 });

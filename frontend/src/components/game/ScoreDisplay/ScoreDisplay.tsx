@@ -9,7 +9,7 @@
 import type { HTMLAttributes, CSSProperties } from "react";
 import type { Variant } from "@/types/themeProvider";
 import classNames from "classnames";
-import "./ScoreDisplay.scss";
+import styles from "./ScoreDisplay.module.scss";
 
 interface ScoreProps extends HTMLAttributes<HTMLDivElement> {
   /** The score */
@@ -47,23 +47,35 @@ export default function ScoreDisplay({
   const { className, style, ...rest } = props;
   return (
     <div
-      className={classNames("score-display", className)}
+      className={classNames(styles.scoreDisplay, className)}
       style={{ "--score-display-font-size": size, ...style } as CSSProperties}
       {...rest}
     >
-      <div className="score">
+      <div className={styles.score}>
         <div
-          className={`value ${
+          className={classNames(
+            styles.scoreValue,
             score !== undefined ? `text-fill-${variant}` : "text-light-gray"
-          }`}
+          )}
         >
           {score === undefined ? placeholder : score}
         </div>
         {units && score !== undefined ? (
-          <span className={`text-fill-${variant} units small`}>{units}</span>
+          <span
+            className={classNames(
+              styles.scoreUnits,
+              `text-fill-${variant} small`
+            )}
+          >
+            {units}
+          </span>
         ) : null}
       </div>
-      {label && <div className="label text-muted small">{label}</div>}
+      {label && (
+        <div className={classNames(styles.scoreLabel, "text-muted small")}>
+          {label}
+        </div>
+      )}
     </div>
   );
 }
