@@ -6,10 +6,13 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+import type { Card as CardData } from "@/types/Section";
+import type { MatchingPairsProps as MatchingPairsInterfaceProps } from "../MatchingPairsv1/MatchingPairs";
+
 import { useState } from "react";
+import classNames from "classnames";
+import { processTutorial } from "../utils";
 import { scoreIntermediateResult } from "@/API";
-import { Card as CardData } from "@/types/Section";
-import { MatchingPairsProps as MatchingPairsInterfaceProps } from "../MatchingPairsv1/MatchingPairs";
 import { ScoreFeedback } from "@/components/game";
 import {
   useMatchingPairs,
@@ -19,12 +22,12 @@ import {
   UseMatchingPairsProps,
 } from "../useMatchingPairs";
 import { Tutorial, useTutorial } from "../useTutorial";
-import { processTutorial } from "../utils";
+import { GameLayout } from "@/components/layout";
+import { Timeline, getTimeline } from "@/components/game";
 import { Board } from "../Board";
 import { VisualCard } from "../VisualCard";
 import { AudioCard } from "../AudioCard";
 import styles from "./MatchingPairs.module.scss";
-import classNames from "classnames";
 
 interface MPCard extends GenericMPCard {
   playing?: boolean;
@@ -40,6 +43,13 @@ enum GameState {
   COMPLETED_NO_MATCH = "COMPLETED_NO_MATCH",
   COMPLETED_MISREMEMBERED = "COMPLETED_MISREMEMBERED",
   GAME_END = "GAME_END",
+}
+
+enum ComparisonResult {
+  LUCKY_MATCH = "LUCKY_MATCH",
+  MEMORY_MATCH = "MEMORY_MATCH",
+  NO_MATCH = "NO_MATCH",
+  MISREMEMBERED = "MISREMEMBERED",
 }
 
 const CARD_CLASSES = {
@@ -75,12 +85,22 @@ const TUTORIAL = {
   steps: [{ id: "start", content: "Welcome to the game!" }],
 };
 
-enum ComparisonResult {
-  LUCKY_MATCH = "LUCKY_MATCH",
-  MEMORY_MATCH = "MEMORY_MATCH",
-  NO_MATCH = "NO_MATCH",
-  MISREMEMBERED = "MISREMEMBERED",
-}
+const DEFAULT_TIMELINE = getTimeline({
+  symbols: [
+    "dot",
+    "dot",
+    "star-4",
+    "dot",
+    "dot",
+    "star-5",
+    "dot",
+    "dot",
+    "star-6",
+    "dot",
+    "dot",
+    "star-7",
+  ],
+});
 
 // TODO: Not ideal that the comparison result is based on the score.
 // But in backend/experiment/rules/matching_pairs.py the function calculate_intermediate_score
@@ -257,19 +277,19 @@ export default function MatchingPairs({
   }
 
   return (
-    <div className={styles.matchingPairs}>
-      <div className={styles.mpContainer}>
-        <div className={styles.mpHeader}>
+    <div style={{ width: "100vw", height: "100vh" }}>
+      <GameLayout debug={false}>
+        <GameLayout.Header className={styles.header}>
           <ScoreFeedback
             turnScore={turnScore ?? undefined}
             totalScore={totalScore ?? 0}
+            totalScoreLabel=""
           >
             {feedback}
             {/* <p>{activeTutorialStep?.content}</p> */}
           </ScoreFeedback>
-        </div>
-
-        <div className={styles.mpMain}>
+        </GameLayout.Header>
+        <GameLayout.Main className={styles.main}>
           <Board
             columns={4}
             onClick={() => {
@@ -318,8 +338,12 @@ export default function MatchingPairs({
               ];
             })}
           />
-        </div>
-      </div>
+        </GameLayout.Main>
+        <GameLayout.FooterLeft></GameLayout.FooterLeft>
+        <GameLayout.FooterMain style={{ padding: ".5rem 5%" }}>
+          <Timeline timeline={DEFAULT_TIMELINE} step={3} />
+        </GameLayout.FooterMain>
+      </GameLayout>
     </div>
   );
 }

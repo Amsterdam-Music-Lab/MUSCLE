@@ -7,46 +7,50 @@
  */
 
 @import "@/scss/utils.scss";
+@import "@/scss/variables.scss";
 
 .board {
   border-radius: 5%;
-  padding: 3em;
   min-width: 200px;
   min-height: 200px;
 
-  // .square-grid
-  & > div {
-    gap: 1.5em;
+  padding: var(--padding, 5%);
+  .squareGrid {
+    gap: var(--gap, 0.75em);
   }
 }
 
 .slot:not(.invisible) {
   @extend .bg-inset-xs, .sharp-border;
 
-  // TODO
-  border-radius: 1.5em;
+  // Agree with Card
+  border-radius: 15%;
 }
 
 .slot > div {
   height: 100%;
 }
 
-@include media-breakpoint-down(md) {
+@media (min-height: $breakpoint-sm) {
   .board {
-    padding: 1rem;
-
-    .square-grid {
-      gap: 1rem;
-    }
+    --gap: 1rem;
   }
 }
 
-@media (max-aspect-ratio: 1/1), (max-height: 500px) {
+@media (min-width: $breakpoint-sm) {
   .board {
-    padding: 1rem;
+    --gap: 1rem;
+  }
+}
 
-    .square-grid {
-      gap: 1rem;
-    }
+@media (min-height: $breakpoint-md) {
+  .board {
+    --gap: 1.5rem;
+  }
+}
+
+@media (min-width: $breakpoint-md) {
+  .board {
+    --gap: 1.5rem;
   }
 }

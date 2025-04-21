@@ -67,13 +67,13 @@ function Board({
     <div
       className={classNames(
         styles.board,
-        "sharp-border bg-inset-lg md-flush",
+        "sharp-border bg-inset-lg",
         className
       )}
       {...props}
     >
       <div
-        className="square-grid"
+        className={classNames(styles.squareGrid, "square-grid")}
         style={{ "--columns": columns } as CSSProperties}
       >
         {itemsArray.map(([child, slotProps], i) => {
