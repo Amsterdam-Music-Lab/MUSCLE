@@ -266,3 +266,18 @@ $colors: (
   --overlay-opacity: 0.3;
   @extend .hover-color-change;
 }
+
+.contain-fixed-aspect-child {
+  // Keep div in container while maintaining aspect ratio; see:
+  // https://stackoverflow.com/questions/40719015/keeping-div-aspect-ratio-and-centered-regardless-of-parents-aspect-ratio
+  position: relative;
+
+  & > * {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    max-height: 100%;
+    max-width: 100%;
+  }
+}

@@ -1,3 +1,5 @@
+@import "@/scss/utils";
+
 body,
 .theme-root {
   background-size: cover;
@@ -7,7 +9,14 @@ body,
   background-image: var(--background-url, "");
 
   font-family: var(--font-family, sans-serif);
-  font-size: 16px;
+  font-size: 14px;
+}
+
+@include media-breakpoint-up(lg) {
+  body,
+  .theme-root {
+    font-size: 16px;
+  }
 }
 
 // Gradients

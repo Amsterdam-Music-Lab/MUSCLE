@@ -5,15 +5,16 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-import type { Tutorial } from "@/types/tutorial";
+import type { Tutorial, TutorialStep } from "@/types/tutorial";
 import type { Card as CardData } from "@/types/Section";
 import type { MatchingPairsProps as MatchingPairsInterfaceProps } from "../MatchingPairsv1/MatchingPairs";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import classNames from "classnames";
 import { scoreIntermediateResult } from "@/API";
 import { useTutorial } from "@/hooks/useTutorial";
-import { GameLayout } from "@/components/layout";
+import { useOrientation } from "@/hooks/OrientationProvider";
+import { SquareLayout } from "@/components/layout";
 import {
   Timeline,
   getTimeline,
@@ -32,6 +33,7 @@ import { Board } from "../Board";
 import { VisualCard } from "../VisualCard";
 import { AudioCard } from "../AudioCard";
 import styles from "./MatchingPairs.module.scss";
+import { Logo } from "@/components/svg";
 
 interface MPCard extends GenericMPCard {
   playing?: boolean;
@@ -303,78 +305,119 @@ export default function MatchingPairs({
     feedback = feedbackContentList[randomIdx];
   }
 
+  const orientation = useOrientation();
+  // const orientation = useContext(OrientationContext);
+  console.log(orientation);
+  // useEffect(() => {
+  //   console.log("orientation", orientation);
+  // }, [orientation]);
+  // const orientation = "portrait";
+
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
-      <GameLayout debug={false}>
-        <GameLayout.Header className={styles.header}>
-          <ScoreFeedback
-            turnScore={turnScore ?? undefined}
-            totalScore={totalScore ?? 0}
-            totalScoreLabel="Total score"
-          >
-            {feedback}
-          </ScoreFeedback>
+    <SquareLayout
+      portraitHeaderHeight={0.55}
+      className={styles.container}
+      fullscreen={true}
+    >
+      <SquareLayout.Header className={styles.header}>
+        {/* Separate component mostly so that it picks up the orientation correctly */}
+        <MPHeader
+          turnScore={turnScore}
+          totalScore={totalScore}
+          feedback={feedback}
+          activeSteps={getActiveSteps()}
+        />
+      </SquareLayout.Header>
+      <SquareLayout.Square className={styles.main}>
+        <Board
+          columns={4}
+          onClick={() => {
+            if (gameState.startsWith("COMPLETED")) endTurn();
+          }}
+          items={cards.map((card) => {
+            const sharedProps = {
+              flipped: card.selected,
+              disabled: card.disabled,
+              label: <DevCardLabel children={card.data?.group} />,
+            };
 
-          {getActiveSteps().map((step) => (
-            <TutorialMessage key={step.id} {...step} />
-          ))}
-        </GameLayout.Header>
-        <GameLayout.Main className={styles.main}>
-          <Board
-            columns={4}
-            onClick={() => {
-              if (gameState.startsWith("COMPLETED")) endTurn();
-            }}
-            items={cards.map((card) => {
-              const sharedProps = {
-                flipped: card.selected,
-                disabled: card.disabled,
-                label: <DevCardLabel children={card.data?.group} />,
-              };
+            // Return cards (in a container div to isolate the transformations)
+            return [
+              <div
+                key={card.id}
+                className={card.className}
+                onClick={() => {
+                  // Note that nothing else should be called here. In particular,
+                  // the hook onSelectCard is called via the hook beforeSelectCard.
+                  // In this way, the useMatchingPairs hook can ensure that disabled
+                  // cards do not respond (more principled than e.g. a .noEvents class)
+                  selectCard(card.id);
+                }}
+              >
+                {type === "visual" ? (
+                  <VisualCard
+                    src={card.data?.src}
+                    alt={card.data?.alt}
+                    {...sharedProps}
+                  />
+                ) : (
+                  <AudioCard
+                    key={card.id}
+                    running={card.playing}
+                    {...sharedProps}
+                  />
+                )}
+              </div>,
 
-              // Return cards (in a container div to isolate the transformations)
-              return [
-                <div
-                  key={card.id}
-                  className={card.className}
-                  onClick={() => {
-                    // Note that nothing else should be called here. In particular,
-                    // the hook onSelectCard is called via the hook beforeSelectCard.
-                    // In this way, the useMatchingPairs hook can ensure that disabled
-                    // cards do not respond (more principled than e.g. a .noEvents class)
-                    selectCard(card.id);
-                  }}
-                >
-                  {type === "visual" ? (
-                    <VisualCard
-                      src={card.data?.src}
-                      alt={card.data?.alt}
-                      {...sharedProps}
-                    />
-                  ) : (
-                    <AudioCard
-                      key={card.id}
-                      running={card.playing}
-                      {...sharedProps}
-                    />
-                  )}
-                </div>,
+              // Hide slots when card is not disabled so the visual effects
+              // look cleaner
+              {
+                invisible: card.disabled === false,
+              },
+            ];
+          })}
+        />
+      </SquareLayout.Square>
+      <SquareLayout.Aside className={styles.aside}>
+        <Logo name="tunetwins" fill="#ccc" className={styles.logo} />
+      </SquareLayout.Aside>
+      <SquareLayout.Footer className={styles.footer}>
+        <Timeline timeline={DEFAULT_TIMELINE} step={3} />
+      </SquareLayout.Footer>
+    </SquareLayout>
+  );
+}
 
-                // Hide slots when card is not disabled so the visual effects
-                // look cleaner
-                {
-                  invisible: card.disabled === false,
-                },
-              ];
-            })}
-          />
-        </GameLayout.Main>
-        <GameLayout.FooterLeft></GameLayout.FooterLeft>
-        <GameLayout.FooterMain style={{ padding: ".5rem 5%" }}>
-          <Timeline timeline={DEFAULT_TIMELINE} step={3} />
-        </GameLayout.FooterMain>
-      </GameLayout>
-    </div>
+interface MPHeaderProps {
+  turnScore?: number;
+  totalScore?: number;
+  feedback?: string;
+  activeSteps?: TutorialStep[];
+}
+
+function MPHeader({
+  turnScore,
+  totalScore,
+  feedback,
+  activeSteps,
+}: MPHeaderProps) {
+  const orientation = useOrientation();
+  return (
+    <>
+      <ScoreFeedback
+        className={styles.feedback}
+        turnScore={turnScore ?? undefined}
+        totalScore={totalScore ?? 0}
+        totalScoreLabel="Total score"
+        center={orientation === "portrait"}
+      >
+        {feedback}
+      </ScoreFeedback>
+
+      {activeSteps.map((step) => (
+        <TutorialMessage key={step.id} {...step} />
+      ))}
+    </>
   );
 }
 
@@ -391,15 +434,15 @@ export function MatchingPairsInterface({
   view,
 }: MatchingPairsInterfaceProps) {
   // TODO Tutorial
-  tutorial = {
-    lucky_match:
-      "You got a matching pair, but you didn't hear both cards before. This is considered a lucky match. You get 10 points.",
-    memory_match: "You got a matching pair. You get 20 points.",
-    misremembered:
-      "You thought you found a matching pair, but you didn't. This is considered a misremembered pair. You lose 10 points.",
-    no_match:
-      "This was not a match, so you get 0 points. Please try again to see if you can find a matching pair.",
-  };
+  // tutorial = {
+  //   lucky_match:
+  //     "You got a matching pair, but you didn't hear both cards before. This is considered a lucky match. You get 10 points.",
+  //   memory_match: "You got a matching pair. You get 20 points.",
+  //   misremembered:
+  //     "You thought you found a matching pair, but you didn't. This is considered a misremembered pair. You lose 10 points.",
+  //   no_match:
+  //     "This was not a match, so you get 0 points. Please try again to see if you can find a matching pair.",
+  // };
   const cards = sections.map(
     (section, index) =>
       ({

@@ -6,6 +6,4 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export * from "./GameLayout";
-export * from "./NarrowLayout";
-export * from "./SquareLayout";
+export { default as OrientationProvider } from "./OrientationProvider";

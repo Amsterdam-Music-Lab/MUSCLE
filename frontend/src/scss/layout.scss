@@ -12,6 +12,7 @@
 body.root {
   // user-select: none;
   min-height: 100vh;
+  overflow-x: hidden;
 
   /* disable pinch zoom on iOS */
   touch-action: manipulation;
