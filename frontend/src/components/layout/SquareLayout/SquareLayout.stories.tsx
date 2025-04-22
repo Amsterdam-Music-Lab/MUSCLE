@@ -6,7 +6,7 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import { useOrientation } from "@/hooks/useOrientation";
+import { useOrientation } from "@/hooks/OrientationProvider";
 import SquareLayout from "./SquareLayout";
 
 function getDecorator(width: string, height: string) {
