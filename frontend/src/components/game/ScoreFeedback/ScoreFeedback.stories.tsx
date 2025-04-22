@@ -39,3 +39,13 @@ export const WithMessage = {
   },
   decorators: [decorator],
 };
+
+export const Centered = {
+  args: {
+    turnScore: 10,
+    totalScore: 120,
+    children: <>You did it!</>,
+    center: true,
+  },
+  decorators: [decorator],
+};

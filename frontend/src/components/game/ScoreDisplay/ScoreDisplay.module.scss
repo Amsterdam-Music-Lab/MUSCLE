@@ -11,6 +11,15 @@
 .scoreDisplay {
   --score-display-font-size: 4;
 }
+
+.center {
+  .score,
+  .scoreLabel {
+    display: flex;
+    justify-content: center;
+  }
+}
+
 .score {
   position: relative;
 }

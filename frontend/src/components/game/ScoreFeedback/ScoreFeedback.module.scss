@@ -13,6 +13,11 @@
 }
 
 .message {
-  // min-height: 4em;
   padding-top: 0.5em;
+}
+
+.center {
+  .message {
+    text-align: center;
+  }
 }

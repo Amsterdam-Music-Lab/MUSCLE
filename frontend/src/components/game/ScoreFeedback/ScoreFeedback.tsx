@@ -15,21 +15,31 @@ interface FeedbackProps extends HTMLAttributes<HTMLDivElement> {
   totalScore?: number;
   totalScoreLabel?: string;
   children?: React.ReactNode;
+  center?: boolean;
 }
 
 export default function ScoreFeedback({
   turnScore,
   totalScore = 0,
   totalScoreLabel = "Total score",
+  center = false,
   children,
   className,
   ...divProps
 }: FeedbackProps) {
   return (
-    <div className={classNames(styles.feedback, className)} {...divProps}>
+    <div
+      className={classNames(
+        styles.feedback,
+        center && styles.center,
+        className
+      )}
+      {...divProps}
+    >
       <ScoreDisplay
         score={totalScore}
         label={totalScoreLabel}
+        center={center}
         variant="secondary"
       />
       <div className={styles.message}>

@@ -96,3 +96,12 @@ export const SecondaryVariant = {
   },
   decorators: [decorator],
 };
+
+export const Centered = {
+  args: {
+    score: 1234,
+    label: "My very long label is even longer now",
+    center: true,
+  },
+  decorators: [decorator],
+};

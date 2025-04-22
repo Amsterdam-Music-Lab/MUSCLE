@@ -29,6 +29,9 @@ interface ScoreProps extends HTMLAttributes<HTMLDivElement> {
 
   /** The variant color */
   variant?: Variant;
+
+  /** Whether to center the component */
+  center: boolean;
 }
 
 /**
@@ -42,37 +45,51 @@ export default function ScoreDisplay({
   size = 4,
   placeholder = "??",
   variant = "primary",
+  center = false,
   ...props
 }: ScoreProps) {
   const { className, style, ...rest } = props;
   return (
     <div
-      className={classNames(styles.scoreDisplay, className)}
+      className={classNames(
+        styles.scoreDisplay,
+        className,
+        center && styles.center,
+        "score-display"
+      )}
       style={{ "--score-display-font-size": size, ...style } as CSSProperties}
       {...rest}
     >
       <div className={styles.score}>
-        <div
-          className={classNames(
-            styles.scoreValue,
-            score !== undefined ? `text-fill-${variant}` : "text-light-gray"
-          )}
-        >
-          {score === undefined ? placeholder : score}
-        </div>
-        {units && score !== undefined ? (
+        {/* Wrap in an extra div to be able to center the component. */}
+        <div>
           <span
             className={classNames(
-              styles.scoreUnits,
-              `text-fill-${variant} small`
+              styles.scoreValue,
+              score !== undefined ? `text-fill-${variant}` : "text-light-gray"
             )}
           >
-            {units}
+            {score === undefined ? placeholder : score}
           </span>
-        ) : null}
+          {units && score !== undefined ? (
+            <span
+              className={classNames(
+                styles.scoreUnits,
+                `text-fill-${variant} small`
+              )}
+            >
+              {units}
+            </span>
+          ) : null}
+        </div>
       </div>
       {label && (
-        <div className={classNames(styles.scoreLabel, "text-muted small")}>
+        <div
+          className={classNames(
+            styles.scoreLabel,
+            "text-muted small score-label"
+          )}
+        >
           {label}
         </div>
       )}
