@@ -23,7 +23,7 @@
   }
 
   &.cardHeader {
-    padding-top: calc(1.25 * var(--spacer));
+    padding: calc(1.25 * var(--spacer)) var(--spacer);
   }
 }
 

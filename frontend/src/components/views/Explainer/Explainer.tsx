@@ -54,18 +54,20 @@ const Explainer = ({
       <Card data-testid="explainer" className={classNames(styles.explainer)}>
         <Card.Header title={title}>{instruction}</Card.Header>
 
-        <Card.Section>
-          <ul>
-            {steps.map((step, index) => (
-              <ExplainerItem
-                key={index}
-                number={step.number}
-                description={step.description}
-                delay={index * 250}
-              />
-            ))}
-          </ul>
-        </Card.Section>
+        {steps.length > 0 && (
+          <Card.Section>
+            <ul>
+              {steps.map((step, index) => (
+                <ExplainerItem
+                  key={index}
+                  number={step.number}
+                  description={step.description}
+                  delay={index * 250}
+                />
+              ))}
+            </ul>
+          </Card.Section>
+        )}
       </Card>
 
       <Button
