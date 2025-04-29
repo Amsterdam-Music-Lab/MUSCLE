@@ -306,12 +306,6 @@ export default function MatchingPairs({
   }
 
   const orientation = useOrientation();
-  // const orientation = useContext(OrientationContext);
-  console.log(orientation);
-  // useEffect(() => {
-  //   console.log("orientation", orientation);
-  // }, [orientation]);
-  // const orientation = "portrait";
 
   return (
     <SquareLayout
