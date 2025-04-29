@@ -1,0 +1,57 @@
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+@import "@/scss/utils";
+
+$defaultSpacer: 1rem;
+
+.radioInput {
+  --option-size: 1.75rem;
+  --option-padding: 0.25rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: calc(0.25 * var(--spacer, $defaultSpacer));
+}
+
+.option {
+  display: flex;
+  padding: var(--option-padding);
+  gap: calc(0.75 * var(--spacer, $defaultSpacer));
+  cursor: pointer;
+
+  &:focus {
+    @extend .rounded;
+    outline: 1px solid #eee;
+    background-color: #f9f9f9;
+  }
+}
+
+.handle {
+  @extend .bg-inset-sm;
+  border: 1px solid #ddd;
+
+  width: var(--option-size);
+  height: var(--option-size);
+  border-radius: 100rem;
+  transition: background-color 0.3s ease-out;
+
+  .option:hover &:not(.checked) {
+    background-color: #ddd;
+  }
+}
+
+.label {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+  .option.checked & {
+    @extend .fw-semibold;
+  }
+}

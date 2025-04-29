@@ -3,7 +3,7 @@ import type Question from '@/types/Question';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
-import Radios from './_Radios';
+import Radios from './RadioQuestion';
 
 const mockQuestion: Question = {
     key: 'test-radios',

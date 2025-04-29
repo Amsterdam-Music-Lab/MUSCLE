@@ -3,7 +3,7 @@ import { useState } from "react";
 import classNames from "classnames";
 
 import ButtonArray from "./_ButtonArray";
-import Radios from "./_Radios";
+import { RadioQuestion } from "../RadioQuestion";
 import Range from "./_Range";
 import TextRange from "./_TextRange";
 import IconRange from "./_IconRange";
@@ -58,7 +58,7 @@ const Question = ({
             case QuestionViews.AUTOCOMPLETE:
                 return <AutoComplete {...attrs} />;
             case QuestionViews.RADIOS:
-                return <Radios {...attrs} />;
+                return <RadioQuestion {...attrs} />;
             case QuestionViews.RANGE:
                 return <Range {...attrs} />;
             case QuestionViews.TEXT_RANGE:

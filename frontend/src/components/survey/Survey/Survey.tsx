@@ -3,7 +3,7 @@ import type IQuestion from "@/types/Question";
 
 import { useState } from "react";
 import classNames from "classnames";
-import Question from "../Question";
+import { Question } from "../Question";
 import { submitResultType } from "@/hooks/useResultHandler";
 import { Button, Card } from "@/components/ui";
 import { NarrowLayout } from "@/components/layout";
@@ -54,8 +54,7 @@ const Survey = ({
       }
       return false;
     });
-    if (validFormElements.length === form.length) setFormValid(true);
-    else setFormValid(false);
+    setFormValid(validFormElements.length === form.length);
   };
 
   function validateFormElement(formElement: IQuestion) {
@@ -75,7 +74,6 @@ const Survey = ({
       <Card>
         <form>
           {form.map((question, index) => {
-            console.log(question, form);
             return (
               <Card.Section key={index} title={question.question} titleTag="h2">
                 <Question
@@ -107,6 +105,7 @@ const Survey = ({
               title={skipLabel}
             />
           )}
+
           <Button
             onClick={() => {
               submitResult();
@@ -116,7 +115,8 @@ const Survey = ({
             size="lg"
             variant="secondary"
             className={"submit"}
-            disabled={!Boolean(formValid)}
+            allowMultipleClicks={true}
+            disabled={formValid !== true}
             title={buttonLabel}
           />
         </>
