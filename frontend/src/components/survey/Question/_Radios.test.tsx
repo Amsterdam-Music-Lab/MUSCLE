@@ -1,8 +1,9 @@
+import type Question from '@/types/Question';
+
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
 import Radios from './_Radios';
-import Question from '@/types/Question';
 
 const mockQuestion: Question = {
     key: 'test-radios',

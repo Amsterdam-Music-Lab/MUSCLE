@@ -1,8 +1,7 @@
+import type { QuestionViews } from "@/types/Question";
+
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-
-import { QuestionViews } from "@/types/Question";
-
 import Survey from "./Survey";
 
 const form = [

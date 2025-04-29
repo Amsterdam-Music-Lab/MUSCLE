@@ -1,4 +1,5 @@
-import Question from "@/types/Question";
+import type Question from "@/types/Question";
+
 import classNames from "classnames";
 
 interface RadiosProps {

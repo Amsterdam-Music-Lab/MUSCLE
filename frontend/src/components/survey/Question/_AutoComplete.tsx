@@ -1,4 +1,4 @@
-import Question from "@/types/Question";
+import type Question from "@/types/Question";
 import Select from "react-select";
 
 interface AutoCompleteProps {

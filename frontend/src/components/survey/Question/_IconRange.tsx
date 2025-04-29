@@ -1,7 +1,7 @@
+import type Question from "@/types/Question";
 import Slider from "react-rangeslider";
 import classNames from "classnames";
 import RangeTitle from "./_RangeTitle";
-import Question from "@/types/Question";
 
 interface IconRangeProps {
     question: Question;

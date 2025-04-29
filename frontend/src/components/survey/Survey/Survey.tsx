@@ -1,8 +1,9 @@
 import type { HTMLAttributes, ReactNode } from "react";
+import type IQuestion from "@/types/Question";
+
 import { useState } from "react";
 import classNames from "classnames";
-import Question from "@/components/Question/Question";
-import type IQuestion from "@/types/Question";
+import Question from "../Question";
 import { submitResultType } from "@/hooks/useResultHandler";
 import { Button, Card } from "@/components/ui";
 import { NarrowLayout } from "@/components/layout";

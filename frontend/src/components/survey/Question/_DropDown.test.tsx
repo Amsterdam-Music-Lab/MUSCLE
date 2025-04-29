@@ -1,9 +1,9 @@
+import type Question from '@/types/Question';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
 import DropDown from './_DropDown';
-import Question from '@/types/Question';
 
 const mockQuestion: Question = {
     key: 'test-dropdown',

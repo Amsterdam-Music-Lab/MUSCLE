@@ -1,9 +1,9 @@
+import type Question from "@/types/Question";
+
 import Slider from "react-rangeslider";
 import classNames from "classnames";
-
 import RangeLimits from "./_RangeLimits";
 import RangeTitle from "./_RangeTitle";
-import Question from "@/types/Question";
 
 interface TextRangeProps {
     question: Question;

@@ -1,7 +1,8 @@
+import type Question, { QuestionViews } from '@/types/Question';
+
 import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import TextRange from './_TextRange'; // Adjust the import path as necessary
-import Question, { QuestionViews } from '@/types/Question';
 
 describe('TextRange Component', () => {
     const mockQuestion: Question = {
