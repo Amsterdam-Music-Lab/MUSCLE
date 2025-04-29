@@ -90,8 +90,13 @@ const Button = ({
   rounded = true,
   ...btnProps
 }: ButtonProps) => {
-  const [disabled, setDisabled] = useState(initialDisabled);
-  // const clicked = useRef(false);
+  // Only use state to control disabled when allowMultipleClicks === false
+  // TODO its a bit strange to have  allowMultipleClicks = true by default
+  let disabled = initialDisabled;
+  let setDisabled = () => {};
+  if (allowMultipleClicks === false) {
+    [disabled, setDisabled] = useState(initialDisabled);
+  }
 
   // Only handle the first click
   const clickOnceGuard = () => {
