@@ -66,7 +66,7 @@ Card.Section = ({
           {title}
         </TitleTag>
       )}
-      {children && <div>{children}</div>}
+      {children && <div className={styles.sectionContent}>{children}</div>}
     </section>
   );
 };

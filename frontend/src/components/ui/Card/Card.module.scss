@@ -1,7 +1,7 @@
 @import "@/scss/utils";
 
 .card {
-  --spacer: 1rem;
+  --spacer: 1.5rem;
 
   @extend .bg-inset-sm, .sharp-border;
   @extend .rounded-md;
@@ -15,24 +15,26 @@
 
 .section {
   &:not(.flush) {
-    padding: calc(0.75 * var(--spacer)) var(--spacer);
+    padding: var(--spacer) calc(1.25 * var(--spacer));
   }
 
   &.flush {
     padding: 0;
   }
 
-  &.cardHeader {
-    padding: calc(1.25 * var(--spacer)) var(--spacer);
+  * + .sectionContent {
+    margin-top: calc(0.5 * var(--spacer));
   }
 }
 
-.cardTitle {
-  font-size: 1.5rem;
+.sectionTitle {
   margin-bottom: 0;
 }
 
-.sectionTitle {
+h2.sectionTitle {
+  font-size: 1.5rem;
+}
+
+h3.sectionTitle {
   font-size: 1rem;
-  margin-bottom: 0;
 }
