@@ -1,4 +1,4 @@
-import { renderLabel } from "../../util/label";
+import { renderLabel } from "@/util/label";
 
 interface RangeLimitsProps {
     minVal: string;

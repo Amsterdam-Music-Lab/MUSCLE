@@ -1,5 +1,6 @@
-import { renderLabel } from "../../util/label";
-import Question from "@/types/Question";
+import type Question from "@/types/Question";
+
+import { renderLabel } from "@/util/label";
 
 interface RangeTitleProps {
     question: Question;

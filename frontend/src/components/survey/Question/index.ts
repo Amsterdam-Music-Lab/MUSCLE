@@ -6,5 +6,4 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export * from "./Survey";
-export * from "./Question"
+export { default as Question } from "./Question";

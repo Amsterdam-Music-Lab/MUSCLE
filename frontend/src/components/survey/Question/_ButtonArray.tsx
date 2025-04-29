@@ -1,6 +1,7 @@
+import type Question from "@/types/Question";
+
 import classNames from "classnames";
-import { renderLabel } from "../../util/label";
-import Question from "@/types/Question";
+import { renderLabel } from "@/util/label";
 
 interface ButtonArrayProps {
     question: Question;

@@ -1,4 +1,4 @@
-import ButtonArray from "../components/Question/_ButtonArray";
+import ButtonArray from "@/components/survey/Question/_ButtonArray";
 
 export default {
     title: "UI/ButtonArray",
