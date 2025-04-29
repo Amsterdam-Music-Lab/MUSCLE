@@ -243,6 +243,10 @@ const Block = () => {
 
   const view = state?.view;
 
+  // Also show gradient circles for feedback forms
+  const showGradientCircles =
+    view !== "TRIAL_VIEW" || state?.feedback_form !== undefined;
+
   return (
     <>
       <FontLoader fontUrl={theme?.heading_font_url} fontType="heading" />
@@ -263,7 +267,7 @@ const Block = () => {
             <Page
               title={state.title}
               className={className}
-              showGradientCircles={view !== "TRIAL_VIEW"}
+              showGradientCircles={showGradientCircles}
             >
               {render()}
 
