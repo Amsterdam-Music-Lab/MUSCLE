@@ -26,7 +26,7 @@
   transition: background-color 0.2s ease, transform 0.1s ease;
   color: white;
 
-  &:not(:disabled):active {
+  &:not(.disabled):active {
     transform: scale(0.96);
   }
 
@@ -35,11 +35,11 @@
     border-radius: inherit;
   }
 
-  &:disabled {
+  &.disabled {
     cursor: unset;
   }
 
-  &:disabled::after {
+  &.disabled::after {
     content: "";
     position: absolute;
     inset: 0;

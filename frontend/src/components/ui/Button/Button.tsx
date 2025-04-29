@@ -121,10 +121,13 @@ const Button = ({
           stretch,
           rounded,
         },
-        className
+        className,
+
+        // Using classes instead of disabled={disabled}
+        // to fix some issues when disabled="" appears in html
+        disabled === true && styles.disabled
       )}
       onClick={clickOnceGuard}
-      disabled={disabled === true}
       tabIndex={0}
       onKeyDown={clickOnceGuard}
       type="button"
