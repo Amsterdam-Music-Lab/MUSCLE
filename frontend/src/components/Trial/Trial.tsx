@@ -1,14 +1,14 @@
+import type { TrialConfig } from "@/types/Trial";
+import type { Trial as TrialAction } from "@/types/Action";
+
 import { useState, useRef, useCallback } from "react";
 import classNames from "classnames";
-
 import { getCurrentTime, getTimeSince } from "@/util/time";
-import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
-import { Button } from "@/components/ui";
 import { OnResultType } from "@/hooks/useResultHandler";
-import { TrialConfig } from "@/types/Trial";
-import { Trial as TrialAction } from "@/types/Action";
+import { Survey } from "@/components/survey";
+import { Button } from "@/components/ui";
 
 export interface TrialProps extends TrialAction {
     onNext: (breakRound?: boolean) => void;
@@ -157,7 +157,7 @@ const Trial = (props: TrialProps) => {
                 />
             )}
             {preloadReady && feedback_form && (
-                <FeedbackForm
+                <Survey
                     formActive={formActive}
                     form={feedback_form.form}
                     buttonLabel={feedback_form.submit_label}

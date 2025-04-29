@@ -12,8 +12,8 @@ vi.mock("../Playback/Playback", () => ({
         }}>Mock Playback</div>
     )),
 }));
-vi.mock("../FeedbackForm/FeedbackForm", () => ({
-    default: vi.fn(({ submitResult }) => (
+vi.mock("@/components/survey", () => ({
+    Survey: vi.fn(({ submitResult }) => (
         <div data-testid="mock-feedback-form" onClick={() => { submitResult(); }}>Mock Feedback Form</div>
     )),
 }));
