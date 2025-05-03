@@ -36,7 +36,7 @@ function Card({
   );
 }
 
-interface CardSectionProps
+export interface CardSectionProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
   title?: ReactNode;
   flush?: boolean;
