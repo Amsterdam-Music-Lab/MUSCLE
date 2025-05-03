@@ -12,7 +12,7 @@ import type { TimelineConfig } from "@/types/timeline";
 
 import classNames from "@/util/classNames";
 import { renderTemplate } from "@/util/renderTemplate";
-import { ShareOptions, ExpandableButton } from "@/components/ui";
+import { ShareOptions, ExpandableButton, Card } from "@/components/ui";
 import { Timeline } from "@/components/game";
 import { TIMELINE_SYMBOLS } from "@/components/game/Timeline/Timeline";
 import { ScoreBar } from "../ScoreBar";
@@ -46,12 +46,13 @@ const SectionLabel = ({
 const defaultLabels = {
   turnScore: "Last game",
   totalScore: "Total score",
+  scoreHeader: "",
   percentileAboveCutoff:
     "Congrats! You did better than {{percentile}}% of players at this level",
   percentileBelowCutoff:
     "Congrats! You did better than {{percentileCutoff}}% of players at this level",
   trophy: "Yay, you've earned a star!",
-  timeline: "Your progress",
+  timelineHeader: "Your progress",
 };
 
 export interface ScoreBoardProps {
@@ -138,117 +139,96 @@ export default function ScoreBoard({
   };
 
   return (
-    <div className={classNames(styles.scoreBoard, "card")}>
-      {/* Capture this */}
-      {/* A square card that fits inside the rounded card and should be captured */}
-      {/* as an image for sharing on social media */}
-      <div className={styles.capture}>
-        {/* TuneTwins logo */}
-        <div style={{ display: "flex", justifyContent: "start" }}>
-          <Logo
-            name="tunetwins"
+    <Card className={classNames(styles.scoreBoard)}>
+      <Card.Header style={{ display: "flex", justifyContent: "start" }}>
+        <Logo
+          name="tunetwins"
+          variant="primary"
+          style={{ height: "2.5em", marginLeft: "1em" }}
+        />
+      </Card.Header>
+
+      {/* Star */}
+      {showTrophy && hasTrophy && (
+        <div className={styles.trophy}>
+          <p className={styles.trophyLabel}>
+            {renderTemplate(templates.trophy, templateData)}
+          </p>
+
+          {Trophy && (
+            <Trophy
+              className={styles.trophyIcon}
+              variant="secondary"
+              size={100}
+              circleStrokeWidth={0.15}
+            />
+          )}
+        </div>
+      )}
+
+      {/* Percentile */}
+      {showPercentile && hasPercentile && percentile > 0 && (
+        <Card.Section
+          title={renderTemplate(
+            percentile > percentileCutoff
+              ? templates.percentileAboveCutoff
+              : templates.percentileBelowCutoff,
+            templateData
+          )}
+        >
+          <ScoreBar
+            value={
+              percentile > percentileCutoff ? percentile : percentileCutoff
+            }
             variant="primary"
-            style={{ height: "2.5em", marginLeft: "1em" }}
           />
-        </div>
+        </Card.Section>
+      )}
 
-        {/* Star */}
-        {showTrophy && hasTrophy && (
-          <div className={styles.trophy}>
-            <p className={styles.trophyLabel}>
-              {renderTemplate(templates.trophy, templateData)}
-            </p>
-
-            {Trophy && (
-              <Trophy
-                className={styles.trophyIcon}
+      {/* Ranking */}
+      {showScores && (
+        <Card.Section title={labels.scoreHeader}>
+          <div className="d-flex">
+            <div style={{ width: "50%" }}>
+              <Score
+                score={turnScore}
+                label={renderTemplate(templates.turnScore, templateData)}
                 variant="secondary"
-                size={100}
-                circleStrokeWidth={0.15}
               />
-            )}
+            </div>
+            <div style={{ width: "50%" }}>
+              <Score
+                score={totalScore}
+                label={renderTemplate(templates.totalScore, templateData)}
+                variant="secondary"
+              />
+            </div>
           </div>
-        )}
+        </Card.Section>
+      )}
 
-        <div className="list-group list-group-flush bg-transparent">
-          {/* Percentile */}
-          {showPercentile && hasPercentile && percentile > 0 && (
-            <div className="list-group-item p-4 bg-transparent">
-              {percentile > percentileCutoff ? (
-                <>
-                  <SectionLabel style={{ maxWidth: "70%" }}>
-                    {renderTemplate(
-                      templates.percentileAboveCutoff,
-                      templateData
-                    )}
-                  </SectionLabel>
-                  <ScoreBar value={percentile} variant="primary" />
-                </>
-              ) : (
-                <>
-                  <SectionLabel>
-                    {renderTemplate(
-                      templates.percentileBelowCutoff,
-                      templateData
-                    )}
-                  </SectionLabel>
-                  <ScoreBar value={percentileCutoff} variant="primary" />
-                </>
-              )}
-            </div>
-          )}
-
-          {/* Ranking */}
-          {/* Note that falls back gracefully when score or totalScore are missing. */}
-          {showScores && (
-            <div className="list-group-item p-4 bg-transparent">
-              {/* <SectionLabel>Your scores</SectionLabel> */}
-              <div className="d-flex">
-                <div style={{ width: "50%" }}>
-                  <Score
-                    score={turnScore}
-                    label={renderTemplate(templates.turnScore, templateData)}
-                    variant="secondary"
-                  />
-                </div>
-                <div style={{ width: "50%" }}>
-                  <Score
-                    score={totalScore}
-                    label={renderTemplate(templates.totalScore, templateData)}
-                    variant="secondary"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Progress */}
-          {showTimeline && hasTimeline && (
-            <div className="list-group-item p-4 bg-transparent">
-              {/* The label should depend on the step in the timeline */}
-              <SectionLabel>
-                {renderTemplate(templates.timeline, templateData)}
-              </SectionLabel>
-              <Timeline
-                timeline={timeline}
-                step={timelineStep + 1}
-                spine={true}
-                variant="primary"
-              />
-            </div>
-          )}
-        </div>
-      </div>
-      {/* End of capture */}
+      {/* Progress */}
+      {showTimeline && hasTimeline && (
+        <Card.Section
+          title={renderTemplate(templates.timelineHeader, templateData)}
+        >
+          <Timeline
+            timeline={timeline}
+            step={timelineStep + 1}
+            spine={true}
+            variant="primary"
+          />
+        </Card.Section>
+      )}
 
       {/* Share and options */}
       {showShare && (
-        <div className="list-group-item p-4 bg-transparent border-left-0 border-right-0 border-bottom-0">
+        <Card.Section>
           <ExpandableButton title="Share" rounded={true} variant="secondary">
             <ShareOptions config={shareConfig!} />
           </ExpandableButton>
-        </div>
+        </Card.Section>
       )}
-    </div>
+    </Card>
   );
 }
