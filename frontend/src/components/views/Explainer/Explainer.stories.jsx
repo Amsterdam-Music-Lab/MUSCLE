@@ -9,7 +9,7 @@
 import Explainer from "./Explainer";
 
 export default {
-  title: "Experiment/Explainer",
+  title: "Views/Explainer",
   component: Explainer,
   parameters: {
     layout: "fullscreen",

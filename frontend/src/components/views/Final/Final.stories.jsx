@@ -9,7 +9,7 @@
 import Final from "./Final";
 
 export default {
-  title: "Pages/Final",
+  title: "Views/Final",
   component: Final,
   parameters: {
     layout: "fullscreen",
