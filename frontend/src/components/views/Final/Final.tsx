@@ -8,43 +8,34 @@
 
 import type { HTMLAttributes } from "react";
 import type { ScoreBoardProps } from "@/components/game/ScoreBoard/ScoreBoard";
+import type { AllPluginSpec } from "@/components/plugins/pluginRegistry";
+
 import { useEffect } from "react";
 import classNames from "classnames";
 import { URLS } from "@/config";
 import { finalizeSession } from "@/API";
 import useBoundStore from "@/util/stores";
-import { ParticipantLink } from "@/components/user";
-import { UserFeedbackForm } from "@/components/user";
 import { Final as FinalAction } from "@/types/Action";
-import { InputGroup, InputLabel, LinkButton } from "@/components/ui";
-import { ScoreBoard, getTimeline } from "@/components/game";
-import styles from "./Final.module.scss";
 import { NarrowLayout } from "@/components/layout";
-import { Logo } from "@/components/svg";
+import PluginRenderer from "@/components/plugins/PluginRenderer";
+
+import styles from "./Final.module.scss";
 
 export interface FinalProps
   extends FinalAction,
-    Omit<ScoreBoardProps, "logo">,
+    ScoreBoardProps,
     HTMLAttributes<HTMLDivElement> {
   onNext: () => void;
+  plugins?: AllPluginSpec[];
 }
 
-const DEFAULT_TIMELINE = getTimeline({
-  symbols: [
-    "dot",
-    "dot",
-    "star-4",
-    "dot",
-    "dot",
-    "star-5",
-    "dot",
-    "dot",
-    "star-6",
-    "dot",
-    "dot",
-    "star-7",
-  ],
-});
+const DEFAULT_PLUGINS = [
+  { name: "scoreboard" },
+  { name: "linkButton" },
+  { name: "userPages" },
+  { name: "participantLink" },
+  { name: "userFeedback" },
+] as AllPluginSpec[];
 
 /**
  * Final is a block view that shows the final scores of the block
@@ -67,87 +58,73 @@ const Final = ({
   timeline, // TODO
   timelineStep = 0, // TODO
   className,
-  // Deprecated options
-  // final_text,
-  // points,
-  // rank,
+  plugins = DEFAULT_PLUGINS,
   ...divProps
-}: // logo,
-FinalProps) => {
+}: FinalProps) => {
   const session = useBoundStore((state) => state.session);
   useEffect(() => {
     finalizeSession({ session: session!, participant });
   }, [session, participant]);
 
+  // Pass data to plugins
+  plugins = plugins.map((plugin) => {
+    const updated: AllPluginSpec = { args: {}, ...plugin };
+    switch (plugin.name) {
+      case "scoreboard":
+        updated.args = {
+          ...updated.args,
+          turnScore,
+          totalScore,
+          percentile,
+          timeline,
+          timelineStep,
+          shareConfig,
+        };
+        break;
+
+      case "userPages":
+        updated.args = {
+          ...updated.args,
+          links: [
+            { link: URLS.AMLHome, text: userLinkTexts.all_experiments },
+            { link: URLS.profile, text: userLinkTexts.profile },
+          ],
+        };
+        break;
+
+      case "userFeedback":
+        updated.args = {
+          ...updated.args,
+          blockSlug: block.slug,
+          participant,
+          // TODO: cannot yet customize this text...
+          feedbackInfo: feedback_info,
+        };
+        break;
+
+      case "participantLink":
+        updated.args = {
+          ...updated.args,
+          participantIDOnly: participant_id_only,
+        };
+        break;
+
+      case "linkButton":
+        updated.args = {
+          ...updated.args,
+          link: button.link,
+          onClick: onNext,
+          children: button.text,
+        };
+        break;
+    }
+
+    return updated as AllPluginSpec;
+  });
+
   return (
     <NarrowLayout className={classNames(styles.final, className)} {...divProps}>
-      <ScoreBoard
-        turnScore={turnScore}
-        totalScore={totalScore}
-        percentile={percentile}
-        timeline={timeline}
-        timelineStep={timelineStep}
-        shareConfig={shareConfig}
-      />
-
-      {button && (
-        <LinkButton
-          link={button.link}
-          onClick={() => {
-            onNext();
-          }}
-          stretch={true}
-          rounded={false}
-          size="lg"
-          variant="secondary"
-        >
-          {button.text}
-        </LinkButton>
-      )}
-
-      {show_profile_link && (
-        <InputGroup stretch={true}>
-          <InputLabel style={{ flexGrow: 1 }}>User pages</InputLabel>
-          <LinkButton link={URLS.AMLHome} outline={false}>
-            {userLinkTexts.all_experiments}
-          </LinkButton>
-          <LinkButton outline={false} link={URLS.profile}>
-            {userLinkTexts.profile}
-          </LinkButton>
-        </InputGroup>
-      )}
-
-      {show_participant_link && (
-        <ParticipantLink participantIDOnly={participant_id_only} />
-      )}
-
-      {feedback_info && (
-        <UserFeedbackForm
-          blockSlug={block.slug}
-          participant={participant}
-          feedbackInfo={feedback_info}
-        />
-      )}
-
-      {/* {logo && (
-        <div className="text-center pt-4">
-          <a href={logo.link}>
-            <img src={logo.image} width="100%" alt="Logo" />
-          </a>
-        </div>
-      )} */}
-
-      <div style={{ marginTop: "1rem", padding: "1rem", opacity: 0.5 }}>
-        <div style={{ display: "flex", gap: "2em" }}>
-          <Logo name="nwo" fill="#fff" style={{ height: "2.5em" }} />
-          <Logo name="uva" fill="#fff" style={{ height: "1.5em" }} />
-          <Logo name="aml" fill="#fff" style={{ height: "1.5em" }} />
-          <Logo name="mcg" fill="#fff" style={{ height: "1.5em" }} />
-        </div>
-        <p className="small" style={{ color: "#fff", marginTop: "1em" }}>
-          Some disclaimer...
-        </p>
-      </div>
+      <PluginRenderer plugins={plugins as AllPluginSpec[]} />
     </NarrowLayout>
   );
 };

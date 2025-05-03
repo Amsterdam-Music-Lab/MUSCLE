@@ -25,7 +25,7 @@ export const TIMELINE_SYMBOLS = {
   "star-8": ({ ...props }) => <Star numPoints={8} {...props} />,
 };
 
-interface GetTimelineProps {
+export interface GetTimelineProps {
   /** A list of symbol names such as ["dot", "star-4", "dot", ...]  */
   symbols: Array<TimelineSymbolName>;
 
@@ -65,7 +65,7 @@ export function getTimeline({
   }));
 }
 
-interface TimelineProps {
+export interface TimelineProps {
   /**
    * A timeline configuration object. This should be a list of objects specifying
    * the symbol name, the size, whether it is a trophy and whether it is animated.

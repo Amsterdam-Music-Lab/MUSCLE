@@ -34,7 +34,9 @@ export interface SpecificLogoProps
 
 export type LogoName = keyof typeof componentMap;
 
-interface LogoProps extends LogoBaseProps, HTMLAttributes<HTMLDivElement> {
+export interface LogoProps
+  extends LogoBaseProps,
+    HTMLAttributes<HTMLDivElement> {
   name: LogoName;
 }
 

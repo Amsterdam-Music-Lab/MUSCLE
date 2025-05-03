@@ -31,7 +31,7 @@ interface ScoreProps extends HTMLAttributes<HTMLDivElement> {
   variant?: Variant;
 
   /** Whether to center the component */
-  center: boolean;
+  center?: boolean;
 }
 
 /**

@@ -15,7 +15,7 @@ import { useParticipantLink } from "@/API";
 import { Input, InputGroup, Button, InputLabel } from "@/components/ui";
 import styles from "./ParticipantLink.module.scss";
 
-interface ParticipantLinkProps extends InputGroupProps {
+export interface ParticipantLinkProps extends InputGroupProps {
   /** Label text shown in front of the component */
   label?: ReactNode;
 

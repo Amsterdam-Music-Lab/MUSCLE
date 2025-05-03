@@ -29,7 +29,8 @@ interface BaseProps extends GetButtonClassesProps {
   className?: string;
 }
 
-type LinkButtonProps<T extends ElementType> = BaseProps & ElementProps<T>;
+export type LinkButtonProps<T extends ElementType> = BaseProps &
+  ElementProps<T>;
 
 /**
  * Test whether an url is relative
@@ -62,11 +63,6 @@ export default function LinkButton<T extends ElementType = "button">({
 
   props = {
     "data-testid": "button-link",
-    variant,
-    size,
-    outline,
-    rounded,
-    stretch,
     children,
     ...props,
   };
@@ -74,13 +70,13 @@ export default function LinkButton<T extends ElementType = "button">({
   let Component;
   if (!link) {
     Component = Button;
-    props = { className, ...props };
+    props = { className, variant, size, outline, rounded, stretch, ...props };
   } else if (isRelativeUrl(link)) {
     Component = Link;
-    props = { 
-      to: `/redirect${link}`, 
-      className: classNames(styles.anchorButton, classes), 
-      ...props 
+    props = {
+      to: `/redirect${link}`,
+      className: classNames(styles.anchorButton, classes),
+      ...props,
     };
   } else {
     Component = "a";

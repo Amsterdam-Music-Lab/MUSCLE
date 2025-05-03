@@ -6,5 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export type { CardProps, CardSectionProps } from "./Card";
-export { default as Card } from "./Card";
+export type { PluginSpec } from "./PluginCard";
+export { default as PluginCard } from "./PluginCard";

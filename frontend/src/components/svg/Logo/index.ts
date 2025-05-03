@@ -6,4 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+export type { LogoProps } from "./Logo";
 export { default as Logo } from "./Logo";

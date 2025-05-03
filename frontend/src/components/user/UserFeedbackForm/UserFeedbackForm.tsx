@@ -71,7 +71,7 @@ function Form({
   );
 }
 
-interface UserFeedbackFormProps extends Omit<CardProps, "title"> {
+export interface UserFeedbackFormProps extends Omit<CardProps, "title"> {
   blockSlug: string;
   participant: any;
   feedbackInfo: FeedbackInfo;
