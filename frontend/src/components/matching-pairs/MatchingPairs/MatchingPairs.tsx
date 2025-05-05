@@ -15,12 +15,7 @@ import { scoreIntermediateResult } from "@/API";
 import { useTutorial } from "@/hooks/useTutorial";
 import { useOrientation } from "@/hooks/OrientationProvider";
 import { SquareLayout } from "@/components/layout";
-import {
-  Timeline,
-  getTimeline,
-  ScoreFeedback,
-  TutorialMessage,
-} from "@/components/game";
+import { Timeline, ScoreFeedback, TutorialMessage } from "@/components/game";
 import {
   useMatchingPairs,
   CompareCardsProps,
@@ -92,7 +87,7 @@ const TUTORIAL = {
   steps: [{ id: "start", content: "Welcome to the game!" }],
 };
 
-const DEFAULT_TIMELINE = getTimeline({
+const DEFAULT_TIMELINE = {
   symbols: [
     "dot",
     "dot",
@@ -107,7 +102,7 @@ const DEFAULT_TIMELINE = getTimeline({
     "dot",
     "star-7",
   ],
-});
+};
 
 // TODO: Not ideal that the comparison result is based on the score.
 // But in backend/experiment/rules/matching_pairs.py the function calculate_intermediate_score

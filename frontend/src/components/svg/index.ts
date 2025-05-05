@@ -12,3 +12,4 @@ export * from "./Dot";
 export * from "./GradientCircles";
 export * from "./Logo";
 export * from "./Logos";
+export * from "./symbols";

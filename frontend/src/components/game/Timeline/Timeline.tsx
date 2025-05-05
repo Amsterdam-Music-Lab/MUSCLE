@@ -8,38 +8,20 @@
 
 import type { CSSProperties } from "react";
 import type { Variant } from "@/types/themeProvider";
-import type { TimelineSymbolName, TimelineConfig } from "@/types/timeline";
+import type {
+  BaseTimeline,
+  TimelineConfig,
+  TimelineStep,
+} from "@/types/timeline";
 import type { Fill } from "@/types/svg";
+
 import classNames from "classnames";
-import { Star, Dot } from "@/components/svg";
+import { symbols as svgSymbols } from "@/components/svg";
 import { useVariantFill } from "@/hooks/useVariantFill";
 import styles from "./Timeline.module.scss";
 
-export const TIMELINE_SYMBOLS = {
-  dot: ({ ...props }) => <Dot {...props} />,
-  star: ({ ...props }) => <Star numPoints={5} {...props} />,
-  "star-4": ({ ...props }) => <Star numPoints={4} {...props} />,
-  "star-5": ({ ...props }) => <Star numPoints={5} {...props} />,
-  "star-6": ({ ...props }) => <Star numPoints={6} {...props} />,
-  "star-7": ({ ...props }) => <Star numPoints={7} {...props} />,
-  "star-8": ({ ...props }) => <Star numPoints={8} {...props} />,
-};
-
-export interface GetTimelineProps {
-  /** A list of symbol names such as ["dot", "star-4", "dot", ...]  */
-  symbols: Array<TimelineSymbolName>;
-
-  /** Size of the dots */
-  dotSize?: number;
-
-  /** Size of the trophies (not-dots) */
-  trophySize?: number;
-
-  /** Animate the trophies? */
-  animate?: boolean;
-
-  /** Show dots at all */
-  showDots?: boolean;
+interface ProcessTimelineConfigProps extends BaseTimeline {
+  timeline: TimelineConfig;
 }
 
 /**
@@ -48,35 +30,65 @@ export interface GetTimelineProps {
  * of objects that define the symbol, its size, whether it is a trophy and
  * whether it should be animated.
  */
-export function getTimeline({
-  symbols,
+export function processTimelineConfig({
+  timeline,
   dotSize = 10,
   trophySize,
-  animate = false,
   showDots = true,
-}: GetTimelineProps): TimelineConfig {
-  trophySize = trophySize || dotSize * 3;
-  const dotSymbol = showDots ? "dot" : null;
-  return symbols.map((symbol) => ({
-    symbol: symbol === "dot" ? dotSymbol : symbol,
-    size: symbol === "dot" ? dotSize : (trophySize as number),
-    trophy: symbol !== "dot",
-    animate: symbol === "dot" ? false : animate,
-  }));
+  variant,
+  fill,
+  animate,
+}: ProcessTimelineConfigProps): TimelineStep[] {
+  // Make sure all defaults are defined on the timeline object.
+  timeline = {
+    dotSize,
+    trophySize: trophySize || dotSize * 3,
+    showDots,
+    variant,
+    fill,
+    animate,
+    ...timeline,
+  } as TimelineConfig;
+  trophySize = timeline?.trophySize ?? (trophySize || dotSize * 3);
+
+  let steps;
+  if ("symbols" in timeline) {
+    steps = timeline.symbols.map((symbol) => ({ symbol } as TimelineStep));
+  } else {
+    steps = timeline.steps;
+  }
+
+  return steps.map((step) => {
+    const defaultStep = {
+      trophy: step.symbol !== "dot",
+      size: step.symbol === "dot" ? timeline.dotSize : timeline.trophySize,
+    } as Partial<TimelineStep>;
+    if (timeline.animate)
+      defaultStep.animate = step.symbol === "dot" ? false : timeline.animate;
+    if (timeline.fill) defaultStep.fill = fill;
+    if (timeline.variant) defaultStep.variant = variant;
+    const updated = { ...defaultStep, ...step };
+    if (timeline.showDots === false && step.symbol === "dot") {
+      updated.symbol = undefined;
+    }
+    return updated as TimelineStep;
+  });
 }
 
-export interface TimelineProps {
+export interface TimelineProps
+  extends Omit<ProcessTimelineConfigProps, "timeline" | "animate"> {
   /**
-   * A timeline configuration object. This should be a list of objects specifying
-   * the symbol name, the size, whether it is a trophy and whether it is animated.
-   * A configuration object can be created using the getTimeline function.
+   * A timeline configuration object. See TimelineConfig type definition for details.
    */
   timeline: TimelineConfig;
 
   /** The current step in the timeline */
   step: number;
 
-  /** Fill of past symbols: everything up to and including the current step */
+  /**
+   * Fill of past symbols: everything up to and including the current step.
+   * If timeline.fill is defined, that value is used.
+   * */
   fillPast?: Fill;
 
   /** Fill of the future steps: everything after the current step */
@@ -97,7 +109,10 @@ export interface TimelineProps {
   /** Whether to show the symbols at all (or just the spine) */
   showSymbols?: boolean;
 
-  /** Theme variant. If set, this overrides fillPast. */
+  /**
+   * Theme variant. If set, this overrides fillPast.
+   * If timeline.variant is defined, that is used.
+   */
   variant?: Variant;
 }
 
@@ -106,18 +121,30 @@ export interface TimelineProps {
  */
 export default function Timeline({
   timeline,
-  step = 0,
+  step: currentStep = 0,
   fillPast,
   fillFuture = "#eeeeee",
   spineBgPast,
   spineBgFuture,
   animate = true,
   showSpine = true,
+  showDots = true,
+  dotSize = 10,
+  trophySize,
   showSymbols = true,
   variant,
 }: TimelineProps) {
-  const variantFill = useVariantFill(variant ?? "primary") ?? "#000";
-  fillPast = fillPast ?? variantFill;
+  const steps = processTimelineConfig({
+    timeline,
+    animate,
+    showDots,
+    dotSize,
+    trophySize,
+  });
+
+  const variantFill =
+    useVariantFill(timeline.variant ?? variant ?? "primary") ?? "#000";
+  fillPast = timeline.fill ?? fillPast ?? variantFill;
 
   // Determine default bg fill of the spine:
   // Use the fillPast/future colors if they are strings,
@@ -144,17 +171,21 @@ export default function Timeline({
 
   return (
     <div className={styles.timeline} style={style}>
-      {timeline.map((symbol, idx) => {
-        const Symbol = symbol.symbol ? TIMELINE_SYMBOLS[symbol.symbol] : null;
+      {steps.map((step, idx) => {
+        const Symbol = step.symbol ? svgSymbols[step.symbol] : null;
         return (
           <div className={styles.step} key={idx}>
             {showSymbols && Symbol && (
               <div className={styles.symbol}>
                 <Symbol
-                  size={symbol.size}
-                  fill={idx < step ? fillPast : fillFuture}
-                  animate={animate && symbol.animate}
-                  style={{ top: `-${symbol.size / 2}px` }}
+                  size={step.size}
+                  fill={idx < currentStep ? step?.fill ?? fillPast : fillFuture}
+                  animate={
+                    step.animate !== undefined
+                      ? animate && step.animate
+                      : animate
+                  }
+                  style={{ top: `-${(step.size ?? dotSize) / 2}px` }}
                 />
               </div>
             )}
@@ -162,7 +193,7 @@ export default function Timeline({
               <div
                 className={classNames(
                   styles.spineSegment,
-                  idx < step && styles.active
+                  idx < currentStep && styles.active
                 )}
               />
             )}

@@ -7,7 +7,6 @@
  */
 
 import ScoreBoard from "./ScoreBoard";
-import { getTimeline } from "../Timeline";
 
 const decorator = (Story) => (
   <div style={{ padding: "1rem", background: "#f5f5f5" }}>
@@ -48,7 +47,11 @@ export const Tunetwins = {
       { name: "scores" },
       {
         name: "timeline",
-        args: { symbols: ["dot", "dot", "star-4", "dot", "dot", "star-5"] },
+        args: {
+          timeline: {
+            symbols: ["dot", "dot", "star-4", "dot", "dot", "star-5"],
+          },
+        },
       },
       { name: "share" },
     ],
@@ -73,7 +76,11 @@ export const Timeline = {
       { name: "ranking", order: 1 },
       {
         name: "timeline",
-        args: { symbols: ["dot", "dot", "star-4", "dot", "dot", "star-5"] },
+        args: {
+          timeline: {
+            symbols: ["dot", "dot", "star-4", "dot", "dot", "star-5"],
+          },
+        },
         order: 0,
       },
       { name: "share" },
@@ -97,35 +104,10 @@ export const BelowCutoff = {
     turnScore: 123,
     totalScore: 456,
     percentile: 20,
-    percentileCutoff: 25,
+    plugins: [{ name: "scores" }, { name: "ranking", args: { cutoff: 25 } }],
   },
   decorators: [decorator],
 };
-
-// const timeline = getTimeline({
-//   symbols: [
-//     "dot",
-//     "dot",
-//     "star-4",
-//     "dot",
-//     "dot",
-//     "star-5",
-//     "dot",
-//     "dot",
-//     "star-6",
-//   ],
-// });
-
-// export const Timeline = {
-//   args: {
-//     score: 123,
-//     totalScore: 456,
-//     percentile: 59.123,
-//     timeline: timeline,
-//     step: 5,
-//   },
-//   decorators: [decorator],
-// };
 
 export const CustomLabels = {
   args: {
@@ -138,7 +120,11 @@ export const CustomLabels = {
       { name: "ranking", order: 1 },
       {
         name: "timeline",
-        args: { symbols: ["dot", "dot", "star-4", "dot", "dot", "star-5"] },
+        args: {
+          timeline: {
+            symbols: ["dot", "dot", "star-4", "dot", "dot", "star-5"],
+          },
+        },
         order: 0,
       },
       { name: "share" },
@@ -169,67 +155,4 @@ export const Sharing = {
     },
   },
   decorators: [decorator],
-};
-/**
- * Copyright (c) 2025 Bas Cornelissen
- * SPDX-License-Identifier: MIT
- *
- * This file is part of the MUSCLE project by Amsterdam Music Lab.
- * Licensed under the MIT License. See LICENSE file in the project root.
- */
-
-import type { PluginMeta, PluginSpec } from "@/types/plugin";
-import type { Variant } from "@/types/themeProvider";
-
-import ScoreDisplay from "@/components/game/ScoreDisplay/ScoreDisplay";
-
-interface ScoresPluginProps {
-  turnScore?: number;
-  totalScore?: number;
-  turnScoreLabel?: string;
-  totalScoreLabel?: string;
-  variant?: Variant;
-}
-
-function ScoresPlugin({
-  turnScore,
-  totalScore,
-  turnScoreLabel = "Last game",
-  totalScoreLabel = "Total score",
-  variant = "secondary",
-}: ScoresPluginProps) {
-  return (
-    <div className="d-flex">
-      <div style={{ width: "50%" }}>
-        <ScoreDisplay
-          score={turnScore}
-          label={turnScoreLabel}
-          variant={variant}
-        />
-      </div>
-      <div style={{ width: "50%" }}>
-        <ScoreDisplay
-          score={totalScore}
-          label={totalScoreLabel}
-          variant={variant}
-        />
-      </div>
-    </div>
-  );
-}
-
-export interface ScoresPluginArgs extends ScoresPluginProps {}
-
-export interface ScoresPluginMeta extends PluginMeta<ScoresPluginArgs> {
-  name: "scores";
-}
-
-export interface ScoresPluginSpec extends PluginSpec<ScoresPluginArgs> {
-  name: "scores";
-}
-
-export const scoreboardPlugin: ScoresPluginMeta = {
-  name: "scores",
-  component: ScoresPlugin,
-  description: "Displays the turn and total score",
 };

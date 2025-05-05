@@ -7,13 +7,14 @@
  */
 
 import type { SVGProps } from "react";
-import type { Variant } from "@/types/themeProvider";
-import type { Fill } from "@/types/svg";
+import type { Fill, SVGSymbolProps } from "@/types/svg";
 import { useVariantFill } from "@/hooks/useVariantFill";
 import { Gradient } from "../Gradient";
 import createStarPath from "./createStarPath";
 
-interface BasicStarProps {
+interface BasicStarProps extends SVGSymbolProps {
+  // size, variant, animate, fill are inherited from SVGSymbolProps
+
   /** Number of points of the star */
   numPoints?: number;
 
@@ -24,12 +25,6 @@ interface BasicStarProps {
    */
   sharpness?: number;
 
-  /** Size of the star */
-  size?: number;
-
-  /** Fill: an SVG fill object specifying either a fill or a col */
-  fill?: Fill;
-
   /** Fill of the star when showCircle=true. Defaults to white. */
   starFill?: Fill;
 
@@ -39,12 +34,6 @@ interface BasicStarProps {
    * the fill color (if provided) or the gradient. StrokeWidthFactor is then also ignored.
    */
   showCircle?: boolean;
-
-  /**
-   * Whether to animate the star by rotating it. Note that this
-   * only adds an 'animate-rotate' class, so the animation should be set in CSS.
-   */
-  animate?: boolean;
 
   /** The width of the circle's stroke as a fraction of the stars' size */
   circleStrokeWidth?: number;
@@ -59,15 +48,12 @@ interface BasicStarProps {
    * When maxRadiusFactor=0, the star is infinitely small.
    */
   starSize?: number;
-
-  /** Theme variant. If set, this overrides the fill. */
-  variant?: Variant;
 }
 
 /**
  * All SVG properties are allowed, except width, height and viewBox
  */
-interface StarProps
+export interface StarProps
   extends BasicStarProps,
     Omit<SVGProps<SVGSVGElement>, "width" | "height" | "viewBox" | "fill"> {}
 

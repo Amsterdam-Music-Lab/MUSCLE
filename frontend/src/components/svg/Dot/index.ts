@@ -6,4 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+export type { DotProps } from "./Dot";
 export { default as Dot } from "./Dot";

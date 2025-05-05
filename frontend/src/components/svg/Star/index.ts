@@ -6,4 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+export type { StarProps } from "./Star";
 export { default as Star } from "./Star";

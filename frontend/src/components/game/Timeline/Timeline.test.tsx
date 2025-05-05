@@ -1,28 +1,33 @@
 import { describe, test, expect } from "vitest";
 import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders.tsx";
-import Timeline, { getTimeline } from "./Timeline.tsx";
+import Timeline, { processTimelineConfig } from "./Timeline.tsx";
 import styles from "./Timeline.module.scss";
+import { TimelineConfig } from "@/types/timeline.ts";
 
-describe("getTimeline", () => {
+describe("processTimelineConfig", () => {
   test("returns config with default sizes and dot enabled", () => {
-    const timeline = getTimeline({
-      symbols: ["dot", "star", "dot", "star-5"],
+    const timeline = processTimelineConfig({
+      timeline: {
+        symbols: ["dot", "star", "dot", "star-5"],
+      },
     });
 
     expect(timeline).toEqual([
-      { symbol: "dot", size: 10, trophy: false, animate: false },
-      { symbol: "star", size: 30, trophy: true, animate: false },
-      { symbol: "dot", size: 10, trophy: false, animate: false },
-      { symbol: "star-5", size: 30, trophy: true, animate: false },
+      { symbol: "dot", size: 10, trophy: false },
+      { symbol: "star", size: 30, trophy: true },
+      { symbol: "dot", size: 10, trophy: false },
+      { symbol: "star-5", size: 30, trophy: true },
     ]);
   });
 
   test("respects trophySize and animate", () => {
-    const timeline = getTimeline({
-      symbols: ["dot", "star"],
-      dotSize: 5,
-      trophySize: 40,
-      animate: true,
+    const timeline = processTimelineConfig({
+      timeline: {
+        symbols: ["dot", "star"],
+        dotSize: 5,
+        trophySize: 40,
+        animate: true,
+      },
     });
 
     expect(timeline).toEqual([
@@ -32,26 +37,28 @@ describe("getTimeline", () => {
   });
 
   test("hides dots when showDots is false", () => {
-    const result = getTimeline({
-      symbols: ["dot", "star", "dot"],
-      showDots: false,
+    const result = processTimelineConfig({
+      timeline: {
+        symbols: ["dot", "star", "dot"],
+        showDots: false,
+      },
     });
 
     expect(result).toEqual([
-      { symbol: null, size: 10, trophy: false, animate: false },
-      { symbol: "star", size: 30, trophy: true, animate: false },
-      { symbol: null, size: 10, trophy: false, animate: false },
+      { symbol: undefined, size: 10, trophy: false },
+      { symbol: "star", size: 30, trophy: true },
+      { symbol: undefined, size: 10, trophy: false },
     ]);
   });
 });
 
 describe("Timeline component", () => {
-  const timelineConfig = getTimeline({
+  const timelineConfig = {
     symbols: ["dot", "star", "dot", "star-5"],
     dotSize: 10,
     trophySize: 20,
     animate: true,
-  });
+  } as TimelineConfig;
 
   test("renders symbols and spine segments", () => {
     const { container } = render(

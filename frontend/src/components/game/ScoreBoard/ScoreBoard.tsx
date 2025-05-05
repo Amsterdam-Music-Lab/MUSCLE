@@ -8,12 +8,12 @@
 
 import type { ShareConfig } from "@/types/share";
 import type { TimelineConfig } from "@/types/timeline";
-import type { CardProps, PluginSpec } from "@/components/ui";
+import type { CardProps } from "@/components/ui";
+import type { AllPluginSpec } from "@/components/plugins/pluginRegistry";
 
-import classNames from "classnames";
 import { Card } from "@/components/ui";
-import styles from "./ScoreBoard.module.scss";
 import PluginRenderer from "@/components/plugins/PluginRenderer";
+// import styles from "./ScoreBoard.module.scss";
 
 // const defaultLabels = {
 //   trophy: "Yay, you've earned a star!",
@@ -37,10 +37,10 @@ export interface ScoreBoardProps extends CardProps {
 
   shareConfig?: ShareConfig;
 
-  plugins?: PluginSpec[];
+  plugins?: AllPluginSpec[];
 }
 
-const DEFAULT_PLUGINS: PluginSpec[] = [
+const DEFAULT_PLUGINS = [
   { name: "ranking" },
   { name: "scores" },
   { name: "share" },
@@ -76,7 +76,7 @@ export default function ScoreBoard({
 
   // Pass dynamic attributes to all plugins
   plugins = plugins.map((plugin) => {
-    const updated: PluginSpec = { ...plugin };
+    const updated: AllPluginSpec = { ...plugin };
     switch (plugin.name) {
       case "ranking":
         updated.args = { ...updated.args, percentile };
@@ -99,24 +99,25 @@ export default function ScoreBoard({
 
   return (
     <Card {...cardProps}>
-      <PluginRenderer plugins={plugins} wrapper={Card.Section} />
+      <PluginRenderer
+        plugins={plugins as AllPluginSpec[]}
+        wrapper={Card.Section}
+      />
       {/* Star */}
-      {/* {showTrophy && hasTrophy && (
-          <div className={styles.trophy}>
-            <p className={styles.trophyLabel}>
-              {renderTemplate(templates.trophy, templateData)}
-            </p>
+      {/* {showTrophy && hasTrophy && ( */}
+      {/* <div className={styles.trophy}>
+        <p className={styles.trophyLabel}>Yay, you've earned a trophy!</p>
 
-            {Trophy && (
-              <Trophy
-                className={styles.trophyIcon}
-                variant="secondary"
-                size={100}
-                circleStrokeWidth={0.15}
-              />
-            )}
-          </div>
-        )} */}
+        {Trophy && (
+          <Trophy
+            className={styles.trophyIcon}
+            variant="secondary"
+            size={100}
+            circleStrokeWidth={0.15}
+          />
+        )}
+      </div> */}
+      {/* )} */}
     </Card>
   );
 }

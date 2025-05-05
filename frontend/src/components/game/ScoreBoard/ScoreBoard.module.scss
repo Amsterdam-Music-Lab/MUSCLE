@@ -28,19 +28,6 @@
   }
 }
 
-.scoreBoard {
-  @extend .rounded-lg;
-  @extend .bg-inset-sm;
-
-  .capture {
-    margin-top: 1.5em;
-  }
-}
-
-.capture {
-  position: relative;
-}
-
 .trophy {
   position: absolute;
   display: flex;
@@ -54,6 +41,7 @@
     animation: 700ms ease-in 0s 1 starAnimation;
   }
 }
+
 .trophyLabel {
   position: absolute;
   font-size: 1.5em;
@@ -67,10 +55,4 @@
 
 .trophyIcon {
   position: absolute;
-}
-
-.sectionLabel {
-  display: block;
-  margin-bottom: 0.5em;
-  font-weight: 600;
 }

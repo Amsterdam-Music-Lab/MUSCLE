@@ -1,6 +1,6 @@
-import Timeline, { getTimeline } from "./Timeline";
+import Timeline from "./Timeline";
 
-const timeline = getTimeline({
+const timeline = {
   symbols: [
     "dot",
     "dot",
@@ -12,9 +12,9 @@ const timeline = getTimeline({
     "dot",
     "star-6",
   ],
-});
+};
 
-const timeline2 = getTimeline({
+const timeline2 = {
   symbols: [
     "star-5",
     "dot",
@@ -27,7 +27,7 @@ const timeline2 = getTimeline({
     "dot",
     "star-8",
   ],
-});
+};
 
 const decorator = (Story) => (
   <div style={{ padding: "1rem", background: "#f5f5f5" }}>
@@ -66,7 +66,7 @@ export const CustomFill = {
     step: 4,
     fillPast: {
       startColor: "#ff0000",
-      endColor: "#0000ff",
+      endColor: "#00ff00",
       scale: 2,
       angle: 60,
     },
@@ -88,6 +88,14 @@ export const NoSpine = {
     timeline: timeline,
     step: 5,
     showSpine: false,
+  },
+  decorators: [decorator],
+};
+
+export const NoDots = {
+  args: {
+    timeline: { ...timeline, showDots: false },
+    step: 5,
   },
   decorators: [decorator],
 };
@@ -115,6 +123,23 @@ export const SecondaryVariant = {
     timeline: timeline2,
     step: 7,
     variant: "secondary",
+  },
+  decorators: [decorator],
+};
+
+export const CustomizeEverything = {
+  args: {
+    timeline: {
+      steps: [
+        { symbol: "dot" },
+        { symbol: "star-4", fill: "#0ff" },
+        { symbol: "star-5", fill: "#f00", size: 80 },
+        { symbol: "star-6", size: 50, fill: "#ff0" },
+      ],
+      // variant: "secondary",
+      fill: "#0f0",
+    },
+    step: 3,
   },
   decorators: [decorator],
 };

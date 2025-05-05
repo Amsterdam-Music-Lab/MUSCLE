@@ -7,31 +7,18 @@
  */
 
 import type { SVGProps } from "react";
-import type { Fill } from "@/types/svg";
-import type { Variant } from "@/types/themeProvider";
+import type { SVGSymbolProps } from "@/types/svg";
 import { Gradient } from "../Gradient";
 import { useVariantFill } from "@/hooks/useVariantFill";
 
-interface BasicDotProps {
-  /** Size of the dot */
-  size?: number;
-
-  /** Fill object or string */
-  fill?: Fill;
-
-  /** Whether to animate the object */
-  animate?: boolean;
-
-  /** Theme variant. If set, this overrides the fill. */
-  variant?: Variant;
-}
-
-interface DotProps
+export interface DotProps
   extends Omit<
       SVGProps<SVGSVGElement>,
       "width" | "height" | "viewBox" | "fill"
     >,
-    BasicDotProps {}
+    SVGSymbolProps {
+  // size, variant, animate, fill are inherited from SVGSymbol
+}
 
 /**
  * A simple SVG dot with a given size and fill. The dot can be animated.

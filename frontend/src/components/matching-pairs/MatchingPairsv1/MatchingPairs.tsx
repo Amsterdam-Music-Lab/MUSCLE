@@ -11,7 +11,7 @@ import Participant from "@/types/Participant";
 import Overlay from "@/components/Overlay/Overlay";
 import { ScoreFeedbackDisplay } from "@/types/Playback";
 
-import { Timeline, getTimeline } from "@/components/game";
+import { Timeline } from "@/components/game";
 import PlayingBoard from "./PlayingBoard";
 
 export const SCORE_FEEDBACK_DISPLAY: { [key: string]: ScoreFeedbackDisplay } = {
@@ -295,7 +295,7 @@ const MatchingPairs = ({
     }
   };
 
-  const timeline = getTimeline({
+  const timeline = {
     symbols: [
       "dot",
       "dot",
@@ -310,7 +310,7 @@ const MatchingPairs = ({
       "dot",
       "star-7",
     ],
-  });
+  };
 
   return (
     <div className="aha__matching-pairs">
