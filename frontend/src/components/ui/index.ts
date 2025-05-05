@@ -15,4 +15,3 @@ export * from "./Input";
 export * from "./InputLabel";
 export * from "./InputGroup";
 export * from "./RadioInput";
-export * from "./PluginCard";
