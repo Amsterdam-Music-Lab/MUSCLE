@@ -70,6 +70,16 @@ import type {
   FooterPluginSpec,
 } from "./plugins/FooterPlugin";
 import { footerPlugin } from "./plugins/FooterPlugin";
+
+import type {
+  MarkdownPluginMeta,
+  MarkdownPluginSpec,
+} from "./plugins/MarkdownPlugin";
+import { markdownPlugin } from "./plugins/MarkdownPlugin";
+
+import type { CardPluginMeta, CardPluginSpec } from "./plugins/CardPlugin";
+import { cardPlugin } from "./plugins/CardPlugin";
+
 //
 // Combine all types
 //
@@ -85,7 +95,9 @@ export type AllPluginMeta =
   | UserFeedbackPluginMeta
   | ParticipantLinkPluginMeta
   | LinkButtonPluginMeta
-  | FooterPluginMeta;
+  | FooterPluginMeta
+  | MarkdownPluginMeta
+  | CardPluginMeta;
 
 export type AllPluginSpec =
   | LogoPluginSpec
@@ -98,7 +110,9 @@ export type AllPluginSpec =
   | UserFeedbackPluginSpec
   | ParticipantLinkPluginSpec
   | LinkButtonPluginSpec
-  | FooterPluginSpec;
+  | FooterPluginSpec
+  | MarkdownPluginSpec
+  | CardPluginSpec;
 
 export type PluginRegistry = Record<AllPluginMeta["name"], AllPluginMeta>;
 
@@ -115,4 +129,6 @@ export const pluginMetaRegistry: PluginRegistry = {
   [participantLinkPlugin.name]: participantLinkPlugin,
   [linkButtonPlugin.name]: linkButtonPlugin,
   [footerPlugin.name]: footerPlugin,
+  [markdownPlugin.name]: markdownPlugin,
+  [cardPlugin.name]: cardPlugin,
 };
