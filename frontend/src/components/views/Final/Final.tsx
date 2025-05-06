@@ -18,8 +18,8 @@ import useBoundStore from "@/util/stores";
 import { Final as FinalAction } from "@/types/Action";
 import { NarrowLayout } from "@/components/layout";
 import PluginRenderer from "@/components/plugins/PluginRenderer";
-
 import styles from "./Final.module.scss";
+import frontendConfig from "@/config/frontend";
 
 export interface FinalProps
   extends FinalAction,
@@ -58,7 +58,7 @@ const Final = ({
   timeline, // TODO
   timelineStep = 0, // TODO
   className,
-  plugins = DEFAULT_PLUGINS,
+  plugins = frontendConfig.final.plugins,
   ...divProps
 }: FinalProps) => {
   const session = useBoundStore((state) => state.session);

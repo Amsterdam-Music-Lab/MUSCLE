@@ -23,6 +23,10 @@ import Helmet from "@/components/Helmet/Helmet";
 import Redirect from "@/components/Redirect/Redirect";
 
 import { ThemeProvider } from "@/theme/ThemeProvider";
+import { Landing } from "@/components/views";
+
+// TODO ideally load or populate this from the backend
+import frontendConfig from "@/config/frontend";
 
 // App is the root component of our application
 const App = () => {
@@ -71,7 +75,13 @@ const App = () => {
                         {/* Default experiment */}
                         <Route
                             path="/"
-                            element={<Redirect to={URLS.experiment.replace(":slug", EXPERIMENT_SLUG)} />}
+                            element={
+                                frontendConfig.showLanding 
+                                    ? <Landing 
+                                        experimentUrl={URLS.experiment.replace(":slug", EXPERIMENT_SLUG)} 
+                                        plugins={frontendConfig.landing.plugins} /> 
+                                    : <Redirect to={URLS.experiment.replace(":slug", EXPERIMENT_SLUG)} />
+                                }
                         />
 
                         {/* Profile */}

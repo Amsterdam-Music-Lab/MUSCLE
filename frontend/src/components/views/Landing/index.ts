@@ -6,6 +6,4 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export * from "./Final";
-export * from "./Explainer";
-export * from "./Landing"
+export { default as Landing } from "./Landing";

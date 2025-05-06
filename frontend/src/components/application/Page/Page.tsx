@@ -7,34 +7,66 @@ import { AppBar } from "../AppBar";
 import styles from "./Page.module.scss";
 
 interface PageProps extends HTMLAttributes<HTMLDivElement> {
-  className?: string;
+  /** Title of the page */
   title?: string;
-  children?: ReactNode;
-  fullwidth?: boolean;
+
+  /**
+   * Whether to show the app bar. If not set, the settings from the frontend
+   * theme are used, and otherwise defaults to true.
+   */
   showAppBar?: boolean;
+
+  /**
+   * Show the gradient circles background. If not set, the settings in the
+   * frontend theme are used; otherwise defaults to true.
+   */
   showGradientCircles?: boolean;
+
+  /**
+   * Show the background image if there is one? If not set, the settings
+   * in the frontend are used, and otherwise defaults to true.
+   */
   showBackgroundImage?: boolean;
+
+  /**
+   * Use the backend theme? Defaults to true.
+   *
+   * This option is mostly there so that you can also render 'static' pages that do
+   * not require a state, for example as a landing page.
+   */
+  useBackendTheme?: boolean;
 }
 
 /**
- * Page is a Page with an AppBar and a width-restricted container for content (if fullwidth=true)
+ * Page with a background, that can be either an image or a gradient circles fill.
+ * The component defaults to a gradient circles fill, unless a background image is
+ * set by specifying backgroundUrl.
  */
 export default function Page({
-  className,
   title,
   children,
+  className,
+  backgroundUrl,
   showAppBar,
+  useBackendTheme = true,
   showGradientCircles,
   showBackgroundImage,
   ...divProps
 }: PageProps) {
-  const backendTheme = useBoundStore((state) => state.theme);
-  const { theme } = useTheme();
-  showAppBar = showAppBar ?? theme.showAppBar ?? true;
+  const { theme: frontendTheme } = useTheme();
+
+  // Settings that default to the value in frontendTheme.
+  showAppBar = showAppBar ?? frontendTheme.showAppBar ?? true;
   showGradientCircles =
-    showGradientCircles ?? theme.showGradientCircles ?? true;
+    showGradientCircles ?? frontendTheme.showGradientCircles ?? true;
   showBackgroundImage =
-    showBackgroundImage ?? theme.showBackgroundImage ?? false;
+    showBackgroundImage ?? frontendTheme.showBackgroundImage ?? true;
+
+  let backendTheme
+  if (useBackendTheme) {
+    backendTheme = useBoundStore((state) => state.theme);
+    backgroundUrl = backendTheme?.backgroundUrl && backgroundUrl;
+  }
 
   return (
     <>
@@ -45,14 +77,13 @@ export default function Page({
       </div>
 
       {/* Background div */}
-      {(showGradientCircles ||
-        (showBackgroundImage && backendTheme?.backgroundUrl)) && (
+      {(showGradientCircles || (showBackgroundImage && backgroundUrl)) && (
         <div className={styles.bg}>
-          {showBackgroundImage && backendTheme?.backgroundUrl && (
+          {showBackgroundImage && backgroundUrl && (
             <div
               className={styles.bgImg}
               style={{
-                backgroundImage: `url(${backendTheme.backgroundUrl})`,
+                backgroundImage: `url(${backgroundUrl})`,
               }}
             />
           )}

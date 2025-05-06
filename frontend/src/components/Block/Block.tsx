@@ -20,7 +20,7 @@ import Session from "@/types/Session";
 import { Action } from "@/types/Action";
 import { Round } from "@/types/Round";
 
-import { matchingPairsConfig } from "@/config/matchingPairs";
+// import { matchingPairsConfig } from "@/config/matchingPairs";
 import { AllPluginSpec } from "../plugins/pluginRegistry";
 
 /**
@@ -217,7 +217,7 @@ const Block = () => {
             totalScore={undefined} // TODO
             timeline={undefined}
             timelineStep={undefined}
-            plugins={matchingPairsConfig.final.plugins as AllPluginSpec[]}
+            // plugins={matchingPairsConfig.final.plugins as AllPluginSpec[]}
             // final_text={attrs.final_text}
             // points={attrs.points}
           />
