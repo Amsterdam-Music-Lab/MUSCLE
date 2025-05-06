@@ -1,6 +1,6 @@
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import Consent, { ConsentProps } from './Consent';
-import { useConsent } from '../../API'
+import { useConsent } from '@/API'
 import { saveAs } from 'file-saver';
 import { vi, Mock, expect, it, describe, } from 'vitest';
 
@@ -15,7 +15,7 @@ vi.mock('file-saver', () => ({
     saveAs: vi.fn(),
 }));
 
-vi.mock('../../API', () => ({
+vi.mock('@/API', () => ({
     createConsent: vi.fn(),
     useConsent: vi.fn(),
 }));

@@ -1,4 +1,4 @@
-import Consent from "@/components/Consent/Consent";
+import Consent from "./Consent";
 
 const defaultArgs = {
     title: "This is the title",

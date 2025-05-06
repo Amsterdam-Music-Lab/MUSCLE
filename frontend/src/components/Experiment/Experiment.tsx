@@ -7,7 +7,7 @@ import {
 
 import useBoundStore from "../../util/stores";
 import { useExperiment } from "@/API";
-import Consent from "../Consent/Consent";
+import { Consent } from "@/components/views";
 import Footer from "../Footer/Footer";
 import { Page } from "@/components/application";
 import Loading from "../Loading/Loading";

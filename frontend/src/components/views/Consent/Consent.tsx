@@ -3,10 +3,11 @@ import { saveAs } from 'file-saver';
 
 import { URLS } from "@/config";
 import { Button } from "@/components/ui";
-import Loading from "../Loading/Loading";
-import { createConsent, useConsent } from "../../API";
+import Loading from "@/components/Loading/Loading";
+import { createConsent, useConsent } from "@/API";
 import classNames from "classnames";
 import Participant from "@/types/Participant";
+import "./Consent.scss"
 
 export interface ConsentProps {
     title: string;
