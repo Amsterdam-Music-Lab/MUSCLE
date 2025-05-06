@@ -35,7 +35,7 @@ class MatchingPairs2025(MatchingPairsGame):
     """
 
     ID = "MATCHING_PAIRS_2025"
-    num_pairs = 2
+    num_pairs = 8
     tutorial = {
         "no_match": _(
             "This was not a match, so you get 0 points. Please try again to see if you can find a matching pair."
@@ -87,14 +87,20 @@ class MatchingPairs2025(MatchingPairsGame):
         accumulated_score = session.participant.session_set.aggregate(total_score=models.Sum("final_score"))[
             "total_score"
         ]
+        current_score = session.final_score
+        blocks = session.block.experiment.block_set
+        sessions_played = session.participant.session_set.filter(
+            block__in=blocks
+        ).count()
         score = Final(
             session,
             title="Score",
-            total_score=accumulated_score,
+            total_score=current_score,
             final_text=self._final_text(session),
             button={"text": "Next game", "link": self.get_experiment_url(session)},
-            rank=self.rank(session, exclude_unfinished=False),
-            percentile=session.percentile_rank(exclude_unfinished=False),
+            percentile=self._get_percentile_rank(session),
+            sessions_played=sessions_played,
+            accumulated_score=accumulated_score,
         )
 
         return [score]
@@ -176,6 +182,7 @@ class MatchingPairs2025(MatchingPairsGame):
             least_played.score += 1
             least_played.save()
             cond, difficulty = least_played.question_key.split('_')[1:]
+            session.save_json_data({'condition': cond, 'difficulty': difficulty})
             return cond, difficulty
         elif len(condition_results) == 0:
             cond, difficulty = random.choice(POSSIBLE_CONDITIONS)
@@ -192,6 +199,7 @@ class MatchingPairs2025(MatchingPairsGame):
         Result.objects.create(
             participant=session.participant, question_key=question_key, score=1
         )
+        session.save_json_data({'condition': cond, 'difficulty': difficulty})
         return cond, difficulty
 
     def _select_least_played_songs(self, session: Session) -> list[int]:
@@ -227,43 +235,38 @@ class MatchingPairs2025(MatchingPairsGame):
             result.save()
         return selected_songs
 
-    def _final_text(self, session: Session):
-        total_sessions = session.participant.session_set.count()
-        total_score = session.participant.session_set.aggregate(total_score=models.Sum("final_score"))["total_score"]
-        average_score = total_score / total_sessions if total_sessions > 0 else 0
-        highest_score = session.participant.session_set.aggregate(highest_score=models.Max("final_score"))[
-            "highest_score"
-        ]
-        game_score = int(session.total_score())
-        percentile = session.percentile_rank(exclude_unfinished=False)
-        percentile_rounded = round(percentile)
+    def _final_text(self, percentile):
+        return _("You outperformed {}% of the players!").format(percentile)
 
-        final_text = """
-        <p>{outperformed}</p>
-
-        <table>
-            <tr><td>{this_game}</td><td>{game_score}</td></tr>
-            <tr><td>{personal_best}</td><td>{best_score}</td></tr>
-            <tr><td>{average}</td><td>{avg_score}</td></tr>
-        </table>
-        """.format(
-            outperformed=_("You outperformed {}% of the players!").format(
-                percentile_rounded
-            ),
-            this_game=_("This game"),
-            game_score=game_score,
-            personal_best=_("Personal Best"),
-            # personal best might not be updated yet in the database
-            best_score=max(int(highest_score), game_score),
-            average=_("Average score"),
-            avg_score=int(average_score),
+    def _get_percentile_rank(self, session):
+        """
+        Returns:
+            Percentile rank of all sessions with same difficulty, based on `final_score`
+        """
+        blocks = session.block.phase.experiment.associated_blocks()
+        condition = session.json_data.get('condition')
+        difficulty = session.json_data.get('difficulty')
+        score = session.final_score
+        relevant_sessions = []
+        for block in blocks:
+            relevant_sessions.extend(
+                block.session_set.filter(
+                    json_data__contains={
+                        'condition': condition,
+                        'difficulty': difficulty,
+                    },
+                )
+            )
+        n_sessions = len(relevant_sessions)
+        if n_sessions == 0:
+            return 0.0  # Should be impossible but avoids x/0
+        n_lte = len(
+            [session for session in relevant_sessions if session.final_score <= score]
         )
-
-        return final_text
-
-    def _get_percentile_rank(self):
-        # Custom percentile rank calculation
-        raise NotImplementedError
+        n_eq = len(
+            [session for session in relevant_sessions if session.final_score == score]
+        )
+        return round(100.0 * (n_lte - (0.5 * n_eq)) / n_sessions)
 
     def get_info_playlist(self, section_path: str):
         path, filename = split(section_path)
