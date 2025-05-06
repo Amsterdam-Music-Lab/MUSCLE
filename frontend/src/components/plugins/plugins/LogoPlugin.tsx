@@ -9,7 +9,29 @@ import type { PluginMeta, PluginSpec } from "@/types/plugin";
 import type { LogoProps } from "@/components/svg/Logo/Logo";
 import Logo from "@/components/svg/Logo/Logo";
 
-export interface LogoPluginArgs extends LogoProps {}
+export interface LogoPluginArgs extends LogoProps {
+  /** Height of the logo in ems */
+  height?: number;
+
+  /** Whether to center the logo */
+  center?: boolean;
+}
+
+/**
+ * Plugin that shows a logo. The alignment (centered true/false) and height (in ems)
+ * can be specified.
+ */
+function LogoPlugin({ height = 3, center = true, ...props }: LogoPluginArgs) {
+  return (
+    <Logo
+      {...props}
+      style={{
+        height: `${height}em`,
+        alignSelf: center ? "center" : "baseline",
+      }}
+    />
+  );
+}
 
 export interface LogoPluginMeta extends PluginMeta<LogoPluginArgs> {
   name: "logo";
@@ -21,7 +43,7 @@ export interface LogoPluginSpec extends PluginSpec<LogoPluginArgs> {
 
 export const logoPlugin: LogoPluginMeta = {
   name: "logo",
-  component: Logo,
+  component: LogoPlugin,
   description: "Displays a logo",
   defaultArgs: {
     name: "matching-pairs",

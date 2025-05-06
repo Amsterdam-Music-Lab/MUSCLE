@@ -7,10 +7,16 @@
  */
 import type { PluginMeta, PluginSpec } from "@/types/plugin";
 import type { LogoName } from "@/components/svg/Logo/Logo";
+
+import ReactMarkdown from "react-markdown";
 import Logo from "@/components/svg/Logo/Logo";
+import { Logos } from "@/components/svg";
 
 export interface FooterPluginArgs {
+  /** A list of logo names */
   logos?: LogoName[];
+
+  /** Markdown disclaimer string */
   disclaimer?: string;
 }
 
@@ -22,25 +28,17 @@ export interface FooterPluginSpec extends PluginSpec<FooterPluginArgs> {
   name: "footer";
 }
 
+/**
+ * A footer plugin that displays some logo's and a disclaimer text.
+ */
 function FooterPlugin({ logos = [], disclaimer }: FooterPluginArgs) {
   return (
-    <div style={{ marginTop: "1rem", padding: "1rem", opacity: 0.5 }}>
-      {logos.length > 0 && (
-        <div style={{ display: "flex", gap: "2em" }}>
-          {logos.map((name) => (
-            <Logo
-              name={name}
-              fill="#fff"
-              style={{ height: name == "nwo" ? "2.5em" : "1.5em" }}
-              key={name}
-            />
-          ))}
-        </div>
-      )}
+    <div style={{ marginTop: "1rem", padding: "1rem" }}>
+      {logos.length > 0 && <Logos logos={logos} />}
       {disclaimer && (
-        <p className="small" style={{ color: "#fff", marginTop: "1em" }}>
-          {disclaimer}
-        </p>
+        <div className="small" style={{ color: "#fff", marginTop: "1em" }}>
+          <ReactMarkdown>{disclaimer}</ReactMarkdown>
+        </div>
       )}
     </div>
   );

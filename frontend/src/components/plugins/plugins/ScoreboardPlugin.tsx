@@ -23,6 +23,6 @@ export interface ScoreboardPluginSpec extends PluginSpec<ScoreboardPluginArgs> {
 export const scoreboardPlugin: ScoreboardPluginMeta = {
   name: "scoreboard",
   component: ScoreBoard,
-  description: "Displays an expandable button with sharing options",
+  description: "Displays an scoreboard",
   defaultSpecs: {},
 };

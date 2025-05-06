@@ -6,9 +6,16 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export * from "./Gradient";
-export * from "./Star";
-export * from "./Dot";
-export * from "./GradientCircles";
-export * from "./Logo";
-export * from "./Logos";
+.logos {
+  display: flex;
+  gap: var(--logos-gap, 1em);
+}
+
+.logo {
+  opacity: 0.8;
+  transition: opacity 300ms ease;
+
+  &:hover {
+    opacity: 1;
+  }
+}
