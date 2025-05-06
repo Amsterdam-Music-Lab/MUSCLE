@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django.db import models
 
 from result.models import Result
-from section.models import Section, Song
+from section.models import Section
 from session.models import Session
 
 from experiment.actions import Explainer, Final, Trial
@@ -51,11 +51,7 @@ class MatchingPairs2025(MatchingPairsGame):
 
     def next_round(self, session: Session):
         if session.get_rounds_passed() < 1:
-            actions = (
-                [self.get_intro_explainer()]
-                if not self._has_played_before(session)
-                else []
-            )
+            actions = []
 
             questions = self.get_open_questions(session)
             if questions:
@@ -68,8 +64,12 @@ class MatchingPairs2025(MatchingPairsGame):
                 )
                 actions.append(intro_questions)
                 actions.extend(questions)
+            if not self._has_played_before(session):
+                actions.append(self.get_intro_explainer())
             if not actions:
-                actions.append(self.get_short_explainer())
+                actions.append(
+                    self.get_short_explainer()
+                )  # short explainer necessary because preload won't start otherwise
             trial = self.get_matching_pairs_trial(session)
             actions.append(trial)
             return actions
