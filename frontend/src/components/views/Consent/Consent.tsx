@@ -1,112 +1,136 @@
-import { useEffect } from "react";
-import { saveAs } from 'file-saver';
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
 
-import { URLS } from "@/config";
-import { Button } from "@/components/ui";
-import Loading from "@/components/Loading/Loading";
-import { createConsent, useConsent } from "@/API";
+import type Participant from "@/types/Participant";
+import type { NarrowLayoutProps } from "@/components/layout";
+
 import classNames from "classnames";
-import Participant from "@/types/Participant";
-import "./Consent.scss"
+import { useEffect } from "react";
+import { saveAs } from "file-saver";
+import { URLS } from "@/config";
+import { createConsent, useConsent } from "@/API";
+import { Button, Card, InputGroup, LinkButton } from "@/components/ui";
+import Loading from "@/components/Loading/Loading";
+import { NarrowLayout } from "@/components/layout";
 
-export interface ConsentProps {
-    title: string;
-    text: string;
-    experiment: any;
-    participant: Pick<Participant, 'csrf_token'>;
-    onNext: () => void;
-    confirm: string;
-    deny: string;
+import styles from "./Consent.module.scss";
+
+export interface ConsentProps extends NarrowLayoutProps {
+  title: string;
+  text: string;
+  experiment: any;
+  participant: Pick<Participant, "csrf_token">;
+  onNext: () => void;
+  confirm: string;
+  deny: string;
 }
 
 /** Consent is an experiment view that shows the consent text, and handles agreement/stop actions */
-const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }: ConsentProps) => {
-    const [consent, loadingConsent] = useConsent(experiment.slug);
-    const urlQueryString = window.location.search;
+function Consent({
+  title,
+  text,
+  experiment,
+  participant,
+  onNext,
+  confirm,
+  deny,
+  className,
+  ...layoutProps
+}: ConsentProps) {
+  const [consent, loadingConsent] = useConsent(experiment.slug);
+  const urlQueryString = window.location.search;
 
-    // Listen for consent, and auto advance if already given
-    useEffect(() => {
-        if (consent || (new URLSearchParams(urlQueryString).get("participant_id"))) {
-            onNext();
-        }
-    }, [consent, onNext, urlQueryString]);
-
-    // Click on agree button
-    const onAgree = async () => {
-        // Store consent
-        await createConsent({ experiment, participant });
-
-        // Next!
-        onNext();
-    };
-
-    const onDownload = async () => {
-        const doc = new DOMParser().parseFromString(text, 'text/html');
-        const txt = doc.body.textContent ? doc.body.textContent.split('  ').join('') : '';
-        const blob = new Blob([txt], { type: "text/plain;charset=utf-8" });
-        saveAs(blob, 'consent.txt');
+  // Listen for consent, and auto advance if already given
+  useEffect(() => {
+    if (consent || new URLSearchParams(urlQueryString).get("participant_id")) {
+      onNext();
     }
+  }, [consent, onNext, urlQueryString]);
 
-    // Loader in case consent is being loaded
-    // or it was already given
-    if (loadingConsent || consent) {
-        return <Loading />;
-    }
+  // Click on agree button
+  const onAgree = async () => {
+    // Store consent
+    await createConsent({ experiment, participant });
 
-    // Calculate height for consent text to prevent overlapping browser chrome
-    const height =
-        (document &&
-            document.documentElement &&
-            document.documentElement.clientHeight) ||
-        window.innerHeight;
+    // Next!
+    onNext();
+  };
 
-    const width =
-        (document &&
-            document.documentElement &&
-            document.documentElement.clientWidth) ||
-        window.innerWidth;
+  const onDownload = async () => {
+    const doc = new DOMParser().parseFromString(text, "text/html");
+    const txt = doc.body.textContent
+      ? doc.body.textContent.split("  ").join("")
+      : "";
+    const blob = new Blob([txt], { type: "text/plain;charset=utf-8" });
+    saveAs(blob, "consent.txt");
+  };
 
-    const correction = width > 720 ? 300 : 250;
+  // Loader in case consent is being loaded
+  // or it was already given
+  if (loadingConsent || consent) {
+    return <Loading />;
+  }
 
+  // Calculate height for consent text to prevent overlapping browser chrome
+  const height =
+    (document &&
+      document.documentElement &&
+      document.documentElement.clientHeight) ||
+    window.innerHeight;
 
-    // Show consent
-    return (
-        <div className={classNames("aha__consent")}>
-            <div className="aha__consent-header d-flex">
-                <div className="flex-fill">
-                    <h3>{title}</h3>
-                </div>
-                <div className="flex-end">
-                    <button
-                        className="btn btn-download fa-solid fa-download font-weight-bold"
-                        data-testid="download-button"
-                        onClick={onDownload}
-                    >
-                    </button>
-                </div>
-            </div>
+  const width =
+    (document &&
+      document.documentElement &&
+      document.documentElement.clientWidth) ||
+    window.innerWidth;
 
-            <div
-                className="consent-text"
-                data-testid="consent-text"
-                style={{ height: height - correction }}
-                dangerouslySetInnerHTML={{ __html: text }}
-            />
+  const correction = width > 720 ? 300 : 250;
 
-            <div className="buttons d-flex justify-content-between">
-                <a href={URLS.AMLHome} className="btn btn-negative btn-lg">
-                    {deny}
-                </a>
+  // Show consent
+  return (
+    <NarrowLayout className={classNames(className)} {...layoutProps}>
+      <Card>
+        <Card.Header title={title} />
 
-                <Button
-                    className="btn-positive"
-                    onClick={onAgree}
-                    title={confirm}
-                />
+        <Card.Section>
+          <div
+            data-testid="consent-text"
+            style={{ height: height - correction }}
+            dangerouslySetInnerHTML={{ __html: text }}
+          />
+        </Card.Section>
 
-            </div>
-        </div>
-    );
-};
+        <Card.Section>
+          <div className={styles.buttons}>
+            <LinkButton href={URLS.AMLHome} outline={false}>
+              {deny}
+            </LinkButton>
+            <Button
+              data-testid="download-button"
+              onClick={onDownload}
+              outline={false}
+              variant="secondary"
+            >
+              Download consent form
+            </Button>
+          </div>
+        </Card.Section>
+      </Card>
+
+      <Button
+        variant="secondary"
+        rounded={false}
+        size="lg"
+        onClick={onAgree}
+        title={confirm}
+      />
+    </NarrowLayout>
+  );
+}
 
 export default Consent;

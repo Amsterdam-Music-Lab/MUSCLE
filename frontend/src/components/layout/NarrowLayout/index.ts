@@ -6,4 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+export type { NarrowLayoutProps } from "./NarrowLayout";
 export { default as NarrowLayout } from "./NarrowLayout";
