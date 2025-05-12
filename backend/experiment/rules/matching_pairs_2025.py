@@ -214,7 +214,7 @@ class MatchingPairs2025(MatchingPairsGame):
             else:
                 selected_songs = [
                     *unplayed_songs,
-                    *participant_songs,
+                    *list(set(participant_songs).intersection(set(songs))),
                 ][: self.num_pairs]
         for song in selected_songs:
             result, created = Result.objects.get_or_create(
