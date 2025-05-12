@@ -23,10 +23,12 @@ class Command(BaseCommand):
         parser.add_argument('directory',
                             type=str,
                             help="Directory of audio files, relative to upload folder")
-        parser.add_argument('--experiment',
-                            type=str,
-                            default=None,
-                            help="Provide the ID of the experiment for which the playlist should be compiled")
+        parser.add_argument(
+            '--block',
+            type=str,
+            default=None,
+            help="Provide the ID of the block rules for which the playlist should be compiled",
+        )
         parser.add_argument('--artist_default',
                             type=str,
                             default='default',
@@ -43,28 +45,29 @@ class Command(BaseCommand):
         name = options.get('artist_default')
         upload_dir = settings.MEDIA_ROOT
         playlist_dir = join(upload_dir, directory)
-        search_critera = glob('{}/*.wav'.format(playlist_dir)) + \
-            glob('{}/*.mp3'.format(playlist_dir))
+        search_criteria = glob(
+            '**/*.wav', root_dir=playlist_dir, recursive=True
+        ) + glob('**/*.mp3', root_dir=playlist_dir, recursive=True)
         song_names_option = options.get('song_names')
         if song_names_option:
             with open(join(playlist_dir, song_names_option)) as json_file:
                 song_names = json.load(json_file)
-        block_option = options.get('experiment')
+        block_option = options.get('block')
         with open(join(playlist_dir, 'audiofiles.csv'), 'w+') as f:
             csv_writer = csv.writer(f)
-            for i, audio_file in enumerate(search_critera):
+            for i, audio_file in enumerate(search_criteria):
                 # set defaults
                 artist_name = name
                 song_name = name
                 tag = group = '0'
-                filename = join(directory, basename(audio_file))
+                filename = join(directory, audio_file)
                 audio_file_clean = splitext(basename(audio_file))[0]
                 if song_names_option:
                     artist_name = song_names[audio_file_clean]
                     song_name = basename(audio_file)[:-4]
                 elif block_option:
                     rules = BLOCK_RULES.get(block_option)
-                    info = rules.get_info_playlist(rules, audio_file_clean)
+                    info = rules.get_info_playlist(rules, audio_file)
                     artist_name = info.get('artist')
                     song_name = info.get('song')
                     tag = info.get('tag')
@@ -72,7 +75,7 @@ class Command(BaseCommand):
                 else:
                     song_name = audio_file_clean
                 start_position = 0.0
-                with audioread.audio_open(audio_file) as f:
+                with audioread.audio_open(join(playlist_dir, audio_file)) as f:
                     duration = f.duration
                 group_tag_option = options.get('tag_group')
                 if group_tag_option:
