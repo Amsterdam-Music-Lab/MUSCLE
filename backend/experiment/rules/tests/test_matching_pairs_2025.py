@@ -1,6 +1,7 @@
 import random
 from unittest import skip
 
+from django.db.models import Avg
 from django.test import TestCase
 
 from experiment.models import Block, Experiment, Phase
@@ -69,7 +70,8 @@ class MatchingPairs2025Test(TestCase):
         for cond in conditions:
             result, _created = Result.objects.get_or_create(
                 participant=self.session.participant,
-                question_key=f"condition_{cond[0]}_{cond[1]}",
+                question_key="condition",
+                given_response=f"{cond[0]}_{cond[1]}",
             )
             result.score = score
             result.save()
@@ -106,7 +108,8 @@ class MatchingPairs2025Test(TestCase):
         for song in songs:
             result, _created = Result.objects.get_or_create(
                 participant=self.session.participant,
-                question_key=f"song_{song}",
+                question_key="song",
+                given_response=song,
             )
             result.score = score
             result.save()
@@ -255,11 +258,11 @@ class PlaythroughSimulationTest(TestCase):
         cls.participant = Participant.objects.create()
         cls.rules = cls.block.get_rules()
 
-    def test_simulate_repeated_playthrough_ch(self):
-        n_games = 1000
-        for condition in ['ch', 'rc', 'tv']:
+    def test_simulate_repeated_playthrough(self):
+        n_games = 500
+        for corpus in ['ch', 'rc', 'tv']:
+            playlist = getattr(self, f'{corpus}_playlist')
             for game in range(n_games):
-                playlist = getattr(self, f'{condition}_playlist')
                 session = Session.objects.create(
                     participant=self.participant,
                     block=self.block,
@@ -267,3 +270,21 @@ class PlaythroughSimulationTest(TestCase):
                 )
                 actions = self.rules.next_round(session)
                 self.assertNotEqual(len(actions), 0)
+            song_results = Result.objects.filter(
+                participant=self.participant, question_key='song'
+            )
+            average_plays = song_results.aggregate(Avg('score'))['score__avg']
+            # check that all songs have been played equally frequently, give or take 1
+            for song_result in song_results:
+                self.assertAlmostEqual(song_result.score, average_plays, delta=1)
+            song_results.delete()
+            condition_results = Result.objects.filter(
+                participant=self.participant, question_key='condition'
+            )
+            average_conditions = condition_results.aggregate(Avg('score'))['score__avg']
+            # check that all conditions have been played equally frequently, give or take 1
+            for condition_result in condition_results:
+                self.assertAlmostEqual(
+                    condition_result.score, average_conditions, delta=1
+                )
+            condition_results.delete()
