@@ -1,4 +1,5 @@
 import random
+from unittest import skip
 
 from django.test import TestCase
 
@@ -235,3 +236,13 @@ class MatchingPairs2025Test(TestCase):
         session = Session.objects.create(block=self.block, participant=self.participant, playlist=self.playlist)
 
         self.assertTrue(self.rules._has_played_before(session))
+
+    @skip("This test simulates repeated playthroughs, comment this line out to run")
+    def test_simulate_repeated_playthrough(self):
+        n_games = 200
+        for game in range(n_games):
+            session = Session.objects.create(
+                participant=self.participant, block=self.block, playlist=self.playlist
+            )
+            actions = self.rules.next_round(session)
+            self.assertNotEqual(len(actions), 0)
