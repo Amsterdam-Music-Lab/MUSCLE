@@ -190,30 +190,30 @@ class MarkdownPreviewTextInput(TextInput):
 
 class ExperimentForm(ModelForm):
 
-    def __init__(self, *args, **kwargs):
-        super(ModelForm, self).__init__(*args, **kwargs)
-        for language in settings.MODELTRANSLATION_LANGUAGES:
-            language = language.replace('-', '_')
-            desc_field = f"description_{language}"
-            self.fields[desc_field].widget.attrs["style"] = "height:40px"
-            soc_field = f"social_media_message_{language}"
-            self.fields[soc_field].widget.attrs["style"] = "height:15px"
+    # def __init__(self, *args, **kwargs):
+    #     super(ModelForm, self).__init__(*args, **kwargs)
+    #     for language in settings.MODELTRANSLATION_LANGUAGES:
+    #         language = language.replace('-', '_')
+    #         desc_field = f"description_{language}"
+    #         self.fields[desc_field].widget.attrs["style"] = "height:40px"
+    #         soc_field = f"social_media_message_{language}"
+    #         self.fields[soc_field].widget.attrs["style"] = "height:15px"
 
     class Meta:
         model = Experiment
         fields = "__all__"
-        help_texts = {}
-        for language in settings.MODELTRANSLATION_LANGUAGES:
-            for field_name in ["about_content", "disclaimer", "privacy"]:
-                language = language.replace("-", "_")
-                lang_field_name = f"{field_name}_{language}"
-                help_texts.update(
-                    {
-                        lang_field_name: _(
-                            "You can enter plain text, html or markdown here."
-                        )
-                    }
-                )
+        # help_texts = {}
+        # for language in settings.MODELTRANSLATION_LANGUAGES:
+        #     for field_name in ["about_content", "disclaimer", "privacy"]:
+        #         language = language.replace("-", "_")
+        #         lang_field_name = f"{field_name}_{language}"
+        #         help_texts.update(
+        #             {
+        #                 lang_field_name: _(
+        #                     "You can enter plain text, html or markdown here."
+        #                 )
+        #             }
+        #         )
 
     class Media:
         js = ["experiment_form.js"]

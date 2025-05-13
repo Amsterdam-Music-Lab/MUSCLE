@@ -25,23 +25,25 @@ from question.models import QuestionSeries, QuestionInSeries
 from .utils import export_json_results
 
 
-class BlockInline(NestedStackedInline):
+class BlockAdmin(admin.ModelAdmin):
     model = Block
     inlines = [QuestionSeriesInline]
-    form = BlockForm
     autocomplete_fields = ["playlists"]
     classes = ["wide"]
 
-    def get_extra(self, request, obj=None, **kwargs):
-        if obj:
-            return 0
-        return 1
+    def has_module_permission(self, request):
+        ''' Prevents the admin from being shown in the sidebar.'''
+        return False
 
 
-class PhaseInline(NestedTabularInline):
+class PhaseInline(admin.StackedInline):
     model = Phase
     sortable_field_name = "index"
-    inlines = [BlockInline]
+    template = "admin/phase_inline.html"
+    show_change_link = True
+
+    class Media:
+        css = {"all": ("phase_inline.css",)}
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
@@ -49,7 +51,7 @@ class PhaseInline(NestedTabularInline):
         return 1
 
 
-class SocialMediaConfigInline(NestedStackedInline):
+class SocialMediaConfigInline(admin.StackedInline):
     form = SocialMediaConfigForm
     model = SocialMediaConfig
 
@@ -59,9 +61,7 @@ class SocialMediaConfigInline(NestedStackedInline):
         return 1
 
 
-class ExperimentAdmin(
-    InlineActionsModelAdminMixin, NestedModelAdmin, TabbedTranslationAdmin
-):
+class ExperimentAdmin(admin.ModelAdmin, InlineActionsModelAdminMixin):
     list_display = (
         "experiment_name",
         "slug_link",
@@ -299,35 +299,5 @@ class ExperimentAdmin(
         )
 
 
-class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = (
-        "name_link",
-        "related_experiment",
-        "index",
-        "dashboard",
-        "randomize",
-        "blocks",
-    )
-    fields = ["name", "experiment", "index", "dashboard", "randomize"]
-    inlines = [BlockInline]
-
-    def name_link(self, obj):
-        obj_name = obj.__str__()
-        url = reverse("admin:experiment_phase_change", args=[obj.pk])
-        return format_html('<a href="{}">{}</a>', url, obj_name)
-
-    def related_experiment(self, obj):
-        url = reverse("admin:experiment_experiment_change", args=[obj.experiment.pk])
-        experiment_name = obj.experiment.name or "No name"
-        return format_html('<a href="{}">{}</a>', url, experiment_name)
-
-    def blocks(self, obj):
-        blocks = Block.objects.filter(phase=obj)
-
-        if not blocks:
-            return "No blocks"
-
-        return format_html(", ".join([block.slug for block in blocks]))
-
-
 admin.site.register(Experiment, ExperimentAdmin)
+admin.site.register(Block, BlockAdmin)
