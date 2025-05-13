@@ -4,18 +4,23 @@
     20% {
         transform: scale(1.15);
     }
+
     40% {
         transform: scale(1);
     }
+
     60% {
         transform: scale(1.1);
     }
+
     80% {
         transform: scale(1);
     }
+
     95% {
         transform: scale(1.05);
     }
+
     100% {
         transform: scale(1);
     }
@@ -25,12 +30,15 @@
     40% {
         transform: scale(1.15);
     }
+
     80% {
         transform: scale(1);
     }
+
     95% {
         transform: scale(1.05);
     }
+
     100% {
         transform: scale(1);
     }
@@ -40,30 +48,39 @@
     10% {
         transform: rotate(13deg);
     }
+
     20% {
         transform: rotate(-13deg);
     }
+
     30% {
         transform: rotate(11deg);
     }
+
     40% {
         transform: rotate(-11deg);
     }
+
     50% {
         transform: rotate(10deg);
     }
+
     60% {
         transform: rotate(-10deg);
     }
+
     70% {
         transform: rotate(8deg);
     }
+
     80% {
         transform: rotate(-8deg);
     }
+
     95% {
         transform: rotate(5deg);
     }
+
     100% {
         transform: rotate(0deg);
     }
@@ -111,7 +128,8 @@
         }
     }
 
-    &.fbnomatch, &.fbmisremembered {
+    &.fbnomatch,
+    &.fbmisremembered {
         animation-duration: 0.7s;
         animation-name: nomatch;
         animation-iteration-count: 1;

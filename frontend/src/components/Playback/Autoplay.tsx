@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 
 import Circle from "../Circle/Circle";
-import ListenCircle from "../ListenCircle/ListenCircle";
+import CountDown from "../CountDown/CountDown";
+import Histogram from "../Histogram/Histogram";
 
 interface AutoPlayProps {
     instruction?: string;
@@ -23,7 +24,7 @@ const AutoPlay = ({ instruction, showAnimation, playSection, startedPlaying, fin
     }, [playSection, startedPlaying]);
 
     return (
-        <div>
+        <div className={"aha__autoplay d-flex flex-column justify-content-center align-items-center " + className}>
             <div className="circle">
                 <Circle
                     running={running}
@@ -38,24 +39,23 @@ const AutoPlay = ({ instruction, showAnimation, playSection, startedPlaying, fin
                 />
                 <div className="circle-content">
                     {showAnimation
-                        ? <ListenCircle
-                            duration={responseTime}
-                            histogramRunning={running}
-                            countDownRunning={running}
-                        />
+                        ?
+                        <div>
+                            <CountDown duration={responseTime} running={running} />
+                            <div className="aha__histogram-container">
+                                <Histogram running={running} />
+                            </div>
+                        </div>
                         : <div className="stationary">
                             <span className="fa-solid fa-headphones fa-6x"></span>
                         </div>
                     }
                 </div>
             </div>
-            <div className={"aha__listen d-flex flex-column justify-content-center align-items-center " + className}
-            >
-                {/* Instruction */}
-                {instruction && (<div className="instruction d-flex justify-content-center align-items-center">
-                    <h3 className="text-center">{instruction}</h3>
-                </div>)}
-            </div>
+            {/* Instruction */}
+            {instruction && (<div className="instruction d-flex justify-content-center align-items-center">
+                <h3 className="text-center">{instruction}</h3>
+            </div>)}
         </div>
     )
 }

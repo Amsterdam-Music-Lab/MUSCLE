@@ -1,6 +1,10 @@
-import json
+import gzip
+from os.path import join
+
 from django.core.management.base import BaseCommand, CommandError
+
 from experiment.models import Block
+from experiment.utils import block_export_json_results
 
 
 class Command(BaseCommand):
@@ -14,27 +18,17 @@ class Command(BaseCommand):
         parser.add_argument('block_slug',
                             type=str,
                             help="Block slug")
-
-        # Named (optional) arguments
-        parser.add_argument(
-            '--indent',
-            type=int,
-            default=0,
-            help='JSON indent',
-        )
+        parser.add_argument('directory', type=str, help="Directory to write to")
 
     def handle(self, *args, **options):
         block_slug = options['block_slug']
-        indent = options['indent']
+        directory = options['directory']
         try:
             block = Block.objects.get(slug=block_slug)
         except Block.DoesNotExist:
             raise CommandError(
                 'Block "%s" does not exist with slug' % block_slug)
 
-        # Optional indent
-        options = {}
-        if indent > 0:
-            options = {'indent': indent}
-
-        self.stdout.write(json.dumps(block._export_admin(), **options))
+        zip_file = block_export_json_results(block_slug)
+        with gzip.open(join(directory, f'{block_slug}.zip'), 'w+') as f:
+            f.write(zip_file.getbuffer())

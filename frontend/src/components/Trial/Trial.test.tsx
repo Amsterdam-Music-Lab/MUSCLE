@@ -26,7 +26,8 @@ const feedback_form = {
         key: 'test_question',
         view: QuestionViews.BUTTON_ARRAY,
         question: ['What is the average speed of a Swallow?'],
-        choices: { 'slow': '1 km/h', 'fast': '42 km/h' }
+        choices: { 'slow': '1 km/h', 'fast': '42 km/h' },
+        style: {}
     }],
     submit_label: 'Submit',
     skip_label: 'Skip',
@@ -56,18 +57,6 @@ describe('Trial', () => {
             onResult={mockOnResult}
         />);
         expect(screen.queryByRole('presentation')).toBeTruthy();
-    });
-
-    it("sets the class of the trial element based on config style", () => {
-        const config = { ...defaultConfig, style: 'boolean' };
-        render(<Trial
-            feedback_form={feedback_form}
-            config={config}
-            onNext={mockOnNext}
-            onResult={mockOnResult}
-        />);
-        const presentation = screen.queryByRole('presentation');
-        expect(presentation.classList.contains('boolean')).toBe(true);
     });
 
     it("renders Playback component when playback prop is provided", () => {

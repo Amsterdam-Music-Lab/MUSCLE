@@ -65,11 +65,11 @@
             </td>
             <td>
                 <input type="number" step="0.001" name="{{section.id}}_start_time" maxlength="128" required=""
-                    id="{{section.id}}_start_time" value="{{ section.start_time}}">
+                    id="{{section.id}}_start_time" value="{{ section.start_time|stringformat:"f" }}">
             </td>
             <td>
                 <input type="number" step="0.001" name="{{section.id}}_duration" maxlength="128" required=""
-                    id="{{section.id}}_duration" value="{{ section.duration}}">
+                    id="{{section.id}}_duration" value="{{ section.duration|stringformat:"f" }}">
             </td>
             <td>
                 <input type="text" name="{{section.id}}_tag" maxlength="128" id="{{section.id}}_tag"

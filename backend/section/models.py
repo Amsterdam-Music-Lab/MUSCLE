@@ -144,8 +144,8 @@ class Playlist(models.Model):
         for row in reader:
             lines += 1
             iteration_error = False
-            
-            # Check for valid row length in csv. If it has less than 8 entries, csv.DictReader will assign None to values of missing keys            
+
+            # Check for valid row length in csv. If it has less than 8 entries, csv.DictReader will assign None to values of missing keys
             if None in row.values():
                 csv_messages.append(f"Error: Invalid row length, line: {str(lines)}")
                 # Skip adding or altering this row
@@ -160,19 +160,6 @@ class Playlist(models.Model):
                 iteration_error = True
                 global_errors += 1
 
-            # Check if the duration in the csv exceeds the actual duration of the audio file
-            file_path = join(settings.MEDIA_ROOT, str(row['filename']))
-
-            if "test" not in sys.argv:
-                # while running tests this would throw an error
-                with audioread.audio_open(file_path) as f:
-                    actual_duration = f.duration
-                if float(row['duration']) > actual_duration:
-                    # Add or edit this row, but show an error message containing the actual saved duration
-                    row['duration'] = actual_duration
-                    global_errors += 1
-                    csv_messages.append(f"Error: The duration of {row['filename']} exceeds the actual duration of the audio file and has been set to {actual_duration} seconds.")
-                
             # Make the changes if there are no global errors in this row
             if not iteration_error:
                 # Retrieve or create Song object
@@ -225,7 +212,7 @@ class Playlist(models.Model):
             # Reset process csv option and save playlist
             self.process_csv = False
             self.save()
-            
+
             return {
                 'status': self.CSV_OK,
                 'message':

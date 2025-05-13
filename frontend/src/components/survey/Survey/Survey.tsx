@@ -16,7 +16,6 @@ interface SurveyProps extends HTMLAttributes<HTMLDivElement> {
   skipLabel: string;
   isSkippable: boolean;
   submitResult: submitResultType;
-  emphasizeTitle?: boolean;
 }
 
 /** Survey */
@@ -27,7 +26,6 @@ const Survey = ({
   skipLabel,
   isSkippable,
   submitResult,
-  emphasizeTitle = false,
   className,
   ...divProps
 }: SurveyProps) => {
@@ -81,7 +79,6 @@ const Survey = ({
                   disabled={!formActive}
                   question={{ ...question, question: "" }}
                   onChange={onChange}
-                  emphasizeTitle={false}
                 />
               </Card.Section>
             );

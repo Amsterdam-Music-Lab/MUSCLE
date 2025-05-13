@@ -4,7 +4,7 @@ The actions that can be used by experiments are formalized in `backend/experimen
 
 ## 1. Explainers
 An Explainer presents some information to participants of an experiment. They can include a number of Steps, which may or may not be numbered.
-[Preview](https://amsterdam-music-lab.github.io/MUSCLE/?path=/story/explainer--default)
+[Preview](https://amsterdam-music-lab.github.io/MUSCLE/storybook/?path=/story/explainer--default)
 
 ## 2. Playlist
 If there are multiple playlist tied to an experiment, the Playlist widget lets participants select one of them for use in the experiment.

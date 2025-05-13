@@ -32,6 +32,7 @@ export function PluginRenderer({
 }: PluginRendererProps) {
   // Update plugin args and specs with default arguments
   plugins = plugins
+    .filter((p) => p)
     .map((plugin) => {
       const meta = registry[plugin.name as keyof PluginRegistry];
       if (!meta) {

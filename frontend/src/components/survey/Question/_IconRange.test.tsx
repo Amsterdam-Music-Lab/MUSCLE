@@ -3,6 +3,7 @@ import type Question from '@/types/Question';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import IconRange from './_IconRange';
+import Question, {QuestionViews} from '@/types/Question';
 
 // Mock the RangeTitle component
 vi.mock('./_RangeTitle', () => ({
@@ -25,6 +26,8 @@ vi.mock('react-rangeslider', () => ({
 
 const mockQuestion: Question = {
     key: 'test-icon-range',
+    view: QuestionViews.ICON_RANGE,
+    question: "What is the question?",
     choices: {
         '1': 'fa-face-grin-hearts',
         '2': 'fa-face-grin',
@@ -36,29 +39,30 @@ const mockQuestion: Question = {
 
 describe('IconRange', () => {
     it('renders without crashing', () => {
-        render(<IconRange question={mockQuestion} value="" style={{}} onChange={() => { }} emphasizeTitle={false} />);
+        render(<IconRange question={mockQuestion} value="" onChange={() => { }} />);
         expect(screen.getByTestId('mock-range-title')).toBeDefined();
         expect(screen.getByTestId('mock-slider')).toBeDefined();
     });
 
     it('throws an error when no choices are provided', () => {
         const invalidQuestion = { ...mockQuestion, choices: {} };
-        expect(() => render(<IconRange question={invalidQuestion} value="" style={{}} onChange={() => { }} emphasizeTitle={false} />))
+        expect(() => render(<IconRange question={invalidQuestion} value="" onChange={() => { }} />))
             .toThrow('IconRange question must have choices');
     });
 
     it('sets the correct initial value', () => {
-        render(<IconRange question={mockQuestion} value="3" style={{}} onChange={() => { }} emphasizeTitle={false} />);
+        render(<IconRange question={mockQuestion} value="3" onChange={() => { }}  />);
         expect((screen.getByTestId('mock-slider') as HTMLInputElement).value).toBe('2');
     });
 
     it('sets the middle value when no value is provided', () => {
-        render(<IconRange question={mockQuestion} value="" style={{}} onChange={() => { }} emphasizeTitle={false} />);
+        render(<IconRange question={mockQuestion} value="" onChange={() => { }}  />);
         expect((screen.getByTestId('mock-slider') as HTMLInputElement).value).toBe('2');
     });
 
     it('applies the correct style', () => {
-        const { container } = render(<IconRange question={mockQuestion} value="" style={{ gradient: true }} onChange={() => { }} emphasizeTitle={false} />);
+        const questionWithStyle = {...mockQuestion, style:{"gradient": true}}
+        const { container } = render(<IconRange question={questionWithStyle} value="" onChange={() => { }}  />);
 
         const firstChild = container.firstChild;
 
@@ -71,12 +75,12 @@ describe('IconRange', () => {
     });
 
     it('applies empty class when value is empty', () => {
-        const { container } = render(<IconRange question={mockQuestion} value="" style={{}} onChange={() => { }} emphasizeTitle={false} />);
+        const { container } = render(<IconRange question={mockQuestion} value="" onChange={() => { }}  />);
         expect(container.firstChild).toHaveProperty('className', expect.stringContaining('empty'));
     });
 
     it('does not apply empty class when value is provided', () => {
-        const { container } = render(<IconRange question={mockQuestion} value="3" style={{}} onChange={() => { }} emphasizeTitle={false} />);
+        const { container } = render(<IconRange question={mockQuestion} value="3" onChange={() => { }}  />);
         expect(container.firstChild).toHaveProperty('className', expect.not.stringContaining('empty'));
     });
 });

@@ -1,228 +1,1335 @@
 [
-    {
-        "model": "experiment.Experiment",
-        "pk": 1,
-        "fields": {
-            "slug": "RhythmTestSeries"
-        }
-    },
-    {
-        "model": "experiment.Phase",
-        "pk": 1,
-        "fields": {
-            "experiment": 1,
-            "index": 0
-        }
-    },
-    {
-        "model": "experiment.Block",
-        "pk": 1,
-        "fields": {
-            "slug": "ddi",
-            "rounds": 100,
-            "bonus_points": 0,
-            "rules": "DURATION_DISCRIMINATION",
-            "playlists": [
-                5
-            ]
-        }
-    },
-    {
-        "model": "experiment.Block",
-        "pk": 2,
-        "fields": {
-            "slug": "ddit",
-            "rounds": 100,
-            "bonus_points": 0,
-            "rules": "DURATION_DISCRIMINATION_TONE",
-            "playlists": [
-                4
-            ]
-        }
-    },
-    {
-        "model": "experiment.Block",
-        "pk": 3,
-        "fields": {
-            "slug": "bat",
-            "rounds": 17,
-            "bonus_points": 0,
-            "rules": "BEAT_ALIGNMENT",
-            "playlists": [
-                7
-            ]
-        }
-    },
-    {
-        "model": "experiment.Block",
-        "pk": 4,
-        "fields": {
-            "slug": "hbat_bit",
-            "rounds": 100,
-            "bonus_points": 0,
-            "rules": "H_BAT",
-            "playlists": [
-                9
-            ]
-        }
-    },
-    {
-        "model": "experiment.Block",
-        "pk": 5,
-        "fields": {
-            "slug": "hbat_bfit",
-            "rounds": 100,
-            "bonus_points": 0,
-            "rules": "H_BAT_BFIT",
-            "playlists": [
-                8
-            ]
-        }
-    },
-    {
-        "model": "experiment.Block",
-        "pk": 6,
-        "fields": {
-            "slug": "hbat_bst",
-            "rounds": 100,
-            "bonus_points": 0,
-            "rules": "BST",
-            "playlists": [
-                10
-            ]
-        }
-    },
-    {
-        "model": "experiment.Block",
-        "pk": 7,
-        "fields": {
-            "slug": "anis",
-            "rounds": 100,
-            "bonus_points": 0,
-            "rules": "ANISOCHRONY",
-            "playlists": [
-                3
-            ]
-        }
-    },
-    {
-        "model": "experiment.Block",
-        "pk": 8,
-        "fields": {
-            "phase": 1,
-            "slug": "rhdis",
-            "rounds": 40,
-            "bonus_points": 0,
-            "rules": "RHYTHM_DISCRIMINATION",
-            "playlists": [
-                6
-            ]
-        }
-    },
-    {
-        "model": "experiment.Block",
-        "pk": 9,
-        "fields": {
-            "slug": "rhythm_outro",
-            "rounds": 10,
-            "bonus_points": 0,
-            "rules": "RHYTHM_BATTERY_FINAL",
-            "playlists": [
-                3
-            ]
-        }
-    },
-    {
-        "model": "experiment.Block",
-        "pk": 10,
-        "fields": {
-            "slug": "rhythm_intro",
-            "rounds": 10,
-            "bonus_points": 0,
-            "rules": "RHYTHM_BATTERY_INTRO",
-            "playlists": [
-                11
-            ]
-        }
-    },
-    {
-        "model": "experiment.Block",
-        "pk": 14,
-        "fields": {
-            "slug": "huang_2022",
-            "rounds": 30,
-            "bonus_points": 0,
-            "rules": "HUANG_2022",
-            "playlists": [
-                13,
-                2,
-                1
-            ]
-        }
-    },
-    {
-        "model": "experiment.Block",
-        "pk": 16,
-        "fields": {
-            "slug": "cat",
-            "rounds": 10,
-            "bonus_points": 0,
-            "rules": "CATEGORIZATION",
-            "playlists": [
-                12
-            ]
-        }
-    },
-    {
-        "model": "experiment.Block",
-        "pk": 17,
-        "fields": {
-            "slug": "tunetwins",
-            "rounds": 10,
-            "bonus_points": 0,
-            "rules": "MATCHING_PAIRS",
-            "playlists": [
-                14
-            ]
-        }
-    },
-    {
-        "model": "experiment.Block",
-        "pk": 18,
-        "fields": {
-            "slug": "eurovision_2021",
-            "rounds": 30,
-            "bonus_points": 0,
-            "rules": "EUROVISION_2020",
-            "playlists": [
-                16
-            ]
-        }
-    },
-    {
-        "model": "experiment.Block",
-        "pk": 19,
-        "fields": {
-            "slug": "christmas_2020",
-            "rounds": 30,
-            "bonus_points": 0,
-            "rules": "KUIPER_2020",
-            "playlists": [
-                17
-            ]
-        }
-    },
-    {
-        "model": "experiment.Block",
-        "pk": 20,
-        "fields": {
-            "slug": "thats_my_song",
-            "rounds": 10,
-            "bonus_points": 0,
-            "rules": "THATS_MY_SONG",
-            "playlists": [
-                18
-            ]
-        }
+{
+    "model": "experiment.experiment",
+    "pk": 2,
+    "fields": {
+        "slug": "rhythm_battery",
+        "theme_config": null,
+        "active": true
     }
+},
+{
+    "model": "experiment.experiment",
+    "pk": 3,
+    "fields": {
+        "slug": "thkids",
+        "theme_config": null,
+        "active": true
+    }
+},
+{
+    "model": "experiment.experiment",
+    "pk": 4,
+    "fields": {
+        "slug": "eurovision_2021",
+        "theme_config": null,
+        "active": true
+    }
+},
+{
+    "model": "experiment.experiment",
+    "pk": 5,
+    "fields": {
+        "slug": "tunetwins",
+        "theme_config": null,
+        "active": true
+    }
+},
+{
+    "model": "experiment.experiment",
+    "pk": 7,
+    "fields": {
+        "slug": "cat",
+        "theme_config": null,
+        "active": true
+    }
+},
+{
+    "model": "experiment.experiment",
+    "pk": 8,
+    "fields": {
+        "slug": "huang_2022",
+        "theme_config": null,
+        "active": true
+    }
+},
+{
+    "model": "experiment.experiment",
+    "pk": 9,
+    "fields": {
+        "slug": "christmas_2020",
+        "theme_config": null,
+        "active": true
+    }
+},
+{
+    "model": "experiment.experiment",
+    "pk": 10,
+    "fields": {
+        "slug": "thats_my_song",
+        "theme_config": null,
+        "active": true
+    }
+},
+{
+    "model": "experiment.experiment",
+    "pk": 11,
+    "fields": {
+        "slug": "tunetwins_icmpc",
+        "theme_config": null,
+        "active": true
+    }
+},
+{
+    "model": "experiment.experiment",
+    "pk": 12,
+    "fields": {
+        "slug": "teletunes",
+        "theme_config": null,
+        "active": true
+    }
+},
+{
+    "model": "experiment.experiment",
+    "pk": 13,
+    "fields": {
+        "slug": "mpst",
+        "theme_config": null,
+        "active": true
+    }
+},
+{
+    "model": "experiment.experiment",
+    "pk": 14,
+    "fields": {
+        "slug": "mpref",
+        "theme_config": null,
+        "active": true
+    }
+},
+{
+    "model": "experiment.experiment",
+    "pk": 15,
+    "fields": {
+        "slug": "tunetwinsvisual",
+        "theme_config": null,
+        "active": true
+    }
+},
+{
+    "model": "experiment.experiment",
+    "pk": 16,
+    "fields": {
+        "slug": "congo-same-diff",
+        "theme_config": null,
+        "active": true
+    }
+},
+{
+    "model": "experiment.experiment",
+    "pk": 17,
+    "fields": {
+        "slug": "tunetwinsvisual2",
+        "theme_config": null,
+        "active": true
+    }
+},
+{
+    "model": "experiment.experiment",
+    "pk": 18,
+    "fields": {
+        "slug": "rhythm_outro",
+        "theme_config": null,
+        "active": true
+    }
+},
+{
+    "model": "experiment.phase",
+    "pk": 1,
+    "fields": {
+        "experiment": 2,
+        "index": 0,
+        "dashboard": false,
+        "randomize": false
+    }
+},
+{
+    "model": "experiment.phase",
+    "pk": 2,
+    "fields": {
+        "experiment": 2,
+        "index": 0,
+        "dashboard": false,
+        "randomize": true
+    }
+},
+{
+    "model": "experiment.phase",
+    "pk": 3,
+    "fields": {
+        "experiment": 2,
+        "index": 0,
+        "dashboard": false,
+        "randomize": false
+    }
+},
+{
+    "model": "experiment.phase",
+    "pk": 4,
+    "fields": {
+        "experiment": 3,
+        "index": 0,
+        "dashboard": true,
+        "randomize": false
+    }
+},
+{
+    "model": "experiment.phase",
+    "pk": 5,
+    "fields": {
+        "experiment": 4,
+        "index": 0,
+        "dashboard": false,
+        "randomize": false
+    }
+},
+{
+    "model": "experiment.phase",
+    "pk": 6,
+    "fields": {
+        "experiment": 5,
+        "index": 0,
+        "dashboard": false,
+        "randomize": false
+    }
+},
+{
+    "model": "experiment.phase",
+    "pk": 8,
+    "fields": {
+        "experiment": 7,
+        "index": 0,
+        "dashboard": false,
+        "randomize": false
+    }
+},
+{
+    "model": "experiment.phase",
+    "pk": 9,
+    "fields": {
+        "experiment": 8,
+        "index": 0,
+        "dashboard": false,
+        "randomize": false
+    }
+},
+{
+    "model": "experiment.phase",
+    "pk": 10,
+    "fields": {
+        "experiment": 9,
+        "index": 0,
+        "dashboard": false,
+        "randomize": false
+    }
+},
+{
+    "model": "experiment.phase",
+    "pk": 11,
+    "fields": {
+        "experiment": 10,
+        "index": 0,
+        "dashboard": false,
+        "randomize": false
+    }
+},
+{
+    "model": "experiment.phase",
+    "pk": 12,
+    "fields": {
+        "experiment": 11,
+        "index": 0,
+        "dashboard": false,
+        "randomize": false
+    }
+},
+{
+    "model": "experiment.phase",
+    "pk": 13,
+    "fields": {
+        "experiment": 12,
+        "index": 0,
+        "dashboard": false,
+        "randomize": false
+    }
+},
+{
+    "model": "experiment.phase",
+    "pk": 14,
+    "fields": {
+        "experiment": 13,
+        "index": 0,
+        "dashboard": false,
+        "randomize": false
+    }
+},
+{
+    "model": "experiment.phase",
+    "pk": 15,
+    "fields": {
+        "experiment": 14,
+        "index": 0,
+        "dashboard": false,
+        "randomize": false
+    }
+},
+{
+    "model": "experiment.phase",
+    "pk": 16,
+    "fields": {
+        "experiment": 15,
+        "index": 0,
+        "dashboard": false,
+        "randomize": false
+    }
+},
+{
+    "model": "experiment.phase",
+    "pk": 17,
+    "fields": {
+        "experiment": 16,
+        "index": 0,
+        "dashboard": false,
+        "randomize": false
+    }
+},
+{
+    "model": "experiment.phase",
+    "pk": 18,
+    "fields": {
+        "experiment": 17,
+        "index": 0,
+        "dashboard": false,
+        "randomize": false
+    }
+},
+{
+    "model": "experiment.phase",
+    "pk": 19,
+    "fields": {
+        "experiment": 18,
+        "index": 0,
+        "dashboard": false,
+        "randomize": false
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 1,
+    "fields": {
+        "phase": 8,
+        "index": 0,
+        "image": null,
+        "slug": "cat",
+        "rounds": 70,
+        "bonus_points": 0,
+        "rules": "CATEGORIZATION",
+        "theme_config": null,
+        "playlists": [
+            5
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 3,
+    "fields": {
+        "phase": 15,
+        "index": 0,
+        "image": null,
+        "slug": "mpref",
+        "rounds": 64,
+        "bonus_points": 0,
+        "rules": "MUSICAL_PREFERENCES",
+        "theme_config": null,
+        "playlists": [
+            1
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 4,
+    "fields": {
+        "phase": 9,
+        "index": 0,
+        "image": null,
+        "slug": "huang_2022",
+        "rounds": 6,
+        "bonus_points": 0,
+        "rules": "HUANG_2022",
+        "theme_config": null,
+        "playlists": [
+            3,
+            34,
+            6
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 5,
+    "fields": {
+        "phase": 5,
+        "index": 0,
+        "image": null,
+        "slug": "eurovision_2021",
+        "rounds": 30,
+        "bonus_points": 0,
+        "rules": "EUROVISION_2020",
+        "theme_config": null,
+        "playlists": [
+            4
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 6,
+    "fields": {
+        "phase": 10,
+        "index": 0,
+        "image": null,
+        "slug": "christmas_2020",
+        "rounds": 30,
+        "bonus_points": 0,
+        "rules": "KUIPER_2020",
+        "theme_config": null,
+        "playlists": [
+            2
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 7,
+    "fields": {
+        "phase": 11,
+        "index": 0,
+        "image": null,
+        "slug": "thats_my_song",
+        "rounds": 15,
+        "bonus_points": 0,
+        "rules": "THATS_MY_SONG",
+        "theme_config": null,
+        "playlists": [
+            69
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 8,
+    "fields": {
+        "phase": 6,
+        "index": 0,
+        "image": null,
+        "slug": "tunetwins",
+        "rounds": 10,
+        "bonus_points": 0,
+        "rules": "MATCHING_PAIRS",
+        "theme_config": null,
+        "playlists": [
+            70
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 9,
+    "fields": {
+        "phase": 12,
+        "index": 0,
+        "image": null,
+        "slug": "tunetwins_icmpc",
+        "rounds": 10,
+        "bonus_points": 0,
+        "rules": "MATCHING_PAIRS_ICMPC",
+        "theme_config": null,
+        "playlists": [
+            73
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 10,
+    "fields": {
+        "phase": 2,
+        "index": 0,
+        "image": null,
+        "slug": "hbat_bit",
+        "rounds": 100,
+        "bonus_points": 0,
+        "rules": "H_BAT",
+        "theme_config": null,
+        "playlists": [
+            74
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 11,
+    "fields": {
+        "phase": 2,
+        "index": 0,
+        "image": null,
+        "slug": "anis",
+        "rounds": 100,
+        "bonus_points": 0,
+        "rules": "ANISOCHRONY",
+        "theme_config": null,
+        "playlists": [
+            75
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 12,
+    "fields": {
+        "phase": 2,
+        "index": 0,
+        "image": null,
+        "slug": "bat",
+        "rounds": 17,
+        "bonus_points": 0,
+        "rules": "BEAT_ALIGNMENT",
+        "theme_config": null,
+        "playlists": [
+            76
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 13,
+    "fields": {
+        "phase": 2,
+        "index": 0,
+        "image": null,
+        "slug": "ddi",
+        "rounds": 100,
+        "bonus_points": 0,
+        "rules": "DURATION_DISCRIMINATION",
+        "theme_config": null,
+        "playlists": [
+            77
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 14,
+    "fields": {
+        "phase": 2,
+        "index": 0,
+        "image": null,
+        "slug": "ddit",
+        "rounds": 100,
+        "bonus_points": 0,
+        "rules": "DURATION_DISCRIMINATION_TONE",
+        "theme_config": null,
+        "playlists": [
+            78
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 15,
+    "fields": {
+        "phase": 2,
+        "index": 0,
+        "image": null,
+        "slug": "hbat_bfit",
+        "rounds": 100,
+        "bonus_points": 0,
+        "rules": "H_BAT_BFIT",
+        "theme_config": null,
+        "playlists": [
+            79
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 16,
+    "fields": {
+        "phase": 2,
+        "index": 0,
+        "image": null,
+        "slug": "hbat_bst",
+        "rounds": 100,
+        "bonus_points": 0,
+        "rules": "BST",
+        "theme_config": null,
+        "playlists": [
+            80
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 17,
+    "fields": {
+        "phase": 2,
+        "index": 0,
+        "image": null,
+        "slug": "rhdis",
+        "rounds": 40,
+        "bonus_points": 0,
+        "rules": "RHYTHM_DISCRIMINATION",
+        "theme_config": null,
+        "playlists": [
+            81
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 18,
+    "fields": {
+        "phase": 13,
+        "index": 0,
+        "image": null,
+        "slug": "teletunes",
+        "rounds": 30,
+        "bonus_points": 0,
+        "rules": "HOOKED_TELETUNES",
+        "theme_config": null,
+        "playlists": [
+            82
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 19,
+    "fields": {
+        "phase": 14,
+        "index": 0,
+        "image": null,
+        "slug": "mpst",
+        "rounds": 8,
+        "bonus_points": 0,
+        "rules": "MUSICAL_PREFERENCES",
+        "theme_config": null,
+        "playlists": [
+            83
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 20,
+    "fields": {
+        "phase": 16,
+        "index": 0,
+        "image": null,
+        "slug": "tunetwinsvisual",
+        "rounds": 10,
+        "bonus_points": 0,
+        "rules": "VISUAL_MATCHING_PAIRS",
+        "theme_config": null,
+        "playlists": [
+            84
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 21,
+    "fields": {
+        "phase": 17,
+        "index": 0,
+        "image": null,
+        "slug": "congo-same-diff",
+        "rounds": 4,
+        "bonus_points": 0,
+        "rules": "CONGOSAMEDIFF",
+        "theme_config": null,
+        "playlists": [
+            85
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 22,
+    "fields": {
+        "phase": 18,
+        "index": 0,
+        "image": null,
+        "slug": "tunetwinsvisual2",
+        "rounds": 10,
+        "bonus_points": 0,
+        "rules": "MATCHING_PAIRS_LITE",
+        "theme_config": null,
+        "playlists": [
+            84
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 23,
+    "fields": {
+        "phase": 1,
+        "index": 0,
+        "image": null,
+        "slug": "rhythm_intro",
+        "rounds": 10,
+        "bonus_points": 0,
+        "rules": "RHYTHM_BATTERY_INTRO",
+        "theme_config": null,
+        "playlists": [
+            67
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 24,
+    "fields": {
+        "phase": 19,
+        "index": 0,
+        "image": null,
+        "slug": "rhythm_outro",
+        "rounds": 10,
+        "bonus_points": 0,
+        "rules": "RHYTHM_BATTERY_FINAL",
+        "theme_config": null,
+        "playlists": [
+            67
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 37,
+    "fields": {
+        "phase": 4,
+        "index": 0,
+        "image": null,
+        "slug": "thk_absolute",
+        "rounds": 5,
+        "bonus_points": 0,
+        "rules": "TOONTJE_HOGER_KIDS_4_ABSOLUTE",
+        "theme_config": null,
+        "playlists": [
+            95
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 38,
+    "fields": {
+        "phase": 4,
+        "index": 0,
+        "image": null,
+        "slug": "thk_preverbal",
+        "rounds": 2,
+        "bonus_points": 0,
+        "rules": "TOONTJE_HOGER_KIDS_2_PREVERBAL",
+        "theme_config": null,
+        "playlists": [
+            87
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 39,
+    "fields": {
+        "phase": 4,
+        "index": 0,
+        "image": null,
+        "slug": "thk_mozart",
+        "rounds": 2,
+        "bonus_points": 0,
+        "rules": "TOONTJE_HOGER_KIDS_1_MOZART",
+        "theme_config": null,
+        "playlists": [
+            92
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 40,
+    "fields": {
+        "phase": 4,
+        "index": 0,
+        "image": null,
+        "slug": "thk_tempo",
+        "rounds": 5,
+        "bonus_points": 0,
+        "rules": "TOONTJE_HOGER_KIDS_5_TEMPO",
+        "theme_config": null,
+        "playlists": [
+            96
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 41,
+    "fields": {
+        "phase": 4,
+        "index": 0,
+        "image": null,
+        "slug": "thk_plink",
+        "rounds": 10,
+        "bonus_points": 0,
+        "rules": "TOONTJE_HOGER_KIDS_3_PLINK",
+        "theme_config": null,
+        "playlists": [
+            93
+        ]
+    }
+},
+{
+    "model": "experiment.block",
+    "pk": 42,
+    "fields": {
+        "phase": 4,
+        "index": 0,
+        "image": null,
+        "slug": "thk_relative",
+        "rounds": 2,
+        "bonus_points": 0,
+        "rules": "TOONTJE_HOGER_KIDS_6_RELATIVE",
+        "theme_config": null,
+        "playlists": [
+            91
+        ]
+    }
+},
+{
+    "model": "experiment.experimenttranslatedcontent",
+    "pk": 1,
+    "fields": {
+        "experiment": 2,
+        "index": 0,
+        "language": "en",
+        "name": "Rhythm Test Battery",
+        "description": "",
+        "consent": "",
+        "about_content": "",
+        "social_media_message": "I scored {points} points in {experiment_name}!"
+    }
+},
+{
+    "model": "experiment.experimenttranslatedcontent",
+    "pk": 2,
+    "fields": {
+        "experiment": 3,
+        "index": 0,
+        "language": "en",
+        "name": "Toontje Hoger Kids",
+        "description": "# Je bent muzikaler dan je denkt!\r\n\r\nHoe snel herken jij een liedje? Heb je een goed maatgevoel? Hoe goed is jouw absoluut gehoor? \r\nDoe de testjes op ToontjeHogerKids en ontdek meer over je eigen muzikaliteit én wat de wetenschap daarover weet.",
+        "consent": "",
+        "about_content": "### Over ons\r\nDe ToontjeHogerKids website laat jou ontdekken hoe muzikaal je bent. Je leert wat wetenschappers hebben uitgevonden over muzikaliteit en dat de meeste mensen veel muzikaler zijn dan ze zelf denken!\r\nWil jij ontdekken hoe het zit met jouw maatgevoel? Hoe je liedjes kunt herkennen? Ben jij benieuwd hoe precies jij kunt luisteren? En wil je jouw geheugen voor muziek testen? Dan zijn de ToontjeHogerKids testjes echt iets voor jou!\r\n\r\n### Meer weten?\r\nBezoek  <a href=\"https://www.amsterdammusiclab.nl/\" target=\"_blank\" rel=\"noopener noreferrer\">AML</a>, <a href=\"https://www.mcg.uva.nl/\" target=\"_blank\" rel=\"noopener noreferrer\">MCG</a> of onze blog <a href=\"https://musiccognition.blogspot.com/\" target=\"_blank\" rel=\"noopener noreferrer\">Music Matters</a>. Of lees meer over muziekcognitie in het publieksboek <a href=\"https://henkjanhoning.nl/x/iedereen-is-muzikaal.html\" target=\"_blank\" rel=\"noopener noreferrer\">Iedereen is muzikaal</a>.\r\n\r\n### Colofon\r\n**Organisatie**: Helmke Jansen, Fleur Bouwer \r\n\r\n**Realisatie**: Helmke Jansen, Fleur Bouwer, Werner Helmich, Berit Janssen, Drikus Roor, Evert Rot.\r\n\r\n**Video**: Suédy Mauricio\r\n\r\n**Presentatie filmpjes**: Fleur Bouwer, Merel Vercammen, Hannelore van Es\r\n\r\n### Filmpjes: \r\n<div style=\"padding:56% 0 0 0;position:relative;margin-bottom:2vh;\"><iframe src=https://player.vimeo.com/video/1012727419?h=7a41747c25 width=\"640\" height=\"360\"  frameborder=\"0\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Merel Vercammen\"></iframe></div>\r\n\r\n<div style=\"padding:56% 0 0 0;position:relative;margin-bottom:2vh;\"><iframe src=https://player.vimeo.com/video/1012727374?h=9e35dfa6af frameborder=\"0\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Hannelore van Es\"></iframe></div>\r\n\r\n<div style=\"padding:56% 0 0 0;position:relative;margin-bottom:2vh;\"><iframe src=https://player.vimeo.com/video/1012727335?h=922a88233e frameborder=\"0\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Fleur Bouwer\"></iframe></div>\r\n\r\nEn natuurlijk alle mensen die ToontjeHoger ontwikkelden!",
+        "social_media_message": "I scored {points} points in {experiment_name}!"
+    }
+},
+{
+    "model": "experiment.experimenttranslatedcontent",
+    "pk": 3,
+    "fields": {
+        "experiment": 4,
+        "index": 0,
+        "language": "en",
+        "name": "Hooked-Eurovision",
+        "description": "",
+        "consent": "consent/eurovision_2021/en-consent_hooked.html",
+        "about_content": "",
+        "social_media_message": "I scored {points} points in {experiment_name}!"
+    }
+},
+{
+    "model": "experiment.experimenttranslatedcontent",
+    "pk": 4,
+    "fields": {
+        "experiment": 5,
+        "index": 0,
+        "language": "en",
+        "name": "MatchingPairs",
+        "description": "",
+        "consent": "consent/tunetwins/en-consent_matching_pairs.html",
+        "about_content": "",
+        "social_media_message": "I scored {points} points in {experiment_name}!"
+    }
+},
+{
+    "model": "experiment.experimenttranslatedcontent",
+    "pk": 6,
+    "fields": {
+        "experiment": 7,
+        "index": 0,
+        "language": "en",
+        "name": "categorization",
+        "description": "",
+        "consent": "consent/cat/en-consent_categorization.html",
+        "about_content": "",
+        "social_media_message": "I scored {points} points in {experiment_name}!"
+    }
+},
+{
+    "model": "experiment.experimenttranslatedcontent",
+    "pk": 7,
+    "fields": {
+        "experiment": 8,
+        "index": 0,
+        "language": "zh",
+        "name": "Hooked-China",
+        "description": "",
+        "consent": "consent/huang_2022/zh-consent_huang2021.html",
+        "about_content": "",
+        "social_media_message": "I scored {points} points in {experiment_name}!"
+    }
+},
+{
+    "model": "experiment.experimenttranslatedcontent",
+    "pk": 8,
+    "fields": {
+        "experiment": 9,
+        "index": 0,
+        "language": "en",
+        "name": "Hooked-Christmas",
+        "description": "",
+        "consent": "consent/christmas_2020/en-consent_hooked.html",
+        "about_content": "",
+        "social_media_message": "I scored {points} points in {experiment_name}!"
+    }
+},
+{
+    "model": "experiment.experimenttranslatedcontent",
+    "pk": 9,
+    "fields": {
+        "experiment": 10,
+        "index": 0,
+        "language": "en",
+        "name": "That's My Song",
+        "description": "",
+        "consent": "consent/thats_my_song/en-consent_hooked.html",
+        "about_content": "",
+        "social_media_message": "I scored {points} points in {experiment_name}!"
+    }
+},
+{
+    "model": "experiment.experimenttranslatedcontent",
+    "pk": 10,
+    "fields": {
+        "experiment": 11,
+        "index": 0,
+        "language": "en",
+        "name": "TuneTwinsICMPC",
+        "description": "",
+        "consent": "consent/tunetwins_icmpc/en-consent_matching_pairs.html",
+        "about_content": "",
+        "social_media_message": "I scored {points} points in {experiment_name}!"
+    }
+},
+{
+    "model": "experiment.experimenttranslatedcontent",
+    "pk": 11,
+    "fields": {
+        "experiment": 12,
+        "index": 0,
+        "language": "en",
+        "name": "Teletunes",
+        "description": "",
+        "consent": "consent/teletunes/en-consent_teletunes.html",
+        "about_content": "",
+        "social_media_message": "I scored {points} points in {experiment_name}!"
+    }
+},
+{
+    "model": "experiment.experimenttranslatedcontent",
+    "pk": 12,
+    "fields": {
+        "experiment": 13,
+        "index": 0,
+        "language": "en",
+        "name": "MusicalPreferencesShortTest",
+        "description": "",
+        "consent": "consent/mpst/en-consent_musical_preferences.html",
+        "about_content": "",
+        "social_media_message": "I scored {points} points in {experiment_name}!"
+    }
+},
+{
+    "model": "experiment.experimenttranslatedcontent",
+    "pk": 13,
+    "fields": {
+        "experiment": 14,
+        "index": 0,
+        "language": "en",
+        "name": "MusicalPreferences",
+        "description": "",
+        "consent": "consent/mpref/en-consent_musical_preferences.html",
+        "about_content": "",
+        "social_media_message": "I scored {points} points in {experiment_name}!"
+    }
+},
+{
+    "model": "experiment.experimenttranslatedcontent",
+    "pk": 14,
+    "fields": {
+        "experiment": 15,
+        "index": 0,
+        "language": "en",
+        "name": "TuneTwinsVisualIntroduction",
+        "description": "",
+        "consent": "",
+        "about_content": "",
+        "social_media_message": "I scored {points} points in {experiment_name}!"
+    }
+},
+{
+    "model": "experiment.experimenttranslatedcontent",
+    "pk": 15,
+    "fields": {
+        "experiment": 16,
+        "index": 0,
+        "language": "en",
+        "name": "CongoSameDiff",
+        "description": "",
+        "consent": "",
+        "about_content": "",
+        "social_media_message": "I scored {points} points in {experiment_name}!"
+    }
+},
+{
+    "model": "experiment.experimenttranslatedcontent",
+    "pk": 16,
+    "fields": {
+        "experiment": 17,
+        "index": 0,
+        "language": "en",
+        "name": "VisualMP2",
+        "description": "",
+        "consent": "consent/tunetwinsvisual2/en-consent_matching_pairs.html",
+        "about_content": "",
+        "social_media_message": "I scored {points} points in {experiment_name}!"
+    }
+},
+{
+    "model": "experiment.experimenttranslatedcontent",
+    "pk": 17,
+    "fields": {
+        "experiment": 18,
+        "index": 0,
+        "language": "en",
+        "name": "Rhythm Outro",
+        "description": "",
+        "consent": "",
+        "about_content": "",
+        "social_media_message": "I scored {points} points in {experiment_name}!"
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 1,
+    "fields": {
+        "block": 5,
+        "language": "en",
+        "name": "Hooked-Eurovision",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 2,
+    "fields": {
+        "block": 8,
+        "language": "en",
+        "name": "MatchingPairs",
+        "description": "Matching pairs is the best game evah."
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 4,
+    "fields": {
+        "block": 1,
+        "language": "en",
+        "name": "categorization",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 5,
+    "fields": {
+        "block": 4,
+        "language": "zh",
+        "name": "Hooked-China",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 6,
+    "fields": {
+        "block": 6,
+        "language": "en",
+        "name": "Hooked-Christmas",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 7,
+    "fields": {
+        "block": 7,
+        "language": "en",
+        "name": "That's My Song",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 8,
+    "fields": {
+        "block": 9,
+        "language": "en",
+        "name": "TuneTwinsICMPC",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 9,
+    "fields": {
+        "block": 11,
+        "language": "en",
+        "name": "Anisochrony",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 10,
+    "fields": {
+        "block": 12,
+        "language": "en",
+        "name": "BeatAlignment",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 11,
+    "fields": {
+        "block": 18,
+        "language": "en",
+        "name": "Teletunes",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 12,
+    "fields": {
+        "block": 19,
+        "language": "en",
+        "name": "MusicalPreferencesShortTest",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 13,
+    "fields": {
+        "block": 3,
+        "language": "en",
+        "name": "MusicalPreferences",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 14,
+    "fields": {
+        "block": 20,
+        "language": "en",
+        "name": "TuneTwinsVisualIntroduction",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 15,
+    "fields": {
+        "block": 21,
+        "language": "en",
+        "name": "CongoSameDiff",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 16,
+    "fields": {
+        "block": 22,
+        "language": "en",
+        "name": "VisualMP2",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 17,
+    "fields": {
+        "block": 24,
+        "language": "en",
+        "name": "Rhythm Outro",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 18,
+    "fields": {
+        "block": 17,
+        "language": "en",
+        "name": "RhythmDiscrimination",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 19,
+    "fields": {
+        "block": 39,
+        "language": "en",
+        "name": "Het Mozart effect",
+        "description": "Word je slimmer door naar muziek te luisteren?"
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 20,
+    "fields": {
+        "block": 23,
+        "language": "en",
+        "name": "Rhythm Intro",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 21,
+    "fields": {
+        "block": 13,
+        "language": "en",
+        "name": "DurationDiscrimination",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 22,
+    "fields": {
+        "block": 14,
+        "language": "en",
+        "name": "DurationDiscriminationTone",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 23,
+    "fields": {
+        "block": 15,
+        "language": "en",
+        "name": "HBAT-BFIT",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 24,
+    "fields": {
+        "block": 10,
+        "language": "en",
+        "name": "HBAT-BIT",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 25,
+    "fields": {
+        "block": 16,
+        "language": "en",
+        "name": "HBAT-BST",
+        "description": ""
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 26,
+    "fields": {
+        "block": 38,
+        "language": "en",
+        "name": "Het eerste luisteren",
+        "description": "Hoor jij het verschil tussen Franse of Duitse babyhuiltjes?"
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 27,
+    "fields": {
+        "block": 41,
+        "language": "en",
+        "name": "Muziekherkenning",
+        "description": "Hoe snel kun jij een popliedje herkennen?"
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 28,
+    "fields": {
+        "block": 40,
+        "language": "en",
+        "name": "Maatgevoel",
+        "description": "Test hier je maatgevoel!"
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 29,
+    "fields": {
+        "block": 42,
+        "language": "en",
+        "name": "Relatief gehoor",
+        "description": "Kun jij horen of het liedje gelijk is gebleven?"
+    }
+},
+{
+    "model": "experiment.blocktranslatedcontent",
+    "pk": 30,
+    "fields": {
+        "block": 37,
+        "language": "en",
+        "name": "Absoluut gehoor",
+        "description": "Muziek van tv en filmpjes herkennen: welke klinkt precies zoals jij ‘m kent?"
+    }
+}
 ]

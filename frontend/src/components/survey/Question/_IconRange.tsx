@@ -6,12 +6,10 @@ import RangeTitle from "./_RangeTitle";
 interface IconRangeProps {
     question: Question;
     value: any;
-    style: any;
     onChange: any;
-    emphasizeTitle: any;
 }
 
-const IconRange = ({ question, value, style, onChange, emphasizeTitle }: IconRangeProps) => {
+const IconRange = ({ question, value, onChange}: IconRangeProps) => {
     const emptyValue = !value;
 
     if (!question.choices || Object.keys(question.choices).length <= 0) {
@@ -33,10 +31,9 @@ const IconRange = ({ question, value, style, onChange, emphasizeTitle }: IconRan
     }
 
     return (
-        <div className={classNames("aha__text-range", style, { empty: emptyValue })}>
+        <div className={classNames("aha__text-range", question.style, { empty: emptyValue })}>
             <RangeTitle
                 // this prop does not exist on RangeTitle
-                emphasizeTitle={emphasizeTitle}
                 question={question}
                 value={value}
                 sliderValue={sliderValue}

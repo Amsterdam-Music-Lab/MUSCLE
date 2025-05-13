@@ -377,8 +377,8 @@ You will be presented with a screen that lets you choose the fields that you wan
 12. Go back to the `Block` overview page.
 
 ## The database structure
-[![muscle_db_visualized](https://github.com/user-attachments/assets/f0d97029-ec49-4bcc-8c84-8ed35b0937c0)](https://github.com/user-attachments/assets/f0d97029-ec49-4bcc-8c84-8ed35b0937c0)
-[*click to open the image to enable zoom functionality*](https://github.com/user-attachments/assets/f0d97029-ec49-4bcc-8c84-8ed35b0937c0)
+[![muscle_db_visualized](../assets/images/dbStructure.png)
+[*click to open the image to enable zoom functionality*](../assets/images/dbStructure.png)
 
 ## Note on Timestamps
 

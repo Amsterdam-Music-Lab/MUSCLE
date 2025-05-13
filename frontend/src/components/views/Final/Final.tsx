@@ -100,6 +100,7 @@ const Final = ({
           // TODO: cannot yet customize this text...
           feedbackInfo: feedback_info,
         };
+        if(!feedback_info) return null;
         break;
 
       case "participantLink":

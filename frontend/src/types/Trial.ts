@@ -9,7 +9,6 @@ export interface TrialConfig {
     listen_first: boolean;
     show_continue_button: boolean;
     continue_label: string;
-    style: string;
     break_round_on: BreakRoundOn;
 
     auto_advance_timer: number | null;

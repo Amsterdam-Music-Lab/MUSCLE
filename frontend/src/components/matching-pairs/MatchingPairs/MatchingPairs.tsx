@@ -28,6 +28,7 @@ import {
   MPStates,
   UseMatchingPairsProps,
 } from "../useMatchingPairs";
+import { getAudioLatency } from "@/util/time";
 import { convertTutorial } from "../utils";
 import { Board } from "../Board";
 import { VisualCard } from "../VisualCard";
@@ -122,13 +123,15 @@ const compareCards = async (
   card2: MPCard,
   { startOfTurn, participant, session }: CompareCardsProps<MPCard>
 ): Promise<[ComparisonResult, number] | void> => {
+  // TODO or should the latency be set immediately when the first card is turned?
+  const latency = getAudioLatency()
   const response = await scoreIntermediateResult({
     session,
     participant,
     result: {
       start_of_turn: startOfTurn,
-      first_card: { ...card1.data, seen: card1.hasBeenSelected },
-      second_card: { ...card2.data, seen: card2.hasBeenSelected },
+      first_card: { ...card1.data, seen: card1.hasBeenSelected, audio_latency_ms: latency },
+      second_card: { ...card2.data, seen: card2.hasBeenSelected, audio_latency_ms: latency },
       // What was this used for?
       overlay_was_shown: false,
     },
