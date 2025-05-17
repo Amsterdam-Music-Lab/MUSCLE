@@ -11,7 +11,6 @@ interface PageProps {
 /** Page is a single page in the application */
 const Page = ({ className, children }: PageProps) => {
   const theme = useBoundStore((state) => state.theme);
-  console.log(theme);
 
   // @BC mark MCG theme as .mcg
   // @BC no default bg '/public/images/background.jpg', instead add .no-background

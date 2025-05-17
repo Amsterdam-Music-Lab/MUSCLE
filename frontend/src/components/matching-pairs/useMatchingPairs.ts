@@ -179,7 +179,6 @@ export function useMatchingPairs<ComparisonResult, Card extends MPCard>({
     // Only call hook after checking if the card can be selected
     const beforeSelectCardUpdates = beforeSelectCard({ card, ...allStates });
     if (typeof beforeSelectCardUpdates == "function") {
-      console.log('FUNCTION', beforeSelectCardUpdates(cards))
       setCards(beforeSelectCardUpdates);
     }
 
