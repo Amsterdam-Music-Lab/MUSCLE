@@ -7,4 +7,3 @@
  */
 
 export { default as Timeline } from "./Timeline";
-export { getTimeline } from "./Timeline";
