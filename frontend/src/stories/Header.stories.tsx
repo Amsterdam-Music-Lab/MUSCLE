@@ -1,5 +1,3 @@
-import { BrowserRouter as Router } from "react-router-dom";
-
 import Header from "../components/Experiment/Header/Header";
 
 export default {
@@ -31,9 +29,7 @@ const getDecorator = (Story) => (
         className="aha__experiment"
         style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
     >
-        <Router>
             <Story />
-        </Router>
     </div>
 );
 
