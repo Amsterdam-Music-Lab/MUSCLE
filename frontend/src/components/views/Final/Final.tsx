@@ -11,14 +11,12 @@ import type { ScoreBoardProps } from "@/components/game/ScoreBoard/ScoreBoard";
 import type { AllPluginSpec } from "@/components/plugins/pluginRegistry";
 
 import { useEffect } from "react";
-import classNames from "classnames";
 import { URLS } from "@/config";
 import { finalizeSession } from "@/API";
 import useBoundStore from "@/util/stores";
 import { Final as FinalAction } from "@/types/Action";
 import { NarrowLayout } from "@/components/layout";
 import PluginRenderer from "@/components/plugins/PluginRenderer";
-import styles from "./Final.module.scss";
 import frontendConfig from "@/config/frontend";
 
 export interface FinalProps
@@ -57,9 +55,8 @@ const Final = ({
   totalScore, // TODO
   timeline, // TODO
   timelineStep = 0, // TODO
-  className,
-  plugins = frontendConfig.final.plugins,
-  ...divProps
+  plugins = frontendConfig?.final?.plugins || DEFAULT_PLUGINS,
+  ...layoutProps
 }: FinalProps) => {
   const session = useBoundStore((state) => state.session);
   useEffect(() => {
@@ -67,7 +64,7 @@ const Final = ({
   }, [session, participant]);
 
   // Pass data to plugins
-  plugins = plugins.map((plugin) => {
+  plugins = plugins?.map((plugin) => {
     const updated: AllPluginSpec = { args: {}, ...plugin };
     switch (plugin.name) {
       case "scoreboard":
@@ -100,7 +97,7 @@ const Final = ({
           // TODO: cannot yet customize this text...
           feedbackInfo: feedback_info,
         };
-        if(!feedback_info) return null;
+        if (!feedback_info) return null;
         break;
 
       case "participantLink":
@@ -124,7 +121,7 @@ const Final = ({
   });
 
   return (
-    <NarrowLayout className={classNames(styles.final, className)} {...divProps}>
+    <NarrowLayout {...layoutProps}>
       <PluginRenderer plugins={plugins as AllPluginSpec[]} />
     </NarrowLayout>
   );
