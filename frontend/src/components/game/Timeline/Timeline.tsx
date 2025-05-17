@@ -134,6 +134,10 @@ export default function Timeline({
   showSymbols = true,
   variant,
 }: TimelineProps) {
+  if (!timeline) {
+    throw new Error("Timeline: No timeline provided");
+  }
+
   const steps = processTimelineConfig({
     timeline,
     animate,
