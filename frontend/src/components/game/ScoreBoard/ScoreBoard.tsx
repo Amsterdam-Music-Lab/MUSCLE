@@ -44,7 +44,7 @@ const DEFAULT_PLUGINS = [
   { name: "ranking" },
   { name: "scores" },
   { name: "share" },
-];
+] as AllPluginSpec[];
 
 export default function ScoreBoard({
   turnScore,
