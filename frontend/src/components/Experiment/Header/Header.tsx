@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { ShareOptions } from "@/components/ui";
 import HTML from "@/components/HTML/HTML";
 import { ScoreDisplayConfig } from "@/types/Theme";
-import Rank from "@/components/Rank/Rank";
+import { Rank } from "@/components/game";
 import { SocialMediaConfig } from "@/types/Experiment";
 
 interface HeaderProps {

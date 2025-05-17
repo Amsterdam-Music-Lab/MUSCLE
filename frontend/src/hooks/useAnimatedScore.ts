@@ -1,42 +1,55 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
 import { useEffect, useState } from "react";
 
-const useAnimatedScore = (targetScore: number) => {
-    const [score, setScore] = useState(0);
+interface UseAnimatedScoreProps {
+  /** The duration of the animation in ms */
+  durationMs?: number;
 
-    useEffect(() => {
-        if (targetScore === 0) {
-            setScore(0);
-            return;
-        }
+  /** The score to start counting from. Defaults to 0*/
+  startScore?: number;
+}
 
-        let animationFrameId: number;
+/**
+ * A hook that animates a score from the current score to the target score,
+ * in a given duration. The hook returns the current score, which is updated
+ * every frame until the target score is reached. The starting score can also
+ * be set, but defaults to 0.
+ */
+export default function useAnimatedScore(
+  targetScore: number,
+  { durationMs = 500, startScore = 0 }: UseAnimatedScoreProps = {}
+) {
+  const [score, setScore] = useState(startScore);
 
-        const nextStep = () => {
-            setScore((prevScore) => {
-                const difference = targetScore - prevScore;
-                const scoreStep = Math.max(1, Math.min(10, Math.ceil(Math.abs(difference) / 10)));
+  useEffect(() => {
+    if (targetScore === score) return;
 
-                if (difference === 0) {
-                    cancelAnimationFrame(animationFrameId);
-                    return prevScore;
-                }
+    let animationFrameId: number;
+    const startTime = performance.now();
+    const difference = targetScore - score;
 
-                const newScore = prevScore + Math.sign(difference) * scoreStep;
-                animationFrameId = requestAnimationFrame(nextStep);
-                return newScore;
-            });
-        };
+    const step = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / durationMs, 1);
+      const nextScore = Math.round(score + difference * progress);
+      setScore(nextScore);
 
-        // Start the animation
-        animationFrameId = requestAnimationFrame(nextStep);
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(step);
+      }
+    };
 
-        // Cleanup function to cancel the animation frame
-        return () => {
-            cancelAnimationFrame(animationFrameId);
-        };
-    }, [targetScore]);
+    animationFrameId = requestAnimationFrame(step);
 
-    return score;
-};
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [targetScore, durationMs]);
 
-export default useAnimatedScore;
+  return score;
+}
