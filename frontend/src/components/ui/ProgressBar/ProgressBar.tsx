@@ -10,9 +10,9 @@ import type { HTMLAttributes } from "react";
 import type { Variant } from "@/types/themeProvider";
 import classNames from "classnames";
 import { renderTemplate } from "@/util/renderTemplate";
-import styles from "./ScoreBar.module.scss";
+import styles from "./ProgressBar.module.scss";
 
-interface ScoreBarProps extends HTMLAttributes<HTMLDivElement> {
+interface ProgressBarProps extends HTMLAttributes<HTMLDivElement> {
   /** The value to show */
   value?: number;
 
@@ -35,7 +35,7 @@ interface ScoreBarProps extends HTMLAttributes<HTMLDivElement> {
 /**
  * Displays a progress bar using bootstrap's progress bar utility.
  */
-export default function ScoreBar({
+export default function ProgressBar({
   value = 0,
   min = 0,
   max = 100,
@@ -44,7 +44,7 @@ export default function ScoreBar({
   variant = "primary",
   className,
   ...rest
-}: ScoreBarProps) {
+}: ProgressBarProps) {
   const clampedValue = Math.min(Math.max(min, value), max);
   const percentage = Math.round(((clampedValue - min) / (max - min)) * 100);
   const templateData = {
@@ -57,7 +57,7 @@ export default function ScoreBar({
   return (
     <div
       className={classNames(
-        styles.scoreBar,
+        styles.progressBar,
         animate && styles.animate,
         "rounded-sm bg-inset-sm",
         className
@@ -67,7 +67,7 @@ export default function ScoreBar({
       <div
         className={classNames(`fill-${variant}`, "rounded-sm small")}
         role="progressbar"
-        data-testid="scorebar"
+        data-testid="progressbar"
         style={{ width: `${percentage}%` }}
         aria-valuenow={clampedValue}
         aria-valuemin={min}

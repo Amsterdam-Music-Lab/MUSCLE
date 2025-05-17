@@ -7,7 +7,7 @@
  */
 import type { PluginMeta, PluginSpec } from "@/types/plugin";
 import { renderTemplate } from "@/util/renderTemplate";
-import ScoreBar from "@/components/game/ScoreBar/ScoreBar";
+import { ProgressBar } from "@/components/ui";
 
 const DEFAULT_CUTOFF = 30;
 
@@ -41,7 +41,7 @@ function RankingPlugin({
   cutoff = DEFAULT_CUTOFF,
 }: RankingPluginArgs) {
   return (
-    <ScoreBar
+    <ProgressBar
       value={percentile > cutoff ? percentile : cutoff}
       variant="primary"
     />

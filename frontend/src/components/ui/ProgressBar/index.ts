@@ -6,4 +6,4 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export { default as ScoreBar } from "./ScoreBar";
+export { default as ProgressBar } from "./ProgressBar";

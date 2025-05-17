@@ -6,7 +6,7 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-@keyframes scoreBarAppear {
+@keyframes progressBarAppear {
   0% {
     transform: translateX(-100%);
   }
@@ -18,7 +18,7 @@
   }
 }
 
-.scoreBar {
+.progressBar {
   --score-bar-height: 2em;
   height: var(--score-bar-height);
   display: flex;
@@ -40,6 +40,6 @@
   }
 }
 
-.scoreBar.animate div {
-  animation: 1500ms ease-out 0s 1 scoreBarAppear;
+.progressBar.animate div {
+  animation: 1500ms ease-out 0s 1 progressBarAppear;
 }

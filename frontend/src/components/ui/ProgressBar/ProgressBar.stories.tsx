@@ -6,7 +6,7 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import ScoreBar from "./ScoreBar";
+import ProgressBar from "./ProgressBar";
 
 const decorator = (Story) => (
   <div style={{ padding: "1rem" }}>
@@ -15,8 +15,8 @@ const decorator = (Story) => (
 );
 
 export default {
-  title: "Game UI/ScoreBar",
-  component: ScoreBar,
+  title: "UI/ProgressBar",
+  component: ProgressBar,
   parameters: {
     layout: "fullscreen",
   },
