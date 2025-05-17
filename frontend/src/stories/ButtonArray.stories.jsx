@@ -1,7 +1,7 @@
-import ButtonArray from "../components/Question/_ButtonArray";
+import ButtonArray from "@/components/survey/Question/_ButtonArray";
 
 export default {
-    title: "Question/ButtonArray",
+    title: "UI/ButtonArray",
     component: ButtonArray,
     parameters: {
         layout: "fullscreen",

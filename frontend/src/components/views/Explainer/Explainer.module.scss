@@ -1,0 +1,59 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+@use "sass:math";
+@import "@/scss/variables";
+@import "@/scss/utils";
+
+.explainer {
+  overflow: hidden;
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: flex;
+      margin-bottom: 1rem;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.number {
+  flex-shrink: 0;
+  margin-right: 1em;
+  display: inline-block;
+  margin-top: -0.25em;
+  width: var(--explainer-number-size, 2em);
+  height: var(--explainer-number-size, 2em);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  background-color: #eee;
+  text-align: center;
+  @extend .rounded, .bolder;
+}
+
+@include media-breakpoint-down(sm) {
+  .explainer {
+    --explainer-number-size: 1.5em;
+    ul {
+      padding: 0;
+    }
+    .number {
+      margin-top: 0;
+      margin-right: 0.5em;
+    }
+  }
+}

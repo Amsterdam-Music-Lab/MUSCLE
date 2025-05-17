@@ -1,0 +1,51 @@
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+.inputGroup {
+  --radius: calc(var(--border-radius, 4) * 1em);
+
+  display: flex;
+  align-items: center;
+
+  &.stretch {
+    width: 100%;
+  }
+
+  input {
+    flex: 1;
+    // border-radius: 4px 0 0 4px;
+  }
+
+  & > * {
+    font-size: 1rem !important;
+    line-height: 1.5;
+    font-family: inherit;
+  }
+
+  // Only child
+  :first-child:last-child {
+    border-radius: var(--radius);
+  }
+
+  // First of multiple
+  :first-child:not(:last-child) {
+    border-radius: var(--radius) 0 0 var(--radius);
+  }
+
+  // Intermediate
+  :not(:first-child):not(:last-child) {
+    border-radius: 0;
+  }
+
+  // Last of multiple
+  :last-child:not(:first-child) {
+    // border-radius:-
+    border-radius: 0 var(--radius) var(--radius) 0;
+    // outline
+  }
+}

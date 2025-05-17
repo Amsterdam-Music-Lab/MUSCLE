@@ -13,7 +13,6 @@ import Block from "../Block/Block";
 import Experiment from "../Experiment/Experiment";
 import LoaderContainer from "../LoaderContainer/LoaderContainer";
 import ConditionalRender from "../ConditionalRender/ConditionalRender";
-import Profile from "../Profile/Profile";
 import Reload from "../Reload/Reload";
 import StoreProfile from "../StoreProfile/StoreProfile";
 import useDisableRightClickOnTouchDevices from "../../hooks/useDisableRightClickOnTouchDevices";
@@ -21,6 +20,12 @@ import useDisableIOSPinchZoomOnTouchDevices from "@/hooks/useDisableIOSPinchZoom
 import { InternalRedirect } from "../InternalRedirect/InternalRedirect";
 import Helmet from "@/components/Helmet/Helmet";
 import Redirect from "@/components/Redirect/Redirect";
+
+import { ThemeProvider } from "@/theme/ThemeProvider";
+import { Landing, Profile } from "@/components/views";
+
+// TODO ideally load or populate this from the backend
+import frontendConfig from "@/config/frontend";
 
 // App is the root component of our application
 const App = () => {
@@ -58,7 +63,7 @@ const App = () => {
     }
 
     return (
-        <>
+        <ThemeProvider>
             <Helmet />
             <Router className="aha__app">
                 <ConditionalRender condition={!!participant} fallback={<LoaderContainer />}>
@@ -69,7 +74,13 @@ const App = () => {
                         {/* Default experiment */}
                         <Route
                             path="/"
-                            element={<Redirect to={URLS.experiment.replace(":slug", EXPERIMENT_SLUG)} />}
+                            element={
+                                frontendConfig.showLanding 
+                                    ? <Landing 
+                                        experimentUrl={URLS.experiment.replace(":slug", EXPERIMENT_SLUG)} 
+                                        plugins={frontendConfig.landing.plugins} /> 
+                                    : <Redirect to={URLS.experiment.replace(":slug", EXPERIMENT_SLUG)} />
+                                }
                         />
 
                         {/* Profile */}
@@ -92,7 +103,7 @@ const App = () => {
                     </Routes>
                 </ConditionalRender>
             </Router >
-        </>
+        </ThemeProvider>
     );
 };
 

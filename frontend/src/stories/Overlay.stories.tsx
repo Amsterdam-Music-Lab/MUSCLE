@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Overlay from '@/components/Overlay/Overlay';
 import { useState } from 'react';
-import Button from '@/components/Button/Button';
+import { Button } from "@/components/ui";
 
 const meta: Meta<typeof Overlay> = {
-    title: 'Overlay/Overlay',
+    title: 'UI/Overlay',
     component: Overlay,
     parameters: {
     },
@@ -18,7 +18,7 @@ const meta: Meta<typeof Overlay> = {
                         onClick={() => setIsOpen(true)}
                         title="Open Overlay"
                         className='primary'
-                        clickOnce={false}
+                        allowMultipleClicks={true}
                     />
 
                     <Story

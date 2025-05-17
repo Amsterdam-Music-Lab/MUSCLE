@@ -1,7 +1,7 @@
 import CountDown from "../components/CountDown/CountDown";
 
 export default {
-    title: "CountDown/CountDown",
+    title: "UI/CountDown",
     component: CountDown,
     parameters: {
         layout: "fullscreen",

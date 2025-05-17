@@ -1,7 +1,7 @@
 import Circle from "../components/Circle/Circle";
 
 export default {
-    title: "Circle/Circle",
+    title: "UI/Circle",
     component: Circle,
     parameters: {
         layout: "fullscreen",
