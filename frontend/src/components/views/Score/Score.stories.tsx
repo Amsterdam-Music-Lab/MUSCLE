@@ -1,9 +1,7 @@
-import { BrowserRouter as Router } from "react-router-dom";
-
-import Score from "@/components/Score/Score";
+import Score from "./Score";
 
 export default {
-  title: "Game UI/Score",
+  title: "Views/Score",
   component: Score,
   parameters: {
     layout: "fullscreen",
@@ -14,9 +12,9 @@ export default {
       control: {
         type: "select",
       },
-      options: ['diamond', 'platinum', 'gold', 'silver', 'bronze', 'plastic'],
-    }
-  }
+      options: ["diamond", "platinum", "gold", "silver", "bronze", "plastic"],
+    },
+  },
 };
 
 function getScoreData(overrides = {}) {
@@ -32,7 +30,7 @@ function getScoreData(overrides = {}) {
     },
     icon: "fa fa-music",
     feedback: "This is a feedback message",
-    timer: setTimeout(() => { }, 1000),
+    timer: setTimeout(() => {}, 1000),
     onNext: () => void 0,
     ...overrides,
   };
@@ -40,11 +38,14 @@ function getScoreData(overrides = {}) {
 
 const getDecorator = (Story) => (
   <div
-    style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
+    style={{
+      width: "100%",
+      height: "100%",
+      backgroundColor: "#aaa",
+      padding: "1rem",
+    }}
   >
-    <Router>
-      <Story />
-    </Router>
+    <Story />
   </div>
 );
 

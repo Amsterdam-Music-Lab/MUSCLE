@@ -8,6 +8,7 @@
 
 export * from "./Final";
 export * from "./Explainer";
-export * from "./Landing"
-export * from "./Consent"
-export * from "./Profile"
+export * from "./Landing";
+export * from "./Consent";
+export * from "./Profile";
+export * from "./Score";

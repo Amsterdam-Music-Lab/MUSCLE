@@ -1,7 +1,7 @@
 import { act } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import Score from './Score';
-import makeDefaultScoreProps from '../../util/testUtils/makeDefaultScoreProps';
+import makeDefaultScoreProps from '@/util/testUtils/makeDefaultScoreProps';
 import { vi, describe, expect, it } from 'vitest';
 
 vi.useFakeTimers();
