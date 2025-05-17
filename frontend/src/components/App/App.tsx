@@ -13,7 +13,6 @@ import Block from "../Block/Block";
 import Experiment from "../Experiment/Experiment";
 import LoaderContainer from "../LoaderContainer/LoaderContainer";
 import ConditionalRender from "../ConditionalRender/ConditionalRender";
-import Profile from "../Profile/Profile";
 import Reload from "../Reload/Reload";
 import StoreProfile from "../StoreProfile/StoreProfile";
 import useDisableRightClickOnTouchDevices from "../../hooks/useDisableRightClickOnTouchDevices";
@@ -23,7 +22,7 @@ import Helmet from "@/components/Helmet/Helmet";
 import Redirect from "@/components/Redirect/Redirect";
 
 import { ThemeProvider } from "@/theme/ThemeProvider";
-import { Landing } from "@/components/views";
+import { Landing, Profile } from "@/components/views";
 
 // TODO ideally load or populate this from the backend
 import frontendConfig from "@/config/frontend";

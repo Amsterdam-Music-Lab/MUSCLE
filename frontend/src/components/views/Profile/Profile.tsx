@@ -1,6 +1,6 @@
 import { Page } from "@/components/application";
-import Loading from "../Loading/Loading";
-import { useParticipantScores } from "../../API";
+import Loading from "@/components/Loading/Loading";
+import { useParticipantScores } from "@/API";
 import ProfileView, { ProfileViewProps } from "./ProfileView";
 
 /** Profile loads and shows the profile of a participant for a given experiment */

@@ -1,9 +1,7 @@
-import { BrowserRouter as Router } from "react-router-dom";
-
-import ProfileView from "../components/Profile/ProfileView";
+import ProfileView from "./ProfileView";
 
 export default {
-    title: "User/ProfileView",
+    title: "views/Profile",
     component: ProfileView,
     parameters: {
         layout: "fullscreen",
@@ -86,15 +84,11 @@ function getProfileData(overrides = {}) {
 
 const getDecorator = (Story) => (
     <div
-        style={{ width: "100%", height: "100%", backgroundColor: "#333", padding: "1rem" }}
-        className="aha__page aha__profile"
     >
         <div className="container">
             <div className="row justify-content-center">
                 <div className="col-12">
-                    <Router>
                         <Story />
-                    </Router>
                 </div>
             </div>
         </div>
