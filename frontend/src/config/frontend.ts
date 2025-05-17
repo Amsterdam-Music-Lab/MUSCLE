@@ -92,7 +92,7 @@ const scoreboard = {
         name: "timeline",
         // order: 2,
         args: {
-          symbols: timelineSymbols,
+          timeline: { symbols: timelineSymbols },
           // dotSize: 15,
         },
         wrapperProps: {
