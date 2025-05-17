@@ -6,7 +6,7 @@ import { GradientCircles } from "@/components/svg";
 import { AppBar } from "../AppBar";
 import styles from "./Page.module.scss";
 
-interface PageProps extends HTMLAttributes<HTMLDivElement> {
+export interface PageProps extends HTMLAttributes<HTMLDivElement> {
   /** Title of the page */
   title?: string;
 
@@ -62,7 +62,7 @@ export default function Page({
   showBackgroundImage =
     showBackgroundImage ?? frontendTheme.showBackgroundImage ?? true;
 
-  let backendTheme
+  let backendTheme;
   if (useBackendTheme) {
     backendTheme = useBoundStore((state) => state.theme);
     backgroundUrl = backendTheme?.backgroundUrl && backgroundUrl;
