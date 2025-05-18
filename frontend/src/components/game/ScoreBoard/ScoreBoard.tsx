@@ -5,19 +5,52 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-
+import type { HTMLAttributes } from "react";
 import type { ShareConfig } from "@/types/share";
 import type { TimelineConfig } from "@/types/timeline";
 import type { CardProps } from "@/components/ui";
 import type { AllPluginSpec } from "@/components/plugins/pluginRegistry";
+import type { SVGSymbolName, SVGSymbolProps } from "@/types/svg";
 
+import classNames from "classnames";
 import { Card } from "@/components/ui";
-import PluginRenderer from "@/components/plugins/PluginRenderer";
-// import styles from "./ScoreBoard.module.scss";
+import { PluginRenderer } from "@/components/plugins";
+import { symbols as svgSymbols } from "@/components/svg";
+import styles from "./ScoreBoard.module.scss";
 
-// const defaultLabels = {
-//   trophy: "Yay, you've earned a star!",
-// };
+interface TrophyProps extends HTMLAttributes<HTMLDivElement> {
+  icon: SVGSymbolName;
+  message?: string;
+  iconProps?: SVGSymbolProps;
+}
+
+/**
+ * Shows a trophy icon with a message above it.
+ */
+function Trophy({
+  icon,
+  message,
+  iconProps = {},
+  className,
+  ...divProps
+}: TrophyProps) {
+  const Trophy = svgSymbols[icon];
+  if (!Trophy) {
+    console.warn(`Trophy icon "${icon}" not found.`);
+  }
+  const props: SVGSymbolProps = {
+    size: 100,
+    variant: "secondary",
+    ...iconProps,
+  };
+  props.className = classNames(styles.trophyIcon, iconProps.className);
+  return (
+    <div className={classNames(styles.trophy, className)} {...divProps}>
+      {message && <p className={styles.trophyLabel}>{message}</p>}
+      <Trophy {...props} />
+    </div>
+  );
+}
 
 export interface ScoreBoardProps extends CardProps {
   /** Score in the last turn */
@@ -37,6 +70,21 @@ export interface ScoreBoardProps extends CardProps {
 
   shareConfig?: ShareConfig;
 
+  /**
+   * Name of the trophy icon to show
+   */
+  trophyIcon?: SVGSymbolName;
+
+  /**
+   * Message to show below the trophy icon
+   */
+  trophyMessage?: string;
+
+  /**
+   * Whether to show the trophy if there is one. Default true.
+   */
+  showTrophy?: boolean;
+
   plugins?: AllPluginSpec[];
 }
 
@@ -46,18 +94,17 @@ const DEFAULT_PLUGINS = [
   { name: "share" },
 ] as AllPluginSpec[];
 
-
 /**
  * A scoreboard that can render a range of plugins:
- * 
+ *
  * - **ranking**: a progress bar showing the percentile,
  * - **scores**: the turn and total score,
  * - **share**: a button to share the score on social media,
  * - **timeline**: a timeline showing the progress of the game.
- * 
+ *
  * Moreover, you can add plugins like **logo**, **markdown**, etc.
  * The order of the plugins, their parameters etc, can all be
- * configured in the `plugins` prop. 
+ * configured in the `plugins` prop.
  */
 export default function ScoreBoard({
   turnScore,
@@ -66,27 +113,13 @@ export default function ScoreBoard({
   timeline,
   timelineStep,
   shareConfig,
+  trophyIcon,
+  trophyMessage = "Yay, you've earned a trophy!",
+  showTrophy = true,
   plugins = DEFAULT_PLUGINS,
+  className,
   ...cardProps
 }: ScoreBoardProps) {
-  // const hasTimeline = timeline !== undefined && timelineStep !== undefined;
-  // const hasTrophy = hasTimeline && timeline[timelineStep].trophy;
-  // const Trophy =
-  //   hasTrophy && timeline[timelineStep].symbol
-  //     ? TIMELINE_SYMBOLS[timeline[timelineStep].symbol]
-  //     : null;
-
-  // Label templates
-  // const templates = { ...defaultLabels, ...labels };
-  // const templateData = {
-  //   turnScore,
-  //   totalScore,
-  //   percentile: percentile !== undefined ? Math.round(percentile) : undefined,
-  //   percentileCutoff,
-  //   timelineStep,
-  //   numSteps: timeline?.length,
-  // };
-
   // Pass dynamic attributes to all plugins
   plugins = plugins.map((plugin) => {
     const updated: AllPluginSpec = { ...plugin };
@@ -111,26 +144,15 @@ export default function ScoreBoard({
   });
 
   return (
-    <Card {...cardProps}>
+    <Card className={classNames(styles.scoreBoard, className)} {...cardProps}>
+      {showTrophy && trophyIcon && (
+        <Trophy icon={trophyIcon} message={trophyMessage} />
+      )}
+
       <PluginRenderer
         plugins={plugins as AllPluginSpec[]}
         wrapper={Card.Section}
       />
-      {/* Star */}
-      {/* {showTrophy && hasTrophy && ( */}
-      {/* <div className={styles.trophy}>
-        <p className={styles.trophyLabel}>Yay, you've earned a trophy!</p>
-
-        {Trophy && (
-          <Trophy
-            className={styles.trophyIcon}
-            variant="secondary"
-            size={100}
-            circleStrokeWidth={0.15}
-          />
-        )}
-      </div> */}
-      {/* )} */}
     </Card>
   );
 }

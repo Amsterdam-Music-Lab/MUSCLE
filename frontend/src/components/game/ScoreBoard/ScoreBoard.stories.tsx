@@ -12,7 +12,7 @@ import ScoreBoard from "./ScoreBoard";
 type Story = StoryObj<typeof ScoreBoard>;
 
 const decorator = (StoryComponent: Story) => (
-  <div style={{ padding: "1rem" }}>
+  <div style={{ padding: "4rem" }}>
     <StoryComponent />
   </div>
 );
@@ -34,7 +34,13 @@ export const Default: Story = {
     turnScore: 123,
     totalScore: 456,
     percentile: 48,
-    timelineStep: 3,
+  },
+};
+
+export const Trophy: Story = {
+  args: {
+    ...Default.args,
+    trophyIcon: "star-5",
   },
 };
 
@@ -68,19 +74,17 @@ const defaultPlugins = [
 
 export const BelowCutoff: Story = {
   args: {
-    turnScore: 123,
-    totalScore: 456,
+    ...Default.args,
     percentile: 20,
+    timelineStep: 3,
     plugins: [{ name: "ranking", args: { cutoff: 25 } }, { name: "scores" }],
   },
 };
 
 export const CustomPlugins: Story = {
   args: {
+    ...Default.args,
     plugins: defaultPlugins,
-    turnScore: 123,
-    totalScore: 456,
-    percentile: 48,
     timelineStep: 3,
     shareConfig: {
       channels: ["facebook", "twitter", "clipboard"],

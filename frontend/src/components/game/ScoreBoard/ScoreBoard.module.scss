@@ -5,9 +5,8 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-@import "@/scss/utils.scss";
 
-@keyframes starAnimation {
+@keyframes trophyAnimation {
   0% {
     transform: scale(0);
     opacity: 0;
@@ -28,29 +27,33 @@
   }
 }
 
+.scoreBoard {
+  position: relative;
+}
+
 .trophy {
   position: absolute;
   display: flex;
   justify-content: flex-end;
   width: 100%;
-  top: 0.5em;
+  top: -1em;
+  right: -1em;
   z-index: 10;
 
   svg {
-    margin-right: 1em;
-    animation: 700ms ease-in 0s 1 starAnimation;
+    animation: 700ms ease-in 0s 1 trophyAnimation;
   }
 }
 
 .trophyLabel {
   position: absolute;
   font-size: 1.5em;
-  transform: rotate(-3deg);
-  top: -3em;
-  right: 0.5em;
+  transform: rotate(-2deg);
+  top: -1em;
+  right: -0.5em;
 
   font-weight: 600;
-  color: var(--color-white);
+  color: var(--text-light, #fff);
 }
 
 .trophyIcon {
