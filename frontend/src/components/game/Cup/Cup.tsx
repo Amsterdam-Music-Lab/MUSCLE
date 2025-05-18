@@ -6,33 +6,100 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import type { HTMLAttributes } from "react";
+import type { HTMLAttributes, CSSProperties } from "react";
 import classNames from "classnames";
-import "./Cup.scss";
+import styles from "./Cup.module.scss";
 
-export interface CupProps extends HTMLAttributes<HTMLDivElement> {
-  className:
-    | string
-    | "diamond"
-    | "platinum"
-    | "gold"
-    | "silver"
-    | "bronze"
-    | "plastic";
-  text: string;
+function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export default function Cup({ className, text, ...divProps }: CupProps) {
+export type CupType =
+  | "diamond"
+  | "platinum"
+  | "gold"
+  | "silver"
+  | "bronze"
+  | "plastic";
+
+export interface CupProps extends HTMLAttributes<HTMLDivElement> {
+  /**
+   * The type of cup to show: "diamond", "platinum", "gold", "silver", "bronze" or "plastic". The default is "plastic".
+   */
+  type?: CupType;
+
+  /**
+   * An optional label to show below the cup, inside the circle. You can
+   * pass a custom label, or `false` if you want to hide the label. By default,
+   * the capitalized type (e.g. "Gold") is used as the label.
+   */
+  label?: string | boolean;
+
+  /** Size of the circle in px */
+  radius?: number;
+
+  /**
+   * Whether to show a halo around the circle containing the cup.
+   */
+  showHalo?: boolean;
+
+  /**
+   * Whether to animate the cup. This rotates the crown, if any, and
+   * will bounce the cup up and down.
+   */
+  animate?: boolean;
+
+  /**
+   * Whether to show the label in uppercase. Default true
+   */
+  uppercase?: boolean;
+}
+
+/**
+ * A medal with a cup inside. The cup can be of different types, corresponding
+ * to different colors, and the cup can be animated. The cup can also have a label.
+ */
+export default function Cup({
+  type = "plastic",
+  label,
+  radius = 150,
+  showHalo = true,
+  animate = true,
+  uppercase = true,
+  className,
+  style,
+  ...divProps
+}: CupProps) {
+  if (label === undefined || label === true) {
+    label = capitalize(type);
+  }
   return (
     <div
-      className={classNames("aha__cup", className, {
-        offsetCup: text,
-      })}
-      data-testid="cup"
+      className={classNames(styles.cupContainer, animate && styles.animate)}
+      style={{ "--cup-radius": `${radius}px`, ...style } as CSSProperties}
       {...divProps}
     >
-      <div className="cup" data-testid="cup-animation" />
-      <h4 data-testid="cup-text">{text}</h4>
+      <div
+        className={classNames(
+          styles.circle,
+          showHalo && styles.halo,
+          styles[type],
+          label && styles.offset,
+          className
+        )}
+        data-testid="cup"
+      >
+        <div className={styles.cup} data-testid="cup-animation" />
+        {label && (
+          <div
+            className={classNames(styles.label, uppercase && styles.uppercase)}
+            data-testid="cup-text"
+          >
+            {label}
+          </div>
+        )}
+        {showHalo && <div className={styles.rays} />}
+      </div>
     </div>
   );
 }

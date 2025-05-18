@@ -5,63 +5,88 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-
-import { render } from "@testing-library/react";
-import Cup from "./Cup";
+import "@testing-library/jest-dom";
 import { describe, expect, it } from "vitest";
+import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
+import Cup from "./Cup";
+import styles from "./Cup.module.scss";
 
 describe("Cup Component", () => {
-  it("renders with the correct class and text", () => {
-    const rank = {
-      className: "gold",
-      text: "Gold Cup",
-    };
+  it("renders with default props", () => {
+    const { getByTestId } = render(<Cup />);
+    const cup = getByTestId("cup");
+    const text = getByTestId("cup-text");
 
-    const { getByTestId, getByText } = render(<Cup {...rank} />);
-
-    const cupElement = getByTestId("cup");
-
-    // Check if the main div has the correct classes
-    expect(cupElement.classList.contains("aha__cup")).toBe(true);
-    expect(cupElement.classList.contains("gold")).toBe(true);
-    expect(cupElement.classList.contains("offsetCup")).toBe(true);
-
-    // Check if the h4 element contains the correct text
-    expect(document.body.contains(getByText("Gold Cup"))).toBe(true);
+    expect(cup).toBeInTheDocument();
+    expect(cup.className).toContain("plastic"); // default type
+    expect(text.textContent).toBe("Plastic"); // default label
   });
 
-  it("does not have offsetCup class when text is empty", () => {
-    const rank = {
-      className: "silver",
-      text: "",
-    };
+  it("renders with a specific type and label", () => {
+    const { getByTestId } = render(<Cup type="gold" label="Gold Rank" />);
 
-    const { getByTestId } = render(<Cup {...rank} />);
+    const cup = getByTestId("cup");
+    const text = getByTestId("cup-text");
 
-    const cupElement = getByTestId("cup");
-
-    // Check if the main div has the correct classes
-    expect(cupElement.classList.contains("aha__cup")).toBe(true);
-    expect(cupElement.classList.contains("silver")).toBe(true);
-    expect(cupElement.classList.contains("offsetCup")).toBe(false);
-
-    // Check if the h4 element contains the correct text
-    const cupText = getByTestId("cup-text");
-    expect(document.body.contains(cupText)).toBe(true);
-    expect(cupText.textContent).toBe("");
+    expect(cup.className).toContain("gold");
+    expect(text.textContent).toBe("Gold Rank");
   });
 
-  it("renders the cup div", () => {
-    const rank = {
-      className: "bronze",
-      text: "Bronze Cup",
-    };
+  it("hides label if label is false", () => {
+    const { queryByTestId } = render(<Cup label={false} />);
+    expect(queryByTestId("cup-text")).toBeNull();
+  });
 
-    const { getByTestId } = render(<Cup {...rank} />);
+  it("uses capitalized type as fallback label", () => {
+    const { getByTestId } = render(<Cup type="silver" />);
+    expect(getByTestId("cup-text").textContent).toBe("Silver");
+  });
 
-    const cupElement = getByTestId("cup-animation");
+  it("applies custom radius as style", () => {
+    const { getByTestId } = render(<Cup radius={200} />);
+    const cup = getByTestId("cup");
+    expect(
+      (cup.parentElement as HTMLElement).style.getPropertyValue("--cup-radius")
+    ).toBe("200px");
+  });
 
-    // Check if the cup div is present
-    expect(document.body.contains(cupElement)).toBe(true);
+  it("adds animate class when animate=true", () => {
+    const { getByTestId } = render(<Cup animate={true} />);
+    const wrapper = getByTestId("cup").parentElement!;
+    expect(wrapper.className).toContain("animate");
+  });
+
+  it("does not add animate class when animate=false", () => {
+    const { getByTestId } = render(<Cup animate={false} />);
+    const wrapper = getByTestId("cup").parentElement!;
+    expect(wrapper.className).not.toContain("animate");
+  });
+
+  it("renders halo (rays) when showHalo is true", () => {
+    const { container } = render(<Cup showHalo={true} />);
+    expect(container.querySelector(`.${styles.rays}`)).toBeTruthy();
+  });
+
+  it("does not render halo (rays) when showHalo is false", () => {
+    const { container } = render(<Cup showHalo={false} />);
+    expect(container.querySelector(`.${"rays"}`)).toBeFalsy();
+  });
+
+  it("renders label in lowercase when uppercase is false", () => {
+    const { getByTestId } = render(<Cup label="gold rank" uppercase={false} />);
+    const label = getByTestId("cup-text");
+    expect(label.className).not.toContain("uppercase");
+    expect(label.textContent).toBe("gold rank");
+  });
+
+  it("merges --cup-radius and custom style props", () => {
+    const { getByTestId } = render(
+      <Cup radius={200} style={{ backgroundColor: "red" }} />
+    );
+
+    const cupContainer = getByTestId("cup").parentElement as HTMLElement;
+
+    expect(cupContainer.style.getPropertyValue("--cup-radius")).toBe("200px");
+    expect(cupContainer.style.backgroundColor).toBe("red");
   });
 });
