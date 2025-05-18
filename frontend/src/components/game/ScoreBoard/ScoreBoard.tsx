@@ -46,6 +46,19 @@ const DEFAULT_PLUGINS = [
   { name: "share" },
 ] as AllPluginSpec[];
 
+
+/**
+ * A scoreboard that can render a range of plugins:
+ * 
+ * - **ranking**: a progress bar showing the percentile,
+ * - **scores**: the turn and total score,
+ * - **share**: a button to share the score on social media,
+ * - **timeline**: a timeline showing the progress of the game.
+ * 
+ * Moreover, you can add plugins like **logo**, **markdown**, etc.
+ * The order of the plugins, their parameters etc, can all be
+ * configured in the `plugins` prop. 
+ */
 export default function ScoreBoard({
   turnScore,
   totalScore,
