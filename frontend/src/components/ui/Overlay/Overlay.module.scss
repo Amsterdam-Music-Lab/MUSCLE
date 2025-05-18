@@ -1,4 +1,12 @@
-@import '../../scss/variables.scss';
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+@import "@/scss/variables.scss";
 
 .overlay {
   position: fixed;
@@ -13,7 +21,7 @@
   pointer-events: none;
   transition: background-color 0.3s ease-in-out;
 
-  &.visible {
+  &.active {
     background-color: rgba(0, 0, 0, 0.66);
     pointer-events: auto;
 
@@ -25,35 +33,14 @@
 
   .content {
     position: relative;
-    border-radius: 8px;
-    padding: 2rem;
     max-width: 90%;
     width: 480px;
     max-height: 90vh;
     overflow-y: auto;
     opacity: 0;
     transform: translateY(-100px);
-    transition: transform .3s ease-in-out, opacity 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   }
-}
-
-.header {
-  margin-bottom: 1.5rem;
-
-  h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: $gray-900;
-    margin: 0;
-  }
-}
-
-.body {
-  font-size: 1.25rem;
-  margin-bottom: 1.5rem;
-  line-height: 1.6;
-  color: white;
-  filter: drop-shadow(0px 0px 3px $primary);
 }
 
 .closeIcon {

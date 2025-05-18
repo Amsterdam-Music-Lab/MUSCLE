@@ -8,7 +8,7 @@ import PlayCard from "./PlayCard";
 import { Card } from "@/types/Section";
 import Session from "@/types/Session";
 import Participant from "@/types/Participant";
-import Overlay from "@/components/Overlay/Overlay";
+import { Overlay } from "@/components/ui";
 import { ScoreFeedbackDisplay } from "@/types/Playback";
 
 import { Timeline } from "@/components/game";
@@ -366,9 +366,9 @@ const MatchingPairs = ({
       />
 
       <Overlay
-        isOpen={tutorialOverlayState.isOpen}
+        open={tutorialOverlayState.isOpen}
         title={tutorialOverlayState.title}
-        content={tutorialOverlayState.content}
+        children={tutorialOverlayState.content}
         onClose={() => {
           finishTurn();
           setTutorialOverlayState({ ...tutorialOverlayState, isOpen: false });
