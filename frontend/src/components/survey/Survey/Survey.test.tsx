@@ -1,4 +1,4 @@
-import type { QuestionViews } from "@/types/Question";
+import { QuestionViews } from "@/types/Question";
 
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
@@ -16,7 +16,9 @@ const form = [
 describe("Survey", () => {
   it("renders a heading, and a group of radio buttons", () => {
     render(<Survey form={form} />);
-    const heading = screen.getByRole("heading");
+    const heading = screen.getByRole("heading", {
+      name: "What is the average speed of a Swallow?",
+    });
     expect(heading).toBeTruthy();
     expect(heading.textContent).toBe("What is the average speed of a Swallow?");
     expect(screen.getByRole("group")).toBeTruthy();

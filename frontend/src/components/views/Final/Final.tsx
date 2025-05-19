@@ -16,7 +16,7 @@ import { finalizeSession } from "@/API";
 import useBoundStore from "@/util/stores";
 import { Final as FinalAction } from "@/types/Action";
 import { NarrowLayout } from "@/components/layout";
-import PluginRenderer from "@/components/plugins/PluginRenderer";
+import { PluginRenderer } from "@/components/plugins";
 import frontendConfig from "@/config/frontend";
 
 export interface FinalProps
@@ -30,8 +30,6 @@ export interface FinalProps
 const DEFAULT_PLUGINS = [
   { name: "scoreboard" },
   { name: "linkButton" },
-  { name: "userPages" },
-  { name: "participantLink" },
   { name: "userFeedback" },
 ] as AllPluginSpec[];
 

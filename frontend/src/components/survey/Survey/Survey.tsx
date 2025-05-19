@@ -18,6 +18,8 @@ interface SurveyProps extends HTMLAttributes<HTMLDivElement> {
   submitResult: submitResultType;
 }
 
+// TODO move to views?
+
 /** Survey */
 const Survey = ({
   formActive,

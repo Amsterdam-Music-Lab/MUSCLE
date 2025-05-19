@@ -5,16 +5,31 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-
+import "@testing-library/jest-dom";
 import { vi, expect, describe, it } from "vitest";
 import { screen, fireEvent, waitFor } from "@testing-library/react";
 import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
 import { BrowserRouter } from "react-router-dom";
 import * as API from "@/API";
 
-import Final from "./Final"; // Adjust the import path as necessary
+import Block from "@/types/Block";
+import Theme from "@/types/Theme";
+import Image from "@/types/Image";
 
-vi.mock("../../util/stores", () => ({
+vi.mock("@/components/plugins", () => ({
+  __esModule: true,
+  PluginRenderer: ({ plugins }: any) => (
+    <div data-testid="plugin-renderer">
+      {plugins?.map((p: any, i: number) => (
+        <div key={i} data-testid={`plugin-${p?.name || "unknown"}`}>
+          {JSON.stringify(p?.args)}
+        </div>
+      ))}
+    </div>
+  ),
+}));
+
+vi.mock("@/util/stores", () => ({
   __esModule: true,
   default: (fn: (state: any) => any) => {
     const state = {
@@ -28,11 +43,11 @@ vi.mock("../../util/stores", () => ({
   useBoundStore: vi.fn(),
 }));
 
-vi.mock("../../API", () => ({
+vi.mock("@/API", () => ({
   finalizeSession: vi.fn(),
 }));
 
-vi.mock("../../config", () => {
+vi.mock("@/config", () => {
   return {
     SILENT_MP3: "",
     API_ROOT: "",
@@ -42,6 +57,19 @@ vi.mock("../../config", () => {
     },
   };
 });
+
+vi.mock("@/config/frontend", () => ({
+  __esModule: true,
+  default: {
+    final: {
+      plugins: [
+        { name: "scoreboard" },
+        { name: "linkButton" },
+        { name: "userFeedback" },
+      ],
+    },
+  },
+}));
 
 let mockNavigate = vi.fn();
 
@@ -53,197 +81,169 @@ vi.mock("react-router-dom", async () => {
   };
 });
 
+import Final, { FinalProps } from "./Final";
+
+const logoImageObj = {
+  title: "Logo",
+  description: "Logo description",
+  file: "https://example.com/logo.png",
+  alt: "Logo alt text",
+  href: "https://example.com",
+  rel: "noopener noreferrer",
+  target: "_blank",
+} as Image;
+
+const themeObj = {
+  backgroundUrl: "https://example.com/background.jpg",
+  bodyFontUrl: "https://example.com/font.ttf",
+  description: "theme description",
+  headingFontUrl: "https://example.com/font.ttf",
+  logo: logoImageObj,
+  name: "Test Theme",
+  footer: null,
+  header: null,
+} as Theme;
+
+const feedbackInfoObj = {
+  header: "Feedback Header",
+  button: "Feedback Button",
+  contact_body: "Contact Body",
+  thank_you: "Thank You",
+  show_float_button: true,
+} as Block["feedback_info"];
+
+const blockObj = {
+  id: 24,
+  slug: "test",
+  name: "Test",
+  playlists: [{ id: "my-playlist", name: "TestPlaylist" }],
+  session_id: 42,
+  loadingText: "Patience!",
+  description: "Test description",
+  rounds: 1,
+  class_name: "test-class",
+  theme: themeObj,
+  bonus_points: 0,
+  feedback_info: feedbackInfoObj,
+  loading_text: "Loading...",
+} as Block;
+
+const participantObj = {
+  id: 1,
+  hash: "hash",
+  csrf_token: "csrf_token",
+  participant_id_url: "https://example.com/participant",
+  country: "NL",
+};
+
+const defaultProps = {
+  block: blockObj,
+  participant: participantObj,
+  button: { text: "Next", link: "/next" },
+  onNext: vi.fn(),
+  score: 100,
+  action_texts: {
+    all_experiments: "All Blocks",
+    profile: "Profile",
+    play_again: "Play Again",
+  },
+  show_participant_link: true,
+  participant_id_only: false,
+  show_profile_link: true,
+  social: {
+    channels: [
+      "facebook",
+      "whatsapp",
+      "twitter",
+      "weibo",
+      "share",
+      "clipboard",
+    ],
+    url: "https://example.com",
+    content: "Check this out!",
+    tags: ["test", "vitest"],
+  },
+
+  // Duplicate; also in block?
+  feedback_info: feedbackInfoObj,
+} as FinalProps;
+
 describe("Final Component", () => {
-  it.skip("renders correctly with given props", () => {
+  it("renders default plugins", () => {
+    render(
+      <BrowserRouter>
+        <Final {...defaultProps} />
+      </BrowserRouter>
+    );
+    expect(screen.getByTestId("plugin-scoreboard")).toBeInTheDocument();
+    expect(screen.getByTestId("plugin-linkButton")).toBeInTheDocument();
+    expect(screen.getByTestId("plugin-userFeedback")).toBeInTheDocument();
+  });
+
+  it("passes correct data to scoreboard plugin", () => {
+    render(
+      <Final
+        {...defaultProps}
+        participant="p1"
+        block={{ slug: "b" }}
+        score={42}
+        totalScore={100}
+        percentile={80}
+        timeline={[1, 2, 3]}
+        timelineStep={2}
+      />
+    );
+    const scoreboard = screen.getByTestId("plugin-scoreboard");
+    const args = JSON.parse(scoreboard.textContent!);
+    expect(args.turnScore).toBe(42);
+    expect(args.totalScore).toBe(100);
+    expect(args.percentile).toBe(80);
+    expect(args.timeline).toEqual([1, 2, 3]);
+    expect(args.timelineStep).toBe(2);
+  });
+
+  it("passes correct data to linkButton plugin", () => {
     render(
       <BrowserRouter>
         <Final
-          block={{ slug: "test-block" }}
-          participant="participant-id"
-          score={100}
-          final_text="<p>Final Text</p>"
-          rank={1}
+          {...defaultProps}
+          button={{ text: "Go!", link: "/next-link" }}
+          onNext={() => {}}
         />
       </BrowserRouter>
     );
-
-    expect(document.body.contains(screen.queryByText("Final Text"))).toBe(true);
-    expect(document.body.contains(screen.queryByTestId("score"))).toBe(true);
+    const linkButton = screen.getByTestId("plugin-linkButton");
+    const args = JSON.parse(linkButton.textContent!);
+    expect(args.link).toBe("/next-link");
+    expect(args.children).toBe("Go!");
   });
 
-  it.skip("calls onNext prop when button is clicked", async () => {
-    const onNextMock = vi.fn();
-    render(
-      <BrowserRouter>
-        <Final button={{ text: "Next", link: "" }} onNext={onNextMock} />
-      </BrowserRouter>
-    );
-
-    fireEvent.click(screen.getByTestId("button"));
-    await waitFor(() => {
-      expect(onNextMock).toHaveBeenCalled();
-    });
-  });
-
-  it("does not render rank and social components when props are not provided", () => {
+  it("passes correct data to userFeedback plugin", () => {
     render(
       <BrowserRouter>
         <Final
-          block={{ slug: "test-block" }}
-          participant="participant-id"
-          score={100}
-          final_text="<p>Final Text</p>"
+          {...defaultProps}
+          feedback_info={{
+            header: "Feedback Header",
+            button: "Feedback Button",
+            contact_body: "Contact Body",
+            thank_you: "Thank You",
+            show_float_button: true,
+          }}
         />
       </BrowserRouter>
     );
-
-    expect(document.body.contains(screen.queryByTestId("rank"))).toBe(false);
-    expect(document.body.contains(screen.queryByTestId("social"))).toBe(false);
+    const userFeedback = screen.getByTestId("plugin-userFeedback");
+    const args = JSON.parse(userFeedback.textContent!).feedbackInfo;
+    expect(args.header).toBe("Feedback Header");
+    expect(args.button).toBe("Feedback Button");
+    expect(args.contact_body).toBe("Contact Body");
+    expect(args.thank_you).toBe("Thank You");
+    expect(args.show_float_button).toBe(true);
   });
 
-  it.skip("navigates to profile page when profile link is clicked", async () => {
-    mockNavigate = vi.fn();
-
-    const mockActionTexts = {
-      all_experiments: "All Blocks",
-      profile: "Profile",
-      play_again: "Play Again",
-    };
-
-    render(
-      <BrowserRouter>
-        <Final
-          show_profile_link={true}
-          final_text={"<p>Final Text</p>"}
-          action_texts={mockActionTexts}
-        />
-      </BrowserRouter>
-    );
-
-    const profileLink = screen.getByTestId("profile-link");
-
-    expect(document.body.contains(profileLink)).toBe(true);
-
-    fireEvent.click(profileLink);
-
-    expect(mockNavigate).toHaveBeenCalledWith("/profile");
-  });
-
-  it.skip("calls finalizeSession with correct arguments", () => {
-    API.finalizeSession = vi.fn();
-
-    render(
-      <BrowserRouter>
-        <Final participant="participant-id" session="session-id" />
-      </BrowserRouter>
-    );
-
-    expect(API.finalizeSession).toHaveBeenCalledWith({
-      session: 1,
-      participant: "participant-id",
-    });
-  });
-
-  it("Uses Link to navigate when button link is relative", () => {
-    render(
-      <BrowserRouter>
-        <Final button={{ text: "Next", link: "/aml" }} />
-      </BrowserRouter>
-    );
-
-    const el = screen.getByTestId("button-link");
-    expect(document.body.contains(el)).toBe(true);
-    expect(el.getAttribute("href")).toBe("/redirect/aml");
-  });
-
-  it("Uses an anchor tag to navigate when button link is absolute", () => {
-    render(
-      <BrowserRouter>
-        <Final button={{ text: "Next", link: "https://example.com" }} />
-      </BrowserRouter>
-    );
-
-    const el = screen.getByTestId("button-link");
-    expect(document.body.contains(el)).toBe(true);
-    expect(el.getAttribute("href")).toBe("https://example.com");
-  });
-
-  it.skip("Calls onNext when there is no button link and the user clicks the button", async () => {
-    const onNextMock = vi.fn();
-    render(
-      <BrowserRouter>
-        <Final button={{ text: "Next" }} onNext={onNextMock} />
-      </BrowserRouter>
-    );
-
-    fireEvent.click(screen.getByTestId("button"));
-    await waitFor(() => {
-      expect(onNextMock).toHaveBeenCalled();
-    });
-  });
-
-  it.skip("Sets the rank cursor position correctly when percentile is valid", () => {
-    render(
-      <BrowserRouter>
-        <Final
-          rank={{ class: "rank-class", text: "Rank Text" }}
-          score={100}
-          final_text="<p>Final Text</p>"
-          percentile={50}
-        />
-      </BrowserRouter>
-    );
-    const cursor = screen.getByTestId("final-rank-bar-cursor");
-    expect(cursor.style.left).toBe("50%");
-  });
-
-  it("does not render percentile/rank part when percentile is not defined", () => {
-    render(
-      <BrowserRouter>
-        <Final
-          block={{ slug: "test-block" }}
-          participant="participant-id"
-          score={100}
-          final_text="<p>Final Text</p>"
-        />
-      </BrowserRouter>
-    );
-    expect(
-      document.body.contains(screen.queryByTestId("final-rank-bar-cursor"))
-    ).toBe(false);
-  });
-
-  it("does not render percentile/rank part when percentile is out of range", () => {
-    render(
-      <BrowserRouter>
-        <Final
-          block={{ slug: "test-block" }}
-          participant="participant-id"
-          score={100}
-          final_text="<p>Final Text</p>"
-          percentile={150}
-        />
-      </BrowserRouter>
-    );
-    expect(
-      document.body.contains(screen.queryByTestId("final-rank-bar-cursor"))
-    ).toBe(false);
-  });
-
-  it.skip("renders percentile/rank part when percentile is between 0 and 100", () => {
-    render(
-      <BrowserRouter>
-        <Final
-          block={{ slug: "test-block" }}
-          participant="participant-id"
-          score={100}
-          final_text="<p>Final Text</p>"
-          percentile={75}
-        />
-      </BrowserRouter>
-    );
-    expect(
-      document.body.contains(screen.queryByTestId("final-rank-bar-cursor"))
-    ).toBe(true);
+  it("does not render userFeedback plugin if feedback_info is missing", () => {
+    render(<Final {...defaultProps} feedback_info={undefined} />);
+    expect(screen.queryByTestId("plugin-userFeedback")).not.toBeInTheDocument();
   });
 });
