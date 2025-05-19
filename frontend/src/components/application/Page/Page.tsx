@@ -56,16 +56,21 @@ export default function Page({
   const { theme: frontendTheme } = useTheme();
 
   // Settings that default to the value in frontendTheme.
-  showAppBar = showAppBar ?? frontendTheme.showAppBar ?? true;
+  showAppBar =
+    showAppBar !== undefined ? showAppBar : frontendTheme.showAppBar ?? true;
   showGradientCircles =
-    showGradientCircles ?? frontendTheme.showGradientCircles ?? true;
+    showGradientCircles !== undefined
+      ? showGradientCircles
+      : frontendTheme.showGradientCircles ?? true;
   showBackgroundImage =
-    showBackgroundImage ?? frontendTheme.showBackgroundImage ?? true;
+    showBackgroundImage !== undefined
+      ? showBackgroundImage
+      : frontendTheme.showBackgroundImage ?? true;
 
   let backendTheme;
   if (useBackendTheme) {
     backendTheme = useBoundStore((state) => state.theme);
-    backgroundUrl = backendTheme?.backgroundUrl && backgroundUrl;
+    backgroundUrl = backendTheme?.backgroundUrl ?? backgroundUrl;
   }
 
   return (
@@ -82,6 +87,7 @@ export default function Page({
           {showBackgroundImage && backgroundUrl && (
             <div
               className={styles.bgImg}
+              data-testid="background-image"
               style={{
                 backgroundImage: `url(${backgroundUrl})`,
               }}
