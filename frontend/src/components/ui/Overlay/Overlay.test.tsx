@@ -1,6 +1,15 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import Overlay from "./Overlay";
+import styles from "./Overlay.module.scss";
 
 describe("Overlay Component Tests", () => {
   const mockOnClose = vi.fn();
@@ -30,7 +39,7 @@ describe("Overlay Component Tests", () => {
     expect(screen.getByText("Tutorial")).toBeTruthy();
   });
 
-  it.skip("should call onClose when clicking the close button", () => {
+  it("should call onClose when clicking the close button", () => {
     render(<Overlay {...defaultProps} />);
     fireEvent.click(screen.getByLabelText("Close"));
     expect(mockOnClose).toHaveBeenCalledTimes(1);
@@ -56,18 +65,18 @@ describe("Overlay Component Tests", () => {
     expect(mockOnClose).not.toHaveBeenCalled();
   });
 
-  it.skip("should have correct visibility class when isOpen is true", () => {
+  it("should have correct visibility class when isOpen is true", () => {
     render(<Overlay {...defaultProps} />);
-    expect(screen.getByRole("presentation").classList.contains("active")).toBe(
-      true
-    );
+    expect(
+      screen.getByRole("presentation").classList.contains(styles.active)
+    ).toBe(true);
   });
 
-  it("should have correct visibility class when isOpen is false", () => {
-    render(<Overlay {...defaultProps} isOpen={false} />);
+  it("should have correct visibility class when open is false", () => {
+    render(<Overlay {...defaultProps} open={false} />);
     waitFor(() => {
       expect(
-        screen.getByRole("presentation").classList.contains("visible")
+        screen.getByRole("presentation").classList.contains(styles.active)
       ).toBe(false);
     });
   });
@@ -100,8 +109,8 @@ describe("Overlay Component Tests", () => {
     expect(mockOnClose).not.toHaveBeenCalled();
   });
 
-  it.skip("should not listen for Escape key when overlay is closed", () => {
-    render(<Overlay {...defaultProps} isOpen={false} />);
+  it("should not listen for Escape key when overlay is closed", () => {
+    render(<Overlay {...defaultProps} open={false} />);
     fireEvent.keyDown(document, { key: "Escape" });
     expect(mockOnClose).not.toHaveBeenCalled();
   });
@@ -113,14 +122,14 @@ describe("Overlay Component Tests", () => {
     expect(mockOnClose).not.toHaveBeenCalled();
   });
 
-  it.skip("should render custom content correctly", () => {
+  it("should render custom content correctly", () => {
     const customContent = (
       <div data-testid="custom-content">
         <h3>Custom Title</h3>
         <p>Custom paragraph</p>
       </div>
     );
-    render(<Overlay {...defaultProps} content={customContent} />);
+    render(<Overlay {...defaultProps}>{customContent}</Overlay>);
     expect(screen.getByTestId("custom-content")).toBeTruthy();
     expect(screen.getByText("Custom Title")).toBeTruthy();
     expect(screen.getByText("Custom paragraph")).toBeTruthy();

@@ -86,7 +86,7 @@ export default function Overlay({
           <Card>
             <button
               className={styles.closeIcon}
-              aria-label="Close overlay"
+              aria-label="Close"
               onClick={close}
             >
               ×
