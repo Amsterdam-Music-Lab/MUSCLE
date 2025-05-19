@@ -12,8 +12,8 @@ import classNames from "classnames";
 import { Button, Card } from "@/components/ui";
 import { Explainer as ExplainerAction } from "@/types/Action";
 import { NarrowLayout } from "@/components/layout";
-import styles from "./Explainer.module.scss";
 import { Logo } from "@/components/svg";
+import styles from "./Explainer.module.scss";
 
 export interface ExplainerProps
   extends ExplainerAction,
@@ -28,7 +28,7 @@ export interface ExplainerProps
  */
 const Explainer = ({
   instruction,
-  button_label,
+  button_label: buttonText = "Next",
   steps = [],
   timer = null,
   onNext,
@@ -50,6 +50,7 @@ const Explainer = ({
       className={classNames(styles.container, className)}
       {...divProps}
     >
+      {/* TODO Use plugin system! */}
       <Logo name="tunetwins" fill="#fff" style={{ height: "3em" }} />
       <Card data-testid="explainer" className={classNames(styles.explainer)}>
         <Card.Header title={title}>{instruction}</Card.Header>
@@ -79,7 +80,7 @@ const Explainer = ({
         rounded={false}
         variant="secondary"
       >
-        {button_label}
+        {buttonText}
       </Button>
     </NarrowLayout>
   );
