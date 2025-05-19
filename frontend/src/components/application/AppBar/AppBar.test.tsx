@@ -6,10 +6,22 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+import "@testing-library/jest-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 import { vi, describe, beforeEach, it, expect } from "vitest";
 import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
 import AppBar from "./AppBar";
+
+import useBoundStore from "@/util/stores";
+vi.mock("@/util/stores", () => ({
+  __esModule: true,
+  default: vi.fn(),
+}));
+
+// Mock Logo to a test div
+vi.mock("@/components/svg", () => ({
+  Logo: (props: any) => <div data-testid="logo-mock" {...props} />,
+}));
 
 describe("AppBar", () => {
   const BASE_URL = "https://www.amsterdammusiclab.nl";
@@ -28,21 +40,26 @@ describe("AppBar", () => {
     expect(document.body.contains(titleElement)).toBe(true);
   });
 
-  it.skip("renders logo as Link for relative URL", () => {
-    const { getByLabelText } = render(<AppBar title="Test Title" />, {
+  it("renders logo as Link for relative URL", () => {
+    vi.mocked(useBoundStore).mockImplementation((selector) =>
+      selector({ theme: { logo: { href: "/relative-path" } } })
+    );
+    const { getByTestId } = render(<AppBar title="Test Title" />, {
       wrapper: Router,
     });
-    const logo = getByLabelText("Logo");
-    expect(logo.tagName).toBe("A");
-    expect(logo.getAttribute("href")).toBe(BASE_URL);
+    const logo = getByTestId("logo-mock");
+    expect(logo.closest("a")).toHaveAttribute("href", "/relative-path");
   });
 
-  it.skip("renders logo as an a-element for absolute URL", () => {
-    const { getByLabelText } = render(<AppBar title="Test Title" />, {
+  it("renders logo as an a-element for absolute URL", () => {
+    vi.mocked(useBoundStore).mockImplementation((selector) =>
+      selector({ theme: { logo: { href: BASE_URL } } })
+    );
+    const { getByTestId } = render(<AppBar title="Test Title" />, {
       wrapper: Router,
     });
-    const logo = getByLabelText("Logo");
-    expect(logo.tagName).toBe("A");
-    expect(logo.getAttribute("href")).toBe(BASE_URL);
+    const logo = getByTestId("logo-mock");
+    // The parent <a> should have the correct href
+    expect(logo.closest("a")).toHaveAttribute("href", BASE_URL);
   });
 });
