@@ -214,6 +214,40 @@ class MatchingPairs2025Test(TestCase):
             self.rules.num_pairs - len(single_plays),
         )
 
+    def create_session(self, final_score, json_data):
+        participant = Participant.objects.create()
+        session = Session.objects.create(
+            block=self.block,
+            participant=participant,
+            playlist=self.playlist,
+            final_score=final_score,
+            json_data=json_data,
+        )
+        return session
+
+    def test_get_percentile_rank(self):
+        json_data = {'condition': 'TD', 'difficulty': '4'}
+        self.create_session(80, json_data)
+        self.create_session(90, json_data)
+        self.create_session(90, json_data)
+        self.create_session(100, json_data)
+        self.create_session(110, json_data)
+        self.create_session(120, json_data)
+        session = self.create_session(100, json_data)
+        percentile = self.rules._get_percentile_rank(session)
+        self.assertEqual(percentile, 57)
+
+    def test_other_conditions_do_not_affect_percentile_rank(self):
+        target_data = {'condition': 'TD', 'difficulty': '4'}
+        self.create_session(80, target_data)
+        self.create_session(100, target_data)
+        self.create_session(120, target_data)
+        session = self.create_session(110, target_data)
+        self.create_session(20, {'condition': 'SD', 'difficulty': '2'})
+        self.create_session(20, {'condition': 'SD', 'difficulty': '2'})
+        percentile = self.rules._get_percentile_rank(session)
+        self.assertEqual(percentile, 62)
+
     def test_has_played_before_returns_false(self):
         """Test that _has_played_before returns False when there are no previous results."""
         experiment = Experiment.objects.create(slug="dummy_experiment")
