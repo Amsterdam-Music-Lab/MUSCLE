@@ -1,5 +1,7 @@
 import random
+from unittest import skip
 
+from django.db.models import Avg
 from django.test import TestCase
 
 from experiment.models import Block, Experiment, Phase
@@ -26,9 +28,6 @@ class MatchingPairs2025Test(TestCase):
         cls.block = Block.objects.create(rules="MATCHING_PAIRS_2025", slug="mpairs-2025", rounds=42, phase=cls.phase)
         cls.session = Session.objects.create(block=cls.block, participant=cls.participant, playlist=cls.playlist)
         cls.rules = cls.session.block_rules()
-        cls.session = Session.objects.create(
-            block=cls.block, participant=cls.participant, playlist=cls.playlist
-        )
 
     @staticmethod
     def create_section_csv():
@@ -71,7 +70,8 @@ class MatchingPairs2025Test(TestCase):
         for cond in conditions:
             result, _created = Result.objects.get_or_create(
                 participant=self.session.participant,
-                question_key=f"condition_{cond[0]}_{cond[1]}",
+                question_key="condition",
+                given_response=f"{cond[0]}_{cond[1]}",
             )
             result.score = score
             result.save()
@@ -108,7 +108,8 @@ class MatchingPairs2025Test(TestCase):
         for song in songs:
             result, _created = Result.objects.get_or_create(
                 participant=self.session.participant,
-                question_key=f"song_{song}",
+                question_key="song",
+                given_response=song,
             )
             result.score = score
             result.save()
@@ -269,3 +270,55 @@ class MatchingPairs2025Test(TestCase):
         session = Session.objects.create(block=self.block, participant=self.participant, playlist=self.playlist)
 
         self.assertTrue(self.rules._has_played_before(session))
+
+
+@skip("This test simulates repeated playthroughs, comment this line out to run")
+class PlaythroughSimulationTest(TestCase):
+    fixtures = ['playlist']
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.exp = Experiment.objects.create(slug="matching_pairs_2025")
+        cls.phase = Phase.objects.create(experiment=cls.exp)
+        cls.ch_playlist = Playlist.objects.get(name="MP2.0 - CH")
+        cls.ch_playlist._update_sections()
+        cls.rc_playlist = Playlist.objects.get(name="MP2.0 - RC")
+        cls.rc_playlist._update_sections()
+        cls.tv_playlist = Playlist.objects.get(name="MP2.0 - TV")
+        cls.tv_playlist._update_sections()
+        cls.block = Block.objects.create(
+            rules="MATCHING_PAIRS_2025", slug="mpairs-2025", rounds=1, phase=cls.phase
+        )
+        cls.participant = Participant.objects.create()
+        cls.rules = cls.block.get_rules()
+
+    def test_simulate_repeated_playthrough(self):
+        n_games = 500
+        for corpus in ['ch', 'rc', 'tv']:
+            playlist = getattr(self, f'{corpus}_playlist')
+            for game in range(n_games):
+                session = Session.objects.create(
+                    participant=self.participant,
+                    block=self.block,
+                    playlist=playlist,
+                )
+                actions = self.rules.next_round(session)
+                self.assertNotEqual(len(actions), 0)
+            song_results = Result.objects.filter(
+                participant=self.participant, question_key='song'
+            )
+            average_plays = song_results.aggregate(Avg('score'))['score__avg']
+            # check that all songs have been played equally frequently, give or take 1
+            for song_result in song_results:
+                self.assertAlmostEqual(song_result.score, average_plays, delta=1)
+            song_results.delete()
+            condition_results = Result.objects.filter(
+                participant=self.participant, question_key='condition'
+            )
+            average_conditions = condition_results.aggregate(Avg('score'))['score__avg']
+            # check that all conditions have been played equally frequently, give or take 1
+            for condition_result in condition_results:
+                self.assertAlmostEqual(
+                    condition_result.score, average_conditions, delta=1
+                )
+            condition_results.delete()

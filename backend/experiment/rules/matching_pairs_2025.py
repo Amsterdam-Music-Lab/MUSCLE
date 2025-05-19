@@ -174,30 +174,33 @@ class MatchingPairs2025(MatchingPairsGame):
         self, session: Session
     ) -> tuple[str, str]:
         condition_results = session.participant.result_set.filter(
-            question_key__startswith='condition'
-        )
+            question_key='condition'
+        ).order_by('score')
         if len(condition_results) == 11:
             # all conditions have been played, return the least played
-            least_played = condition_results.order_by('score').first()
+            least_played = condition_results.first()
             least_played.score += 1
             least_played.save()
-            cond, difficulty = least_played.question_key.split('_')[1:]
+            cond, difficulty = least_played.given_response.split('_')
             session.save_json_data({'condition': cond, 'difficulty': difficulty})
             return cond, difficulty
         elif len(condition_results) == 0:
             cond, difficulty = random.choice(POSSIBLE_CONDITIONS)
         else:
             played_conditions = [
-                cond.split('_')[1:]
-                for cond in condition_results.values_list('question_key', flat=True)
+                cond.split('_')
+                for cond in condition_results.values_list('given_response', flat=True)
             ]
             unplayed_conditions = [
                 cond for cond in POSSIBLE_CONDITIONS if cond not in played_conditions
             ]
             cond, difficulty = random.choice(unplayed_conditions)
-        question_key = f"condition_{cond}_{difficulty}"
+        condition = f"{cond}_{difficulty}"
         Result.objects.create(
-            participant=session.participant, question_key=question_key, score=1
+            participant=session.participant,
+            question_key="condition",
+            given_response=condition,
+            score=1,
         )
         session.save_json_data({'condition': cond, 'difficulty': difficulty})
         return cond, difficulty
@@ -208,13 +211,13 @@ class MatchingPairs2025(MatchingPairsGame):
         )
         random.shuffle(songs)
         participant_results = session.participant.result_set.filter(
-            question_key__startswith='song'
+            question_key='song', given_response__in=songs
         ).order_by('score')
         if not participant_results.count():
             selected_songs = songs[: self.num_pairs]
         else:
             participant_songs = [
-                int(result.question_key.split('_')[1]) for result in participant_results
+                int(result.given_response) for result in participant_results
             ]
             unplayed_songs = [song for song in songs if song not in participant_songs]
             if len(unplayed_songs) >= self.num_pairs:
@@ -226,7 +229,9 @@ class MatchingPairs2025(MatchingPairsGame):
                 ][: self.num_pairs]
         for song in selected_songs:
             result, created = Result.objects.get_or_create(
-                participant=session.participant, question_key=f"song_{song}"
+                participant=session.participant,
+                question_key="song",
+                given_response=song,
             )
             if created:
                 result.score = 1
