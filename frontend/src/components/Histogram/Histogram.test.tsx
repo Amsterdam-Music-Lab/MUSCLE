@@ -8,7 +8,8 @@
 
 import "@testing-library/jest-dom";
 import { describe, it, expect, vi, beforeEach, afterEach, Mock } from "vitest";
-import { render, act, screen } from "@testing-library/react";
+import { act, screen } from "@testing-library/react";
+import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
 import Histogram from "./Histogram";
 
 // Mock requestAnimationFrame and cancelAnimationFrame
@@ -118,180 +119,69 @@ describe("Histogram", () => {
     expect(data).toEqual([0, 0, 0]);
   });
 
-  it.skip("has active class when running", () => {
-    const { container } = render(<Histogram running={true} />);
-    const histogram = container.querySelector(".aha__histogram");
-
-    if (!histogram) {
-      throw new Error("Histogram not found");
-    }
-
-    expect(histogram.classList.contains("active")).toBe(true);
-  });
-
-  it.skip("does not have active class when not running", () => {
-    const { container } = render(<Histogram running={false} />);
-    const histogram = container.querySelector(".aha__histogram");
-
-    if (!histogram) {
-      throw new Error("Histogram not found");
-    }
-
-    expect(histogram.classList.contains("active")).toBe(false);
-  });
-
-  it.skip("updates bar heights based on frequency data when running", async () => {
-    const bars = 5;
+  it("updates bar data based on frequency data when running", async () => {
     mockAnalyser.getByteFrequencyData.mockImplementation((array) => {
       for (let i = 0; i < array.length; i++) {
         array[i] = Math.floor(Math.random() * 256);
       }
     });
 
-    const { container, rerender } = render(
-      <Histogram running={true} bars={bars} />
+    const { getByTestId, rerender } = render(
+      <Histogram running={true} bars={5} />
     );
 
-    const getHeights = () =>
-      Array.from(container.querySelectorAll(".aha__histogram > div")).map(
-        (bar) => bar.style.height
-      );
+    const getData = () =>
+      JSON.parse(getByTestId("barplot").getAttribute("data-data")!);
 
-    const initialHeights = getHeights();
-
-    // Advance timers and trigger animation frame
-    await act(async () => {
-      vi.advanceTimersByTime(100);
-    });
-
-    rerender(<Histogram running={true} bars={bars} />);
-
-    const updatedHeights = getHeights();
-
-    expect(initialHeights).not.to.deep.equal(updatedHeights);
+    const initialData = getData();
+    await act(async () => vi.advanceTimersByTime(100));
+    rerender(<Histogram running={true} bars={5} />);
+    const updatedData = getData();
+    expect(initialData).not.toEqual(updatedData);
     expect(mockAnalyser.getByteFrequencyData).toHaveBeenCalled();
   });
 
-  it.skip("does not update bar heights when not running", () => {
-    const bars = 5;
-    mockAnalyser.getByteFrequencyData.mockImplementation(() => {
-      // This should not be called when running is false
-    });
+  it("does not update bar data when not running", () => {
+    mockAnalyser.getByteFrequencyData.mockImplementation(() => {});
 
-    const { container } = render(<Histogram running={false} bars={bars} />);
+    const { getByTestId, rerender } = render(
+      <Histogram running={false} bars={5} />
+    );
 
-    const getHeights = () =>
-      Array.from(container.querySelectorAll(".aha__histogram > div")).map(
-        (bar) => bar.style.height
-      );
+    const getData = () =>
+      JSON.parse(getByTestId("barplot").getAttribute("data-data")!);
 
-    const initialHeights = getHeights();
-
-    // Advance timers to simulate time passing
-    act(() => {
-      vi.advanceTimersByTime(1000); // Advance time by 1 second
-    });
-
-    const updatedHeights = getHeights();
-
-    expect(initialHeights).to.deep.equal(updatedHeights);
+    const initialData = getData();
+    act(() => vi.advanceTimersByTime(1000));
+    rerender(<Histogram running={false} bars={5} />);
+    const updatedData = getData();
+    expect(initialData).toEqual(updatedData);
     expect(mockAnalyser.getByteFrequencyData).not.toHaveBeenCalled();
   });
 
-  it.skip("updates bar heights based on random data when random is true and running is true", async () => {
-    const bars = 5;
-
-    const { container, rerender } = render(
-      <Histogram running={true} bars={bars} random={true} interval={200} />
+  it("updates bar data based on random data when random is true and running is true", async () => {
+    const { getByTestId, rerender } = render(
+      <Histogram running={true} bars={5} random={true} interval={200} />
     );
 
-    const getHeights = () =>
-      Array.from(container.querySelectorAll(".aha__histogram > div")).map(
-        (bar) => bar.style.height
-      );
+    const getData = () =>
+      JSON.parse(getByTestId("barplot").getAttribute("data-data")!);
 
-    const initialHeights = getHeights();
-
-    // Advance timers by at least one interval
-    await act(async () => {
-      vi.advanceTimersByTime(200);
-    });
-
-    rerender(<Histogram running={true} bars={bars} random={true} />);
-
-    const updatedHeights = getHeights();
-
-    expect(initialHeights).not.to.deep.equal(updatedHeights);
+    const initialData = getData();
+    await act(async () => vi.advanceTimersByTime(200));
+    rerender(
+      <Histogram running={true} bars={5} random={true} interval={200} />
+    );
+    const updatedData = getData();
+    expect(initialData).not.toEqual(updatedData);
   });
 
-  it.skip("does not call getByteFrequencyData when random is true", async () => {
-    const bars = 5;
-
+  it("does not call getByteFrequencyData when random is true", async () => {
     const { rerender } = render(
-      <Histogram running={true} bars={bars} random={true} />
+      <Histogram running={true} bars={5} random={true} />
     );
-
-    // Advance timers and trigger animation frame
-    await act(async () => {
-      vi.advanceTimersByTime(100);
-    });
-
-    rerender(<Histogram running={true} bars={bars} random={true} />);
-
+    await act(async () => vi.advanceTimersByTime(100));
+    rerender(<Histogram running={true} bars={5} random={true} />);
     expect(mockAnalyser.getByteFrequencyData).not.toHaveBeenCalled();
-  });
-
-  it.skip("updates bar heights based on random data at the specified interval", async () => {
-    const bars = 5;
-    const interval = 200;
-
-    const { container } = render(
-      <Histogram running={true} bars={bars} random={true} interval={interval} />
-    );
-
-    const getHeights = () =>
-      Array.from(container.querySelectorAll(".aha__histogram > div")).map(
-        (bar) => bar.style.height
-      );
-
-    const initialHeights = getHeights();
-
-    // Advance timers by the interval to trigger the update
-    await act(async () => {
-      vi.advanceTimersByTime(interval);
-    });
-
-    const updatedHeights = getHeights();
-
-    expect(initialHeights).not.to.deep.equal(updatedHeights);
-  });
-
-  it.skip("updates bar heights based on frequency data using requestAnimationFrame", async () => {
-    const bars = 5;
-
-    mockAnalyser.getByteFrequencyData.mockImplementation((array) => {
-      for (let i = 0; i < array.length; i++) {
-        array[i] = Math.floor(Math.random() * 256);
-      }
-    });
-
-    const { container } = render(<Histogram running={true} bars={bars} />);
-
-    const getHeights = () =>
-      Array.from(container.querySelectorAll(".aha__histogram > div")).map(
-        (bar) => bar.style.height
-      );
-
-    const initialHeights = getHeights();
-
-    // Advance timers to simulate requestAnimationFrame calls
-    await act(async () => {
-      vi.advanceTimersByTime(16); // Approximate time for one frame at 60 FPS
-    });
-
-    const updatedHeights = getHeights();
-
-    expect(initialHeights).not.to.deep.equal(updatedHeights);
-    expect(mockAnalyser.getByteFrequencyData).toHaveBeenCalled();
   });
 });

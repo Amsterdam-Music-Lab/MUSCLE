@@ -6,9 +6,10 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import { FC, useEffect, useRef, useState } from "react";
+import type { BarPlotProps } from "@/components/game";
+import { useEffect, useRef, useState } from "react";
 import useBoundStore from "@/util/stores";
-import { BarPlot, BarPlotProps } from "@/components/game";
+import { BarPlot } from "@/components/game";
 
 export interface HistogramProps
   extends Omit<BarPlotProps, "data" | "min" | "max"> {
@@ -37,13 +38,13 @@ export interface HistogramProps
  * component mostly provides the frequency data, the actual visualization
  * is handled by the BarPlot component.
  */
-const Histogram: FC<HistogramProps> = ({
+export default function Histogram({
   bars = 8,
   running = true,
   random = false,
   interval = 200,
   ...props
-}) => {
+}: HistogramProps) {
   const [data, setData] = useState<Uint8Array>(new Uint8Array(bars));
   const currentAction = useBoundStore((state) => state.currentAction);
   const animationFrameRef = useRef<number>();
@@ -112,6 +113,4 @@ const Histogram: FC<HistogramProps> = ({
   }, [running, bars, randomize, interval]);
 
   return <BarPlot data={[...data]} min={0} max={255} {...props} />;
-};
-
-export default Histogram;
+}
