@@ -1,3 +1,5 @@
+from os.path import basename, splitext
+
 from django.utils.translation import gettext_lazy as _
 
 from experiment.actions import Final, Trial
@@ -22,8 +24,9 @@ class ThatsMySong(Hooked):
     def feedback_info(self):
         return None
 
-    def get_info_playlist(self, filename):
+    def get_info_playlist(self, section_path):
         """function used by `manage.py compileplaylist` to compile a csv with metadata"""
+        filename = splitext(basename(section_path))[0]
         parts = filename.split(" - ")
         time_info = int(parts[0])
         if time_info < 1970:
