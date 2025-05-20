@@ -17,7 +17,6 @@ from experiment.models import (
 )
 from experiment.forms import (
     BlockForm,
-    ExperimentForm,
     SocialMediaConfigForm,
 )
 from question.admin import QuestionSeriesInline
@@ -29,7 +28,7 @@ class BlockAdmin(admin.ModelAdmin):
     model = Block
     inlines = [QuestionSeriesInline]
     autocomplete_fields = ["playlists"]
-    classes = ["wide"]
+    form = BlockForm
 
     def has_module_permission(self, request):
         ''' Prevents the admin from being shown in the sidebar.'''
@@ -69,14 +68,14 @@ class ExperimentAdmin(admin.ModelAdmin, InlineActionsModelAdminMixin):
         "active",
     )
     inline_actions = ["experimenter_dashboard", "duplicate"]
-    form = ExperimentForm
+    fields = ["slug", "name", "description", "consent", "about_content",
+                  "disclaimer","privacy"]
+    change_form_template = "admin/experiment_change.html"
+
     inlines = [
         PhaseInline,
         SocialMediaConfigInline,
     ]
-
-    class Media:
-        css = {"all": ("experiment_admin.css",)}
 
     def experiment_name(self, obj):
         return obj.name or "No name"

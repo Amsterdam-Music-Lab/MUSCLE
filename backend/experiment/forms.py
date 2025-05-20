@@ -188,51 +188,18 @@ class MarkdownPreviewTextInput(TextInput):
         js = ["markdown_preview.js"]
 
 
-class ExperimentForm(ModelForm):
-
-    # def __init__(self, *args, **kwargs):
-    #     super(ModelForm, self).__init__(*args, **kwargs)
-    #     for language in settings.MODELTRANSLATION_LANGUAGES:
-    #         language = language.replace('-', '_')
-    #         desc_field = f"description_{language}"
-    #         self.fields[desc_field].widget.attrs["style"] = "height:40px"
-    #         soc_field = f"social_media_message_{language}"
-    #         self.fields[soc_field].widget.attrs["style"] = "height:15px"
-
-    class Meta:
-        model = Experiment
-        fields = "__all__"
-        # help_texts = {}
-        # for language in settings.MODELTRANSLATION_LANGUAGES:
-        #     for field_name in ["about_content", "disclaimer", "privacy"]:
-        #         language = language.replace("-", "_")
-        #         lang_field_name = f"{field_name}_{language}"
-        #         help_texts.update(
-        #             {
-        #                 lang_field_name: _(
-        #                     "You can enter plain text, html or markdown here."
-        #                 )
-        #             }
-        #         )
-
-    class Media:
-        js = ["experiment_form.js"]
-        css = {"all": ["experiment_form.css"]}
-
-
 class BlockForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(ModelForm, self).__init__(*args, **kwargs)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         choices = tuple()
         for i in BLOCK_RULES:
             choices += ((i, BLOCK_RULES[i].__name__),)
         choices += (("", "---------"),)
-
         self.fields["rules"] = ChoiceField(choices=sorted(choices))
 
     def clean_playlists(self):
-        # Check if there is a rules id selected and key exists
+        # Check if there is a rulesid selected and key exists
         if "rules" not in self.cleaned_data:
             return
 
@@ -262,7 +229,9 @@ class BlockForm(ModelForm):
 
     class Meta:
         model = Block
-        fields = "__all__"
+        fields = ["index", "slug", "name", "description",
+                  "rounds", "bonus_points", "playlists", "rules", "theme_config"
+                  ]
         help_texts = {
             "name": _("The name and description will be displayed in dashboard mode."),
             "image": _(

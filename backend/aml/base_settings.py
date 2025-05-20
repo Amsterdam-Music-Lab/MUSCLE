@@ -17,9 +17,9 @@ import sentry_sdk
 
 # Workaround for deprecated ugettext_lazy in django-inline-actions
 import django
-from django.utils.translation import gettext_lazy
+from django.utils.translation import gettext_lazy as _
 
-django.utils.translation.ugettext_lazy = gettext_lazy
+django.utils.translation.ugettext_lazy = _
 
 logger = logging.getLogger(__name__)
 
@@ -128,7 +128,14 @@ USE_I18N = True
 
 USE_L10N = True
 
-MODELTRANSLATION_LANGUAGES = ("en", "nl", "pt", "zh-hans")
+LANGUAGES = [
+    ("en", _("English")),
+    ("nl", _("Dutch")),
+    ("pt", _("Portuguese")),
+    ("zh-hans", _("Chinese")),
+]
+MODELTRANSLATION_LANGUAGES = [lang[0] for lang in LANGUAGES]
+
 
 # Increase django limits for large data sets
 # A request timeout should be set in the webserver
