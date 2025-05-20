@@ -6,6 +6,7 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+import "@testing-library/jest-dom";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import Overlay from "./Overlay";
@@ -133,5 +134,31 @@ describe("Overlay Component Tests", () => {
     expect(screen.getByTestId("custom-content")).toBeTruthy();
     expect(screen.getByText("Custom Title")).toBeTruthy();
     expect(screen.getByText("Custom paragraph")).toBeTruthy();
+  });
+
+  it("renders and uses a custom Handle component", () => {
+    const mockHandle = vi.fn();
+
+    const CustomHandle = ({ onClick }: { onClick: () => void }) => (
+      <button
+        data-testid="custom-handle"
+        onClick={() => {
+          mockHandle();
+          onClick();
+        }}
+      >
+        Open Overlay
+      </button>
+    );
+
+    render(
+      <Overlay open={false} Handle={CustomHandle} closeButtonText="Close" />
+    );
+
+    // The custom handle should be rendered
+    const handleButton = screen.getByTestId("custom-handle");
+    expect(handleButton).toBeInTheDocument();
+    handleButton.click();
+    expect(mockHandle).toHaveBeenCalled();
   });
 });

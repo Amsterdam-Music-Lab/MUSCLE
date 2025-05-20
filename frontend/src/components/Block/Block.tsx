@@ -11,7 +11,7 @@ import Loading from "@/components/Loading/Loading";
 import Playlist from "@/components/Playlist/Playlist";
 import Trial from "@/components/Trial/Trial";
 import Info from "@/components/Info/Info";
-import FloatingActionButton from "@/components/FloatingActionButton/FloatingActionButton";
+import { FloatingActionButton } from "@/components/ui";
 import { UserFeedbackForm } from "@/components/user";
 import FontLoader from "@/components/FontLoader/FontLoader";
 import useResultHandler from "@/hooks/useResultHandler";

@@ -62,3 +62,17 @@ export const CustomTitle: Story = {
     children: "Welcome to our awesome app!",
   },
 };
+
+export const CustomHandleText: Story = {
+  args: {
+    ...Default.args,
+    handleText: "Please click me!",
+  },
+};
+
+export const CustomHandle: Story = {
+  args: {
+    ...Default.args,
+    Handle: (props) => <button {...props}>Click me!</button>,
+  },
+};

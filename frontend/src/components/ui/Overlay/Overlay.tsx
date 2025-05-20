@@ -6,19 +6,21 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import type { HTMLAttributes } from "react";
+import type { HTMLAttributes, ComponentType } from "react";
 
 import { useEffect, useState } from "react";
 import classNames from "classnames";
-import { Button, Card } from "@/components/ui";
+import { Button, ButtonProps, Card } from "@/components/ui";
 import styles from "./Overlay.module.scss";
 
 export interface OverlayProps extends HTMLAttributes<HTMLDivElement> {
   /** Title of the overlay card */
   title?: string;
 
+  Handle?: ComponentType<{ onClick: () => void }>;
+
   /** Text shown on the button to open the overlay. */
-  openButtonText?: string;
+  handleText?: string;
 
   /** Text shown on the button used to close the overlay */
   closeButtonText?: string;
@@ -27,7 +29,7 @@ export interface OverlayProps extends HTMLAttributes<HTMLDivElement> {
   open?: boolean;
 
   /** Callback called when closing the overlay */
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 /**
@@ -35,9 +37,10 @@ export interface OverlayProps extends HTMLAttributes<HTMLDivElement> {
  */
 export default function Overlay({
   open: activeInitial = false,
-  onClose,
-  title = "Tutorial",
-  openButtonText = "Open",
+  onClose = () => {},
+  title,
+  handleText = "Open",
+  Handle,
   closeButtonText = "Close",
   children,
 }: OverlayProps) {
@@ -68,14 +71,20 @@ export default function Overlay({
     };
   }, [active]);
 
+  if (!Handle) {
+    Handle = (props: ButtonProps) => (
+      <Button
+        allowMultipleClicks={true}
+        className="primary"
+        title={handleText}
+        {...props}
+      />
+    );
+  }
+
   return (
     <>
-      <Button
-        onClick={open}
-        title={openButtonText}
-        className="primary"
-        allowMultipleClicks={true}
-      />
+      <Handle onClick={open} />
       <div
         className={classNames(styles.overlay, active && styles.active)}
         aria-hidden={!open}
@@ -91,7 +100,7 @@ export default function Overlay({
             >
               ×
             </button>
-            <Card.Header title={title} />
+            {title && <Card.Header title={title} />}
 
             <Card.Section>{children}</Card.Section>
 

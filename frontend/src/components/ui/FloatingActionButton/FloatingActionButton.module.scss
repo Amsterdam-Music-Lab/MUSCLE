@@ -1,0 +1,67 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+@import "@/scss/variables.scss";
+@import "@/scss/utils.scss";
+
+.button {
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  z-index: 100;
+  cursor: pointer;
+
+  transition-property: transform, left, right, top, bottom, filter;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+  filter: drop-shadow(0, 0, 0, rgba(0, 0, 0, 0));
+  background: $gray;
+  border: none;
+  padding: 0.5rem;
+
+  @extend .rounded;
+
+  &.expanded {
+    filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.2));
+  }
+
+  &.left {
+    left: 0px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+
+    &.expanded {
+      left: 0px;
+    }
+  }
+
+  &.right {
+    right: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+
+  &.top & {
+    top: 0px;
+  }
+
+  &.bottom {
+    bottom: 0px;
+  }
+
+  &.center {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  color: $black;
+}
