@@ -8,7 +8,7 @@
 
 import type { HTMLAttributes, ComponentType } from "react";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import classNames from "classnames";
 import { Button, ButtonProps, Card } from "@/components/ui";
 import styles from "./Overlay.module.scss";
@@ -46,21 +46,21 @@ export default function Overlay({
 }: OverlayProps) {
   const [active, setActive] = useState(activeInitial);
 
-  const close = () => {
+  const close = useCallback(() => {
     onClose();
     setActive(false);
-  };
+  }, [onClose]);
+
   const open = () => setActive(true);
 
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) close();
   };
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "Escape") close();
-  };
-
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+    };
     if (active) {
       document.addEventListener("keydown", handleKeyDown);
     } else {
@@ -69,7 +69,7 @@ export default function Overlay({
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [active]);
+  }, [active, close]);
 
   if (!Handle) {
     Handle = (props: ButtonProps) => (

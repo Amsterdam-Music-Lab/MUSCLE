@@ -51,7 +51,7 @@ export default function ExpandableButton({
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [disabled]);
 
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     setExpand((prev) => !prev);

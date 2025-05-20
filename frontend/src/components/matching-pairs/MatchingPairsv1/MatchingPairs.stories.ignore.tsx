@@ -23,7 +23,7 @@ const StoreDecorator = (Story) => {
     );
 };
 
-export default {
+const meta = {
     title: "Matching Pairs/MatchingPairs",
     component: MatchingPairs,
     parameters: {
@@ -36,6 +36,7 @@ export default {
         },
     },
 };
+export default meta;
 
 const getDefaultArgs = (overrides = {}) => ({
     playSection: () => { },

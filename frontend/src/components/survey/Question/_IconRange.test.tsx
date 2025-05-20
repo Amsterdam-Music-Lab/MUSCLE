@@ -1,9 +1,9 @@
-import {type Question as TQuestion} from '@/types/Question';
+import type { Question } from '@/types/Question';
 
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import IconRange from './_IconRange';
-import Question, {QuestionViews} from '@/types/Question';
+import { QuestionViews } from '@/types/Question';
 
 // Mock the RangeTitle component
 vi.mock('./_RangeTitle', () => ({
@@ -24,7 +24,7 @@ vi.mock('react-rangeslider', () => ({
     )
 }));
 
-const mockQuestion: TQuestion = {
+const mockQuestion: Question = {
     key: 'test-icon-range',
     view: QuestionViews.ICON_RANGE,
     question: "What is the question?",

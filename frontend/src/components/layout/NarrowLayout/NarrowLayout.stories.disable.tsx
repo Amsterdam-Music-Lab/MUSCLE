@@ -18,7 +18,7 @@ const decorator = (Story: () => JSX.Element) => (
   </div>
 );
 
-export default {
+const meta =  {
   title: "NarrowLayout",
   component: NarrowLayout,
   parameters: {
@@ -27,6 +27,8 @@ export default {
   decorators: [decorator],
   tags: ["autodocs"],
 };
+
+export default meta
 
 export const Default = {
   args: {},

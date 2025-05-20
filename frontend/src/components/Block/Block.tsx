@@ -137,7 +137,10 @@ const Block = () => {
     return () => {
       resetHeadData();
     };
-  }, [block, loadingBlock, participant, setError, updateActions]);
+  }, 
+  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [block, loadingBlock, participant, setError, updateActions, resetHeadData, session, setBlock, setHeadData, setSession]);
 
   useEffect(() => {
     if (block?.theme) {

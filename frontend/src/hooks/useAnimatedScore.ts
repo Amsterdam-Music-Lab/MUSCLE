@@ -49,7 +49,7 @@ export default function useAnimatedScore(
     animationFrameId = requestAnimationFrame(step);
 
     return () => cancelAnimationFrame(animationFrameId);
-  }, [targetScore, durationMs]);
+  }, [targetScore, durationMs, score]);
 
   return score;
 }

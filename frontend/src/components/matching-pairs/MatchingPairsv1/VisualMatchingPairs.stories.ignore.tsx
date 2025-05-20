@@ -4,7 +4,7 @@ import Cat01 from "./assets/images/cat-01.webp";
 import Cat02 from "./assets/images/cat-02.webp";
 import Cat03 from "./assets/images/cat-03.webp";
 
-export default {
+const meta = {
     title: "Matching Pairs/VisualMatchingPairs",
     component: VisualMatchingPairs,
     parameters: {
@@ -17,6 +17,7 @@ export default {
         },
     },
 };
+export default meta;
 
 const getDefaultArgs = (overrides = {}) => ({
     playSection: () => { },

@@ -293,7 +293,7 @@ export default function MatchingPairs({
     if (!endTurnAfterInterval || !gameState.startsWith("COMPLETED")) return;
     const timeout = setTimeout(endTurn, endTurnAfterInterval * 1000);
     return () => clearTimeout(timeout); // cleanup on unmount or if matched changes
-  }, [gameState, endTurn]);
+  }, [gameState, endTurn, endTurnAfterInterval]);
 
   // Feedback meessage
   let feedback;

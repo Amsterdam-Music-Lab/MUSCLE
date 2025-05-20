@@ -7,6 +7,7 @@
  */
 
 import "@testing-library/jest-dom";
+import { act } from "react";
 import { screen } from "@testing-library/react";
 import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
 import { vi, describe, it, expect } from "vitest";
@@ -22,6 +23,7 @@ describe("Explainer Component", () => {
   };
 
   it("renders with given props", () => {
+    
     render(<Explainer {...props} />);
     expect(screen.getByTestId("explainer")).toBeTruthy();
   });
@@ -31,12 +33,12 @@ describe("Explainer Component", () => {
     await screen.findByText("Some instruction");
   });
 
-  it("renders the button with correct label and triggers onNext on click", () => {
+  it("renders the button with correct label and triggers onNext on click", async () => {
     const onNext = vi.fn();
     render(<Explainer {...props} onNext={onNext} />);
     const button = screen.getByRole("button", { name: "Next" });
     expect(button).toBeInTheDocument();
-    button.click();
+    await act(() => button.click());
     expect(onNext).toHaveBeenCalled();
   });
 

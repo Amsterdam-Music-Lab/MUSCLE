@@ -1,13 +1,14 @@
 import PlayCard from "./PlayCard";
 import catImage from "@/stories/assets/images/cat-01.webp";
 
-export default {
+const meta = {
   title: "Matching Pairs/PlayCard",
   component: PlayCard,
   parameters: {
     layout: "fullscreen",
   },
 };
+export default meta
 
 const getDefaultArgs = (overrides = {}) => ({
   onClick: () => alert("Clicked!"),
