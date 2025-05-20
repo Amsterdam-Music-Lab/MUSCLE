@@ -18,7 +18,6 @@ export default function Circle({
   animate = true,
   ...props
 }: CircleProps) {
-  const styles = {};
   return (
     <circle cx={cx} cy={cy} r={r} fill={fill} {...props}>
       {!dur || !animate ? null : (

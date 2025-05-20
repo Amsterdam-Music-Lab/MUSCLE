@@ -6,7 +6,7 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import type { CSSProperties, HTMLAttributes, SVGAttributes } from "react";
+import type { HTMLAttributes, SVGAttributes } from "react";
 import type { LogoName } from "../Logo/Logo";
 import classNames from "classnames";
 import styles from "./Logos.module.scss";

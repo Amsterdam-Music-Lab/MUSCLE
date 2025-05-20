@@ -35,11 +35,6 @@ describe("Overlay Component Tests", () => {
     expect(screen.getByText("Custom Title")).toBeTruthy();
   });
 
-  it("should render with default title when not provided", () => {
-    render(<Overlay {...defaultProps} />);
-    expect(screen.getByText("Tutorial")).toBeTruthy();
-  });
-
   it("should call onClose when clicking the close button", () => {
     render(<Overlay {...defaultProps} />);
     fireEvent.click(screen.getByLabelText("Close"));

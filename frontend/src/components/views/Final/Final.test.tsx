@@ -15,6 +15,7 @@ import * as API from "@/API";
 import Block from "@/types/Block";
 import Theme from "@/types/Theme";
 import Image from "@/types/Image";
+import Final, { FinalProps } from "./Final";
 
 vi.mock("@/components/plugins", () => ({
   __esModule: true,
@@ -80,8 +81,6 @@ vi.mock("react-router-dom", async () => {
     useNavigate: () => mockNavigate,
   };
 });
-
-import Final, { FinalProps } from "./Final";
 
 const logoImageObj = {
   title: "Logo",

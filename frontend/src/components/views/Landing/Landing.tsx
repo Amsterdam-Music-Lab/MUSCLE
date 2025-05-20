@@ -15,13 +15,13 @@ import { PluginRenderer } from "@/components/plugins";
 import { Card } from "@/components/ui";
 
 interface LandingPageProps extends PageProps {
-  /** 
-   * Url to the actual experiment 
+  /**
+   * Url to the actual experiment
    */
   experimentUrl: string;
 
   /**
-   * Plugins to render on the landing page. In particular, the linkButton 
+   * Plugins to render on the landing page. In particular, the linkButton
    * plugin will be populated with the experimentUrl.
    */
   plugins?: AllPluginSpec[];
@@ -44,7 +44,7 @@ export default function LandingPage({
   if (plugins) {
     plugins = plugins.map((plugin) => {
       const updated: AllPluginSpec = { args: {}, ...plugin };
-      if (plugin.name == "linkButton") {
+      if (plugin.name === "linkButton") {
         updated.args = { ...updated.args, link: experimentUrl };
       }
       return updated;
