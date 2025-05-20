@@ -31,7 +31,5 @@ export const useEffectDebugger = (effectHook, dependencies, dependencyNames = []
     if (Object.keys(changedDeps).length) {
       console.log('[use-effect-debugger] ', changedDeps);
     }
-    
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(effectHook, dependencies);
   };
