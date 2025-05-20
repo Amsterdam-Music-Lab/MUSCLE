@@ -6,16 +6,104 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+import type { Meta, StoryObj } from "@storybook/react";
 import { UserFeedbackForm } from "@/components/user";
 import FloatingActionButton from "./FloatingActionButton";
+import { UserFeedbackFormProps } from "@/components/user/UserFeedbackForm/UserFeedbackForm";
 
-export default {
+type Story = StoryObj<typeof FloatingActionButton>;
+
+const decorator = (Story: Story) => (
+  <div
+    style={{
+      width: "100%",
+      height: "150px",
+      backgroundColor: "#f5f5f5",
+    }}
+  >
+    <Story />
+  </div>
+);
+
+const meta: Meta<typeof FloatingActionButton> = {
   title: "UI/FloatingActionButton",
   component: FloatingActionButton,
   tags: ["autodocs"],
+  decorators: [decorator],
+};
+export default meta;
+
+export const Default: Story = {
+  args: {
+    children: <p>The content!</p>,
+  },
 };
 
-const userFeedbackProps = {
+export const TopLeft: Story = {
+  args: {
+    ...Default.args,
+    position: "top-left",
+  },
+};
+
+export const TopRight: Story = {
+  args: {
+    ...Default.args,
+    position: "top-right",
+  },
+};
+
+export const BottomLeft: Story = {
+  args: {
+    ...Default.args,
+    position: "bottom-left",
+  },
+};
+
+export const BottomRight: Story = {
+  args: {
+    ...Default.args,
+    position: "bottom-right",
+  },
+};
+
+export const CenterLeft: Story = {
+  args: {
+    ...Default.args,
+    position: "center-left",
+  },
+};
+
+export const CenterRight: Story = {
+  args: {
+    ...Default.args,
+    position: "center-right",
+  },
+};
+
+export const FlushRight: Story = {
+  args: {
+    ...Default.args,
+    position: "center-right",
+    flush: true,
+  },
+};
+
+export const FlushLeft: Story = {
+  args: {
+    ...FlushRight.args,
+    position: "center-left",
+  },
+};
+
+export const VariantSecondary: Story = {
+  args: {
+    ...Default.args,
+    variant: "secondary",
+  },
+};
+
+const userFeedbackProps: UserFeedbackFormProps = {
   blockSlug: "test",
   participant: "test",
   feedbackInfo: {
@@ -24,152 +112,25 @@ const userFeedbackProps = {
     thank_you: "Thank you for your feedback!",
     contact_body:
       '<p>Please contact us at <a href="mailto:info@example.com">info@example.com</a> if you have any questions.</p>',
+    show_float_button: false, // ignored?
   },
   inline: false,
 };
 
-export const Default = {
+export const Feedback: Story = {
   args: {
-    children: <UserFeedbackForm {...userFeedbackProps} />,
+    ...Default.args,
+    title: "Your Feedback",
+    wrapInCardSection: false,
+    children: <UserFeedbackForm wrapInCard={false} {...userFeedbackProps} />,
   },
-  decorators: [
-    (Story) => (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          backgroundColor: "#aaa",
-          padding: "1rem",
-        }}
-      >
-        <Story />
-      </div>
-    ),
-  ],
 };
 
-export const TopLeft = {
+export const CustomOffsetFontSize: Story = {
   args: {
+    ...Default.args,
     position: "top-left",
-    children: <UserFeedbackForm {...userFeedbackProps} />,
+    fontSize: 3,
+    offset: 4,
   },
-  decorators: [
-    (Story) => (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          backgroundColor: "#aaa",
-          padding: "1rem",
-        }}
-      >
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-export const TopRight = {
-  args: {
-    position: "top-right",
-    children: <UserFeedbackForm {...userFeedbackProps} />,
-  },
-  decorators: [
-    (Story) => (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          backgroundColor: "#aaa",
-          padding: "1rem",
-        }}
-      >
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-export const BottomLeft = {
-  args: {
-    position: "bottom-left",
-    children: <UserFeedbackForm {...userFeedbackProps} />,
-  },
-  decorators: [
-    (Story) => (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          backgroundColor: "#aaa",
-          padding: "1rem",
-        }}
-      >
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-export const BottomRight = {
-  args: {
-    position: "bottom-right",
-    children: <UserFeedbackForm {...userFeedbackProps} />,
-  },
-  decorators: [
-    (Story) => (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          backgroundColor: "#aaa",
-          padding: "1rem",
-        }}
-      >
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-export const CenterLeft = {
-  args: {
-    position: "center-left",
-    children: <UserFeedbackForm {...userFeedbackProps} />,
-  },
-  decorators: [
-    (Story) => (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          backgroundColor: "#aaa",
-          padding: "1rem",
-        }}
-      >
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-export const CenterRight = {
-  args: {
-    position: "center-right",
-    children: <UserFeedbackForm {...userFeedbackProps} />,
-  },
-  decorators: [
-    (Story) => (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          backgroundColor: "#aaa",
-          padding: "1rem",
-        }}
-      >
-        <Story />
-      </div>
-    ),
-  ],
 };

@@ -30,6 +30,9 @@ export interface OverlayProps extends HTMLAttributes<HTMLDivElement> {
 
   /** Callback called when closing the overlay */
   onClose?: () => void;
+
+  /** Whether to wrap the content in a Card.Section */
+  wrapInCardSection: boolean;
 }
 
 /**
@@ -42,6 +45,7 @@ export default function Overlay({
   handleText = "Open",
   Handle,
   closeButtonText = "Close",
+  wrapInCardSection = true,
   children,
 }: OverlayProps) {
   const [active, setActive] = useState(activeInitial);
@@ -102,7 +106,11 @@ export default function Overlay({
             </button>
             {title && <Card.Header title={title} />}
 
-            <Card.Section>{children}</Card.Section>
+            {children && wrapInCardSection ? (
+              <Card.Section>{children}</Card.Section>
+            ) : (
+              children
+            )}
 
             <Card.Section>
               <Button

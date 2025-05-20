@@ -6,132 +6,65 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import { it, describe, expect } from "vitest";
+import "@testing-library/jest-dom";
+import { vi, it, describe, expect } from "vitest";
 import { render } from "@testing-library/react";
 import FloatingActionButton from "./FloatingActionButton";
+import styles from "./FloatingActionButton.module.scss";
+
+vi.mock("../Overlay", () => ({
+  __esModule: true,
+  Overlay: ({ Handle, children, ...props }: any) => (
+    <div data-testid="overlay" {...props}>
+      {Handle ? <Handle {...props} /> : null}
+      {children}
+    </div>
+  ),
+}));
 
 describe("FloatingActionButton", () => {
-  //   it("renders the button with the initial icon", () => {
-  //     const { getByTestId } = render(
-  //       <FloatingActionButton icon="fa-comment">
-  //         Test Content
-  //       </FloatingActionButton>
-  //     );
-  //     const icon = getByTestId("floating-action-button__icon");
-
-  //     expect(document.body.contains(icon)).toBe(true);
-  //     expect(icon.classList.contains("fa-comment")).toBe(true);
-  //   });
-
-  //   it("toggles the content on click", () => {
-  //     const { getByTestId } = render(
-  //       <FloatingActionButton icon="fa-comment">
-  //         <div>Test Content</div>
-  //       </FloatingActionButton>
-  //     );
-
-  //     const toggleButton = getByTestId("floating-action-button__toggle-button");
-  //     fireEvent.click(toggleButton);
-
-  //     const content = getByTestId("floating-action-button");
-  //     expect(content.classList.contains("floating-action-button--expanded")).toBe(
-  //       true
-  //     );
-
-  //     fireEvent.click(toggleButton);
-  //     expect(content.classList.contains("floating-action-button--expanded")).toBe(
-  //       false
-  //     );
-  //   });
-
-  //   it("displays the correct icon when expanded", () => {
-  //     const { getByTestId } = render(
-  //       <FloatingActionButton icon="fa-comment">
-  //         <div>Test Content</div>
-  //       </FloatingActionButton>
-  //     );
-
-  //     const toggleButton = getByTestId("floating-action-button__toggle-button");
-  //     fireEvent.click(toggleButton);
-
-  //     const icon = getByTestId("floating-action-button__icon");
-
-  //     expect(document.body.contains(icon)).toBe(true);
-  //     expect(icon.classList.contains("fa-times")).toBe(true);
-  //   });
-
-  //   it("closes the expanded content when the overlay is clicked", () => {
-  //     const { getByTestId } = render(
-  //       <FloatingActionButton icon="fa-comment">
-  //         <div>Test Content</div>
-  //       </FloatingActionButton>
-  //     );
-
-  //     const toggleButton = getByTestId("floating-action-button__toggle-button");
-  //     fireEvent.click(toggleButton);
-
-  //     const overlay = getByTestId("floating-action-button__overlay");
-  //     fireEvent.click(overlay);
-
-  //     const content = getByTestId("floating-action-button__content");
-  //     expect(content.classList.contains("floating-action-button--expanded")).toBe(
-  //       false
-  //     );
-  //   });
-
-  it("initially renders in a collapsed state", () => {
+  it("renders with the default icon and position", () => {
     const { getByTestId } = render(
-      <FloatingActionButton icon="fa-comment">
-        <div>Test Content</div>
-      </FloatingActionButton>
+      <FloatingActionButton>Test Content</FloatingActionButton>
     );
-    expect(
-      getByTestId("floating-action-button").classList.contains(
-        "floating-action-button--expanded"
-      )
-    ).toBe(false);
+    const button = getByTestId("floating-action-button");
+    const icon = getByTestId("floating-action-icon");
+    expect(button).toBeInTheDocument();
+    expect(icon.classList.contains("fa-comment")).toBe(true);
+    expect(button.classList.contains(styles.right)).toBe(true);
+    expect(button.classList.contains(styles.bottom)).toBe(true);
   });
 
-  //   it("correctly applies position classes", () => {
-  //     const { getByTestId } = render(
-  //       <FloatingActionButton position="bottom-left">
-  //         Test Content
-  //       </FloatingActionButton>
-  //     );
-  //     expect(
-  //       getByTestId("floating-action-button").classList.contains(
-  //         "floating-action-button--bottom"
-  //       )
-  //     ).toBe(true);
-  //     expect(
-  //       getByTestId("floating-action-button").classList.contains(
-  //         "floating-action-button--left"
-  //       )
-  //     ).toBe(true);
-  //   });
+  it("renders with a custom icon and position", () => {
+    const { getByTestId } = render(
+      <FloatingActionButton icon="fa-star" position="bottom-left">
+        Test Content
+      </FloatingActionButton>
+    );
+    const button = getByTestId("floating-action-button");
+    const icon = getByTestId("floating-action-icon");
+    expect(icon.classList.contains("fa-star")).toBe(true);
+    expect(button.classList.contains(styles.left)).toBe(true);
+    expect(button.classList.contains(styles.bottom)).toBe(true);
+  });
 
-  //   it("applies custom class name", () => {
-  //     const { getByTestId } = render(
-  //       <FloatingActionButton className="custom-class">
-  //         Test Content
-  //       </FloatingActionButton>
-  //     );
-  //     const button = getByTestId("floating-action-button");
-  //     expect(button.classList.contains("custom-class")).toBe(true);
-  //   });
+  it("applies custom className and variant", () => {
+    const { getByTestId } = render(
+      <FloatingActionButton className="custom-class" variant="secondary">
+        Test Content
+      </FloatingActionButton>
+    );
+    const button = getByTestId("floating-action-button");
+    expect(button.classList.contains("custom-class")).toBe(true);
+    expect(button.classList.contains("fill-secondary")).toBe(true);
+  });
 
-  //   it("updates aria-hidden attribute of overlay correctly", () => {
-  //     const { getByTestId } = render(
-  //       <FloatingActionButton>Test Content</FloatingActionButton>
-  //     );
-  //     const overlay = getByTestId("floating-action-button__overlay");
-  //     expect(overlay.attributes.getNamedItem("aria-hidden").value).toEqual(
-  //       "true"
-  //     );
-
-  //     fireEvent.click(getByTestId("floating-action-button__toggle-button"));
-  //     expect(overlay.attributes.getNamedItem("aria-hidden").value).toEqual(
-  //       "false"
-  //     );
-  //   });
+  it("renders children inside the overlay", () => {
+    const { getByTestId } = render(
+      <FloatingActionButton>
+        <div data-testid="test-children">Content</div>
+      </FloatingActionButton>
+    );
+    expect(getByTestId("test-children")).toBeInTheDocument();
+  });
 });

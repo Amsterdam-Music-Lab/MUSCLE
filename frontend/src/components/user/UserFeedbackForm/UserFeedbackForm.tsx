@@ -42,32 +42,34 @@ function Form({
   };
 
   return (
-    <form className={classNames(styles.form, className)} {...formProps}>
+    <>
       <Card.Section flush={true}>
-        <textarea
-          className={styles.textarea}
-          placeholder="Type your feedback..."
-          rows={rows}
-          onChange={handleChange}
-          value={value}
-        />
-      </Card.Section>
-      <Card.Section>
-        <Button
-          title={buttonText}
-          variant="primary"
-          stretch={true}
-          className={classNames(
-            styles.button,
-            "anim anim-fade-in anim-speed-500"
-          )}
-          onClick={() => handleSubmit(value)}
-        />
+        <form className={classNames(styles.form, className)} {...formProps}>
+          <textarea
+            className={styles.textarea}
+            placeholder="Type your feedback..."
+            rows={rows}
+            onChange={handleChange}
+            value={value}
+          />
+          <div style={{ padding: "1em" }}>
+            <Button
+              title={buttonText}
+              variant="primary"
+              stretch={true}
+              className={classNames(
+                styles.button,
+                "anim anim-fade-in anim-speed-500"
+              )}
+              onClick={() => handleSubmit(value)}
+            />
+          </div>
+        </form>
       </Card.Section>
       <Card.Section>
         <div dangerouslySetInnerHTML={{ __html: contactInformation }} />
       </Card.Section>
-    </form>
+    </>
   );
 }
 
@@ -77,6 +79,7 @@ export interface UserFeedbackFormProps extends Omit<CardProps, "title"> {
   feedbackInfo: FeedbackInfo;
   inline?: boolean;
   title?: ReactNode;
+  wrapInCard?: boolean;
 }
 
 export default function UserFeedbackForm({
@@ -84,6 +87,7 @@ export default function UserFeedbackForm({
   participant,
   feedbackInfo,
   inline = true,
+  wrapInCard = true,
   className,
   title = "Your Feedback",
   ...cardProps
@@ -101,22 +105,26 @@ export default function UserFeedbackForm({
     return;
   };
 
-  return (
+  const content = showForm ? (
+    <Form
+      handleSubmit={handleSubmit}
+      header={feedbackInfo.header}
+      contactInformation={feedbackInfo.contact_body}
+    />
+  ) : (
+    <Card.Section children={feedbackInfo.thank_you} />
+  );
+
+  return !wrapInCard ? (
+    content
+  ) : (
     <Card
       dividers={false}
       className={classNames(styles.container, className)}
       {...cardProps}
     >
       <Card.Header title={title} />
-      {showForm ? (
-        <Form
-          handleSubmit={handleSubmit}
-          header={feedbackInfo.header}
-          contactInformation={feedbackInfo.contact_body}
-        />
-      ) : (
-        <Card.Section children={feedbackInfo.thank_you} />
-      )}
+      {content}
     </Card>
   );
 }

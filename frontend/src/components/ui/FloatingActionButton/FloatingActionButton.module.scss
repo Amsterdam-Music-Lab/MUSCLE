@@ -6,34 +6,35 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-@import "@/scss/variables.scss";
 @import "@/scss/utils.scss";
 
 .button {
-  display: flex;
-  flex-direction: row;
+  --fa-button-offset: 1em;
+  --fa-button-font-size: 1.5em;
+
   position: fixed;
+  display: flex;
   z-index: 100;
-  cursor: pointer;
 
-  transition-property: transform, left, right, top, bottom, filter;
-  transition-duration: 0.2s;
-  transition-timing-function: ease-in-out;
-  filter: drop-shadow(0, 0, 0, rgba(0, 0, 0, 0));
-  background: $gray;
   border: none;
+  box-shadow: 0 0 2em rgba(0, 0, 0, 0.2);
   padding: 0.5rem;
-
   @extend .rounded;
 
-  &.expanded {
-    filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.2));
+  transition: opacity 300ms ease;
+  opacity: 0.8;
+  &:hover {
+    opacity: 1;
   }
 
   &.left {
-    left: 0px;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
+    left: var(--fa-button-offset, 0px);
+
+    &.flushToWindowEdge {
+      left: 0px;
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
+    }
 
     &.expanded {
       left: 0px;
@@ -41,17 +42,21 @@
   }
 
   &.right {
-    right: 0px;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
+    right: var(--fa-button-offset, 0px);
+
+    &.flushToWindowEdge {
+      right: 0px;
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
   }
 
   &.top & {
-    top: 0px;
+    top: var(--fa-button-offset, 0px);
   }
 
   &.bottom {
-    bottom: 0px;
+    bottom: var(--fa-button-offset, 0px);
   }
 
   &.center {
@@ -61,7 +66,15 @@
 }
 
 .icon {
-  width: 24px;
-  height: 24px;
-  color: $black;
+  // Determines the relative size of the icon compared to
+  // the button size. Note it will scale quadratically.
+  $factor: 1.25;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: calc($factor * $factor * var(--fa-button-font-size));
+  height: calc($factor * $factor * var(--fa-button-font-size));
+  font-size: var(--fa-button-font-size);
+  color: #fff;
 }
