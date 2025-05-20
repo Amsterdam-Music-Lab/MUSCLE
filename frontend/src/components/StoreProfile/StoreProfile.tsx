@@ -5,7 +5,7 @@ import * as EmailValidator from "email-validator";
 import { URLS } from "@/config";
 import useBoundStore from "../../util/stores";
 import { shareParticipant } from "../../API";
-import DefaultPage from "../Page/DefaultPage";
+import { Page } from "@/components/application";
 import Loading from "../Loading/Loading";
 import Participant from "@/types/Participant";
 
@@ -37,7 +37,7 @@ const StoreProfile = () => {
     }
 
     return (
-        <DefaultPage className="aha__store-profile" title="Store Profile">
+        <Page className="aha__store-profile" title="Store Profile">
             <h3 className="title">Personal Link</h3>
             <p>
                 We will send you a personal link by email, which provides access
@@ -73,7 +73,7 @@ const StoreProfile = () => {
                     Send me the link
                 </div>
             </div>
-        </DefaultPage>
+        </Page>
     );
 };
 

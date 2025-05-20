@@ -1,0 +1,40 @@
+@import "@/scss/utils";
+
+.card {
+  --spacer: 1.5rem;
+
+  @extend .bg-inset-sm, .sharp-border;
+  @extend .rounded-md;
+
+  background-color: var(--background);
+
+  &.dividers .section + .section {
+    border-top: 1px solid #f5f5f5;
+  }
+}
+
+.section {
+  &:not(.flush) {
+    padding: var(--spacer) calc(1.25 * var(--spacer));
+  }
+
+  &.flush {
+    padding: 0;
+  }
+
+  * + .sectionContent {
+    margin-top: calc(0.5 * var(--spacer));
+  }
+}
+
+.sectionTitle {
+  margin-bottom: 0;
+}
+
+h2.sectionTitle {
+  font-size: 1.5rem;
+}
+
+h3.sectionTitle {
+  font-size: 1rem;
+}

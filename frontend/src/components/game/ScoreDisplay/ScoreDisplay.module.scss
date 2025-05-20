@@ -1,0 +1,47 @@
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ * 
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+@import "@/scss/utils.scss";
+
+.scoreDisplay {
+  --score-display-font-size: 4;
+}
+
+.center {
+  .score,
+  .scoreLabel {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.score {
+  position: relative;
+  & > div {
+    display: flex;
+  }
+}
+
+.scoreValue {
+  @extend .fw-black;
+
+  display: inline-block;
+  line-height: 0.8;
+  font-size: calc(var(--score-display-font-size) * 1rem);
+}
+
+.scoreUnits,
+.scoreLabel {
+  @extend .fw-semibold;
+}
+
+@include media-breakpoint-down(sm) {
+  .scoreValue {
+    font-size: calc(var(--score-display-font-size) * 0.75rem);
+  }
+}

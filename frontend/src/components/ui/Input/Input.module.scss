@@ -1,0 +1,40 @@
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+@import "@/scss/utils";
+
+.input {
+  all: unset;
+
+  @extend .sharp-border, .bg-inset-sm;
+
+  display: block;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  color: inherit;
+
+  background-color: white;
+
+  &:focus {
+    outline: none;
+    border-color: #007aff;
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.25);
+  }
+
+  &::placeholder {
+    color: #666;
+  }
+
+  &[readonly] {
+    // background-color: #f9f9f9;
+    color: #666;
+    // border-color: #ddd;
+    cursor: default;
+    pointer-events: none;
+  }
+}
