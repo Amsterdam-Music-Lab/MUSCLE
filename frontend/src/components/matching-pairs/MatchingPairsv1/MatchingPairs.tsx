@@ -56,7 +56,7 @@ const MatchingPairs = ({
   const [score, setScore] = useState<number | null>(null);
   const [total, setTotal] = useState(bonusPoints);
   const [startOfTurn, setStartOfTurn] = useState(performance.now());
-  const [overlayWasShown, setOverlayWasShown] = useState(false);
+  // const [overlayWasShown, setOverlayWasShown] = useState(false);
 
   // New state to track card states
   const [sections, setSections] = useState(() =>
@@ -85,7 +85,7 @@ const MatchingPairs = ({
     completed: [] as ScoreType[],
   });
 
-  const columnCount = sections.length > 6 ? 4 : 3;
+  // const columnCount = sections.length > 6 ? 4 : 3;
 
   const participant = useBoundStore(
     (state) => state.participant
@@ -187,7 +187,7 @@ const MatchingPairs = ({
   };
 
   const checkMatchingPairs = async (index: number) => {
-    const currentCard = sections[index];
+    // const currentCard = sections[index];
     const turnedCards = sections.filter((s) => s.turned);
 
     let updatedCurrentCard;
@@ -410,7 +410,7 @@ const ScoreFeedback = ({
       <div
         data-testid="score"
         className={`matching-pairs__score ${
-          total == 0 ? "zero" : total > 0 ? "positive" : "negative"
+          total === 0 ? "zero" : total > 0 ? "positive" : "negative"
         }`}
       >
         <span className="value">

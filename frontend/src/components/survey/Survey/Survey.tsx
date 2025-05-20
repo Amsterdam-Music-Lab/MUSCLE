@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from "react";
+import type { HTMLAttributes } from "react";
 import type IQuestion from "@/types/Question";
 
 import { useState } from "react";
@@ -7,7 +7,6 @@ import { Question } from "../Question";
 import { submitResultType } from "@/hooks/useResultHandler";
 import { Button, Card } from "@/components/ui";
 import { NarrowLayout } from "@/components/layout";
-import styles from "./Survey.module.scss";
 
 interface SurveyProps extends HTMLAttributes<HTMLDivElement> {
   formActive: boolean;

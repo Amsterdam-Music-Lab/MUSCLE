@@ -9,7 +9,7 @@ import type { Tutorial, TutorialStep } from "@/types/tutorial";
 import type { Card as CardData } from "@/types/Section";
 import type { MatchingPairsProps as MatchingPairsInterfaceProps } from "../MatchingPairsv1/MatchingPairs";
 
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import classNames from "classnames";
 import { scoreIntermediateResult } from "@/API";
 import { useTutorial } from "@/hooks/useTutorial";
@@ -303,7 +303,6 @@ export default function MatchingPairs({
     feedback = feedbackContentList[randomIdx];
   }
 
-  const orientation = useOrientation();
 
   return (
     <SquareLayout

@@ -5,7 +5,6 @@ import { useState, useRef, useCallback } from "react";
 import classNames from "classnames";
 
 import { getAudioLatency, getCurrentTime, getTimeSince } from "@/util/time";
-import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
 import { OnResultType } from "@/hooks/useResultHandler";

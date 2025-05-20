@@ -19,16 +19,6 @@ const meta: Meta<typeof Cup> = {
 
 export default meta;
 
-const cupData = {
-  text: "Rank",
-  className: "rank",
-};
-
-const scoreData = {
-  score: 100,
-  label: "points",
-};
-
 export const Default: Story = {
   args: {},
 };

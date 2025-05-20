@@ -6,9 +6,7 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 import type { PluginMeta, PluginSpec } from "@/types/plugin";
-import type { LogoProps } from "@/components/svg/Logo/Logo";
 import ReactMarkdown from "react-markdown";
-import Logo from "@/components/svg/Logo/Logo";
 export interface MarkdownPluginArgs {}
 
 function Markdown({ content }) {

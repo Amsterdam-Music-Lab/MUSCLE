@@ -54,7 +54,7 @@ describe("Button component", () => {
   });
 
   it("does not collapse the button when disabled=true and expanded=true, even if clicking outside", () => {
-    const { getByText, getByTestId } = render(
+    const { getByTestId } = render(
       <div>
         <ExpandableButton
           title="More"

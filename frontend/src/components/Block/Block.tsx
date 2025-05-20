@@ -19,9 +19,6 @@ import Session from "@/types/Session";
 import { Action } from "@/types/Action";
 import { Round } from "@/types/Round";
 
-// import { matchingPairsConfig } from "@/config/matchingPairs";
-import { AllPluginSpec } from "../plugins/pluginRegistry";
-
 /**
  * Block handles the main (experiment) block flow:
  * - Loads the block and participant

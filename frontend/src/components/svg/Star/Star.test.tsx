@@ -7,7 +7,7 @@
  */
 
 import "@testing-library/jest-dom";
-import { vi, describe, expect, it } from "vitest";
+import { vi, describe, expect } from "vitest";
 import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
 import Star from "./Star";
 

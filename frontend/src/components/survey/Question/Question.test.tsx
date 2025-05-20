@@ -1,6 +1,6 @@
 import { render, fireEvent, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import Question, {QuestionProps} from './Question';
+import Question from './Question';
 import { QuestionViews } from '@/types/Question';
 
 describe('Question Component', () => {

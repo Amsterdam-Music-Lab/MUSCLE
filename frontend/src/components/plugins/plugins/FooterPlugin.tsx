@@ -9,7 +9,6 @@ import type { PluginMeta, PluginSpec } from "@/types/plugin";
 import type { LogoName } from "@/components/svg/Logo/Logo";
 
 import ReactMarkdown from "react-markdown";
-import Logo from "@/components/svg/Logo/Logo";
 import { Logos } from "@/components/svg";
 
 export interface FooterPluginArgs {

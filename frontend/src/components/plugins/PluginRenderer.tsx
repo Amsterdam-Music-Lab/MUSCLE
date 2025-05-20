@@ -6,8 +6,8 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import type { PluginSpec, PluginMeta } from "@/types/plugin";
-import type { ReactNode, ComponentType, ElementType } from "react";
+import type { PluginSpec } from "@/types/plugin";
+import type { ReactNode, ComponentType } from "react";
 import { Fragment, createElement } from "react";
 import { pluginMetaRegistry } from "./pluginRegistry";
 import type { AllPluginSpec, PluginRegistry } from "./pluginRegistry";

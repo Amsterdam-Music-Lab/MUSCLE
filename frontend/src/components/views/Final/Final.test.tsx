@@ -7,10 +7,9 @@
  */
 import "@testing-library/jest-dom";
 import { vi, expect, describe, it } from "vitest";
-import { screen, fireEvent, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
 import { BrowserRouter } from "react-router-dom";
-import * as API from "@/API";
 
 import Block from "@/types/Block";
 import Theme from "@/types/Theme";

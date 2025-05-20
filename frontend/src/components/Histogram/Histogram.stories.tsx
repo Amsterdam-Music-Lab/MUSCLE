@@ -1,4 +1,4 @@
-import type { Meta, StoryFn } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 import Histogram from "./Histogram";
 
 const meta: Meta<typeof Histogram> = {

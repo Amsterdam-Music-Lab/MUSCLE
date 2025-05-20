@@ -76,8 +76,8 @@ export default function Page({
       : frontendTheme.showBackgroundImage ?? true;
 
   let backendTheme;
+  backendTheme = useBoundStore((state) => state.theme);
   if (useBackendTheme) {
-    backendTheme = useBoundStore((state) => state.theme);
     backgroundUrl = backendTheme?.backgroundUrl ?? backgroundUrl;
   }
 

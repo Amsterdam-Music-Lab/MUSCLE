@@ -92,16 +92,15 @@ const Button = ({
 }: ButtonProps) => {
   // Only use state to control disabled when allowMultipleClicks === false
   // TODO its a bit strange to have  allowMultipleClicks = true by default
-  let disabled = initialDisabled;
-  let setDisabled = () => {};
-  if (allowMultipleClicks === false) {
-    [disabled, setDisabled] = useState(initialDisabled);
-  }
+  
+  // Use internal state to avoid a conditional hook
+  const [internalDisabled, setInternalDisabled] = useState(initialDisabled);
+  const disabled = allowMultipleClicks ? initialDisabled : internalDisabled;
 
   // Only handle the first click
   const clickOnceGuard = () => {
     if (disabled === true) return;
-    if (allowMultipleClicks === false) setDisabled(true);
+    if (allowMultipleClicks === false) setInternalDisabled(true);
     onClick(value);
   };
 

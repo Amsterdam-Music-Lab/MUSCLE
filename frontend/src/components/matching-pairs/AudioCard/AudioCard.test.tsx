@@ -11,6 +11,9 @@ import { vi, describe, expect, test } from "vitest";
 import { screen } from "@testing-library/dom";
 import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
 
+import AudioCard from "./AudioCard";
+import styles from "./AudioCard.module.scss";
+
 vi.mock("@/components/Histogram/Histogram", () => ({
   __esModule: true,
   default: (props: any) => (
@@ -20,9 +23,6 @@ vi.mock("@/components/Histogram/Histogram", () => ({
   ),
 }));
 
-// eslint-disable-next-line import/first
-import AudioCard from "./AudioCard";
-import styles from "./AudioCard.module.scss";
 
 describe("Matching Pairs Audio Card", () => {
   test("renders AudioCard component", () => {

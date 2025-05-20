@@ -6,7 +6,7 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import type { HTMLAttributes, SVGAttributes } from "react";
+import type { HTMLAttributes } from "react";
 import type { LogoName } from "../Logo/Logo";
 import classNames from "classnames";
 import styles from "./Logos.module.scss";
@@ -35,7 +35,7 @@ export default function Logos({
           name={name}
           className={styles.logo}
           fill="#fff"
-          style={{ height: `${name == "nwo" ? 1.75 * height : height}em` }}
+          style={{ height: `${name === "nwo" ? 1.75 * height : height}em` }}
         />
       ))}
     </div>

@@ -5,7 +5,7 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-import type { ReactNode, CSSProperties, HTMLAttributes } from "react";
+import type { CSSProperties } from "react";
 
 import type { Decorator } from "@storybook/react";
 import Board from "./Board";

@@ -56,7 +56,7 @@ const App = () => {
         } finally {
             setParticipantLoading(false);
         }
-    }, [setError, queryParams, setParticipant])
+    }, [setError, queryParams, setParticipant, setParticipantLoading])
 
     if (error) {
         return <p className="aha__error">Error: {error}</p>;

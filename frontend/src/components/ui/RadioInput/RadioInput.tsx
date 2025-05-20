@@ -46,7 +46,7 @@ export default function RadioInput<Value>({
   if (!values || Object.keys(values).length <= 0) {
     throw new Error("Radio inputs must have values");
   }
-  if (!labels || labels.length == 0) {
+  if (!labels || labels.length === 0) {
     labels = [...values];
   }
   if (values.length !== labels.length) {
