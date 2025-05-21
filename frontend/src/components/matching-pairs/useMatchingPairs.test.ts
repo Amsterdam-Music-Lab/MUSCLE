@@ -11,11 +11,19 @@ import type { MPCard, UseMatchingPairsProps } from "./useMatchingPairs";
 import { vi, describe, expect, test, afterEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useMatchingPairs } from "./useMatchingPairs";
+import {
+  filterCards,
+  selectCard,
+  selectedCards,
+  endTurn,
+  playTurn,
+  playCompleteTurn,
+} from "./utils.ts";
 
 const initialState = {
   // participant: 1,
   // session: 1,
-  // setError: vi.fn(),
+  setError: vi.fn(),
   block: { bonus_points: 0 },
   // currentAction: () => ({ view: "TRIAL_VIEW" }),
 };
@@ -58,34 +66,6 @@ const getProps = (props: Partial<UseMPProps> = {}) => ({
   successfulComparisons: ["match"],
   ...props,
 });
-
-// Helper functions
-
-const filterCards = (result, filter) => result.current.cards.filter(filter);
-
-const selectedCards = (result) => filterCards(result, (c) => c.selected);
-
-const selectCard = async (result, id: number) => {
-  await act(async () => {
-    await result.current.selectCard(id);
-  });
-};
-
-const endTurn = async (result) => {
-  await act(async () => {
-    result.current.endTurn();
-  });
-};
-
-const playTurn = async (result, id1: number, id2: number) => {
-  await selectCard(result, id1);
-  await selectCard(result, id2);
-};
-
-const playCompleteTurn = async (result, id1: number, id2: number) => {
-  await playTurn(result, id1, id2);
-  await endTurn(result);
-};
 
 // Tests
 

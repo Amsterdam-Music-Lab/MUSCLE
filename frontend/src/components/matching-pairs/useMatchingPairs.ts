@@ -130,6 +130,7 @@ export function useMatchingPairs<ComparisonResult, Card extends MPCard>({
   onGameEnd = () => {},
 }: UseMatchingPairsProps<ComparisonResult, Card>) {
   // Variables bound to global store
+  // Todo these should not be in useMatchingPairs, but probably in useTuneTwins
   const block = useBoundStore((s) => s.block);
   const participant = useBoundStore((s) => s.participant);
   const session = useBoundStore((s) => s.session);
@@ -304,7 +305,6 @@ export function useMatchingPairs<ComparisonResult, Card extends MPCard>({
 
   return { ...allStates, setCards, endTurn, selectCard };
 }
-
 
 /**
  * Utility that applies several updaters to a list of cards.

@@ -21,13 +21,13 @@ import {
 } from "./useMatchingPairs";
 import { getAudioLatency } from "@/util/time";
 
-interface TTCard extends MPCard {
+export interface TTCard extends MPCard {
   playing?: boolean;
   className?: string;
   data: CardData;
 }
 
-type TTStates = MPStates<TTCard>;
+export type TTStates = MPStates<TTCard>;
 
 export enum TTGameState {
   DEFAULT = "DEFAULT",
@@ -53,34 +53,12 @@ const DEFAULT_CARD_CLASSES = {
   [TTComparisonResult.MEMORY_MATCH]: "memory",
 };
 
-const FEEDBACK = {
-  [TTGameState.DEFAULT]: {
-    content: ["Pick a card..."],
-  },
-  [TTGameState.CARD_SELECTED]: {
-    content: ["Pick another card..."],
-  },
-  [TTGameState.COMPLETED_LUCKY_MATCH]: {
-    content: ["Lucky guess!", "Lucky you!", "This is your lucky day!"],
-  },
-  [TTGameState.COMPLETED_MEMORY_MATCH]: {
-    content: ["Well done!", "Good job!", "Nice!", "Excellent!"],
-  },
-  [TTGameState.COMPLETED_NO_MATCH]: {
-    content: ["No match, try again!"],
-  },
-  [TTGameState.COMPLETED_MISREMEMBERED]: {
-    content: ["Nope, that's no match..."],
-  },
-  [TTGameState.GAME_END]: {},
-};
-
 /**
  * Function that compares two cards and returns the result of the comparison.
  * In this case, it sends a request to the server to get the score. The result
  * of the comparison is determined based on the score returned by the server.
  */
-const compareCards = async (
+const DEFAULT_COMPARE_CARDS = async (
   card1: TTCard,
   card2: TTCard,
   { startOfTurn, participant, session }: CompareCardsProps<TTCard>
@@ -129,14 +107,15 @@ export interface UseTuneTwinsProps {
   cards: TTCard[];
 
   /** Animate the card based on the comparison result */
-  animate: boolean;
+  animate?: boolean;
 
-  /** Called when a card is selected */
+  /** Callback called when a card is selected */
   onSelectCard?: (card: TTCard) => void;
 
-  onTurnEnd: (states: TTStates) => void;
+  /** Callback called when a turn ends */
+  onTurnEnd?: (states: TTStates) => void;
 
-  /** Called when the game ends */
+  /** Callback called when the game ends */
   onGameEnd?: (states: TTStates) => void;
 
   /**
@@ -148,7 +127,20 @@ export interface UseTuneTwinsProps {
   /** Tutorial object */
   tutorial?: Tutorial;
 
+  /**
+   * ClassNames to apply to the cards depending on the comparison result
+   */
   cardClasses?: Record<TTComparisonResult, string>;
+
+  /**
+   * Feedback messages depending on the game state. For every game state
+   * you can pass a list of feedback messages. One will be picked at random
+   * from the list.
+   */
+  feedbackMessages?: Record<TTGameState, string[]>;
+
+  // Only here for testing purposes; shouldn't be changed.
+  _compareCards?: CompareCardsProps<TTCard>;
 }
 
 export function useTuneTwins({
@@ -159,7 +151,9 @@ export function useTuneTwins({
   endTurnAfterInterval = 10,
   animate = true,
   cardClasses = DEFAULT_CARD_CLASSES,
+  feedbackMessages,
   tutorial,
+  _compareCards = DEFAULT_COMPARE_CARDS,
 }: UseTuneTwinsProps) {
   // Game state that flags UI changes
   const [gameState, setTTGameState] = useState<TTGameState>(
@@ -167,12 +161,9 @@ export function useTuneTwins({
   );
 
   // Tutorial
-  let showStep = () => {};
-  let completeStep = () => {};
-  let getActiveSteps = () => {};
-  if (tutorial) {
-    let { showStep, completeStep, getActiveSteps } = useTutorial({ tutorial });
-  }
+  const { showStep, completeStep, getActiveSteps } = useTutorial({
+    tutorial,
+  });
 
   const beforeSelectCard: UseMPProps["beforeSelectCard"] = ({ card }) => {
     setTTGameState(TTGameState.CARD_SELECTED);
@@ -219,7 +210,7 @@ export function useTuneTwins({
     onTurnEndCallback(states);
 
     // Finish tutorial step
-    if (tutorial) getActiveSteps().map((step) => completeStep(step.id));
+    if (tutorial) getActiveSteps()?.map((step) => completeStep(step.id));
 
     // Return cards updater
     return (prev: TTCard[]) =>
@@ -239,7 +230,7 @@ export function useTuneTwins({
   const { cards, turnScore, totalScore, endTurn, selectCard } =
     useMatchingPairs<TTComparisonResult, TTCard>({
       cards: initialCards,
-      compareCards,
+      compareCards: _compareCards,
       successfulComparisons: [
         TTComparisonResult.LUCKY_MATCH,
         TTComparisonResult.MEMORY_MATCH,
@@ -260,16 +251,18 @@ export function useTuneTwins({
 
   // Feedback meessage
   let feedback;
-  const feedbackContentList = FEEDBACK[gameState]?.content;
-  if (feedbackContentList) {
-    const randomIdx = Math.floor(Math.random() * feedbackContentList.length);
-    feedback = feedbackContentList[randomIdx];
+  if (feedbackMessages) {
+    const feedbackContentList = feedbackMessages[gameState] ?? undefined;
+    if (feedbackContentList) {
+      const randomIdx = Math.floor(Math.random() * feedbackContentList.length);
+      feedback = feedbackContentList[randomIdx];
+    }
   }
 
   return {
     showStep,
     completeStep,
-    getActiveSteps,
+    activeSteps: getActiveSteps ? getActiveSteps() : [],
     feedback,
     gameState,
     cards,

@@ -28,24 +28,14 @@ interface UseTutorialProps extends Omit<Tutorial, "steps"> {
  * true, you can use `getActiveSteps` to get all active steps.
  */
 export const useTutorial = ({ tutorial, ...config }: UseTutorialProps) => {
-  if (!tutorial) {
-    return {
-      steps: undefined,
-      showStep: () => {},
-      completeStep: () => {},
-      getActiveSteps: () => false,
-      getActiveStep: () => false,
-    };
-  }
-
   // Determine configuration: default values, values in the tutorial object,
   // or finally overrides passed to the hook.
-  const { steps: _steps, ...rest } = tutorial;
+  const { steps: _steps, ...rest } = tutorial ?? { steps: [] };
   config = { ...DEFAULT_CONFIG, ...rest, ...config };
 
   const [steps, setSteps] = useState<Record<string, TutorialStep>>(() => {
     const initialSteps: Record<string, TutorialStep> = {};
-    tutorial.steps.forEach((step, index) => {
+    tutorial?.steps.forEach((step, index) => {
       initialSteps[step.id] = {
         ...step,
         order: config.inferOrder ? index : step.order,
@@ -55,6 +45,16 @@ export const useTutorial = ({ tutorial, ...config }: UseTutorialProps) => {
     });
     return initialSteps;
   });
+
+  if (tutorial === undefined) {
+    return {
+      steps: undefined,
+      showStep: () => {},
+      completeStep: () => {},
+      getActiveSteps: () => [],
+      getActiveStep: () => undefined,
+    };
+  }
 
   /**
    * Shows the step with the given id

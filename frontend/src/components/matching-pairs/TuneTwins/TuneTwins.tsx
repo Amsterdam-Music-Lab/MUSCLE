@@ -5,11 +5,13 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
+
 import type { TutorialStep } from "@/types/tutorial";
 import type { UseTuneTwinsProps } from "../useTuneTwins";
-
+import type { TimelineConfig } from "@/types/timeline";
+import type { LogoName } from "@/components/svg";
 import { useOrientation } from "@/hooks/OrientationProvider";
-import { useTuneTwins, TTComparisonResult } from "../useTuneTwins";
+import { useTuneTwins, TTComparisonResult, TTGameState } from "../useTuneTwins";
 import { Timeline, ScoreFeedback, TutorialMessage } from "@/components/game";
 import { SquareLayout } from "@/components/layout";
 import { Board } from "../Board";
@@ -25,32 +27,73 @@ const CARD_CLASSES = {
   [TTComparisonResult.MEMORY_MATCH]: styles.memory,
 };
 
-const DEFAULT_TIMELINE = {
-  symbols: [
-    "dot",
-    "dot",
-    "star-4",
-    "dot",
-    "dot",
-    "star-5",
-    "dot",
-    "dot",
-    "star-6",
-    "dot",
-    "dot",
-    "star-7",
+type TTFeedbackMessage =
+  | "default"
+  | "cardSelected"
+  | "completedLuckyMatch"
+  | "completedMemoryMatch"
+  | "completedNoMatch"
+  | "completedMisremembered"
+  | "gameEnd";
+
+const DEFAULT_FEEDBACK: Record<TTFeedbackMessage, string[]> = {
+  default: ["Pick a card..."],
+  cardSelected: ["Pick another card..."],
+  completedLuckyMatch: [
+    "Lucky guess!",
+    "Lucky you!",
+    "This is your lucky day!",
   ],
+  completedMemoryMatch: ["Well done!", "Good job!", "Nice!", "Excellent!"],
+  completedNoMatch: ["No match, try again!"],
+  completedMisremembered: ["Nope, that's no match..."],
 };
 
-interface TuneTwinsProps extends UseTuneTwinsProps {}
+interface TuneTwinsProps extends UseTuneTwinsProps {
+  /** Feedback messages shown to the user after turning two cards */
+  feedbackMessages?: Record<TTFeedbackMessage, string[]>;
+
+  /** Name of the logo */
+  logo?: LogoName;
+
+  /** Whether to show the logo */
+  showLogo?: boolean;
+
+  /** Configuration of the timeline */
+  timeline?: TimelineConfig;
+
+  /** Step on the timeline */
+  timelineStep?: number;
+
+  /** Whether to show the timeline, even if one is specified. */
+  showTimeline?: boolean;
+}
 
 /**
  * The main component for the matching pairs game. It uses the useTuneTwins
  * hook to manage the game state and logic, and includes feedback and tutorials.
  */
-export default function TuneTwins(props: TuneTwinsProps) {
+export default function TuneTwins({
+  feedbackMessages: msg = DEFAULT_FEEDBACK,
+  timeline,
+  timelineStep,
+  showTimeline = true,
+  showLogo = true,
+  logo = "tunetwins",
+  ...props
+}: TuneTwinsProps) {
+  const feedbackMessages = {
+    [TTGameState.DEFAULT]: msg.default,
+    [TTGameState.CARD_SELECTED]: msg.cardSelected,
+    [TTGameState.COMPLETED_LUCKY_MATCH]: msg.completedLuckyMatch,
+    [TTGameState.COMPLETED_MEMORY_MATCH]: msg.completedMemoryMatch,
+    [TTGameState.COMPLETED_NO_MATCH]: msg.completedNoMatch,
+    [TTGameState.COMPLETED_MISREMEMBERED]: msg.completedMisremembered,
+    [TTGameState.GAME_END]: msg.gameEnd,
+  };
+
   const {
-    getActiveSteps,
+    activeSteps,
     feedback,
     gameState,
     cards,
@@ -60,6 +103,7 @@ export default function TuneTwins(props: TuneTwinsProps) {
     selectCard,
   } = useTuneTwins({
     ...props,
+    feedbackMessages,
     cardClasses: CARD_CLASSES,
   });
 
@@ -75,7 +119,7 @@ export default function TuneTwins(props: TuneTwinsProps) {
           turnScore={turnScore}
           totalScore={totalScore}
           feedback={feedback}
-          activeSteps={getActiveSteps()}
+          activeSteps={activeSteps}
         />
       </SquareLayout.Header>
       <SquareLayout.Square className={styles.main}>
@@ -120,12 +164,16 @@ export default function TuneTwins(props: TuneTwinsProps) {
           })}
         />
       </SquareLayout.Square>
-      <SquareLayout.Aside className={styles.aside}>
-        <Logo name="tunetwins" fill="#ccc" className={styles.logo} />
-      </SquareLayout.Aside>
-      <SquareLayout.Footer className={styles.footer}>
-        <Timeline timeline={DEFAULT_TIMELINE} step={3} />
-      </SquareLayout.Footer>
+      {showLogo && (
+        <SquareLayout.Aside className={styles.aside}>
+          <Logo name={logo} fill="#ccc" className={styles.logo} />
+        </SquareLayout.Aside>
+      )}
+      {timeline && showTimeline && (
+        <SquareLayout.Footer className={styles.footer}>
+          <Timeline timeline={timeline} step={timelineStep} />
+        </SquareLayout.Footer>
+      )}
     </SquareLayout>
   );
 }

@@ -13,7 +13,7 @@ import { URLS } from "@/API";
 import TuneTwins from "./TuneTwins";
 
 import audio from "@/stories/assets/audio.wav";
-import catImage from "@/stories/assets/images/cat-01.webp";
+import { TTCard, TTComparisonResult } from "../useTuneTwins";
 
 const decorator = (Story) => {
   const setSession = useBoundStore((state) => state.setSession);
@@ -28,33 +28,21 @@ const decorator = (Story) => {
   );
 };
 
-export default {
+const meta = {
   title: "Matching Pairs/TuneTwins",
   component: TuneTwins,
-  parameters: {
-    layout: "fullscreen",
-  },
+  decorators: [decorator],
   tags: ["autodocs"],
 };
 
-const audioCards = Array(16)
+export default meta;
+
+const cards = Array(16)
   .fill(1)
   .map((_, index) => ({
     id: index,
     data: {
       url: audio,
-      group: index % 8,
-    },
-  }))
-  .sort(() => Math.random() - 0.5);
-
-const visualCards = Array(16)
-  .fill(1)
-  .map((_, index) => ({
-    id: index,
-    data: {
-      src: `http://localhost:6006${catImage}`,
-      alt: "Image of a cat",
       group: index % 8,
     },
   }))
@@ -70,48 +58,109 @@ const getMockAPIParams = (response) => ({
   },
 });
 
-export const AllMemoryMatch = {
+interface MockComparisonProps {
+  successResult: TTComparisonResult;
+  failureResult: TTComparisonResult;
+  successScore: number;
+  failureScore: numberl;
+}
+
+function mockComparison({
+  successResult = TTComparisonResult.MEMORY_MATCH,
+  failureResult = TTComparisonResult.NO_MATCH,
+  successScore = 10,
+  failureScore = 0,
+}: MockComparisonProps = {}) {
+  return async (card1: TTCard, card2: TTCard) => {
+    const match = card1.data.group === card2.data.group;
+    const result = match ? successResult : failureResult;
+    const score = match ? successScore : failureScore;
+    return [result, score];
+  };
+}
+
+export const Default = {
   args: {
-    cards: audioCards,
-    type: "audio",
+    cards,
+    _compareCards: mockComparison(),
   },
-  decorators: [decorator],
+};
+
+export const AllMemoryMatch = {
+  args: { cards },
   parameters: getMockAPIParams({ score: 20 }),
 };
 
-export const AllLuckyMatch = {
+export const MatchLucky = {
   args: {
-    cards: audioCards,
-    type: "audio",
+    cards,
+    _compareCards: mockComparison({
+      successResult: TTComparisonResult.LUCKY_MATCH,
+    }),
   },
-  decorators: [decorator],
-  parameters: getMockAPIParams({ score: 10 }),
 };
 
-export const AllNoMatch = {
+export const MatchMemory = {
   args: {
-    cards: audioCards,
-    type: "audio",
+    cards,
+    _compareCards: mockComparison({
+      successResult: TTComparisonResult.LUCKY_MATCH,
+    }),
   },
-  decorators: [decorator],
-  parameters: getMockAPIParams({ score: 0 }),
 };
 
-export const AllMisremembered = {
+export const NoMatchMisremembered = {
   args: {
-    cards: audioCards,
-    type: "audio",
+    cards,
+    _compareCards: mockComparison({
+      failureResult: TTComparisonResult.MISREMEMBERED,
+    }),
   },
-  decorators: [decorator],
-  parameters: getMockAPIParams({ score: -10 }),
 };
 
-export const AllLuckyNotAnimated = {
+export const NotAnimated = {
   args: {
-    cards: audioCards,
-    type: "audio",
+    ...Default.args,
     animate: false,
   },
-  decorators: [decorator],
-  parameters: getMockAPIParams({ score: -10 }),
+};
+
+const tutorial = {
+  steps: [
+    {
+      id: "no_match",
+      content: "The selected cards did not match...",
+    },
+    {
+      id: "memory_match",
+      content:
+        "The selected cards matched! Very well done, this is absolutely fantastic!",
+    },
+  ],
+  disableCompleted: false,
+};
+
+export const Tutorial = {
+  args: {
+    ...Default.args,
+    tutorial,
+  },
+};
+
+export const Timeline = {
+  args: {
+    ...Default.args,
+    timeline: {
+      symbols: ["star-4", "dot", "dot", "star-5", "dot", "dot"],
+    },
+    timelineStep: 4,
+  },
+};
+
+export const NoFooter = {
+  args: {
+    ...Default.args,
+    showLogo: false,
+    showTimeline: false,
+  },
 };
