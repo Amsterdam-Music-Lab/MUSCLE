@@ -213,6 +213,7 @@ const Block = () => {
             totalScore={undefined} // TODO
             timeline={undefined}
             timelineStep={undefined}
+            sessions_played={attrs.sessions_played}
             // plugins={matchingPairsConfig.final.plugins as AllPluginSpec[]}
             // final_text={attrs.final_text}
             // points={attrs.points}

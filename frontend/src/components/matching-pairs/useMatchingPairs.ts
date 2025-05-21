@@ -10,7 +10,6 @@ import { type Session } from "@sentry/react";
 
 import { useState } from "react";
 import useBoundStore from "@/util/stores";
-import { applyCardUpdates } from "./utils";
 
 export interface MPCard {
   id: number;
@@ -304,4 +303,18 @@ export function useMatchingPairs<ComparisonResult, Card extends MPCard>({
   };
 
   return { ...allStates, setCards, endTurn, selectCard };
+}
+
+
+/**
+ * Utility that applies several updaters to a list of cards.
+ */
+export function applyCardUpdates<Card>(
+  ...updaters: Array<((cards: Card[]) => Card[]) | undefined>
+): (prev: Card[]) => Card[] {
+  return (prev: Card[]) => {
+    return updaters
+      .filter((fn): fn is (cards: Card[]) => Card[] => typeof fn === "function")
+      .reduce((acc, fn) => fn(acc), prev);
+  };
 }

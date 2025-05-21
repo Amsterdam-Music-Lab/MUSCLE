@@ -5,7 +5,7 @@ import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
 import * as API from "@/API";
 
-import MatchingPairs from "./MatchingPairs";
+import TuneTwins from "./TuneTwins";
 
 let mock: MockAdapter;
 
@@ -28,7 +28,7 @@ vi.mock("../../util/stores", () => ({
   useBoundStore: vi.fn(),
 }));
 
-describe.skip("MatchingPairs Component", () => {
+describe.skip("TuneTwins Component", () => {
   beforeEach(() => {
     vi.resetAllMocks();
     mock = new MockAdapter(axios);
@@ -95,7 +95,7 @@ describe.skip("MatchingPairs Component", () => {
 
   test("renders correctly", () => {
     const { getByText } = render(
-      <MatchingPairs sections={mockSections} setPlayerIndex={vi.fn()} />
+      <TuneTwins sections={mockSections} setPlayerIndex={vi.fn()} />
     );
     // Not a very good test: if the text changes, this fails.
     expect(getByText("Pick a card...")).not.toBeNull();
@@ -103,7 +103,7 @@ describe.skip("MatchingPairs Component", () => {
 
   test("flips a card when clicked", async () => {
     render(
-      <MatchingPairs
+      <TuneTwins
         {...baseProps}
         sections={mockSections}
         setPlayerIndex={vi.fn()}
@@ -121,7 +121,7 @@ describe.skip("MatchingPairs Component", () => {
   test("updates score after a match", async () => {
     mock.onPost().replyOnce(200, { score: 10 });
     const { getByText } = render(
-      <MatchingPairs
+      <TuneTwins
         {...baseProps}
         sections={mockSections}
         setPlayerIndex={vi.fn()}
@@ -138,7 +138,7 @@ describe.skip("MatchingPairs Component", () => {
   test("has a blocking overlay in-between turns", async () => {
     mock.onPost().replyOnce(200, { score: 0 });
     render(
-      <MatchingPairs
+      <TuneTwins
         {...baseProps}
         sections={mockSections}
         setPlayerIndex={vi.fn()}
@@ -161,7 +161,7 @@ describe.skip("MatchingPairs Component", () => {
     mock.onPost().reply(200, { score: 10 });
     const spy = vi.spyOn(API, "scoreIntermediateResult");
     render(
-      <MatchingPairs
+      <TuneTwins
         {...baseProps}
         sections={mockSections}
         tutorial={undefined}
@@ -192,7 +192,7 @@ describe.skip("MatchingPairs Component", () => {
     mock.onPost().reply(200, { score: 10 });
     const submitResult = vi.fn();
     render(
-      <MatchingPairs
+      <TuneTwins
         {...baseProps}
         sections={mockSections}
         setPlayerIndex={vi.fn()}
@@ -235,20 +235,20 @@ describe.skip("MatchingPairs Component", () => {
 
   // test('displays three columns when sections length is less than or equal to 6', () => {
   //     const sections = new Array(6).fill({}).map((_, index) => ({ id: index }));
-  //     const { container } = render(<MatchingPairs {...baseProps} sections={sections} />);
+  //     const { container } = render(<TuneTwins {...baseProps} sections={sections} />);
   //     expect(container.querySelector('.playing-board--three-columns')).not.toBeNull();
   // });
 
   // test('displays four columns when sections length is greater than 6', () => {
   //     const sections = new Array(7).fill({}).map((_, index) => ({ id: index }));
-  //     const { container } = render(<MatchingPairs {...baseProps} sections={sections} />);
+  //     const { container } = render(<TuneTwins {...baseProps} sections={sections} />);
   //     expect(container.querySelector('.playing-board--three-columns')).toBeNull();
   // });
 
   test("displays score feedback when scoreFeedbackDisplay is not HIDDEN", () => {
     const sections = new Array(6).fill({}).map((_, index) => ({ id: index }));
     const { container } = render(
-      <MatchingPairs
+      <TuneTwins
         {...baseProps}
         sections={sections}
         scoreFeedbackDisplay={SCORE_FEEDBACK_DISPLAY.LARGE_TOP}
@@ -262,7 +262,7 @@ describe.skip("MatchingPairs Component", () => {
   test("does not display score feedback when scoreFeedbackDisplay is HIDDEN", () => {
     const sections = new Array(6).fill({}).map((_, index) => ({ id: index }));
     const { container } = render(
-      <MatchingPairs
+      <TuneTwins
         {...baseProps}
         sections={sections}
         scoreFeedbackDisplay={SCORE_FEEDBACK_DISPLAY.HIDDEN}
@@ -276,7 +276,7 @@ describe.skip("MatchingPairs Component", () => {
   test("displays score feedback on the top when scoreFeedbackDisplay is LARGE_TOP", () => {
     const sections = new Array(6).fill({}).map((_, index) => ({ id: index }));
     const { container } = render(
-      <MatchingPairs
+      <TuneTwins
         {...baseProps}
         sections={sections}
         scoreFeedbackDisplay={SCORE_FEEDBACK_DISPLAY.LARGE_TOP}
@@ -292,7 +292,7 @@ describe.skip("MatchingPairs Component", () => {
   test("displays score feedback on the bottom right when scoreFeedbackDisplay is SMALL_BOTTOM_RIGHT", () => {
     const sections = new Array(6).fill({}).map((_, index) => ({ id: index }));
     const { container } = render(
-      <MatchingPairs
+      <TuneTwins
         {...baseProps}
         sections={sections}
         scoreFeedbackDisplay={SCORE_FEEDBACK_DISPLAY.SMALL_BOTTOM_RIGHT}

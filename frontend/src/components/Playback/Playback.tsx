@@ -8,8 +8,10 @@ import AutoPlay from "./Autoplay";
 import PlayButton from "../PlayButton/PlayButton";
 import MultiPlayer from "./MultiPlayer";
 import ImagePlayer from "./ImagePlayer";
-import { MatchingPairsInterface as MatchingPairs } from "@/components/matching-pairs";
+import { TuneTwins } from "@/components/matching-pairs";
+import convertTutorial from "@/util/convertTutorial";
 import Preload from "../Preload/Preload";
+
 import {
   AUTOPLAY,
   BUTTON,
@@ -264,13 +266,21 @@ const Playback = ({
           />
         );
       case MATCHINGPAIRS:
+        const cards = playbackArgs.sections.map((section, index) => ({
+          id: index,
+          data: { ...section },
+        }));
         return (
-          <MatchingPairs
-            {...attrs}
-            showAnimation={playbackArgs.show_animation}
-            scoreFeedbackDisplay={playbackArgs.score_feedback_display}
-            view={playMethod === "NOAUDIO" ? "visual" : ""}
-            tutorial={playbackArgs.tutorial}
+          <TuneTwins
+            cards={cards}
+            type={playMethod === "NOAUDIO" ? "visual" : "audio"}
+            animate={playbackArgs.show_animation}
+            onGameEnd={() => attrs.submitResult({})}
+            onTurnEnd={() => attrs.finishedPlaying()}
+            onSelectCard={(card) => {
+              attrs.playSection(card.id);
+            }}
+            tutorial={convertTutorial(playbackArgs.tutorial)}
           />
         );
       default:

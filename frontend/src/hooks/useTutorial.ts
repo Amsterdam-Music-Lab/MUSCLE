@@ -17,7 +17,7 @@ const DEFAULT_CONFIG = {
 
 interface UseTutorialProps extends Omit<Tutorial, "steps"> {
   /** The tutorial object */
-  tutorial: Tutorial;
+  tutorial?: Tutorial;
 }
 
 /**
@@ -28,6 +28,16 @@ interface UseTutorialProps extends Omit<Tutorial, "steps"> {
  * true, you can use `getActiveSteps` to get all active steps.
  */
 export const useTutorial = ({ tutorial, ...config }: UseTutorialProps) => {
+  if (!tutorial) {
+    return {
+      steps: undefined,
+      showStep: () => {},
+      completeStep: () => {},
+      getActiveSteps: () => false,
+      getActiveStep: () => false,
+    };
+  }
+
   // Determine configuration: default values, values in the tutorial object,
   // or finally overrides passed to the hook.
   const { steps: _steps, ...rest } = tutorial;
