@@ -11,7 +11,7 @@ import type { UseTuneTwinsProps } from "../useTuneTwins";
 import type { TimelineConfig } from "@/types/timeline";
 import type { LogoName } from "@/components/svg";
 import { useOrientation } from "@/hooks/OrientationProvider";
-import { useTuneTwins, TTComparisonResult, TTGameState } from "../useTuneTwins";
+import { useTuneTwins, TTComparisonResult, TTGameState } from "./useTuneTwins";
 import { Timeline, ScoreFeedback, TutorialMessage } from "@/components/game";
 import { SquareLayout } from "@/components/layout";
 import { Board } from "../Board";
@@ -49,7 +49,7 @@ const DEFAULT_FEEDBACK: Record<TTFeedbackMessage, string[]> = {
   completedMisremembered: ["Nope, that's no match..."],
 };
 
-interface TuneTwinsProps extends UseTuneTwinsProps {
+export interface TuneTwinsProps extends UseTuneTwinsProps {
   /** Feedback messages shown to the user after turning two cards */
   feedbackMessages?: Record<TTFeedbackMessage, string[]>;
 
@@ -122,6 +122,7 @@ export default function TuneTwins({
           activeSteps={activeSteps}
         />
       </SquareLayout.Header>
+
       <SquareLayout.Square className={styles.main}>
         <Board
           columns={4}
@@ -164,11 +165,13 @@ export default function TuneTwins({
           })}
         />
       </SquareLayout.Square>
+
       {showLogo && (
         <SquareLayout.Aside className={styles.aside}>
           <Logo name={logo} fill="#ccc" className={styles.logo} />
         </SquareLayout.Aside>
       )}
+
       {timeline && showTimeline && (
         <SquareLayout.Footer className={styles.footer}>
           <Timeline timeline={timeline} step={timelineStep} />

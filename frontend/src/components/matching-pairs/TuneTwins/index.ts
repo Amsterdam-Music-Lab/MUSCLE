@@ -6,4 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+export type { TuneTwinsProps } from "./TuneTwins";
 export { default as TuneTwins } from "./TuneTwins";

@@ -12,14 +12,14 @@ import { useState, useEffect } from "react";
 import classNames from "classnames";
 import { scoreIntermediateResult } from "@/API";
 import { useTutorial } from "@/hooks/useTutorial";
+import { getAudioLatency } from "@/util/time";
 import {
   useMatchingPairs,
   CompareCardsProps,
   MPCard,
   MPStates,
   UseMatchingPairsProps,
-} from "./useMatchingPairs";
-import { getAudioLatency } from "@/util/time";
+} from "../MatchingPairs/useMatchingPairs";
 
 export interface TTCard extends MPCard {
   playing?: boolean;

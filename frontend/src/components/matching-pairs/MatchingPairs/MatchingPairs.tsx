@@ -11,7 +11,7 @@ import {
   useMatchingPairs,
   MatchingPairsCard,
   UseMatchingPairsProps,
-} from "../useMatchingPairs";
+} from "./useMatchingPairs";
 import { Board } from "../Board";
 
 interface MPMinimalCard extends MatchingPairsCard {

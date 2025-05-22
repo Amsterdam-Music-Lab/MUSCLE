@@ -9,7 +9,7 @@
 import "@testing-library/jest-dom";
 import { describe, test, expect, vi, afterEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
-import { selectCard, playTurn, playCompleteTurn } from "./utils.ts";
+import { selectCard, playTurn, playCompleteTurn } from "../MatchingPairs/utils";
 import {
   useTuneTwins,
   TTGameState,

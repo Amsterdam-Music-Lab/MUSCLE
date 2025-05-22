@@ -7,3 +7,4 @@
  */
 
 export { default as MatchingPairs } from "./MatchingPairs";
+export { useMatchingPairs } from "./useMatchingPairs";
