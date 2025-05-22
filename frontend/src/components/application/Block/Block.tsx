@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
 import { useState, useEffect, useCallback, useRef } from "react";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { useParams } from "react-router-dom";
@@ -5,7 +13,6 @@ import classNames from "classnames";
 
 import useBoundStore from "@/util/stores";
 import { getNextRound, useBlock } from "@/API";
-import { Page } from "@/components/application";
 import { Explainer, Final, Score } from "@/components/views";
 import Loading from "@/components/Loading/Loading";
 import Playlist from "@/components/Playlist/Playlist";
@@ -18,6 +25,9 @@ import useResultHandler from "@/hooks/useResultHandler";
 import Session from "@/types/Session";
 import { Action } from "@/types/Action";
 import { Round } from "@/types/Round";
+
+import { Page } from "../Page";
+import styles from "./Block.module.scss";
 
 /**
  * Block handles the main (experiment) block flow:
@@ -245,30 +255,32 @@ const Block = () => {
   const view = state?.view;
 
   // Also show gradient circles for feedback forms
-  const showGradientCircles =
-    view !== "TRIAL_VIEW" || state?.feedback_form !== undefined;
+  // const showGradientCircles =
+  //   view !== "TRIAL_VIEW" || state?.feedback_form !== undefined;
 
   return (
     <>
       <FontLoader fontUrl={theme?.heading_font_url} fontType="heading" />
       <FontLoader fontUrl={theme?.body_font_url} fontType="body" />
+
       <TransitionGroup
         className={classNames(
-          "aha__block",
+          styles.block,
           !loadingBlock && block ? "block-" + block.slug : ""
         )}
         data-testid="block-wrapper"
       >
         <CSSTransition
-          timeout={{ enter: 300, exit: 0 }}
-          classNames={"transition"}
+          key={state?.view}
+          // timeout={{ enter: 0, exit: 0, appear: 500 }}
+          classNames="transition"
           unmountOnExit
         >
           {(!loadingBlock && block) || view === "ERROR" ? (
             <Page
               title={state.title}
               className={className}
-              showGradientCircles={showGradientCircles}
+              data-view={state.view}
             >
               {render()}
 
@@ -284,7 +296,7 @@ const Block = () => {
               )}
             </Page>
           ) : (
-            <div className="loader-container">
+            <div className={styles.loaderContainer}>
               <Loading loadingText={loadingText} />
             </div>
           )}

@@ -1,11 +1,19 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
 import { Route, MemoryRouter, Routes } from "react-router-dom";
 import { screen, waitFor } from "@testing-library/react";
 import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import * as API from "@/API";
 import Block from "./Block";
-import * as API from "../../API";
 
-vi.mock("../../util/stores");
+vi.mock("@/util/stores");
 
 let mockUseParams = vi.fn();
 
