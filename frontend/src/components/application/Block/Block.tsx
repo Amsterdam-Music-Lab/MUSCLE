@@ -24,10 +24,10 @@ import {
   Final,
   Score,
   Loading,
+  Playlists,
 } from "@/components/views";
 import { FloatingActionButton } from "@/components/ui";
 import { UserFeedbackForm } from "@/components/user";
-import Playlist from "@/components/Playlist/Playlist";
 import Trial from "@/components/Trial/Trial";
 
 import { Page } from "../Page";
@@ -238,7 +238,17 @@ const Block = () => {
       // Generic / helpers
       // -------------------------
       case "PLAYLIST":
-        return <Playlist key={key} {...attrs} />;
+        return (
+          <Playlists
+            key={key}
+            playlist={attrs.playlist}
+            playlists={attrs.block.playlists}
+            onSelect={onNext}
+            title="Playlists..."
+            instruction={attrs.instruction}
+          />
+        );
+
       case "LOADING":
         return <Loading key={key} label={attrs.loadingText} />;
       case "INFO":

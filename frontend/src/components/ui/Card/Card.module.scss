@@ -6,6 +6,7 @@
   @extend .bg-inset-sm, .sharp-border;
   @extend .rounded-md;
 
+  overflow: hidden;
   background-color: var(--background);
 
   &.dividers .section + .section {
@@ -18,12 +19,43 @@
     padding: var(--spacer) calc(1.25 * var(--spacer));
   }
 
+  * + .sectionContent {
+    margin-top: calc(0.5 * var(--spacer));
+  }
+
   &.flush {
     padding: 0;
   }
 
-  * + .sectionContent {
-    margin-top: calc(0.5 * var(--spacer));
+  // No dividers: reduce vertical spacing between sections by half
+  .card:not(.dividers) & {
+    &:not(:first-of-type) {
+      padding-top: calc(0.5 * var(--spacer));
+    }
+    &:not(:last-of-type) {
+      padding-bottom: calc(0.5 * var(--spacer));
+    }
+  }
+
+  // No dividers and narrow spacing
+  .card.narrow:not(.dividers) & {
+    &:not(:first-of-type) {
+      padding-top: calc(0.25 * var(--spacer));
+    }
+    &:not(:last-of-type) {
+      padding-bottom: calc(0.25 * var(--spacer));
+    }
+  }
+
+  // Narrow spacing (with dividers)
+  .narrow &,
+  &.narrow {
+    padding-top: calc(0.5 * var(--spacer));
+    padding-bottom: calc(0.5 * var(--spacer));
+
+    * + .sectionContent {
+      margin-top: 0;
+    }
   }
 }
 
@@ -37,4 +69,17 @@ h2.sectionTitle {
 
 h3.sectionTitle {
   font-size: 1rem;
+}
+
+.cardOption {
+  transition: background-color 200ms ease;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+    cursor: pointer;
+  }
+
+  &:active {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
 }

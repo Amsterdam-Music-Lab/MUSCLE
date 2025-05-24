@@ -29,6 +29,9 @@
 
 .scoreBoard {
   position: relative;
+
+  // override card default
+  overflow: visible;
 }
 
 .trophy {

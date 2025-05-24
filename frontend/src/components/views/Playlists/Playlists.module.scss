@@ -1,0 +1,41 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+$icon-playlist: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzciIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzNyAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB4PSIwLjAyNTg3ODkiIHk9IjMuOTA1MjciIHdpZHRoPSIyMi4wNTM5IiBoZWlnaHQ9IjIiIGZpbGw9IndoaXRlIi8+PHJlY3QgeD0iMC4wMjU4Nzg5IiB5PSIxMC4wODU5IiB3aWR0aD0iMjIuMDUzOSIgaGVpZ2h0PSIyIiBmaWxsPSJ3aGl0ZSIvPjxyZWN0IHg9IjAuMDI1ODc4OSIgeT0iMTYuMjY1NiIgd2lkdGg9IjE2LjMxMTQiIGhlaWdodD0iMiIgZmlsbD0id2hpdGUiLz48cmVjdCB4PSIwLjAyNTg3ODkiIHk9IjIyLjQ0NjMiIHdpZHRoPSIxMS4xOTA3IiBoZWlnaHQ9IjIiIGZpbGw9IndoaXRlIi8+PGVsbGlwc2UgY3g9IjIxLjU5NiIgY3k9IjI0Ljk0MDkiIHJ4PSI3LjE2NDY1IiByeT0iNS4xMTUyNSIgdHJhbnNmb3JtPSJyb3RhdGUoLTE3Ljc5MzYgMjEuNTk2IDI0Ljk0MDkpIiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik0yNi40NjI0IDAuMDc0MjE4OEMyNi40NjI0IDAuMDc0MjE4OCAyOC4yNDM0IDIuNjExNzMgMzAuOTc5MiAzLjY4NTA4QzQwLjE5NzUgNy4zMDE4NSAzNC42NCAxNC4xMzg0IDM0LjY0IDE0LjEzODRDMzUuNDc4MSAxMC41NjU4IDMxLjk0OTUgOS43Mjc3NCAyOC41OTQyIDkuNzI3NzRWMjMuOTUzN0gyNi40NjI0VjAuMDc0MjE4OFoiIGZpbGw9IndoaXRlIi8+PC9zdmc+);
+
+.playlistItem {
+  display: flex;
+  gap: 0.75em;
+}
+
+.label,
+.icon {
+  display: inline-block;
+  height: 2em;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.icon {
+  width: 2em;
+  border-radius: 100em;
+  position: relative;
+
+  i {
+    margin: auto;
+    display: inline-block;
+    height: 60%;
+    width: 60%;
+    border-radius: 35px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: $icon-playlist;
+    background-size: cover;
+  }
+}
