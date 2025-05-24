@@ -15,7 +15,7 @@ import { URLS as API_URLS } from "@/API";
 import useBoundStore from "@/util/stores";
 import useDisableRightClickOnTouchDevices from "@/hooks/useDisableRightClickOnTouchDevices";
 import useDisableIOSPinchZoomOnTouchDevices from "@/hooks/useDisableIOSPinchZoomOnTouchDevices";
-import { Experiment } from "@/components/experiments";
+import { Experiment } from "@/components/experiment";
 import StoreProfile from "@/components/StoreProfile/StoreProfile";
 import {
   Redirect,
