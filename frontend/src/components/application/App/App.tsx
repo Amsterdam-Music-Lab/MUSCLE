@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
 import { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import axios from "axios";
@@ -9,17 +17,22 @@ import Experiment from "@/components/Experiment/Experiment";
 import StoreProfile from "@/components/StoreProfile/StoreProfile";
 import useDisableRightClickOnTouchDevices from "@/hooks/useDisableRightClickOnTouchDevices";
 import useDisableIOSPinchZoomOnTouchDevices from "@/hooks/useDisableIOSPinchZoomOnTouchDevices";
-import { Redirect, InternalRedirect, Reload, ConditionalRender } from "@/components/utils";
-
+import {
+  Redirect,
+  InternalRedirect,
+  Reload,
+  ConditionalRender,
+} from "@/components/utils";
 import { ThemeProvider } from "@/theme/ThemeProvider";
-import { Loading, Landing, Profile } from "@/components/views";
-import { Block, Background, Helmet } from "@/components/application";
+import { Error, Loading, Landing, Profile } from "@/components/views";
+import { Block, Background, Helmet } from "../";
+import styles from "./App.module.scss";
 
 // TODO ideally load or populate this from the backend
 import frontendConfig from "@/config/frontend";
 
 // App is the root component of our application
-const App = () => {
+export default function App() {
   const error = useBoundStore((state) => state.error);
   const setError = useBoundStore((state) => state.setError);
   const participant = useBoundStore((state) => state.participant);
@@ -56,17 +69,14 @@ const App = () => {
   }, [setError, queryParams, setParticipant, setParticipantLoading]);
 
   if (error) {
-    return <p className="aha__error">Error: {error}</p>;
+    return <Error title="An error occured" message={error} />;
   }
 
   return (
     <ThemeProvider>
       <Helmet />
-      <Router className="aha__app">
-        <ConditionalRender
-          condition={!!participant}
-          fallback={<Loading />}
-        >
+      <Router className={styles.app}>
+        <ConditionalRender condition={!!participant} fallback={<Loading />}>
           <Routes>
             {/* Request reload for given participant */}
             <Route path={URLS.reloadParticipant} element={<Reload />} />
@@ -115,6 +125,4 @@ const App = () => {
       <Background />
     </ThemeProvider>
   );
-};
-
-export default App;
+}

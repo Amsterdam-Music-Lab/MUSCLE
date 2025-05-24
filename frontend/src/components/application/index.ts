@@ -6,6 +6,7 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+export * from "./App";
 export * from "./Block";
 export * from "./Page";
 export * from "./AppBar";

@@ -6,11 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export * from "./Error";
-export * from "./Final";
-export * from "./Explainer";
-export * from "./Landing";
-export * from "./Consent";
-export * from "./Profile";
-export * from "./Score";
-export * from "./Loading";
+export type { ErrorProps } from "./Error";
+export { default as Error } from "./Error";
