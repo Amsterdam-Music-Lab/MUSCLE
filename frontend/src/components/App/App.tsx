@@ -6,7 +6,6 @@ import { API_BASE_URL, EXPERIMENT_SLUG, URLS } from "@/config";
 import { URLS as API_URLS } from "@/API";
 import useBoundStore from "@/util/stores";
 import Experiment from "@/components/Experiment/Experiment";
-import LoaderContainer from "@/components/LoaderContainer/LoaderContainer";
 import ConditionalRender from "@/components/ConditionalRender/ConditionalRender";
 import Reload from "@/components/Reload/Reload";
 import StoreProfile from "@/components/StoreProfile/StoreProfile";
@@ -17,7 +16,7 @@ import Helmet from "@/components/Helmet/Helmet";
 import Redirect from "@/components/Redirect/Redirect";
 
 import { ThemeProvider } from "@/theme/ThemeProvider";
-import { Landing, Profile } from "@/components/views";
+import { Loading, Landing, Profile } from "@/components/views";
 import { Block, Background } from "@/components/application";
 
 // TODO ideally load or populate this from the backend
@@ -70,7 +69,7 @@ const App = () => {
       <Router className="aha__app">
         <ConditionalRender
           condition={!!participant}
-          fallback={<LoaderContainer />}
+          fallback={<Loading />}
         >
           <Routes>
             {/* Request reload for given participant */}

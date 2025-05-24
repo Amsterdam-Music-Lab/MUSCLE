@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import Circle from "../Circle/Circle";
+import { Circle } from "@/components/ui";
 import CountDown from "../CountDown/CountDown";
 import Histogram from "../Histogram/Histogram";
 

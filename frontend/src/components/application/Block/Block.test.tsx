@@ -31,7 +31,7 @@ const blockObj = {
   name: "Test",
   playlists: [{ id: 42, name: "TestPlaylist" }],
   session_id: 42,
-  loadingText: "Patience!",
+  label: "Patience!",
 };
 
 const nextRoundObj = {
@@ -50,12 +50,12 @@ const mockParticipantStore = {
   country: "nl",
 };
 
-vi.mock("../../API", () => ({
+vi.mock("@/API", () => ({
   useBlock: () => [Promise.resolve(blockObj), false],
   getNextRound: () => Promise.resolve(nextRoundObj),
 }));
 
-vi.mock("../../util/stores", () => ({
+vi.mock("@/util/stores", () => ({
   __esModule: true,
   default: (fn: any) => {
     const state = {

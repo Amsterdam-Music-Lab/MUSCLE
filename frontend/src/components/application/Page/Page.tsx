@@ -21,6 +21,8 @@ export interface PageProps extends HTMLAttributes<HTMLDivElement> {
    * theme are used, and otherwise defaults to true.
    */
   showAppBar?: boolean;
+
+  showBackgroundFill: boolean;
 }
 
 /**
@@ -33,6 +35,7 @@ export default function Page({
   showAppBar,
   children,
   className,
+  showBackgroundFill,
   ...divProps
 }: PageProps) {
   const { theme: frontendTheme } = useTheme();
@@ -42,12 +45,16 @@ export default function Page({
     showAppBar !== undefined ? showAppBar : frontendTheme.showAppBar ?? true;
 
   return (
-    <>
-      {/* Main page content */}
-      <div className={classNames(styles.page, className)} {...divProps}>
-        {showAppBar && <AppBar title={title ?? ""} />}
-        {children}
-      </div>
-    </>
+    <div
+      className={classNames(
+        styles.page,
+        showBackgroundFill && styles.bgFill,
+        className
+      )}
+      {...divProps}
+    >
+      {showAppBar && <AppBar title={title ?? ""} />}
+      {children}
+    </div>
   );
 }

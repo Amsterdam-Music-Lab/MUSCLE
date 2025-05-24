@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import classNames from "classnames";
-import Circle from "@/components/Circle/Circle";
-import { Button } from "@/components/ui";
+import { Button, Circle } from "@/components/ui";
 import { Score as ScoreAction } from "@/types/Action";
 import "./Score.scss"
 

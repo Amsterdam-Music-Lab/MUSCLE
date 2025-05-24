@@ -6,7 +6,7 @@ import { URLS } from "@/config";
 import useBoundStore from "../../util/stores";
 import { shareParticipant } from "../../API";
 import { Page } from "@/components/application";
-import Loading from "../Loading/Loading";
+import { Loading } from "@/components/views";
 import Participant from "@/types/Participant";
 
 // StoreProfile enables participants to store their profile for later access

@@ -15,8 +15,8 @@ import { saveAs } from "file-saver";
 import { URLS } from "@/config";
 import { createConsent, useConsent } from "@/API";
 import { Button, Card, LinkButton } from "@/components/ui";
-import Loading from "@/components/Loading/Loading";
 import { NarrowLayout } from "@/components/layout";
+import { Loading } from "../Loading";
 
 import styles from "./Consent.module.scss";
 

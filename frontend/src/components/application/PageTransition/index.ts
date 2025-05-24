@@ -6,20 +6,4 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-.page {
-  z-index: 1;
-  border-radius: 1.5em;
-}
-
-.bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
-}
-
-.bgFill {
-  background-color: #fff;
-}
+export { default as PageTransition } from "./PageTransition";

@@ -18,3 +18,4 @@ export * from "./RadioInput";
 export * from "./ProgressBar";
 export * from "./Overlay";
 export * from "./FloatingActionButton";
+export * from "./Circle";

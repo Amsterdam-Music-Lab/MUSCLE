@@ -1,4 +1,4 @@
-import Block from "../components/Block/Block";
+import { Block } from "@/components/application";
 import { MemoryRouter, Route } from "react-router-dom";
 
 export default {

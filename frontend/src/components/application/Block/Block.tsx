@@ -6,27 +6,26 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+import type Session from "@/types/Session";
+import type { Action } from "@/types/Action";
+import type { Round } from "@/types/Round";
+
 import { useState, useEffect, useCallback, useRef } from "react";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { useParams } from "react-router-dom";
 import classNames from "classnames";
 
+import useResultHandler from "@/hooks/useResultHandler";
 import useBoundStore from "@/util/stores";
 import { getNextRound, useBlock } from "@/API";
-import { Explainer, Final, Score } from "@/components/views";
-import Loading from "@/components/Loading/Loading";
+import { Explainer, Final, Score, Loading } from "@/components/views";
+import { FloatingActionButton } from "@/components/ui";
+import { UserFeedbackForm } from "@/components/user";
 import Playlist from "@/components/Playlist/Playlist";
 import Trial from "@/components/Trial/Trial";
 import Info from "@/components/Info/Info";
-import { FloatingActionButton } from "@/components/ui";
-import { UserFeedbackForm } from "@/components/user";
-import FontLoader from "@/components/FontLoader/FontLoader";
-import useResultHandler from "@/hooks/useResultHandler";
-import Session from "@/types/Session";
-import { Action } from "@/types/Action";
-import { Round } from "@/types/Round";
 
 import { Page } from "../Page";
+import { PageTransition } from "../PageTransition";
 import styles from "./Block.module.scss";
 
 /**
@@ -235,7 +234,7 @@ const Block = () => {
       case "PLAYLIST":
         return <Playlist key={key} {...attrs} />;
       case "LOADING":
-        return <Loading key={key} {...attrs} />;
+        return <Loading key={key} label={attrs.loadingText} />;
       case "INFO":
         return <Info key={key} {...attrs} />;
       case "REDIRECT":
@@ -255,54 +254,47 @@ const Block = () => {
   const view = state?.view;
 
   // Also show gradient circles for feedback forms
-  // const showGradientCircles =
-  //   view !== "TRIAL_VIEW" || state?.feedback_form !== undefined;
+  const showBackgroundFill = !(
+    view !== "TRIAL_VIEW" || state?.feedback_form !== undefined
+  );
+
+  // BC: I've removed the FontLoader as this theme doesn't use fonts
+  // in that way anyway.
+  // <FontLoader fontUrl={theme?.heading_font_url} fontType="heading" />
+  // <FontLoader fontUrl={theme?.body_font_url} fontType="body" />
 
   return (
-    <>
-      <FontLoader fontUrl={theme?.heading_font_url} fontType="heading" />
-      <FontLoader fontUrl={theme?.body_font_url} fontType="body" />
-
-      <TransitionGroup
-        className={classNames(
-          styles.block,
-          !loadingBlock && block ? "block-" + block.slug : ""
-        )}
-        data-testid="block-wrapper"
-      >
-        <CSSTransition
-          key={state?.view}
-          // timeout={{ enter: 0, exit: 0, appear: 500 }}
-          classNames="transition"
-          unmountOnExit
+    <PageTransition
+      transitionKey={state?.view}
+      className={classNames(
+        styles.block,
+        !loadingBlock && block ? "block-" + block.slug : ""
+      )}
+      data-testid="block-wrapper"
+    >
+      {(!loadingBlock && block) || view === "ERROR" ? (
+        <Page
+          title={state.title}
+          className={className}
+          showBackgroundFill={showBackgroundFill}
         >
-          {(!loadingBlock && block) || view === "ERROR" ? (
-            <Page
-              title={state.title}
-              className={className}
-              data-view={state.view}
-            >
-              {render()}
+          {render()}
 
-              {block?.feedback_info?.show_float_button && (
-                <FloatingActionButton>
-                  <UserFeedbackForm
-                    blockSlug={block.slug}
-                    participant={participant}
-                    feedbackInfo={block.feedback_info}
-                    inline={false}
-                  />
-                </FloatingActionButton>
-              )}
-            </Page>
-          ) : (
-            <div className={styles.loaderContainer}>
-              <Loading loadingText={loadingText} />
-            </div>
+          {block?.feedback_info?.show_float_button && (
+            <FloatingActionButton>
+              <UserFeedbackForm
+                blockSlug={block.slug}
+                participant={participant}
+                feedbackInfo={block.feedback_info}
+                inline={false}
+              />
+            </FloatingActionButton>
           )}
-        </CSSTransition>
-      </TransitionGroup>
-    </>
+        </Page>
+      ) : (
+        <Loading label={loadingText} />
+      )}
+    </PageTransition>
   );
 };
 

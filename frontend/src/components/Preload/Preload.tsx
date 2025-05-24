@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import classNames from "classnames";
 
-import Circle from "../Circle/Circle";
+import { Circle } from "@/components/ui";
 import * as audio from "../../util/audio";
 import * as webAudio from "../../util/webAudio";
 import Section from "@/types/Section";

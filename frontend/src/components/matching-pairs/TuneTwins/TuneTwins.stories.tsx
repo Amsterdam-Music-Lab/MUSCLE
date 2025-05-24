@@ -13,7 +13,7 @@ import { URLS } from "@/API";
 import TuneTwins from "./TuneTwins";
 
 import audio from "@/stories/assets/audio.wav";
-import { TTCard, TTComparisonResult } from "../useTuneTwins";
+import { TTCard, TTComparisonResult } from "./useTuneTwins";
 
 const decorator = (Story) => {
   const setSession = useBoundStore((state) => state.setSession);

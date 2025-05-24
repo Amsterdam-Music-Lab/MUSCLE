@@ -1,5 +1,5 @@
 import { Page } from "@/components/application";
-import Loading from "@/components/Loading/Loading";
+import { Loading } from "../Loading";
 import { useParticipantScores } from "@/API";
 import ProfileView, { ProfileViewProps } from "./ProfileView";
 

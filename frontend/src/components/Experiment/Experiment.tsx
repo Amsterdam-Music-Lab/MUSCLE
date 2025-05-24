@@ -10,7 +10,7 @@ import { useExperiment } from "@/API";
 import { Consent } from "@/components/views";
 import Footer from "../Footer/Footer";
 import { Page } from "@/components/application";
-import Loading from "../Loading/Loading";
+import { Loading } from "@/components/views";
 import ExperimentAbout from "./ExperimentAbout/ExperimentAbout";
 import ExperimentDashboard from "./ExperimentDashboard/ExperimentDashboard";
 import IExperiment from "@/types/Experiment";
@@ -45,11 +45,7 @@ const Experiment = () => {
     const getBlockHref = (slug: string) => `/block/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     if (loadingExperiment) {
-        return (
-            <div className="loader-container">
-                <Loading />
-            </div>
-        );
+        return <Loading />;
     }
 
     if (!loadingExperiment && !experiment) {
