@@ -14,3 +14,4 @@ export * from "./Consent";
 export * from "./Profile";
 export * from "./Score";
 export * from "./Loading";
+export * from "./Info";

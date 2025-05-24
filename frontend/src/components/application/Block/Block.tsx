@@ -17,12 +17,18 @@ import classNames from "classnames";
 import useResultHandler from "@/hooks/useResultHandler";
 import useBoundStore from "@/util/stores";
 import { getNextRound, useBlock } from "@/API";
-import { Explainer, Final, Score, Loading } from "@/components/views";
+import {
+  Error,
+  Info,
+  Explainer,
+  Final,
+  Score,
+  Loading,
+} from "@/components/views";
 import { FloatingActionButton } from "@/components/ui";
 import { UserFeedbackForm } from "@/components/user";
 import Playlist from "@/components/Playlist/Playlist";
 import Trial from "@/components/Trial/Trial";
-import Info from "@/components/Info/Info";
 
 import { Page } from "../Page";
 import { PageTransition } from "../PageTransition";
@@ -236,13 +242,22 @@ const Block = () => {
       case "LOADING":
         return <Loading key={key} label={attrs.loadingText} />;
       case "INFO":
-        return <Info key={key} {...attrs} />;
+        return (
+          <Info
+            key={key}
+            html={attrs?.body}
+            title={attrs?.heading}
+            buttonText={attrs?.button_label}
+            buttonLink={attrs?.button_link}
+            onButtonClick={attrs?.onNext}
+          />
+        );
       case "REDIRECT":
         window.location.replace(state.url);
         return null;
 
       default:
-        return <div className="text-white bg-danger">Unknown view: {view}</div>;
+        return <Error title="Unknown view">Unknown view: {view}</Error>;
     }
   };
 
