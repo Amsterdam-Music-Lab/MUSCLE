@@ -6,11 +6,10 @@ import { API_BASE_URL, EXPERIMENT_SLUG, URLS } from "@/config";
 import { URLS as API_URLS } from "@/API";
 import useBoundStore from "@/util/stores";
 import Experiment from "@/components/Experiment/Experiment";
-import ConditionalRender from "@/components/ConditionalRender/ConditionalRender";
 import StoreProfile from "@/components/StoreProfile/StoreProfile";
 import useDisableRightClickOnTouchDevices from "@/hooks/useDisableRightClickOnTouchDevices";
 import useDisableIOSPinchZoomOnTouchDevices from "@/hooks/useDisableIOSPinchZoomOnTouchDevices";
-import { Redirect, InternalRedirect, Reload } from "@/components/utils";
+import { Redirect, InternalRedirect, Reload, ConditionalRender } from "@/components/utils";
 import Helmet from "@/components/Helmet/Helmet";
 
 import { ThemeProvider } from "@/theme/ThemeProvider";
