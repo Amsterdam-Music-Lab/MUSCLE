@@ -13,10 +13,10 @@ import axios from "axios";
 import { API_BASE_URL, EXPERIMENT_SLUG, URLS } from "@/config";
 import { URLS as API_URLS } from "@/API";
 import useBoundStore from "@/util/stores";
-import Experiment from "@/components/Experiment/Experiment";
-import StoreProfile from "@/components/StoreProfile/StoreProfile";
 import useDisableRightClickOnTouchDevices from "@/hooks/useDisableRightClickOnTouchDevices";
 import useDisableIOSPinchZoomOnTouchDevices from "@/hooks/useDisableIOSPinchZoomOnTouchDevices";
+import { Experiment } from "@/components/experiments";
+import StoreProfile from "@/components/StoreProfile/StoreProfile";
 import {
   Redirect,
   InternalRedirect,

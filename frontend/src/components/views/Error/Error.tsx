@@ -29,11 +29,11 @@ export default function Error({
 }: ErrorProps) {
   return (
     <div className={classNames(styles.errorPage, className)} {...divProps}>
-      <div class={styles.card}>
+      <div className={styles.card}>
         <h1>{title}</h1>
         {message && <p className={styles.message}>{message}</p>}
         {children}
-        <p class={styles.footer}>
+        <p className={styles.footer}>
           Return to the <a href="/">home page</a>.
         </p>
       </div>

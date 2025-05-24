@@ -1,11 +1,19 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
 import { MemoryRouter } from "react-router-dom";
 import { screen, waitFor } from "@testing-library/react";
 import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
 import { vi, it, expect, describe, beforeEach } from "vitest";
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
-
 import Experiment from "./Experiment";
+
 let mock = new MockAdapter(axios);
 
 let mockUseParams = vi.fn();
@@ -20,6 +28,7 @@ vi.mock("react-router-dom", async () => {
 
 vi.mock("@/components/views", () => ({
   __esModule: true,
+  Error: ({ message }) => <div>{message}</div>,
   Consent: (props: any) => (
     <div className="consent-text" data-testid="consent-mock">
       {props.text || "Mocked Consent"}
