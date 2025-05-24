@@ -6,9 +6,4 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export * from "./Reload";
-export * from "./Redirect";
-export * from "./InternalRedirect";
-export * from "./ConditionalRender";
-export * from "./FontLoader";
-export * from "./RenderHtml";
+export { default as RenderHtml } from "./RenderHtml";

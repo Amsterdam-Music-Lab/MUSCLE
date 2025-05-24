@@ -5,7 +5,7 @@ import { useState, useRef, useCallback } from "react";
 import classNames from "classnames";
 
 import { getAudioLatency, getCurrentTime, getTimeSince } from "@/util/time";
-import HTML from "../HTML/HTML";
+import { RenderHtml } from "@/components/utils";
 import Playback from "../Playback/Playback";
 import { OnResultType } from "@/hooks/useResultHandler";
 import { Survey } from "@/components/survey";
@@ -153,11 +153,7 @@ const Trial = (props: TrialProps) => {
                     finishedPlaying={finishedPlaying}
                 />
             )}
-            {html && (
-                <HTML
-                    body={html.body}
-                />
-            )}
+            {html && <RenderHtml html={html.body} />}
             {preloadReady && feedback_form && (
                 <Survey
                     formActive={formActive}

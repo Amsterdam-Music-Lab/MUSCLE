@@ -11,7 +11,7 @@ import type { SocialMediaConfig } from "@/types/Experiment";
 
 import React from "react";
 import { Link } from "react-router-dom";
-import HTML from "@/components/HTML/HTML";
+import { RenderHtml } from "@/components/utils";
 import { ShareOptions } from "@/components/ui";
 import { Cup, ScoreCounter } from "@/components/game";
 
@@ -39,7 +39,7 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <div className="hero">
       <div className="intro">
-        <HTML body={description} innerClassName="" />
+        <RenderHtml html={description} />
         <nav className="actions">
           {nextBlockSlug && (
             <a

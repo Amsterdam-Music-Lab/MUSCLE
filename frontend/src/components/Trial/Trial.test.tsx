@@ -17,8 +17,8 @@ vi.mock("@/components/survey", () => ({
         <div data-testid="mock-feedback-form" onClick={() => { submitResult(); }}>Mock Feedback Form</div>
     )),
 }));
-vi.mock("../HTML/HTML", () => ({
-    default: vi.fn(({ body }) => <div data-testid="mock-html">{body}</div>),
+vi.mock("@/components/utils", () => ({
+    RenderHtml: ({ html }) => <div data-testid="mock-html">{html}</div>,
 }));
 
 const feedback_form = {

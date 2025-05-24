@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import HTML from '../../HTML/HTML';
+import { RenderHtml } from '@/components/utils';
 
 interface ExperimentAboutProps {
     content: string;
@@ -19,7 +19,7 @@ export const ExperimentAbout: React.FC<ExperimentAboutProps> = (props: Experimen
                 {backButtonText}
             </Link>
             <div className="col-12 mt-3" role="contentinfo">
-                <HTML body={content} innerClassName="prose text-left pb-3 text-white" />
+                <RenderHtml html={content} innerClassName="prose text-left pb-3 text-white" />
             </div>
         </div>
     );
