@@ -6,6 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export * from "./Redirect";
-export * from "./InternalRedirect";
-export * from "./FontLoader";
+export type { RedirectProps } from "./Redirect";
+export { default as Redirect } from "./Redirect";

@@ -11,9 +11,8 @@ import Reload from "@/components/Reload/Reload";
 import StoreProfile from "@/components/StoreProfile/StoreProfile";
 import useDisableRightClickOnTouchDevices from "@/hooks/useDisableRightClickOnTouchDevices";
 import useDisableIOSPinchZoomOnTouchDevices from "@/hooks/useDisableIOSPinchZoomOnTouchDevices";
-import { InternalRedirect } from "../InternalRedirect/InternalRedirect";
+import { Redirect, InternalRedirect } from "@/components/utils";
 import Helmet from "@/components/Helmet/Helmet";
-import Redirect from "@/components/Redirect/Redirect";
 
 import { ThemeProvider } from "@/theme/ThemeProvider";
 import { Loading, Landing, Profile } from "@/components/views";

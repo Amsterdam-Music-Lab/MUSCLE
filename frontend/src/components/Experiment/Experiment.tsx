@@ -14,7 +14,7 @@ import { Loading } from "@/components/views";
 import ExperimentAbout from "./ExperimentAbout/ExperimentAbout";
 import ExperimentDashboard from "./ExperimentDashboard/ExperimentDashboard";
 import IExperiment from "@/types/Experiment";
-import Redirect from "@/components/Redirect/Redirect";
+import { Redirect } from "@/components/utils";
 import useHeadDataFromExperiment from "@/hooks/useHeadDataFromExperiment";
 
 const Experiment = () => {
