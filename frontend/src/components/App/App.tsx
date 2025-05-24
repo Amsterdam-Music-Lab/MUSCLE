@@ -10,11 +10,10 @@ import StoreProfile from "@/components/StoreProfile/StoreProfile";
 import useDisableRightClickOnTouchDevices from "@/hooks/useDisableRightClickOnTouchDevices";
 import useDisableIOSPinchZoomOnTouchDevices from "@/hooks/useDisableIOSPinchZoomOnTouchDevices";
 import { Redirect, InternalRedirect, Reload, ConditionalRender } from "@/components/utils";
-import Helmet from "@/components/Helmet/Helmet";
 
 import { ThemeProvider } from "@/theme/ThemeProvider";
 import { Loading, Landing, Profile } from "@/components/views";
-import { Block, Background } from "@/components/application";
+import { Block, Background, Helmet } from "@/components/application";
 
 // TODO ideally load or populate this from the backend
 import frontendConfig from "@/config/frontend";
