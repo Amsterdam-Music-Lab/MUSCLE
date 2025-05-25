@@ -12,7 +12,7 @@ import { API_BASE_URL } from "@/config";
 import { URLS } from "@/API";
 import TuneTwins from "./TuneTwins";
 
-import audio from "@/stories/assets/audio.wav";
+import audio from "@/assets/audio.wav";
 import { TTCard, TTComparisonResult } from "./useTuneTwins";
 
 const decorator = (Story) => {

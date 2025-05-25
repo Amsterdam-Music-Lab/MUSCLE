@@ -5,11 +5,9 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-// @import "@/scss/variables.scss";
-// @import "@/scss/elements.scss";
-// @import "@/scss/utils.scss";
 
 .button {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -26,10 +24,6 @@
   transition: background-color 0.2s ease, transform 0.1s ease;
   color: white;
 
-  &:not(.disabled):active {
-    transform: scale(0.96);
-  }
-
   &::before {
     // Fix safari bug: don't show overlay outside button
     border-radius: inherit;
@@ -37,6 +31,7 @@
 
   &.disabled {
     cursor: unset;
+    outline: none;
   }
 
   &.disabled::after {
@@ -46,6 +41,22 @@
     background: #fff;
     opacity: 0.5;
     z-index: 2;
+  }
+
+  &.outline,
+  &.outline:active {
+    --outline-size: 3px;
+    outline: var(--outline-size) solid #ffffff66;
+    outline-offset: calc(-1 * var(--outline-size));
+  }
+
+  &:not(.disabled) {
+    &:active {
+      transform: scale(0.96);
+    }
+    &.outline:focus {
+      outline: 1px solid #ffffffcc;
+    }
   }
 }
 
@@ -67,20 +78,14 @@
 
 .lg {
   font-size: 1.3em;
-
-  &.outline {
-    --outline-size: 4px;
-  }
 }
 
-.outline,
-.outline:active {
-  --outline-size: 3px;
-  outline: var(--outline-size) solid #ffffff66;
-  outline-offset: calc(-1 * var(--outline-size));
+.xl {
+  font-size: 1.5em;
 }
-.outline:focus {
-  outline: 1px solid #ffffffcc;
+
+.huge {
+  font-size: 3em;
 }
 
 .stretch {

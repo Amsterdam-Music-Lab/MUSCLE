@@ -7,7 +7,7 @@
  */
 
 import VisualCard from "./VisualCard";
-import catImage from "@/stories/assets/images/cat-01.webp";
+import catImage from "@/assets/images/cat-01.webp";
 
 export default {
   title: "Matching Pairs/VisualCard",

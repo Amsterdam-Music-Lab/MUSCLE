@@ -82,7 +82,6 @@ export default function ParticipantLink({
       />
 
       <Button
-        allowMultipleClicks={true}
         disabled={!link}
         onClick={copyLink}
         onKeyDown={copyLink}

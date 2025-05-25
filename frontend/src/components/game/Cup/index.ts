@@ -6,5 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export type { CupProps } from "./Cup";
+export type { CupProps, CupType } from "./Cup";
 export { default as Cup } from "./Cup";

@@ -41,7 +41,7 @@
 
 .children {
   margin: auto;
-  color: #fff;
+  color: var(--circle-color, inherit);
 }
 
 .circlePercentage {

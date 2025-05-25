@@ -78,7 +78,6 @@ export default function Overlay({
   if (!Handle) {
     Handle = (props: ButtonProps) => (
       <Button
-        allowMultipleClicks={true}
         className="primary"
         title={handleText}
         {...props}
@@ -117,7 +116,6 @@ export default function Overlay({
                 onClick={close}
                 className="primary"
                 title={closeButtonText}
-                allowMultipleClicks={true}
               />
             </Card.Section>
           </Card>

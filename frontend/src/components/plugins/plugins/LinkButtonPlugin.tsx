@@ -7,10 +7,10 @@
  */
 import type { MouseEvent } from "react";
 import type { PluginMeta, PluginSpec } from "@/types/plugin";
-import type { GetButtonClassesProps } from "@/components/ui/Button/Button";
+import type { BaseButtonProps } from "@/components/ui";
 import { LinkButton } from "@/components/ui";
 
-export interface LinkButtonPluginArgs extends GetButtonClassesProps {
+export interface LinkButtonPluginArgs extends BaseButtonProps {
   link?: string;
   onClick?: (e: MouseEvent) => void;
 }

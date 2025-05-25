@@ -10,7 +10,7 @@ import type Experiment from "@/types/Experiment";
 
 import { Link } from "react-router-dom";
 import { Header } from "../Header";
-import Logo from "@/components/Logo/Logo";
+import { Logo } from "@/components/application";
 import "./Dashboard.module.scss"; // TODO: not modular yet
 
 export interface DashboardProps {

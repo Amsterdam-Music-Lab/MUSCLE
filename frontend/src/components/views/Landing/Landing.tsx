@@ -51,7 +51,7 @@ export default function LandingPage({
     });
   }
   return (
-    <Page useBackendTheme={false} {...pageProps}>
+    <Page {...pageProps}>
       <NarrowLayout>
         {plugins ? (
           <PluginRenderer plugins={plugins as AllPluginSpec[]} />

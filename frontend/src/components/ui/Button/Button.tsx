@@ -8,17 +8,17 @@
 
 import { type ButtonHTMLAttributes, type TouchEvent } from "react";
 import type { Variant } from "@/types/themeProvider";
-import { useState } from "react";
+import { useState, forwardRef } from "react";
 import classNames from "classnames";
 import { audioInitialized } from "@/util/audio";
 import styles from "./Button.module.scss";
 
-export interface GetButtonClassesProps {
+export interface BaseButtonProps {
   /** Theme color variant to use */
   variant?: Variant;
 
   /** Size of the button */
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl" | "huge";
 
   /** Whether the button has round caps */
   rounded?: boolean;
@@ -28,6 +28,12 @@ export interface GetButtonClassesProps {
 
   /** Whether to show the soft outline */
   outline?: boolean;
+
+  /** Whether the button is disabled */
+  disabled?: boolean;
+
+  /** Whether the button is hovered (adds a css class) */
+  hover?: boolean;
 }
 
 /**
@@ -41,58 +47,61 @@ export function getButtonClasses(
     rounded = true,
     stretch = false,
     outline = true,
-  }: GetButtonClassesProps,
-  ...otherClasses
+    hover,
+    disabled,
+  }: BaseButtonProps,
+  ...otherClasses: (string | Record<string, boolean>)[]
 ) {
   return classNames(
     styles.button,
     stretch && styles.stretch,
     outline && styles.outline,
     rounded && styles.rounded,
-    {
-      [styles.sm]: size === "sm",
-      [styles.md]: size === "md",
-      [styles.lg]: size === "lg",
-    },
+    hover && "hover",
+    styles[size],
     `fill-${variant}`,
-    "hover-darker",
+    disabled !== true && "hover-darker",
     ...otherClasses
   );
 }
 
 export interface ButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onClick" | "value">,
-    GetButtonClassesProps {
+    BaseButtonProps {
   value?: string | boolean;
 
   // TODO is this used?
   onClick?: (value?: string | boolean) => void;
 
-  /** Whether you can click multiple times. Defaults to false! */
+  /** Whether you can click multiple times. Defaults to true. */
   allowMultipleClicks?: boolean;
 }
 
 /**
  * A button that can only be clicked one time by default
  */
-const Button = ({
-  title,
-  children,
-  onClick = () => {},
-  className,
-  disabled: initialDisabled = false,
-  value,
-  allowMultipleClicks = false,
-  variant = "primary",
-  size = "md",
-  stretch = false,
-  outline = true,
-  rounded = true,
-  ...btnProps
-}: ButtonProps) => {
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  {
+    title,
+    children,
+    onClick = () => {},
+    className,
+    disabled: initialDisabled = false,
+    value,
+    allowMultipleClicks = true,
+    variant = "primary",
+    size = "md",
+    stretch = false,
+    outline = true,
+    rounded = true,
+    hover,
+    ...btnProps
+  }: ButtonProps,
+  ref
+) {
   // Only use state to control disabled when allowMultipleClicks === false
   // TODO its a bit strange to have  allowMultipleClicks = true by default
-  
+
   // Use internal state to avoid a conditional hook
   const [internalDisabled, setInternalDisabled] = useState(initialDisabled);
   const disabled = allowMultipleClicks ? initialDisabled : internalDisabled;
@@ -117,6 +126,11 @@ const Button = ({
 
   return (
     <button
+      ref={ref}
+      type="button"
+      tabIndex={0}
+      onClick={clickOnceGuard}
+      onKeyDown={clickOnceGuard}
       className={getButtonClasses(
         {
           variant,
@@ -124,6 +138,8 @@ const Button = ({
           outline,
           stretch,
           rounded,
+          disabled,
+          hover,
         },
         className,
 
@@ -131,16 +147,12 @@ const Button = ({
         // to fix some issues when disabled="" appears in html
         disabled === true && styles.disabled
       )}
-      onClick={clickOnceGuard}
-      tabIndex={0}
-      onKeyDown={clickOnceGuard}
-      type="button"
       {...btnProps}
     >
       {title}
       {children}
     </button>
   );
-};
+});
 
 export default Button;

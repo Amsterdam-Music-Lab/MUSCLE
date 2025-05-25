@@ -6,14 +6,15 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+import type { SpectrumProps } from "@/components/play";
 import classNames from "classnames";
-import Histogram, { HistogramProps } from "@/components/Histogram/Histogram";
+import { Spectrum } from "@/components/play";
 import Card, { type CardProps } from "../Card/Card";
 import styles from "./AudioCard.module.scss";
 
 interface AudioCardProps
   extends CardProps,
-    Omit<HistogramProps, "variant" | "data"> {}
+    Omit<SpectrumProps, "variant" | "data"> {}
 
 export default function AudioCard({
   running = false,
@@ -27,7 +28,7 @@ export default function AudioCard({
   return (
     <Card className={classNames(styles.audio, className)} {...cardProps}>
       <Card.Front className={variantFront ? `fill-${variantFront}` : ""}>
-        <Histogram
+        <Spectrum
           running={running}
           bars={bars}
           random={random}

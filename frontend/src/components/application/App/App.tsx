@@ -16,7 +16,6 @@ import useBoundStore from "@/util/stores";
 import useDisableRightClickOnTouchDevices from "@/hooks/useDisableRightClickOnTouchDevices";
 import useDisableIOSPinchZoomOnTouchDevices from "@/hooks/useDisableIOSPinchZoomOnTouchDevices";
 import { Experiment } from "@/components/experiment";
-import StoreProfile from "@/components/StoreProfile/StoreProfile";
 import {
   Redirect,
   InternalRedirect,
@@ -24,7 +23,13 @@ import {
   ConditionalRender,
 } from "@/components/utils";
 import { ThemeProvider } from "@/theme/ThemeProvider";
-import { Error, Loading, Landing, Profile } from "@/components/views";
+import {
+  Error,
+  Loading,
+  Landing,
+  Profile,
+  StoreProfile,
+} from "@/components/views";
 import { Block, Background, Helmet } from "../";
 import styles from "./App.module.scss";
 
@@ -117,7 +122,7 @@ export default function App() {
             <Route path={URLS.experiment} element={<Experiment />} />
 
             {/* Store profile */}
-            <Route path={URLS.storeProfile} element={StoreProfile} />
+            <Route path={URLS.storeProfile} element={<StoreProfile />} />
           </Routes>
         </ConditionalRender>
       </Router>

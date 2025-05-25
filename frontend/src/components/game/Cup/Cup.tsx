@@ -75,7 +75,11 @@ export default function Cup({
   }
   return (
     <div
-      className={classNames(styles.cupContainer, animate && styles.animate)}
+      className={classNames(
+        styles.cupContainer,
+        animate && styles.animate,
+        className
+      )}
       style={{ "--cup-radius": `${radius}px`, ...style } as CSSProperties}
       {...divProps}
     >
@@ -84,8 +88,7 @@ export default function Cup({
           styles.circle,
           showHalo && styles.halo,
           styles[type],
-          label && styles.offset,
-          className
+          label && styles.offset
         )}
         data-testid="cup"
       >

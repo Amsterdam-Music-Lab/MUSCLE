@@ -7,7 +7,7 @@
  */
 
 import type { HTMLAttributes, ButtonHTMLAttributes, MouseEvent } from "react";
-import type { GetButtonClassesProps } from "../Button/Button";
+import type { BaseButtonProps } from "../Button";
 
 import { useState, useRef, useEffect } from "react";
 import classNames from "classnames";
@@ -15,7 +15,7 @@ import { Button } from "../Button";
 import styles from "./ExpandableButton.module.scss";
 
 interface ExpandableButtonProps
-  extends GetButtonClassesProps,
+  extends BaseButtonProps,
     HTMLAttributes<HTMLDivElement> {
   expanded?: boolean;
   disabled?: boolean;
@@ -70,7 +70,6 @@ export default function ExpandableButton({
         size={size}
         outline={outline}
         stretch={false}
-        allowMultipleClicks={true}
         rounded={rounded}
         disabled={disabled}
         onClick={handleClick}

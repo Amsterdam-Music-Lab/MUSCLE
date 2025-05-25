@@ -18,6 +18,7 @@ import useResultHandler from "@/hooks/useResultHandler";
 import useBoundStore from "@/util/stores";
 import { getNextRound, useBlock } from "@/API";
 import {
+  Trial,
   Error,
   Info,
   Explainer,
@@ -28,7 +29,6 @@ import {
 } from "@/components/views";
 import { FloatingActionButton } from "@/components/ui";
 import { UserFeedbackForm } from "@/components/user";
-import Trial from "@/components/Trial/Trial";
 
 import { Page } from "../Page";
 import { PageTransition } from "../PageTransition";
@@ -171,28 +171,22 @@ const Block = () => {
 
   // Render block state
   const render = () => {
-    if (!state) {
-      return <div className="text-white bg-danger">No valid state</div>;
-    }
-
-    // Default attributes for every view
-    const attrs = {
-      block: block!,
-      participant: participant!,
-      loadingText,
-      onResult,
-      onNext,
-      playlist,
-      // key,
-      ...state,
-    };
-
     // Show view, based on the unique view ID:
-    switch (attrs.view) {
+    switch (state.view) {
       // Block views
       // -------------------------
       case "TRIAL_VIEW":
-        return <Trial key={key} {...attrs} />;
+        return (
+          <Trial
+            key={key}
+            playback={state.playback}
+            html={state.html}
+            feedback_form={state.feedback_form}
+            config={state.config}
+            onNext={onNext}
+            onResult={onResult}
+          />
+        );
 
       // Information & Scoring
       // -------------------------
@@ -200,38 +194,52 @@ const Block = () => {
         return (
           <Explainer
             key={key}
-            instruction={attrs.instruction}
-            button_label={attrs.button_label}
-            steps={attrs.steps}
-            timer={attrs.timer}
-            onNext={attrs.onNext}
+            instruction={state.instruction}
+            button_label={state.button_label}
+            steps={state.steps}
+            timer={state.timer}
+            onNext={onNext}
           />
         );
+
       case "SCORE":
-        return <Score key={key} {...attrs} />;
+        return (
+          <Score
+            key={key}
+            last_song={state.last_song}
+            score_meesage={state.score_meesage}
+            total_score={state.total_score}
+            texts={state.texts}
+            icon={state.icon}
+            feedback={state.feedback}
+            timer={state.timer}
+            onNext={onNext}
+          />
+        );
+
       case "FINAL":
         return (
           <Final
             key={key}
-            block={attrs.block}
-            participant={attrs.participant}
-            action_texts={attrs.action_texts}
-            button={attrs.button}
-            onNext={attrs.onNext}
-            show_participant_link={attrs.show_participant_link}
-            participant_id_only={attrs?.participant_id_only}
-            show_profile_link={attrs.show_profile_link}
-            social={attrs.social}
-            feedback_info={attrs.feedback_info}
-            percentile={attrs.percentile}
-            score={attrs.score}
+            block={block}
+            participant={participant}
+            action_texts={state.action_texts}
+            button={state.button}
+            onNext={onNext}
+            show_participant_link={state.show_participant_link}
+            participant_id_only={state?.participant_id_only}
+            show_profile_link={state.show_profile_link}
+            social={state.social}
+            feedback_info={state.feedback_info}
+            percentile={state.percentile}
+            score={state.score}
             totalScore={undefined} // TODO
             timeline={undefined}
             timelineStep={undefined}
-            sessions_played={attrs.sessions_played}
+            sessions_played={state.sessions_played}
             // plugins={matchingPairsConfig.final.plugins as AllPluginSpec[]}
-            // final_text={attrs.final_text}
-            // points={attrs.points}
+            // final_text={state.final_text}
+            // points={state.points}
           />
         );
 
@@ -241,30 +249,37 @@ const Block = () => {
         return (
           <Playlists
             key={key}
-            playlist={attrs.playlist}
-            playlists={attrs.block.playlists}
+            playlist={playlist}
+            playlists={block?.playlists}
             onSelect={onNext}
             title="Playlists..."
-            instruction={attrs.instruction}
+            instruction={state.instruction}
           />
         );
 
       case "LOADING":
-        return <Loading key={key} label={attrs.loadingText} />;
+        return <Loading key={key} label={loadingText} />;
+
       case "INFO":
         return (
           <Info
             key={key}
-            html={attrs?.body}
-            title={attrs?.heading}
-            buttonText={attrs?.button_label}
-            buttonLink={attrs?.button_link}
-            onButtonClick={attrs?.onNext}
+            html={state?.body}
+            title={state?.heading}
+            buttonText={state?.button_label}
+            buttonLink={state?.button_link}
+            onButtonClick={onNext}
           />
         );
+
       case "REDIRECT":
         window.location.replace(state.url);
         return null;
+
+      case "ERROR":
+      case undefined:
+      case null:
+        return <Error message="No valid state" />;
 
       default:
         return <Error title="Unknown view">Unknown view: {view}</Error>;
@@ -276,11 +291,9 @@ const Block = () => {
     setError("No valid state");
   }
 
-  const view = state?.view;
-
-  // Also show gradient circles for feedback forms
+  // Also show background fill for feedback forms
   const showBackgroundFill = !(
-    view !== "TRIAL_VIEW" || state?.feedback_form !== undefined
+    state?.view !== "TRIAL_VIEW" || state?.feedback_form !== undefined
   );
 
   // BC: I've removed the FontLoader as this theme doesn't use fonts
@@ -297,7 +310,7 @@ const Block = () => {
       )}
       data-testid="block-wrapper"
     >
-      {(!loadingBlock && block) || view === "ERROR" ? (
+      {!loadingBlock && block ? (
         <Page
           title={state.title}
           className={className}

@@ -113,7 +113,6 @@ const Survey = ({
             size="lg"
             variant="secondary"
             className={"submit"}
-            allowMultipleClicks={true}
             disabled={formValid !== true}
             title={buttonLabel}
           />

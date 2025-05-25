@@ -24,7 +24,11 @@ describe("Button component", () => {
   it("calls onClick handler only once", () => {
     const mockOnClick = vi.fn();
     const { getByText } = render(
-      <Button title="Test Button" onClick={mockOnClick} />
+      <Button
+        title="Test Button"
+        onClick={mockOnClick}
+        allowMultipleClicks={false}
+      />
     );
 
     const button = getByText("Test Button");

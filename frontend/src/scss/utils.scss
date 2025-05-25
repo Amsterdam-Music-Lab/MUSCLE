@@ -245,7 +245,8 @@ $colors: (
     z-index: 0;
   }
 
-  &:not(:disabled):hover::before {
+  &:not(:disabled):hover::before,
+  &:not(:disabled).hover::before {
     opacity: var(--overlay-opacity, 0.25);
   }
 

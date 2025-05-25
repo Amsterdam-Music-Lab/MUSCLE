@@ -24,6 +24,7 @@ export interface CircleProps extends HTMLAttributes<HTMLDivElement> {
   running?: boolean;
   animateCircle?: boolean;
   rotate?: boolean;
+  light?: boolean;
 }
 
 /**
@@ -32,11 +33,11 @@ export interface CircleProps extends HTMLAttributes<HTMLDivElement> {
 export default function Circle({
   startTime = 0,
   duration = 0,
-  color = "white",
+  color = "black",
   onTick,
   onFinish,
   radius = 60,
-  strokeWidth = 1.5,
+  strokeWidth = 3,
   running = true,
   animateCircle = true,
   rotate = false,
@@ -87,8 +88,9 @@ export default function Circle({
       className={classNames(styles.circle, rotate && styles.rotate, className)}
       style={
         {
-          width: size,
-          height: size,
+          width: size + strokeWidth,
+          height: size + strokeWidth,
+          "--circle-color": color,
           ...customStyles,
         } as CSSProperties
       }
@@ -96,9 +98,9 @@ export default function Circle({
       {...divProps}
     >
       <svg
-        width={size}
-        height={size}
-        viewBox={"0 0 " + size + " " + size}
+        width={size + strokeWidth}
+        height={size + strokeWidth}
+        viewBox={`0 0  ${size} ${size}`}
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -107,7 +109,7 @@ export default function Circle({
           cx={radius + strokeWidth / 2}
           cy={radius + strokeWidth / 2}
           r={radius}
-          stroke="white"
+          stroke={color}
           strokeWidth={strokeWidth}
         />
         <circle

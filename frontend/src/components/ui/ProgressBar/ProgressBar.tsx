@@ -33,7 +33,7 @@ interface ProgressBarProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * Displays a progress bar using bootstrap's progress bar utility.
+ * Displays a progress bar.
  */
 export default function ProgressBar({
   value = 0,

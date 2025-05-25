@@ -8,7 +8,7 @@
 
 import type IExperiment from "@/types/Experiment";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useBoundStore from "@/util/stores";
 import { useExperiment } from "@/API";
 import useHeadDataFromExperiment from "@/hooks/useHeadDataFromExperiment";
@@ -40,9 +40,11 @@ export default function Experiment() {
 
   useHeadDataFromExperiment(experiment, setHeadData, resetHeadData);
 
-  if (experiment?.theme) {
-    setTheme(experiment.theme);
-  }
+  useEffect(() => {
+    if (experiment?.theme) {
+      setTheme(experiment.theme);
+    }
+  }, [experiment?.theme, setTheme]);
 
   const onNext = () => {
     setHasShownConsent(true);

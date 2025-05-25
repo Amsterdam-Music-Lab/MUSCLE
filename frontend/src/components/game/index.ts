@@ -11,6 +11,5 @@ export * from "./ScoreCounter";
 export * from "./ScoreDisplay";
 export * from "./ScoreBoard";
 export * from "./ScoreFeedback";
-export * from "./BarPlot";
 export * from "./TutorialMessage";
 export * from "./Cup";

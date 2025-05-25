@@ -3,7 +3,6 @@ import Circle from "./Circle";
 const decoratorStyles = {
   width: "100%",
   height: "100%",
-  backgroundColor: "#666",
   padding: "1rem",
   display: "flex",
   justifyContent: "center",
@@ -117,5 +116,12 @@ export const InfiniteRotation = {
     running: false,
     startTime: 0.2,
     rotate: true,
+  },
+};
+
+export const CustomColor = {
+  args: {
+    ...InfiniteRotation.args,
+    color: "red",
   },
 };

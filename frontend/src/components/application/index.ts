@@ -12,3 +12,4 @@ export * from "./Page";
 export * from "./AppBar";
 export * from "./Background";
 export * from "./Helmet";
+export * from "./Logo";

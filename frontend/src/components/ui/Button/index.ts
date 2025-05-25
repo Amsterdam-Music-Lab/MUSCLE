@@ -5,6 +5,5 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-
+export type { BaseButtonProps, ButtonProps } from "./Button";
 export { default as Button } from "./Button";
-export type { ButtonProps } from "./Button";

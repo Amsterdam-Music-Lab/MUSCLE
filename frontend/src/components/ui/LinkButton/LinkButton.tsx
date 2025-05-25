@@ -8,7 +8,7 @@
 
 import type { AnchorHTMLAttributes, ElementType, ReactNode } from "react";
 import type { LinkProps } from "react-router-dom";
-import type { ButtonProps, GetButtonClassesProps } from "../Button/Button";
+import type { ButtonProps, BaseButtonProps } from "../Button/Button";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 import Button, { getButtonClasses } from "../Button/Button";
@@ -23,7 +23,7 @@ type ElementProps<T extends ElementType> = T extends "a"
   ? LinkProps
   : Record<string, unknown>;
 
-interface BaseProps extends GetButtonClassesProps {
+interface BaseProps extends BaseButtonProps {
   link?: string;
   children?: ReactNode;
   className?: string;

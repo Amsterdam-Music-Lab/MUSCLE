@@ -14,15 +14,14 @@ import { renderWithProviders as render } from "@/util/testUtils/renderWithProvid
 import AudioCard from "./AudioCard";
 import styles from "./AudioCard.module.scss";
 
-vi.mock("@/components/Histogram/Histogram", () => ({
+vi.mock("@/components/play", () => ({
   __esModule: true,
-  default: (props: any) => (
-    <div data-testid="histogram" data-props={JSON.stringify(props)}>
-      Mock Histogram
+  Spectrum: (props: any) => (
+    <div data-testid="spectrum" data-props={JSON.stringify(props)}>
+      Mock Spectrum
     </div>
   ),
 }));
-
 
 describe("Matching Pairs Audio Card", () => {
   test("renders AudioCard component", () => {
@@ -46,7 +45,7 @@ describe("Matching Pairs Audio Card", () => {
         interval={500}
       />
     );
-    const el = screen.getByTestId("histogram");
+    const el = screen.getByTestId("spectrum");
     const props = JSON.parse(el.getAttribute("data-props") || "{}");
 
     expect(props.running).toBe(true);
