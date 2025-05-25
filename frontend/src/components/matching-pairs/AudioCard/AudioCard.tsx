@@ -20,7 +20,7 @@ export default function AudioCard({
   running = false,
   bars = 6,
   random = true,
-  interval = 300,
+  interval = 400,
   className,
   variantFront = "primary",
   ...cardProps
