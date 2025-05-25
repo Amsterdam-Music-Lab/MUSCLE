@@ -106,7 +106,7 @@ export default function Preload({
       />
       {preloadMessage && (
         <div className="instruction d-flex justify-content-center align-items-center">
-          <h3 className="text-center">{preloadMessage}</h3>
+          <h3>{preloadMessage}</h3>
         </div>
       )}
     </div>

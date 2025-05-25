@@ -27,7 +27,7 @@ function ScoresPlugin({
   variant = "secondary",
 }: ScoresPluginProps) {
   return (
-    <div className="d-flex">
+    <div style={{ display: "flex" }}>
       <div style={{ width: "50%" }}>
         <ScoreDisplay
           score={turnScore}

@@ -106,15 +106,18 @@ export default function MatchingPairs({ cards: initialCards }: MPMinimalProps) {
               opacity: card.disabled ? 0.15 : 1,
               borderRadius: "1.5em",
               cursor: card.disabled ? "none" : "pointer",
+              textAlign: "center",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
             }}
-            className="text-center d-flex flex-column justify-content-center"
             key={card.id}
             onClick={() => {
               selectCard(card.id);
             }}
           >
-            <span className="d-block text-muted small">#{card.id}</span>
-            <span className="d-block fw-semibold">{card.data.value}</span>
+            <span className="text-muted">#{card.id}</span>
+            <span className=" fw-semibold">{card.data.value}</span>
           </div>
         ))}
       </Board>

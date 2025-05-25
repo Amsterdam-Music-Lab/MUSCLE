@@ -24,6 +24,8 @@
   transition: background-color 0.2s ease, transform 0.1s ease;
   color: white;
 
+  text-decoration: none;
+
   &::before {
     // Fix safari bug: don't show overlay outside button
     border-radius: inherit;

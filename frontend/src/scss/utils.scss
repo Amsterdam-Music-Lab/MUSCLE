@@ -56,11 +56,16 @@ $colors: (
   background: transparent !important;
 }
 
+.text-light {
+  color: #fff;
+}
+
 .text-light-gray {
   color: #ddd;
 }
 
-.text-grey {
+.text-grey,
+.text-muted {
   color: #999;
 }
 

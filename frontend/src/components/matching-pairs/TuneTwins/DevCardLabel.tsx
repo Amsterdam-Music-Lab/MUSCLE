@@ -7,7 +7,7 @@
  */
 import type { HTMLAttributes } from "react";
 import classNames from "classnames";
-
+import styles from "./DevCardLabel.module.scss";
 interface DevCardLabelProps extends HTMLAttributes<HTMLDivElement> {}
 
 /**
@@ -24,10 +24,7 @@ export default function DevCardLabel({
     import.meta.env.DEV && (
       <div
         style={{ opacity: 0.5, ...style }}
-        className={classNames(
-          "text-light d-flex flex-column justify-content-center small",
-          className
-        )}
+        className={classNames(styles.DevCardLabel, className)}
         {...divProps}
       >
         {children}

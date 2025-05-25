@@ -6,31 +6,40 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+import type { Meta, StoryObj } from "@storybook/react";
 import AudioCard from "./AudioCard";
 
-export default {
-  title: "Matching Pairs/AudioCard",
-  component: AudioCard,
-  parameters: {
-    layout: "fullscreen",
-  },
-  tags: ["autodocs"],
-};
+type Story = StoryObj<typeof AudioCard>;
 
-const decorator = (Story) => (
-  <div style={{ width: "256px", height: "256px", padding: "1rem" }}>
-    <Story />
+const decorator = (StoryComponent: Story) => (
+  <div style={{ width: "200px", height: "200px" }}>
+    <StoryComponent />
   </div>
 );
 
+const meta: Meta<typeof AudioCard> = {
+  title: "Matching Pairs/AudioCard",
+  component: AudioCard,
+  decorators: [decorator],
+};
+
+export default meta;
+
 export const Back = {
   args: {},
-  decorators: [decorator],
 };
 
 export const Front = {
   args: {
     flipped: true,
+  },
+  decorators: [decorator],
+};
+
+export const Playing = {
+  args: {
+    flipped: true,
+    running: true,
   },
   decorators: [decorator],
 };
