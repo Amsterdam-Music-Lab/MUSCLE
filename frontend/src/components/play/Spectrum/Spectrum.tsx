@@ -56,7 +56,7 @@ export default function Spectrum({
   ...barPlotProps
 }: SpectrumProps) {
   // Start from random data so that the spectrum doesn't hang when interval is large
-  const initialData = random ? getRandomData(bars) : new Uint8Array(bars);
+  const initialData = new Uint8Array(bars);
   const [data, setData] = useState<Uint8Array>(initialData);
   const currentAction = useBoundStore((state) => state.currentAction);
   const animationFrameRef = useRef<number>();
