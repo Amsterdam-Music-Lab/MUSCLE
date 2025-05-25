@@ -9,7 +9,7 @@
 import "@testing-library/jest-dom";
 import { vi, it } from "vitest";
 import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
-import audio from "@/stories/assets/audio.wav";
+import audio from "@/assets/audio.wav";
 import TuneTwins from "./TuneTwins";
 
 // Mock the Timeline component
