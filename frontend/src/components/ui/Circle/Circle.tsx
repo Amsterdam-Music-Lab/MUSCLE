@@ -37,7 +37,7 @@ export default function Circle({
   onTick,
   onFinish,
   radius = 60,
-  strokeWidth = 3,
+  strokeWidth = 2,
   running = true,
   animateCircle = true,
   rotate = false,
@@ -101,6 +101,7 @@ export default function Circle({
         width={size + strokeWidth}
         height={size + strokeWidth}
         viewBox={`0 0  ${size} ${size}`}
+        className={styles.circleSvg}
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -119,6 +120,7 @@ export default function Circle({
           r={radius}
           stroke={color}
           strokeWidth={strokeWidth}
+          strokeLinecap="round"
           style={style}
         />
       </svg>

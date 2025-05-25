@@ -5,7 +5,7 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-// @import "@/scss/animations";
+@import "@/scss/animations";
 
 @keyframes rotate {
   100% {
@@ -19,19 +19,19 @@
   flex-direction: column;
   justify-content: center;
 
-  svg {
+  svg.circleSvg {
+    @extend .transition-appear;
     position: absolute;
     left: 0;
     top: 0;
   }
 
-  &:not(.rotate) svg {
+  &:not(.rotate) svg.circleSvg {
     transform: rotate(-90deg);
     transform-origin: 50% 50%;
-    // @extend .circleIntro;
   }
 
-  &.rotate svg {
+  &.rotate svg.circleSvg {
     animation-name: rotate;
     animation-duration: 2s;
     animation-timing-function: linear;
@@ -42,6 +42,10 @@
 .children {
   margin: auto;
   color: var(--circle-color, inherit);
+
+  & > * {
+    margin: auto;
+  }
 }
 
 .circlePercentage {
