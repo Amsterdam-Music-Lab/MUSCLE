@@ -16,7 +16,7 @@ import useHeadDataFromExperiment from "@/hooks/useHeadDataFromExperiment";
 import { Route, Routes, useParams } from "react-router-dom";
 import { Redirect } from "@/components/utils";
 import { Page } from "@/components/application";
-import { ConsentView, Error, Loading } from "@/components/views";
+import { ConsentView, ErrorView, Loading } from "@/components/views";
 import { About, Dashboard, Footer } from "../";
 import "./Experiment.module.scss"; // TODO: not modular yet
 
@@ -60,7 +60,7 @@ export default function Experiment() {
   }
 
   if (!loadingExperiment && !experiment) {
-    return <Error message="Experiment not found" />;
+    return <ErrorView message="Experiment not found" />;
   }
 
   if (!hasShownConsent && showConsent) {

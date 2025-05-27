@@ -24,7 +24,7 @@ import {
 } from "@/components/utils";
 import { ThemeProvider } from "@/theme/ThemeProvider";
 import {
-  Error,
+  ErrorView,
   Loading,
   Landing,
   Profile,
@@ -74,7 +74,7 @@ export default function App() {
   }, [setError, queryParams, setParticipant, setParticipantLoading]);
 
   if (error) {
-    return <Error title="An error occured" message={error} />;
+    return <ErrorView title="An error occured" message={error} />;
   }
 
   return (

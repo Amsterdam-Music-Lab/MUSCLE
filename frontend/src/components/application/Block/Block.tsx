@@ -19,7 +19,7 @@ import useBoundStore from "@/util/stores";
 import { getNextRound, useBlock } from "@/API";
 import {
   Trial,
-  Error,
+  ErrorView,
   Info,
   Explainer,
   Final,
@@ -279,10 +279,10 @@ const Block = () => {
       case "ERROR":
       case undefined:
       case null:
-        return <Error message="No valid state" />;
+        return <ErrorView message="No valid state" />;
 
       default:
-        return <Error title="Unknown view">Unknown view: {view}</Error>;
+        return <ErrorView title="Unknown view">Unknown view: {view}</ErrorView>;
     }
   };
 

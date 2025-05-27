@@ -7,9 +7,9 @@
  */
 import type { HTMLAttributes } from "react";
 import classNames from "classnames";
-import styles from "./Error.module.scss";
+import styles from "./ErrorView.module.scss";
 
-export interface ErrorProps extends HTMLAttributes<HTMLDivElement> {
+export interface ErrorViewProps extends HTMLAttributes<HTMLDivElement> {
   /** The error message to show */
   message?: string;
 
@@ -20,15 +20,15 @@ export interface ErrorProps extends HTMLAttributes<HTMLDivElement> {
 /**
  * Shows a minimal error page with no dependencies.
  */
-export default function Error({
+export default function ErrorView({
   message,
   title = "An error has occured...",
   className,
   children,
   ...divProps
-}: ErrorProps) {
+}: ErrorViewProps) {
   return (
-    <div className={classNames(styles.errorPage, className)} {...divProps}>
+    <div className={classNames(styles.errorView, className)} {...divProps}>
       <div className={styles.card}>
         <h1>{title}</h1>
         {message && <p className={styles.message}>{message}</p>}

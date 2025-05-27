@@ -6,5 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export type { ErrorProps } from "./Error";
-export { default as Error } from "./Error";
+export type { ErrorViewProps } from "./ErrorView";
+export { default as ErrorView } from "./ErrorView";

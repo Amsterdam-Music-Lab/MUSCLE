@@ -1,4 +1,4 @@
-import { Loading, Error } from "../";
+import { Loading, ErrorView } from "../";
 import classNames from "classnames";
 import { useParticipantScores } from "@/API";
 import { NarrowLayout } from "@/components/layout";
@@ -75,7 +75,9 @@ const Profile = () => {
 
   if (loadingData) return <Loading />;
   if (!data)
-    return <Error message="An error occured while loading your profile..." />;
+    return (
+      <ErrorView message="An error occured while loading your profile..." />
+    );
 
   data.scores.sort((a, b) =>
     a.finished_at === b.finished_at ? 0 : a.finished_at > b.finished_at ? -1 : 1

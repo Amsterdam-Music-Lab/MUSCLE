@@ -12,7 +12,7 @@ import * as audio from "@/util/audio";
 import * as webAudio from "@/util/webAudio";
 import { playAudio, pauseAudio } from "@/util/audioControl";
 
-import { Error } from "@/components/views";
+import { ErrorView } from "@/components/views";
 import { TuneTwins } from "@/components/matching-pairs";
 import { Autoplay, PlayButton, MultiPlayer, ImagePlayer, Preload } from "../";
 import convertTutorial from "@/util/convertTutorial";
@@ -290,7 +290,7 @@ export default function Playback({
         );
 
       default:
-        return <Error message={`Unknown player view "${view}"`} />;
+        return <ErrorView message={`Unknown player view "${view}"`} />;
     }
   };
 
