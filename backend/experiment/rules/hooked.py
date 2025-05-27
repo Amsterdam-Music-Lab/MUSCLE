@@ -179,12 +179,12 @@ class Hooked(BaseRules):
                     n_sync_guessed += 1
                     json_data = result.json_data
                     sync_time += json_data.get("decision_time")
-                    if result.score > 0:
+                    if result.score and result.score > 0:
                         n_sync_correct += 1
             else:
                 if result.expected_response == "old":
                     n_old_new_expected += 1
-                    if result.score > 0:
+                    if result.score and result.score > 0:
                         n_old_new_correct += 1
 
         score_message = "Well done!" if session.final_score > 0 else "Too bad!"
