@@ -6,11 +6,11 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import Explainer from "./Explainer";
+import ExplainerView from "./ExplainerView";
 
 export default {
-  title: "Views/Explainer",
-  component: Explainer,
+  title: "Views/ExplainerView",
+  component: ExplainerView,
   parameters: {
     layout: "fullscreen",
   },

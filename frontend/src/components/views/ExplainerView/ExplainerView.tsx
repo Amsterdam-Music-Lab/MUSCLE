@@ -13,9 +13,9 @@ import { Button, Card } from "@/components/ui";
 import { Explainer as ExplainerAction } from "@/types/Action";
 import { NarrowLayout } from "@/components/layout";
 import { Logo } from "@/components/svg";
-import styles from "./Explainer.module.scss";
+import styles from "./ExplainerView.module.scss";
 
-export interface ExplainerProps
+export interface ExplainerViewProps
   extends ExplainerAction,
     HTMLAttributes<HTMLDivElement> {
   onNext: () => void;
@@ -26,7 +26,7 @@ export interface ExplainerProps
  * If the button has not been clicked, onNext will be called automatically after the timer expires (in milliseconds).
  * If timer == null, onNext will only be called after the button is clicked.
  */
-const Explainer = ({
+export default function ExplainerView({
   instruction,
   button_label: buttonText = "Next",
   steps = [],
@@ -35,7 +35,7 @@ const Explainer = ({
   title = "Instructions...",
   className,
   ...divProps
-}: ExplainerProps) => {
+}: ExplainerViewProps) {
   useEffect(() => {
     if (timer != null) {
       const id = setTimeout(onNext, timer);
@@ -84,7 +84,7 @@ const Explainer = ({
       </Button>
     </NarrowLayout>
   );
-};
+}
 
 interface ExplainerItemProps {
   number: number | null;
@@ -106,5 +106,3 @@ const ExplainerItem = ({
     <span>{description}</span>
   </li>
 );
-
-export default Explainer;

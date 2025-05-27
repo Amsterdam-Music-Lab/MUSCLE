@@ -6,4 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export { default as Explainer } from "./Explainer";
+export type { ExplainerViewProps } from "./ExplainerView";
+export { default as ExplainerView } from "./ExplainerView";

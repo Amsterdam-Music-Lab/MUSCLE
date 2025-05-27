@@ -21,7 +21,7 @@ import {
   Trial,
   ErrorView,
   Info,
-  Explainer,
+  ExplainerView,
   Final,
   Score,
   Loading,
@@ -192,7 +192,7 @@ const Block = () => {
       // -------------------------
       case "EXPLAINER":
         return (
-          <Explainer
+          <ExplainerView
             key={key}
             instruction={state.instruction}
             button_label={state.button_label}

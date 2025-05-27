@@ -11,9 +11,9 @@ import { act } from "react";
 import { screen } from "@testing-library/react";
 import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
 import { vi, describe, it, expect } from "vitest";
-import Explainer from "./Explainer";
+import ExplainerView from "./ExplainerView";
 
-describe("Explainer Component", () => {
+describe("ExplainerView Component", () => {
   const props = {
     instruction: "Some instruction",
     button_label: "Next",
@@ -23,19 +23,18 @@ describe("Explainer Component", () => {
   };
 
   it("renders with given props", () => {
-    
-    render(<Explainer {...props} />);
+    render(<ExplainerView {...props} />);
     expect(screen.getByTestId("explainer")).toBeTruthy();
   });
 
   it("renders the instruction message", async () => {
-    render(<Explainer {...props} />);
+    render(<ExplainerView {...props} />);
     await screen.findByText("Some instruction");
   });
 
   it("renders the button with correct label and triggers onNext on click", async () => {
     const onNext = vi.fn();
-    render(<Explainer {...props} onNext={onNext} />);
+    render(<ExplainerView {...props} onNext={onNext} />);
     const button = screen.getByRole("button", { name: "Next" });
     expect(button).toBeInTheDocument();
     await act(() => button.click());
@@ -47,7 +46,7 @@ describe("Explainer Component", () => {
       { number: 1, description: "Step one" },
       { number: 2, description: "Step two" },
     ];
-    render(<Explainer {...props} steps={steps} />);
+    render(<ExplainerView {...props} steps={steps} />);
     expect(screen.getByText("Step one")).toBeInTheDocument();
     expect(screen.getByText("Step two")).toBeInTheDocument();
   });
@@ -55,14 +54,14 @@ describe("Explainer Component", () => {
   it("calls onNext automatically after timer expires", async () => {
     vi.useFakeTimers();
     const onNext = vi.fn();
-    render(<Explainer {...props} timer={500} onNext={onNext} />);
+    render(<ExplainerView {...props} timer={500} onNext={onNext} />);
     vi.advanceTimersByTime(500);
     expect(onNext).toHaveBeenCalled();
     vi.useRealTimers();
   });
 
   it("does not render steps list when steps is empty", () => {
-    render(<Explainer {...props} steps={[]} />);
+    render(<ExplainerView {...props} steps={[]} />);
     expect(screen.queryByRole("list")).toBeNull();
   });
 });
