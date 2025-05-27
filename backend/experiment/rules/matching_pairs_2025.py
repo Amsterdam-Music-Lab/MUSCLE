@@ -88,7 +88,7 @@ class MatchingPairs2025(MatchingPairsGame):
             session,
             title="Score",
             total_score=session.final_score,
-            final_text=self._final_text(session),
+            final_text=self._final_text(self._get_percentile_rank(session)),
             button={"text": "Next game", "link": self.get_experiment_url(session)},
             percentile=self._get_percentile_rank(session),
         )
