@@ -84,14 +84,15 @@ class MatchingPairs2025(MatchingPairsGame):
         return Explainer("Click to start!", steps=[])
 
     def _get_final_actions(self, session: Session):
-        accumulated_score = session.participant.session_set.aggregate(total_score=models.Sum("final_score"))[
-            "total_score"
-        ]
         current_score = session.final_score
-        blocks = session.block.experiment.block_set
-        sessions_played = session.participant.session_set.filter(
+        blocks = session.block.phase.experiment.associated_blocks()
+        participant_sessions = session.participant.session_set.filter(
             block__in=blocks
-        ).count()
+        )
+        accumulated_score = participant_sessions.aggregate(
+            total_score=models.Sum("final_score")
+        )["total_score"]
+        sessions_played = participant_sessions.count()
         score = Final(
             session,
             title="Score",
