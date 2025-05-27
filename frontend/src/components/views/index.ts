@@ -11,7 +11,7 @@ export * from "./ErrorView";
 export * from "./ExplainerView";
 export * from "./FinalView";
 export * from "./InfoView";
-export * from "./Landing";
+export * from "./LandingView";
 export * from "./Loading";
 export * from "./Playlists";
 export * from "./Profile";

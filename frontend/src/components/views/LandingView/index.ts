@@ -6,4 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export { default as Landing } from "./Landing";
+export type { LandingViewProps } from "./LandingView";
+export { default as LandingView } from "./LandingView";

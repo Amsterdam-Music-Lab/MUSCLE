@@ -26,7 +26,7 @@ import { ThemeProvider } from "@/theme/ThemeProvider";
 import {
   ErrorView,
   Loading,
-  Landing,
+  LandingView,
   Profile,
   StoreProfile,
 } from "@/components/views";
@@ -91,7 +91,7 @@ export default function App() {
               path="/"
               element={
                 frontendConfig.showLanding ? (
-                  <Landing
+                  <LandingView
                     experimentUrl={URLS.experiment.replace(
                       ":slug",
                       EXPERIMENT_SLUG

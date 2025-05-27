@@ -14,7 +14,7 @@ import { NarrowLayout } from "@/components/layout";
 import { PluginRenderer } from "@/components/plugins";
 import { Card } from "@/components/ui";
 
-interface LandingPageProps extends PageProps {
+interface LandingViewProps extends PageProps {
   /**
    * Url to the actual experiment
    */
@@ -36,11 +36,11 @@ const DEFAULT_PLUGINS = [
   },
 ] as AllPluginSpec[];
 
-export default function LandingPage({
+export default function LandingView({
   experimentUrl,
   plugins = DEFAULT_PLUGINS,
   ...pageProps
-}: LandingPageProps) {
+}: LandingViewProps) {
   if (plugins) {
     plugins = plugins.map((plugin) => {
       const updated: AllPluginSpec = { args: {}, ...plugin };
