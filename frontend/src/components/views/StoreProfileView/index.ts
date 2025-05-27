@@ -6,4 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+export type { StoreProfileViewProps } from "./StoreProfileView";
 export { default as StoreProfile } from "./StoreProfile";

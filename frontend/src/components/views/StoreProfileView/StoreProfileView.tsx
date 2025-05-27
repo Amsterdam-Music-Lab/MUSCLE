@@ -17,17 +17,17 @@ import { shareParticipant } from "@/API";
 import { LoadingView } from "../LoadingView";
 import { NarrowLayout, NarrowLayoutProps } from "@/components/layout";
 import { Button, Card, Input, InputGroup, LinkButton } from "@/components/ui";
-import styles from "./StoreProfile.module.scss";
+import styles from "./StoreProfileView.module.scss";
 
-interface StoreProfileProps extends NarrowLayoutProps {
+export interface StoreProfileViewProps extends NarrowLayoutProps {
   title?: string;
 }
 
-// StoreProfile enables participants to store their profile for later access
-export default function StoreProfile({
+// StoreProfileView enables participants to store their profile for later access
+export default function StoreProfileView({
   title,
   ...layoutProps
-}: StoreProfileProps) {
+}: StoreProfileViewProps) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
 

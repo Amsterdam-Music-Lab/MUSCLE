@@ -28,7 +28,7 @@ import {
   LoadingView,
   LandingView,
   ProfileView,
-  StoreProfile,
+  StoreProfileView,
 } from "@/components/views";
 import { Block, Background, Helmet } from "../";
 import styles from "./App.module.scss";
@@ -122,7 +122,7 @@ export default function App() {
             <Route path={URLS.experiment} element={<Experiment />} />
 
             {/* Store profile */}
-            <Route path={URLS.storeProfile} element={<StoreProfile />} />
+            <Route path={URLS.storeProfile} element={<StoreProfileView />} />
           </Routes>
         </ConditionalRender>
       </Router>
