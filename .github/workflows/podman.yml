@@ -17,7 +17,7 @@ jobs:
     environment: TuneTwins
     runs-on: tunetwins
 
-    if: github.ref == 'refs/heads/tunetwins'
+    if: github.ref == 'refs/heads/Tunetwins'
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
@@ -63,7 +63,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Create .env file
         run: |
-          echo Deploying branch ${{ github.ref }} with commit ${{ github.sha }} to test environment
+          echo Deploying branch ${{ github.ref }} with commit ${{ github.sha }} to tunetwins environment
           touch .env
           echo "VITE_API_ROOT=$FRONTEND_API_ROOT" >> .env
           echo "VITE_EXPERIMENT_SLUG=$FRONTEND_EXPERIMENT_SLUG" >> .env
