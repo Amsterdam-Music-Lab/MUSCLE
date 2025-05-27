@@ -27,7 +27,7 @@ import {
   ErrorView,
   LoadingView,
   LandingView,
-  Profile,
+  ProfileView,
   StoreProfile,
 } from "@/components/views";
 import { Block, Background, Helmet } from "../";
@@ -107,7 +107,7 @@ export default function App() {
             />
 
             {/* Profile */}
-            <Route path={URLS.profile} element={<Profile />} />
+            <Route path={URLS.profile} element={<ProfileView />} />
 
             {/* Internal redirect */}
             <Route

@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
 import { LoadingView, ErrorView } from "../";
 import classNames from "classnames";
 import { useParticipantScores } from "@/API";
@@ -6,7 +14,7 @@ import { Cup, CupType } from "@/components/game";
 import { URLS } from "@/config";
 import { ParticipantLink } from "@/components/user";
 import { Card, LinkButton } from "@/components/ui";
-import styles from "./Profile.module.scss";
+import styles from "./ProfileView.module.scss";
 
 export interface ProfileViewProps {
   messages: {
@@ -27,6 +35,7 @@ export interface ProfileViewProps {
     finished_at: string;
   }[];
 }
+
 interface ScoreBadgeProps extends HTMLAttributes<HTMLDivElement> {
   block_slug: string;
   block_name: string;
@@ -69,7 +78,7 @@ function ScoreBadge({
 }
 
 /** Profile loads and shows the profile of a participant for a given experiment */
-const Profile = () => {
+const ProfileView = () => {
   // API hooks
   const [data, loadingData] = useParticipantScores<ProfileViewProps>();
 
@@ -118,4 +127,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ProfileView;
