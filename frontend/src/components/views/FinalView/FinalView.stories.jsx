@@ -6,18 +6,18 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import Final from "./Final";
+import FinalView from "./FinalView";
 
 export default {
-  title: "Views/Final",
-  component: Final,
+  title: "Views/FinalView",
+  component: FinalView,
   parameters: {
     layout: "fullscreen",
   },
   tags: ["autodocs"],
 };
 
-function getFinalData(overrides = {}) {
+function getFinalViewData(overrides = {}) {
   return {
     score: 100,
     percentile: 66,
@@ -95,13 +95,13 @@ const getDecorator = (Story) => (
 );
 
 export const Default = {
-  args: getFinalData(),
+  args: getFinalViewData(),
   decorators: [getDecorator],
 };
 
 // with relative button.link
 export const RelativeButtonLink = {
-  args: getFinalData({
+  args: getFinalViewData({
     button: {
       text: "Play again",
       link: "/profile",
@@ -112,7 +112,7 @@ export const RelativeButtonLink = {
 
 // with absolute button.link
 export const AbsoluteButtonLink = {
-  args: getFinalData({
+  args: getFinalViewData({
     button: {
       text: "Button",
       link: "https://www.example.com",
@@ -123,7 +123,7 @@ export const AbsoluteButtonLink = {
 
 // without button.link
 export const NoButtonLink = {
-  args: getFinalData({
+  args: getFinalViewData({
     button: {
       text: "Button",
       link: "",
@@ -133,8 +133,8 @@ export const NoButtonLink = {
 };
 
 // final text html test
-export const FinalTextHtml = {
-  args: getFinalData({
+export const FinalViewTextHtml = {
+  args: getFinalViewData({
     final_text: `
             <p>You outperformed 66% of the players</p>
             <table>
@@ -172,7 +172,7 @@ export const FinalTextHtml = {
 
 // no percentile, text centered
 export const PlainText = {
-  args: getFinalData({
+  args: getFinalViewData({
     percentile: undefined,
     final_text: "<center>Well done!</center>",
   }),

@@ -6,4 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export { default as Final } from "./Final";
+export type { FinalViewProps } from "./FinalView";
+export { default as FinalView } from "./FinalView";

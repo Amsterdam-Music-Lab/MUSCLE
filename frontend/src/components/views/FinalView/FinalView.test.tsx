@@ -14,7 +14,7 @@ import { BrowserRouter } from "react-router-dom";
 import Block from "@/types/Block";
 import Theme from "@/types/Theme";
 import Image from "@/types/Image";
-import Final, { FinalProps } from "./Final";
+import FinalView, { FinalViewProps } from "./FinalView";
 
 vi.mock("@/components/plugins", () => ({
   __esModule: true,
@@ -164,13 +164,13 @@ const defaultProps = {
 
   // Duplicate; also in block?
   feedback_info: feedbackInfoObj,
-} as FinalProps;
+} as FinalViewProps;
 
-describe("Final Component", () => {
+describe("FinalView Component", () => {
   it("renders default plugins", () => {
     render(
       <BrowserRouter>
-        <Final {...defaultProps} />
+        <FinalView {...defaultProps} />
       </BrowserRouter>
     );
     expect(screen.getByTestId("plugin-scoreboard")).toBeInTheDocument();
@@ -180,7 +180,7 @@ describe("Final Component", () => {
 
   it("passes correct data to scoreboard plugin", () => {
     render(
-      <Final
+      <FinalView
         {...defaultProps}
         participant="p1"
         block={{ slug: "b" }}
@@ -203,7 +203,7 @@ describe("Final Component", () => {
   it("passes correct data to linkButton plugin", () => {
     render(
       <BrowserRouter>
-        <Final
+        <FinalView
           {...defaultProps}
           button={{ text: "Go!", link: "/next-link" }}
           onNext={() => {}}
@@ -219,7 +219,7 @@ describe("Final Component", () => {
   it("passes correct data to userFeedback plugin", () => {
     render(
       <BrowserRouter>
-        <Final
+        <FinalView
           {...defaultProps}
           feedback_info={{
             header: "Feedback Header",
@@ -241,7 +241,7 @@ describe("Final Component", () => {
   });
 
   it("does not render userFeedback plugin if feedback_info is missing", () => {
-    render(<Final {...defaultProps} feedback_info={undefined} />);
+    render(<FinalView {...defaultProps} feedback_info={undefined} />);
     expect(screen.queryByTestId("plugin-userFeedback")).not.toBeInTheDocument();
   });
 });

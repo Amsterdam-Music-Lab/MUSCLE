@@ -19,7 +19,7 @@ import { NarrowLayout } from "@/components/layout";
 import { PluginRenderer } from "@/components/plugins";
 import frontendConfig from "@/config/frontend";
 
-export interface FinalProps
+export interface FinalViewProps
   extends FinalAction,
     ScoreBoardProps,
     HTMLAttributes<HTMLDivElement> {
@@ -37,7 +37,7 @@ const DEFAULT_PLUGINS = [
  * Final is a block view that shows the final scores of the block
  * It can only be the last view of a block
  */
-const Final = ({
+export default function FinalView({
   block,
   participant,
   action_texts: userLinkTexts,
@@ -55,7 +55,7 @@ const Final = ({
   timelineStep = 0, // TODO
   plugins = frontendConfig?.final?.plugins || DEFAULT_PLUGINS,
   ...layoutProps
-}: FinalProps) => {
+}: FinalViewProps) {
   const session = useBoundStore((state) => state.session);
   useEffect(() => {
     finalizeSession({ session: session!, participant });
@@ -123,6 +123,4 @@ const Final = ({
       <PluginRenderer plugins={plugins as AllPluginSpec[]} />
     </NarrowLayout>
   );
-};
-
-export default Final;
+}
