@@ -29,7 +29,7 @@ vi.mock("react-router-dom", async () => {
 vi.mock("@/components/views", () => ({
   __esModule: true,
   Error: ({ message }) => <div>{message}</div>,
-  Consent: (props: any) => (
+  ConsentView: (props: any) => (
     <div className="consent-text" data-testid="consent-mock">
       {props.text || "Mocked Consent"}
     </div>

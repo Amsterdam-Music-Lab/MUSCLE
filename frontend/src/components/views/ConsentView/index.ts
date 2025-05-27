@@ -6,4 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export { default as Consent } from "./Consent";
+export type { ConsentViewProps } from "./ConsentView";
+export { default as ConsentView } from "./ConsentView";

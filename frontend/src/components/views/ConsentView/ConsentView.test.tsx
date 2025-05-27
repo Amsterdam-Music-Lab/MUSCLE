@@ -1,5 +1,5 @@
 import { fireEvent, render, waitFor } from "@testing-library/react";
-import Consent, { ConsentProps } from "./Consent";
+import ConsentView, { ConsentViewProps } from "./ConsentView";
 import { useConsent } from "@/API";
 import { saveAs } from "file-saver";
 import { vi, Mock, expect, it, describe } from "vitest";
@@ -30,9 +30,9 @@ const mockExperiment = {
   name: "Test",
 };
 
-const getConsentProps: (overrides?: Partial<ConsentProps>) => ConsentProps = (
-  overrides
-) => ({
+const getConsentViewProps: (
+  overrides?: Partial<ConsentViewProps>
+) => ConsentViewProps = (overrides) => ({
   title: "Consent",
   text: "<p>Consent Text</p>",
   experiment: mockExperiment,
@@ -47,7 +47,7 @@ describe("Consent", () => {
   it("renders circle while loading", () => {
     (useConsent as Mock).mockReturnValue([null, true]); // Mock loading state
     const { getByTestId } = render(
-      <Consent {...getConsentProps({ experiment: mockExperiment })} />
+      <ConsentView {...getConsentViewProps({ experiment: mockExperiment })} />
     );
     expect(getByTestId("mock-loading")).toBeTruthy();
   });
@@ -55,8 +55,8 @@ describe("Consent", () => {
   it("renders consent text when not loading", () => {
     (useConsent as Mock).mockReturnValue([null, false]);
     const { getByText } = render(
-      <Consent
-        {...getConsentProps({
+      <ConsentView
+        {...getConsentViewProps({
           text: "<p>Consent Text</p>",
           experiment: mockExperiment,
         })}
@@ -70,8 +70,8 @@ describe("Consent", () => {
     (useConsent as Mock).mockReturnValue([null, false]);
     const onNext = vi.fn();
     const { getByText } = render(
-      <Consent
-        {...getConsentProps({
+      <ConsentView
+        {...getConsentViewProps({
           confirm: "Agree",
           experiment: mockExperiment,
           onNext,
@@ -85,7 +85,7 @@ describe("Consent", () => {
 
   it("triggers download when Download button is clicked", async () => {
     (useConsent as Mock).mockReturnValue([null, false]);
-    const { getByTestId } = render(<Consent {...getConsentProps()} />);
+    const { getByTestId } = render(<ConsentView {...getConsentViewProps()} />);
     fireEvent.click(getByTestId("download-button"));
 
     await waitFor(() => expect(saveAs).toHaveBeenCalled());
@@ -95,7 +95,9 @@ describe("Consent", () => {
     (useConsent as Mock).mockReturnValue([true, false]);
     const onNext = vi.fn();
     render(
-      <Consent {...getConsentProps({ experiment: mockExperiment, onNext })} />
+      <ConsentView
+        {...getConsentViewProps({ experiment: mockExperiment, onNext })}
+      />
     );
     expect(onNext).toHaveBeenCalled();
   });
@@ -107,7 +109,7 @@ describe("Consent", () => {
       configurable: true,
       value: 800,
     });
-    const { getByTestId } = render(<Consent {...getConsentProps()} />);
+    const { getByTestId } = render(<ConsentView {...getConsentViewProps()} />);
     const consentText = getByTestId("consent-text");
     expect(consentText.style.height).toBe("500px");
   });

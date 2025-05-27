@@ -18,9 +18,9 @@ import { Button, Card, LinkButton } from "@/components/ui";
 import { NarrowLayout } from "@/components/layout";
 import { Loading } from "../Loading";
 
-import styles from "./Consent.module.scss";
+import styles from "./ConsentView.module.scss";
 
-export interface ConsentProps extends NarrowLayoutProps {
+export interface ConsentViewProps extends NarrowLayoutProps {
   title: string;
   text: string;
   experiment: any;
@@ -31,7 +31,7 @@ export interface ConsentProps extends NarrowLayoutProps {
 }
 
 /** Consent is an experiment view that shows the consent text, and handles agreement/stop actions */
-function Consent({
+export default function ConsentView({
   title,
   text,
   experiment,
@@ -132,5 +132,3 @@ function Consent({
     </NarrowLayout>
   );
 }
-
-export default Consent;

@@ -16,7 +16,7 @@ import useHeadDataFromExperiment from "@/hooks/useHeadDataFromExperiment";
 import { Route, Routes, useParams } from "react-router-dom";
 import { Redirect } from "@/components/utils";
 import { Page } from "@/components/application";
-import { Consent, Error, Loading } from "@/components/views";
+import { ConsentView, Error, Loading } from "@/components/views";
 import { About, Dashboard, Footer } from "../";
 import "./Experiment.module.scss"; // TODO: not modular yet
 
@@ -72,7 +72,7 @@ export default function Experiment() {
     };
     return (
       <Page className="aha__consent-wrapper" title={experiment.name}>
-        <Consent {...attrs} />
+        <ConsentView {...attrs} />
       </Page>
     );
   }
