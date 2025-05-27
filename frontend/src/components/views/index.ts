@@ -15,6 +15,6 @@ export * from "./LandingView";
 export * from "./LoadingView";
 export * from "./PlaylistsView";
 export * from "./ProfileView";
-export * from "./Score";
+export * from "./ScoreView";
 export * from "./StoreProfile";
 export * from "./Trial";

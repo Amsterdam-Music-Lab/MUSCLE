@@ -1,15 +1,23 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
 import { useState, useEffect, useRef } from "react";
 import classNames from "classnames";
 import { Button, Circle } from "@/components/ui";
 import { Score as ScoreAction } from "@/types/Action";
-import "./Score.scss";
+import "./ScoreView.module.scss";
 
-export interface ScoreProps extends ScoreAction {
+export interface ScoreViewProps extends ScoreAction {
   onNext: () => void;
 }
 
 /** Score is an block view that shows an intermediate and total score */
-const Score = ({
+export default function ScoreView({
   last_song,
   score,
   score_message,
@@ -19,7 +27,7 @@ const Score = ({
   feedback,
   timer,
   onNext,
-}: ScoreProps) => {
+}: ScoreViewProps) {
   const [showScore, setShowScore] = useState(0);
   // Use a ref to prevent doing multiple increments
   // when the render is skipped
@@ -114,6 +122,4 @@ const Score = ({
       {feedback && <p className="feedback">{feedback}</p>}
     </div>
   );
-};
-
-export default Score;
+}

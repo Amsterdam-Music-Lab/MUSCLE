@@ -23,7 +23,7 @@ import {
   InfoView,
   ExplainerView,
   FinalView,
-  Score,
+  ScoreView,
   LoadingView,
   PlaylistsView,
 } from "@/components/views";
@@ -204,7 +204,7 @@ const Block = () => {
 
       case "SCORE":
         return (
-          <Score
+          <ScoreView
             key={key}
             last_song={state.last_song}
             score_meesage={state.score_meesage}
