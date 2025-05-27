@@ -7,9 +7,9 @@
  */
 
 import type { Meta, StoryObj } from "@storybook/react";
-import Info from "./Info";
+import InfoView from "./InfoView";
 
-type Story = StoryObj<typeof Info>;
+type Story = StoryObj<typeof InfoView>;
 
 const decorator = (StoryComponent: Story) => (
   <div style={{ padding: "4rem", backgroundColor: "#eee" }}>
@@ -17,9 +17,9 @@ const decorator = (StoryComponent: Story) => (
   </div>
 );
 
-const meta: Meta<typeof Info> = {
-  title: "views/Info",
-  component: Info,
+const meta: Meta<typeof InfoView> = {
+  title: "views/InfoView",
+  component: InfoView,
   tags: ["autodocs"],
   decorators: [decorator],
 };

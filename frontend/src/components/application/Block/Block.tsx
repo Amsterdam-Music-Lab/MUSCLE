@@ -20,7 +20,7 @@ import { getNextRound, useBlock } from "@/API";
 import {
   Trial,
   ErrorView,
-  Info,
+  InfoView,
   ExplainerView,
   FinalView,
   Score,
@@ -262,7 +262,7 @@ const Block = () => {
 
       case "INFO":
         return (
-          <Info
+          <InfoView
             key={key}
             html={state?.body}
             title={state?.heading}

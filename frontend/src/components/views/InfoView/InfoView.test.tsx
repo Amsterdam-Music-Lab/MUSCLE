@@ -8,27 +8,27 @@
 
 import { describe, test, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import Info from "./Info";
+import InfoView from "./InfoView";
 
-describe("Info Component", () => {
+describe("InfoView Component", () => {
   test("renders without crashing", () => {
-    render(<Info html="Test body" />);
+    render(<InfoView html="Test body" />);
     expect(screen.getByText("Test body")).toBeTruthy();
   });
 
   test("renders heading when provided", () => {
-    render(<Info title="Test Heading" html="Test body" />);
+    render(<InfoView title="Test Heading" html="Test body" />);
     expect(screen.getByText("Test Heading")).toBeTruthy();
   });
 
   test("does not render heading when not provided", () => {
-    render(<Info html="Test body" />);
+    render(<InfoView html="Test body" />);
     expect(screen.queryByRole("heading")).toBeNull();
   });
 
   test("renders button link when button_label & button_link is provided", () => {
     render(
-      <Info
+      <InfoView
         html="Test body"
         buttonText="Click me"
         buttonLink="https://example.com"
@@ -43,7 +43,11 @@ describe("Info Component", () => {
 
   test("renders button when button_label & onNext is provided", () => {
     render(
-      <Info html="Test body" buttonText="Click me" onButtonClick={vi.fn()} />
+      <InfoView
+        html="Test body"
+        buttonText="Click me"
+        onButtonClick={vi.fn()}
+      />
     );
     const button = screen.queryByRole("button");
     expect(button).toBeTruthy();
@@ -52,18 +56,18 @@ describe("Info Component", () => {
   });
 
   test("does not render button without link and onNext when only button_label is provided", () => {
-    render(<Info html="Test body" buttonText="Click me" />);
+    render(<InfoView html="Test body" buttonText="Click me" />);
     expect(screen.queryByRole("button")).toBeNull();
   });
 
   test("does not render button when button_label is not provided", () => {
-    render(<Info html="Test body" />);
+    render(<InfoView html="Test body" />);
     expect(screen.queryByRole("button")).toBeNull();
   });
 
   test("renders anchor tag when button_link is provided", () => {
     render(
-      <Info
+      <InfoView
         html="Test body"
         buttonText="Click me"
         buttonLink="https://example.com"
@@ -78,7 +82,11 @@ describe("Info Component", () => {
   test("renders button without link when only button_label is provided", () => {
     const onNextMock = vi.fn();
     render(
-      <Info html="Test body" buttonText="Click me" onButtonClick={onNextMock} />
+      <InfoView
+        html="Test body"
+        buttonText="Click me"
+        onButtonClick={onNextMock}
+      />
     );
     const button = screen.getByText("Click me");
     expect(button.tagName).toBe("BUTTON");
@@ -87,7 +95,11 @@ describe("Info Component", () => {
   test("calls onNext when button is clicked", () => {
     const onNextMock = vi.fn();
     render(
-      <Info html="Test body" buttonText="Click me" onButtonClick={onNextMock} />
+      <InfoView
+        html="Test body"
+        buttonText="Click me"
+        onButtonClick={onNextMock}
+      />
     );
     fireEvent.click(screen.getByText("Click me"));
     expect(onNextMock).toHaveBeenCalledTimes(1);
@@ -95,27 +107,27 @@ describe("Info Component", () => {
 
   test("renders body content as HTML", () => {
     const html = "<p>Test <strong>body</strong></p>";
-    const { getByTestId } = render(<Info html={html} />);
+    const { getByTestId } = render(<InfoView html={html} />);
     expect(getByTestId("info-body").innerHTML).to.contain(html);
   });
 
   test("applies max-height style to info-body", () => {
     const { getByTestId } = render(
-      <Info html="Test body" responsiveHeight={true} />
+      <InfoView html="Test body" responsiveHeight={true} />
     );
     expect(getByTestId("info-body").style.maxHeight).toBeTruthy();
   });
 
   test("updates max-height on window resize", async () => {
     const { rerender } = render(
-      <Info html="Test body" responsiveHeight={true} />
+      <InfoView html="Test body" responsiveHeight={true} />
     );
     const initialHeight = screen.getByTestId("info-body").style.maxHeight;
 
     // Simulate window resize
     window.innerHeight = 1001;
     window.dispatchEvent(new Event("resize"));
-    rerender(<Info html="Test body" />);
+    rerender(<InfoView html="Test body" />);
 
     const updatedHeight =
       screen.getByText("Test body").parentElement?.style.maxHeight;

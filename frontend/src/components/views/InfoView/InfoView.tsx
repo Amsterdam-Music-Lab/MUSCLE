@@ -33,7 +33,7 @@ function useMaxHeight() {
   return maxHeight;
 }
 
-export interface InfoProps extends NarrowLayoutProps {
+export interface InfoViewProps extends NarrowLayoutProps {
   /**
    * Title of the info card.
    */
@@ -68,7 +68,7 @@ export interface InfoProps extends NarrowLayoutProps {
 }
 
 /** Info is a block view that shows the Info text, and handles agreement/stop actions */
-export default function Info({
+export default function InfoView({
   title,
   html,
   buttonText = "Continue",
@@ -76,7 +76,7 @@ export default function Info({
   onButtonClick,
   responsiveHeight = false,
   ...layoutProps
-}: InfoProps) {
+}: InfoViewProps) {
   const maxHeight = useMaxHeight();
   const btnProps: any = {
     stretch: true,

@@ -6,11 +6,11 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export * from "./Consent";
-export * from "./Error";
-export * from "./Explainer";
-export * from "./Final";
-export * from "./Info";
+export * from "./ConsentView";
+export * from "./ErrorView";
+export * from "./ExplainerView";
+export * from "./FinalView";
+export * from "./InfoView";
 export * from "./Landing";
 export * from "./Loading";
 export * from "./Playlists";

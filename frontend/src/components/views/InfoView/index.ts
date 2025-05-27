@@ -6,5 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export type { InfoProps } from "./Info";
-export { default as Info } from "./Info";
+export type { InfoViewProps } from "./InfoView";
+export { default as InfoView } from "./Info";
