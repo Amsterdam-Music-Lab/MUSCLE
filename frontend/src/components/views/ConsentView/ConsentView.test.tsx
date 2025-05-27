@@ -21,8 +21,8 @@ vi.mock("@/API", () => ({
 }));
 
 // Mock the Circle and ListenCircle components
-vi.mock("../Loading", () => ({
-  Loading: () => <div data-testid="mock-loading">Loading...</div>,
+vi.mock("../LoadingView", () => ({
+  LoadingView: () => <div data-testid="mock-loading">Loading...</div>,
 }));
 
 const mockExperiment = {

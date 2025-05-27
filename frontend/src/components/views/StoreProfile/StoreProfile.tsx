@@ -14,7 +14,7 @@ import classNames from "classnames";
 import { URLS } from "@/config";
 import useBoundStore from "@/util/stores";
 import { shareParticipant } from "@/API";
-import { Loading } from "../Loading";
+import { LoadingView } from "../LoadingView";
 import { NarrowLayout, NarrowLayoutProps } from "@/components/layout";
 import { Button, Card, Input, InputGroup, LinkButton } from "@/components/ui";
 import styles from "./StoreProfile.module.scss";
@@ -47,7 +47,7 @@ export default function StoreProfile({
   };
 
   if (!participant) {
-    return <Loading />;
+    return <LoadingView />;
   }
 
   return (

@@ -25,7 +25,7 @@ import {
 import { ThemeProvider } from "@/theme/ThemeProvider";
 import {
   ErrorView,
-  Loading,
+  LoadingView,
   LandingView,
   Profile,
   StoreProfile,
@@ -81,7 +81,7 @@ export default function App() {
     <ThemeProvider>
       <Helmet />
       <Router className={styles.app}>
-        <ConditionalRender condition={!!participant} fallback={<Loading />}>
+        <ConditionalRender condition={!!participant} fallback={<LoadingView />}>
           <Routes>
             {/* Request reload for given participant */}
             <Route path={URLS.reloadParticipant} element={<Reload />} />

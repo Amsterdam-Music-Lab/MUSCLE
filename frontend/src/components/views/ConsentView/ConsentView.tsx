@@ -16,7 +16,7 @@ import { URLS } from "@/config";
 import { createConsent, useConsent } from "@/API";
 import { Button, Card, LinkButton } from "@/components/ui";
 import { NarrowLayout } from "@/components/layout";
-import { Loading } from "../Loading";
+import { LoadingView } from "../LoadingView";
 
 import styles from "./ConsentView.module.scss";
 
@@ -73,7 +73,7 @@ export default function ConsentView({
   // Loader in case consent is being loaded
   // or it was already given
   if (loadingConsent || consent) {
-    return <Loading />;
+    return <LoadingView />;
   }
 
   // Calculate height for consent text to prevent overlapping browser chrome

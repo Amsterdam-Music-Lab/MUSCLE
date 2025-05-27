@@ -24,7 +24,7 @@ import {
   ExplainerView,
   FinalView,
   Score,
-  Loading,
+  LoadingView,
   Playlists,
 } from "@/components/views";
 import { FloatingActionButton } from "@/components/ui";
@@ -258,7 +258,7 @@ const Block = () => {
         );
 
       case "LOADING":
-        return <Loading key={key} label={loadingText} />;
+        return <LoadingView key={key} label={loadingText} />;
 
       case "INFO":
         return (
@@ -330,7 +330,7 @@ const Block = () => {
           )}
         </Page>
       ) : (
-        <Loading label={loadingText} />
+        <LoadingView label={loadingText} />
       )}
     </PageTransition>
   );

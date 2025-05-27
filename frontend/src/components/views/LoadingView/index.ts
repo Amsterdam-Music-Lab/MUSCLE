@@ -6,5 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export type { LoadingProps } from "./Loading";
-export { default as Loading } from "./Loading";
+export type { LoadingViewProps } from "./LoadingView";
+export { default as LoadingView } from "./LoadingView";

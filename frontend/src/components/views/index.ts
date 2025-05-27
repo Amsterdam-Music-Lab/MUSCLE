@@ -12,7 +12,7 @@ export * from "./ExplainerView";
 export * from "./FinalView";
 export * from "./InfoView";
 export * from "./LandingView";
-export * from "./Loading";
+export * from "./LoadingView";
 export * from "./Playlists";
 export * from "./Profile";
 export * from "./Score";

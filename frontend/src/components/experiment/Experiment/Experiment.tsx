@@ -16,7 +16,7 @@ import useHeadDataFromExperiment from "@/hooks/useHeadDataFromExperiment";
 import { Route, Routes, useParams } from "react-router-dom";
 import { Redirect } from "@/components/utils";
 import { Page } from "@/components/application";
-import { ConsentView, ErrorView, Loading } from "@/components/views";
+import { ConsentView, ErrorView, LoadingView } from "@/components/views";
 import { About, Dashboard, Footer } from "../";
 import "./Experiment.module.scss"; // TODO: not modular yet
 
@@ -56,7 +56,7 @@ export default function Experiment() {
     }`;
 
   if (loadingExperiment) {
-    return <Loading />;
+    return <LoadingView />;
   }
 
   if (!loadingExperiment && !experiment) {

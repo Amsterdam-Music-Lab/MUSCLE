@@ -11,7 +11,7 @@ import classNames from "classnames";
 import { NarrowLayout } from "@/components/layout";
 import { Circle } from "@/components/ui";
 
-export interface LoadingProps extends NarrowLayoutProps {
+export interface LoadingViewProps extends NarrowLayoutProps {
   /**
    * Label shown inside the circle. Defaults to "Loading..."
    */
@@ -32,7 +32,7 @@ export interface LoadingProps extends NarrowLayoutProps {
  * Loading is a block view that shows a loading screen
  * It is normally set by code during loading of data
  */
-export default function Loading({
+export default function LoadingView({
   label = "Loading...",
   gapSize = 0.02,
   duration = 2,
@@ -40,7 +40,7 @@ export default function Loading({
   running = false,
   className,
   ...layoutProps
-}: LoadingProps) {
+}: LoadingViewProps) {
   return (
     <NarrowLayout
       className={classNames("transition-appear", className)}

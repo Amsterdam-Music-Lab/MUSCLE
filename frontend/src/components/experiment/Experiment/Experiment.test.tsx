@@ -34,7 +34,7 @@ vi.mock("@/components/views", () => ({
       {props.text || "Mocked Consent"}
     </div>
   ),
-  Loading: () => <div>Loading...</div>,
+  LoadingView: () => <div>Loading...</div>,
 }));
 
 const getBlock = (overrides = {}) => {

@@ -1,4 +1,4 @@
-import { Loading, ErrorView } from "../";
+import { LoadingView, ErrorView } from "../";
 import classNames from "classnames";
 import { useParticipantScores } from "@/API";
 import { NarrowLayout } from "@/components/layout";
@@ -73,7 +73,7 @@ const Profile = () => {
   // API hooks
   const [data, loadingData] = useParticipantScores<ProfileViewProps>();
 
-  if (loadingData) return <Loading />;
+  if (loadingData) return <LoadingView />;
   if (!data)
     return (
       <ErrorView message="An error occured while loading your profile..." />

@@ -8,9 +8,9 @@
 
 import type { Meta, StoryObj } from "@storybook/react";
 
-import Loading from "./Loading";
+import LoadingView from "./LoadingView";
 
-type Story = StoryObj<typeof Loading>;
+type Story = StoryObj<typeof LoadingView>;
 
 const decorator = (StoryComponent: Story) => (
   <div style={{ height: "300px", background: "#666" }}>
@@ -18,9 +18,9 @@ const decorator = (StoryComponent: Story) => (
   </div>
 );
 
-const meta: Meta<typeof Loading> = {
-  title: "App/Loading",
-  component: Loading,
+const meta: Meta<typeof LoadingView> = {
+  title: "App/LoadingView",
+  component: LoadingView,
   tags: ["autodocs"],
   decorators: [decorator],
 };
