@@ -17,7 +17,7 @@ jobs:
     environment: TuneTwins
     runs-on: tunetwins
 
-    if: github.ref == 'refs/heads/Tunetwins'
+    if: github.ref == 'refs/heads/tunetwins'
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
