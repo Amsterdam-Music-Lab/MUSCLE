@@ -22,7 +22,7 @@ import {
   ErrorView,
   Info,
   ExplainerView,
-  Final,
+  FinalView,
   Score,
   Loading,
   Playlists,
@@ -219,7 +219,7 @@ const Block = () => {
 
       case "FINAL":
         return (
-          <Final
+          <FinalView
             key={key}
             block={block}
             participant={participant}
