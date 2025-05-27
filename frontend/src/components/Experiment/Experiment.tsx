@@ -30,7 +30,7 @@ const Experiment = () => {
     const nextBlock = experiment?.nextBlock;
     const displayDashboard = experiment?.dashboard.length;
     const showConsent = experiment?.consent;
-    const totalScore = experiment?.totalScore;
+    const totalScore = experiment?.accumulatedScore;
 
     useHeadDataFromExperiment(experiment, setHeadData, resetHeadData);
 

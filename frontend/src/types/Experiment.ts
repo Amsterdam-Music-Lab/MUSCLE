@@ -25,6 +25,7 @@ export default interface Experiment {
     aboutContent: string;
     consent?: Consent;
     theme?: Theme;
-    totalScore: number;
+    accumulatedScore: number;
+    playedSessions: number;
     socialMediaConfig?: SocialMediaConfig;
 }
