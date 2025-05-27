@@ -6,5 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export type { PlaylistsProps } from "./Playlists";
-export { default as Playlists } from "./Playlists";
+export type { PlaylistsViewProps } from "./PlaylistsView";
+export { default as PlaylistsView } from "./PlaylistsView";

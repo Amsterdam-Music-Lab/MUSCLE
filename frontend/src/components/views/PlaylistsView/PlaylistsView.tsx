@@ -13,9 +13,9 @@ import { useEffect } from "react";
 import classNames from "classnames";
 import { NarrowLayout } from "@/components/layout";
 import { Card, CardSectionProps } from "@/components/ui";
-import styles from "./Playlists.module.scss";
+import styles from "./PlaylistsView.module.scss";
 
-export interface PlaylistsProps {
+export interface PlaylistsViewProps {
   /** The playlists that can be selected */
   playlists: Playlist[];
 
@@ -41,7 +41,7 @@ export interface PlaylistsProps {
 /**
  * Playlist is a block view, that handles (auto)selection of a playlist
  */
-export default function Playlists({
+export default function PlaylistsView({
   playlists,
   playlist: currentPlaylist,
   onSelect = () => {},
@@ -49,7 +49,7 @@ export default function Playlists({
   title,
   animate = true,
   animationDelayMs = 100,
-}: PlaylistsProps) {
+}: PlaylistsViewProps) {
   // Silently proceed to next view when fewer than 2 playlists are left
   useEffect(() => {
     if (playlists.length < 2) onSelect();

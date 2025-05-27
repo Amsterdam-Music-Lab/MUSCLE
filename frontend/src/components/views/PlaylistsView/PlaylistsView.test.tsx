@@ -8,11 +8,11 @@
 import "@testing-library/jest-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { vi, describe, it, expect } from "vitest";
-import Playlists from "./Playlists";
+import PlaylistsView from "./PlaylistsView";
 
 vi.mock("@/util/stores");
 
-describe("Playlists Component", () => {
+describe("PlaylistsView Component", () => {
   const curPlaylist = { current: "42" };
   const playlists = [
     { id: "42", name: "Playlist A" },
@@ -22,7 +22,7 @@ describe("Playlists Component", () => {
 
   it("renders correctly with given props", () => {
     render(
-      <Playlists
+      <PlaylistsView
         playlist={curPlaylist}
         playlists={playlists}
         instruction="instruction"
@@ -36,7 +36,7 @@ describe("Playlists Component", () => {
 
   it("calls onNext when playlist item is clicked", () => {
     render(
-      <Playlists
+      <PlaylistsView
         playlists={playlists}
         playlist={curPlaylist}
         instruction="instruction"
@@ -49,7 +49,7 @@ describe("Playlists Component", () => {
 
   it("does not render with less than 2 playlists", () => {
     render(
-      <Playlists
+      <PlaylistsView
         playlists={[{ id: "42", name: "Playlist A" }]}
         playlist={curPlaylist}
         instruction="instruction"

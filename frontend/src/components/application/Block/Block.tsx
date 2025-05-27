@@ -25,7 +25,7 @@ import {
   FinalView,
   Score,
   LoadingView,
-  Playlists,
+  PlaylistsView,
 } from "@/components/views";
 import { FloatingActionButton } from "@/components/ui";
 import { UserFeedbackForm } from "@/components/user";
@@ -247,7 +247,7 @@ const Block = () => {
       // -------------------------
       case "PLAYLIST":
         return (
-          <Playlists
+          <PlaylistsView
             key={key}
             playlist={playlist}
             playlists={block?.playlists}

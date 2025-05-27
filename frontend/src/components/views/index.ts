@@ -13,7 +13,7 @@ export * from "./FinalView";
 export * from "./InfoView";
 export * from "./LandingView";
 export * from "./LoadingView";
-export * from "./Playlists";
+export * from "./PlaylistsView";
 export * from "./Profile";
 export * from "./Score";
 export * from "./StoreProfile";

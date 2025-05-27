@@ -7,7 +7,7 @@
  */
 
 import type { Meta, StoryObj } from "@storybook/react";
-import Playlists from "./Playlists";
+import PlaylistsView from "./PlaylistsView";
 
 type Story = StoryObj<typeof InPlaylistfo>;
 
@@ -17,9 +17,9 @@ const decorator = (StoryComponent: Story) => (
   </div>
 );
 
-const meta: Meta<typeof Playlists> = {
-  title: "views/Playlists",
-  component: Playlists,
+const meta: Meta<typeof PlaylistsView> = {
+  title: "views/PlaylistsView",
+  component: PlaylistsView,
   tags: ["autodocs"],
   decorators: [decorator],
 };
