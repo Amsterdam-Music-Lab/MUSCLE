@@ -6,18 +6,14 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import type { HTMLAttributes } from "react";
 import { useEffect } from "react";
 import classNames from "classnames";
 import { Button, Card } from "@/components/ui";
 import { Explainer as ExplainerAction } from "@/types/Action";
-import { NarrowLayout } from "@/components/layout";
 import { Logo } from "@/components/svg";
 import styles from "./ExplainerView.module.scss";
 
-export interface ExplainerViewProps
-  extends ExplainerAction,
-    HTMLAttributes<HTMLDivElement> {
+export interface ExplainerViewProps extends ExplainerAction {
   onNext: () => void;
 }
 
@@ -33,8 +29,6 @@ export default function ExplainerView({
   timer = null,
   onNext,
   title = "Instructions...",
-  className,
-  ...divProps
 }: ExplainerViewProps) {
   useEffect(() => {
     if (timer != null) {
@@ -46,10 +40,7 @@ export default function ExplainerView({
   }, [onNext, timer]);
 
   return (
-    <NarrowLayout
-      className={classNames(styles.container, className)}
-      {...divProps}
-    >
+    <>
       {/* TODO Use plugin system! */}
       <Logo name="tunetwins" fill="#fff" style={{ height: "3em" }} />
       <Card data-testid="explainer" className={classNames(styles.explainer)}>
@@ -82,9 +73,20 @@ export default function ExplainerView({
       >
         {buttonText}
       </Button>
-    </NarrowLayout>
+    </>
   );
 }
+
+ExplainerView.viewName = "explainer";
+ExplainerView.usesOwnLayout = false;
+ExplainerView.getViewProps = ({ state, onNext }) => ({
+  instruction: state.instruction,
+  button_label: state.button_label,
+  steps: state.steps,
+  timer: state.timer,
+  onNext,
+});
+ExplainerView.dependencies = ["state", "onNext"];
 
 interface ExplainerItemProps {
   number: number | null;

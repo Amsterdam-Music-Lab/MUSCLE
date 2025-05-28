@@ -7,4 +7,4 @@
  */
 
 export type { StoreProfileViewProps } from "./StoreProfileView";
-export { default as StoreProfile } from "./StoreProfile";
+export { default as StoreProfileView } from "./StoreProfileView";

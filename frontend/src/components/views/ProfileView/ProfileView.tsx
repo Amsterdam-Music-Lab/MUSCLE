@@ -5,18 +5,17 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-
-import { LoadingView, ErrorView } from "../";
+import type { HTMLAttributes } from "react";
 import classNames from "classnames";
 import { useParticipantScores } from "@/API";
-import { NarrowLayout } from "@/components/layout";
 import { Cup, CupType } from "@/components/game";
 import { URLS } from "@/config";
 import { ParticipantLink } from "@/components/user";
 import { Card, LinkButton } from "@/components/ui";
 import styles from "./ProfileView.module.scss";
+import { View } from "@/components/application";
 
-export interface ProfileViewProps {
+export interface ProfileViewData {
   messages: {
     title: string;
     summary: string;
@@ -78,14 +77,17 @@ function ScoreBadge({
 }
 
 /** Profile loads and shows the profile of a participant for a given experiment */
-const ProfileView = () => {
+export default function ProfileView() {
   // API hooks
-  const [data, loadingData] = useParticipantScores<ProfileViewProps>();
+  const [data, loadingData] = useParticipantScores<ProfileViewData>();
 
-  if (loadingData) return <LoadingView />;
+  if (loadingData) return <View name="loading" />;
   if (!data)
     return (
-      <ErrorView message="An error occured while loading your profile..." />
+      <View
+        name="error"
+        message="An error occured while loading your profile..."
+      />
     );
 
   data.scores.sort((a, b) =>
@@ -93,7 +95,7 @@ const ProfileView = () => {
   );
   const results = data.scores;
   return (
-    <NarrowLayout>
+    <>
       <Card>
         <Card.Header title={data.messages.title}>
           {data.messages.summary}
@@ -123,8 +125,10 @@ const ProfileView = () => {
           ))}
         </div>
       </div>
-    </NarrowLayout>
+    </>
   );
-};
+}
 
-export default ProfileView;
+ProfileView.viewName = "profile";
+ProfileView.usesOwnLayout = false;
+ProfileView.getViewProps = undefined;

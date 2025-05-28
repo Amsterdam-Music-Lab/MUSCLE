@@ -6,5 +6,4 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export type { PageProps } from "./Page";
-export { default as Page } from "./Page";
+export { default as View } from "./View";

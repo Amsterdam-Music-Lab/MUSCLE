@@ -8,8 +8,9 @@
 
 export * from "./App";
 export * from "./Block";
-export * from "./Page";
 export * from "./AppBar";
 export * from "./Background";
 export * from "./Helmet";
 export * from "./Logo";
+export * from "./View";
+export * from "./ViewTransition";

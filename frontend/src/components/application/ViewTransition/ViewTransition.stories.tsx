@@ -9,9 +9,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
 
-import PageTransition from "./PageTransition";
+import ViewTransition from "./ViewTransition";
 
-type Story = StoryObj<typeof PageTransition>;
+type Story = StoryObj<typeof ViewTransition>;
 
 const decorator = (StoryComponent: Story) => (
   <div style={{ height: "200px" }}>
@@ -19,9 +19,9 @@ const decorator = (StoryComponent: Story) => (
   </div>
 );
 
-const meta: Meta<typeof PageTransition> = {
-  title: "App/PageTransition",
-  component: PageTransition,
+const meta: Meta<typeof ViewTransition> = {
+  title: "App/ViewTransition",
+  component: ViewTransition,
   parameters: {
     layout: "fullscreen",
   },
@@ -45,7 +45,7 @@ export const Interactive: Story = {
     const [page, setPage] = useState(0);
     const colors = ["#e57373", "#64b5f6", "#81c784"];
     return (
-      <PageTransition transitionKey={page}>
+      <ViewTransition transitionKey={page}>
         <div style={{ ...pageStyles, background: colors[page] }}>
           <div>
             <h3>Page {page + 1}</h3>
@@ -54,7 +54,7 @@ export const Interactive: Story = {
             </button>
           </div>
         </div>
-      </PageTransition>
+      </ViewTransition>
     );
   },
 };

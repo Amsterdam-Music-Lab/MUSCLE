@@ -7,4 +7,4 @@
  */
 
 export type { ProfileViewProps } from "./ProfileView";
-export { default as Profile } from "./Profile";
+export { default as ProfileView } from "./ProfileView";

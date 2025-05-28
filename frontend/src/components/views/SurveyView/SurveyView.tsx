@@ -1,14 +1,19 @@
-import type { HTMLAttributes } from "react";
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
 import type IQuestion from "@/types/Question";
 
 import { useState } from "react";
-import classNames from "classnames";
-import { Question } from "../Question";
+import { Question } from "@/components/question";
 import { submitResultType } from "@/hooks/useResultHandler";
 import { Button, Card } from "@/components/ui";
-import { NarrowLayout } from "@/components/layout";
 
-interface SurveyProps extends HTMLAttributes<HTMLDivElement> {
+export interface SurveyViewProps {
   formActive: boolean;
   form: IQuestion[];
   buttonLabel: string;
@@ -17,10 +22,8 @@ interface SurveyProps extends HTMLAttributes<HTMLDivElement> {
   submitResult: submitResultType;
 }
 
-// TODO move to views?
-
-/** Survey */
-const Survey = ({
+/** SurveyView */
+export default function SurveyView({
   formActive,
   form,
   buttonLabel,
@@ -29,7 +32,7 @@ const Survey = ({
   submitResult,
   className,
   ...divProps
-}: SurveyProps) => {
+}: SurveyViewProps) {
   const showSubmitButtons =
     form.filter((formElement) => formElement.submits).length === 0;
 
@@ -69,7 +72,7 @@ const Survey = ({
   }
 
   return (
-    <NarrowLayout className={classNames(className)} {...divProps}>
+    <>
       <Card>
         <form>
           {form.map((question, index) => {
@@ -87,39 +90,35 @@ const Survey = ({
         </form>
       </Card>
 
-      {/* Continue button */}
       {showSubmitButtons && (
         <>
           {isSkippable && (
-            // skip button
             <Button
-              onClick={() => {
-                submitResult();
-              }}
+              title={skipLabel}
+              onClick={submitResult}
               stretch={true}
               rounded={false}
               size="lg"
               variant="secondary"
-              title={skipLabel}
             />
           )}
 
           <Button
-            onClick={() => {
-              submitResult();
-            }}
+            title={buttonLabel}
+            onClick={submitResult}
             stretch={true}
             rounded={false}
             size="lg"
             variant="secondary"
             className={"submit"}
             disabled={formValid !== true}
-            title={buttonLabel}
           />
         </>
       )}
-    </NarrowLayout>
+    </>
   );
-};
+}
 
-export default Survey;
+SurveyView.viewName = "survey";
+SurveyView.usesOwnLayout = false;
+SurveyView.getViewProps = undefined;

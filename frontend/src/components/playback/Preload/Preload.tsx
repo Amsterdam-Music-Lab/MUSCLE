@@ -22,7 +22,9 @@ interface PreloadProps {
   onNext: () => void;
 }
 
-/** Preload is an experiment screen that continues after a given time or after an audio file has been preloaded */
+/**
+ * Preload is an experiment screen that continues after a given time or after an audio file has been preloaded
+ */
 export default function Preload({
   sections,
   playMethod,

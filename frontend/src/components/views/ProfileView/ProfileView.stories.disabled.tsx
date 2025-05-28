@@ -8,7 +8,7 @@
 
 import ProfileView from "./ProfileView";
 
-export default {
+const meta = {
   title: "views/ProfileView",
   component: ProfileView,
   parameters: {
@@ -16,6 +16,7 @@ export default {
   },
   tags: ["autodocs"],
 };
+export default meta;
 
 function getProfileData(overrides = {}) {
   return {

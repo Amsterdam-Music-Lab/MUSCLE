@@ -6,13 +6,25 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import { QuestionViews } from "@/types/Question";
 import Trial from "./Trial";
 
-vi.mock("../../util/stores");
-vi.mock("@/components/play", () => ({
+function MockView({ name, ...props }) {
+  if (name === "survey") {
+    return <div data-testid="mock-view-survey" onClick={props.submitResult} />;
+  } else {
+    return <div data-testid={`mock-view-${name}`} />;
+  }
+}
+
+vi.mock("@/components/application", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/components/application")>()),
+  View: MockView,
+}));
+
+vi.mock("@/components/playback", () => ({
   Playback: vi.fn(({ finishedPlaying, onPreloadReady }) => (
     <div
       data-testid="mock-playback"
@@ -25,18 +37,7 @@ vi.mock("@/components/play", () => ({
     </div>
   )),
 }));
-vi.mock("@/components/survey", () => ({
-  Survey: vi.fn(({ submitResult }) => (
-    <div
-      data-testid="mock-feedback-form"
-      onClick={() => {
-        submitResult();
-      }}
-    >
-      Mock Feedback Form
-    </div>
-  )),
-}));
+
 vi.mock("@/components/utils", () => ({
   RenderHtml: ({ html }) => <div data-testid="mock-html">{html}</div>,
 }));
@@ -72,7 +73,7 @@ describe("Trial", () => {
   });
 
   it("renders itself", () => {
-    render(
+    const { container } = render(
       <Trial
         feedback_form={feedback_form}
         config={defaultConfig}
@@ -80,11 +81,13 @@ describe("Trial", () => {
         onResult={mockOnResult}
       />
     );
-    expect(screen.queryByRole("presentation")).toBeTruthy();
+    // Not ideal but the trial doesn't export any constant elements,
+    // (it exports a fragment), so what else to do...
+    expect(container.innerHTML).toBeTruthy();
   });
 
   it("renders Playback component when playback prop is provided", () => {
-    render(
+    const { getByTestId } = render(
       <Trial
         playback={{ somePlaybackProp: true }}
         feedback_form={feedback_form}
@@ -93,12 +96,12 @@ describe("Trial", () => {
         onResult={mockOnResult}
       />
     );
-    expect(screen.getByTestId("mock-playback")).toBeTruthy();
+    expect(getByTestId("mock-playback")).toBeTruthy();
   });
 
   it("renders HTML component when html prop is provided", () => {
     const htmlBody = "Test HTML content";
-    render(
+    const { getByTestId } = render(
       <Trial
         html={{ body: htmlBody }}
         feedback_form={feedback_form}
@@ -107,13 +110,13 @@ describe("Trial", () => {
         onResult={mockOnResult}
       />
     );
-    const htmlComponent = screen.getByTestId("mock-html");
+    const htmlComponent = getByTestId("mock-html");
     expect(htmlComponent).toBeTruthy();
     expect(htmlComponent.textContent).toBe(htmlBody);
   });
 
   it("renders FeedbackForm when feedback_form prop is provided", () => {
-    render(
+    const { getByTestId } = render(
       <Trial
         feedback_form={feedback_form}
         config={defaultConfig}
@@ -121,7 +124,7 @@ describe("Trial", () => {
         onResult={mockOnResult}
       />
     );
-    expect(screen.getByTestId("mock-feedback-form")).toBeTruthy();
+    expect(getByTestId("mock-view-survey")).toBeTruthy();
   });
 
   it("shows continue button when config.show_continue_button is true", () => {
@@ -130,14 +133,14 @@ describe("Trial", () => {
       show_continue_button: true,
       continue_label: "Continue",
     };
-    render(
+    const { getByText } = render(
       <Trial config={config} onNext={mockOnNext} onResult={mockOnResult} />
     );
-    expect(screen.getByText("Continue")).toBeTruthy();
+    expect(getByText("Continue")).toBeTruthy();
   });
 
   it("calls onResult when FeedbackForm submits result", async () => {
-    render(
+    const { getByTestId } = render(
       <Trial
         feedback_form={feedback_form}
         config={defaultConfig}
@@ -145,15 +148,16 @@ describe("Trial", () => {
         onResult={mockOnResult}
       />
     );
-    fireEvent.click(screen.getByTestId("mock-feedback-form"));
+    fireEvent.click(getByTestId("mock-view-survey"));
     await waitFor(() => {
       expect(mockOnResult).toHaveBeenCalled();
     });
   });
 
   it("calls finishedPlaying when Playback component finishes", () => {
+    // TODO does this test actually check if finishedPlaying is called?
     const config = { ...defaultConfig, auto_advance: true };
-    render(
+    const { getByTestId } = render(
       <Trial
         playback={{ view: "AUTOPLAY" }}
         config={config}
@@ -162,8 +166,8 @@ describe("Trial", () => {
         feedback_form={feedback_form}
       />
     );
-    fireEvent.click(screen.getByTestId("mock-playback"));
-    expect(screen.getByTestId("mock-feedback-form")).toBeTruthy();
+    fireEvent.click(getByTestId("mock-playback"));
+    expect(getByTestId("mock-view-survey")).toBeTruthy();
   });
 
   it("auto-advances after specified timer when config.auto_advance_timer is set", async () => {
@@ -172,7 +176,7 @@ describe("Trial", () => {
       auto_advance: true,
       auto_advance_timer: 42,
     };
-    render(
+    const { getByTestId } = render(
       <Trial
         playback={{ view: "BUTTON" }}
         config={config}
@@ -181,7 +185,7 @@ describe("Trial", () => {
         onResult={mockOnResult}
       />
     );
-    fireEvent.click(screen.getByTestId("mock-playback"));
+    fireEvent.click(getByTestId("mock-playback"));
     await waitFor(() => {
       expect(mockOnResult).toHaveBeenCalled();
       expect(mockOnResult).toHaveBeenCalledWith(
@@ -199,11 +203,13 @@ describe("Trial", () => {
   });
 
   it("calls onResult when form is not defined", async () => {
+    // TODO Does this test really make sense, or does it essentially test whether the
+    // mock fires a click event correctly?
     const formless_feedback_form = {
       ...feedback_form,
       form: undefined,
     };
-    render(
+    const { getByTestId } = render(
       <Trial
         config={defaultConfig}
         onNext={mockOnNext}
@@ -211,7 +217,7 @@ describe("Trial", () => {
         feedback_form={formless_feedback_form}
       />
     );
-    fireEvent.click(screen.getByTestId("mock-feedback-form"));
+    fireEvent.click(getByTestId("mock-view-survey"));
     await waitFor(() => {
       expect(mockOnResult).toHaveBeenCalled();
     });
@@ -226,7 +232,7 @@ describe("Trial", () => {
       ...defaultConfig,
       break_round_on: { NOT: ["fast"] },
     };
-    render(
+    const { getByTestId } = render(
       <Trial
         config={config}
         onNext={mockOnNext}
@@ -234,7 +240,7 @@ describe("Trial", () => {
         feedback_form={formless_feedback_form}
       />
     );
-    fireEvent.click(screen.getByTestId("mock-feedback-form"));
+    fireEvent.click(getByTestId("mock-view-survey"));
     await waitFor(() => {
       expect(mockOnResult).toHaveBeenCalled();
       expect(mockOnNext).toHaveBeenCalled();

@@ -16,21 +16,9 @@ import useBoundStore from "@/util/stores";
 import useDisableRightClickOnTouchDevices from "@/hooks/useDisableRightClickOnTouchDevices";
 import useDisableIOSPinchZoomOnTouchDevices from "@/hooks/useDisableIOSPinchZoomOnTouchDevices";
 import { Experiment } from "@/components/experiment";
-import {
-  Redirect,
-  InternalRedirect,
-  Reload,
-  ConditionalRender,
-} from "@/components/utils";
+import { Redirect, InternalRedirect, Reload } from "@/components/utils";
 import { ThemeProvider } from "@/theme/ThemeProvider";
-import {
-  ErrorView,
-  LoadingView,
-  LandingView,
-  ProfileView,
-  StoreProfileView,
-} from "@/components/views";
-import { Block, Background, Helmet } from "../";
+import { Block, Background, Helmet, View } from "../";
 import styles from "./App.module.scss";
 
 // TODO ideally load or populate this from the backend
@@ -74,14 +62,14 @@ export default function App() {
   }, [setError, queryParams, setParticipant, setParticipantLoading]);
 
   if (error) {
-    return <ErrorView title="An error occured" message={error} />;
+    return <View name="error" title="An error occured" message={error} />;
   }
 
   return (
     <ThemeProvider>
       <Helmet />
       <Router className={styles.app}>
-        <ConditionalRender condition={!!participant} fallback={<LoadingView />}>
+        {!!participant ? (
           <Routes>
             {/* Request reload for given participant */}
             <Route path={URLS.reloadParticipant} element={<Reload />} />
@@ -91,7 +79,8 @@ export default function App() {
               path="/"
               element={
                 frontendConfig.showLanding ? (
-                  <LandingView
+                  <View
+                    name="landing"
                     experimentUrl={URLS.experiment.replace(
                       ":slug",
                       EXPERIMENT_SLUG
@@ -107,7 +96,7 @@ export default function App() {
             />
 
             {/* Profile */}
-            <Route path={URLS.profile} element={<ProfileView />} />
+            <Route path={URLS.profile} element={<View name="profile" />} />
 
             {/* Internal redirect */}
             <Route
@@ -122,9 +111,14 @@ export default function App() {
             <Route path={URLS.experiment} element={<Experiment />} />
 
             {/* Store profile */}
-            <Route path={URLS.storeProfile} element={<StoreProfileView />} />
+            <Route
+              path={URLS.storeProfile}
+              element={<View name="storeProfile" />}
+            />
           </Routes>
-        </ConditionalRender>
+        ) : (
+          <View name="loading" />
+        )}
       </Router>
 
       <Background />

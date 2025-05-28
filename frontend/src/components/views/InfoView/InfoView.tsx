@@ -5,11 +5,11 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
+import type { HTMLAttributes } from "react";
 
 import { useEffect, useState } from "react";
 import { Card, LinkButton } from "@/components/ui";
 import { RenderHtml } from "@/components/utils";
-import { NarrowLayout, NarrowLayoutProps } from "@/components/layout";
 
 /**
  * Calculate height for Info text to prevent overlapping browser chrome
@@ -33,7 +33,7 @@ function useMaxHeight() {
   return maxHeight;
 }
 
-export interface InfoViewProps extends NarrowLayoutProps {
+export interface InfoViewProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Title of the info card.
    */
@@ -75,7 +75,7 @@ export default function InfoView({
   buttonLink,
   onButtonClick,
   responsiveHeight = false,
-  ...layoutProps
+  ...divProps
 }: InfoViewProps) {
   const maxHeight = useMaxHeight();
   const btnProps: any = {
@@ -87,7 +87,7 @@ export default function InfoView({
   if (onButtonClick) btnProps.onClick = onButtonClick;
 
   return (
-    <NarrowLayout {...layoutProps}>
+    <div {...divProps}>
       <Card>
         {title && <Card.Header title={title} />}
         {html && (
@@ -103,6 +103,17 @@ export default function InfoView({
       {(buttonLink || onButtonClick) && (
         <LinkButton {...btnProps}>{buttonText}</LinkButton>
       )}
-    </NarrowLayout>
+    </div>
   );
 }
+
+InfoView.viewName = "viewName";
+InfoView.usesOwnLayout = false;
+InfoView.getViewProps = ({ state, onNext }) => ({
+  html: state?.body,
+  title: state?.heading,
+  buttonText: state?.button_label,
+  buttonLink: state?.button_link,
+  onButtonClick: onNext,
+});
+InfoView.dependencies = ["state", "onNext"];

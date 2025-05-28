@@ -12,7 +12,7 @@ import * as audio from "@/util/audio";
 import * as webAudio from "@/util/webAudio";
 import { playAudio, pauseAudio } from "@/util/audioControl";
 
-import { ErrorView } from "@/components/views";
+import { View } from "@/components/application";
 import { TuneTwins } from "@/components/matching-pairs";
 import { Autoplay, PlayButton, MultiPlayer, ImagePlayer, Preload } from "../";
 import convertTutorial from "@/util/convertTutorial";
@@ -212,7 +212,7 @@ export default function Playback({
     return () => pauseAudio(playMethod);
   }, [playMethod]);
 
-  const render = (view: PlaybackView) => {
+  const render = () => {
     switch (state.view) {
       case PRELOAD:
         return (
@@ -290,9 +290,14 @@ export default function Playback({
         );
 
       default:
-        return <ErrorView message={`Unknown player view "${view}"`} />;
+        return (
+          <View
+            name="error"
+            message={`Unknown player view "${playbackArgs.view}"`}
+          />
+        );
     }
   };
 
-  return render(playbackArgs.view);
+  return render();
 }

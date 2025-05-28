@@ -5,17 +5,16 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-
+import { CardProps } from "@/components/ui";
 import type { MutableRefObject } from "react";
 import type { Playlist } from "@/types/Block";
 
 import { useEffect } from "react";
 import classNames from "classnames";
-import { NarrowLayout } from "@/components/layout";
 import { Card, CardSectionProps } from "@/components/ui";
 import styles from "./PlaylistsView.module.scss";
 
-export interface PlaylistsViewProps {
+export interface PlaylistsViewProps extends CardProps {
   /** The playlists that can be selected */
   playlists: Playlist[];
 
@@ -49,6 +48,7 @@ export default function PlaylistsView({
   title,
   animate = true,
   animationDelayMs = 100,
+  ...cardProps
 }: PlaylistsViewProps) {
   // Silently proceed to next view when fewer than 2 playlists are left
   useEffect(() => {
@@ -59,25 +59,33 @@ export default function PlaylistsView({
   if (playlists.length <= 1) return null;
 
   return (
-    <NarrowLayout>
-      <Card>
-        <Card.Header title={title}>{instruction}</Card.Header>
-        {playlists.map((playlist, index) => (
-          <PlaylistItem
-            key={playlist.id}
-            playlist={playlist}
-            onSelect={(playlistId) => {
-              currentPlaylist.current = playlistId;
-              onSelect();
-            }}
-            className={animate && "anim anim-fade-in-slide-left anim-speed-300"}
-            style={{ animationDelay: `${index * animationDelayMs}ms` }}
-          />
-        ))}
-      </Card>
-    </NarrowLayout>
+    <Card {...cardProps}>
+      <Card.Header title={title}>{instruction}</Card.Header>
+      {playlists.map((playlist, index) => (
+        <PlaylistItem
+          key={playlist.id}
+          playlist={playlist}
+          onSelect={(playlistId) => {
+            currentPlaylist.current = playlistId;
+            onSelect();
+          }}
+          className={animate && "anim anim-fade-in-slide-left anim-speed-300"}
+          style={{ animationDelay: `${index * animationDelayMs}ms` }}
+        />
+      ))}
+    </Card>
   );
 }
+PlaylistsView.viewName = "playlists";
+PlaylistsView.usesOwnLayout = false;
+PlaylistsView.getViewProps = ({ playlist, block, onNext, state }) => ({
+  playlist,
+  playlists: block?.playlists,
+  onSelect: onNext,
+  instruction: state.instruction,
+  title: "Playlists...",
+});
+PlaylistsView.dependencies = ["playlist", "block", "onNext", "state"];
 
 interface PlaylistItemProps extends CardSectionProps {
   playlist: Playlist;

@@ -9,9 +9,9 @@
 import type { CSSProperties, HTMLAttributes } from "react";
 import { useRef } from "react";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
-import styles from "./PageTransition.module.scss";
+import styles from "./ViewTransition.module.scss";
 
-interface PageTransitionProps extends HTMLAttributes<HTMLDivElement> {
+interface ViewTransitionProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * A key that indicates the state of the child element.
    * Change this to trigger a transition.
@@ -43,7 +43,7 @@ interface PageTransitionProps extends HTMLAttributes<HTMLDivElement> {
  * A wrapper around the SwitchTransition component that shows
  * a smooth page transition.
  */
-export default function PageTransition({
+export default function ViewTransition({
   transitionKey,
   durationMs = 500,
   distance = 50,
@@ -51,7 +51,7 @@ export default function PageTransition({
   children,
   style,
   ...divProps
-}: PageTransitionProps) {
+}: ViewTransitionProps) {
   const nodeRef = useRef(null);
   return (
     <div

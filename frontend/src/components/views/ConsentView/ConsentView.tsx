@@ -7,20 +7,17 @@
  */
 
 import type Participant from "@/types/Participant";
-import type { NarrowLayoutProps } from "@/components/layout";
 
-import classNames from "classnames";
 import { useEffect } from "react";
 import { saveAs } from "file-saver";
 import { URLS } from "@/config";
 import { createConsent, useConsent } from "@/API";
 import { Button, Card, LinkButton } from "@/components/ui";
-import { NarrowLayout } from "@/components/layout";
 import { LoadingView } from "../LoadingView";
 
 import styles from "./ConsentView.module.scss";
 
-export interface ConsentViewProps extends NarrowLayoutProps {
+export interface ConsentViewProps {
   title: string;
   text: string;
   experiment: any;
@@ -39,8 +36,6 @@ export default function ConsentView({
   onNext,
   confirm,
   deny,
-  className,
-  ...layoutProps
 }: ConsentProps) {
   const [consent, loadingConsent] = useConsent(experiment.slug);
   const urlQueryString = window.location.search;
@@ -93,7 +88,7 @@ export default function ConsentView({
 
   // Show consent
   return (
-    <NarrowLayout className={classNames(className)} {...layoutProps}>
+    <>
       <Card>
         <Card.Header title={title} />
 
@@ -107,7 +102,7 @@ export default function ConsentView({
 
         <Card.Section>
           <div className={styles.buttons}>
-            <LinkButton href={URLS.AMLHome} outline={false}>
+            <LinkButton link={URLS.AMLHome} outline={false}>
               {deny}
             </LinkButton>
             <Button
@@ -129,6 +124,19 @@ export default function ConsentView({
         onClick={onAgree}
         title={confirm}
       />
-    </NarrowLayout>
+    </>
   );
 }
+
+ConsentView.usesOwnLayout = false;
+ConsentView.viewName = "consent";
+ConsentView.getViewProps = ({ participant, onNext, experiment }) => ({
+  title: experiment.consent.title, // ?
+  text: experiment.consent.text, // ?
+  experiment,
+  participant,
+  onNext,
+  confirm: experiment.consent.confirm, //?
+  deny: experiment.consent.deny, //?
+});
+ConsentView.dependencies = ["experiment", "participant", "onNext"];

@@ -15,19 +15,15 @@ import { URLS } from "@/config";
 import useBoundStore from "@/util/stores";
 import { shareParticipant } from "@/API";
 import { LoadingView } from "../LoadingView";
-import { NarrowLayout, NarrowLayoutProps } from "@/components/layout";
 import { Button, Card, Input, InputGroup, LinkButton } from "@/components/ui";
 import styles from "./StoreProfileView.module.scss";
 
-export interface StoreProfileViewProps extends NarrowLayoutProps {
-  title?: string;
-}
+export interface StoreProfileViewProps {}
 
-// StoreProfileView enables participants to store their profile for later access
-export default function StoreProfileView({
-  title,
-  ...layoutProps
-}: StoreProfileViewProps) {
+/**
+ * StoreProfileView enables participants to store their profile for later access
+ */
+export default function StoreProfileView() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
 
@@ -51,7 +47,7 @@ export default function StoreProfileView({
   }
 
   return (
-    <NarrowLayout {...layoutProps}>
+    <>
       <Card>
         <Card.Header title="Personal link">
           We will send you a personal link by email, which provides access to
@@ -95,6 +91,9 @@ export default function StoreProfileView({
           Send me the link
         </Button>
       </div>
-    </NarrowLayout>
+    </>
   );
 }
+StoreProfileView.viewName = "storeProfile";
+StoreProfileView.usesOwnLayout = false;
+StoreProfileView.getViewProps = undefined;

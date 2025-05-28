@@ -13,6 +13,11 @@ import Playback from "./Playback";
 
 vi.mock("@/util/stores");
 
+vi.mock("@/components/application", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/components/application")>()),
+  View: ({ name }) => <div data-testid={`mock-view-${name}`} />,
+}));
+
 describe("Playback", () => {
   const basicProps = {
     responseTime: 42,

@@ -6,15 +6,11 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import type { PageProps } from "@/components/application";
+import type { NarrowLayoutProps } from "@/components/layout";
 import type { AllPluginSpec } from "@/components/plugins";
-
-import { Page } from "@/components/application";
-import { NarrowLayout } from "@/components/layout";
 import { PluginRenderer } from "@/components/plugins";
-import { Card } from "@/components/ui";
 
-interface LandingViewProps extends PageProps {
+interface LandingViewProps extends NarrowLayoutProps {
   /**
    * Url to the actual experiment
    */
@@ -39,7 +35,7 @@ const DEFAULT_PLUGINS = [
 export default function LandingView({
   experimentUrl,
   plugins = DEFAULT_PLUGINS,
-  ...pageProps
+  ...layoutProps
 }: LandingViewProps) {
   if (plugins) {
     plugins = plugins.map((plugin) => {
@@ -50,20 +46,9 @@ export default function LandingView({
       return updated;
     });
   }
-  return (
-    <Page {...pageProps}>
-      <NarrowLayout>
-        {plugins ? (
-          <PluginRenderer plugins={plugins as AllPluginSpec[]} />
-        ) : (
-          // Superfluous fallback
-          <Card>
-            <Card.Section title="An error occured">
-              No plugins were specified, and so this page is empty...
-            </Card.Section>
-          </Card>
-        )}
-      </NarrowLayout>
-    </Page>
-  );
+  return <PluginRenderer plugins={plugins as AllPluginSpec[]} />;
 }
+
+LandingView.viewName = "landing";
+LandingView.usesOwnLayout = false;
+LandingView.getViewProps = undefined;

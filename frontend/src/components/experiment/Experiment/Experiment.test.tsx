@@ -6,6 +6,7 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+import "@testing-library/jest-dom";
 import { MemoryRouter } from "react-router-dom";
 import { screen, waitFor } from "@testing-library/react";
 import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
@@ -26,15 +27,9 @@ vi.mock("react-router-dom", async () => {
   };
 });
 
-vi.mock("@/components/views", () => ({
-  __esModule: true,
-  Error: ({ message }) => <div>{message}</div>,
-  ConsentView: (props: any) => (
-    <div className="consent-text" data-testid="consent-mock">
-      {props.text || "Mocked Consent"}
-    </div>
-  ),
-  LoadingView: () => <div>Loading...</div>,
+vi.mock("@/components/application", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/components/application")>()),
+  View: ({ name }) => <div data-testid={`view-${name}`} />,
 }));
 
 const getBlock = (overrides = {}) => {
@@ -103,11 +98,7 @@ describe("Experiment", () => {
 
   it("shows a loading spinner while loading", () => {
     mock.onGet().replyOnce(200, new Promise(() => {}));
-    render(
-      <MemoryRouter>
-        <Experiment />
-      </MemoryRouter>
-    );
+    render(<Experiment />);
     waitFor(() => {
       expect(document.querySelector(".loader-container")).not.toBeNull();
     });
@@ -115,11 +106,7 @@ describe("Experiment", () => {
 
   it("shows a placeholder if no image is available", () => {
     mock.onGet().replyOnce(200, { dashboard: [block1], nextBlock: block1 });
-    render(
-      <MemoryRouter>
-        <Experiment />
-      </MemoryRouter>
-    );
+    render(<Experiment />);
     waitFor(() => {
       expect(document.querySelector(".loader-container")).not.toBeNull();
     });
@@ -129,11 +116,7 @@ describe("Experiment", () => {
     mock
       .onGet()
       .replyOnce(200, { dashboard: [blockWithAllProps], nextBlock: block1 });
-    render(
-      <MemoryRouter>
-        <Experiment />
-      </MemoryRouter>
-    );
+    render(<Experiment />);
     waitFor(() => {
       expect(document.querySelector("img")).not.toBeNull();
     });
@@ -143,11 +126,7 @@ describe("Experiment", () => {
     mock
       .onGet()
       .replyOnce(200, { dashboard: [blockWithAllProps], nextBlock: block1 });
-    render(
-      <MemoryRouter>
-        <Experiment />
-      </MemoryRouter>
-    );
+    render(<Experiment />);
     waitFor(() => {
       const description = screen.getByText("Some description");
       expect(description).not.toBeNull();
@@ -160,14 +139,10 @@ describe("Experiment", () => {
       dashboard: [blockWithAllProps],
       nextBlock: block1,
     });
-    render(
-      <MemoryRouter>
-        <Experiment />
-      </MemoryRouter>
+    const { getByTestId } = render(<Experiment />);
+    await waitFor(() =>
+      expect(getByTestId("view-consent")).toBeInTheDocument()
     );
-    await waitFor(() => {
-      expect(document.querySelector(".consent-text")).not.toBeNull();
-    });
   });
 
   it("shows a footer if a theme with footer is available", async () => {

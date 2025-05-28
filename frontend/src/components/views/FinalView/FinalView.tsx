@@ -6,7 +6,6 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import type { HTMLAttributes } from "react";
 import type { ScoreBoardProps } from "@/components/game/ScoreBoard/ScoreBoard";
 import type { AllPluginSpec } from "@/components/plugins/pluginRegistry";
 
@@ -15,14 +14,13 @@ import { URLS } from "@/config";
 import { finalizeSession } from "@/API";
 import useBoundStore from "@/util/stores";
 import { Final as FinalAction } from "@/types/Action";
-import { NarrowLayout } from "@/components/layout";
 import { PluginRenderer } from "@/components/plugins";
 import frontendConfig from "@/config/frontend";
 
 export interface FinalViewProps
   extends FinalAction,
     ScoreBoardProps,
-    HTMLAttributes<HTMLDivElement> {
+    PluginRendererProps {
   onNext: () => void;
   plugins?: AllPluginSpec[];
 }
@@ -54,7 +52,7 @@ export default function FinalView({
   timeline, // TODO
   timelineStep = 0, // TODO
   plugins = frontendConfig?.final?.plugins || DEFAULT_PLUGINS,
-  ...layoutProps
+  ...pluginRendererProps
 }: FinalViewProps) {
   const session = useBoundStore((state) => state.session);
   useEffect(() => {
@@ -119,8 +117,31 @@ export default function FinalView({
   });
 
   return (
-    <NarrowLayout {...layoutProps}>
-      <PluginRenderer plugins={plugins as AllPluginSpec[]} />
-    </NarrowLayout>
+    <PluginRenderer
+      plugins={plugins as AllPluginSpec[]}
+      {...pluginRendererProps}
+    />
   );
 }
+
+FinalView.viewName = "final";
+FinalView.usesOwnLayout = false;
+FinalView.getViewProps = ({ block, state, participant, onNext }) => ({
+  block,
+  participant,
+  action_texts: state.action_texts,
+  button: state.button,
+  onNext,
+  show_participant_link: state.show_participant_link,
+  participant_id_only: state?.participant_id_only,
+  show_profile_link: state.show_profile_link,
+  social: state.social,
+  feedback_info: state.feedback_info,
+  percentile: state.percentile,
+  score: state.score,
+  totalScore: undefined, // TODO
+  timeline: undefined,
+  timelineStep: undefined,
+  sessions_played: state.sessions_played,
+});
+FinalView.dependencies = ["block", "state", "participant", "onNext"];

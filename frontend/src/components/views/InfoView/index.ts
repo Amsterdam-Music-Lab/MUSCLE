@@ -7,4 +7,4 @@
  */
 
 export type { InfoViewProps } from "./InfoView";
-export { default as InfoView } from "./Info";
+export { default as InfoView } from "./InfoView";

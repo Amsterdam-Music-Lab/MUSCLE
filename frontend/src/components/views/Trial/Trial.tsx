@@ -12,13 +12,11 @@ import type { PlaybackArgs } from "@/types/Playback";
 import type { OnResultType } from "@/hooks/useResultHandler";
 
 import { useState, useRef, useCallback } from "react";
-import classNames from "classnames";
 import { getAudioLatency, getCurrentTime, getTimeSince } from "@/util/time";
+import { View } from "@/components/application";
 import { RenderHtml } from "@/components/utils";
-import { Playback } from "@/components/play";
-import { Survey } from "@/components/survey";
+import { Playback } from "@/components/playback";
 import { Button } from "@/components/ui";
-import styles from "./Trial.module.scss";
 
 export interface TrialProps extends HTMLAttributes<HTMLDivElement> {
   onNext: (breakRound?: boolean) => void;
@@ -42,7 +40,6 @@ export default function Trial({
   config,
   onNext,
   onResult,
-  className,
   role = "presentation",
   ...divProps
 }: TrialProps) {
@@ -64,14 +61,9 @@ export default function Trial({
   const makeResult = useCallback(
     async (hasTimedOut: boolean) => {
       // Prevent multiple submissions
-      if (submitted.current) {
-        return;
-      }
+      if (submitted.current) return;
       submitted.current = true;
-
-      if (!feedback_form) {
-        return onNext();
-      }
+      if (!feedback_form) return onNext();
 
       const { form = [] } = feedback_form;
 
@@ -146,11 +138,7 @@ export default function Trial({
   }, [config, playback, makeResult]);
 
   return (
-    <div
-      role={role}
-      className={classNames(styles.trial, config.style, className)}
-      {...divProps}
-    >
+    <>
       {playback && (
         <Playback
           playbackArgs={playback}
@@ -168,7 +156,8 @@ export default function Trial({
       {html && <RenderHtml html={html.body} />}
 
       {preloadReady && feedback_form && (
-        <Survey
+        <View
+          name="survey"
           formActive={formActive}
           form={feedback_form.form}
           buttonLabel={feedback_form.submit_label}
@@ -187,6 +176,18 @@ export default function Trial({
           />
         </div>
       )}
-    </div>
+    </>
   );
 }
+
+Trial.viewName = "trial";
+Trial.usesOwnLayout = true;
+Trial.getViewProps = ({ state, onNext, onResult }) => ({
+  playback: state.playback,
+  html: state.html,
+  feedback_form: state.feedback_form,
+  config: state.config,
+  onNext,
+  onResult,
+});
+Trial.dependencies = ["state", "onNext", "onResult"];

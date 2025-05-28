@@ -12,7 +12,7 @@ import { Fragment, createElement } from "react";
 import { pluginMetaRegistry } from "./pluginRegistry";
 import type { AllPluginSpec, PluginRegistry } from "./pluginRegistry";
 
-interface PluginRendererProps {
+export interface PluginRendererProps {
   plugins: AllPluginSpec[];
 
   registry?: PluginRegistry;

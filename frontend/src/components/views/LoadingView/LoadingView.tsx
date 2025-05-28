@@ -6,12 +6,11 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import type { NarrowLayoutProps } from "@/components/layout";
+import type { HTMLAttributes } from "react";
 import classNames from "classnames";
-import { NarrowLayout } from "@/components/layout";
 import { Circle } from "@/components/ui";
 
-export interface LoadingViewProps extends NarrowLayoutProps {
+export interface LoadingViewProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Label shown inside the circle. Defaults to "Loading..."
    */
@@ -39,13 +38,10 @@ export default function LoadingView({
   rotate = true,
   running = false,
   className,
-  ...layoutProps
+  ...divProps
 }: LoadingViewProps) {
   return (
-    <NarrowLayout
-      className={classNames("transition-appear", className)}
-      {...layoutProps}
-    >
+    <div className={classNames("transition-appear", className)} {...divProps}>
       <Circle
         data-testid="loading"
         duration={duration}
@@ -56,6 +52,10 @@ export default function LoadingView({
       >
         {label && <span>{label}</span>}
       </Circle>
-    </NarrowLayout>
+    </div>
   );
 }
+
+LoadingView.viewName = "loading";
+LoadingView.usesOwnLayout = false;
+LoadingView.getViewProps = undefined;

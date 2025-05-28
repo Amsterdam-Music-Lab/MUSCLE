@@ -14,9 +14,8 @@ import { useExperiment } from "@/API";
 import useHeadDataFromExperiment from "@/hooks/useHeadDataFromExperiment";
 
 import { Route, Routes, useParams } from "react-router-dom";
+import { View } from "@/components/application";
 import { Redirect } from "@/components/utils";
-import { Page } from "@/components/application";
-import { ConsentView, ErrorView, LoadingView } from "@/components/views";
 import { About, Dashboard, Footer } from "../";
 import "./Experiment.module.scss"; // TODO: not modular yet
 
@@ -56,31 +55,23 @@ export default function Experiment() {
     }`;
 
   if (loadingExperiment) {
-    return <LoadingView />;
-  }
-
-  if (!loadingExperiment && !experiment) {
-    return <ErrorView message="Experiment not found" />;
-  }
-
-  if (!hasShownConsent && showConsent) {
-    const attrs = {
-      participant,
-      onNext,
-      experiment,
-      ...experiment.consent,
-    };
+    return <View name="loading" />;
+  } else if (!loadingExperiment && !experiment)
+    return <View name="error" message="Experiment not found" />;
+  else if (!hasShownConsent && showConsent) {
     return (
-      <Page className="aha__consent-wrapper" title={experiment.name}>
-        <ConsentView {...attrs} />
-      </Page>
+      <View
+        name="consent"
+        participant={participant}
+        experiment={experiment}
+        onNext={onNext}
+      />
     );
-  }
-
-  if (!displayDashboard && nextBlock) {
+  } else if (!displayDashboard && nextBlock) {
     return <Redirect to={getBlockHref(nextBlock.slug)} />;
   }
 
+  // TODO: why arent these routes in /App?
   return (
     <div className="aha__experiment">
       <Routes>

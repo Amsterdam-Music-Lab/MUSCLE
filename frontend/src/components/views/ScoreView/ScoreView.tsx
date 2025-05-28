@@ -5,14 +5,16 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-
+import type { HTMLAttributes } from "react";
 import { useState, useEffect, useRef } from "react";
 import classNames from "classnames";
 import { Button, Circle } from "@/components/ui";
 import { Score as ScoreAction } from "@/types/Action";
 import "./ScoreView.module.scss";
 
-export interface ScoreViewProps extends ScoreAction {
+export interface ScoreViewProps
+  extends ScoreAction,
+    HTMLAttributes<HTMLDivElement> {
   onNext: () => void;
 }
 
@@ -27,6 +29,8 @@ export default function ScoreView({
   feedback,
   timer,
   onNext,
+  className,
+  ...divProps
 }: ScoreViewProps) {
   const [showScore, setShowScore] = useState(0);
   // Use a ref to prevent doing multiple increments
@@ -71,7 +75,13 @@ export default function ScoreView({
   }, [timer, onNext]);
 
   return (
-    <div className="aha__score d-flex flex-column justify-content-center">
+    <div
+      className={classNames(
+        "aha__score d-flex flex-column justify-content-center",
+        className
+      )}
+      {...divProps}
+    >
       <div
         className={classNames("score", {
           zero: score === 0,
@@ -123,3 +133,17 @@ export default function ScoreView({
     </div>
   );
 }
+
+ScoreView.viewName = "score";
+ScoreView.usesOwnLayout = false;
+ScoreView.getViewProps = ({ state, onNext }) => ({
+  last_song: state.last_song,
+  score_meesage: state.score_meesage,
+  total_score: state.total_score,
+  texts: state.texts,
+  icon: state.icon,
+  feedback: state.feedback,
+  timer: state.timer,
+  onNext,
+});
+ScoreView.dependencies = ["state", "onNext"];

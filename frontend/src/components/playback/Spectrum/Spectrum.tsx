@@ -87,7 +87,7 @@ export default function Spectrum({
 
     // Update the histogram data
     const update = () => {
-      if (!random && window.audioContext && window.analyzer) {
+      if (!randomize && window.audioContext && window.analyzer) {
         const freqData = new Uint8Array(bars + 3);
         window.analyzer.getByteFrequencyData(freqData);
         // Remove the lower end of the frequency data

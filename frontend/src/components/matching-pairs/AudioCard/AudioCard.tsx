@@ -6,9 +6,9 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import type { SpectrumProps } from "@/components/play";
+import type { SpectrumProps } from "@/components/playback";
 import classNames from "classnames";
-import { Spectrum } from "@/components/play";
+import { Spectrum } from "@/components/playback";
 import Card, { type CardProps } from "../Card/Card";
 import styles from "./AudioCard.module.scss";
 

@@ -1,8 +1,15 @@
-import { QuestionViews } from "@/types/Question";
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
 
+import { QuestionViews } from "@/types/Question";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import Survey from "./Survey";
+import SurveyView from "./SurveyView";
 
 const form = [
   {
@@ -13,9 +20,9 @@ const form = [
   },
 ];
 
-describe("Survey", () => {
+describe("SurveyView", () => {
   it("renders a heading, and a group of radio buttons", () => {
-    render(<Survey form={form} />);
+    render(<SurveyView form={form} />);
     const heading = screen.getByRole("heading", {
       name: "What is the average speed of a Swallow?",
     });
