@@ -45,7 +45,7 @@ interface ScoreBadgeProps extends HTMLAttributes<HTMLDivElement> {
   finished_at: string;
 }
 
-function ScoreBadge({
+export function ScoreBadge({
   blockName,
   blockSlug,
   score,

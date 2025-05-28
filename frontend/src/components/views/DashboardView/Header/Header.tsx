@@ -10,12 +10,12 @@ import type { ScoreDisplayConfig } from "@/types/Theme";
 import type { SocialMediaConfig } from "@/types/Experiment";
 
 import React from "react";
-import { Link } from "react-router-dom";
 import { RenderHtml } from "@/components/utils";
-import { ShareOptions } from "@/components/ui";
+import { Card, LinkButton, ShareOptions } from "@/components/ui";
 import { Cup, ScoreCounter } from "@/components/game";
 
-interface HeaderProps {
+export interface HeaderProps {
+  title?: string;
   description: string;
   nextBlockSlug: string | undefined;
   nextBlockButtonText: string;
@@ -27,56 +27,65 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({
+  title = "Dashboard",
   description,
   nextBlockSlug,
-  nextBlockButtonText,
-  aboutButtonText,
+  nextBlockButtonText = "Play next experiment",
+  aboutButtonText = "About this experiment",
   experimentSlug,
   totalScore,
   scoreDisplayConfig,
   socialMediaConfig,
 }) => {
   return (
-    <div className="hero">
-      <div className="intro">
-        <RenderHtml html={description} />
-        <nav className="actions">
-          {nextBlockSlug && (
-            <a
-              className="btn btn-lg btn-primary"
-              href={`/block/${nextBlockSlug}`}
-            >
-              {nextBlockButtonText}
-            </a>
-          )}
+    <>
+      <Card>
+        <Card.Header title={title}>
+          <RenderHtml html={description} />
           {aboutButtonText && (
-            <Link
+            <LinkButton
               className="btn btn-lg btn-outline-primary"
-              to={`/${experimentSlug}/about`}
+              link={`/${experimentSlug}/about`}
             >
               {aboutButtonText}
-            </Link>
+            </LinkButton>
           )}
-        </nav>
-      </div>
-      {scoreDisplayConfig && totalScore !== 0 && (
-        <div className="results">
-          <Cup type={scoreDisplayConfig.scoreClass} label={false} />
-          <h4>
-            <ScoreCounter
-              score={totalScore}
-              label={scoreDisplayConfig.scoreLabel}
-            />
-          </h4>
-          {socialMediaConfig?.channels?.length && (
-            <ShareOptions config={socialMediaConfig} />
-          )}
-        </div>
+        </Card.Header>
+      </Card>
+
+      {nextBlockSlug && (
+        <LinkButton
+          link={`/block/${nextBlockSlug}`}
+          variant="secondary"
+          rounded={false}
+          stretch={true}
+        >
+          {nextBlockButtonText}
+        </LinkButton>
       )}
+
+      {scoreDisplayConfig && totalScore !== 0 && (
+        // TODO use ScoreBadge from ProfileView
+        <Card>
+          <Card.Header title="Your total score">
+            <Cup type={scoreDisplayConfig.scoreClass} label={false} />
+            <h4>
+              <ScoreCounter
+                score={totalScore}
+                label={scoreDisplayConfig.scoreLabel}
+              />
+            </h4>
+            {socialMediaConfig?.channels?.length && (
+              <ShareOptions config={socialMediaConfig} />
+            )}
+          </Card.Header>
+        </Card>
+      )}
+
       {scoreDisplayConfig && totalScore === 0 && (
         <h3>{scoreDisplayConfig.noScoreLabel}</h3>
       )}
-    </div>
+    </>
   );
 };
 

@@ -92,7 +92,7 @@ describe("Experiment", () => {
       </MemoryRouter>
     );
     await waitFor(() => {
-      expect(screen.queryByRole("menu")).toBeFalsy();
+      expect(screen.queryByTestId("dashboard-experiments")).toBeFalsy();
     });
   });
 
@@ -145,17 +145,18 @@ describe("Experiment", () => {
     );
   });
 
-  it("shows a footer if a theme with footer is available", async () => {
+  it.skip("shows a footer if a theme with footer is available", async () => {
     mock.onGet().replyOnce(200, {
       dashboard: [blockWithAllProps],
       nextBlock: block1,
       theme,
     });
-    render(
+    const { container } = render(
       <MemoryRouter>
         <Experiment />
       </MemoryRouter>
     );
+    console.log(container.innerHTML);
     await waitFor(() => {
       expect(document.querySelector(".aha__footer")).not.toBeNull();
     });

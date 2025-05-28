@@ -9,7 +9,6 @@
 export * from "./Autoplay";
 export * from "./ImagePlayer";
 export * from "./MultiPlayer";
-export * from "./Playback";
 export * from "./PlayButton";
 export * from "./Preload";
 export * from "./SmallPlayer";

@@ -15,14 +15,14 @@ import { URLS as API_URLS } from "@/API";
 import useBoundStore from "@/util/stores";
 import useDisableRightClickOnTouchDevices from "@/hooks/useDisableRightClickOnTouchDevices";
 import useDisableIOSPinchZoomOnTouchDevices from "@/hooks/useDisableIOSPinchZoomOnTouchDevices";
-import { Experiment } from "@/components/experiment";
 import { Redirect, InternalRedirect, Reload } from "@/components/utils";
 import { ThemeProvider } from "@/theme/ThemeProvider";
-import { Block, Background, Helmet, View } from "../";
-import styles from "./App.module.scss";
+import { Block, Experiment, View } from "../";
+import Helmet from "./Helmet";
 
 // TODO ideally load or populate this from the backend
 import frontendConfig from "@/config/frontend";
+import { BaseLayout } from "@/components/layout/BaseLayout";
 
 // App is the root component of our application
 export default function App() {
@@ -68,60 +68,60 @@ export default function App() {
   return (
     <ThemeProvider>
       <Helmet />
-      <Router className={styles.app}>
-        {!!participant ? (
-          <Routes>
-            {/* Request reload for given participant */}
-            <Route path={URLS.reloadParticipant} element={<Reload />} />
+      <BaseLayout>
+        <Router>
+          {!!participant ? (
+            <Routes>
+              {/* Request reload for given participant */}
+              <Route path={URLS.reloadParticipant} element={<Reload />} />
 
-            {/* Default experiment */}
-            <Route
-              path="/"
-              element={
-                frontendConfig.showLanding ? (
-                  <View
-                    name="landing"
-                    experimentUrl={URLS.experiment.replace(
-                      ":slug",
-                      EXPERIMENT_SLUG
-                    )}
-                    plugins={frontendConfig.landing.plugins}
-                  />
-                ) : (
-                  <Redirect
-                    to={URLS.experiment.replace(":slug", EXPERIMENT_SLUG)}
-                  />
-                )
-              }
-            />
+              {/* Default experiment */}
+              <Route
+                path="/"
+                element={
+                  frontendConfig.showLanding ? (
+                    <View
+                      name="landing"
+                      experimentUrl={URLS.experiment.replace(
+                        ":slug",
+                        EXPERIMENT_SLUG
+                      )}
+                      plugins={frontendConfig.landing.plugins}
+                    />
+                  ) : (
+                    <Redirect
+                      to={URLS.experiment.replace(":slug", EXPERIMENT_SLUG)}
+                    />
+                  )
+                }
+              />
 
-            {/* Profile */}
-            <Route path={URLS.profile} element={<View name="profile" />} />
+              {/* Profile */}
+              <Route path={URLS.profile} element={<View name="profile" />} />
 
-            {/* Internal redirect */}
-            <Route
-              path={URLS.internalRedirect}
-              element={<InternalRedirect />}
-            />
+              {/* Internal redirect */}
+              <Route
+                path={URLS.internalRedirect}
+                element={<InternalRedirect />}
+              />
 
-            {/* Block */}
-            <Route path={URLS.block} element={<Block />} />
+              {/* Block */}
+              <Route path={URLS.block} element={<Block />} />
 
-            {/* Experiment */}
-            <Route path={URLS.experiment} element={<Experiment />} />
+              {/* Experiment */}
+              <Route path={URLS.experiment} element={<Experiment />} />
 
-            {/* Store profile */}
-            <Route
-              path={URLS.storeProfile}
-              element={<View name="storeProfile" />}
-            />
-          </Routes>
-        ) : (
-          <View name="loading" />
-        )}
-      </Router>
-
-      <Background />
+              {/* Store profile */}
+              <Route
+                path={URLS.storeProfile}
+                element={<View name="storeProfile" />}
+              />
+            </Routes>
+          ) : (
+            <View name="loading" />
+          )}
+        </Router>
+      </BaseLayout>
     </ThemeProvider>
   );
 }

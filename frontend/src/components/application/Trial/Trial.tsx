@@ -13,9 +13,8 @@ import type { OnResultType } from "@/hooks/useResultHandler";
 
 import { useState, useRef, useCallback } from "react";
 import { getAudioLatency, getCurrentTime, getTimeSince } from "@/util/time";
-import { View } from "@/components/application";
+import { Playback, View } from "@/components/application";
 import { RenderHtml } from "@/components/utils";
-import { Playback } from "@/components/playback";
 import { Button } from "@/components/ui";
 
 export interface TrialProps extends HTMLAttributes<HTMLDivElement> {

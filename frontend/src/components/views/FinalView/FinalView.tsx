@@ -48,8 +48,8 @@ export default function FinalView({
   feedback_info,
   percentile,
   score: turnScore,
-  totalScore, // TODO
-  timeline, // TODO
+  totalScore,
+  timeline,
   timelineStep = 0, // TODO
   plugins = frontendConfig?.final?.plugins || DEFAULT_PLUGINS,
   ...pluginRendererProps
@@ -139,9 +139,9 @@ FinalView.getViewProps = ({ block, state, participant, onNext }) => ({
   feedback_info: state.feedback_info,
   percentile: state.percentile,
   score: state.score,
-  totalScore: undefined, // TODO
+  totalScore: state.accumulated_score,
   timeline: undefined,
-  timelineStep: undefined,
+  timelineStep: state.sessions_played % 5,
   sessions_played: state.sessions_played,
 });
 FinalView.dependencies = ["block", "state", "participant", "onNext"];

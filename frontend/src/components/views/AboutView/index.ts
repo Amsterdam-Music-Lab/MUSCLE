@@ -6,4 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export { default as AppBar } from "./AppBar";
+export type { AboutViewProps } from "./AboutView";
+export { default as AboutView } from "./AboutView";

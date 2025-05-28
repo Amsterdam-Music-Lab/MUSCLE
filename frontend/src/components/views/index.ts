@@ -6,7 +6,9 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+export * from "./AboutView";
 export * from "./ConsentView";
+export * from "./DashboardView";
 export * from "./ErrorView";
 export * from "./ExplainerView";
 export * from "./FinalView";
@@ -17,4 +19,4 @@ export * from "./PlaylistsView";
 export * from "./ProfileView";
 export * from "./ScoreView";
 export * from "./StoreProfileView";
-export * from "./Trial";
+export * from "./SurveyView";

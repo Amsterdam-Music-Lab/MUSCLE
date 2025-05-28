@@ -18,7 +18,8 @@ import { getNextRound, useBlock } from "@/API";
 import useResultHandler from "@/hooks/useResultHandler";
 import { FloatingActionButton } from "@/components/ui";
 import { UserFeedbackForm } from "@/components/user";
-import { View, ViewTransition } from "../";
+import { ViewTransition } from "@/components/layout";
+import { View } from "@/components/application";
 import styles from "./Block.module.scss";
 
 const VIEW_NAMES = {
@@ -166,6 +167,8 @@ export default function Block() {
   // in that way anyway.
   // <FontLoader fontUrl={theme?.heading_font_url} fontType="heading" />
   // <FontLoader fontUrl={theme?.body_font_url} fontType="body" />
+
+  console.log(state, block);
 
   return (
     <ViewTransition

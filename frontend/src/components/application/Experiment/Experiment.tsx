@@ -16,8 +16,6 @@ import useHeadDataFromExperiment from "@/hooks/useHeadDataFromExperiment";
 import { Route, Routes, useParams } from "react-router-dom";
 import { View } from "@/components/application";
 import { Redirect } from "@/components/utils";
-import { About, Dashboard, Footer } from "../";
-import "./Experiment.module.scss"; // TODO: not modular yet
 
 export default function Experiment() {
   const { slug } = useParams();
@@ -73,36 +71,22 @@ export default function Experiment() {
 
   // TODO: why arent these routes in /App?
   return (
-    <div className="aha__experiment">
-      <Routes>
-        <Route
-          path={"/about"}
-          element={
-            <About
-              content={experiment?.aboutContent}
-              slug={experiment.slug}
-              backButtonText={experiment.backButtonText}
-            />
-          }
-        />
-        <Route
-          path={"*"}
-          element={
-            <Dashboard
-              experiment={experiment}
-              participantIdUrl={participantIdUrl}
-              totalScore={totalScore}
-            />
-          }
-        />
-      </Routes>
-      {experiment.theme?.footer && (
-        <Footer
-          disclaimer={experiment.disclaimer}
-          logos={experiment.theme.footer.logos}
-          privacy={experiment.privacy}
-        />
-      )}
-    </div>
+    <Routes>
+      <Route
+        path={"/about"}
+        element={<View name="about" experiment={experiment} />}
+      />
+      <Route
+        path={"*"}
+        element={
+          <View
+            name="dashboard"
+            experiment={experiment}
+            participantIdUrl={participantIdUrl}
+            totalScore={totalScore}
+          />
+        }
+      />
+    </Routes>
   );
 }

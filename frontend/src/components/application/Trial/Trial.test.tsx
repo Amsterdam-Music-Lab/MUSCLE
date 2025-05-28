@@ -19,13 +19,8 @@ function MockView({ name, ...props }) {
   }
 }
 
-vi.mock("@/components/application", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("@/components/application")>()),
-  View: MockView,
-}));
-
-vi.mock("@/components/playback", () => ({
-  Playback: vi.fn(({ finishedPlaying, onPreloadReady }) => (
+function MockPlayback({ finishedPlaying, onPreloadReady }) {
+  return (
     <div
       data-testid="mock-playback"
       onClick={() => {
@@ -35,7 +30,13 @@ vi.mock("@/components/playback", () => ({
     >
       Mock Playback
     </div>
-  )),
+  );
+}
+
+vi.mock("@/components/application", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/components/application")>()),
+  View: MockView,
+  Playback: MockPlayback,
 }));
 
 vi.mock("@/components/utils", () => ({

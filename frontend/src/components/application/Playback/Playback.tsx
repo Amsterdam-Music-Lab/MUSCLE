@@ -13,9 +13,13 @@ import * as webAudio from "@/util/webAudio";
 import { playAudio, pauseAudio } from "@/util/audioControl";
 
 import { View } from "@/components/application";
-import { TuneTwins } from "@/components/matching-pairs";
-import { Autoplay, PlayButton, MultiPlayer, ImagePlayer, Preload } from "../";
-import convertTutorial from "@/util/convertTutorial";
+import {
+  Autoplay,
+  PlayButton,
+  MultiPlayer,
+  ImagePlayer,
+  Preload,
+} from "@/components/playback";
 
 import {
   AUTOPLAY,
@@ -270,22 +274,16 @@ export default function Playback({
           />
         );
       case MATCHINGPAIRS:
-        const cards = playbackArgs.sections.map((section, index) => ({
-          id: index,
-          data: { ...section },
-        }));
         if (playMethod === "NOAUDIO") {
           throw Error("TuneTwins only supports audio");
         }
         return (
-          <TuneTwins
-            cards={cards}
-            type={playMethod === "NOAUDIO" ? "visual" : "audio"}
-            animate={playbackArgs.show_animation}
-            onGameEnd={() => submitResult({})}
-            onTurnEnd={onFinishedPlaying}
-            onSelectCard={(card) => playSection(card.id)}
-            tutorial={convertTutorial(playbackArgs.tutorial)}
+          <View
+            name="tunetwins"
+            playbackArgs={playbackArgs}
+            submitResult={submitResult}
+            onFinishedPlaying={onFinishedPlaying}
+            playSection={playSection}
           />
         );
 
