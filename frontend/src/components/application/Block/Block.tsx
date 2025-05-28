@@ -168,8 +168,6 @@ export default function Block() {
   // <FontLoader fontUrl={theme?.heading_font_url} fontType="heading" />
   // <FontLoader fontUrl={theme?.body_font_url} fontType="body" />
 
-  console.log(state, block);
-
   return (
     <ViewTransition
       transitionKey={state?.view}
