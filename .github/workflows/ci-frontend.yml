@@ -1,12 +1,6 @@
 name: Frontend Test & Lint
 
 on:
-  push:
-    paths:
-      - 'frontend/**'
-      - '.yarn'
-      - '.github/workflows/ci-frontend.yml'
-      - 'docker-compose.yaml'
   pull_request:
     paths:
       - 'frontend/**'
