@@ -48,7 +48,7 @@ export interface CardSectionProps
   title?: ReactNode;
   flush?: boolean;
   variant?: Variant;
-  spacing: "wide" | "narrow";
+  spacing?: "wide" | "narrow";
   titleTag?: "h1" | "h2" | "h3" | "h4" | "h5" | "p" | "div";
   titleClass?: string;
 }
