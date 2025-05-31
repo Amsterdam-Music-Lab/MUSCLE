@@ -6,5 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export type { DashboardProps } from "./DashboardView";
+export type { DashboardViewProps } from "./DashboardView";
 export { default as DashboardView } from "./DashboardView";

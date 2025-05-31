@@ -20,17 +20,20 @@ export interface ExperimentLayoutProps extends NarrowLayoutProps {
 
 export default function ExperimentLayout({
   children,
-  experiment,
+  disclaimerHtml,
+  privacyHtml,
+  logos,
+  showFooter = true,
   ...layoutProps
 }: ExperimentLayoutProps) {
   return (
     <NarrowLayout {...layoutProps}>
       {children}
-      {experiment?.theme?.footer && (
+      {showFooter && (
         <Footer
-          disclaimerHtml={experiment?.disclaimer}
-          logos={experiment?.theme?.footer?.logos}
-          privacyHtml={experiment?.privacy}
+          disclaimerHtml={disclaimerHtml}
+          logos={logos}
+          privacyHtml={privacyHtml}
         />
       )}
     </NarrowLayout>

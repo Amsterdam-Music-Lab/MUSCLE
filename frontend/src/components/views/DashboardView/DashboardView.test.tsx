@@ -29,6 +29,7 @@ const experiment1 = getExperiment({
   name: "Some Experiment",
   description: null,
 });
+
 const experiment2 = getExperiment({
   id: 2,
   slug: "another_slug",
@@ -36,12 +37,15 @@ const experiment2 = getExperiment({
   description: "Some description",
 });
 
-const experimentWithDashboard = { dashboard: [experiment1, experiment2] };
+const dashboard = [experiment1, experiment2];
+
+const experimentWithDashboard = { dashboard };
 
 const header = {
   nextBlockButtonText: "Next experiment",
   aboutButtonText: "About us",
 };
+
 const experimentWithTheme = {
   dashboard: [experiment1, experiment2],
   theme: {
@@ -67,7 +71,7 @@ describe("DashboardView", () => {
   it("shows a dashboard of multiple experiments if it receives an array", async () => {
     render(
       <MemoryRouter>
-        <DashboardView experiment={experimentWithDashboard} />
+        <DashboardView dashboard={dashboard} />
       </MemoryRouter>
     );
     await waitFor(() => {
@@ -79,7 +83,7 @@ describe("DashboardView", () => {
     // Disabled
     render(
       <MemoryRouter>
-        <DashboardView experiment={experimentWithDashboard} />
+        <DashboardView dashboard={dashboard} />
       </MemoryRouter>
     );
     await waitFor(() => {
@@ -97,7 +101,7 @@ describe("DashboardView", () => {
 
     render(
       <MemoryRouter>
-        <DashboardView experiment={experimentWithDashboard} />
+        <DashboardView dashboard={dashboard} />
       </MemoryRouter>
     );
     await waitFor(() => {
@@ -116,10 +120,7 @@ describe("DashboardView", () => {
 
     render(
       <MemoryRouter>
-        <DashboardView
-          experiment={experimentWithDashboard}
-          participantIdUrl="some_id"
-        />
+        <DashboardView dashboard={dashboard} participantIdUrl="some_id" />
       </MemoryRouter>
     );
     await waitFor(() => {
@@ -134,7 +135,7 @@ describe("DashboardView", () => {
     render(
       <MemoryRouter>
         <DashboardView
-          experiment={experimentWithDashboard}
+          {...experimentWithDashboard}
           participantIdUrl="some_id"
         />
       </MemoryRouter>
@@ -146,10 +147,7 @@ describe("DashboardView", () => {
   it("shows a header if a theme.header is present", async () => {
     render(
       <MemoryRouter>
-        <DashboardView
-          experiment={experimentWithTheme}
-          participantIdUrl="some_id"
-        />
+        <DashboardView header={header} />
       </MemoryRouter>
     );
     await screen.findByText("About us");

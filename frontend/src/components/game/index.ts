@@ -8,8 +8,9 @@
 
 export * from "./Timeline";
 export * from "./ScoreCounter";
-export * from "./ScoreDisplay";
+export * from "./ScoreBadge";
 export * from "./ScoreBoard";
+export * from "./ScoreDisplay";
 export * from "./ScoreFeedback";
 export * from "./TutorialMessage";
 export * from "./Cup";

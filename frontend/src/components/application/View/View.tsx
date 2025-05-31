@@ -7,7 +7,10 @@
  */
 
 import type { ComponentType } from "react";
+import { Fragment } from "react";
 import { NarrowLayout } from "@/components/layout";
+import { FloatingActionButton } from "@/components/ui";
+import { UserFeedbackForm } from "@/components/user";
 
 // Simple views
 import {
@@ -24,6 +27,7 @@ import {
   StoreProfileView,
   SurveyView,
   ConsentView,
+  ConsentDeniedView,
   DashboardView,
 } from "@/components/views";
 
@@ -32,6 +36,7 @@ import { Trial } from "../";
 
 // Other views
 import { TuneTwins } from "@/components/matching-pairs";
+import useBoundStore from "@/util/stores";
 
 export type ViewDependency =
   | "state"
@@ -55,7 +60,8 @@ export type ViewComponent<P = any> = ComponentType<P> & BaseViewComponent<P>;
 const viewComponents: Record<string, ViewComponent<any>> = {
   [AboutView.viewName]: AboutView,
   [ConsentView.viewName]: ConsentView,
-  [DashboardView.viewName]: DashboardView,
+  [ConsentDeniedView.viewName]: ConsentDeniedView,
+  dashboard: DashboardView,
   [ErrorView.viewName]: ErrorView,
   [ExplainerView.viewName]: ExplainerView,
   [FinalView.viewName]: FinalView,
@@ -63,7 +69,7 @@ const viewComponents: Record<string, ViewComponent<any>> = {
   [LandingView.viewName]: LandingView,
   [LoadingView.viewName]: LoadingView,
   [PlaylistsView.viewName]: PlaylistsView,
-  profileView: ProfileView,
+  [ProfileView.viewName]: ProfileView,
   // [ProfileView.viewName]: ProfileView,
   [ScoreView.viewName]: ScoreView,
   [SurveyView.viewName]: SurveyView,
@@ -91,26 +97,30 @@ export interface ViewProps {
 export default function View({
   name,
   state,
-  block,
-  participant,
   experiment,
   onNext,
   onResult,
-  session,
   playlist,
   ...viewPropsOverrides
 }: ViewProps) {
-  let viewProps = {};
-  const ViewComponent = viewComponents[name] || ErrorView;
+  // Use state
+  const participant = useBoundStore((state) => state.participant);
+  const block = useBoundStore((state) => state.block);
+  const session = useBoundStore((state) => state.session);
+  const setError = useBoundStore((state) => state.setError);
+
+  const ViewComponent = viewComponents[name];
+  const deps = ViewComponent.dependencies ?? [];
   if (!Object.keys(viewComponents).includes(name)) {
-    viewProps.message = `Invalid view name "${name}"`;
+    setError(`Invalid view name "${name}"`);
   }
 
+  let viewProps = {};
   if (typeof ViewComponent.getViewProps === "function") {
     // Ensure all the required dependencies are defined and throw an error otherwise
-    const deps = ViewComponent.dependencies ?? [];
+    // This is mostly for debuggin purposes
     const throwError = (varName: ViewDependency) => {
-      throw new Error(
+      setError(
         `Required dependency "${varName}" for view "${ViewComponent.viewName}" is not defined`
       );
     };
@@ -124,28 +134,44 @@ export default function View({
     if (deps.includes("onResult") && !onResult) throwError("onResult");
 
     // Compute the views default props
-    const defaultProps = ViewComponent.getViewProps({
-      state,
-      block,
-      participant,
-      session,
-      playlist,
-      experiment,
-      onNext,
-      onResult,
-      ...viewPropsOverrides,
-    });
+    let defaultProps;
+    try {
+      defaultProps = ViewComponent.getViewProps({
+        state,
+        block,
+        participant,
+        session,
+        playlist,
+        experiment,
+        onNext,
+        onResult,
+        ...viewPropsOverrides,
+      });
+    } catch (e) {
+      setError(
+        `An error occurred while trying to render the view "${name}". The properties required to show the view could not be computed.\n (${e})`
+      );
+    }
     viewProps = { ...defaultProps, ...viewProps };
   }
 
+  const Wrapper = ViewComponent.usesOwnLayout ? Fragment : NarrowLayout;
+
   viewProps = { ...viewProps, ...viewPropsOverrides };
-  if (ViewComponent.usesOwnLayout !== false) {
-    return <ViewComponent {...viewProps} />;
-  } else {
-    return (
-      <NarrowLayout>
-        <ViewComponent {...viewProps} />
-      </NarrowLayout>
-    );
-  }
+  return (
+    <Wrapper>
+      <ViewComponent {...viewProps} />
+
+      {block && block?.feedback_info?.show_float_button && (
+        <FloatingActionButton>
+          <UserFeedbackForm
+            blockSlug={block.slug}
+            participant={participant}
+            feedbackInfo={block.feedback_info}
+            inline={false}
+          />
+        </FloatingActionButton>
+      )}
+    </Wrapper>
+  );
 }

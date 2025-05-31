@@ -10,7 +10,7 @@ import type { ScoreBoardProps } from "@/components/game/ScoreBoard/ScoreBoard";
 import type { AllPluginSpec } from "@/components/plugins/pluginRegistry";
 
 import { useEffect } from "react";
-import { URLS } from "@/config";
+import { routes } from "@/config";
 import { finalizeSession } from "@/API";
 import useBoundStore from "@/util/stores";
 import { Final as FinalAction } from "@/types/Action";
@@ -79,8 +79,11 @@ export default function FinalView({
         updated.args = {
           ...updated.args,
           links: [
-            { link: URLS.AMLHome, text: userLinkTexts.all_experiments },
-            { link: URLS.profile, text: userLinkTexts.profile },
+            {
+              link: routes.externalHome(),
+              text: userLinkTexts.all_experiments,
+            },
+            { link: routes.profile(), text: userLinkTexts.profile },
           ],
         };
         break;

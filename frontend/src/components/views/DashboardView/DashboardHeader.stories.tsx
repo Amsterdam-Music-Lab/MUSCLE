@@ -8,33 +8,28 @@
 
 import type { Meta, StoryObj } from "@storybook/react";
 
-import Header from "./Header";
+import DashboardHeader from "./DashboardHeader";
+import { NarrowLayout } from "@/components/layout";
 
 type Story = StoryObj<typeof Header>;
 
 const decorator = (StoryComponent: Story) => (
-  <div
-    className="aha__experiment"
-    style={{
-      backgroundColor: "#aaa",
-      padding: "1rem",
-    }}
-  >
+  <NarrowLayout>
     <StoryComponent />
-  </div>
+  </NarrowLayout>
 );
 
 const meta: Meta<typeof Header> = {
-  title: "Experiment/Header",
-  component: Header,
+  title: "Experiment/DashboardHeader",
+  component: DashboardHeader,
   decorators: [decorator],
 };
 export default meta;
 
 export const Default: Story = {
   args: {
-    description:
-      "<h1>Experiment ABC</h1><p>This is the experiment description</p>",
+    title: "Experiment ABC",
+    description: "This is the experiment description",
     nextBlockSlug: "/th1-mozart",
     nextBlockButtonText: "Volgende experiment",
     experimentSlug: "/thkids",

@@ -9,7 +9,7 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { describe, it, expect, vi } from "vitest";
 import InternalRedirect from "./InternalRedirect";
-import { URLS } from "@/config";
+import { routes } from "@/config";
 
 // Mock the Redirect component
 vi.mock("../Redirect", () => ({
@@ -21,7 +21,11 @@ describe("InternalRedirect", () => {
     render(
       <MemoryRouter initialEntries={[path]}>
         <Routes>
-          <Route path={URLS.internalRedirect} element={<InternalRedirect />} />=
+          <Route
+            path={routes.internalRedirect()}
+            element={<InternalRedirect />}
+          />
+          =
         </Routes>
       </MemoryRouter>
     );

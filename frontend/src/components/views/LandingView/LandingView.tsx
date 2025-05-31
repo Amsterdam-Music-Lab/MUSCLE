@@ -12,9 +12,9 @@ import { PluginRenderer } from "@/components/plugins";
 
 interface LandingViewProps extends NarrowLayoutProps {
   /**
-   * Url to the actual experiment
+   * Path to the actual experiment
    */
-  experimentUrl: string;
+  experimentPath: string;
 
   /**
    * Plugins to render on the landing page. In particular, the linkButton
@@ -33,7 +33,7 @@ const DEFAULT_PLUGINS = [
 ] as AllPluginSpec[];
 
 export default function LandingView({
-  experimentUrl,
+  experimentPath,
   plugins = DEFAULT_PLUGINS,
   ...layoutProps
 }: LandingViewProps) {
@@ -41,7 +41,7 @@ export default function LandingView({
     plugins = plugins.map((plugin) => {
       const updated: AllPluginSpec = { args: {}, ...plugin };
       if (plugin.name === "linkButton") {
-        updated.args = { ...updated.args, link: experimentUrl };
+        updated.args = { ...updated.args, link: experimentPath };
       }
       return updated;
     });

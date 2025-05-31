@@ -11,7 +11,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as EmailValidator from "email-validator";
 import classNames from "classnames";
-import { URLS } from "@/config";
+import { routes } from "@/config";
 import useBoundStore from "@/util/stores";
 import { shareParticipant } from "@/API";
 import { LoadingView } from "../LoadingView";
@@ -24,11 +24,12 @@ export interface StoreProfileViewProps {}
  * StoreProfileView enables participants to store their profile for later access
  */
 export default function StoreProfileView() {
+  // Todo should not rely on global state directly
+  const participant = useBoundStore((state) => state.participant);
+
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-
   const validEmail = email && EmailValidator.validate(email);
-  const participant = useBoundStore((state) => state.participant);
 
   const sendLink = async (participant: Participant) => {
     if (validEmail) {
@@ -38,7 +39,7 @@ export default function StoreProfileView() {
       } else {
         alert("You will receive an e-mail shortly");
       }
-      navigate(URLS.profile);
+      navigate(routes.profile());
     }
   };
 
@@ -71,7 +72,7 @@ export default function StoreProfileView() {
 
       <div className={styles.buttons}>
         <LinkButton
-          link={URLS.profile}
+          link={routes.profile()}
           stretch={true}
           size="lg"
           rounded={false}

@@ -7,6 +7,7 @@
  */
 
 export * from "./AboutView";
+export * from "./ConsentDeniedView";
 export * from "./ConsentView";
 export * from "./DashboardView";
 export * from "./ErrorView";

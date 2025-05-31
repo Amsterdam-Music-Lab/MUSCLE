@@ -1,8 +1,9 @@
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import ConsentView, { ConsentViewProps } from "./ConsentView";
 import { useConsent } from "@/API";
 import { saveAs } from "file-saver";
 import { vi, Mock, expect, it, describe } from "vitest";
+import { MemoryRouter } from "react-router-dom";
 
 global.Blob = vi.fn().mockImplementation((content, options) => ({
   content,
@@ -30,64 +31,54 @@ const mockExperiment = {
   name: "Test",
 };
 
-const getConsentViewProps: (
-  overrides?: Partial<ConsentViewProps>
-) => ConsentViewProps = (overrides) => ({
-  title: "Consent",
-  text: "<p>Consent Text</p>",
+const defaultProps = {
   experiment: mockExperiment,
+  consentHtml: "<p>Consent Text</p>",
   participant: { csrf_token: "42" },
-  onNext: vi.fn(),
-  confirm: "Agree",
-  deny: "Disagree",
-  ...overrides,
-});
+  onConfirm: vi.fn(),
+};
 
 describe("Consent", () => {
   it("renders circle while loading", () => {
-    (useConsent as Mock).mockReturnValue([null, true]); // Mock loading state
-    const { getByTestId } = render(
-      <ConsentView {...getConsentViewProps({ experiment: mockExperiment })} />
-    );
+    (useConsent as Mock).mockReturnValue([null, true]);
+    const { getByTestId } = render(<ConsentView {...defaultProps} />);
     expect(getByTestId("mock-loading")).toBeTruthy();
   });
 
   it("renders consent text when not loading", () => {
     (useConsent as Mock).mockReturnValue([null, false]);
     const { getByText } = render(
-      <ConsentView
-        {...getConsentViewProps({
-          text: "<p>Consent Text</p>",
-          experiment: mockExperiment,
-        })}
-      />
+      <MemoryRouter>
+        <ConsentView {...defaultProps} consentHtml={"<p>Lorem Ipsum</p>"} />
+      </MemoryRouter>
     );
-
-    expect(document.body.contains(getByText("Consent Text"))).toBe(true);
+    expect(getByText("Lorem Ipsum")).toBeTruthy(true);
   });
 
   it("calls onNext when Agree button is clicked", async () => {
     (useConsent as Mock).mockReturnValue([null, false]);
     const onNext = vi.fn();
     const { getByText } = render(
-      <ConsentView
-        {...getConsentViewProps({
-          confirm: "Agree",
-          experiment: mockExperiment,
-          onNext,
-        })}
-      />
+      <MemoryRouter>
+        <ConsentView
+          {...defaultProps}
+          confirmLabel="CONFIRM!"
+          onConfirm={onNext}
+        />
+      </MemoryRouter>
     );
-    fireEvent.click(getByText("Agree"));
-
+    fireEvent.click(getByText("CONFIRM!"));
     await waitFor(() => expect(onNext).toHaveBeenCalled());
   });
 
   it("triggers download when Download button is clicked", async () => {
     (useConsent as Mock).mockReturnValue([null, false]);
-    const { getByTestId } = render(<ConsentView {...getConsentViewProps()} />);
+    const { getByTestId } = render(
+      <MemoryRouter>
+        <ConsentView {...defaultProps} />
+      </MemoryRouter>
+    );
     fireEvent.click(getByTestId("download-button"));
-
     await waitFor(() => expect(saveAs).toHaveBeenCalled());
   });
 
@@ -95,9 +86,9 @@ describe("Consent", () => {
     (useConsent as Mock).mockReturnValue([true, false]);
     const onNext = vi.fn();
     render(
-      <ConsentView
-        {...getConsentViewProps({ experiment: mockExperiment, onNext })}
-      />
+      <MemoryRouter>
+        <ConsentView {...defaultProps} onConfirm={onNext} />
+      </MemoryRouter>
     );
     expect(onNext).toHaveBeenCalled();
   });
@@ -109,7 +100,11 @@ describe("Consent", () => {
       configurable: true,
       value: 800,
     });
-    const { getByTestId } = render(<ConsentView {...getConsentViewProps()} />);
+    const { getByTestId } = render(
+      <MemoryRouter>
+        <ConsentView {...defaultProps} />
+      </MemoryRouter>
+    );
     const consentText = getByTestId("consent-text");
     expect(consentText.style.height).toBe("500px");
   });

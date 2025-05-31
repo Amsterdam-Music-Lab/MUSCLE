@@ -7,28 +7,25 @@
  */
 
 import { RenderHtml } from "@/components/utils";
-import { ExperimentLayout } from "@/components/layout";
-import Experiment from "@/types/Experiment";
+import { ExperimentLayout, ExperimentLayoutProps } from "@/components/layout";
 import { Card, LinkButton } from "@/components/ui";
 
-export interface AboutViewProps {
+export interface AboutViewProps extends ExperimentLayoutProps {
   content: string;
   slug: string;
-  backButtonText: string;
-  experiment: Experiment;
+  backButtonText?: string;
   title?: string;
 }
 
 export default function AboutView({
-  experiment,
   content,
   slug,
-  backButtonText,
+  backButtonText = "Back",
   title = "About",
+  ...layoutProps
 }: AboutViewProps) {
-  console.log(experiment);
   return (
-    <ExperimentLayout experiment={experiment} className="container">
+    <ExperimentLayout className="container" {...layoutProps}>
       <Card>
         <Card.Header title={title} />
         <Card.Section>
@@ -50,5 +47,11 @@ AboutView.getViewProps = ({ experiment }) => ({
   content: experiment.aboutContent,
   slug: experiment.slug,
   backButtonText: experiment.backButtonText,
+
+  // Passed on to ExperimentLayout
+  disclaimerHtml: experiment?.disclaimer,
+  privacyHtml: experiment?.privacy,
+  logos: experiment?.theme?.footer?.logos,
+  showFooter: experiment?.theme?.footer,
 });
 AboutView.dependencies = ["experiment"];
