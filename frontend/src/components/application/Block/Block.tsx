@@ -8,8 +8,6 @@
 
 import type Session from "@/types/Session";
 import type { Action } from "@/types/Action";
-import type { Round } from "@/types/Round";
-
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "react-router-dom";
 import useBoundStore from "@/util/stores";
@@ -36,144 +34,150 @@ const VIEW_NAMES = {
  * - It handles sending results to the server
  */
 export default function Block() {
-  const { slug } = useParams();
-  const startState = { view: "LOADING" } as Action;
-
-  // Stores
+  // Global state
   const setError = useBoundStore((state) => state.setError);
   const participant = useBoundStore((state) => state.participant);
-  const setSession = useBoundStore((state) => state.setSession);
   const session = useBoundStore((state) => state.session);
+  const setSession = useBoundStore((state) => state.setSession);
   const theme = useBoundStore((state) => state.theme);
   const setTheme = useBoundStore((state) => state.setTheme);
   const resetTheme = useBoundStore((state) => state.resetTheme);
   const setBlock = useBoundStore((state) => state.setBlock);
-  const setCurrentAction = useBoundStore((state) => state.setCurrentAction);
-
+  const setGlobalCurrentAction = useBoundStore((s) => s.setCurrentAction);
   const setHeadData = useBoundStore((state) => state.setHeadData);
   const resetHeadData = useBoundStore((state) => state.resetHeadData);
 
-  // Current block state
-  const [actions, setActions] = useState<Round>([]);
-  const [state, setState] = useState<Action | null>(startState);
+  // Local component state, refs, etc
+  // the current action. Note that every block consists
+  // of rounds, which are sequences of actions, each action renders a view.
+  const startState = { view: "LOADING" } as Action;
+  const [actions, setActions] = useState<Action[]>([]);
+  const [currentAction, setCurrentAction] = useState<Action | null>(startState);
   const playlist = useRef(null);
-
-  // API hooks
+  const { slug } = useParams();
   const [block, loadingBlock] = useBlock(slug!);
 
-  /** Set new state as spread of current state to force re-render */
-  const updateState = useCallback((state: Action) => {
-    if (!state) return;
-    setState({ ...state });
-    // setKey(Math.random());
-  }, []);
+  //////////////////////////////////////////////////////////////////////
 
-  const updateActions = useCallback(
-    (currentActions: Round) => {
-      const newActions = currentActions;
-      setActions(newActions);
-      const newState = newActions.shift();
-      const currentAction = newState ? newState : null;
-      setCurrentAction({ ...currentAction });
-      updateState(newState);
-    },
-    [updateState, setCurrentAction]
-  );
+  /**
+   * Update the current action to the passed action, updating
+   * both the local and global state and forcing a re-render
+   */
+  const updateCurrentAction = useCallback((action: Action) => {
+    const newAction = action ? { ...action } : null;
+    setCurrentAction(newAction);
+    setGlobalCurrentAction(newAction);
+  });
 
-  const continueToNextRound = async (activeSession: Session) => {
-    // Try to get next_round data from server
-    const round = await getNextRound({
-      session: activeSession,
+  /**
+   * Continue to the next action in the current round
+   */
+  const goToNextActionInRound = useCallback(() => {
+    setActions((prevActions: Action[]) => {
+      const nextActions = [...prevActions];
+      const nextAction = nextActions.shift() || null;
+      updateCurrentAction(nextAction);
+      return nextActions;
     });
+  }, [updateCurrentAction]);
+
+  /**
+   * Continue to the next round within a block. This requires fetching
+   * the round from the server.
+   */
+  const goToNextRound = async (session: Session) => {
+    const round = await getNextRound({ session });
     if (round) {
-      updateActions(round.next_round);
+      setActions(round.next_round);
+      goToNextActionInRound();
     } else {
       setError(
         "An error occured while loading the data, please try to reload the page. (Error: next_round data unavailable)"
       );
-      setCurrentAction(null);
-      setState(null);
+      updateCurrentAction(null);
     }
   };
 
-  // trigger next action from next_round array, or call session/next_round
-  const onNext = async (doBreak = false) => {
-    if (!doBreak && actions.length) {
-      updateActions(actions);
+  /**
+   * Continue to the next action. This is either the next action in the current
+   * round, if such an action is left, or otherwise the first action in the
+   * next round.
+   */
+  const goToNextAction = async (endRound = false) => {
+    if (!endRound && actions.length) {
+      goToNextActionInRound();
     } else {
-      continueToNextRound(session as Session);
+      goToNextRound(session);
     }
   };
-  const onResult = useResultHandler({ session, participant });
 
-  // Start first_round when block and partipant have been loaded
+  /**
+   * Handle the result of an action
+   */
+  const handleActionResult = useResultHandler({ session, participant });
+
+  //////////////////////////////////////////////////////////////////////
+
+  /**
+   * Go to the first round when the block and partipant have been loaded
+   */
   useEffect(() => {
-    // Check if done loading
-    if (!loadingBlock && participant) {
-      // Loading succeeded
-      if (block) {
-        // Set Helmet Head data
-        setHeadData({
-          title: block.name,
-          description: block.description,
-          image: block.image?.file ?? "",
-          url: window.location.href,
-          structuredData: {
-            "@type": "Block",
-          },
-        });
-
-        setBlock(block);
-
-        if (block.session_id) {
-          setSession({ id: block.session_id });
-        } else if (!block.session_id && session) {
-          setError("Session could not be created");
-        }
-
-        continueToNextRound({ id: block.session_id });
-      } else {
-        // Loading error
-        setError("Could not load block");
-      }
+    if (loadingBlock || !participant) {
+      // Nothing: still loading...
+    } else if (!block) {
+      setError("Could not load a block");
+    } else if (!block.session_id && session) {
+      return setError("Session could not be created");
+    } else {
+      // Finished loading!
+      setBlock(block);
+      setSession({ id: block.session_id });
+      goToNextRound({ id: block.session_id });
+      setHeadData({
+        title: block.name,
+        description: block.description,
+        image: block.image?.file ?? "",
+        url: window.location.href,
+        structuredData: { "@type": "Block" },
+      });
     }
 
-    // Cleanup
-    return resetHeadData;
-  }, [block, loadingBlock, participant, setError, updateActions]);
+    return resetHeadData; // Clean up
+  }, [block, loadingBlock, participant, setError]);
 
+  // Theme
   useEffect(() => {
-    if (block?.theme) {
-      // Set theme if block has theme
-      setTheme(block.theme);
-    } else if (!block?.theme && theme) {
-      // Reset theme if new block has no theme
-      resetTheme();
-    }
+    if (block?.theme) setTheme(block.theme);
+    if (!block?.theme && theme) resetTheme();
   }, [block, theme, setTheme, resetTheme]);
 
-  // Fail safe
+  // Check if there's a valid action
   useEffect(() => {
-    if (!state) setError("No valid state");
-  }, [state, setError]);
+    if (!currentAction || !currentAction.view)
+      setError("No valid current action");
+  }, [currentAction, setError]);
 
-  // BC: I've removed the FontLoader as this theme doesn't use fonts
-  // in that way anyway.
-  // <FontLoader fontUrl={theme?.heading_font_url} fontType="heading" />
-  // <FontLoader fontUrl={theme?.body_font_url} fontType="body" />
-
+  // Whether the action has a valid view
+  const isValidAction = currentAction?.view in VIEW_NAMES;
   return (
-    <ViewTransition transitionKey={state?.view} data-testid="block-wrapper">
-      {!loadingBlock && block ? (
+    <ViewTransition transitionKey={currentAction?.view}>
+      {loadingBlock ? (
+        <View name="loading" label={block?.loading_text ?? ""} />
+      ) : !isValidAction ? (
         <View
-          name={VIEW_NAMES[state.view]}
-          state={state}
-          onNext={onNext}
-          onResult={onResult}
-          playlist={playlist}
+          name="error"
+          message={`Invalid action unsupported view (${JSON.stringify(
+            currentAction
+          )}`}
         />
       ) : (
-        <View name="loading" label={block ? block.loading_text : ""} />
+        <View
+          name={VIEW_NAMES[currentAction.view]}
+          state={currentAction}
+          onNext={goToNextAction}
+          onResult={handleActionResult}
+          playlist={playlist}
+        />
       )}
     </ViewTransition>
   );

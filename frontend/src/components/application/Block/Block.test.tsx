@@ -6,16 +6,21 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import { Route, MemoryRouter, Routes } from "react-router-dom";
-import { screen, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import { screen, waitFor, fireEvent } from "@testing-library/react";
 import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import * as API from "@/API";
 import Block from "./Block";
 
-vi.mock("@/util/stores");
-
+const useBlockMock = vi.fn();
+const getNextRoundMock = vi.fn();
+const setErrorMock = vi.fn();
 let mockUseParams = vi.fn();
+
+vi.mock("@/API", () => ({
+  useBlock: (...args) => useBlockMock(...args),
+  getNextRound: (...args) => getNextRoundMock(...args),
+}));
 
 vi.mock("react-router-dom", async () => {
   const actual = await vi.importActual("react-router-dom");
@@ -24,6 +29,22 @@ vi.mock("react-router-dom", async () => {
     useParams: () => mockUseParams(),
   };
 });
+
+vi.mock("@/components/layout", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/components/layout")>()),
+  ViewTransition: ({ ...props }) => (
+    <div data-testid="view-transition" {...props} />
+  ),
+}));
+
+vi.mock("@/components/application", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/components/application")>()),
+  View: ({ name, onNext, ...props }) => (
+    <div data-testid={`view-${name}`} onClick={onNext}>
+      {JSON.stringify(props)}
+    </div>
+  ),
+}));
 
 const blockObj = {
   id: 24,
@@ -40,7 +61,6 @@ const nextRoundObj = {
   ],
 };
 
-const mockSessionStore = { id: 1 };
 const mockParticipantStore = {
   id: 1,
   hash: "00000000-0000-0000-0000-000000000000",
@@ -50,18 +70,13 @@ const mockParticipantStore = {
   country: "nl",
 };
 
-vi.mock("@/API", () => ({
-  useBlock: () => [Promise.resolve(blockObj), false],
-  getNextRound: () => Promise.resolve(nextRoundObj),
-}));
-
 vi.mock("@/util/stores", () => ({
   __esModule: true,
   default: (fn: any) => {
     const state = {
-      session: mockSessionStore,
+      session: { id: 1 },
       participant: mockParticipantStore,
-      setError: vi.fn(),
+      setError: setErrorMock,
       setSession: vi.fn(),
       setHeadData: vi.fn(),
       resetHeadData: vi.fn(),
@@ -76,6 +91,8 @@ vi.mock("@/util/stores", () => ({
 
 describe("Block Component", () => {
   beforeEach(() => {
+    useBlockMock.mockReset();
+    getNextRoundMock.mockReset();
     mockUseParams.mockReturnValue({ slug: "test" });
   });
 
@@ -83,28 +100,46 @@ describe("Block Component", () => {
     vi.clearAllMocks();
   });
 
-  it("renders with given props", async () => {
-    // Mock the useParticipantLink hook
-
-    render(
-      <MemoryRouter>
-        <Block />
-      </MemoryRouter>
-    );
-    await screen.findByText("Instruction");
+  it("renders loading state when loadingBlock is true", async () => {
+    useBlockMock.mockReturnValue([null, true]);
+    const { getByTestId } = render(<Block />);
+    expect(getByTestId("view-loading")).toBeInTheDocument();
   });
 
-  it("calls onNext", async () => {
-    const spy = vi.spyOn(API, "getNextRound");
-    spy.mockImplementationOnce(() => Promise.resolve(nextRoundObj));
+  it("renders error view if block is null after loading", async () => {
+    useBlockMock.mockImplementationOnce(() => [null, false]);
+    render(<Block />);
+    await waitFor(() => {
+      expect(setErrorMock).toHaveBeenCalledWith("Could not load a block");
+    });
+  });
 
-    render(
-      <MemoryRouter initialEntries={["/block/test"]}>
-        <Routes>
-          <Route path="/block/:slug" element={<Block />} />
-        </Routes>
-      </MemoryRouter>
-    );
-    await waitFor(() => expect(spy).toHaveBeenCalled());
+  it("renders the first step after loading block", async () => {
+    useBlockMock.mockImplementation(() => [blockObj, false]);
+    getNextRoundMock.mockResolvedValueOnce(nextRoundObj);
+    render(<Block />);
+    const view = await screen.findByTestId("view-explainer");
+    expect(view.textContent).toContain("Instruction");
+  });
+
+  it("calls getNextRound when onNext is triggered at end of round", async () => {
+    useBlockMock.mockImplementation(() => [blockObj, false]);
+    getNextRoundMock.mockResolvedValueOnce(nextRoundObj);
+
+    render(<Block />);
+    const view = await screen.findByTestId("view-explainer");
+    fireEvent.click(view);
+    await waitFor(() => {
+      expect(getNextRoundMock).toHaveBeenCalled();
+    });
+  });
+
+  it("calls setError if no valid round is returned", async () => {
+    useBlockMock.mockImplementation(() => [blockObj, false]);
+    getNextRoundMock.mockResolvedValueOnce(null);
+    render(<Block />);
+    await waitFor(() => {
+      expect(setErrorMock).toHaveBeenCalled();
+    });
   });
 });
