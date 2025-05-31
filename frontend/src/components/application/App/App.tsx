@@ -7,52 +7,47 @@
  */
 
 import { useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import axios from "axios";
 
-import { API_BASE_URL, EXPERIMENT_SLUG, URLS } from "@/config";
-import { URLS as API_URLS } from "@/API";
+import { API_BASE_URL } from "@/config";
+import { URLS } from "@/API";
 import useBoundStore from "@/util/stores";
 import useDisableRightClickOnTouchDevices from "@/hooks/useDisableRightClickOnTouchDevices";
 import useDisableIOSPinchZoomOnTouchDevices from "@/hooks/useDisableIOSPinchZoomOnTouchDevices";
-import { Redirect, InternalRedirect, Reload } from "@/components/utils";
 import { ThemeProvider } from "@/theme/ThemeProvider";
-import { Block, Experiment, View } from "../";
+import { BaseLayout } from "@/components/layout/BaseLayout";
+import AppRoutes from "./AppRoutes";
 import Helmet from "./Helmet";
 
 // TODO ideally load or populate this from the backend
 import frontendConfig from "@/config/frontend";
-import { BaseLayout } from "@/components/layout/BaseLayout";
 
-// App is the root component of our application
+/**
+ * The root component of the application
+ *
+ * Note that this component also sets the participant_id as URL parameter,
+ * e.g. http://localhost:3000/bat?participant_id=johnsmith34
+ * Empty URL parameter "participant_id" is the same as no URL parameter at all
+ */
 export default function App() {
-  const error = useBoundStore((state) => state.error);
   const setError = useBoundStore((state) => state.setError);
-  const participant = useBoundStore((state) => state.participant);
   const setParticipant = useBoundStore((state) => state.setParticipant);
-  const setParticipantLoading = useBoundStore(
-    (state) => state.setParticipantLoading
-  );
-  const queryParams = window.location.search;
+  const setParticipantLoading = useBoundStore((s) => s.setParticipantLoading);
 
+  // Disable gestures on touch devices
   useDisableRightClickOnTouchDevices();
   useDisableIOSPinchZoomOnTouchDevices();
 
+  // Load the participant using the participant_id query param
+  const queryParams = window.location.search;
   useEffect(() => {
-    const urlParams = new URLSearchParams(queryParams);
-    const participantId = urlParams.get("participant_id");
-    let participantQueryParams = "";
-    if (participantId) {
-      participantQueryParams = `?participant_id=${participantId}`;
-    }
     try {
-      axios
-        .get(
-          API_BASE_URL + API_URLS.participant.current + participantQueryParams
-        )
-        .then((response) => {
-          setParticipant(response.data);
-        });
+      const urlParams = new URLSearchParams(queryParams);
+      const participantId = urlParams.get("participant_id");
+      let url = `${API_BASE_URL}${URLS.participant.current}`;
+      if (participantId) url = `${url}?participant_id=${participantId}`;
+      axios.get(url).then((response) => setParticipant(response.data));
     } catch (err) {
       console.error(err);
       setError("Could not load participant", err);
@@ -61,65 +56,17 @@ export default function App() {
     }
   }, [setError, queryParams, setParticipant, setParticipantLoading]);
 
-  if (error) {
-    return <View name="error" title="An error occured" message={error} />;
-  }
-
   return (
     <ThemeProvider>
       <Helmet />
       <BaseLayout>
         <Router>
-          {!!participant ? (
-            <Routes>
-              {/* Request reload for given participant */}
-              <Route path={URLS.reloadParticipant} element={<Reload />} />
-
-              {/* Default experiment */}
-              <Route
-                path="/"
-                element={
-                  frontendConfig.showLanding ? (
-                    <View
-                      name="landing"
-                      experimentUrl={URLS.experiment.replace(
-                        ":slug",
-                        EXPERIMENT_SLUG
-                      )}
-                      plugins={frontendConfig.landing.plugins}
-                    />
-                  ) : (
-                    <Redirect
-                      to={URLS.experiment.replace(":slug", EXPERIMENT_SLUG)}
-                    />
-                  )
-                }
-              />
-
-              {/* Profile */}
-              <Route path={URLS.profile} element={<View name="profile" />} />
-
-              {/* Internal redirect */}
-              <Route
-                path={URLS.internalRedirect}
-                element={<InternalRedirect />}
-              />
-
-              {/* Block */}
-              <Route path={URLS.block} element={<Block />} />
-
-              {/* Experiment */}
-              <Route path={URLS.experiment} element={<Experiment />} />
-
-              {/* Store profile */}
-              <Route
-                path={URLS.storeProfile}
-                element={<View name="storeProfile" />}
-              />
-            </Routes>
-          ) : (
-            <View name="loading" />
-          )}
+          {/* The routes are in a separate component so that we can use
+          useLocation to get smooth page transitions */}
+          <AppRoutes
+            showLanding={frontendConfig.showLanding}
+            landingPlugins={frontendConfig?.landing?.plugins}
+          />
         </Router>
       </BaseLayout>
     </ThemeProvider>

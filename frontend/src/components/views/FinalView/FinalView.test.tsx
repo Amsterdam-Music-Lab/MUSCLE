@@ -51,9 +51,9 @@ vi.mock("@/config", () => {
   return {
     SILENT_MP3: "",
     API_ROOT: "",
-    URLS: {
-      AMLHome: "/aml",
-      profile: "/profile",
+    routes: {
+      externalHome: () => "/aml",
+      profile: () => "/profile",
     },
   };
 });

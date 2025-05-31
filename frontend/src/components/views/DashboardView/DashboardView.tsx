@@ -5,64 +5,83 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-import type IBlock from "@/types/Block";
-import type Experiment from "@/types/Experiment";
-import { useNavigate } from "react-router-dom";
-import { Header } from "./Header";
-import { ExperimentLayout } from "@/components/layout";
-import "./DashboardView.module.scss"; // TODO: not modular yet
-import { Card } from "@/components/ui";
+import type TBlock from "@/types/Block";
+import type { Header as THeader } from "@/types/Theme";
+import type { SocialMediaConfig } from "@/types/Experiment";
 
-export interface DashboardViewProps {
-  experiment: Experiment;
-  participantIdUrl: string | null;
+import { useNavigate } from "react-router-dom";
+import { ExperimentLayout, ExperimentLayoutProps } from "@/components/layout";
+import { Card } from "@/components/ui";
+import DashboardHeader from "./DashboardHeader";
+import { routes } from "@/config";
+
+export interface DashboardViewProps extends ExperimentLayoutProps {
+  slug: string;
+  name: string;
+  description: string;
+  dashboard: TBlock;
+  nextBlock: TBlock | null;
+  aboutContent: string;
   totalScore: number;
+  socialMediaConfig?: SocialMediaConfig;
+  participantId: string | null;
+  header: Partial<THeader>;
 }
 
 export default function DashboardView({
-  experiment,
-  participantIdUrl,
+  name,
+  slug,
+  description,
+  nextBlock,
   totalScore,
+  socialMediaConfig,
+  participantId,
+  dashboard,
+  header = {},
+  ...layoutProps
 }: DashboardViewProps) {
   const navigate = useNavigate();
-  const getExperimentHref = (slug: string) =>
-    `/block/${slug}${
-      participantIdUrl ? `?participant_id=${participantIdUrl}` : ""
-    }`;
-  const header = experiment.theme?.header ?? {};
+  const hasDashboard = dashboard && dashboard.length > 0;
   return (
-    <ExperimentLayout experiment={experiment}>
-      <Header
-        title={experiment.name}
-        nextBlockSlug={experiment.nextBlock?.slug}
-        experimentSlug={experiment.slug}
+    <ExperimentLayout {...layoutProps}>
+      <DashboardHeader
+        title={name}
+        experimentSlug={slug}
         totalScore={totalScore}
-        description={experiment.description}
+        nextBlockSlug={nextBlock?.slug}
+        description={description}
+        socialMediaConfig={socialMediaConfig}
         scoreDisplayConfig={header?.score}
         nextBlockButtonText={header?.nextBlockButtonText}
         aboutButtonText={header?.aboutButtonText}
-        socialMediaConfig={experiment.socialMediaConfig}
       />
 
       <Card data-testid="dashboard-experiments">
         <Card.Header title="Experiments" />
-        {experiment.dashboard.map((exp: IBlock) => (
-          <Card.Option
-            key={exp.slug}
-            title={`Go to experiment '${exp.name}'`}
-            spacing="narrow"
-            onClick={() => navigate(getExperimentHref(exp.slug))}
-          >
-            {exp.image?.file && (
-              <img
-                src={exp.image?.file}
-                alt={exp.image?.alt ?? exp.description}
-              />
-            )}
-            {exp.description}
-          </Card.Option>
-        ))}
-        {experiment.dashboard.length === 0 && (
+
+        {hasDashboard ? (
+          dashboard.map((exp: TBlock) => {
+            const path = routes.block(exp.slug, {
+              participant_id: participantId,
+            });
+            return (
+              <Card.Option
+                key={exp.slug}
+                title={`Go to experiment '${exp.name}'`}
+                spacing="narrow"
+                onClick={() => navigate(path)}
+              >
+                {exp.image?.file && (
+                  <img
+                    src={exp.image?.file}
+                    alt={exp.image?.alt ?? exp.description}
+                  />
+                )}
+                {exp.description}
+              </Card.Option>
+            );
+          })
+        ) : (
           <Card.Option>No experiments found</Card.Option>
         )}
       </Card>
@@ -72,5 +91,21 @@ export default function DashboardView({
 
 DashboardView.viewName = "dashboard";
 DashboardView.usesOwnLayout = true;
-DashboardView.getViewProps = ({ experiment }) => ({ experiment });
-DashboardView.dependencies = ["experiment"];
+DashboardView.getViewProps = ({ experiment, participant }) => ({
+  name: experiment.name,
+  slug: experiment.slug,
+  description: experiment.description,
+  totalScore: experiment.totalScore,
+  nextBlock: experiment.nextBlock,
+  header: experiment?.theme?.header ?? {},
+  socialMediaConfig: experiment.socialMediaConfig,
+  participantId: participant?.participant_id_url,
+  dashboard: experiment.dashboard,
+
+  // Passed on to ExperimentLayout
+  disclaimerHtml: experiment?.disclaimer,
+  privacyHtml: experiment?.privacy,
+  logos: experiment?.theme?.footer?.logos,
+  showFooter: experiment?.theme?.footer,
+});
+DashboardView.dependencies = ["experiment", "participant"];

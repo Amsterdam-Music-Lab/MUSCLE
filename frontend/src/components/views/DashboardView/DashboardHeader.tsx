@@ -14,7 +14,7 @@ import { RenderHtml } from "@/components/utils";
 import { Card, LinkButton, ShareOptions } from "@/components/ui";
 import { Cup, ScoreCounter } from "@/components/game";
 
-export interface HeaderProps {
+export interface DashboardHeaderProps {
   title?: string;
   description: string;
   nextBlockSlug: string | undefined;
@@ -26,7 +26,7 @@ export interface HeaderProps {
   socialMediaConfig?: SocialMediaConfig;
 }
 
-export const Header: React.FC<HeaderProps> = ({
+export default function DashboardHeader({
   title = "Dashboard",
   description,
   nextBlockSlug,
@@ -36,17 +36,16 @@ export const Header: React.FC<HeaderProps> = ({
   totalScore,
   scoreDisplayConfig,
   socialMediaConfig,
-}) => {
+}: DashboardHeaderProps) {
   return (
     <>
       <Card>
         <Card.Header title={title}>
-          <RenderHtml html={description} />
+          {description && (
+            <RenderHtml html={description} style={{ marginBottom: ".75em" }} />
+          )}
           {aboutButtonText && (
-            <LinkButton
-              className="btn btn-lg btn-outline-primary"
-              link={`/${experimentSlug}/about`}
-            >
+            <LinkButton link={`/${experimentSlug}/about`}>
               {aboutButtonText}
             </LinkButton>
           )}
@@ -83,10 +82,10 @@ export const Header: React.FC<HeaderProps> = ({
       )}
 
       {scoreDisplayConfig && totalScore === 0 && (
-        <h3>{scoreDisplayConfig.noScoreLabel}</h3>
+        <Card>
+          <Card.Header>{scoreDisplayConfig.noScoreLabel}</Card.Header>
+        </Card>
       )}
     </>
   );
-};
-
-export default Header;
+}

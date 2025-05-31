@@ -12,15 +12,11 @@ import type { Round } from "@/types/Round";
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "react-router-dom";
-import classNames from "classnames";
 import useBoundStore from "@/util/stores";
 import { getNextRound, useBlock } from "@/API";
 import useResultHandler from "@/hooks/useResultHandler";
-import { FloatingActionButton } from "@/components/ui";
-import { UserFeedbackForm } from "@/components/user";
 import { ViewTransition } from "@/components/layout";
 import { View } from "@/components/application";
-import styles from "./Block.module.scss";
 
 const VIEW_NAMES = {
   TRIAL_VIEW: "trial",
@@ -34,12 +30,10 @@ const VIEW_NAMES = {
 };
 
 /**
- * Block handles the main (experiment) block flow:
+ * Component that controls an experiment block:
  * - Loads the block and participant
  * - Renders the view based on the state that is provided by the server
  * - It handles sending results to the server
- * - Implements participant_id as URL parameter, e.g. http://localhost:3000/bat?participant_id=johnsmith34
- * Empty URL parameter "participant_id" is the same as no URL parameter at all
  */
 export default function Block() {
   const { slug } = useParams();
@@ -145,9 +139,7 @@ export default function Block() {
     }
 
     // Cleanup
-    return () => {
-      resetHeadData();
-    };
+    return resetHeadData;
   }, [block, loadingBlock, participant, setError, updateActions]);
 
   useEffect(() => {
@@ -161,7 +153,9 @@ export default function Block() {
   }, [block, theme, setTheme, resetTheme]);
 
   // Fail safe
-  if (!state) setError("No valid state");
+  useEffect(() => {
+    if (!state) setError("No valid state");
+  }, [state, setError]);
 
   // BC: I've removed the FontLoader as this theme doesn't use fonts
   // in that way anyway.
@@ -169,38 +163,15 @@ export default function Block() {
   // <FontLoader fontUrl={theme?.body_font_url} fontType="body" />
 
   return (
-    <ViewTransition
-      transitionKey={state?.view}
-      className={classNames(
-        styles.block,
-        !loadingBlock && block ? "block-" + block.slug : ""
-      )}
-      data-testid="block-wrapper"
-    >
+    <ViewTransition transitionKey={state?.view} data-testid="block-wrapper">
       {!loadingBlock && block ? (
-        <>
-          <View
-            name={VIEW_NAMES[state.view]}
-            state={state}
-            block={block}
-            participant={participant}
-            onNext={onNext}
-            onResult={onResult}
-            session={session}
-            playlist={playlist}
-          />
-
-          {block?.feedback_info?.show_float_button && (
-            <FloatingActionButton>
-              <UserFeedbackForm
-                blockSlug={block.slug}
-                participant={participant}
-                feedbackInfo={block.feedback_info}
-                inline={false}
-              />
-            </FloatingActionButton>
-          )}
-        </>
+        <View
+          name={VIEW_NAMES[state.view]}
+          state={state}
+          onNext={onNext}
+          onResult={onResult}
+          playlist={playlist}
+        />
       ) : (
         <View name="loading" label={block ? block.loading_text : ""} />
       )}

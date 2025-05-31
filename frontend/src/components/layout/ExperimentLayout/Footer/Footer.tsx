@@ -35,18 +35,20 @@ export default function Footer({
       {disclaimerHtml && (
         <RenderHtml html={disclaimerHtml} className="disclaimer" />
       )}
-      <div className="logos">
-        {logos.map((logo: ILogo, index: number) => (
-          <a
-            href={logo.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            key={index}
-          >
-            <img src={logo.file} alt={logo.alt} />
-          </a>
-        ))}
-      </div>
+      {logos && (
+        <div className="logos">
+          {logos.map((logo: ILogo, index: number) => (
+            <a
+              href={logo.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              key={index}
+            >
+              <img src={logo.file} alt={logo.alt} />
+            </a>
+          ))}
+        </div>
+      )}
       {privacyHtml && <RenderHtml className="privacy" html={privacyHtml} />}
     </div>
   );

@@ -139,7 +139,11 @@ describe("Experiment", () => {
       dashboard: [blockWithAllProps],
       nextBlock: block1,
     });
-    const { getByTestId } = render(<Experiment />);
+    const { getByTestId } = render(
+      <MemoryRouter>
+        <Experiment />
+      </MemoryRouter>
+    );
     await waitFor(() =>
       expect(getByTestId("view-consent")).toBeInTheDocument()
     );

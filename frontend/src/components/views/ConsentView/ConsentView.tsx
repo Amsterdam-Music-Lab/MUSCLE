@@ -10,54 +10,69 @@ import type Participant from "@/types/Participant";
 
 import { useEffect } from "react";
 import { saveAs } from "file-saver";
-import { URLS } from "@/config";
+import { routes } from "@/config";
 import { createConsent, useConsent } from "@/API";
 import { Button, Card, LinkButton } from "@/components/ui";
+import { RenderHtml } from "@/components/utils";
 import { LoadingView } from "../LoadingView";
-
 import styles from "./ConsentView.module.scss";
 
 export interface ConsentViewProps {
-  title: string;
-  text: string;
+  /**
+   * A html string with the consent text
+   */
+  consentHtml: string;
+
+  /** The experiment */
   experiment: any;
+
+  /** The current participant */
   participant: Pick<Participant, "csrf_token">;
-  onNext: () => void;
-  confirm: string;
-  deny: string;
+
+  /** Callback called when clicking the confirm button */
+  onConfirm?: () => void;
+
+  /** Title of the consent form. Default "Consent" */
+  title?: string;
+
+  /** Text shown on the confirm button */
+  confirmLabel?: string;
+
+  /** Text shown on the deny button */
+  denyLabel?: string;
 }
 
-/** Consent is an experiment view that shows the consent text, and handles agreement/stop actions */
+/**
+ * Consent is an experiment view that shows the consent text,
+ * and handles agreement/stop actions
+ */
 export default function ConsentView({
-  title,
-  text,
+  consentHtml,
   experiment,
   participant,
-  onNext,
-  confirm,
-  deny,
-}: ConsentProps) {
+  onConfirm = () => {},
+  title = "Consent",
+  confirmLabel = "Agree",
+  denyLabel = "Disagree",
+}: ConsentViewProps) {
   const [consent, loadingConsent] = useConsent(experiment.slug);
   const urlQueryString = window.location.search;
 
   // Listen for consent, and auto advance if already given
   useEffect(() => {
     if (consent || new URLSearchParams(urlQueryString).get("participant_id")) {
-      onNext();
+      onConfirm();
     }
-  }, [consent, onNext, urlQueryString]);
+  }, [consent, onConfirm, urlQueryString]);
 
-  // Click on agree button
+  // Store consent on agree and continue
   const onAgree = async () => {
-    // Store consent
     await createConsent({ experiment, participant });
-
-    // Next!
-    onNext();
+    onConfirm();
   };
 
   const onDownload = async () => {
-    const doc = new DOMParser().parseFromString(text, "text/html");
+    const doc = new DOMParser().parseFromString(consentHtml, "text/html");
     const txt = doc.body.textContent
       ? doc.body.textContent.split("  ").join("")
       : "";
@@ -93,17 +108,20 @@ export default function ConsentView({
         <Card.Header title={title} />
 
         <Card.Section>
-          <div
+          <RenderHtml
+            html={consentHtml}
             data-testid="consent-text"
             style={{ height: height - correction }}
-            dangerouslySetInnerHTML={{ __html: text }}
           />
         </Card.Section>
 
         <Card.Section>
           <div className={styles.buttons}>
-            <LinkButton link={URLS.AMLHome} outline={false}>
-              {deny}
+            <LinkButton
+              link={routes.noconsent(experiment.slug)}
+              outline={false}
+            >
+              {denyLabel}
             </LinkButton>
             <Button
               data-testid="download-button"
@@ -122,7 +140,7 @@ export default function ConsentView({
         rounded={false}
         size="lg"
         onClick={onAgree}
-        title={confirm}
+        title={confirmLabel}
       />
     </>
   );
@@ -131,12 +149,12 @@ export default function ConsentView({
 ConsentView.usesOwnLayout = false;
 ConsentView.viewName = "consent";
 ConsentView.getViewProps = ({ participant, onNext, experiment }) => ({
-  title: experiment.consent.title, // ?
-  text: experiment.consent.text, // ?
+  consentHtml: experiment.consent.text,
   experiment,
   participant,
-  onNext,
-  confirm: experiment.consent.confirm, //?
-  deny: experiment.consent.deny, //?
+  onConfirm: onNext,
+  title: experiment.consent.title,
+  confirmLabel: experiment.consent.confirm,
+  denyLabel: experiment.consent.deny,
 });
 ConsentView.dependencies = ["experiment", "participant", "onNext"];
