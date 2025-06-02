@@ -39,8 +39,6 @@ export default function Trial({
   config,
   onNext,
   onResult,
-  role = "presentation",
-  ...divProps
 }: TrialProps) {
   // Main component state
   const [formActive, setFormActive] = useState(!config.listen_first);
@@ -181,12 +179,12 @@ export default function Trial({
 
 Trial.viewName = "trial";
 Trial.usesOwnLayout = true;
-Trial.getViewProps = ({ state, onNext, onResult }) => ({
-  playback: state.playback,
-  html: state.html,
-  feedback_form: state.feedback_form,
-  config: state.config,
+Trial.getViewProps = ({ action, onNext, onResult }) => ({
+  playback: action.playback,
+  html: action.html,
+  feedback_form: action.feedback_form,
+  config: action.config,
   onNext,
   onResult,
 });
-Trial.dependencies = ["state", "onNext", "onResult"];
+Trial.dependencies = ["action"];

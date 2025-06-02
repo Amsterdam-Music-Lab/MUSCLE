@@ -37,22 +37,25 @@ import { Trial } from "../";
 // Other views
 import { TuneTwins } from "@/components/matching-pairs";
 import useBoundStore from "@/util/stores";
+import Action from "@/types/Action";
+import Block from "@/types/Block";
+import Participant from "@/types/Participant";
+import Session from "@/types/Session";
 
-export type ViewDependency =
-  | "state"
-  | "block"
-  | "participant"
-  | "experiment"
-  | "onNext"
-  | "onResult"
-  | "session"
-  | "playlist";
+export type ViewDependency = "block" | "action" | "participant" | "session";
+
+interface GetViewPropsArgs {
+  action?: Action;
+  block?: Block;
+  participant?: Participant;
+  session?: Session;
+}
 
 export interface BaseViewComponent<P = any> {
   viewName: string;
   dependencies?: ViewDependency[];
   usesOwnLayout?: boolean;
-  getViewProps?: (deps: Record<string, any>) => P;
+  getViewProps?: (props: GetViewPropsArgs | any) => P;
 }
 
 export type ViewComponent<P = any> = ComponentType<P> & BaseViewComponent<P>;
@@ -61,7 +64,6 @@ const viewComponents: Record<string, ViewComponent<any>> = {
   [AboutView.viewName]: AboutView,
   [ConsentView.viewName]: ConsentView,
   [ConsentDeniedView.viewName]: ConsentDeniedView,
-  dashboard: DashboardView,
   [ErrorView.viewName]: ErrorView,
   [ExplainerView.viewName]: ExplainerView,
   [FinalView.viewName]: FinalView,
@@ -70,52 +72,37 @@ const viewComponents: Record<string, ViewComponent<any>> = {
   [LoadingView.viewName]: LoadingView,
   [PlaylistsView.viewName]: PlaylistsView,
   [ProfileView.viewName]: ProfileView,
-  // [ProfileView.viewName]: ProfileView,
   [ScoreView.viewName]: ScoreView,
   [SurveyView.viewName]: SurveyView,
   [StoreProfileView.viewName]: StoreProfileView,
-
-  // using [Trial.viewName] raises testing issues?!
-  trial: Trial,
-
   [TuneTwins.viewName]: TuneTwins,
+
+  // Use name directly as [View.viewName] raises test issues
+  dashboard: DashboardView,
+  trial: Trial,
 };
 
 export interface ViewProps {
   name: string;
-  state?: any;
-  block?: any;
-  participant?: any;
-  experiment?: any;
-  onNext?: (...args: any[]) => void;
-  onResult?: (...args: any[]) => void;
-  session?: any;
-  playlist?: any;
-  [key: string]: any; // for overrides
+  block?: Block;
+  action?: Action;
+  session?: Session;
+  participant?: Participant;
 }
 
-export default function View({
-  name,
-  state,
-  experiment,
-  onNext,
-  onResult,
-  playlist,
-  ...viewPropsOverrides
-}: ViewProps) {
+export default function View({ name, ...viewProps }: ViewProps) {
   // Use state
-  const participant = useBoundStore((state) => state.participant);
-  const block = useBoundStore((state) => state.block);
-  const session = useBoundStore((state) => state.session);
   const setError = useBoundStore((state) => state.setError);
+  const block = useBoundStore((state) => state.block);
+  const action = useBoundStore((state) => state.currentAction);
+  const session = useBoundStore((state) => state.session);
+  const participant = useBoundStore((state) => state.participant);
 
-  const ViewComponent = viewComponents[name];
-  const deps = ViewComponent.dependencies ?? [];
   if (!Object.keys(viewComponents).includes(name)) {
     setError(`Invalid view name "${name}"`);
   }
 
-  let viewProps = {};
+  const ViewComponent = viewComponents[name];
   if (typeof ViewComponent.getViewProps === "function") {
     // Ensure all the required dependencies are defined and throw an error otherwise
     // This is mostly for debuggin purposes
@@ -124,40 +111,30 @@ export default function View({
         `Required dependency "${varName}" for view "${ViewComponent.viewName}" is not defined`
       );
     };
-    if (deps.includes("state") && !state) throwError("state");
+    const deps = ViewComponent.dependencies ?? [];
     if (deps.includes("block") && !block) throwError("block");
+    if (deps.includes("action") && !action) throwError("action");
     if (deps.includes("participant") && !participant) throwError("participant");
     if (deps.includes("session") && !session) throwError("session");
-    if (deps.includes("playlist") && !playlist) throwError("playlist");
-    if (deps.includes("experiment") && !experiment) throwError("experiment");
-    if (deps.includes("onNext") && !onNext) throwError("onNext");
-    if (deps.includes("onResult") && !onResult) throwError("onResult");
 
     // Compute the views default props
-    let defaultProps;
     try {
-      defaultProps = ViewComponent.getViewProps({
-        state,
+      viewProps = ViewComponent.getViewProps({
         block,
+        action,
         participant,
         session,
-        playlist,
-        experiment,
-        onNext,
-        onResult,
-        ...viewPropsOverrides,
+        ...viewProps,
       });
     } catch (e) {
       setError(
         `An error occurred while trying to render the view "${name}". The properties required to show the view could not be computed.\n (${e})`
       );
     }
-    viewProps = { ...defaultProps, ...viewProps };
   }
 
   const Wrapper = ViewComponent.usesOwnLayout ? Fragment : NarrowLayout;
 
-  viewProps = { ...viewProps, ...viewPropsOverrides };
   return (
     <Wrapper>
       <ViewComponent {...viewProps} />

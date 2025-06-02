@@ -58,4 +58,6 @@ export default function LoadingView({
 
 LoadingView.viewName = "loading";
 LoadingView.usesOwnLayout = false;
-LoadingView.getViewProps = undefined;
+LoadingView.getViewProps = ({ label }) => ({
+  label,
+});
