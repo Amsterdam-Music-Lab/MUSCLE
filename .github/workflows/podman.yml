@@ -18,7 +18,7 @@ jobs:
     environment: TuneTwins
     runs-on: tunetwins
 
-    if: github.ref == 'refs/heads/tunetwins'
+    if: github.ref == 'refs/heads/tunetwins' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
@@ -112,7 +112,7 @@ jobs:
     runs-on: tst
 
     # this job runs only on commits to the develop branch or when manually triggered for a branch other than main
-    if: github.ref == 'refs/heads/develop' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main')
+    if: github.ref == 'refs/heads/develop' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main' && github.ref != '/ref/heads/tunetwins')
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
