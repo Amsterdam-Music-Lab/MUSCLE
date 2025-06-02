@@ -22,6 +22,8 @@ import { AudioCard } from "../AudioCard";
 import DevCardLabel from "./DevCardLabel";
 import styles from "./TuneTwins.module.scss";
 
+import frontendConfig from "@/config/frontend";
+
 const CARD_CLASSES = {
   [TTComparisonResult.NO_MATCH]: styles.nomatch,
   [TTComparisonResult.LUCKY_MATCH]: styles.lucky,
@@ -189,12 +191,18 @@ TuneTwins.getViewProps = ({
   submitResult,
   onFinishedPlaying,
   playSection,
+  experiment,
 }) => {
   const cards = playbackArgs.sections.map((section, index) => ({
     id: index,
     data: { ...section },
   }));
   const tutorial = convertTutorial(playbackArgs.tutorial);
+  const timeline = frontendConfig?.tunetwins?.timeline;
+  const numSteps = timeline?.symbols.length || 0;
+  const sessionsPlayed = experiment.playedSessions || 0;
+  const timelineStep = sessionsPlayed % numSteps;
+
   return {
     cards,
     animate: playbackArgs.show_animation,
@@ -202,6 +210,8 @@ TuneTwins.getViewProps = ({
     onTurnEnd: onFinishedPlaying,
     onSelectCard: (card) => playSection(card.id),
     tutorial,
+    timeline,
+    timelineStep,
   };
 };
 

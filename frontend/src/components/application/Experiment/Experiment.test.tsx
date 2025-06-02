@@ -148,20 +148,4 @@ describe("Experiment", () => {
       expect(getByTestId("view-consent")).toBeInTheDocument()
     );
   });
-
-  it.skip("shows a footer if a theme with footer is available", async () => {
-    mock.onGet().replyOnce(200, {
-      dashboard: [blockWithAllProps],
-      nextBlock: block1,
-      theme,
-    });
-    const { container } = render(
-      <MemoryRouter>
-        <Experiment />
-      </MemoryRouter>
-    );
-    await waitFor(() => {
-      expect(document.querySelector(".aha__footer")).not.toBeNull();
-    });
-  });
 });

@@ -48,8 +48,9 @@ export const routes = {
   about: (p?: QueryParams) => path("/about", p),
   profile: (p?: QueryParams) => path("/profile", p),
   storeProfile: (p?: QueryParams) => path("/profile/store", p),
-  block: (slug: string, p?: QueryParams) => path(`/block/${slug}`, p),
   experiment: (slug: string, p?: QueryParams) => path(`/${slug}`, p),
+  block: (expSlug: string, blockSlug: string, p?: QueryParams) =>
+    path(`/${expSlug}/block/${blockSlug}`, p),
   experimentAbout: (slug: string, p?: QueryParams) => path(`/${slug}/about`, p),
   noconsent: (slug: string, p?: QueryParams) => path(`/${slug}/noconsent`, p),
   internalRedirect: (p?: QueryParams) => path("/redirect/*", p),

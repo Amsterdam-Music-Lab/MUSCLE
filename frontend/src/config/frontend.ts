@@ -187,4 +187,7 @@ export default {
   showLanding: true,
   landing: landingView,
   final: finalView,
+  tunetwins: {
+    timeline: { symbols: timelineSymbols },
+  },
 } as FrontendConfig;

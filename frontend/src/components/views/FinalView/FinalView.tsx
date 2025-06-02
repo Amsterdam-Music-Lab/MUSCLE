@@ -50,7 +50,8 @@ export default function FinalView({
   score: turnScore,
   totalScore,
   timeline,
-  timelineStep = 0, // TODO
+  timelineStep,
+  trophyIcon,
   plugins = frontendConfig?.final?.plugins || DEFAULT_PLUGINS,
   ...pluginRendererProps
 }: FinalViewProps) {
@@ -72,6 +73,7 @@ export default function FinalView({
           timeline,
           timelineStep,
           shareConfig,
+          trophyIcon,
         };
         break;
 
@@ -129,22 +131,36 @@ export default function FinalView({
 
 FinalView.viewName = "final";
 FinalView.usesOwnLayout = false;
-FinalView.getViewProps = ({ block, action, participant, onNext }) => ({
+FinalView.getViewProps = ({
   block,
+  action,
   participant,
-  action_texts: action.action_texts,
-  button: action.button,
   onNext,
-  show_participant_link: action.show_participant_link,
-  participant_id_only: action?.participant_id_only,
-  show_profile_link: action.show_profile_link,
-  social: action.social,
-  feedback_info: action.feedback_info,
-  percentile: action.percentile,
-  score: action.score,
-  totalScore: action.accumulated_score,
-  timeline: undefined,
-  timelineStep: action.sessions_played % 5,
-  sessions_played: action.sessions_played,
-});
+  experiment,
+}) => {
+  const timeline = frontendConfig?.tunetwins?.timeline;
+  const numSteps = timeline?.symbols.length || 0;
+  const sessionsPlayed = experiment.playedSessions || 0;
+  const timelineStep = sessionsPlayed % numSteps;
+  const symbol = timeline?.symbols[timelineStep - 1] || "dot";
+  const trophyIcon = symbol !== "dot" ? symbol : undefined;
+  return {
+    block,
+    participant,
+    action_texts: action.action_texts,
+    button: action.button,
+    onNext,
+    show_participant_link: action.show_participant_link,
+    participant_id_only: action?.participant_id_only,
+    show_profile_link: action.show_profile_link,
+    social: action.social,
+    feedback_info: action.feedback_info,
+    percentile: action.percentile,
+    score: action.score,
+    totalScore: experiment.accumulatedScore,
+    timeline,
+    timelineStep,
+    trophyIcon,
+  };
+};
 FinalView.dependencies = ["block", "state", "participant", "onNext"];

@@ -55,6 +55,7 @@ export default function Playback({
   submitResult,
   startedPlaying,
   finishedPlaying,
+  experiment,
 }: PlaybackProps) {
   const [playerIndex, setPlayerIndex] = useState(-1);
   const lastPlayerIndex = useRef(-1);
@@ -284,6 +285,7 @@ export default function Playback({
             submitResult={submitResult}
             onFinishedPlaying={onFinishedPlaying}
             playSection={playSection}
+            experiment={experiment}
           />
         );
 

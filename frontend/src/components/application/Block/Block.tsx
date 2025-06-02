@@ -11,7 +11,7 @@ import type { Action } from "@/types/Action";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "react-router-dom";
 import useBoundStore from "@/util/stores";
-import { getNextRound, useBlock } from "@/API";
+import { getNextRound, useBlock, useExperiment } from "@/API";
 import useResultHandler from "@/hooks/useResultHandler";
 import { ViewTransition } from "@/components/layout";
 import { View } from "@/components/application";
@@ -54,8 +54,11 @@ export default function Block() {
   const [actions, setActions] = useState<Action[]>([]);
   const [currentAction, setCurrentAction] = useState<Action | null>(startState);
   const playlist = useRef(null);
-  const { slug } = useParams();
-  const [block, loadingBlock] = useBlock(slug!);
+
+  // Load block and experiment based on params
+  const { expSlug, blockSlug } = useParams();
+  const [block, loadingBlock] = useBlock(blockSlug!);
+  const [experiment, loadingExperiment] = useExperiment(expSlug!);
 
   //////////////////////////////////////////////////////////////////////
 
@@ -120,14 +123,18 @@ export default function Block() {
 
   //////////////////////////////////////////////////////////////////////
 
+  const isLoading = loadingBlock || loadingExperiment || !participant;
+
   /**
    * Go to the first round when the block and partipant have been loaded
    */
   useEffect(() => {
-    if (loadingBlock || !participant) {
+    if (isLoading) {
       // Nothing: still loading...
     } else if (!block) {
       setError("Could not load a block");
+    } else if (!experiment) {
+      setError("Could not load the experiment");
     } else if (!block.session_id && session) {
       return setError("Session could not be created");
     } else {
@@ -145,7 +152,14 @@ export default function Block() {
     }
 
     return resetHeadData; // Clean up
-  }, [block, loadingBlock, participant, setError]);
+  }, [
+    block,
+    experiment,
+    loadingBlock,
+    loadingExperiment,
+    participant,
+    setError,
+  ]);
 
   // Theme
   useEffect(() => {
@@ -180,6 +194,7 @@ export default function Block() {
           onResult={handleActionResult}
           playlist={playlist}
           action={currentAction}
+          experiment={experiment}
         />
       )}
     </ViewTransition>

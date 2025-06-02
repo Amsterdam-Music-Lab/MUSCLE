@@ -81,13 +81,19 @@ export default function AppRoutes({
           />
 
           {/* Block */}
-          <Route path={routes.block(":slug")} element={<Block />} />
+          <Route
+            path={routes.block(":expSlug", ":blockSlug")}
+            element={<Block />}
+          />
 
           {/*
            * Experiment. Note that this matches any other path; further handling
            * is delegated to the Experiment controller.
            */}
-          <Route path={routes.experiment(":slug/*")} element={<Experiment />} />
+          <Route
+            path={routes.experiment(":expSlug/*")}
+            element={<Experiment />}
+          />
         </Routes>
       )}
     </ViewTransition>

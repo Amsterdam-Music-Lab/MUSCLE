@@ -36,12 +36,14 @@ const mockParticipantStore = {
   country: "nl",
 };
 
-const useBlockMock = vi.fn(); //() => [{ ...blockObj }, false]);
-const getNextRoundMock = vi.fn(); //() => ({ ...nextRoundObj }));
+const useExperimentMock = vi.fn();
+const useBlockMock = vi.fn();
+const getNextRoundMock = vi.fn();
 const setErrorMock = vi.fn();
 let mockUseParams = vi.fn();
 
 vi.mock("@/API", () => ({
+  useExperiment: (...args) => useExperimentMock(...args),
   useBlock: (...args) => useBlockMock(...args),
   getNextRound: (...args) => getNextRoundMock(...args),
 }));
@@ -91,6 +93,7 @@ vi.mock("@/util/stores", () => ({
 
 describe("Block Component", () => {
   beforeEach(() => {
+    useExperimentMock.mockReset();
     useBlockMock.mockReset();
     getNextRoundMock.mockReset();
     setErrorMock.mockReset();
@@ -102,21 +105,35 @@ describe("Block Component", () => {
   // });
 
   it("renders loading state when loadingBlock is true", async () => {
+    useExperimentMock.mockReturnValue([null, true]);
     useBlockMock.mockReturnValue([null, true]);
     const { getByTestId } = render(<Block />);
     expect(getByTestId("view-loading")).toBeInTheDocument();
   });
 
   it("renders error view if block is null after loading", async () => {
-    useBlockMock.mockImplementationOnce(() => [null, false]);
+    useExperimentMock.mockReturnValue([null, false]);
+    useBlockMock.mockReturnValue([null, false]);
     render(<Block />);
     await waitFor(() => {
       expect(setErrorMock).toHaveBeenCalledWith("Could not load a block");
     });
   });
 
+  it("renders error view if experiment is null after loading", async () => {
+    useExperimentMock.mockReturnValue([null, false]);
+    useBlockMock.mockReturnValue([true, false]);
+    render(<Block />);
+    await waitFor(() => {
+      expect(setErrorMock).toHaveBeenCalledWith(
+        "Could not load the experiment"
+      );
+    });
+  });
+
   it("renders the first step after loading block", async () => {
     useBlockMock.mockImplementation(() => [blockObj, false]);
+    useExperimentMock.mockReturnValue([true, false]);
     getNextRoundMock.mockResolvedValueOnce({
       next_round: [{ ...explainerAction }], // Avoid sharing mutables between tests
     });
@@ -125,19 +142,25 @@ describe("Block Component", () => {
     expect(view.textContent).toContain("Instruction");
   });
 
-  it("renders the first step after loading bloc 2", async () => {
+  it("calls getNextRound when onNext is triggered by clicking the view", async () => {
     useBlockMock.mockImplementation(() => [blockObj, false]);
+    useExperimentMock.mockReturnValue([true, false]);
     getNextRoundMock.mockResolvedValueOnce({
       next_round: [{ ...explainerAction }], // Avoid sharing mutables between tests
     });
     render(<Block />);
     const view = await screen.findByTestId("view-explainer");
-    expect(view.textContent).toContain("Instruction");
+    // Simulate user clicking the view, which triggers onNext
+    view.click();
+    await waitFor(() => {
+      expect(getNextRoundMock).toHaveBeenCalled();
+    });
   });
 
   it("calls setError if no valid round is returned", async () => {
     useBlockMock.mockImplementationOnce(() => [blockObj, false]);
     useBlockMock.mockImplementationOnce(() => [blockObj, false]);
+    useExperimentMock.mockReturnValue([true, false]);
     getNextRoundMock.mockResolvedValueOnce(null);
     render(<Block />);
     await waitFor(() => {

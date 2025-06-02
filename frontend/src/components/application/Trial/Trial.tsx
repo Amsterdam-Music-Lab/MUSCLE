@@ -39,6 +39,7 @@ export default function Trial({
   config,
   onNext,
   onResult,
+  experiment,
 }: TrialProps) {
   // Main component state
   const [formActive, setFormActive] = useState(!config.listen_first);
@@ -147,6 +148,7 @@ export default function Trial({
           submitResult={makeResult}
           startedPlaying={startTimer}
           finishedPlaying={finishedPlaying}
+          experiment={experiment}
         />
       )}
 
@@ -161,6 +163,7 @@ export default function Trial({
           skipLabel={feedback_form.skip_label}
           isSkippable={feedback_form.is_skippable}
           submitResult={makeResult}
+          experiment={experiment}
         />
       )}
 
@@ -179,12 +182,13 @@ export default function Trial({
 
 Trial.viewName = "trial";
 Trial.usesOwnLayout = true;
-Trial.getViewProps = ({ action, onNext, onResult }) => ({
+Trial.getViewProps = ({ action, onNext, onResult, experiment }) => ({
   playback: action.playback,
   html: action.html,
   feedback_form: action.feedback_form,
   config: action.config,
   onNext,
   onResult,
+  experiment,
 });
 Trial.dependencies = ["action"];

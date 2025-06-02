@@ -13,7 +13,7 @@ import useHeadDataFromExperiment from "@/hooks/useHeadDataFromExperiment";
 
 import { Route, Routes, useParams } from "react-router-dom";
 import { routes } from "@/config";
-import { View } from "@/components/application";
+import { Block, View } from "@/components/application";
 import { Redirect } from "@/components/utils";
 
 /**
@@ -23,8 +23,8 @@ import { Redirect } from "@/components/utils";
  * on to the block view if possible.
  */
 export default function Experiment() {
-  const { slug } = useParams();
-  const [experiment, loadingExperiment] = useExperiment(slug!);
+  const { expSlug } = useParams();
+  const [experiment, loadingExperiment] = useExperiment(expSlug!);
   const [hasShownConsent, setHasShownConsent] = useState(false);
   const setTheme = useBoundStore((state) => state.setTheme);
   const setHeadData = useBoundStore((state) => state.setHeadData);
@@ -46,7 +46,10 @@ export default function Experiment() {
   // Show an error if experiment is null, but not loading
   if (!loadingExperiment && !experiment) {
     return (
-      <View name="error" message={`Experiment "${slug}" could not be found.`} />
+      <View
+        name="error"
+        message={`Experiment "${expSlug}" could not be found.`}
+      />
     );
   }
 
@@ -56,7 +59,7 @@ export default function Experiment() {
   const hasDashboard = experiment?.dashboard.length;
   if (!consentRequired && !hasDashboard && experiment?.nextBlock) {
     const params = { participant_id: participant?.participant_id_url };
-    const path = routes.block(experiment.nextBlock.slug, params);
+    const path = routes.block(expSlug, experiment.nextBlock.slug, params);
     return <Redirect to={path} />;
   }
 
@@ -81,6 +84,9 @@ export default function Experiment() {
           )
         }
       />
+
+      {/* Block */}
+      <Route path={routes.block(":exp", ":block")} element={<Block />} />
 
       {/* Information page about the experiment */}
       <Route
