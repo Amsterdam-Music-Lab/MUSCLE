@@ -10,13 +10,15 @@ import type { TutorialStep } from "@/types/tutorial";
 import type { UseTuneTwinsProps } from "../useTuneTwins";
 import type { TimelineConfig } from "@/types/timeline";
 import type { LogoName } from "@/components/svg";
+
 import { useOrientation } from "@/hooks/OrientationProvider";
+import convertTutorial from "@/util/convertTutorial";
 import { useTuneTwins, TTComparisonResult, TTGameState } from "./useTuneTwins";
 import { Timeline, ScoreFeedback, TutorialMessage } from "@/components/game";
 import { SquareLayout } from "@/components/layout";
+import { Logo } from "@/components/svg";
 import { Board } from "../Board";
 import { AudioCard } from "../AudioCard";
-import { Logo } from "@/components/svg";
 import DevCardLabel from "./DevCardLabel";
 import styles from "./TuneTwins.module.scss";
 
@@ -180,6 +182,28 @@ export default function TuneTwins({
     </SquareLayout>
   );
 }
+TuneTwins.viewName = "tunetwins";
+TuneTwins.usesOwnLayout = true;
+TuneTwins.getViewProps = ({
+  playbackArgs,
+  submitResult,
+  onFinishedPlaying,
+  playSection,
+}) => {
+  const cards = playbackArgs.sections.map((section, index) => ({
+    id: index,
+    data: { ...section },
+  }));
+  const tutorial = convertTutorial(playbackArgs.tutorial);
+  return {
+    cards,
+    animate: playbackArgs.show_animation,
+    onGameEnd: () => submitResult({}),
+    onTurnEnd: onFinishedPlaying,
+    onSelectCard: (card) => playSection(card.id),
+    tutorial,
+  };
+};
 
 interface TuneTwinsHeaderProps {
   turnScore?: number;

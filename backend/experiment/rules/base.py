@@ -82,7 +82,7 @@ class BaseRules(object):
             if result.score:
                 total += 1
 
-                if result.score > 0:
+                if result.score and result.score > 0:
                     # if a result has score > 0, it was identified correctly
                     correct += 1
 

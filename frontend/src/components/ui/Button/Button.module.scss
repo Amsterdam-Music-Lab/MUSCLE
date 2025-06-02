@@ -39,6 +39,7 @@
   &.disabled::after {
     content: "";
     position: absolute;
+    border-radius: 0.75em;
     inset: 0;
     background: #fff;
     opacity: 0.5;

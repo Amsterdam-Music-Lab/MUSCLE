@@ -88,6 +88,9 @@ services:
       - type: bind
         source: ./frontend/index.html
         target: /client/index.html
+      - type: bind
+        source: .vscode
+        target: /client/.vscode
     environment:
       - VITE_API_ROOT=${FRONTEND_API_ROOT}
       - VITE_EXPERIMENT_SLUG=${FRONTEND_EXPERIMENT_SLUG}

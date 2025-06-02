@@ -14,7 +14,7 @@ import { renderWithProviders as render } from "@/util/testUtils/renderWithProvid
 import AudioCard from "./AudioCard";
 import styles from "./AudioCard.module.scss";
 
-vi.mock("@/components/play", () => ({
+vi.mock("@/components/playback", () => ({
   __esModule: true,
   Spectrum: (props: any) => (
     <div data-testid="spectrum" data-props={JSON.stringify(props)}>

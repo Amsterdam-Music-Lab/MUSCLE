@@ -17,3 +17,5 @@ e2e/tests/__pycache__
 temp/
 
 docs-pages-build/
+
+.devcontainer/

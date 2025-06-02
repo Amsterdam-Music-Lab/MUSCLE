@@ -18,11 +18,8 @@ import {
 } from "./useTuneTwins";
 
 const initialState = {
-  // participant: 1,
-  // session: 1,
   setError: vi.fn(),
   block: { bonus_points: 0 },
-  // currentAction: () => ({ view: "TRIAL_VIEW" }),
 };
 
 vi.mock("@/util/stores", () => ({
@@ -37,12 +34,9 @@ vi.mock("@/util/stores", () => ({
 vi.mock("@/API", () => ({
   scoreIntermediateResult: vi.fn().mockResolvedValue({ score: 10 }),
 }));
+
 vi.mock("@/util/time", () => ({
   getAudioLatency: () => 42,
-}));
-vi.mock("classnames", () => ({
-  __esModule: true,
-  default: (...args: any[]) => args.filter(Boolean).join(" "),
 }));
 
 const makeCard = (id: number, data: any = {}) =>

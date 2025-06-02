@@ -7,9 +7,12 @@
  */
 
 export * from "./App";
+
+// The central view object
+export * from "./View";
+
+// View controllers
 export * from "./Block";
-export * from "./Page";
-export * from "./AppBar";
-export * from "./Background";
-export * from "./Helmet";
-export * from "./Logo";
+export * from "./Playback";
+export * from "./Trial";
+export * from "./Experiment";

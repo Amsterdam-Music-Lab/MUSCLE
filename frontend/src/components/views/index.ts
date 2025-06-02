@@ -6,15 +6,17 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export * from "./Consent";
-export * from "./Error";
-export * from "./Explainer";
-export * from "./Final";
-export * from "./Info";
-export * from "./Landing";
-export * from "./Loading";
-export * from "./Playlists";
-export * from "./Profile";
-export * from "./Score";
-export * from "./StoreProfile";
-export * from "./Trial";
+export * from "./AboutView";
+export * from "./ConsentView";
+export * from "./DashboardView";
+export * from "./ErrorView";
+export * from "./ExplainerView";
+export * from "./FinalView";
+export * from "./InfoView";
+export * from "./LandingView";
+export * from "./LoadingView";
+export * from "./PlaylistsView";
+export * from "./ProfileView";
+export * from "./ScoreView";
+export * from "./StoreProfileView";
+export * from "./SurveyView";

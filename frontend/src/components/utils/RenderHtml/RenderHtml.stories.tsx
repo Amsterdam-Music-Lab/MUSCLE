@@ -18,7 +18,7 @@ const decorator = (StoryComponent: Story) => (
 );
 
 const meta: Meta<typeof HTML> = {
-  title: "App/RenderHtml",
+  title: "utils/RenderHtml",
   component: RenderHtml,
   tags: ["autodocs"],
   decorators: [decorator],

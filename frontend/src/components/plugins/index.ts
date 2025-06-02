@@ -7,4 +7,5 @@
  */
 
 export type { AllPluginMeta, AllPluginSpec } from "./pluginRegistry";
+export type { PluginRendererProps } from "./PluginRenderer";
 export { default as PluginRenderer } from "./PluginRenderer";

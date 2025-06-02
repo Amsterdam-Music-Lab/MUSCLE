@@ -1,0 +1,42 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+.errorView {
+  padding: 1em;
+  min-height: 100vh;
+  font-size: 16px;
+}
+
+.card {
+  margin: auto;
+  margin-top: 2em;
+  max-width: 500px;
+  padding: 2em;
+  border-radius: 1.5em;
+
+  // Inset shadow
+  background: #fff;
+  box-shadow: 0 0 1.5em rgba(0, 0, 0, 0.04) inset;
+
+  h1 {
+    font-size: 1.3rem;
+    color: #c00;
+  }
+}
+
+.footer {
+  margin-top: 1em;
+  padding-top: 1em;
+  border-top: 1px solid #eee;
+  margin-bottom: 0;
+  color: #999;
+
+  a {
+    color: #666;
+  }
+}
