@@ -274,17 +274,10 @@ class MatchingPairs2025Test(TestCase):
 
     def test_get_final_actions(self):
         mp_block = Block.objects.create(phase=self.phase, rules="MATCHING_PAIRS_2025", slug="mpairs-2025-2")
-        Session.objects.create(participant=self.participant, block=mp_block, final_score=100)
-        self.session.final_score = 120
-        self.session.save()
-        irrelevant_exp = Experiment.objects.create(slug="irrelevant")
-        irrelevant_phase = Phase.objects.create(experiment=irrelevant_exp)
-        irrelevant_block = Block.objects.create(slug="different-block", phase=irrelevant_phase, rules="TOONTJE_HOGER_1_MOZART")
-        Session.objects.create(participant=self.participant, block=irrelevant_block, final_score=42)
-        final_action = self.rules._get_final_actions(self.session)[0]
+        session = Session.objects.create(participant=self.participant, block=mp_block, final_score=100)
+        final_action = self.rules._get_final_actions(session)[0]
         self.assertIsInstance(final_action, Final)
-        self.assertEqual(final_action.sessions_played, 2)
-        self.assertEqual(final_action.accumulated_score, 220)
+        self.assertEqual(final_action.total_score, 100)
 
 
 @skip("This test simulates repeated playthroughs, comment this line out to run")
