@@ -63,23 +63,26 @@ export default function Block() {
    * Update the current action to the passed action, updating
    * both the local and global state and forcing a re-render
    */
-  const updateCurrentAction = useCallback((action: Action) => {
-    const newAction = action ? { ...action } : null;
-    setCurrentAction(newAction);
-    setGlobalCurrentAction(newAction);
-  });
+  const updateCurrentAction = useCallback(
+    (action: Action) => {
+      const newAction = action ? { ...action } : null;
+      setCurrentAction(newAction);
+      setGlobalCurrentAction(newAction);
+    },
+    [setCurrentAction, setGlobalCurrentAction]
+  );
 
   /**
    * Continue to the next action in the current round
    */
-  const goToNextActionInRound = useCallback(() => {
-    setActions((prevActions: Action[]) => {
-      const nextActions = [...prevActions];
-      const nextAction = nextActions.shift() || null;
+  const goToNextActionInRound = useCallback(
+    (round: Action[]) => {
+      setActions(round);
+      const nextAction = round.shift() || null;
       updateCurrentAction(nextAction);
-      return nextActions;
-    });
-  }, [updateCurrentAction]);
+    },
+    [updateCurrentAction]
+  );
 
   /**
    * Continue to the next round within a block. This requires fetching
@@ -88,8 +91,7 @@ export default function Block() {
   const goToNextRound = async (session: Session) => {
     const round = await getNextRound({ session });
     if (round) {
-      setActions(round.next_round);
-      goToNextActionInRound();
+      goToNextActionInRound(round.next_round);
     } else {
       setError(
         "An error occured while loading the data, please try to reload the page. (Error: next_round data unavailable)"
@@ -105,7 +107,7 @@ export default function Block() {
    */
   const goToNextAction = async (endRound = false) => {
     if (!endRound && actions.length) {
-      goToNextActionInRound();
+      goToNextActionInRound(actions);
     } else {
       goToNextRound(session);
     }
@@ -159,6 +161,7 @@ export default function Block() {
 
   // Whether the action has a valid view
   const isValidAction = currentAction?.view in VIEW_NAMES;
+
   return (
     <ViewTransition transitionKey={currentAction?.view}>
       {loadingBlock ? (
@@ -173,10 +176,10 @@ export default function Block() {
       ) : (
         <View
           name={VIEW_NAMES[currentAction.view]}
-          state={currentAction}
           onNext={goToNextAction}
           onResult={handleActionResult}
           playlist={playlist}
+          action={currentAction}
         />
       )}
     </ViewTransition>

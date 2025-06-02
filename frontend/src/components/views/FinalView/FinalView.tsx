@@ -129,22 +129,22 @@ export default function FinalView({
 
 FinalView.viewName = "final";
 FinalView.usesOwnLayout = false;
-FinalView.getViewProps = ({ block, state, participant, onNext }) => ({
+FinalView.getViewProps = ({ block, action, participant, onNext }) => ({
   block,
   participant,
-  action_texts: state.action_texts,
-  button: state.button,
+  action_texts: action.action_texts,
+  button: action.button,
   onNext,
-  show_participant_link: state.show_participant_link,
-  participant_id_only: state?.participant_id_only,
-  show_profile_link: state.show_profile_link,
-  social: state.social,
-  feedback_info: state.feedback_info,
-  percentile: state.percentile,
-  score: state.score,
-  totalScore: state.accumulated_score,
+  show_participant_link: action.show_participant_link,
+  participant_id_only: action?.participant_id_only,
+  show_profile_link: action.show_profile_link,
+  social: action.social,
+  feedback_info: action.feedback_info,
+  percentile: action.percentile,
+  score: action.score,
+  totalScore: action.accumulated_score,
   timeline: undefined,
-  timelineStep: state.sessions_played % 5,
-  sessions_played: state.sessions_played,
+  timelineStep: action.sessions_played % 5,
+  sessions_played: action.sessions_played,
 });
 FinalView.dependencies = ["block", "state", "participant", "onNext"];

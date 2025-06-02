@@ -160,7 +160,6 @@ describe("Experiment", () => {
         <Experiment />
       </MemoryRouter>
     );
-    console.log(container.innerHTML);
     await waitFor(() => {
       expect(document.querySelector(".aha__footer")).not.toBeNull();
     });

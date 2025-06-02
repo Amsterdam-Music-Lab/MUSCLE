@@ -1,5 +1,5 @@
 import { render, fireEvent, waitFor } from "@testing-library/react";
-import ConsentView, { ConsentViewProps } from "./ConsentView";
+import ConsentView from "./ConsentView";
 import { useConsent } from "@/API";
 import { saveAs } from "file-saver";
 import { vi, Mock, expect, it, describe } from "vitest";

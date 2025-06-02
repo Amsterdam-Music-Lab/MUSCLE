@@ -46,27 +46,6 @@ const header = {
   aboutButtonText: "About us",
 };
 
-const experimentWithTheme = {
-  dashboard: [experiment1, experiment2],
-  theme: {
-    backgroundUrl: "some/url.com",
-    bodyFontUrl: "font/url.com",
-    description: "description of the theme",
-    headingFontUrl: "another/font/url.com",
-    logo: {
-      title: "Logo title",
-      description: "Logo description",
-      file: "logo.jpg",
-      alt: "Logo alt",
-      href: "https://www.example.com",
-      rel: "noopener noreferrer",
-      target: "_blank",
-    },
-    name: "Experiment name",
-    header: header,
-  },
-};
-
 describe("DashboardView", () => {
   it("shows a dashboard of multiple experiments if it receives an array", async () => {
     render(
