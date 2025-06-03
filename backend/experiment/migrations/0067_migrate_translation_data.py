@@ -25,12 +25,15 @@ class Migration(migrations.Migration):
                 name = getattr(block, f'name_{lang_code}', '')
                 if name:
                     language = 'zh' if lang_code == 'zh_hans' else lang_code
-                    BlockTranslatedContent.objects.create(
-                        block=block,
-                        language=language,
-                        name=name,
-                        description=getattr(block, f'description_{lang_code}')
-                    )
+                    try:
+                        BlockTranslatedContent.objects.create(
+                            block=block,
+                            language=language,
+                            name=name,
+                            description=getattr(block, f'description_{lang_code}')
+                        )
+                    except:
+                        pass
 
     def populate_experiment_texts(apps, schema_editor):
         Experiment = apps.get_model('experiment', 'Experiment')
@@ -82,8 +85,8 @@ class Migration(migrations.Migration):
                 exp.save()
 
     def create_experiment_translated_contents(apps, schema_editor):
-        Experiment = apps.get_model('experiment', 'Block')
-        ExperimentTranslatedContent = apps.get_model('experiment', 'BlockTranslatedContent')
+        Experiment = apps.get_model('experiment', 'Experiment')
+        ExperimentTranslatedContent = apps.get_model('experiment', 'ExperimentTranslatedContent')
         for experiment in Experiment.objects.all():
             for lang_code in ['en', 'nl', 'pt', 'zh_hans']:
                 name = getattr(experiment, f'name_{lang_code}', '')
@@ -98,7 +101,7 @@ class Migration(migrations.Migration):
                         description=getattr(experiment, f'description_{lang_code}', ''),
                         consent=getattr(experiment, f'consent_{lang_code}', ''),
                         about_content=getattr(experiment, f'about_content_{lang_code}'),
-                        socical_media_message=getattr(experiment, f'social_media_message_{lang_code}', ''),
+                        social_media_message=getattr(experiment, f'social_media_message_{lang_code}', ''),
                         disclaimer=getattr(experiment, f'disclaimer_{lang_code}', ''),
                         privacy=getattr(experiment, f'privacy_{lang_code}', '')
                     )
