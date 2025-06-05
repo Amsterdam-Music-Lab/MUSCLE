@@ -38,65 +38,54 @@ export default function AppRoutes({
 }: AppRoutesProps) {
   const error = useBoundStore((state) => state.error);
   const participant = useBoundStore((state) => state.participant);
-  const location = useLocation();
 
-  return (
-    <ViewTransition transitionKey={location.pathname}>
-      {error ? (
-        <View name="error" title="An error occured" message={error} />
-      ) : !participant ? (
-        <View name="loading" />
-      ) : (
-        <Routes>
-          {/* Home: either a landing page or redirect to the experiment */}
-          <Route
-            index
-            element={
-              <HomeController
-                showLanding={showLanding}
-                landingPlugins={landingPlugins}
-              />
-            }
+  return error ? (
+    <View name="error" title="An error occured" message={error} />
+  ) : !participant ? (
+    <View name="loading" />
+  ) : (
+    <Routes>
+      {/* Home: either a landing page or redirect to the experiment */}
+      <Route
+        index
+        element={
+          <HomeController
+            showLanding={showLanding}
+            landingPlugins={landingPlugins}
           />
+        }
+      />
 
-          {/* Request reload for given participant */}
-          <Route
-            path={routes.reloadParticipant(":id", ":hash")}
-            element={<Reload />}
-          />
+      {/* Request reload for given participant */}
+      <Route
+        path={routes.reloadParticipant(":id", ":hash")}
+        element={<Reload />}
+      />
 
-          {/* Internal redirect */}
-          <Route
-            path={routes.internalRedirect()}
-            element={<InternalRedirect />}
-          />
+      {/* Internal redirect */}
+      <Route path={routes.internalRedirect()} element={<InternalRedirect />} />
 
-          {/* Profile */}
-          <Route path={routes.profile()} element={<ProfileController />} />
+      {/* Profile */}
+      <Route path={routes.profile()} element={<ProfileController />} />
 
-          {/* Store profile */}
-          <Route
-            path={routes.storeProfile()}
-            element={<View name="storeProfile" />}
-          />
+      {/* Store profile */}
+      <Route
+        path={routes.storeProfile()}
+        element={<View name="storeProfile" />}
+      />
 
-          {/* Block */}
-          <Route
-            path={routes.block(":expSlug", ":blockSlug")}
-            element={<Block />}
-          />
+      {/* Block */}
+      <Route
+        path={routes.block(":expSlug", ":blockSlug")}
+        element={<Block />}
+      />
 
-          {/*
-           * Experiment. Note that this matches any other path; further handling
-           * is delegated to the Experiment controller.
-           */}
-          <Route
-            path={routes.experiment(":expSlug/*")}
-            element={<Experiment />}
-          />
-        </Routes>
-      )}
-    </ViewTransition>
+      {/*
+       * Experiment. Note that this matches any other path; further handling
+       * is delegated to the Experiment controller.
+       */}
+      <Route path={routes.experiment(":expSlug/*")} element={<Experiment />} />
+    </Routes>
   );
 }
 

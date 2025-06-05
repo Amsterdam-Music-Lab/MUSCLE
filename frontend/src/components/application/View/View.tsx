@@ -8,7 +8,7 @@
 
 import type { ComponentType } from "react";
 import { Fragment } from "react";
-import { NarrowLayout } from "@/components/layout";
+import { NarrowLayout, ViewTransition } from "@/components/layout";
 import { FloatingActionButton } from "@/components/ui";
 import { UserFeedbackForm } from "@/components/user";
 
@@ -136,19 +136,21 @@ export default function View({ name, ...viewProps }: ViewProps) {
   const Wrapper = ViewComponent.usesOwnLayout ? Fragment : NarrowLayout;
 
   return (
-    <Wrapper>
-      <ViewComponent {...viewProps} />
+    <ViewTransition transitionKey={name}>
+      <Wrapper>
+        <ViewComponent {...viewProps} />
 
-      {block && block?.feedback_info?.show_float_button && (
-        <FloatingActionButton>
-          <UserFeedbackForm
-            blockSlug={block.slug}
-            participant={participant}
-            feedbackInfo={block.feedback_info}
-            inline={false}
-          />
-        </FloatingActionButton>
-      )}
-    </Wrapper>
+        {block && block?.feedback_info?.show_float_button && (
+          <FloatingActionButton>
+            <UserFeedbackForm
+              blockSlug={block.slug}
+              participant={participant}
+              feedbackInfo={block.feedback_info}
+              inline={false}
+            />
+          </FloatingActionButton>
+        )}
+      </Wrapper>
+    </ViewTransition>
   );
 }
