@@ -9,12 +9,12 @@
 import type Session from "@/types/Session";
 import type { Action } from "@/types/Action";
 import { useState, useEffect, useCallback, useRef } from "react";
-import { useParams } from "react-router-dom";
 import useBoundStore from "@/util/stores";
-import { getNextRound, useBlock, useExperiment } from "@/API";
+import { getNextRound } from "@/API";
 import useResultHandler from "@/hooks/useResultHandler";
-import { ViewTransition } from "@/components/layout";
 import { View } from "@/components/application";
+import useLogLifeCycle from "@/util/useLogLifeCycle";
+import { useBlockContext } from "../App/AppRoutes";
 
 const VIEW_NAMES = {
   TRIAL_VIEW: "trial",
@@ -34,18 +34,14 @@ const VIEW_NAMES = {
  * - It handles sending results to the server
  */
 export default function Block() {
+  useLogLifeCycle("Block"); // TO BE REMOVED
+
+  const { block, session } = useBlockContext();
+
   // Global state
   const setError = useBoundStore((state) => state.setError);
   const participant = useBoundStore((state) => state.participant);
-  const session = useBoundStore((state) => state.session);
-  const setSession = useBoundStore((state) => state.setSession);
-  const theme = useBoundStore((state) => state.theme);
-  const setTheme = useBoundStore((state) => state.setTheme);
-  const resetTheme = useBoundStore((state) => state.resetTheme);
-  const setBlock = useBoundStore((state) => state.setBlock);
   const setGlobalCurrentAction = useBoundStore((s) => s.setCurrentAction);
-  const setHeadData = useBoundStore((state) => state.setHeadData);
-  const resetHeadData = useBoundStore((state) => state.resetHeadData);
 
   // Local component state, refs, etc
   // the current action. Note that every block consists
@@ -54,11 +50,6 @@ export default function Block() {
   const [actions, setActions] = useState<Action[]>([]);
   const [currentAction, setCurrentAction] = useState<Action | null>(startState);
   const playlist = useRef(null);
-
-  // Load block and experiment based on params
-  const { expSlug, blockSlug } = useParams();
-  const [block, loadingBlock] = useBlock(blockSlug!);
-  const [experiment, loadingExperiment] = useExperiment(expSlug!);
 
   //////////////////////////////////////////////////////////////////////
 
@@ -123,49 +114,14 @@ export default function Block() {
 
   //////////////////////////////////////////////////////////////////////
 
-  const isLoading = loadingBlock || loadingExperiment || !participant;
-
   /**
    * Go to the first round when the block and partipant have been loaded
    */
   useEffect(() => {
-    if (isLoading) {
-      // Nothing: still loading...
-    } else if (!block) {
-      setError("Could not load a block");
-    } else if (!experiment) {
-      setError("Could not load the experiment");
-    } else if (!block.session_id && session) {
-      return setError("Session could not be created");
-    } else {
-      // Finished loading!
-      setBlock(block);
-      setSession({ id: block.session_id });
+    if (participant && block && !(!block.session_id && session)) {
       goToNextRound({ id: block.session_id });
-      setHeadData({
-        title: block.name,
-        description: block.description,
-        image: block.image?.file ?? "",
-        url: window.location.href,
-        structuredData: { "@type": "Block" },
-      });
     }
-
-    return resetHeadData; // Clean up
-  }, [
-    block,
-    experiment,
-    loadingBlock,
-    loadingExperiment,
-    participant,
-    setError,
-  ]);
-
-  // Theme
-  useEffect(() => {
-    if (block?.theme) setTheme(block.theme);
-    if (!block?.theme && theme) resetTheme();
-  }, [block, theme, setTheme, resetTheme]);
+  }, [block, session]);
 
   // Check if there's a valid action
   useEffect(() => {
@@ -176,27 +132,20 @@ export default function Block() {
   // Whether the action has a valid view
   const isValidAction = currentAction?.view in VIEW_NAMES;
 
-  return (
-    <ViewTransition transitionKey={currentAction?.view}>
-      {loadingBlock ? (
-        <View name="loading" label={block?.loading_text ?? ""} />
-      ) : !isValidAction ? (
-        <View
-          name="error"
-          message={`Invalid action unsupported view (${JSON.stringify(
-            currentAction
-          )}`}
-        />
-      ) : (
-        <View
-          name={VIEW_NAMES[currentAction.view]}
-          onNext={goToNextAction}
-          onResult={handleActionResult}
-          playlist={playlist}
-          action={currentAction}
-          experiment={experiment}
-        />
-      )}
-    </ViewTransition>
+  return !isValidAction ? (
+    <View
+      name="error"
+      message={`Invalid action unsupported view (${JSON.stringify(
+        currentAction
+      )}`}
+    />
+  ) : (
+    <View
+      name={VIEW_NAMES[currentAction.view]}
+      onNext={goToNextAction}
+      onResult={handleActionResult}
+      playlist={playlist}
+      action={currentAction}
+    />
   );
 }

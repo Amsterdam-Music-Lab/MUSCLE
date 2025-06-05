@@ -81,10 +81,7 @@ export default function ConsentView({
   };
 
   // Loader in case consent is being loaded
-  // or it was already given
-  if (loadingConsent || consent) {
-    return <LoadingView />;
-  }
+  if (loadingConsent) return <LoadingView />;
 
   // Calculate height for consent text to prevent overlapping browser chrome
   const height =
@@ -101,11 +98,20 @@ export default function ConsentView({
 
   const correction = width > 720 ? 300 : 250;
 
+  const consentGiven = Boolean(consent);
+
   // Show consent
   return (
     <>
       <Card>
-        <Card.Header title={title} />
+        <Card.Header title={title}>
+          {consentGiven && (
+            <>
+              <strong>You have already given informed consent.</strong> The
+              consent form is shown below for your reference.
+            </>
+          )}
+        </Card.Header>
 
         <Card.Section>
           <RenderHtml
@@ -117,12 +123,14 @@ export default function ConsentView({
 
         <Card.Section>
           <div className={styles.buttons}>
-            <LinkButton
-              link={routes.noconsent(experiment.slug)}
-              outline={false}
-            >
-              {denyLabel}
-            </LinkButton>
+            {!consentGiven && (
+              <LinkButton
+                link={routes.noconsent(experiment.slug)}
+                outline={false}
+              >
+                {denyLabel}
+              </LinkButton>
+            )}
             <Button
               data-testid="download-button"
               onClick={onDownload}
@@ -135,13 +143,25 @@ export default function ConsentView({
         </Card.Section>
       </Card>
 
-      <Button
-        variant="secondary"
-        rounded={false}
-        size="lg"
-        onClick={onAgree}
-        title={confirmLabel}
-      />
+      {!consentGiven ? (
+        <Button
+          variant="secondary"
+          rounded={false}
+          size="lg"
+          onClick={onAgree}
+          title={confirmLabel}
+        />
+      ) : (
+        <LinkButton
+          variant="secondary"
+          rounded={false}
+          size="lg"
+          link="/../"
+          title={confirmLabel}
+        >
+          <i className="fas fa-arrow-left mr-2"></i> Back to the homepage
+        </LinkButton>
+      )}
     </>
   );
 }

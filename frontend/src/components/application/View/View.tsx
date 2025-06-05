@@ -8,7 +8,7 @@
 
 import type { ComponentType } from "react";
 import { Fragment } from "react";
-import { NarrowLayout } from "@/components/layout";
+import { NarrowLayout, ViewTransition } from "@/components/layout";
 import { FloatingActionButton } from "@/components/ui";
 import { UserFeedbackForm } from "@/components/user";
 
@@ -41,8 +41,14 @@ import Action from "@/types/Action";
 import Block from "@/types/Block";
 import Participant from "@/types/Participant";
 import Session from "@/types/Session";
+import { useBlockContext, useExperimentContext } from "../App/AppRoutes";
 
-export type ViewDependency = "block" | "action" | "participant" | "session";
+export type ViewDependency =
+  | "block"
+  | "action"
+  | "participant"
+  | "session"
+  | "experiment";
 
 interface GetViewPropsArgs {
   action?: Action;
@@ -93,10 +99,14 @@ export interface ViewProps {
 export default function View({ name, ...viewProps }: ViewProps) {
   // Use state
   const setError = useBoundStore((state) => state.setError);
-  const block = useBoundStore((state) => state.block);
+  // const block = useBoundStore((state) => state.block);
   const action = useBoundStore((state) => state.currentAction);
-  const session = useBoundStore((state) => state.session);
+  // const session = useBoundStore((state) => state.session);
   const participant = useBoundStore((state) => state.participant);
+  // const experiment = useBoundStore((state) => state.experiment);
+
+  const { block, session } = useBlockContext() ?? {};
+  const experiment = useExperimentContext();
 
   if (!Object.keys(viewComponents).includes(name)) {
     setError(`Invalid view name "${name}"`);
@@ -116,6 +126,7 @@ export default function View({ name, ...viewProps }: ViewProps) {
     if (deps.includes("action") && !action) throwError("action");
     if (deps.includes("participant") && !participant) throwError("participant");
     if (deps.includes("session") && !session) throwError("session");
+    if (deps.includes("experiment") && !experiment) throwError("experiment");
 
     // Compute the views default props
     try {
@@ -124,6 +135,7 @@ export default function View({ name, ...viewProps }: ViewProps) {
         action,
         participant,
         session,
+        experiment,
         ...viewProps,
       });
     } catch (e) {
@@ -134,21 +146,22 @@ export default function View({ name, ...viewProps }: ViewProps) {
   }
 
   const Wrapper = ViewComponent.usesOwnLayout ? Fragment : NarrowLayout;
-
   return (
-    <Wrapper>
-      <ViewComponent {...viewProps} />
+    <ViewTransition transitionKey={name}>
+      <Wrapper>
+        <ViewComponent {...viewProps} />
 
-      {block && block?.feedback_info?.show_float_button && (
-        <FloatingActionButton>
-          <UserFeedbackForm
-            blockSlug={block.slug}
-            participant={participant}
-            feedbackInfo={block.feedback_info}
-            inline={false}
-          />
-        </FloatingActionButton>
-      )}
-    </Wrapper>
+        {block && block?.feedback_info?.show_float_button && (
+          <FloatingActionButton>
+            <UserFeedbackForm
+              blockSlug={block.slug}
+              participant={participant}
+              feedbackInfo={block.feedback_info}
+              inline={false}
+            />
+          </FloatingActionButton>
+        )}
+      </Wrapper>
+    </ViewTransition>
   );
 }

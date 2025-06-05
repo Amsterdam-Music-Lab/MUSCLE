@@ -12,6 +12,7 @@ export interface RedirectProps {
   to: string;
 }
 
+// TODO This is redundant and can be replaced by <Navigate> from ReactRouter
 export default function Redirect({ to }: RedirectProps) {
   let navigate = useNavigate();
   useEffect(() => navigate(to));

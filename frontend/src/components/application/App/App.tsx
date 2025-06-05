@@ -7,7 +7,7 @@
  */
 
 import { useEffect } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import axios from "axios";
 
 import { API_BASE_URL } from "@/config";
@@ -60,14 +60,14 @@ export default function App() {
     <ThemeProvider>
       <Helmet />
       <BaseLayout>
-        <Router>
+        <BrowserRouter>
           {/* The routes are in a separate component so that we can use
           useLocation to get smooth page transitions */}
           <AppRoutes
             showLanding={frontendConfig.showLanding}
             landingPlugins={frontendConfig?.landing?.plugins}
           />
-        </Router>
+        </BrowserRouter>
       </BaseLayout>
     </ThemeProvider>
   );
