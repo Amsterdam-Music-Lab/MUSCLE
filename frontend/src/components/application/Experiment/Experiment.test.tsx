@@ -45,34 +45,6 @@ const block1 = getBlock({
   name: "Some Block",
 });
 
-const theme = {
-  backgroundUrl: "someurl.com",
-  bodyFontUrl: "bodyFontUrl.com",
-  description: "Description of the theme",
-  headingFontUrl: "headingFontUrl.com",
-  logo: {
-    title: "Logo title",
-    description: "Logo description",
-    file: "logo.jpg",
-    alt: "Logo alt",
-    href: "https://www.example.com",
-    rel: "noopener noreferrer",
-    target: "_blank",
-  },
-  name: "Awesome theme",
-  footer: {
-    disclaimer: "disclaimer",
-    logos: [
-      {
-        file: "some/logo.jpg",
-        href: "some.url.net",
-        alt: "Our beautiful logo",
-      },
-    ],
-    privacy: "privacy",
-  },
-};
-
 const blockWithAllProps = getBlock({
   image: "some_image.jpg",
   description: "Some description",

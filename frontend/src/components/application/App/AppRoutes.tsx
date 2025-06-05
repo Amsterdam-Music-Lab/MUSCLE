@@ -8,11 +8,10 @@
 
 import type { AllPluginSpec } from "@/components/plugins";
 import type { ProfileData } from "@/types/profile";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { EXPERIMENT_SLUG, routes } from "@/config";
 import useBoundStore from "@/util/stores";
 import { Redirect, InternalRedirect, Reload } from "@/components/utils";
-import { ViewTransition } from "@/components/layout";
 import { Block, Experiment, View } from "../";
 import { useParticipantScores } from "@/API";
 
@@ -31,6 +30,8 @@ interface AppRoutesProps {
 /**
  * The routes used by the app. This is a separate component, partly so that
  * we can call useLocation to ensure smooth page transitions
+ *
+ * TODO this is no longer neeeded as ViewTransitions is further down the tree now (in View)
  */
 export default function AppRoutes({
   showLanding = false,
