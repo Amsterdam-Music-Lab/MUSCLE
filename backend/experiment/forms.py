@@ -201,7 +201,7 @@ class BlockForm(ModelForm):
     def clean_playlists(self):
         # Check if there is a rulesid selected and key exists
         if "rules" not in self.cleaned_data:
-            return
+            return self.cleaned_data["playlists"]
 
         # Validat the rules' playlist
         rule_id = self.cleaned_data["rules"]
