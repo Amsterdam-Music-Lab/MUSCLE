@@ -166,7 +166,7 @@ class TestExperimentViews(TestCase):
         serialized_coll_1 = serialize_phase(
             self.intermediate_phase, self.participant, 0
         )
-        total_score_1 = serialized_coll_1["totalScore"]
+        total_score_1 = serialized_coll_1["accumulatedScore"]
         self.assertEqual(total_score_1, 8)
         Session.objects.create(
             block=self.block3, participant=self.participant, finished_at=timezone.now(), final_score=8
@@ -174,7 +174,7 @@ class TestExperimentViews(TestCase):
         serialized_coll_2 = serialize_phase(
             self.intermediate_phase, self.participant, 0
         )
-        total_score_2 = serialized_coll_2["totalScore"]
+        total_score_2 = serialized_coll_2["accumulatedScore"]
         self.assertEqual(total_score_2, 16)
 
     def test_experiment_get_translated_content(self):

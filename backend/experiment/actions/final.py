@@ -116,8 +116,6 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         total_score: Optional[float] = None,
         logo: Optional[LogoConfiguration] = None,
         percentile: Optional[float] = None,
-        sessions_played: Optional[int] = None,
-        accumulated_score: Optional[float] = None,
     ):
         self.session = session
         self.title = title
@@ -130,8 +128,6 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         self.feedback_info = feedback_info
         self.logo = logo
         self.percentile = percentile
-        self.sessions_played = sessions_played
-        self.accumulated_score = accumulated_score
 
         if total_score is None:
             self.total_score = self.session.total_score()
@@ -149,8 +145,6 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
             "score": self.total_score,
             "percentile": self.percentile,
             "rank": self.rank,
-            "sessions_played": self.sessions_played,
-            "accumulated_score": self.accumulated_score,
             "final_text": self.wrap_plain_final_text(),
             "button": self.button,
             "points": self.points,
