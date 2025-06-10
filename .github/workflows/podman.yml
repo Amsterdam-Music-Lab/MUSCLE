@@ -46,6 +46,7 @@ jobs:
       FRONTEND_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
       FRONTEND_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
       FRONTEND_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
+      FRONTEND_PLAUSIBLE_DOMAIN: ${{ vars.FRONTEND_PLAUSIBLE_DOMAIN || '' }}
 
       # Secrets
       AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
@@ -78,6 +79,7 @@ jobs:
           echo "VITE_HTML_OG_URL=$FRONTEND_HTML_OG_URL" >> .env
           echo "VITE_HTML_BODY_CLASS=$FRONTEND_HTML_BODY_CLASS" >> .env
           echo "VITE_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
+          echo "VITE_PLAUSIBLE_DOMAIN=$FRONTEND_PLAUSIBLE_DOMAIN" >> .env
           cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
@@ -219,7 +221,6 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
-
         # Variables
         AML_ALLOWED_HOSTS: ${{ vars.AML_ALLOWED_HOSTS }}
         AML_CORS_ORIGIN_WHITELIST: ${{ vars.AML_CORS_ORIGIN_WHITELIST }}
