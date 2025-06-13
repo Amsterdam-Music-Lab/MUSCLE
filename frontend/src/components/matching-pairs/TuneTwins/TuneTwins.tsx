@@ -195,7 +195,7 @@ TuneTwins.getViewProps = ({
 }) => {
   const cards = playbackArgs.sections.map((section, index) => ({
     id: index,
-    data: { ...section },
+    data: { boardposition: index + 1, ...section },
   }));
   const tutorial = convertTutorial(playbackArgs.tutorial);
   const timeline = frontendConfig?.tunetwins?.timeline;
