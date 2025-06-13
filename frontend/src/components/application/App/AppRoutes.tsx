@@ -91,6 +91,11 @@ export default function AppRoutes({
         <Route path="consent" element={<ConsentController />} />
         <Route path="noconsent" element={<View name="consentDenied" />} />
       </Route>
+
+      <Route
+        path="*"
+        element={<View name="error" message="Page not found." />}
+      />
     </Routes>
   );
 }

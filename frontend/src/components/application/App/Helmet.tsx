@@ -6,10 +6,10 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import { Helmet as ReactHelmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import useBoundStore from "@/util/stores";
 
-export default function Helmet() {
+export default function DefaultHelmet() {
   const headData = useBoundStore((state) => state.headData);
   const { description, image, url } = headData;
 
@@ -24,9 +24,9 @@ export default function Helmet() {
   };
 
   return (
-    <ReactHelmet>
+    <Helmet>
       <title>{headData.title}</title>
-      <meta name="description" content={description} />
+      {description && <meta name="description" content={description} />}
       <meta property="og:title" content={headData.title} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={image} />
@@ -45,6 +45,6 @@ export default function Helmet() {
       <script type="application/ld+json">
         {JSON.stringify(structuredData)}
       </script>
-    </ReactHelmet>
+    </Helmet>
   );
 }

@@ -7,7 +7,7 @@
  */
 
 import { useEffect } from "react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, createBrowserRouter } from "react-router-dom";
 import axios from "axios";
 
 import { API_BASE_URL } from "@/config";

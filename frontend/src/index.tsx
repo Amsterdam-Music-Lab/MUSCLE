@@ -1,7 +1,10 @@
 import "./index.scss";
-import { StrictMode } from "react";
-import { createRoot } from 'react-dom/client';
-import { App } from "@/components/application";
+import { StrictMode, Fragment } from "react";
+import { createRoot } from "react-dom/client";
+// import { App } from "@/components/application";
+import { RouterProvider } from "react-router-dom";
+import { router } from "@/app/routes";
+// import { App } from "@/app/App";
 import { initSentry } from "./config/sentry";
 import { initAudioListener } from "./util/audio";
 import { initWebAudioListener } from "./util/webAudio";
@@ -16,24 +19,21 @@ initWebAudioListener();
 // Create app
 const container = document.getElementById("root");
 const root = createRoot(container);
+const Wrapper = import.meta.env.VITE_STRICT === "true" ? StrictMode : Fragment;
 root.render(
-    import.meta.env.VITE_STRICT === 'true' ? (
-        <StrictMode>
-            <App />
-        </StrictMode>
-    ) : (
-        <App />
-    )
+  <Wrapper>
+    <RouterProvider router={router} />
+  </Wrapper>
 );
 
 // Conditionally load plausible analytics if a valid VITE_PLAUSIBLE_DOMAIN is set
 const domain = import.meta.env.VITE_PLAUSIBLE_DOMAIN;
 if (domain && /^[a-z0-9.-]+$/i.test(domain)) {
-    const script = document.createElement('script');
-    script.src = 'https://plausible.io/js/script.outbound-links.js';
-    script.defer = true;
-    script.setAttribute('data-domain', domain);
-    document.body.appendChild(script);
+  const script = document.createElement("script");
+  script.src = "https://plausible.io/js/script.outbound-links.js";
+  script.defer = true;
+  script.setAttribute("data-domain", domain);
+  document.body.appendChild(script);
 }
 
 // import * as serviceWorker from "./serviceWorker";
