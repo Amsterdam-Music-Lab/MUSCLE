@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import ConsentView from "./ConsentView";
 import { useConsent } from "@/API";
@@ -91,21 +98,5 @@ describe("Consent", () => {
       </MemoryRouter>
     );
     expect(onNext).toHaveBeenCalled();
-  });
-
-  it("calculates style for consent text correctly", () => {
-    (useConsent as Mock).mockReturnValue([null, false]);
-    Object.defineProperty(window, "innerHeight", {
-      writable: true,
-      configurable: true,
-      value: 800,
-    });
-    const { getByTestId } = render(
-      <MemoryRouter>
-        <ConsentView {...defaultProps} />
-      </MemoryRouter>
-    );
-    const consentText = getByTestId("consent-text");
-    expect(consentText.style.height).toBe("500px");
   });
 });

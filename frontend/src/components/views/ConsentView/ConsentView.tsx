@@ -11,20 +11,21 @@ import type Participant from "@/types/Participant";
 import { useEffect } from "react";
 import { saveAs } from "file-saver";
 import { routes } from "@/config";
+import classNames from "classnames";
 import { createConsent, useConsent } from "@/API";
 import { Button, Card, LinkButton } from "@/components/ui";
 import { RenderHtml } from "@/components/utils";
 import { LoadingView } from "../LoadingView";
 import styles from "./ConsentView.module.scss";
-
+import "@/scss/prose.scss";
 export interface ConsentViewProps {
   /**
    * A html string with the consent text
    */
   consentHtml: string;
 
-  /** The experiment */
-  experiment: any;
+  /** The experiment slug */
+  experimentSlug: string;
 
   /** The current participant */
   participant: Pick<Participant, "csrf_token">;
@@ -47,15 +48,15 @@ export interface ConsentViewProps {
  * and handles agreement/stop actions
  */
 export default function ConsentView({
+  experimentSlug,
   consentHtml,
-  experiment,
   participant,
   onConfirm = () => {},
   title = "Consent",
   confirmLabel = "Agree",
   denyLabel = "Disagree",
 }: ConsentViewProps) {
-  const [consent, loadingConsent] = useConsent(experiment.slug);
+  const [consent, loadingConsent] = useConsent(experimentSlug);
   const urlQueryString = window.location.search;
 
   // Listen for consent, and auto advance if already given
@@ -67,7 +68,7 @@ export default function ConsentView({
 
   // Store consent on agree and continue
   const onAgree = async () => {
-    await createConsent({ experiment, participant });
+    await createConsent({ experimentSlug, participant });
     onConfirm();
   };
 
@@ -80,26 +81,10 @@ export default function ConsentView({
     saveAs(blob, "consent.txt");
   };
 
-  // Loader in case consent is being loaded
-  // or it was already given
+  // Loader in case consent is being loaded or it was already given
   if (loadingConsent || consent) {
     return <LoadingView />;
   }
-
-  // Calculate height for consent text to prevent overlapping browser chrome
-  const height =
-    (document &&
-      document.documentElement &&
-      document.documentElement.clientHeight) ||
-    window.innerHeight;
-
-  const width =
-    (document &&
-      document.documentElement &&
-      document.documentElement.clientWidth) ||
-    window.innerWidth;
-
-  const correction = width > 720 ? 300 : 250;
 
   // Show consent
   return (
@@ -107,20 +92,13 @@ export default function ConsentView({
       <Card>
         <Card.Header title={title} />
 
-        <Card.Section>
-          <RenderHtml
-            html={consentHtml}
-            data-testid="consent-text"
-            style={{ height: height - correction }}
-          />
+        <Card.Section className={classNames(styles.consentHtml, "prose")}>
+          <RenderHtml html={consentHtml} />
         </Card.Section>
 
         <Card.Section>
           <div className={styles.buttons}>
-            <LinkButton
-              link={routes.noconsent(experiment.slug)}
-              outline={false}
-            >
+            <LinkButton link={routes.noconsent(experimentSlug)} outline={false}>
               {denyLabel}
             </LinkButton>
             <Button
@@ -149,8 +127,8 @@ export default function ConsentView({
 ConsentView.usesOwnLayout = false;
 ConsentView.viewName = "consent";
 ConsentView.getViewProps = ({ participant, onNext, experiment }) => ({
+  experimentSlug: experiment.slug,
   consentHtml: experiment.consent.text,
-  experiment,
   participant,
   onConfirm: onNext,
   title: experiment.consent.title,

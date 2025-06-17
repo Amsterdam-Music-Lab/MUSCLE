@@ -1,4 +1,28 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+@import "@/scss/utils.scss";
+
 .buttons {
   display: flex;
   gap: 1em;
+}
+
+.consentHtml {
+  // Default: no max-height (small vertical screens)
+  max-height: none;
+  overflow-y: visible;
+
+  // Large screens: restrict height and scroll the consent text
+  @media (min-height: 550px) {
+    max-height: calc(100vh - 350px);
+    overflow-y: auto;
+  }
+
+  @extend .thin-scrollbar;
 }
