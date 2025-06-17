@@ -12,7 +12,7 @@ $defaultSpacer: 1rem;
 
 .radioInput {
   --option-size: 1.75rem;
-  --option-padding: 0.25rem;
+  --option-padding: 0.5rem;
 
   display: flex;
   flex-direction: column;
@@ -24,11 +24,12 @@ $defaultSpacer: 1rem;
   padding: var(--option-padding);
   gap: calc(0.75 * var(--spacer, $defaultSpacer));
   cursor: pointer;
+  border-radius: 0.5em;
 
   &:focus {
-    @extend .rounded;
-    outline: 1px solid #eee;
-    background-color: #f9f9f9;
+    @extend .bg-inset-lg;
+    outline: 1px solid #ddd;
+    // background-color: #f9f9f9;
   }
 }
 
@@ -41,8 +42,12 @@ $defaultSpacer: 1rem;
   border-radius: 100rem;
   transition: background-color 0.3s ease-out;
 
+  .checked & {
+    border: 0;
+  }
+
   .option:hover &:not(.checked) {
-    background-color: #ddd;
+    background-color: #eee;
   }
 }
 
