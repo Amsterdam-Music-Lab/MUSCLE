@@ -60,6 +60,9 @@ export default function ConsentView({
   const urlQueryString = window.location.search;
 
   // Listen for consent, and auto advance if already given
+  // TODO this is conflating the logic with the interface: this really is routing
+  // behaviour that should be handled by the router/controller, not the view.
+  // --> See e.g. Block.tsx which uses the useConsent hook to handle this.
   useEffect(() => {
     if (consent || new URLSearchParams(urlQueryString).get("participant_id")) {
       onConfirm();

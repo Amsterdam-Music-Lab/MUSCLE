@@ -9,12 +9,13 @@
 import type Session from "@/types/Session";
 import type { Action } from "@/types/Action";
 import { useState, useEffect, useCallback, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import useBoundStore from "@/util/stores";
-import { getNextRound, useBlock, useExperiment } from "@/API";
+import { getNextRound, useBlock, useExperiment, useConsent } from "@/API";
 import useResultHandler from "@/hooks/useResultHandler";
 import { ViewTransition } from "@/components/layout";
 import { View } from "@/components/application";
+import { routes } from "@/config";
 
 const VIEW_NAMES = {
   TRIAL_VIEW: "trial",
@@ -34,6 +35,8 @@ const VIEW_NAMES = {
  * - It handles sending results to the server
  */
 export default function Block() {
+  const navigate = useNavigate();
+
   // Global state
   const setError = useBoundStore((state) => state.setError);
   const participant = useBoundStore((state) => state.participant);
@@ -59,6 +62,7 @@ export default function Block() {
   const { expSlug, blockSlug } = useParams();
   const [block, loadingBlock] = useBlock(blockSlug!);
   const [experiment, loadingExperiment] = useExperiment(expSlug!);
+  const [consent, loadingConsent] = useConsent(expSlug);
 
   //////////////////////////////////////////////////////////////////////
 
@@ -123,7 +127,8 @@ export default function Block() {
 
   //////////////////////////////////////////////////////////////////////
 
-  const isLoading = loadingBlock || loadingExperiment || !participant;
+  const isLoading =
+    loadingBlock || loadingExperiment || loadingConsent || !participant;
 
   /**
    * Go to the first round when the block and partipant have been loaded
@@ -137,6 +142,9 @@ export default function Block() {
       setError("Could not load the experiment");
     } else if (!block.session_id && session) {
       return setError("Session could not be created");
+    } else if (!consent) {
+      // Go back to the experiment page if consent is required
+      navigate(routes.experiment(expSlug));
     } else {
       // Finished loading!
       setBlock(block);
@@ -159,6 +167,8 @@ export default function Block() {
     loadingExperiment,
     participant,
     setError,
+    consent,
+    loadingConsent,
   ]);
 
   // Theme
