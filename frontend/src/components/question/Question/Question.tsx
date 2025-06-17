@@ -72,7 +72,7 @@ const Question = ({
 
   return (
     <div className="aha__question">
-      {question.explainer && <p className="explainer">{question.explainer}</p>}
+      {question.explainer && <p>{question.explainer}</p>}
       <h3 className={classNames(question.style)}>{question.question}</h3>
       <div className="question">{render(question.view)}</div>
       {question.expected_response && (

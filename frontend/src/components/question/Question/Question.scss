@@ -1,8 +1,6 @@
 @import "@/scss/variables";
 @import "./_AutoComplete";
 @import "./_ButtonArray";
-@import "./_Checkboxes";
-// @import "./_Radios";
 @import "./_Range";
 @import "./_DropDown";
 @import "./_String";
@@ -11,7 +9,6 @@
 .aha__question {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: space-between;
   margin-bottom: 2rem;
 
@@ -22,25 +19,11 @@
 
   h3 {
     width: 100%;
-    margin-bottom: 1rem;
-    font-size: 1.65rem;
-
-    @media (max-width: 320px) {
-      font-size: 1.3em;
-    }
-
-    text-align: center;
+    margin-bottom: 1em;
 
     &.emphasize-title {
       text-align: left;
     }
-  }
-
-  .explainer {
-    color: $gray;
-    font-weight: 500;
-    font-size: 16px;
-    margin-bottom: 5px;
   }
 }
 
