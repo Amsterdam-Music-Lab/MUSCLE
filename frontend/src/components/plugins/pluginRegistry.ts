@@ -80,6 +80,15 @@ import { markdownPlugin } from "./plugins/MarkdownPlugin";
 import type { CardPluginMeta, CardPluginSpec } from "./plugins/CardPlugin";
 import { cardPlugin } from "./plugins/CardPlugin";
 
+import type {
+  QRCodePluginMeta,
+  QRCodePluginSpec,
+} from "./plugins/QRCodePlugin";
+import { qrCodePlugin } from "./plugins/QRCodePlugin";
+
+import type { FlexPluginMeta, FlexPluginSpec } from "./plugins/FlexPlugin";
+import { flexPlugin } from "./plugins/FlexPlugin";
+
 //
 // Combine all types
 //
@@ -97,7 +106,9 @@ export type AllPluginMeta =
   | LinkButtonPluginMeta
   | FooterPluginMeta
   | MarkdownPluginMeta
-  | CardPluginMeta;
+  | CardPluginMeta
+  | QRCodePluginMeta
+  | FlexPluginMeta;
 
 export type AllPluginSpec =
   | LogoPluginSpec
@@ -112,7 +123,9 @@ export type AllPluginSpec =
   | LinkButtonPluginSpec
   | FooterPluginSpec
   | MarkdownPluginSpec
-  | CardPluginSpec;
+  | CardPluginSpec
+  | QRCodePluginSpec
+  | FlexPluginSpec;
 
 export type PluginRegistry = Record<AllPluginMeta["name"], AllPluginMeta>;
 
@@ -131,4 +144,6 @@ export const pluginMetaRegistry: PluginRegistry = {
   [footerPlugin.name]: footerPlugin,
   [markdownPlugin.name]: markdownPlugin,
   [cardPlugin.name]: cardPlugin,
+  [qrCodePlugin.name]: qrCodePlugin,
+  [flexPlugin.name]: flexPlugin,
 };

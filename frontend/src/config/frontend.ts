@@ -48,6 +48,25 @@ const timelineSymbols = [
   "star-7",
 ];
 
+const qrPluginSpec = {
+  name: "flex",
+  args: {
+    plugins: [
+      {
+        name: "qrcode",
+        args: { value: "https://example.com" },
+      },
+      {
+        name: "markdown",
+        args: {
+          content:
+            "**Invite your friends to play!** Simply ask them to scan this QR code.",
+        },
+      },
+    ],
+  },
+};
+
 const scoreboard = {
   name: "scoreboard",
   args: {
@@ -99,7 +118,7 @@ const scoreboard = {
           title: "Your progress...",
         },
       },
-
+      qrPluginSpec,
       // Sharing options
       {
         name: "share",
