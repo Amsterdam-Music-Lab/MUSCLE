@@ -46,7 +46,7 @@ export default function Trial({
   // Preload is immediately set to ready if we don't have a playback object
   const [preloadReady, setPreloadReady] = useState(!playback);
 
-  const submitted = useRef(false);
+  // const submitted = useRef(false);
 
   // This is used to keep track of the time a participant spends in this Trial view
   const startTime = useRef(getCurrentTime());
@@ -59,8 +59,9 @@ export default function Trial({
   const makeResult = useCallback(
     async (hasTimedOut: boolean) => {
       // Prevent multiple submissions
-      if (submitted.current) return;
-      submitted.current = true;
+      // BC: I think this was causing issues with the form not being submitted
+      // if (submitted.current) return;
+      // submitted.current = true;
       if (!feedback_form) return onNext();
 
       const { form = [] } = feedback_form;
