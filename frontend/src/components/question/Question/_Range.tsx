@@ -27,6 +27,7 @@ const Range = ({ question, value, onChange }: RangeProps) => {
   }
   return (
     <div className={classNames("aha__range", { empty: emptyValue })}>
+      {/* TODO: use RangeTitle? */}
       <p className="current-value">{emptyValue ? "↔" : value}</p>
 
       <Slider
@@ -37,6 +38,7 @@ const Range = ({ question, value, onChange }: RangeProps) => {
         tooltip={false}
       />
 
+      {/* TODO: use RangeLimits? */}
       <div className="limits">
         <span className="min">{question.min_value}</span>
         <span className="max">{question.max_value}</span>

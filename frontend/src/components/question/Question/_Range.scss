@@ -1,4 +1,5 @@
 @import "@/scss/theme.scss";
+
 .aha__range,
 .aha__text-range {
   --range-handle-size: 2em;
@@ -8,10 +9,17 @@
   /* Padding at the left and right of the spine */
   --range-spine-padding: 0.5em;
 
+  .current-value-container {
+    display: flex;
+    justify-content: center;
+  }
+
   .current-value {
     text-align: center;
     font-weight: bolder;
     font-size: 1.25em;
+
+    @extend .text-fill-primary;
   }
 
   .limits {
