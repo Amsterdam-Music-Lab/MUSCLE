@@ -15,7 +15,8 @@ import { routes } from "@/config";
 import useBoundStore from "@/util/stores";
 import { shareParticipant } from "@/API";
 import { LoadingView } from "../LoadingView";
-import { Button, Card, Input, InputGroup, LinkButton } from "@/components/ui";
+import { Input, InputGroup } from "@/components/inputs";
+import { Button, Card, LinkButton } from "@/components/ui";
 import styles from "./StoreProfileView.module.scss";
 
 export interface StoreProfileViewProps {}

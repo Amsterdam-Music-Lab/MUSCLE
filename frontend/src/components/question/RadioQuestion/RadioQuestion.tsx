@@ -1,5 +1,5 @@
 import type Question from "@/types/Question";
-import { RadioInput } from "@/components/ui";
+import { RadioInput } from "@/components/inputs";
 
 interface RadioQuestionProps extends HTMLAttributes<HTMLDivElement> {
   question: Question;

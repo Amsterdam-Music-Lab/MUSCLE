@@ -7,12 +7,13 @@
  */
 
 import type { ReactNode } from "react";
-import type { InputGroupProps } from "@/components/ui";
+import type { InputGroupProps } from "@/components/inputs";
 
 import { useRef } from "react";
 import classNames from "classnames";
 import { useParticipantLink } from "@/API";
-import { Input, InputGroup, Button, InputLabel } from "@/components/ui";
+import { Input, InputGroup, InputLabel } from "@/components/inputs";
+import { Button } from "@/components/ui";
 import styles from "./ParticipantLink.module.scss";
 
 export interface ParticipantLinkProps extends InputGroupProps {

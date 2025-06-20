@@ -6,9 +6,9 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+import { Button } from "@/components/ui";
 import InputGroup from "./InputGroup";
 import { Input } from "../Input";
-import { Button } from "../Button";
 import { InputLabel } from "../InputLabel";
 
 const decorator = (Story) => (

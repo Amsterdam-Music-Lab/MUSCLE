@@ -19,8 +19,7 @@ import AutoComplete from "./_AutoComplete";
 import ButtonArray from "./_ButtonArray";
 
 import { RadioQuestion } from "../RadioQuestion";
-import { NumberInput } from "../NumberInput";
-import { TextInput } from "../TextInput";
+import { NumberInput, TextInput } from "@/components/inputs";
 
 const inputComponents = {
   [QuestionViews.BUTTON_ARRAY]: ButtonArray,
