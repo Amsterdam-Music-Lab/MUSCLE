@@ -155,7 +155,7 @@ regex==2023.12.25
     # via
     #   mkdocs-material
     #   textile
-requests==2.32.0
+requests==2.32.4
     # via
     #   genbadge
     #   mkdocs-material
