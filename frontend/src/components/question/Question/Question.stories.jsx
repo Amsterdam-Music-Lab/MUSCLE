@@ -7,7 +7,7 @@ const decorator = (Story) => (
 );
 
 export default {
-  title: "Experiment/Question",
+  title: "Modules/Question",
   component: Question,
   decorators: [decorator],
 };

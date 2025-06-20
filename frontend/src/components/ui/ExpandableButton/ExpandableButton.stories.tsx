@@ -10,7 +10,7 @@ import React, { Children } from "react";
 import ExpandableButton from "./ExpandableButton";
 
 export default {
-  title: "UI/Expandable Button",
+  title: "Design system/Buttons/Expandable Button",
   component: ExpandableButton,
   parameters: {
     layout: "fullscreen",

@@ -14,7 +14,7 @@ const decorator = (Story) => (
   </div>
 );
 export default {
-  title: "UI/RadioInput",
+  title: "Design system/Inputs/RadioInput",
   component: RadioInput,
   decorators: [decorator],
 };

@@ -15,7 +15,7 @@ const decorator = (Story) => (
 );
 
 export default {
-  title: "Game UI/ScoreDisplay",
+  title: "Modules/Scoring/ScoreDisplay",
   component: ScoreDisplay,
   parameters: {
     layout: "fullscreen",

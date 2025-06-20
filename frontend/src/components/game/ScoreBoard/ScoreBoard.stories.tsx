@@ -18,7 +18,7 @@ const decorator = (StoryComponent: Story) => (
 );
 
 const meta: Meta<typeof ScoreBoard> = {
-  title: "Game UI/ScoreBoard",
+  title: "Modules/Scoring/ScoreBoard",
   component: ScoreBoard,
   parameters: {
     layout: "fullscreen",
@@ -92,5 +92,32 @@ export const CustomPlugins: Story = {
       content: "Test",
       tags: [],
     },
+  },
+};
+
+export const QRCode: Story = {
+  args: {
+    ...Default.args,
+    plugins: [
+      ...defaultPlugins,
+      {
+        name: "flex",
+        args: {
+          plugins: [
+            {
+              name: "qrcode",
+              args: { value: "https://example.com", message: "asdfasdf" },
+            },
+            {
+              name: "markdown",
+              args: {
+                content:
+                  "**Invite your friends to play!** Simply ask them to scan this QR code.",
+              },
+            },
+          ],
+        },
+      },
+    ],
   },
 };

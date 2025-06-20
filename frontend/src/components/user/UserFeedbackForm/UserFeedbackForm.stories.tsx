@@ -9,7 +9,7 @@
 import UserFeedbackForm from "./UserFeedbackForm";
 
 export default {
-  title: "User/UserFeedbackForm",
+  title: "Modules/User/UserFeedbackForm",
   component: UserFeedbackForm,
   parameters: {
     layout: "fullscreen",

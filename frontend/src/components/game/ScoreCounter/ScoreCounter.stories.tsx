@@ -9,7 +9,7 @@
 import ScoreCounter from "./ScoreCounter";
 
 export default {
-  title: "Game UI/ScoreCounter",
+  title: "Modules/Scoring/ScoreCounter",
   component: ScoreCounter,
   parameters: {
     layout: "fullscreen",

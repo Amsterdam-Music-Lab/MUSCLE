@@ -12,7 +12,7 @@ import Cup from "./Cup";
 type Story = StoryObj<typeof Cup>;
 
 const meta: Meta<typeof Cup> = {
-  title: "Game UI/Cup",
+  title: "Modules/Scoring/Cup",
   component: Cup,
   tags: ["autodocs"],
 };

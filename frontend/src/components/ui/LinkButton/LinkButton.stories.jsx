@@ -9,7 +9,7 @@
 import LinkButton from "./LinkButton";
 
 export default {
-  title: "UI/LinkButton",
+  title: "Design System/Buttons/LinkButton",
   component: LinkButton,
   parameters: {
     layout: "fullscreen",

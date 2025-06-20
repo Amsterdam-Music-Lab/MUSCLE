@@ -36,7 +36,7 @@ const decorator = (Story) => (
 );
 
 export default {
-  title: "Game UI/Timeline",
+  title: "Modules/Timeline",
   component: Timeline,
   parameters: {
     layout: "fullscreen",

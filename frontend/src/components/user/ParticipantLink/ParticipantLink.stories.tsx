@@ -9,7 +9,7 @@
 import ParticipantLink from "./ParticipantLink";
 
 export default {
-  title: "User/ParticipantLink",
+  title: "Modules/User/ParticipantLink",
   component: ParticipantLink,
   tags: ["autodocs"],
   decorators: [

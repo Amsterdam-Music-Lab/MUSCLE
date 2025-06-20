@@ -18,7 +18,7 @@ const decorator = (Story: Story) => (
 );
 
 const meta: Meta<typeof MultiPlayer> = {
-  title: "Playback/MultiPlayer",
+  title: "Modules/Playback/MultiPlayer",
   component: MultiPlayer,
   decorators: [decorator],
 };

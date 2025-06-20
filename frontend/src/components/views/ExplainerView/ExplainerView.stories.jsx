@@ -9,7 +9,7 @@
 import ExplainerView from "./ExplainerView";
 
 export default {
-  title: "Views/ExplainerView",
+  title: "App/Views/ExplainerView",
   component: ExplainerView,
   parameters: {
     layout: "fullscreen",

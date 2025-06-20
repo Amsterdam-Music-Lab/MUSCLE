@@ -18,7 +18,7 @@ const decorator = (StoryComponent: Story) => (
 );
 
 const meta: Meta<typeof AudioCard> = {
-  title: "Matching Pairs/AudioCard",
+  title: "Experiments/Matching Pairs/AudioCard",
   component: AudioCard,
   decorators: [decorator],
 };

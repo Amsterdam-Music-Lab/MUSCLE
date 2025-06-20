@@ -15,7 +15,7 @@ import audio from "@/assets/music.ogg";
 import Playback from "./Playback";
 
 const meta: Meta<typeof Playback> = {
-  title: "Playback/Playback",
+  title: "App/Controllers/Playback",
   component: Playback,
 };
 export default meta;

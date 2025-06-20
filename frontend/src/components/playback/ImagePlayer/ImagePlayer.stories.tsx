@@ -13,7 +13,7 @@ import catImage from "@/assets/images/cat-01.webp";
 type Story = StoryObj<typeof ImagePlayer>;
 
 const meta: Meta<typeof ImagePlayer> = {
-  title: "Playback/ImagePlayer",
+  title: "Modules/Playback/ImagePlayer",
   component: ImagePlayer,
 };
 

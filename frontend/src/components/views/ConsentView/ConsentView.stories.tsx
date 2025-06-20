@@ -19,7 +19,7 @@ const decorator = (StoryComponent: Story) => (
 );
 
 export default {
-  title: "Views/ConsentView",
+  title: "App/Views/ConsentView",
   component: ConsentView,
   decorators: [decorator],
 } as Meta<typeof ConsentView>;

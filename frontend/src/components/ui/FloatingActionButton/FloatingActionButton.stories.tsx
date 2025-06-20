@@ -26,7 +26,7 @@ const decorator = (Story: Story) => (
 );
 
 const meta: Meta<typeof FloatingActionButton> = {
-  title: "UI/FloatingActionButton",
+  title: "Design System/Buttons/FloatingActionButton",
   component: FloatingActionButton,
   tags: ["autodocs"],
   decorators: [decorator],

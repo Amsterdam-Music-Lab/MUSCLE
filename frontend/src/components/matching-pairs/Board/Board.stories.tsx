@@ -21,7 +21,7 @@ const divStyles = {
 } as CSSProperties;
 
 export default {
-  title: "Matching Pairs/Board",
+  title: "Experiments/Matching Pairs/Board",
   component: Board,
   parameters: {
     layout: "fullscreen",

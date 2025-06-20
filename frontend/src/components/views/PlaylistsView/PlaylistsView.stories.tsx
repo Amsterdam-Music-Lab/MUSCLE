@@ -18,7 +18,7 @@ const decorator = (StoryComponent: Story) => (
 );
 
 const meta: Meta<typeof PlaylistsView> = {
-  title: "views/PlaylistsView",
+  title: "App/Views/PlaylistsView",
   component: PlaylistsView,
   tags: ["autodocs"],
   decorators: [decorator],

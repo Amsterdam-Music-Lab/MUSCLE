@@ -18,7 +18,7 @@ const decorator = (StoryComponent: Story) => (
 );
 
 const meta: Meta<typeof ScoreBadge> = {
-  title: "Game UI/ScoreBadge",
+  title: "Modules/Scoring/ScoreBadge",
   component: ScoreBadge,
   tags: ["autodocs"],
   decorators: [decorator],

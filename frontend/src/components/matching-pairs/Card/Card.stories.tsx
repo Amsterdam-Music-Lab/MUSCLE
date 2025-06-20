@@ -9,7 +9,7 @@
 import Card from "./Card";
 
 export default {
-  title: "Matching Pairs/Card (Generic)",
+  title: "Experiments/Matching Pairs/Generic Card",
   component: Card,
   parameters: {
     layout: "fullscreen",

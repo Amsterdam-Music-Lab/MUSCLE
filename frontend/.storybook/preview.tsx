@@ -1,3 +1,4 @@
+import type {Preview} from "@storybook/react"
 import type { ThemeName } from "../src/types/themeProvider";
 import React from "react";
 import { initialize, mswLoader } from "msw-storybook-addon";
@@ -39,15 +40,20 @@ const withThemeProvider = (Story, context) => {
   );
 };
 
-/** @type { import('@storybook/react').Preview } */
-const preview = {
+const preview: Preview = {
   parameters: {
+    options: {
+      storySort: {
+        order: ['App', 'Experiments', 'Modules', 'Design System', 'Utils']
+      }
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/i,
       },
     },
+    
   },
 
   // Provide the MSW addon loader globally

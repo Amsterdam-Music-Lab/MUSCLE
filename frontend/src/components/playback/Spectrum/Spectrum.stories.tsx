@@ -10,7 +10,7 @@ const decorator = (Story: Story) => (
 );
 
 const meta: Meta<typeof Spectrum> = {
-  title: "Playback/Spectrum",
+  title: "Modules/Spectrum",
   component: Spectrum,
   decorators: [decorator],
 };

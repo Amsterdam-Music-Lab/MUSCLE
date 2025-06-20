@@ -9,7 +9,7 @@
 import ScoreFeedback from "./ScoreFeedback";
 
 export default {
-  title: "Game UI/ScoreFeedback",
+  title: "Modules/Scoring/ScoreFeedback",
   component: ScoreFeedback,
   parameters: {
     layout: "fullscreen",

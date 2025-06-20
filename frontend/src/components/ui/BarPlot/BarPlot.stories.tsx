@@ -22,7 +22,7 @@ const decorator = (Story) => (
 );
 
 export default {
-  title: "Game UI/BarPlot",
+  title: "Modules/BarPlot",
   component: BarPlot,
   parameters: {
     layout: "fullscreen",

@@ -1,7 +1,7 @@
 import ButtonArray from "./_ButtonArray";
 
 export default {
-  title: "UI/ButtonArray",
+  title: "Design System/Buttons/ButtonArray",
   component: ButtonArray,
   parameters: {
     layout: "fullscreen",

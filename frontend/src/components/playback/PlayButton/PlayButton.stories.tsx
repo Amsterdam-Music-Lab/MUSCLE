@@ -12,7 +12,7 @@ import PlayButton from "./PlayButton";
 type Story = StoryObj<typeof PlayButton>;
 
 const meta: Meta<typeof PlayButton> = {
-  title: "Playback/PlayButton",
+  title: "Modules/Playback/PlayButton",
   component: PlayButton,
 };
 

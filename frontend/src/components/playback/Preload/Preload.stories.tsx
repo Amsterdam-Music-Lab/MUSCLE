@@ -10,7 +10,7 @@ import Playback from "./Preload";
 import audio from "@/assets/audio.wav";
 
 export default {
-  title: "Playback/Preload",
+  title: "Modules/Playback/Preload",
   component: Playback,
   parameters: {
     layout: "fullscreen",

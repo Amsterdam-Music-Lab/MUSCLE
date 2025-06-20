@@ -29,7 +29,7 @@ const decorator = (Story) => {
 };
 
 const meta = {
-  title: "Matching Pairs/TuneTwins",
+  title: "Experiments/Matching Pairs/TuneTwins",
   component: TuneTwins,
   decorators: [decorator],
   tags: ["autodocs"],

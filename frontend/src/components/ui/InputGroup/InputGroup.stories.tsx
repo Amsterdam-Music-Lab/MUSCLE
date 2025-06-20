@@ -23,7 +23,7 @@ const decorator = (Story) => (
 );
 
 export default {
-  title: "UI/InputGroup",
+  title: "Design System/Inputs/InputGroup",
   component: InputGroup,
   tags: ["autodocs"],
   decorators: [decorator],

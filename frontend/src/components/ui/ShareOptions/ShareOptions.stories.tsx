@@ -12,7 +12,7 @@ import { ExpandableButton } from "../ExpandableButton";
 import ShareOptions from "./ShareOptions";
 
 const meta: Meta<typeof ShareOptions> = {
-  title: "UI/Social",
+  title: "Modules/ShareOptions",
   component: ShareOptions,
   parameters: {
     layout: "centered",
