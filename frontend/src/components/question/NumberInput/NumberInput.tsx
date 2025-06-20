@@ -58,6 +58,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
 
     return (
       <input
+        ref={ref}
         type="number"
         value={value ?? ""}
         autoFocus={autoFocus}
