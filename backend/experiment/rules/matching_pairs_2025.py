@@ -2,7 +2,6 @@ from os.path import split
 import random
 
 from django.utils.translation import gettext_lazy as _
-from django.db import models
 
 from result.models import Result
 from section.models import Section
