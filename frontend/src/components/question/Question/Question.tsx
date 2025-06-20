@@ -1,83 +1,80 @@
-import { useState } from "react";
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+import type { HTMLAttributes } from "react";
+import type IQuestion from "@/types/Question";
 
 import classNames from "classnames";
+import QuestionInputFactory from "./QuestionInputFactory";
+import styles from "./Question.module.scss";
 
-import ButtonArray from "./_ButtonArray";
-import { RadioQuestion } from "../RadioQuestion";
-import Range from "./_Range";
-import TextRange from "./_TextRange";
-import IconRange from "./_IconRange";
-import String from "./_String";
-import Checkboxes from "./_Checkboxes";
-import DropDown from "./_DropDown";
-import AutoComplete from "./_AutoComplete";
-
-import IQuestion, { QuestionViews } from "@/types/Question";
-import "./Question.scss";
-
-export interface QuestionProps {
+export interface QuestionProps extends HTMLAttributes<HTMLDivElement> {
   question: IQuestion;
-  onChange: (value: string | number | boolean, id: number) => void;
+
+  /**
+   * A unique identifier for the question. Will be passed to the
+   * onChange callback.
+   */
   id: number;
+
+  /**
+   * Callback called whenever the input changes. The callback
+   * receives both the updatedValue and the id of the question.
+   */
+  onChange: (updatedValue: string | number | boolean, id: number) => void;
+
+  /** Whether the question is disabled. Default false. */
   disabled?: boolean;
 }
 
-/** Question is a block view that shows a question and handles storing the answer */
+/**
+ * Question component that shows the question text plus the input component.
+ * It uses a factory component that the input based on the view specified in
+ * question.view
+ */
 const Question = ({
-  question,
+  question: questionObj,
   onChange,
   id,
   disabled = false,
+  className,
+  ...divProps
 }: QuestionProps) => {
-  const [value, setValue] = useState(question.value || "");
-
-  const registerChange = (value: string | number | boolean) => {
-    onChange(value, id);
-    setValue(value);
-  };
-
-  // render view
-  const render = (view: QuestionViews) => {
-    const attrs = {
-      value,
-      question,
-      disabled,
-      onChange: registerChange,
-    };
-
-    switch (view) {
-      case QuestionViews.BUTTON_ARRAY:
-        return <ButtonArray {...attrs} />;
-      case QuestionViews.CHECKBOXES:
-        return <Checkboxes {...attrs} />;
-      case QuestionViews.DROPDOWN:
-        return <DropDown {...attrs} />;
-      case QuestionViews.AUTOCOMPLETE:
-        return <AutoComplete {...attrs} />;
-      case QuestionViews.RADIOS:
-        return <RadioQuestion {...attrs} />;
-      case QuestionViews.RANGE:
-        return <Range {...attrs} />;
-      case QuestionViews.TEXT_RANGE:
-        return <TextRange {...attrs} />;
-      case QuestionViews.ICON_RANGE:
-        return <IconRange {...attrs} />;
-      case QuestionViews.STRING:
-        return <String {...attrs} />;
-
-      default:
-        return <div>Unknown question view {view}</div>;
-    }
-  };
-
+  // Rename variables internally
+  const {
+    explainer,
+    question,
+    style: questionClassName,
+    expected_response: expectedResponse,
+  } = questionObj;
   return (
-    <div className="aha__question">
-      {question.explainer && <p>{question.explainer}</p>}
-      <h3 className={classNames(question.style)}>{question.question}</h3>
-      <div className="question">{render(question.view)}</div>
-      {question.expected_response && (
+    <div
+      className={classNames(styles.questionContainer, className)}
+      {...divProps}
+    >
+      {explainer && <p className={styles.explainer}>{explainer}</p>}
+      {question && (
+        <p className={classNames(styles.questionText, questionClassName)}>
+          {question}
+        </p>
+      )}
+      <div className={styles.question}>
+        <QuestionInputFactory
+          question={questionObj}
+          disabled={disabled}
+          onChange={(updatedValue: string | number | boolean) =>
+            onChange(updatedValue, id)
+          }
+        />
+      </div>
+      {expectedResponse && (
         /* Will only be visible when the backend settings has TESTING=True */
-        <p className="expected-response">{question.expected_response}</p>
+        <p className={styles.expectedResponse}>{expectedResponse}</p>
       )}
     </div>
   );

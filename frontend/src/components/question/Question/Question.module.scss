@@ -1,0 +1,27 @@
+@import "@/scss/variables";
+
+.questionContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.question {
+  flex-grow: 1;
+  width: 100%;
+}
+
+.questionText {
+  width: 100%;
+  margin-bottom: 1em;
+
+  &.emphasize-title {
+    text-align: left;
+  }
+}
+
+// Why is this here at all?
+.expectedResponse {
+  // display: none;
+}

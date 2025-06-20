@@ -84,6 +84,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   {
     title,
     children,
+    type = "button",
     onClick = () => {},
     className,
     disabled: initialDisabled = false,
@@ -127,7 +128,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   return (
     <button
       ref={ref}
-      type="button"
+      type={type}
       tabIndex={0}
       onClick={clickOnceGuard}
       onKeyDown={clickOnceGuard}

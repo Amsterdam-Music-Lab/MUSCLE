@@ -6,119 +6,125 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import type IQuestion from "@/types/Question";
+import type { FormEvent } from "react";
+import type { Survey } from "@/components/application";
+import type SurveyQuestion from "@/types/Question";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Question } from "@/components/question";
-import { submitResultType } from "@/hooks/useResultHandler";
 import { Button, Card } from "@/components/ui";
+import { NarrowLayout } from "@/components/layout";
 
-export interface SurveyViewProps {
-  formActive: boolean;
-  form: IQuestion[];
-  buttonLabel: string;
-  skipLabel: string;
-  isSkippable: boolean;
-  submitResult: submitResultType;
+function validateQuestion(question: SurveyQuestion) {
+  // For multiple choices in CHECKBOXES view, question.value is a string of comma-separated values
+  return !(
+    question.view === "CHECKBOXES" &&
+    question.min_values &&
+    question.value.split(",").length < question.min_values
+  );
 }
 
-/** SurveyView */
+function validateQuestions(questions: SurveyQuestion[]) {
+  const validQuestions = questions.filter(
+    (q) => q.is_skippable || (q.value && q.value !== "" && validateQuestion(q))
+  );
+  return validQuestions.length === questions.length;
+}
+
+export interface SurveyViewProps extends Survey {
+  onChange: (updatedSurvey: Survey) => void;
+
+  /** Callback called when submitting the form */
+  onSubmit: (questions: SurveyQuestion[]) => void;
+
+  /** Whether the survey is disabled */
+  disabled?: boolean;
+}
+
+/**
+ * SurveyView: shows an array of questions. Note that this is a controlled component:
+ * the survey state is owned by Trial.
+ */
 export default function SurveyView({
-  formActive,
-  form,
-  buttonLabel,
-  skipLabel,
-  isSkippable,
-  submitResult,
-  className,
-  ...divProps
+  questions,
+  onChange,
+  onSubmit,
+  disabled = false,
+  skippable = false,
+  submitLabel = "Submit",
+  skipLabel = "Skip",
 }: SurveyViewProps) {
-  const showSubmitButtons =
-    form.filter((formElement) => formElement.submits).length === 0;
+  const [isValid, setIsValid] = useState(false);
 
-  const [formValid, setFormValid] = useState(false);
+  // Validate questions whenever questions changes
+  useEffect(() => setIsValid(validateQuestions(questions)), [questions]);
 
-  const onChange = (
-    value: string | number | boolean,
-    question_index: number
-  ) => {
-    form[question_index].value = value;
-    if (form[question_index].submits) {
-      submitResult();
-    }
-    // for every non-skippable question, check that we have a value
-    const validFormElements = form.filter((formElement) => {
-      if (
-        formElement.is_skippable ||
-        (formElement.value && validateFormElement(formElement))
-      ) {
-        return true;
-      }
-      return false;
-    });
-    setFormValid(validFormElements.length === form.length);
+  // Update state when the question's value changes
+  const handleChange = (value, index) => {
+    onChange((prev) => prev.map((q, i) => (i === index ? { ...q, value } : q)));
+    if (questions[index].submits) onSubmit();
   };
 
-  function validateFormElement(formElement: IQuestion) {
-    // For multiple choices in CHECKBOXES view, formElement.value is a string of comma-separated values
-    if (
-      formElement.view === "CHECKBOXES" &&
-      formElement.min_values &&
-      formElement.value.split(",").length < formElement.min_values
-    ) {
-      return false;
-    }
-    return true;
-  }
+  const handleSubmit = (e?: FormEvent) => {
+    if (e) e.preventDefault();
+    if (isValid) onSubmit(questions);
+  };
+
+  const showSubmitButtons = questions.filter((q) => q.submits).length === 0;
 
   return (
-    <>
-      <Card>
-        <form>
-          {form.map((question, index) => {
+    <form onSubmit={handleSubmit}>
+      <NarrowLayout>
+        <Card>
+          {questions.map((question, index) => {
             return (
               <Card.Section key={index} title={question.question} titleTag="h2">
                 <Question
                   id={index}
-                  disabled={!formActive}
-                  question={{ ...question, question: "" }}
-                  onChange={onChange}
+                  disabled={disabled}
+                  question={{
+                    ...question,
+                    value: questions[index].value,
+                    // Hide question as it's already shown as the Card.Section title
+                    question: "",
+                  }}
+                  onChange={handleChange}
                 />
               </Card.Section>
             );
           })}
-        </form>
-      </Card>
+        </Card>
 
-      {showSubmitButtons && (
-        <>
-          {isSkippable && (
+        {showSubmitButtons && (
+          <>
+            {skippable && (
+              <Button
+                title={skipLabel}
+                onClick={handleSubmit}
+                stretch={true}
+                rounded={false}
+                size="lg"
+                variant="secondary"
+              />
+            )}
+
             <Button
-              title={skipLabel}
-              onClick={submitResult}
+              type="submit"
+              title={submitLabel}
+              // onClick={handleSubmit}
               stretch={true}
               rounded={false}
               size="lg"
               variant="secondary"
+              disabled={isValid !== true}
             />
-          )}
-
-          <Button
-            title={buttonLabel}
-            onClick={submitResult}
-            stretch={true}
-            rounded={false}
-            size="lg"
-            variant="secondary"
-            className={"submit"}
-            disabled={formValid !== true}
-          />
-        </>
-      )}
-    </>
+          </>
+        )}
+      </NarrowLayout>
+    </form>
   );
 }
 
 SurveyView.viewName = "survey";
-SurveyView.usesOwnLayout = false;
+SurveyView.usesOwnLayout = true;
 SurveyView.getViewProps = undefined;

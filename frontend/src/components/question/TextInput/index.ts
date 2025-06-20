@@ -6,5 +6,4 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export type { TrialProps, Survey } from "./Trial";
-export { default as Trial } from "./Trial";
+export { default as TextInput } from "./TextInput";

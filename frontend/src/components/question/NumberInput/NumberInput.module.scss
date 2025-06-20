@@ -1,0 +1,6 @@
+@import "@/scss/forms.scss";
+
+.numberInput {
+  @extend .text-input;
+  width: 100%;
+}

@@ -1,0 +1,12 @@
+@import "./utils.scss";
+
+.text-input {
+  @extend .sharp-border, .bg-inset-lg, .rounded-sm;
+  border: 1px solid #ddd;
+  padding: 0.5em 1em;
+
+  &:focus {
+    border-color: #333;
+    outline: none;
+  }
+}
