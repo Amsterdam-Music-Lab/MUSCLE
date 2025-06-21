@@ -76,7 +76,7 @@ export default function Trial({
   const [preloadReady, setPreloadReady] = useState(!playback);
   const [disableSurvey, setDisableSurvey] = useState(listenFirst);
   const [questions, setQuestions] = useState(survey?.form ?? []);
-  console.log(questions);
+
   // Update state whenever the props change. This ensures the Trial is
   // rerendered when moving to the next question in a round, for example.
   useEffect(() => {

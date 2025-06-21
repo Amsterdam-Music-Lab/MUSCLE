@@ -75,6 +75,31 @@ body,
   color: #000;
 }
 
+.text-primary {
+  color: var(--primary-solid);
+}
+
+.text-secondary {
+  color: var(--secondary-solid);
+}
+
+.text-succes {
+  color: var(--success-solid);
+}
+
+.text-info {
+  color: var(--info-solid);
+}
+
+.text-warning {
+  color: var(--warning-solid);
+}
+
+.text-danger {
+  color: var(--danger-solid);
+  // color: color-mix(in srgb, var(--danger-solid) 100%, black);
+}
+
 h1,
 h2,
 h3,

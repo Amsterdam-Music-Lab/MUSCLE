@@ -20,7 +20,7 @@ function validateQuestion(question: SurveyQuestion) {
   return !(
     question.view === "CHECKBOXES" &&
     question.min_values &&
-    question.value.split(",").length < question.min_values
+    question.value.length < question.min_values
   );
 }
 
@@ -67,6 +67,7 @@ export default function SurveyView({
 
   const handleSubmit = (e?: FormEvent) => {
     if (e) e.preventDefault();
+    // TODO convert checkbox question values to CSV?
     if (isValid) onSubmit(questions);
   };
 

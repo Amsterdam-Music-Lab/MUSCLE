@@ -1,12 +1,38 @@
+@import "./theme.scss";
 @import "./utils.scss";
 
-.text-input {
-  @extend .sharp-border, .bg-inset-lg, .rounded-sm;
+.input-label-active {
+  @extend .fw-semibold;
+}
+
+.input-element {
+  @extend .bg-inset-lg;
   border: 1px solid #ddd;
+  transition: background-color 0.3s ease-out;
+}
+
+.input-element-hover {
+  background-color: #eee;
+}
+
+.text-input {
+  @extend .input-element, .rounded-sm;
   padding: 0.5em 1em;
 
   &:focus {
     border-color: #333;
     outline: none;
   }
+}
+
+.input-error-message {
+  @extend .text-danger;
+}
+
+.hidden-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
 }

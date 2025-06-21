@@ -6,9 +6,17 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export * from "./Input";
-export * from "./InputGroup";
-export * from "./InputLabel";
-export * from "./NumberInput";
-export * from "./OptionField";
-export * from "./TextInput";
+$defaultSpacer: 1rem;
+
+.optionGroup {
+  --option-size: 1.75rem;
+  --option-padding: 0.5rem;
+
+  display: flex;
+  flex-direction: column;
+
+  legend,
+  .errorMessage {
+    padding: 0.5em;
+  }
+}

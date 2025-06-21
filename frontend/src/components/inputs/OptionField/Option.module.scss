@@ -1,0 +1,90 @@
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+@import "@/scss/utils";
+@import "@/scss/forms";
+
+$defaultSpacer: 1rem;
+
+.option {
+  --option-size: 1.75rem;
+  --option-padding: 0.5rem;
+  margin-bottom: 0;
+
+  &.disabled {
+    pointer-events: none;
+  }
+}
+
+// Note that we use the focusRing so that we can do all
+// focus styling without using JS, but using :focus-visible
+.focusRing {
+  display: flex;
+  padding: var(--option-padding);
+  gap: calc(0.75 * var(--spacer, $defaultSpacer));
+  cursor: pointer;
+  border-radius: 0.5em;
+}
+
+input:focus-visible + .focusRing {
+  @extend .bg-inset-lg;
+  outline: 1px solid #ddd;
+}
+
+.handle {
+  width: var(--option-size);
+  height: var(--option-size);
+  transition: background 300ms ease;
+
+  &.radio {
+    border-radius: 100rem;
+  }
+
+  &.checkbox {
+    border-radius: 0.5em;
+  }
+
+  .option.checked & {
+    border-color: transparent;
+  }
+
+  .option:not(.checked) & {
+    @extend .input-element;
+  }
+
+  .option:not(.checked):hover & {
+    @extend .input-element-hover;
+  }
+
+  .hasError & {
+    border-color: var(--danger-solid) !important;
+  }
+
+  .hasError.checked & {
+    background: var(--danger-solid);
+  }
+
+  .disabled & {
+    box-shadow: none !important;
+    opacity: 0.5;
+  }
+}
+
+.label {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+  .option.checked & {
+    @extend .input-label-active;
+  }
+
+  .disabled & {
+    color: #ccc;
+  }
+}
