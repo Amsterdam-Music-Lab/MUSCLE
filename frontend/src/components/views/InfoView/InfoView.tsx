@@ -8,7 +8,8 @@
 import type { HTMLAttributes } from "react";
 
 import { useEffect, useState } from "react";
-import { Card, LinkButton } from "@/components/ui";
+import { LinkButton } from "@/components/buttons";
+import { Card } from "@/components/ui";
 import { RenderHtml } from "@/components/utils";
 
 /**

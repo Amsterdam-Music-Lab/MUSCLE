@@ -7,22 +7,22 @@
  */
 
 import type { PluginMeta, PluginSpec } from "@/types/plugin";
-import type { ScoreBoardProps } from "@/components/game/ScoreBoard/ScoreBoard";
-import ScoreBoard from "@/components/game/ScoreBoard/ScoreBoard";
+import type { ScoreBoardProps } from "@/components/modules/ScoreBoard/ScoreBoard";
+import ScoreBoard from "@/components/modules/ScoreBoard/ScoreBoard";
 
 interface ScoreboardPluginArgs extends ScoreBoardProps {}
 
 export interface ScoreboardPluginMeta extends PluginMeta<ScoreboardPluginArgs> {
-  name: "scoreboard";
+    name: "scoreboard";
 }
 
 export interface ScoreboardPluginSpec extends PluginSpec<ScoreboardPluginArgs> {
-  name: "scoreboard";
+    name: "scoreboard";
 }
 
 export const scoreboardPlugin: ScoreboardPluginMeta = {
-  name: "scoreboard",
-  component: ScoreBoard,
-  description: "Displays an scoreboard",
-  defaultSpecs: {},
+    name: "scoreboard",
+    component: ScoreBoard,
+    description: "Displays an scoreboard",
+    defaultSpecs: {},
 };

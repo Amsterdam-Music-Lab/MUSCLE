@@ -8,7 +8,8 @@
 
 import { useEffect } from "react";
 import classNames from "classnames";
-import { Button, Card } from "@/components/ui";
+import { Button } from "@/components/buttons";
+import { Card } from "@/components/ui";
 import { Explainer as ExplainerAction } from "@/types/Action";
 import { Logo } from "@/components/svg";
 import styles from "./ExplainerView.module.scss";

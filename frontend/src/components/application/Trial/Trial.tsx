@@ -16,7 +16,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { getAudioLatency, getCurrentTime, getTimeSince } from "@/util/time";
 import { Playback, View } from "@/components/application";
 import { RenderHtml } from "@/components/utils";
-import { Button } from "@/components/ui";
+import { Button } from "@/components/buttons";
 
 export interface Survey {
   /** The questions to show */

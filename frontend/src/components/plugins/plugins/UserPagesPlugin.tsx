@@ -6,8 +6,8 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 import type { PluginMeta, PluginSpec } from "@/types/plugin";
-import { InputGroup, InputLabel } from "@/components/inputs";
-import { LinkButton } from "@/components/ui";
+import { InputGroup, InputLabel } from "@/components/forms";
+import { LinkButton } from "@/components/buttons";
 
 export interface UserPagesPluginArgs {
   links: Array<{ link: string; text: string }>;

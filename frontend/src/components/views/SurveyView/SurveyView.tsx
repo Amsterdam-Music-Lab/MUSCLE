@@ -11,8 +11,9 @@ import type { Survey } from "@/components/application";
 import type SurveyQuestion from "@/types/Question";
 
 import { useState, useEffect } from "react";
-import { Question } from "@/components/question";
-import { Button, Card } from "@/components/ui";
+import { Question } from "@/components/modules";
+import { Button } from "@/components/buttons";
+import { Card } from "@/components/ui";
 import { NarrowLayout } from "@/components/layout";
 
 function validateQuestion(question: SurveyQuestion) {

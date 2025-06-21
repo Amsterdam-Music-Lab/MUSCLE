@@ -6,6 +6,8 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+export * from "./Circle";
+export * from "./CountDown";
 export * from "./Reload";
 export * from "./Redirect";
 export * from "./InternalRedirect";

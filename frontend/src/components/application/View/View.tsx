@@ -9,8 +9,8 @@
 import type { ComponentType } from "react";
 import { Fragment } from "react";
 import { NarrowLayout, ViewTransition } from "@/components/layout";
-import { FloatingActionButton } from "@/components/ui";
-import { UserFeedbackForm } from "@/components/user";
+import { FloatingActionButton } from "@/components/buttons";
+import { UserFeedbackForm } from "@/components/modules";
 
 // Simple views
 import {

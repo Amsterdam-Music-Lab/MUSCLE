@@ -8,7 +8,8 @@
 
 import { RenderHtml } from "@/components/utils";
 import { ExperimentLayout, ExperimentLayoutProps } from "@/components/layout";
-import { Card, LinkButton } from "@/components/ui";
+import { LinkButton } from "@/components/buttons";
+import { Card } from "@/components/ui";
 
 export interface AboutViewProps extends ExperimentLayoutProps {
   content: string;

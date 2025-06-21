@@ -10,7 +10,8 @@ import type { PluginMeta, PluginSpec } from "@/types/plugin";
 import type { Variant } from "@/types/themeProvider";
 import type { ShareConfig } from "@/types/share";
 
-import { ShareOptions, ExpandableButton } from "@/components/ui";
+import { ShareOptions } from "@/components/modules";
+import { ExpandableButton } from "@/components/buttons";
 
 interface SharePluginProps {
   config: ShareConfig;

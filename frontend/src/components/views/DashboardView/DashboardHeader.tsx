@@ -11,8 +11,9 @@ import type { SocialMediaConfig } from "@/types/Experiment";
 
 import React from "react";
 import { RenderHtml } from "@/components/utils";
-import { Card, LinkButton, ShareOptions } from "@/components/ui";
-import { Cup, ScoreCounter } from "@/components/game";
+import { LinkButton } from "@/components/buttons";
+import { Card } from "@/components/ui";
+import { Cup, ScoreCounter, ShareOptions } from "@/components/modules";
 
 export interface DashboardHeaderProps {
   title?: string;
