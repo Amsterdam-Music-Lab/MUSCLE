@@ -8,7 +8,6 @@
 
 import type { HTMLAttributes } from "react";
 import type IQuestion from "@/types/Question";
-
 import classNames from "classnames";
 import QuestionInputFactory from "./QuestionInputFactory";
 import styles from "./Question.module.scss";
@@ -16,20 +15,14 @@ import styles from "./Question.module.scss";
 export interface QuestionProps extends HTMLAttributes<HTMLDivElement> {
   question: IQuestion;
 
-  /**
-   * A unique identifier for the question. Will be passed to the
-   * onChange callback.
-   */
-  id: number;
-
-  /**
-   * Callback called whenever the input changes. The callback
-   * receives both the updatedValue and the id of the question.
-   */
-  onChange: (updatedValue: string | number | boolean, id: number) => void;
+  /** Callback called whenever the input changes. */
+  onChange: (updatedValue: string | number | boolean) => void;
 
   /** Whether the question is disabled. Default false. */
   disabled?: boolean;
+
+  /** Optional properties passed on to the field component */
+  fieldProps?: any;
 }
 
 /**
@@ -40,9 +33,9 @@ export interface QuestionProps extends HTMLAttributes<HTMLDivElement> {
 const Question = ({
   question: questionObj,
   onChange,
-  id,
   disabled = false,
   className,
+  fieldProps,
   ...divProps
 }: QuestionProps) => {
   // Rename variables internally
@@ -52,6 +45,7 @@ const Question = ({
     style: questionClassName,
     expected_response: expectedResponse,
   } = questionObj;
+
   return (
     <div
       className={classNames(styles.questionContainer, className)}
@@ -67,9 +61,8 @@ const Question = ({
         <QuestionInputFactory
           question={questionObj}
           disabled={disabled}
-          onChange={(updatedValue: string | number | boolean) =>
-            onChange(updatedValue, id)
-          }
+          onChange={onChange}
+          fieldProps={fieldProps}
         />
       </div>
       {expectedResponse && (

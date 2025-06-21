@@ -11,4 +11,5 @@ export * from "./InputGroup";
 export * from "./InputLabel";
 export * from "./NumberInput";
 export * from "./OptionField";
+export * from "./RangeField";
 export * from "./TextInput";

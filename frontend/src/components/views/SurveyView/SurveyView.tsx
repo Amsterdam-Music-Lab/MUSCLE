@@ -89,7 +89,7 @@ export default function SurveyView({
                     // Hide question as it's already shown as the Card.Section title
                     question: "",
                   }}
-                  onChange={handleChange}
+                  onChange={(value) => handleChange(value, index)}
                 />
               </Card.Section>
             );
