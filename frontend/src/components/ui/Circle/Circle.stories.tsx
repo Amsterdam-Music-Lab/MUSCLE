@@ -16,7 +16,7 @@ const decorator = (Story) => (
 );
 
 export default {
-  title: "UI/Circle",
+  title: "Utils/Circle",
   component: Circle,
   decorators: [decorator],
 };

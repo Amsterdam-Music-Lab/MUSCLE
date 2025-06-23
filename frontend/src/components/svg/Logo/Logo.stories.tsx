@@ -21,7 +21,7 @@ const decorator = (Story: () => JSX.Element) => (
 );
 
 export default {
-  title: "SVG/Logo",
+  title: "Design System/SVG/Logo",
   component: Logo,
   parameters: {
     layout: "fullscreen",

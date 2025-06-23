@@ -1,7 +1,7 @@
 import Star from "./Star";
 
 export default {
-  title: "SVG/Star",
+  title: "Design System/SVG/Star",
   component: Star,
   parameters: {
     layout: "fullscreen",

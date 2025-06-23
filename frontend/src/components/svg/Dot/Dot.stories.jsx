@@ -9,7 +9,7 @@
 import Dot from "./Dot";
 
 export default {
-  title: "SVG/Dot",
+  title: "Design System/SVG/Dot",
   component: Dot,
   parameters: {
     layout: "fullscreen",

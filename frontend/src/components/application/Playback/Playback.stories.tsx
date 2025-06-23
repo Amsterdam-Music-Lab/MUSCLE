@@ -10,12 +10,12 @@ import type { StoryFn, Meta } from "@storybook/react";
 import { useState } from "react";
 import { BUTTON } from "@/types/Playback";
 import useBoundStore from "@/util/stores";
-import { Button } from "@/components/ui";
+import { Button } from "@/components/buttons";
 import audio from "@/assets/music.ogg";
 import Playback from "./Playback";
 
 const meta: Meta<typeof Playback> = {
-  title: "Playback/Playback",
+  title: "App/Controllers/Playback",
   component: Playback,
 };
 export default meta;

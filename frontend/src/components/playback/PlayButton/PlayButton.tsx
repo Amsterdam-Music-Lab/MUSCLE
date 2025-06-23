@@ -5,10 +5,10 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-import type { BaseButtonProps, ButtonProps } from "@/components/ui";
+import type { BaseButtonProps, ButtonProps } from "@/components/buttons";
 import { forwardRef } from "react";
 import classNames from "classnames";
-import { Button } from "@/components/ui";
+import { Button } from "@/components/buttons";
 
 export interface BasePlayButtonProps extends BaseButtonProps {
   /** Play handle */

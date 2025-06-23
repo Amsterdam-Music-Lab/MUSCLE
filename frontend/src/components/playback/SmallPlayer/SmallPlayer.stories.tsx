@@ -18,7 +18,7 @@ const decorator = (Story: Story) => (
 );
 
 const meta: Meta<typeof SmallPlayer> = {
-  title: "Playback/SmallPlayer",
+  title: "Modules/Playback/SmallPlayer",
   component: SmallPlayer,
   decorators: [decorator],
 };

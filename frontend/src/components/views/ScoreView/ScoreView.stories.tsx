@@ -9,7 +9,7 @@
 import ScoreView from "./ScoreView";
 
 export default {
-  title: "Views/ScoreView",
+  title: "App/Views/ScoreView",
   component: ScoreView,
   parameters: {
     layout: "fullscreen",

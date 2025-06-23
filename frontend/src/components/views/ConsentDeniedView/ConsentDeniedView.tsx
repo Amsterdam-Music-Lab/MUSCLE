@@ -6,7 +6,8 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import { Card, LinkButton } from "@/components/ui";
+import { LinkButton } from "@/components/buttons";
+import { Card } from "@/components/ui";
 import { routes } from "@/config";
 
 export default function ConsentDeniedView() {

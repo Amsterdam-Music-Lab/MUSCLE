@@ -8,7 +8,8 @@
 import type { HTMLAttributes } from "react";
 import { useState, useEffect, useRef } from "react";
 import classNames from "classnames";
-import { Button, Circle } from "@/components/ui";
+import { Button } from "@/components/buttons";
+import { Circle } from "@/components/ui";
 import { Score as ScoreAction } from "@/types/Action";
 import "./ScoreView.module.scss";
 

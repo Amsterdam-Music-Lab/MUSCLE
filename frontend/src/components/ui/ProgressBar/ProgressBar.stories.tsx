@@ -15,7 +15,7 @@ const decorator = (Story) => (
 );
 
 export default {
-  title: "UI/ProgressBar",
+  title: "Design System/Feedback/ProgressBar",
   component: ProgressBar,
   parameters: {
     layout: "fullscreen",

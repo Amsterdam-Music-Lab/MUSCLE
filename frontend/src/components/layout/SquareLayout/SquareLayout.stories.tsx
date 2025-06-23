@@ -24,7 +24,7 @@ function getDecorator(width: string, height: string) {
 }
 
 export default {
-  title: "Game UI/SquareLayout",
+  title: "App/Layout/SquareLayout",
   component: SquareLayout,
   parameters: {
     layout: "fullscreen",

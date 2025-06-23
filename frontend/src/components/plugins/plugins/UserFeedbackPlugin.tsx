@@ -6,8 +6,8 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 import type { PluginMeta, PluginSpec } from "@/types/plugin";
-import type { UserFeedbackFormProps } from "@/components/user/UserFeedbackForm/UserFeedbackForm";
-import UserFeedbackForm from "@/components/user/UserFeedbackForm/UserFeedbackForm";
+import type { UserFeedbackFormProps } from "@/components/modules/UserFeedbackForm/UserFeedbackForm";
+import UserFeedbackForm from "@/components/modules/UserFeedbackForm/UserFeedbackForm";
 
 export interface UserFeedbackPluginArgs extends UserFeedbackFormProps {}
 

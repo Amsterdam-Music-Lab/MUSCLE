@@ -57,6 +57,14 @@ export interface Theme {
   /** Secondary fill, by default a gradient */
   secondary: ThemeFill;
 
+  success: ThemeFill;
+
+  info: ThemeFill;
+
+  warning: ThemeFill;
+
+  danger: ThemeFill;
+
   /** Default, medium border radius in rem. */
   borderRadius: number;
 

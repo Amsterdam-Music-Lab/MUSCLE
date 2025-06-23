@@ -1,0 +1,150 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+@import "@/scss/theme.scss";
+@import "@/scss/utils.scss";
+@import "@/scss/forms.scss";
+
+.rangeField {
+  --thumb-size: 2em;
+  --track-padding: calc(0.5 * var(--thumb-size));
+  --label-margin: 0.5em;
+
+  &.showThumbLabel {
+    padding-top: calc(2 * var(--thumb-size));
+  }
+  &.showTicks {
+    padding-bottom: var(--thumb-size);
+  }
+
+  &:not(.hasValue) .thumb {
+    background: #999;
+    transition: unset;
+  }
+
+  &.hasError {
+    .track {
+      @extend .input-element-error;
+    }
+    .thumb {
+      background-color: var(--danger-solid) !important;
+    }
+  }
+
+  &.showTickLabelsInside {
+    .tick {
+      transition: color 350ms ease;
+      &.active .tickLabel {
+        color: #fff;
+      }
+    }
+
+    .tickMark {
+      display: none;
+    }
+
+    .tickLabel {
+      top: 0;
+      position: relative;
+      z-index: 10;
+      text-align: center;
+    }
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.track {
+  height: calc(var(--thumb-size) + var(--track-padding));
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: calc(1.5 * var(--track-padding));
+  padding-right: calc(1.5 * var(--track-padding));
+  @extend .input-element, .rounded;
+}
+
+.thumb {
+  height: var(--thumb-size);
+  width: var(--thumb-size);
+  @extend .rounded;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+
+  &:hover {
+    box-shadow: 0 0 1em rgba(0, 0, 0, 0.15);
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+.thumbLabel {
+  position: absolute;
+  bottom: calc(
+    var(--thumb-size) + 0.5 * var(--track-padding) + 2 * var(--label-margin)
+  );
+  transform: translateX(-50%);
+  white-space: nowrap;
+  padding: 0.25em 0.5em;
+  font-size: 0.875em;
+  border-radius: 0.5em;
+  @extend .input-element;
+}
+
+.tick {
+  // larger to provide a bigger target for click events
+  position: absolute;
+  width: var(--thumb-size);
+  height: var(--thumb-size);
+
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+  &.active {
+    @extend .fw-semibold;
+  }
+}
+
+.tickMark {
+  width: 1px;
+  height: calc(0.5 * var(--thumb-size));
+  background-color: #ccc;
+  margin: auto;
+
+  .rangeField.showTickLabelsInside & {
+    display: none;
+  }
+}
+
+.tickLabel {
+  position: absolute;
+  left: calc(0.5 * var(--thumb-size));
+  display: inline-block;
+  color: #666;
+  white-space: nowrap;
+
+  top: calc(
+    var(--thumb-size) + 0.5 * var(--track-padding) + var(--label-margin)
+  );
+  transform: translate(-50%);
+
+  .rangeField.flushTickLabels .first & {
+    transform: unset;
+  }
+
+  .rangeField.flushTickLabels .last & {
+    transform: translate(-100%);
+    text-align: right;
+  }
+}

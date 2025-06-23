@@ -3,7 +3,7 @@ import PluginRenderer from "./PluginRenderer";
 
 const meta: Meta<typeof PluginRenderer> = {
   component: PluginRenderer,
-  title: "Plugins/PluginRenderer",
+  title: "Utils/PluginRenderer",
   args: {},
 };
 

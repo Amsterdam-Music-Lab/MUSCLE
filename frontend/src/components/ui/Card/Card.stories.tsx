@@ -25,7 +25,7 @@ const decorator = (Story: Story) => (
 );
 
 const meta: Meta<typeof Card> = {
-  title: "UI/Card",
+  title: "Design system/Layout/Card",
   component: Card,
   tags: ["autodocs"],
   decorators: [decorator],

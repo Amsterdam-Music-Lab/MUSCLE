@@ -10,7 +10,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import Overlay from "./Overlay";
 
 const meta: Meta<typeof Overlay> = {
-  title: "UI/Overlay",
+  title: "Design system/Layout/Overlay",
   component: Overlay,
   tags: ["autodocs"],
 };

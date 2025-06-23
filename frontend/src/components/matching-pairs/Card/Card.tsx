@@ -42,6 +42,7 @@ function Card({
   variantFront = "primary",
   variantBack = "secondary",
   label,
+  onClick = () => {},
   ...props
 }: CardProps) {
   // Find child cards
@@ -76,7 +77,14 @@ function Card({
         },
         className
       )}
-      role="button"
+      onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick();
+          e.currentTarget.blur();
+        }
+      }}
       {...props}
     >
       {flipped ? front : back}

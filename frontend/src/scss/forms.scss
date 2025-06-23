@@ -1,0 +1,64 @@
+@import "./theme.scss";
+@import "./utils.scss";
+
+:root {
+  --focus-outline-width: 3px;
+}
+
+.input-label-active {
+  @extend .fw-semibold;
+}
+
+.input-element {
+  @extend .bg-inset-lg;
+  border: 1px solid #ddd;
+  transition: background-color 0.3s ease-out;
+}
+
+.input-element-hover {
+  background-color: #eee;
+}
+
+.text-input {
+  @extend .input-element, .rounded-sm;
+  padding: 0.5em 1em;
+
+  &:focus {
+    border-color: #333;
+    outline: none;
+  }
+}
+
+.input-element-focus {
+  outline: none;
+  border-color: #007aff;
+  box-shadow: 0 0 0 var(--focus-outline-width) rgba(0, 122, 255, 0.25);
+}
+
+.input-element-error,
+.input-element-error-focus {
+  border-color: var(--danger-solid);
+  background-color: color-mix(in srgb, var(--danger-solid) 5%, transparent);
+}
+
+.input-element-error-focus {
+  box-shadow: 0 0 0 var(--focus-outline-width)
+    color-mix(in srgb, var(--danger-solid) 25%, transparent);
+}
+
+.input-element-disabled {
+  cursor: not-allowed;
+  background: #f2f2f2;
+}
+
+.input-error-message {
+  @extend .text-danger;
+}
+
+.hidden-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}

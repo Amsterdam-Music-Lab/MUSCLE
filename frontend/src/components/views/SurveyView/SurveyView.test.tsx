@@ -11,7 +11,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import SurveyView from "./SurveyView";
 
-const form = [
+const questions = [
   {
     key: "test_question",
     view: QuestionViews.BUTTON_ARRAY,
@@ -22,7 +22,7 @@ const form = [
 
 describe("SurveyView", () => {
   it("renders a heading, and a group of radio buttons", () => {
-    render(<SurveyView form={form} />);
+    render(<SurveyView questions={questions} />);
     const heading = screen.getByRole("heading", {
       name: "What is the average speed of a Swallow?",
     });

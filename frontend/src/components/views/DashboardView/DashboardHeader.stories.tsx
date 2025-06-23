@@ -20,7 +20,7 @@ const decorator = (StoryComponent: Story) => (
 );
 
 const meta: Meta<typeof Header> = {
-  title: "Experiment/DashboardHeader",
+  title: "App/View Partials/DashboardHeader",
   component: DashboardHeader,
   decorators: [decorator],
 };

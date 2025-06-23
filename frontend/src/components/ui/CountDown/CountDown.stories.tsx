@@ -18,7 +18,7 @@ const decorator = (StoryComponent: Story) => (
 );
 
 const meta: Meta<typeof CountDown> = {
-  title: "UI/CountDown",
+  title: "Utils/CountDown",
   component: CountDown,
   tags: ["autodocs"],
   decorators: [decorator],

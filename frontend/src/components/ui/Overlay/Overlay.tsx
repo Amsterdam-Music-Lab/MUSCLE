@@ -7,10 +7,11 @@
  */
 
 import type { HTMLAttributes, ComponentType } from "react";
-
+import type { ButtonProps } from "@/components/buttons";
 import { useEffect, useState, useCallback } from "react";
 import classNames from "classnames";
-import { Button, ButtonProps, Card } from "@/components/ui";
+import { Button } from "@/components/buttons";
+import { Card } from "@/components/ui";
 import styles from "./Overlay.module.scss";
 
 export interface OverlayProps extends HTMLAttributes<HTMLDivElement> {
@@ -77,11 +78,7 @@ export default function Overlay({
 
   if (!Handle) {
     Handle = (props: ButtonProps) => (
-      <Button
-        className="primary"
-        title={handleText}
-        {...props}
-      />
+      <Button className="primary" title={handleText} {...props} />
     );
   }
 

@@ -10,7 +10,7 @@ import { describe, it, expect, vi } from "vitest";
 import PlayButton from "./PlayButton";
 
 // Needed to test disabling behaviour of the component
-import buttonStyles from "@/components/ui/Button/Button.module.scss";
+import buttonStyles from "@/components/buttons/Button/Button.module.scss";
 
 describe("PlayButton Component", () => {
   it("renders correctly", () => {
