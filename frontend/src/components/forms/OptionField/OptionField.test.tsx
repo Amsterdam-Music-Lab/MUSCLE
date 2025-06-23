@@ -84,7 +84,11 @@ describe("OptionField (alias for CheckboxField)", () => {
     );
 
     const fieldset = screen.getByRole("group");
-    expect(fieldset).toHaveAttribute("aria-describedby", "fruits-error");
+    // id's are generated using react's useId() and look like "error-:r3:"
+    expect(fieldset).toHaveAttribute(
+      "aria-describedby",
+      expect.stringMatching(/^error-:r\d+:$/)
+    );
     expect(fieldset).toHaveAttribute("aria-invalid", "true");
 
     expect(

@@ -1,9 +1,10 @@
 /**
- * Copyright (c) 2025 Amsterdam Music Lab
+ * Copyright (c) 2025 Bas Cornelissen
  * SPDX-License-Identifier: MIT
  *
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export { default as NumberInput } from "./NumberInput";
+export type { SelectFieldProps } from "./SelectField";
+export { default as SelectField } from "./SelectField";

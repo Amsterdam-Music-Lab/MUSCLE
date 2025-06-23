@@ -57,9 +57,10 @@
     &:active {
       transform: scale(0.96);
     }
-    &.outline:focus {
-      outline: 1px solid #ffffffcc;
-    }
+  }
+  &:focus {
+    outline: var(--outline-size) solid #ffffff;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -70,7 +71,7 @@
 .sm {
   font-size: 0.8rem;
   padding: 0.25em 0.75em;
-  --outline-size: 1px;
+  // --outline-size: 1px;
 
   &.outline {
     --outline-size: 0px;

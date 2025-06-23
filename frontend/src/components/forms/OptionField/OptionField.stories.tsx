@@ -58,7 +58,7 @@ export const Checkboxes: CheckboxStory = {
       { value: "cherry" },
       { value: "dragonfruit", label: "Dragonfruit!", disabled: true },
     ],
-    legend: "Pick your favourite fruit!",
+    label: "Pick your favourite fruit!",
   },
 };
 
@@ -83,6 +83,5 @@ export const Errors: CheckboxStory = {
   args: {
     ...Checkboxes.args,
     error: "There is something wrong with your selection.",
-    showError: true,
   },
 };

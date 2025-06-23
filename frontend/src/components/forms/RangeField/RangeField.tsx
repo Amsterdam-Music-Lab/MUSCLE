@@ -6,57 +6,25 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import type { ReactNode } from "react";
-import type { FieldProps } from "../types";
-import { useState } from "react";
-import { Range } from "react-range";
+import type { FieldOption, FieldProps, BaseFieldProps } from "../types";
+import type { Variant } from "@/types/themeProvider";
 import classNames from "classnames";
-import { Variant } from "@/types/themeProvider";
+import { useState, useMemo } from "react";
+import { Range } from "react-range";
+import { useFieldWrapper } from "../FieldWrapper";
+import { processRangeFieldConfig } from "./utils";
+import Track from "./Track";
+import Thumb from "./Thumb";
+import Tick from "./Tick";
+
 import styles from "./RangeField.module.scss";
 import "@/scss/theme.scss";
 
-export interface RangeOption<Value> {
-  value: Value;
-  label?: ReactNode;
+export interface RangeOption<Value> extends FieldOption<Value> {
   position?: number;
 }
 
-function generateOptions<Value>(
-  min: number,
-  max: number,
-  step: number,
-  autoTickLabels: boolean
-): RangeOption<Value>[] {
-  const options = [];
-  for (let val = min; val <= max; val += step) {
-    options.push({
-      value: val,
-      label: autoTickLabels ? String(val) : undefined,
-      position: val,
-    });
-  }
-  return options;
-}
-
-function havePositions<Value>(options: RangeOption<Value>[]) {
-  return options.map((opt) => opt?.position).every(Boolean);
-}
-
-function getTickLabels<Value>(
-  options: RangeOption<Value>[],
-  showIntermediateTickLabels: boolean
-) {
-  return options.map((option, index) => {
-    if (!showIntermediateTickLabels) {
-      return index === 0 || index === options.length - 1
-        ? option.label
-        : undefined;
-    }
-    return option?.label;
-  });
-}
-
-export interface RangeFieldProps<Value>
+export interface RangeInputProps<Value>
   extends Omit<FieldProps<Value>, "value" | "onChange" | "name"> {
   /** The currently selected values */
   values: Value[];
@@ -81,8 +49,6 @@ export interface RangeFieldProps<Value>
 
   /** Whether the field is disabled */
   disabled?: boolean;
-
-  label?: string;
 
   /** Theme variant used to fill selected options */
   variant?: Variant;
@@ -158,18 +124,24 @@ export interface RangeFieldProps<Value>
  *   ]} />
  * ```
  */
-export default function RangeField<Value>({
+export function RangeInput<Value>({
+  // FieldWrapperChildProps
+  hasError,
+  id,
+  "aria-describedby": ariaDescribedBy,
+  "aria-invalid": ariaInvalid,
+
+  // Component specific props
   values = [],
-  options,
-  min,
-  max,
-  step,
+  options: initOpts,
+  min: initMin,
+  max: initMax,
+  step: initStep,
   onChange = () => {},
-  error,
   disabled,
   label,
   initialPosition,
-  tickLabels,
+  tickLabels: initTickLabels,
   variant = "primary",
   thumbSize,
   showThumbLabel = false,
@@ -179,38 +151,32 @@ export default function RangeField<Value>({
   showTickLabelsInside = false,
   showIntermediateTickLabels = false,
   flushTickLabels = true,
-}: RangeFieldProps<Value>) {
+}: RangeInputProps<Value>) {
   const [hasValue, setHasValue] = useState(values.length > 0);
-
   if (values.length > 1) {
     throw Error("A range field with multiple thumbs is not yet supported.");
   }
 
-  // Ensure we have both a valid options object and min, max and step defined.
-  if (
-    (!options || !options?.length) &&
-    (min === undefined || max === undefined || step === undefined)
-  ) {
-    throw Error("Either provide `options` or `min`, `max` and `step`");
-  }
-  if (options) {
-    // Add positions if the options don't have positions yet
-    if (!havePositions(options))
-      options.forEach((opt, idx) => (opt.position = idx));
-
-    // Infer the min and max position, and the stepsize
-    min = options[0].position!;
-    max = options[options.length - 1].position!;
-    step = step ?? (max - min) / (options.length - 1);
-  } else {
-    options = generateOptions(min!, max!, step!, autoTickLabels);
-  }
-
-  // Use tickLabels if specified, otherwise get the labels from option.label.
-  if (tickLabels && tickLabels.length !== options.length) {
-    console.warn("`tickLabels` should have the same length as `option`");
-  }
-  tickLabels = tickLabels ?? getTickLabels(options, showIntermediateTickLabels);
+  // Memoize the config so it's only computed when it changes
+  const { options, min, max, step, tickLabels } = useMemo(() => {
+    return processRangeFieldConfig(
+      initOpts,
+      initMin,
+      initMax,
+      initStep,
+      initTickLabels,
+      autoTickLabels,
+      showIntermediateTickLabels
+    );
+  }, [
+    initOpts,
+    initMin,
+    initMax,
+    initStep,
+    initTickLabels,
+    autoTickLabels,
+    showIntermediateTickLabels,
+  ]);
 
   // This callback first maps positions to values, and then calls onChange
   // with the values as argument.
@@ -238,107 +204,100 @@ export default function RangeField<Value>({
     if (!hasValue) handleChange([...positions]);
   };
 
-  if (showTickLabelsInside) {
-    flushTickLabels = false;
-  }
+  if (showTickLabelsInside) flushTickLabels = false;
 
-  return (
-    <div>
-      <div
-        className={classNames(
-          styles.rangeField,
-          hasValue && styles.hasValue,
-          error && styles.error,
-          disabled && styles.disabled,
-          showThumbLabel && styles.showThumbLabel,
-          showTicks && styles.showTicks,
-          showTickLabelsInside && styles.showTickLabelsInside,
-          flushTickLabels && styles.flushTickLabels
-        )}
-        style={{ "--thumb-size": thumbSize }}
-      >
-        <Range
-          label={label}
-          values={positions}
-          min={min}
-          max={max}
-          step={step}
-          onChange={handleChange}
-          disabled={disabled}
-          renderTrack={(args) => <Track {...args} />}
-          renderThumb={({ props: { key, ...rest }, ...args }) => (
-            <Thumb
-              key={key}
-              props={rest}
-              label={
-                showThumbLabel &&
-                options.filter((opt) => opt.value === values[args.index])[0]
-                  .label
-              }
-              className={classNames(!error && `fill-${variant}`)}
-              {...args}
-              onMouseDown={handleFirstInteraction}
-              onTouchStart={handleFirstInteraction}
-            />
-          )}
-          renderMark={({ props: { key, ...rest }, index }) =>
-            showTicks && (
-              <Tick
-                key={key}
-                props={rest}
-                label={showTickLabels && tickLabels[index]}
-                className={classNames(
-                  index === 0 && styles.first,
-                  index === options.length - 1 && styles.last,
-                  values.includes(options[index].value) && styles.active
-                )}
-                onMouseDown={handleFirstInteraction}
-                onTouchStart={handleFirstInteraction}
-              />
-            )
-          }
-        />
-      </div>
-      {error && <p className={styles.errorMessage}>{error}</p>}
-    </div>
-  );
-}
-
-function Track({ children, isDragged, disabled, props }) {
-  return (
-    <div className={classNames(styles.track)}>
-      <div className={classNames(styles.trackInner)} {...props}>
-        {children}
-      </div>
-    </div>
-  );
-}
-
-function Thumb({ isDragged, props, label, className, ...divProps }) {
   return (
     <div
       className={classNames(
-        styles.thumb,
-        isDragged & styles.dragging,
-        className
+        styles.rangeField,
+        hasValue && styles.hasValue,
+        hasError && styles.hasError,
+        disabled && styles.disabled,
+        showThumbLabel && styles.showThumbLabel,
+        showTicks && styles.showTicks,
+        showTickLabelsInside && styles.showTickLabelsInside,
+        flushTickLabels && styles.flushTickLabels
       )}
-      {...props}
-      {...divProps}
+      style={{ "--thumb-size": thumbSize }}
     >
-      {label && <div className={styles.thumbLabel}>{label}</div>}
+      <Range
+        label={label}
+        values={positions}
+        min={min}
+        max={max}
+        step={step}
+        onChange={handleChange}
+        disabled={disabled}
+        id={id}
+        renderTrack={(args) => <Track {...args} />}
+        renderThumb={({ props: { key, ...rest }, ...args }) => (
+          <Thumb
+            key={key}
+            props={rest}
+            label={
+              showThumbLabel &&
+              options.filter((opt) => opt.value === values[args.index])[0].label
+            }
+            className={classNames(!hasError && `fill-${variant}`)}
+            {...args}
+            onMouseDown={handleFirstInteraction}
+            onTouchStart={handleFirstInteraction}
+            aria-describedby={ariaDescribedBy}
+            aria-invalid={ariaInvalid}
+          />
+        )}
+        renderMark={({ props: { key, ...rest }, index }) =>
+          showTicks && (
+            <Tick
+              key={key}
+              props={rest}
+              label={showTickLabels && tickLabels[index]}
+              className={classNames(
+                index === 0 && styles.first,
+                index === options.length - 1 && styles.last,
+                values.includes(options[index].value) && styles.active
+              )}
+              onMouseDown={handleFirstInteraction}
+              onTouchStart={handleFirstInteraction}
+            />
+          )
+        }
+      />
     </div>
   );
 }
 
-function Tick({ props, label, className, ...divProps }) {
+interface RangeFieldProps<Value>
+  extends BaseFieldProps,
+    RangeInputProps<Value> {}
+
+export default function RangeField<Value>({
+  // Base field props
+  error,
+  showError,
+  label,
+  disabled,
+  required,
+  fieldWrapperProps = {},
+
+  // Range props
+  ...rangeProps
+}: RangeFieldProps<Value>) {
+  // Field wrapper and properties for input element
+  const { FieldWrapper, fieldProps } = useFieldWrapper({ error, showError });
   return (
-    <div
-      className={classNames(styles.tick, className)}
-      {...props}
-      {...divProps}
+    <FieldWrapper
+      label={label}
+      disabled={disabled}
+      required={required}
+      {...fieldWrapperProps}
     >
-      <div className={styles.tickMark} />
-      <div className={styles.tickLabel}>{label}</div>
-    </div>
+      <RangeInput
+        label={label}
+        disabled={disabled}
+        {...fieldProps}
+        {...rangeProps}
+      />
+    </FieldWrapper>
   );
 }

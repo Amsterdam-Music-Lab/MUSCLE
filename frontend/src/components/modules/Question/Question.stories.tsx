@@ -21,6 +21,18 @@ function QuestionControlled({ question: initQuestion, ...args }) {
   return <Question question={question} onChange={handleChange} {...args} />;
 }
 
+function description(description) {
+  return {
+    parameters: {
+      docs: {
+        description: {
+          story: description,
+        },
+      },
+    },
+  };
+}
+
 const meta: Meta<typeof Question> = {
   title: "Modules/Question",
   component: Question,
@@ -28,13 +40,42 @@ const meta: Meta<typeof Question> = {
 
 export default meta;
 
+const fruits = {
+  apple: "Apple",
+  banana: "Banana",
+  cherry: "Cherry",
+  date: "Date",
+  elderberry: "Elderberry",
+  fig: "Fig",
+  grape: "Grape",
+  honeydew: "Honeydew",
+  indianFig: "Indian Fig",
+  jackfruit: "Jackfruit",
+  kiwi: "Kiwi",
+  lemon: "Lemon",
+  mango: "Mango",
+  nectarine: "Nectarine",
+  orange: "Orange",
+  papaya: "Papaya",
+  quince: "Quince",
+  raspberry: "Raspberry",
+  strawberry: "Strawberry",
+  tangerine: "Tangerine",
+  "ugli fruit": "Ugli Fruit",
+  "vanilla bean": "Vanilla Bean",
+  watermelon: "Watermelon",
+  xigua: "Xigua",
+  yellowPassionFruit: "Yellow Passion Fruit",
+  zucchini: "Zucchini",
+};
+
 const defaultQuestion: Partial<TQuestion> = {
   question: "What is your favourite fruit?",
   explainer: "Please describe or select your favourite fruit in some way.",
   choices: { apple: "Apple", banana: "Banana", cherry: "Cherry" },
 };
 
-export const Default: Story = {
+export const String: Story = {
   render: QuestionControlled,
   args: {
     question: {
@@ -45,25 +86,18 @@ export const Default: Story = {
 };
 
 export const Disabled: Story = {
+  ...description("Same example as above, but now disabled."),
   render: QuestionControlled,
   args: {
-    ...Default.args,
+    ...String.args,
     disabled: true,
   },
 };
 
-export const WithEmphasizeTitle: Story = {
-  render: QuestionControlled,
-  args: {
-    question: {
-      ...defaultQuestion,
-      view: "STRING",
-      style: { "emphasize-title": true },
-    },
-  },
-};
-
 export const Checkboxes: Story = {
+  ...description(
+    "See [Design System → Inputs → Option Field](?path=/docs/design-system-inputs-option-field--docs) for the input field."
+  ),
   render: QuestionControlled,
   args: {
     question: {
@@ -74,6 +108,9 @@ export const Checkboxes: Story = {
 };
 
 export const Radios: Story = {
+  ...description(
+    "See [Design System → Inputs → Option Field](?path=/story/design-system-inputs-option-field) for the input field."
+  ),
   render: QuestionControlled,
   args: {
     question: {
@@ -83,45 +120,42 @@ export const Radios: Story = {
   },
 };
 
-// export const Range = {
-//   args: {
-//     question: {
-//       question: "This is the question",
-//       explainer: "This is the explainer",
-//       view: "RANGE",
-//       value: "",
-//       choices: ["Choice 1", "Choice 2", "Choice 3"],
-//       min_value: 1,
-//       max_value: 42,
-//       style: {},
-//     },
-//     onChange: () => {},
-//     id: 0,
-//     active: true,
-//   },
-// };
-
 export const Range: Story = {
+  ...description(
+    "Note that the question views `RANGE` and `TEXT_RANGE` are aliases and result in the exact same question. "
+  ),
   render: QuestionControlled,
   args: {
     question: {
       ...defaultQuestion,
       view: "RANGE",
     },
-    fieldProps: {
-      showIntermediateTickLabels: true,
-    },
+    showIntermediateTickLabels: true,
   },
 };
 
-// Currently identical to RANGE
-export const TextRange = {
+export const Likert: Story = {
   render: QuestionControlled,
   args: {
     question: {
-      ...defaultQuestion,
-      view: "TEXT_RANGE",
+      question:
+        "How do you think about this statement: 'tomatoes are a kind of fruit.'?",
+      choices: {
+        strongly_disagree: "strongly disagree",
+        disagree: "disagree",
+        neutral: "neither agree nor disagree",
+        agree: "agree",
+        strongly_agree: "strongly agree",
+      },
+      view: "RANGE",
     },
+    tickLabels: [
+      "strongly disagree",
+      undefined,
+      "neutral",
+      undefined,
+      "strongly agree",
+    ],
   },
 };
 
@@ -129,32 +163,46 @@ export const IconRange = {
   render: QuestionControlled,
   args: {
     question: {
-      ...defaultQuestion,
-      choices: { globe: "fa-globe", pencil: "fa-pencil", bike: "fa-bicycle" },
+      question: "What is your favourit means of transport?",
+      choices: { bike: "fa-bicycle", car: "fa-car", plane: "fa-plane" },
       view: "ICON_RANGE",
     },
   },
 };
 
-// export const IconRange = {
-//   args: {
-//     question: {
-//       question: "This is the question",
-//       explainer: "This is the explainer",
-//       icon: "🌎",
-//       view: "ICON_RANGE",
-//       value: "",
-//       choices: ["fa-globe", "fa-pencil", "fa-bicycle"],
-//       min_value: 1,
-//       max_value: 42,
-//       style: {},
-//     },
-//     onChange: () => {},
-//     id: 0,
-//     active: true,
-//   },
-// };
+// Identical to Autocomplete!
+export const Dropdown = {
+  ...description(
+    "Note that the question views `DROPDOWN` and `AUTOCOMPLETE` are aliases and result in the exact same question. "
+  ),
+  args: {
+    question: {
+      ...defaultQuestion,
+      choices: fruits,
+      view: "DROPDOWN",
+    },
+  },
+};
 
+export const EmphasizeTitle: Story = {
+  args: {
+    question: {
+      ...defaultQuestion,
+      view: "STRING",
+      style: { "emphasize-title": true },
+    },
+  },
+};
+
+export const ExpectedResponse = {
+  args: {
+    question: {
+      ...defaultQuestion,
+      expected_response: "banana",
+      view: "STRING",
+    },
+  },
+};
 // export const StringNumberRange = {
 //   args: {
 //     question: {
@@ -182,59 +230,4 @@ export const IconRange = {
 //     onChange: () => {},
 //     value: "",
 //   },
-// };
-
-// export const Dropdown = {
-//   args: {
-//     question: {
-//       question: "This is the question",
-//       explainer: "This is the explainer",
-//       view: "DROPDOWN",
-//       value: "",
-//       choices: ["Choice 1", "Choice 2", "Choice 3"],
-//       style: {},
-//     },
-//     onChange: () => {},
-//     id: 0,
-//     active: true,
-//   },
-// };
-
-// export const Autocomplete = {
-//   args: {
-//     question: {
-//       question: "This is the question",
-//       explainer: "This is the explainer",
-//       view: "AUTOCOMPLETE",
-//       value: "",
-//       choices: [
-//         "Brazil",
-//         "China",
-//         "Germany",
-//         "Japan",
-//         "Netherlands",
-//         "Turkey",
-//         "United States",
-//       ],
-//       style: {},
-//     },
-//     onChange: () => {},
-//     id: 0,
-//     active: true,
-//   },
-//   decorators: [
-//     (Story) => (
-//       <div
-//         style={{
-//           width: "100%",
-//           height: "100%",
-//           backgroundColor: "#ddd",
-//           padding: "1rem",
-//           position: "relative",
-//         }}
-//       >
-//         <Story />
-//       </div>
-//     ),
-//   ],
 // };

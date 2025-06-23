@@ -53,16 +53,18 @@ input:focus-visible + .focusRing {
     border-color: transparent;
   }
 
-  .option:not(.checked) & {
+  .option:not(.checked):not(.hasError) & {
     @extend .input-element;
   }
 
-  .option:not(.checked):hover & {
+  .option:not(.checked):not(.hasError):hover & {
     @extend .input-element-hover;
   }
 
   .hasError & {
     border-color: var(--danger-solid) !important;
+    @extend .input-element;
+    // @extend .input-element-error;
   }
 
   .hasError.checked & {

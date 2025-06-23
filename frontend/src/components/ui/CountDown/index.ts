@@ -6,4 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export { default as TextInput } from "./TextInput";
+export type { CountdownProps } from "./CountDown";
+export { default as Countdown } from "./CountDown";

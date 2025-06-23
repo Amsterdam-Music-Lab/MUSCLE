@@ -9,7 +9,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
 import RangeField from "./RangeField";
 import SliderField from "./SliderField";
-import IconSliderField from "./IconSliderField";
 
 type Story = StoryObj<typeof RangeField>;
 
@@ -48,6 +47,7 @@ export default meta;
 export const Default: Story = {
   render: RangeFieldControlled,
   args: {
+    label: "Please select a number",
     min: 0,
     max: 100,
     step: 10,
@@ -62,6 +62,7 @@ export const Default: Story = {
 export const Likert: Story = {
   render: RangeFieldControlled,
   args: {
+    label: "Apple is a fruit.",
     value: ["agree"],
     options: [
       { value: "strongly_disagree", label: "strongly disagree" },
@@ -95,6 +96,14 @@ export const LabelsInside: Story = {
     ...Default.args,
     showTickLabelsInside: true,
     thumbSize: "2.5em",
+  },
+};
+
+export const Required: Story = {
+  render: RangeFieldControlled,
+  args: {
+    ...Default.args,
+    required: true,
   },
 };
 

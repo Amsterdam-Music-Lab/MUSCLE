@@ -21,7 +21,7 @@ interface OptionProps<Value>
   checked?: boolean;
   variant?: Variant;
   type: "radio" | "checkbox";
-  error?: string;
+  hasError?: boolean;
 }
 
 function Option<Value>({
@@ -34,7 +34,7 @@ function Option<Value>({
   variant = "primary",
   disabled = false,
   className,
-  error,
+  hasError,
 }: OptionProps<Value>) {
   return (
     <label
@@ -42,7 +42,7 @@ function Option<Value>({
         styles.option,
         checked && styles.checked,
         disabled && styles.disabled,
-        error && styles.hasError,
+        hasError && styles.hasError,
         className
       )}
     >

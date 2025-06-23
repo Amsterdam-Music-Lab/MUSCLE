@@ -27,9 +27,9 @@
     transition: unset;
   }
 
-  &.error {
+  &.hasError {
     .track {
-      border-color: var(--danger-solid);
+      @extend .input-element-error;
     }
     .thumb {
       background-color: var(--danger-solid) !important;
@@ -60,10 +60,6 @@
     opacity: 0.5;
     pointer-events: none;
   }
-}
-
-.errorMessage {
-  @extend .input-error-message;
 }
 
 .track {

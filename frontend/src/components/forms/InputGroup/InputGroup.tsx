@@ -23,6 +23,12 @@ export interface InputGroupProps extends HTMLAttributes<HTMLDivElement> {
   stretch?: boolean;
 }
 
+/**
+ * Input group component.
+ *
+ * Note that this component uses the outdated `Input` component, and should
+ * either be updated or deprecated.
+ */
 export default function InputGroup({
   children,
   className,

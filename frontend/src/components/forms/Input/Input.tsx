@@ -12,6 +12,8 @@ import { useState, forwardRef } from "react";
 import classNames from "classnames";
 import styles from "./Input.module.scss";
 
+// DEPRECATED!
+
 export interface InputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "value"> {
   value?: string;

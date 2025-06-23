@@ -1,4 +1,6 @@
 @import "@/scss/variables";
+@import "@/scss/utils.scss";
+@import "@/scss/theme.scss";
 
 .questionContainer {
   display: flex;
@@ -12,16 +14,23 @@
   width: 100%;
 }
 
-.questionText {
-  width: 100%;
+.explainer {
+  @extend .text-muted;
   margin-bottom: 1em;
-
-  &.emphasize-title {
-    text-align: left;
-  }
 }
 
-// Why is this here at all?
+.emphasizeTitle {
+  @extend .text-fill-primary;
+  font-weight: bold;
+}
+
 .expectedResponse {
-  // display: none;
+  @extend .small, .rounded-sm;
+  color: var(--info-solid);
+  padding: 0.25em 1em;
+  margin-top: 1em;
+  background: color-mix(in srgb, var(--info-solid) 5%, transparent);
+  strong {
+    font-weight: 600;
+  }
 }

@@ -129,9 +129,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
     <button
       ref={ref}
       type={type}
-      // tabIndex={0}
       onClick={clickOnceGuard}
-      onKeyDown={clickOnceGuard}
       className={getButtonClasses(
         {
           variant,

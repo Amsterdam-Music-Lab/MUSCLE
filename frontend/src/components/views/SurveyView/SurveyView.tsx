@@ -77,7 +77,7 @@ export default function SurveyView({
   return (
     <form onSubmit={handleSubmit}>
       <NarrowLayout>
-        <Card>
+        <Card style={{ overflow: "unset" }}>
           {questions.map((question, index) => {
             return (
               <Card.Section key={index} title={question.question} titleTag="h2">

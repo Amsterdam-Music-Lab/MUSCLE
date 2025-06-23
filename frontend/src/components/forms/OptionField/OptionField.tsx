@@ -8,8 +8,10 @@
 
 import type { HTMLAttributes, ReactNode } from "react";
 import type { FieldOption, FieldProps } from "../types";
+import type { Variant } from "@/types/themeProvider";
+
 import classNames from "classnames";
-import { Variant } from "@/types/themeProvider";
+import { useFieldWrapper } from "../FieldWrapper";
 import Option from "./Option";
 import styles from "./OptionField.module.scss";
 import "@/scss/theme.scss";
@@ -39,10 +41,12 @@ export interface OptionFieldProps<Value>
   options: FieldOption<Value>[];
 
   /** Optional legend shown above the option group. */
-  legend?: ReactNode;
+  label?: ReactNode;
 
   /** Theme variant used to fill selected options */
   variant?: Variant;
+
+  tabIndex?: number;
 }
 
 /**
@@ -89,20 +93,33 @@ export interface OptionFieldProps<Value>
  * interactions can be handled by the browser (instead of requiring JS).
  */
 export default function OptionField<Value>({
+  // Base field props
+  error,
+  showError,
+  label,
+  disabled,
+  required,
+  fieldWrapperProps = {},
+
+  // Field specific props
   type,
   values,
   name,
   options,
-  legend,
-  disabled,
   onChange = () => {},
-  error,
-  showError = true,
   variant = "primary",
+  tabIndex,
   className,
   ...fieldsetProps
 }: OptionFieldProps<Value>) {
-  error = showError ? error : undefined;
+  // Field wrapper and properties for input element
+  const {
+    FieldWrapper,
+    fieldProps: { hasError, ...fieldProps },
+  } = useFieldWrapper({
+    error,
+    showError,
+  });
 
   // Handle change: add/remove the option from the values, depending on
   // whether it is checked
@@ -115,40 +132,39 @@ export default function OptionField<Value>({
   };
 
   return (
-    <fieldset
-      className={classNames(
-        styles.optionGroup,
-        error && styles.hasError,
-        className
-      )}
-      aria-describedby={error ? `${name}-error` : undefined}
-      aria-invalid={!!error}
-      {...fieldsetProps}
+    <FieldWrapper
+      disabled={disabled}
+      required={required}
+      {...fieldWrapperProps}
     >
-      {legend && <legend>{legend}</legend>}
-      {options.map((option) => {
-        return (
-          <Option
-            key={option.value}
-            type={type}
-            name={name}
-            value={option.value}
-            label={option.label}
-            checked={values.includes(option.value)}
-            disabled={disabled || option.disabled}
-            onChange={(e) => handleChange(option.value, e.target.checked)}
-            error={error}
-          />
-        );
-      })}
-      {error && (
-        <div
-          id={`${name}-error`}
-          className={classNames(styles.errorMessage, "input-error-message")}
-        >
-          {error}
-        </div>
-      )}
-    </fieldset>
+      <fieldset
+        className={classNames(
+          styles.optionGroup,
+          hasError && styles.hasError,
+          className
+        )}
+        {...fieldProps}
+        {...fieldsetProps}
+      >
+        {label && <legend>{label}</legend>}
+        {options.map((option, index) => {
+          return (
+            <Option
+              key={option.value}
+              type={type}
+              name={name}
+              value={option.value}
+              label={option.label}
+              tabIndex={index === 0 ? tabIndex : undefined}
+              checked={values.includes(option.value)}
+              disabled={disabled || option.disabled}
+              onChange={(e) => handleChange(option.value, e.target.checked)}
+              variant={variant}
+              hasError={hasError}
+            />
+          );
+        })}
+      </fieldset>
+    </FieldWrapper>
   );
 }

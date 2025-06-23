@@ -5,14 +5,6 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-@import "@/scss/forms";
 
-$defaultSpacer: 1rem;
-
-.optionGroup {
-  --option-size: 1.75rem;
-  --option-padding: 0.5rem;
-
-  display: flex;
-  flex-direction: column;
-}
+export type { TypedFieldProps } from "./TypedField";
+export { default as TypedField } from "./TypedField";

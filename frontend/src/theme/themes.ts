@@ -44,6 +44,9 @@ export const mcgLight: Theme = {
   danger: {
     solid: red,
   },
+  info: {
+    solid: indigo,
+  },
   fullwidth: true,
   showAppBar: false,
   showGradientCircles: true,
