@@ -26,6 +26,7 @@ const VIEW_NAMES = {
   LOADING: "loading",
   INFO: "info",
   ERROR: "error",
+  REDIRECT: "redirect",
 };
 
 /**
@@ -185,6 +186,10 @@ export default function Block() {
 
   // Whether the action has a valid view
   const isValidAction = currentAction?.view in VIEW_NAMES;
+
+  // Handle redirect actions
+  if (currentAction?.view == "REDIRECT" && currentAction.url)
+    navigate(currentAction.url);
 
   return (
     <ViewTransition transitionKey={currentAction?.view}>
