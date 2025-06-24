@@ -1,6 +1,8 @@
 from os.path import split
 import random
 
+
+from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 
 from result.models import Result
@@ -9,6 +11,7 @@ from session.models import Session
 
 from experiment.actions import Explainer, Final, Trial
 from experiment.actions.playback import MatchingPairs
+from experiment.actions.types import FeedbackInfo
 from .matching_pairs import MatchingPairsGame
 
 POSSIBLE_CONDITIONS = [
@@ -47,6 +50,23 @@ class MatchingPairs2025(MatchingPairsGame):
             "You thought you found a matching pair, but you didn't. This is considered a misremembered pair. You lose 10 points."
         ),
     }
+
+    def feedback_info(self) -> FeedbackInfo:
+        feedback_body = render_to_string(
+            "feedback/user_feedback.html", {"email": self.contact_email}
+        )
+        return {
+            # Header above the feedback form
+            "header": _("Do you have any remarks or questions?"),
+            # Button text
+            "button": _("Submit"),
+            # Body of the feedback form, can be HTML. Shown under the button
+            "contact_body": feedback_body,
+            # Thank you message after submitting feedback
+            "thank_you": _("We appreciate your feedback!"),
+            # Show a floating button on the right side of the screen to open the feedback form
+            "show_float_button": True,
+        }
 
     def next_round(self, session: Session):
         if session.get_rounds_passed() < 1:
