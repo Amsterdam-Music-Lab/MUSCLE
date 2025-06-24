@@ -9,10 +9,10 @@
 import "@testing-library/jest-dom";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
-import Overlay from "./Overlay";
-import styles from "./Overlay.module.scss";
+import Modal from "./Modal";
+import styles from "./Modal.module.scss";
 
-describe("Overlay Component Tests", () => {
+describe("Modal Component Tests", () => {
   const mockOnClose = vi.fn();
   const defaultProps = {
     open: true,
@@ -26,23 +26,23 @@ describe("Overlay Component Tests", () => {
   });
 
   it("should render without crashing", () => {
-    render(<Overlay {...defaultProps} />);
+    render(<Modal {...defaultProps} />);
     expect(screen.getByText("Test Content")).toBeTruthy();
   });
 
   it("should render with custom title", () => {
-    render(<Overlay {...defaultProps} title="Custom Title" />);
+    render(<Modal {...defaultProps} title="Custom Title" />);
     expect(screen.getByText("Custom Title")).toBeTruthy();
   });
 
   it("should call onClose when clicking the close button", () => {
-    render(<Overlay {...defaultProps} />);
+    render(<Modal {...defaultProps} />);
     fireEvent.click(screen.getByLabelText("Close"));
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
   it("should call onClose when clicking the 'Continue' button", () => {
-    render(<Overlay {...defaultProps} />);
+    render(<Modal {...defaultProps} />);
     waitFor(() => {
       fireEvent.click(screen.getByTitle("Continue"));
       expect(mockOnClose).toHaveBeenCalledTimes(1);
@@ -50,26 +50,26 @@ describe("Overlay Component Tests", () => {
   });
 
   it("should call onClose when clicking the overlay background", () => {
-    render(<Overlay {...defaultProps} />);
+    render(<Modal {...defaultProps} />);
     fireEvent.click(screen.getByRole("presentation"));
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
   it("should not call onClose when clicking the content area", () => {
-    render(<Overlay {...defaultProps} />);
+    render(<Modal {...defaultProps} />);
     fireEvent.click(screen.getByText("Test Content"));
     expect(mockOnClose).not.toHaveBeenCalled();
   });
 
   it("should have correct visibility class when isOpen is true", () => {
-    render(<Overlay {...defaultProps} />);
+    render(<Modal {...defaultProps} />);
     expect(
       screen.getByRole("presentation").classList.contains(styles.active)
     ).toBe(true);
   });
 
   it("should have correct visibility class when open is false", () => {
-    render(<Overlay {...defaultProps} open={false} />);
+    render(<Modal {...defaultProps} open={false} />);
     waitFor(() => {
       expect(
         screen.getByRole("presentation").classList.contains(styles.active)
@@ -78,14 +78,14 @@ describe("Overlay Component Tests", () => {
   });
 
   it("should have correct aria-hidden attribute based on isOpen", () => {
-    const { rerender } = render(<Overlay {...defaultProps} />);
+    const { rerender } = render(<Modal {...defaultProps} />);
     waitFor(() => {
       expect(screen.getByRole("presentation").getAttribute("aria-hidden")).toBe(
         "false"
       );
     });
 
-    rerender(<Overlay {...defaultProps} isOpen={false} />);
+    rerender(<Modal {...defaultProps} isOpen={false} />);
     waitFor(() => {
       expect(screen.getByRole("presentation").getAttribute("aria-hidden")).toBe(
         "true"
@@ -94,25 +94,25 @@ describe("Overlay Component Tests", () => {
   });
 
   it("should call onClose when pressing Escape key", () => {
-    render(<Overlay {...defaultProps} />);
+    render(<Modal {...defaultProps} />);
     fireEvent.keyDown(document, { key: "Escape" });
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
   it("should not call onClose when pressing other keys", () => {
-    render(<Overlay {...defaultProps} />);
+    render(<Modal {...defaultProps} />);
     fireEvent.keyDown(document, { key: "Enter" });
     expect(mockOnClose).not.toHaveBeenCalled();
   });
 
   it("should not listen for Escape key when overlay is closed", () => {
-    render(<Overlay {...defaultProps} open={false} />);
+    render(<Modal {...defaultProps} open={false} />);
     fireEvent.keyDown(document, { key: "Escape" });
     expect(mockOnClose).not.toHaveBeenCalled();
   });
 
   it("should cleanup event listener on unmount", () => {
-    const { unmount } = render(<Overlay {...defaultProps} />);
+    const { unmount } = render(<Modal {...defaultProps} />);
     unmount();
     fireEvent.keyDown(document, { key: "Escape" });
     expect(mockOnClose).not.toHaveBeenCalled();
@@ -125,7 +125,7 @@ describe("Overlay Component Tests", () => {
         <p>Custom paragraph</p>
       </div>
     );
-    render(<Overlay {...defaultProps}>{customContent}</Overlay>);
+    render(<Modal {...defaultProps}>{customContent}</Modal>);
     expect(screen.getByTestId("custom-content")).toBeTruthy();
     expect(screen.getByText("Custom Title")).toBeTruthy();
     expect(screen.getByText("Custom paragraph")).toBeTruthy();
@@ -142,12 +142,12 @@ describe("Overlay Component Tests", () => {
           onClick();
         }}
       >
-        Open Overlay
+        Open Modal
       </button>
     );
 
     render(
-      <Overlay open={false} Handle={CustomHandle} closeButtonText="Close" />
+      <Modal open={false} Handle={CustomHandle} closeButtonText="Close" />
     );
 
     // The custom handle should be rendered

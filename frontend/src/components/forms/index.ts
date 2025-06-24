@@ -10,6 +10,7 @@ export * from "./OptionField";
 export * from "./RangeField";
 export * from "./SelectField";
 export * from "./TypedField";
+export * from "./TextAreaField";
 
 // To be deprecated/updated
 export * from "./Input";

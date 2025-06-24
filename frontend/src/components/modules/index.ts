@@ -7,7 +7,7 @@
  */
 
 export * from "./Question";
-export * from "./UserFeedbackForm";
+export * from "./FeedbackForm";
 export * from "./ParticipantLink";
 export * from "./Timeline";
 export * from "./ScoreCounter";

@@ -7,16 +7,16 @@
  */
 
 import type { Meta, StoryObj } from "@storybook/react";
-import Overlay from "./Overlay";
+import Modal from "./Modal";
 
-const meta: Meta<typeof Overlay> = {
-  title: "Design system/Layout/Overlay",
-  component: Overlay,
+const meta: Meta<typeof Modal> = {
+  title: "Design system/Layout/Modal",
+  component: Modal,
   tags: ["autodocs"],
 };
 
 export default meta;
-type Story = StoryObj<typeof Overlay>;
+type Story = StoryObj<typeof Modal>;
 
 export const Default: Story = {
   args: {

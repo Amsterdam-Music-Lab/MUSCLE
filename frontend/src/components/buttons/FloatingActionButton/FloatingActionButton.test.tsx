@@ -14,8 +14,8 @@ import styles from "./FloatingActionButton.module.scss";
 
 vi.mock("@/components/ui", () => ({
   __esModule: true,
-  Overlay: ({ Handle, children, ...props }: any) => (
-    <div data-testid="overlay" {...props}>
+  Modal: ({ Handle, children, ...props }: any) => (
+    <div data-testid="modal" {...props}>
       {Handle ? <Handle {...props} /> : null}
       {children}
     </div>
@@ -25,12 +25,14 @@ vi.mock("@/components/ui", () => ({
 describe("FloatingActionButton", () => {
   it("renders with the default icon and position", () => {
     const { getByTestId } = render(
-      <FloatingActionButton>Test Content</FloatingActionButton>
+      <FloatingActionButton icon="icon-class">
+        Test Content
+      </FloatingActionButton>
     );
     const button = getByTestId("floating-action-button");
     const icon = getByTestId("floating-action-icon");
     expect(button).toBeInTheDocument();
-    expect(icon.classList.contains("fa-comment")).toBe(true);
+    expect(icon.classList.contains("icon-class")).toBe(true);
     expect(button.classList.contains(styles.right)).toBe(true);
     expect(button.classList.contains(styles.bottom)).toBe(true);
   });
@@ -59,7 +61,7 @@ describe("FloatingActionButton", () => {
     expect(button.classList.contains("fill-secondary")).toBe(true);
   });
 
-  it("renders children inside the overlay", () => {
+  it("renders children inside the modal", () => {
     const { getByTestId } = render(
       <FloatingActionButton>
         <div data-testid="test-children">Content</div>

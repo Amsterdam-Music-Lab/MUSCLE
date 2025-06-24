@@ -10,7 +10,7 @@ import type { ComponentType } from "react";
 import { Fragment } from "react";
 import { NarrowLayout, ViewTransition } from "@/components/layout";
 import { FloatingActionButton } from "@/components/buttons";
-import { UserFeedbackForm } from "@/components/modules";
+import { FeedbackForm } from "@/components/modules";
 
 // Simple views
 import {
@@ -41,6 +41,8 @@ import Action from "@/types/Action";
 import Block from "@/types/Block";
 import Participant from "@/types/Participant";
 import Session from "@/types/Session";
+import { RenderHtml } from "@/components/utils";
+import { useSubmitFeedback } from "@/components/modules";
 
 export type ViewDependency = "block" | "action" | "participant" | "session";
 
@@ -135,18 +137,29 @@ export default function View({ name, ...viewProps }: ViewProps) {
 
   const Wrapper = ViewComponent.usesOwnLayout ? Fragment : NarrowLayout;
 
+  const onSubmitFeedback = useSubmitFeedback(block?.slug, participant);
+
   return (
     <ViewTransition transitionKey={name}>
       <Wrapper>
         <ViewComponent {...viewProps} />
 
         {block && block?.feedback_info?.show_float_button && (
-          <FloatingActionButton>
-            <UserFeedbackForm
-              blockSlug={block.slug}
-              participant={participant}
-              feedbackInfo={block.feedback_info}
-              inline={false}
+          <FloatingActionButton
+            icon="fa-comment"
+            title="Your feedback"
+            showFooter={false}
+          >
+            <FeedbackForm
+              onSubmit={onSubmitFeedback}
+              thanks={block?.feedback_info.thank_you}
+              header={block?.feedback_info?.header}
+              footer={
+                <RenderHtml
+                  html={block?.feedback_info?.contact_body}
+                  className="text-muted"
+                />
+              }
             />
           </FloatingActionButton>
         )}

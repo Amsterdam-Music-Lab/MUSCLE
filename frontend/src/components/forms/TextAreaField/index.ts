@@ -6,5 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export type { OverlayProps } from "./Overlay";
-export { default as Overlay } from "./Overlay";
+export type { TextAreaFieldProps } from "./TextAreaField";
+export { default as TextAreaField } from "./TextAreaField";

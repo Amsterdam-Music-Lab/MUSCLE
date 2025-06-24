@@ -7,10 +7,10 @@
  */
 import type { ButtonHTMLAttributes } from "react";
 import type { Variant } from "@/types/themeProvider";
-import type { OverlayProps } from "@/components/ui";
+import type { ModalProps } from "@/components/ui";
 
 import classNames from "classnames";
-import { Overlay } from "@/components/ui";
+import { Modal } from "@/components/ui";
 import styles from "./FloatingActionButton.module.scss";
 
 type Position =
@@ -53,7 +53,7 @@ interface FloatingActionHandleBaseProps {
 }
 
 export interface FloatingActionButtonProps
-  extends OverlayProps,
+  extends ModalProps,
     FloatingActionHandleBaseProps {}
 
 /**
@@ -66,7 +66,7 @@ export default function FloatingActionButton({
   variant,
   offset,
   fontSize,
-  ...overlayProps
+  ...modalProps
 }: FloatingActionButtonProps) {
   const Handle = (props) => (
     <FloatingActionHandle
@@ -79,7 +79,7 @@ export default function FloatingActionButton({
       {...props}
     />
   );
-  return <Overlay Handle={Handle} {...overlayProps} />;
+  return <Modal Handle={Handle} {...modalProps} />;
 }
 
 interface FloatingActionHandleProps
@@ -88,7 +88,7 @@ interface FloatingActionHandleProps
 
 function FloatingActionHandle({
   position = "bottom-right",
-  icon = "fa-comment",
+  icon,
   flush = false,
   variant = "primary",
   offset = 1,

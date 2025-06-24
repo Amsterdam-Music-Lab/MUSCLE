@@ -19,9 +19,12 @@
   background-color: #eee;
 }
 
-.text-input {
-  @extend .input-element, .rounded-sm;
+.input-element-padding {
   padding: 0.5em 1em;
+}
+
+.text-input {
+  @extend .input-element, .rounded-sm, .input-element-padding;
 
   &:focus {
     border-color: #333;

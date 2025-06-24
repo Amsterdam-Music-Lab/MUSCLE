@@ -7,9 +7,9 @@
  */
 
 import type { Meta, StoryObj } from "@storybook/react";
-import { UserFeedbackForm } from "@/components/modules";
+import type { FeedbackFormProps } from "@/components/modules";
+import { FeedbackForm } from "@/components/modules";
 import FloatingActionButton from "./FloatingActionButton";
-import { UserFeedbackFormProps } from "@/components/modules/UserFeedbackForm/UserFeedbackForm";
 
 type Story = StoryObj<typeof FloatingActionButton>;
 
@@ -103,18 +103,11 @@ export const VariantSecondary: Story = {
   },
 };
 
-const userFeedbackProps: UserFeedbackFormProps = {
-  blockSlug: "test",
-  participant: "test",
-  feedbackInfo: {
-    header: "Feedback",
-    button: "Submit",
-    thank_you: "Thank you for your feedback!",
-    contact_body:
-      '<p>Please contact us at <a href="mailto:info@example.com">info@example.com</a> if you have any questions.</p>',
-    show_float_button: false, // ignored?
-  },
-  inline: false,
+const userFeedbackProps: FeedbackFormProps = {
+  header: "Feedback",
+  thanks: "Thank you for your feedback!",
+  footer:
+    '<p>Please contact us at <a href="mailto:info@example.com">info@example.com</a> if you have any questions.</p>',
 };
 
 export const Feedback: Story = {
@@ -122,7 +115,7 @@ export const Feedback: Story = {
     ...Default.args,
     title: "Your Feedback",
     wrapInCardSection: false,
-    children: <UserFeedbackForm wrapInCard={false} {...userFeedbackProps} />,
+    children: <FeedbackForm {...userFeedbackProps} />,
   },
 };
 

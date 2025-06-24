@@ -6,9 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export * from "./BarPlot";
-export * from "./Card";
-export * from "./Circle";
-export * from "./CountDown";
-export * from "./Modal";
-export * from "./ProgressBar";
+export type { ModalProps } from "./Modal";
+export { default as Modal } from "./Modal";

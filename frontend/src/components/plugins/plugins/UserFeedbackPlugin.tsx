@@ -6,10 +6,10 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 import type { PluginMeta, PluginSpec } from "@/types/plugin";
-import type { UserFeedbackFormProps } from "@/components/modules/UserFeedbackForm/UserFeedbackForm";
-import UserFeedbackForm from "@/components/modules/UserFeedbackForm/UserFeedbackForm";
+import type { FeedbackFormProps } from "@/components/modules";
+import { FeedbackForm } from "@/components/modules";
 
-export interface UserFeedbackPluginArgs extends UserFeedbackFormProps {}
+export interface UserFeedbackPluginArgs extends FeedbackFormProps {}
 
 export interface UserFeedbackPluginMeta
   extends PluginMeta<UserFeedbackPluginArgs> {
@@ -23,7 +23,7 @@ export interface UserFeedbackPluginSpec
 
 export const userFeedbackPlugin: UserFeedbackPluginMeta = {
   name: "userFeedback",
-  component: UserFeedbackForm,
+  component: FeedbackForm,
   description: "Displays a user feedback form",
   defaultArgs: {},
 };

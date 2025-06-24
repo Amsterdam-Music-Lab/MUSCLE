@@ -9,15 +9,16 @@
 @import "@/scss/utils";
 
 .textarea {
-  width: 100%;
-  padding: var(--spacer);
-  border: none;
-  outline: none;
   @extend .bg-inset-sm, .sharp-border;
 }
 
-.vertical {
-  .form {
-    display: block;
-  }
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.moreFeedbackButton {
+  display: block;
+  margin-top: 2em;
 }

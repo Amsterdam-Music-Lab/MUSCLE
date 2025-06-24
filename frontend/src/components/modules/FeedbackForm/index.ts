@@ -6,4 +6,7 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export { default as UserFeedbackForm } from "./UserFeedbackForm";
+export { useSubmitFeedback } from "./useSubmitFeedback";
+
+export type { FeedbackFormProps } from "./FeedbackForm";
+export { default as FeedbackForm } from "./FeedbackForm";

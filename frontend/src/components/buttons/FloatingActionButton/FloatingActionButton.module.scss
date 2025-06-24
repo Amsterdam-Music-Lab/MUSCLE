@@ -23,9 +23,16 @@
 
   transition: opacity 300ms ease;
   opacity: 0.8;
+  cursor: pointer;
+
   &:hover {
     opacity: 1;
   }
+
+  // Todo show focus!
+  --outline-size: 3px;
+  outline: var(--outline-size) solid #ffffff66;
+  outline-offset: calc(-1 * var(--outline-size));
 
   &.left {
     left: var(--fa-button-offset, 0px);

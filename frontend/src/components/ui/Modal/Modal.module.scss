@@ -8,15 +8,20 @@
 
 @import "@/scss/variables.scss";
 
-.overlay {
+.overlay,
+.modalContainer {
+  // Both the overlay and the modalContainer have fixed position
+  // and fill the screen. In this way, if vertical scrolling is needed,
+  // the container will scroll vertically, but the underlying page doesn't move.
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  pointer-events: none;
+}
+
+.overlay {
   z-index: 1000;
   pointer-events: none;
   transition: background-color 0.3s ease-in-out;
@@ -24,22 +29,33 @@
   &.active {
     background-color: rgba(0, 0, 0, 0.66);
     pointer-events: auto;
+  }
+}
 
-    .content {
-      opacity: 1;
-      transform: translateY(0);
+.modalContainer {
+  overflow-y: auto;
+  z-index: 1001;
+  padding: 2em;
+  opacity: 0;
+
+  &.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal {
+    transform: translateY(-100px);
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    display: flex;
+    justify-content: center;
+
+    & > * {
+      flex-grow: 1;
     }
   }
 
-  .content {
-    position: relative;
-    max-width: 90%;
-    width: 480px;
-    max-height: 90vh;
-    overflow-y: auto;
-    opacity: 0;
-    transform: translateY(-100px);
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  &.active .modal {
+    transform: translateY(0);
   }
 }
 

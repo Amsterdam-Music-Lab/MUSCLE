@@ -8,9 +8,9 @@
 
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
+import { description } from "@/util/storybook";
 import Question from "./Question";
 import TQuestion from "@/types/Question";
-
 type Story = StoryObj<typeof Question>;
 
 function QuestionControlled({ question: initQuestion, ...args }) {
@@ -19,18 +19,6 @@ function QuestionControlled({ question: initQuestion, ...args }) {
     setQuestion({ ...question, value: newValue });
   };
   return <Question question={question} onChange={handleChange} {...args} />;
-}
-
-function description(description) {
-  return {
-    parameters: {
-      docs: {
-        description: {
-          story: description,
-        },
-      },
-    },
-  };
 }
 
 const meta: Meta<typeof Question> = {
