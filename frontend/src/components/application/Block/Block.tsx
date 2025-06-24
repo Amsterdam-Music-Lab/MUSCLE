@@ -190,11 +190,11 @@ export default function Block() {
   // Handle redirect actions
   useEffect(() => {
     if (currentAction?.view === "REDIRECT" && currentAction.url) {
-      if (currentAction.url.startsWith("/")) {
-        navigate(currentAction.url);
-      } else {
-        window.location.href = currentAction.url;
-      }
+      // if (currentAction.url.startsWith("/")) {
+      // navigate(currentAction.url);
+      // } else {
+      window.location.href = currentAction.url;
+      // }
     }
   }, [currentAction, navigate]);
 
