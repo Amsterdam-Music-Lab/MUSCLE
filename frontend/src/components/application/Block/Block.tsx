@@ -188,8 +188,12 @@ export default function Block() {
   const isValidAction = currentAction?.view in VIEW_NAMES;
 
   // Handle redirect actions
-  if (currentAction?.view == "REDIRECT" && currentAction.url)
-    navigate(currentAction.url);
+  useEffect(() => {
+    if (currentAction?.view === "REDIRECT" && currentAction.url) {
+      // Cannot use navigate() as it may not be internal...
+      window.location.href = currentAction.url;
+    }
+  }, [currentAction]);
 
   return (
     <ViewTransition transitionKey={currentAction?.view}>
