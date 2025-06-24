@@ -45,6 +45,7 @@ export default function Modal({
   handleText = "Open",
   Handle,
   children,
+  fullWidth = false,
   Wrapper = ModalCard,
   ...wrapperProps
 }: ModalProps) {
@@ -89,7 +90,9 @@ export default function Modal({
         className={classNames(styles.modalContainer, active && styles.active)}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className={styles.modal}>
+        <div
+          className={classNames(styles.modal, fullWidth && styles.fullWidth)}
+        >
           <Wrapper onClose={handleClose} {...wrapperProps}>
             {children}
           </Wrapper>

@@ -33,28 +33,34 @@
 }
 
 .modalContainer {
+  display: flex;
+  justify-content: center;
   overflow-y: auto;
   z-index: 1001;
-  padding: 1em;
+  padding: calc(1em + 5vh) 1em;
   opacity: 0;
+  pointer-events: none;
 
   &.active {
     opacity: 1;
-    pointer-events: all;
   }
 
   .modal {
+    width: 100%;
     transform: translateY(-100px);
     transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-    display: flex;
-    justify-content: center;
 
     & > * {
       flex-grow: 1;
     }
+
+    &:not(.fullwidth) {
+      max-width: 600px;
+    }
   }
 
   &.active .modal {
+    pointer-events: all;
     transform: translateY(0);
   }
 }
