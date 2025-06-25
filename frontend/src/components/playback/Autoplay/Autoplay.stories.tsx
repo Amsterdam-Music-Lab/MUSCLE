@@ -18,7 +18,7 @@ const decorator = (StoryComponent: Story) => (
 );
 
 const meta: Meta<typeof Autoplay> = {
-  title: "Playback/Autoplay",
+  title: "Modules/Playback/Autoplay",
   component: Autoplay,
   argTypes: {
     playSection: { action: "playSection" },

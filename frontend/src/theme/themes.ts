@@ -41,6 +41,12 @@ export const mcgLight: Theme = {
     offset: -2.5,
     angle: -60,
   },
+  danger: {
+    solid: red,
+  },
+  info: {
+    solid: indigo,
+  },
   fullwidth: true,
   showAppBar: false,
   showGradientCircles: true,

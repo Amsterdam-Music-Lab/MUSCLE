@@ -9,7 +9,7 @@
 import FinalView from "./FinalView";
 
 export default {
-  title: "Views/FinalView",
+  title: "App/Views/FinalView",
   component: FinalView,
   parameters: {
     layout: "fullscreen",

@@ -6,8 +6,8 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 import type { PluginMeta, PluginSpec } from "@/types/plugin";
-import type { ParticipantLinkProps } from "@/components/user/ParticipantLink/ParticipantLink";
-import ParticipantLink from "@/components/user/ParticipantLink/ParticipantLink";
+import type { ParticipantLinkProps } from "@/components/modules/ParticipantLink/ParticipantLink";
+import ParticipantLink from "@/components/modules/ParticipantLink/ParticipantLink";
 
 export interface ParticipantLinkPluginArgs extends ParticipantLinkProps {}
 

@@ -1,7 +1,7 @@
 import GradientCircles from "./GradientCircles";
 
 export default {
-  title: "SVG/GradientCircles",
+  title: "Design System/SVG/GradientCircles",
   component: GradientCircles,
   parameters: {
     layout: "fullscreen",

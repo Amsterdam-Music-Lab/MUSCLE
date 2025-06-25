@@ -10,7 +10,7 @@ import VisualCard from "./VisualCard";
 import catImage from "@/assets/images/cat-01.webp";
 
 export default {
-  title: "Matching Pairs/VisualCard",
+  title: "Experiments/Matching Pairs/VisualCard",
   component: VisualCard,
   parameters: {
     layout: "fullscreen",

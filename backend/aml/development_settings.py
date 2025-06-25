@@ -37,3 +37,5 @@ GRAPH_MODELS = {
     "all_applications": True,
     "group_models": True,
 }
+
+RELOAD_PARTICIPANT_TARGET = 'http://localhost:3000'

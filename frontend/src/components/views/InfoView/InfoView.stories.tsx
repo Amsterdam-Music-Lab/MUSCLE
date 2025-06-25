@@ -18,7 +18,7 @@ const decorator = (StoryComponent: Story) => (
 );
 
 const meta: Meta<typeof InfoView> = {
-  title: "views/InfoView",
+  title: "App/Views/InfoView",
   component: InfoView,
   tags: ["autodocs"],
   decorators: [decorator],

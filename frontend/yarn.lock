@@ -4579,6 +4579,7 @@ __metadata:
     react-dom: "npm:18.3.1"
     react-helmet: "npm:^6.1.0"
     react-markdown: "npm:^10.1.0"
+    react-range: "npm:^1.10.0"
     react-rangeslider: "npm:^2.2.0"
     react-router: "npm:^6.25.1"
     react-router-dom: "npm:^6.25.1"
@@ -9105,6 +9106,16 @@ __metadata:
     "@types/react": ">=18"
     react: ">=18"
   checksum: 10c0/4a5dc7d15ca6d05e9ee95318c1904f83b111a76f7588c44f50f1d54d4c97193b84e4f64c4b592057c989228238a2590306cedd0c4d398e75da49262b2b5ae1bf
+  languageName: node
+  linkType: hard
+
+"react-range@npm:^1.10.0":
+  version: 1.10.0
+  resolution: "react-range@npm:1.10.0"
+  peerDependencies:
+    react: "*"
+    react-dom: "*"
+  checksum: 10c0/ca0a7c817fb1e18b15939d9a5ce14acb559c6f2b2f694de04f82e5f7493a16e1be54301f32f508277b302f557a5171ae9771dd7d869bc2c48ec52deaded2a0c2
   languageName: node
   linkType: hard
 

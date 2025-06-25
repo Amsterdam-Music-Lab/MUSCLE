@@ -19,7 +19,7 @@ const decorator = (StoryComponent: Story) => (
 );
 
 const meta: Meta<typeof LoadingView> = {
-  title: "App/LoadingView",
+  title: "App/Views/LoadingView",
   component: LoadingView,
   tags: ["autodocs"],
   decorators: [decorator],

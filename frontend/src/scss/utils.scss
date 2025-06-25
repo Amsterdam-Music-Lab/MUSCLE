@@ -81,6 +81,10 @@ $colors: (
   font-weight: 600;
 }
 
+.small {
+  font-size: 0.875em;
+}
+
 .rounded-sm {
   border-radius: calc(0.75rem * var(--border-radius));
 }
@@ -285,5 +289,23 @@ $colors: (
     margin: auto;
     max-height: 100%;
     max-width: 100%;
+  }
+}
+
+.thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 0px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
   }
 }

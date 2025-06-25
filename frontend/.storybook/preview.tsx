@@ -1,3 +1,4 @@
+import type { Preview } from "@storybook/react";
 import type { ThemeName } from "../src/types/themeProvider";
 import React from "react";
 import { initialize, mswLoader } from "msw-storybook-addon";
@@ -6,7 +7,6 @@ import { initWebAudioListener } from "../src/util/webAudio";
 import { MemoryRouter } from "react-router-dom";
 import { themes } from "../src/theme/themes";
 import { ThemeProvider } from "../src/theme/ThemeProvider";
-import "../public/vendor/bootstrap/bootstrap.min.css";
 import "../src/index.scss";
 
 // Init audio listener
@@ -39,9 +39,13 @@ const withThemeProvider = (Story, context) => {
   );
 };
 
-/** @type { import('@storybook/react').Preview } */
-const preview = {
+const preview: Preview = {
   parameters: {
+    options: {
+      storySort: {
+        order: ["App", "Experiments", "Modules", "Design System", "Utils"],
+      },
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,

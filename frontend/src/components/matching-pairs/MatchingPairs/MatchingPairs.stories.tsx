@@ -15,7 +15,7 @@ const decorator = (Story) => (
 );
 
 export default {
-  title: "Matching Pairs/Matching Pairs",
+  title: "Experiments/Matching Pairs/Matching Pairs",
   component: MatchingPairs,
   parameters: {
     layout: "fullscreen",

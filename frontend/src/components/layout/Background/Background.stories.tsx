@@ -18,7 +18,7 @@ const decorator = (StoryComponent: Story) => (
 );
 
 const meta: Meta<typeof Background> = {
-  title: "App/Background",
+  title: "App/Layout/Background",
   component: Background,
   parameters: {
     layout: "fullscreen",

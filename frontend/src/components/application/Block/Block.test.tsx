@@ -10,6 +10,7 @@ import "@testing-library/jest-dom";
 import { screen, waitFor } from "@testing-library/react";
 import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { MemoryRouter } from "react-router-dom";
 import Block from "./Block";
 
 const blockObj = {
@@ -38,13 +39,20 @@ const mockParticipantStore = {
 
 const useExperimentMock = vi.fn();
 const useBlockMock = vi.fn();
+const useConsentMock = vi.fn();
 const getNextRoundMock = vi.fn();
 const setErrorMock = vi.fn();
-let mockUseParams = vi.fn();
+let mockUseParams = vi.fn(() => ({
+  blockSlug: "blockSlug",
+  expSlug: "expSlug",
+}));
+const mockNavigate = vi.fn();
 
 vi.mock("@/API", () => ({
   useExperiment: (...args) => useExperimentMock(...args),
   useBlock: (...args) => useBlockMock(...args),
+  useConsent: (...args) => useConsentMock(...args),
+  getParticipant: () => mockParticipantStore,
   getNextRound: (...args) => getNextRoundMock(...args),
 }));
 
@@ -53,6 +61,7 @@ vi.mock("react-router-dom", async () => {
   return {
     ...actual,
     useParams: () => mockUseParams(),
+    useNavigate: () => () => mockNavigate(),
   };
 });
 
@@ -95,35 +104,65 @@ describe("Block Component", () => {
   beforeEach(() => {
     useExperimentMock.mockReset();
     useBlockMock.mockReset();
+    useConsentMock.mockReset();
     getNextRoundMock.mockReset();
     setErrorMock.mockReset();
-    mockUseParams.mockReturnValue({ slug: "test" });
-  });
 
-  // afterEach(() => {
-  //   vi.clearAllMocks();
-  // });
+    mockUseParams.mockReturnValue({
+      expSlug: "expSlug",
+      blockSlug: "blockSlug",
+    });
+  });
 
   it("renders loading state when loadingBlock is true", async () => {
     useExperimentMock.mockReturnValue([null, true]);
     useBlockMock.mockReturnValue([null, true]);
-    const { getByTestId } = render(<Block />);
+    useConsentMock.mockReturnValue([null, false]);
+    const { getByTestId } = render(
+      <MemoryRouter>
+        <Block />
+      </MemoryRouter>
+    );
     expect(getByTestId("view-loading")).toBeInTheDocument();
   });
 
   it("renders error view if block is null after loading", async () => {
     useExperimentMock.mockReturnValue([null, false]);
     useBlockMock.mockReturnValue([null, false]);
-    render(<Block />);
+    useConsentMock.mockReturnValue([true, false]);
+    render(
+      <MemoryRouter>
+        <Block />
+      </MemoryRouter>
+    );
     await waitFor(() => {
       expect(setErrorMock).toHaveBeenCalledWith("Could not load a block");
+    });
+  });
+
+  it("redirects if consent has not yet been given", async () => {
+    useBlockMock.mockImplementation(() => [blockObj, false]);
+    useExperimentMock.mockReturnValue([true, false]);
+    useConsentMock.mockReturnValue([false, false]);
+    render(
+      <MemoryRouter>
+        <Block />
+      </MemoryRouter>
+    );
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalled();
     });
   });
 
   it("renders error view if experiment is null after loading", async () => {
     useExperimentMock.mockReturnValue([null, false]);
     useBlockMock.mockReturnValue([true, false]);
-    render(<Block />);
+    useConsentMock.mockReturnValue([true, false]);
+    render(
+      <MemoryRouter>
+        <Block />
+      </MemoryRouter>
+    );
     await waitFor(() => {
       expect(setErrorMock).toHaveBeenCalledWith(
         "Could not load the experiment"
@@ -134,10 +173,15 @@ describe("Block Component", () => {
   it("renders the first step after loading block", async () => {
     useBlockMock.mockImplementation(() => [blockObj, false]);
     useExperimentMock.mockReturnValue([true, false]);
+    useConsentMock.mockReturnValue([true, false]);
     getNextRoundMock.mockResolvedValueOnce({
       next_round: [{ ...explainerAction }], // Avoid sharing mutables between tests
     });
-    render(<Block />);
+    render(
+      <MemoryRouter>
+        <Block />
+      </MemoryRouter>
+    );
     const view = await screen.findByTestId("view-explainer");
     expect(view.textContent).toContain("Instruction");
   });
@@ -145,10 +189,15 @@ describe("Block Component", () => {
   it("calls getNextRound when onNext is triggered by clicking the view", async () => {
     useBlockMock.mockImplementation(() => [blockObj, false]);
     useExperimentMock.mockReturnValue([true, false]);
+    useConsentMock.mockReturnValue([true, false]);
     getNextRoundMock.mockResolvedValueOnce({
       next_round: [{ ...explainerAction }], // Avoid sharing mutables between tests
     });
-    render(<Block />);
+    render(
+      <MemoryRouter>
+        <Block />
+      </MemoryRouter>
+    );
     const view = await screen.findByTestId("view-explainer");
     // Simulate user clicking the view, which triggers onNext
     view.click();
@@ -161,8 +210,13 @@ describe("Block Component", () => {
     useBlockMock.mockImplementationOnce(() => [blockObj, false]);
     useBlockMock.mockImplementationOnce(() => [blockObj, false]);
     useExperimentMock.mockReturnValue([true, false]);
+    useConsentMock.mockReturnValue([true, false]);
     getNextRoundMock.mockResolvedValueOnce(null);
-    render(<Block />);
+    render(
+      <MemoryRouter>
+        <Block />
+      </MemoryRouter>
+    );
     await waitFor(() => {
       expect(setErrorMock).toHaveBeenCalled();
     });

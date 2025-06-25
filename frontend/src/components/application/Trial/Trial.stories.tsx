@@ -9,7 +9,7 @@
 import Trial from "./Trial";
 
 export default {
-  title: "Experiment/Trial",
+  title: "App/Controllers/Trial",
   component: Trial,
 };
 

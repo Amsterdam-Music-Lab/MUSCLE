@@ -14,7 +14,7 @@ import type { LogoName } from "@/components/svg";
 import { useOrientation } from "@/hooks/OrientationProvider";
 import convertTutorial from "@/util/convertTutorial";
 import { useTuneTwins, TTComparisonResult, TTGameState } from "./useTuneTwins";
-import { Timeline, ScoreFeedback, TutorialMessage } from "@/components/game";
+import { Timeline, ScoreFeedback, TutorialMessage } from "@/components/modules";
 import { SquareLayout } from "@/components/layout";
 import { Logo } from "@/components/svg";
 import { Board } from "../Board";
@@ -110,7 +110,7 @@ export default function TuneTwins({
     feedbackMessages,
     cardClasses: CARD_CLASSES,
   });
-
+  let tabCount = 0;
   return (
     <SquareLayout
       portraitHeaderHeight={0.55}
@@ -133,29 +133,32 @@ export default function TuneTwins({
           onClick={() => {
             if (gameState.startsWith("COMPLETED")) endTurn();
           }}
-          items={cards.map((card) => {
+          items={cards.map((card, index) => {
             const sharedProps = {
               flipped: card.selected,
               disabled: card.disabled,
               label: <DevCardLabel children={card.data?.group} />,
             };
-
+            if (!card.disabled) tabCount += 1;
             // Return cards (in a container div to isolate the transformations)
             return [
-              <div
-                key={card.id}
-                className={card.className}
-                onClick={() => {
-                  // Note that nothing else should be called here. In particular,
-                  // the hook onSelectCard is called via the hook beforeSelectCard.
-                  // In this way, the useMatchingPairs hook can ensure that disabled
-                  // cards do not respond (more principled than e.g. a .noEvents class)
-                  selectCard(card.id);
-                }}
-              >
+              <div key={card.id} className={card.className}>
                 <AudioCard
                   key={card.id}
                   running={card.playing}
+                  tabIndex={!card.disabled ? tabCount : undefined}
+                  onClick={() => {
+                    // This ensures that you can play the game with keyboard only.
+                    // But not ideal: the first time this is executed the card is not
+                    // selected yet because that requires another state update...
+                    if (gameState.startsWith("COMPLETED")) endTurn();
+
+                    // Note that nothing else should be called here. In particular,
+                    // the hook onSelectCard is called via the hook beforeSelectCard.
+                    // In this way, the useMatchingPairs hook can ensure that disabled
+                    // cards do not respond (more principled than e.g. a .noEvents class)
+                    selectCard(card.id);
+                  }}
                   {...sharedProps}
                 />
               </div>,
@@ -201,7 +204,7 @@ TuneTwins.getViewProps = ({
   const timeline = frontendConfig?.tunetwins?.timeline;
   const numSteps = timeline?.symbols.length || 0;
   const sessionsPlayed = experiment.playedSessions || 0;
-  const timelineStep = sessionsPlayed % numSteps;
+  const timelineStep = (sessionsPlayed - 1) % numSteps;
 
   return {
     cards,

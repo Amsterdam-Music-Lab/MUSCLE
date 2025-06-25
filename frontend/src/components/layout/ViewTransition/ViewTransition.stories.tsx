@@ -20,7 +20,7 @@ const decorator = (StoryComponent: Story) => (
 );
 
 const meta: Meta<typeof ViewTransition> = {
-  title: "App/ViewTransition",
+  title: "App/Layout/ViewTransition",
   component: ViewTransition,
   parameters: {
     layout: "fullscreen",

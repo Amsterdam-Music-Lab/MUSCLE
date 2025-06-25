@@ -10,89 +10,133 @@ import type { TrialConfig } from "@/types/Trial";
 import type { IFeedbackForm } from "@/types/Action";
 import type { PlaybackArgs } from "@/types/Playback";
 import type { OnResultType } from "@/hooks/useResultHandler";
+import type SurveyQuestion from "@/types/Question";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { getAudioLatency, getCurrentTime, getTimeSince } from "@/util/time";
 import { Playback, View } from "@/components/application";
 import { RenderHtml } from "@/components/utils";
-import { Button } from "@/components/ui";
+import { Button } from "@/components/buttons";
+
+export interface Survey {
+  /** The questions to show */
+  questions: SurveyQuestion[];
+
+  /** Whether the survey can be skipped */
+  skippable?: boolean;
+
+  /** Label for the submit button */
+  submitLabel?: string;
+
+  /** Label for the skip button */
+  skipLabel?: string;
+}
 
 export interface TrialProps extends HTMLAttributes<HTMLDivElement> {
   onNext: (breakRound?: boolean) => void;
   onResult: OnResultType;
   playback: PlaybackArgs;
   html: { body: string | TrustedHTML };
-  feedback_form: IFeedbackForm;
-  config: TrialConfig;
+  survey: Survey;
+  responseTime: number;
+  autoAdvance: boolean;
+  listenFirst: boolean;
+  breakRoundOn: BreakRoundOn;
+  autoAdvanceTimer: number | null;
+
+  /** Whether to show the continue button. */
+  showContinueButton: boolean;
+
+  /** Label for the continue button. Default "Continue" */
+  continueLabel?: string;
 }
 
 /**
  * Trial is a block view to present information to the user and/or collect user feedback
  * If "playback" is provided, it will play audio through the Playback component
  * If "html" is provided, it will show html content
- * If "feedback_form" is provided, it will present a form of questions to the user
+ * If "survey" is provided, it will present a form of questions to the user
  */
 export default function Trial({
   playback,
   html,
-  feedback_form,
-  config,
+  survey,
   onNext,
   onResult,
   experiment,
+  responseTime,
+  autoAdvance,
+  autoAdvanceTimer,
+  listenFirst,
+  breakRoundOn,
+  showContinueButton,
+  continueLabel = "Continue",
 }: TrialProps) {
-  // Main component state
-  const [formActive, setFormActive] = useState(!config.listen_first);
   // Preload is immediately set to ready if we don't have a playback object
   const [preloadReady, setPreloadReady] = useState(!playback);
+  const [disableSurvey, setDisableSurvey] = useState(listenFirst);
+  const [questions, setQuestions] = useState(survey?.form ?? []);
 
-  const submitted = useRef(false);
+  // Update state whenever the props change. This ensures the Trial is
+  // rerendered when moving to the next question in a round, for example.
+  useEffect(() => {
+    setQuestions(survey?.questions ?? []);
+  }, [survey?.questions]);
 
-  // This is used to keep track of the time a participant spends in this Trial view
+  // Track the time a participant spends in this Trial view
   const startTime = useRef(getCurrentTime());
-
   const startTimer = useCallback(() => {
     startTime.current = getCurrentTime();
   }, []);
 
-  // Create result data
-  const makeResult = useCallback(
-    async (hasTimedOut: boolean) => {
-      // Prevent multiple submissions
-      if (submitted.current) return;
-      submitted.current = true;
-      if (!feedback_form) return onNext();
+  const handleSubmit = useCallback(
+    async (hasTimedOut: boolean, updatedQuestions: IFeedbackForm["form"]) => {
+      // Continue if there's no form
+      if (!survey) return onNext();
 
-      const { form = [] } = feedback_form;
+      // If the for has timed out, flag all questions as TIMEOUT
+      if (hasTimedOut) updatedQuestions.forEach((q) => (q.value = "TIMEOUT"));
 
-      if (hasTimedOut) {
-        form.map((formElement) => (formElement.value = "TIMEOUT"));
-      }
+      // Set empty values for skipped questions
+      if (survey.skippable)
+        updatedQuestions.forEach((q) => (q.value = q.value || ""));
 
-      if (feedback_form.is_skippable) {
-        form.map(
-          (formElement) => (formElement.value = formElement.value || "")
-        );
-      }
-
-      const breakRoundConditions = config.break_round_on;
+      const values = updatedQuestions.map((q) => q.value);
       const shouldBreakRound =
-        breakRoundConditions &&
-        checkBreakRound(
-          form.map((formElement) => formElement.value),
-          breakRoundConditions
-        );
+        breakRoundOn && checkBreakRound(values, breakRoundOn);
 
-      await onResult({
+      // Submit to server
+      const result = await onResult({
         decision_time: getAndStoreDecisionTime(),
         audio_latency_ms: getAudioLatency(),
-        form,
-        config,
+        form: updatedQuestions,
+        config: {
+          response_time: responseTime,
+          auto_advance: autoAdvance,
+          auto_advance_timer: autoAdvanceTimer,
+          listen_first: listenFirst,
+          show_continue_button: showContinueButton,
+          continue_label: continueLabel,
+          break_round_on: breakRoundOn,
+        },
       });
+      if (!result?.success)
+        console.warn("The survey could not be submitted", result);
 
       return onNext(shouldBreakRound);
     },
-    [feedback_form, config, onNext, onResult]
+    [
+      survey,
+      breakRoundOn,
+      responseTime,
+      autoAdvance,
+      autoAdvanceTimer,
+      listenFirst,
+      showContinueButton,
+      continueLabel,
+      onNext,
+      onResult,
+    ]
   );
 
   const checkBreakRound = (
@@ -117,35 +161,33 @@ export default function Trial({
   };
 
   const finishedPlaying = useCallback(() => {
-    if (config.auto_advance) {
+    if (autoAdvance) {
       // Create a time_passed result
-      if (config.auto_advance_timer != null) {
+      if (autoAdvanceTimer != null) {
         if (playback.view === "BUTTON") {
           startTime.current = getCurrentTime();
         }
 
         setTimeout(() => {
-          makeResult(true);
-        }, config.auto_advance_timer);
+          handleSubmit(true, questions);
+        }, autoAdvanceTimer);
       } else {
-        makeResult(true);
+        handleSubmit(true, questions);
       }
     }
-    setFormActive(true);
+    setDisableSurvey(false);
     return;
-  }, [config, playback, makeResult]);
+  }, [questions, autoAdvance, autoAdvanceTimer, playback, handleSubmit]);
 
   return (
     <>
       {playback && (
         <Playback
           playbackArgs={playback}
-          onPreloadReady={() => {
-            setPreloadReady(true);
-          }}
-          autoAdvance={config.auto_advance}
-          responseTime={config.response_time}
-          submitResult={makeResult}
+          onPreloadReady={() => setPreloadReady(true)}
+          autoAdvance={autoAdvance}
+          responseTime={responseTime}
+          submitResult={(hasTimedOut) => handleSubmit(hasTimedOut, questions)}
           startedPlaying={startTimer}
           finishedPlaying={finishedPlaying}
           experiment={experiment}
@@ -154,25 +196,25 @@ export default function Trial({
 
       {html && <RenderHtml html={html.body} />}
 
-      {preloadReady && feedback_form && (
+      {preloadReady && survey && (
         <View
           name="survey"
-          formActive={formActive}
-          form={feedback_form.form}
-          buttonLabel={feedback_form.submit_label}
-          skipLabel={feedback_form.skip_label}
-          isSkippable={feedback_form.is_skippable}
-          submitResult={makeResult}
-          experiment={experiment}
+          questions={questions}
+          onChange={setQuestions}
+          onSubmit={(updatedSurvey) => handleSubmit(undefined, updatedSurvey)}
+          disabled={disableSurvey}
+          skippable={survey.skippable}
+          submitLabel={survey.submitLabel}
+          skipLabel={survey.skipLabel}
         />
       )}
 
-      {preloadReady && !feedback_form && config.show_continue_button && (
+      {preloadReady && !survey && showContinueButton && (
         <div className="text-center">
           <Button
-            title={config.continue_label}
+            title={continueLabel}
             onClick={onNext}
-            disabled={!formActive}
+            disabled={disableSurvey}
           />
         </div>
       )}
@@ -182,13 +224,31 @@ export default function Trial({
 
 Trial.viewName = "trial";
 Trial.usesOwnLayout = true;
-Trial.getViewProps = ({ action, onNext, onResult, experiment }) => ({
-  playback: action.playback,
-  html: action.html,
-  feedback_form: action.feedback_form,
-  config: action.config,
-  onNext,
-  onResult,
-  experiment,
-});
+Trial.getViewProps = ({ action, onNext, onResult, experiment }) => {
+  let survey;
+  if (action.feedback_form) {
+    survey = {
+      questions: action.feedback_form?.form,
+      skippable: action.feedback_form?.is_skippable,
+      submitLabel: action.feedback_form?.submit_label,
+      skipLabel: action.feedback_form?.skip_label,
+    };
+  }
+
+  return {
+    playback: action.playback,
+    html: action.html,
+    survey,
+    onNext,
+    onResult,
+    experiment,
+    responseTime: action.config.response_time,
+    autoAdvance: action.config.auto_advance,
+    autoAdvanceTimer: action.config.auto_advance_timer,
+    listenFirst: action.config.listen_first,
+    showContinueButton: action.config.show_continue_button,
+    continueLabel: action.config.continue_label,
+    breakRoundOn: action.config.break_round_on,
+  };
+};
 Trial.dependencies = ["action"];
