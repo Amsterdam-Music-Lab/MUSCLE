@@ -54,7 +54,7 @@ const qrPluginSpec = {
     plugins: [
       {
         name: "qrcode",
-        args: { value: "https://example.com" },
+        args: { value: "https://www.mcg.uva.nl/tunetwins/" },
       },
       {
         name: "markdown",
@@ -81,7 +81,6 @@ const scoreboard = {
       {
         // enabled: false,
         name: "ranking",
-        order: 5,
         enabled: true,
         args: {
           cutoff: 30,
@@ -95,7 +94,6 @@ const scoreboard = {
       // Scores
       {
         name: "scores",
-        order: 1,
         args: {
           turnScoreLabel: "Last game",
           totalScoreLabel: "Total score",
