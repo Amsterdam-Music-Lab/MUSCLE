@@ -153,3 +153,11 @@ export const IconSlider: Story = {
     thumbSize: "3.5em",
   },
 };
+
+export const ThumbLabel: Story = {
+  render: SliderFieldControlled,
+  args: {
+    ...Default.args,
+    showThumbLabel: true,
+  },
+};

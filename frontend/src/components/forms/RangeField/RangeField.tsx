@@ -20,6 +20,13 @@ import Tick from "./Tick";
 import styles from "./RangeField.module.scss";
 import "@/scss/theme.scss";
 
+function findOption(options, value) {
+  const matches = options.filter((opt) => opt.value === value);
+  if (matches?.length) {
+    return matches[0];
+  }
+}
+
 export interface RangeOption<Value> extends FieldOption<Value> {
   position?: number;
 }
@@ -235,8 +242,7 @@ export function RangeInput<Value>({
             key={key}
             props={rest}
             label={
-              showThumbLabel &&
-              options.filter((opt) => opt.value === values[args.index])[0].label
+              showThumbLabel && findOption(options, values[args.index])?.label
             }
             className={classNames(!hasError && `fill-${variant}`)}
             {...args}
