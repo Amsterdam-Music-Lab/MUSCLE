@@ -206,7 +206,7 @@ def get_session_info(blocks: list[Block], participant: Participant) -> dict:
         dict with session count and accumulated score
     """
     participant_sessions = participant.session_set.filter(
-        block__in=blocks
+        block__in=blocks, finished_at__is_null=False
     )
     accumulated_score = participant_sessions.aggregate(
         total_score=Sum("final_score")
