@@ -25,7 +25,8 @@ class Questionnaire(BaseRules):
             )
             actions.append(intro_questions)
             actions.extend(questions)
+            return actions
+
         session.finish()
         session.save()
-        actions.append(Redirect(settings.RELOAD_PARTICIPANT_TARGET))
-        return actions
+        return Redirect(settings.RELOAD_PARTICIPANT_TARGET)
