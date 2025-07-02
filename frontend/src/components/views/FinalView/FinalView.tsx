@@ -140,9 +140,9 @@ FinalView.getViewProps = ({
 }) => {
   const timeline = frontendConfig?.tunetwins?.timeline;
   const numSteps = timeline?.symbols.length || 0;
-  const sessionsPlayed = experiment.playedSessions || 0;
+  const sessionsPlayed = experiment.playedSessions + 1 ?? 1;
   const timelineStep = sessionsPlayed % numSteps;
-  const symbol = timeline?.symbols[timelineStep - 1] || "dot";
+  const symbol = timeline?.symbols[timelineStep - 1] ?? "dot";
   const trophyIcon = symbol !== "dot" ? symbol : undefined;
   return {
     block,

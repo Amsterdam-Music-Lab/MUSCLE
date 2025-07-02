@@ -202,9 +202,9 @@ TuneTwins.getViewProps = ({
   }));
   const tutorial = convertTutorial(playbackArgs.tutorial);
   const timeline = frontendConfig?.tunetwins?.timeline;
-  const numSteps = timeline?.symbols.length || 0;
-  const sessionsPlayed = experiment.playedSessions || 0;
-  const timelineStep = (sessionsPlayed - 1) % numSteps;
+  const numSteps = timeline?.symbols.length ?? 0;
+  const sessionsPlayed = experiment.playedSessions ?? 0;
+  const timelineStep = sessionsPlayed % numSteps;
 
   return {
     cards,
