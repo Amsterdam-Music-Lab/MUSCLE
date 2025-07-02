@@ -7,44 +7,63 @@
  */
 
 import { Helmet as ReactHelmet } from "react-helmet";
-import useBoundStore from "@/util/stores";
 
-export default function Helmet() {
-  const headData = useBoundStore((state) => state.headData);
-  const { description, image, url } = headData;
+export default function Helmet({
+  title,
+  description,
+  image,
+  url,
+  children,
+  structuredData,
+}) {
+  const hasTitle = title && title !== "";
+  const hasDescription = description && description !== "";
+  const hasImage = image && image !== "";
+  const hasUrl = url && url !== "";
+  const hasStructuredData =
+    structuredData || hasUrl || hasImage || hasTitle || hasDescription;
 
-  const structuredData = {
-    "@context": "http://schema.org",
-    "@type": "Organization",
-    url: url,
-    logo: image,
-    name: headData.title,
-    description: description,
-    ...headData.structuredData,
-  };
+  if (hasStructuredData) {
+    structuredData = {
+      "@context": "http://schema.org",
+      "@type": "Organization",
+      url,
+      logo: image,
+      name: title,
+      description,
+      ...structuredData,
+    };
+  }
 
   return (
     <ReactHelmet>
-      <title>{headData.title}</title>
-      <meta name="description" content={description} />
-      <meta property="og:title" content={headData.title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
-      <meta property="og:url" content={url} />
+      {hasTitle && <title>{title}</title>}
+      {hasDescription && (
+        <meta name="description" content={description ?? "HELLO THERE"} />
+      )}
 
-      <meta name="twitter:title" content={headData.title} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={image} />
+      {hasTitle && <meta property="og:title" content={title} />}
+      {hasDescription && (
+        <meta property="og:description" content={description} />
+      )}
+      {hasImage && <meta property="og:image" content={image} />}
+      {hasUrl && <meta property="og:url" content={url} />}
+
+      {hasTitle && <meta name="twitter:title" content={title} />}
+      {hasDescription && (
+        <meta name="twitter:description" content={description} />
+      )}
+      {hasImage && <meta name="twitter:image" content={image} />}
       <meta name="twitter:card" content="summary_large_image" />
 
-      <link rel="canonical" href={url} />
+      {hasUrl && <link rel="canonical" href={url} />}
+      {hasStructuredData && (
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+      )}
 
-      <link rel="icon" type="image/png" href="/favicon.ico" />
-      <link rel="apple-touch-icon" href="/favicon.ico" />
-
-      <script type="application/ld+json">
-        {JSON.stringify(structuredData)}
-      </script>
+      {children}
     </ReactHelmet>
   );
 }

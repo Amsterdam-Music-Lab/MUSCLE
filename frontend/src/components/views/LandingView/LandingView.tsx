@@ -9,6 +9,8 @@
 import type { NarrowLayoutProps } from "@/components/layout";
 import type { AllPluginSpec } from "@/components/plugins";
 import { PluginRenderer } from "@/components/plugins";
+import { Helmet } from "@/components/application";
+import frontendConfig from "@/config/frontend";
 
 interface LandingViewProps extends NarrowLayoutProps {
   /**
@@ -46,7 +48,14 @@ export default function LandingView({
       return updated;
     });
   }
-  return <PluginRenderer plugins={plugins as AllPluginSpec[]} />;
+  return (
+    <>
+      {frontendConfig.landing?.helmet && (
+        <Helmet {...frontendConfig.landing.helmet} />
+      )}
+      <PluginRenderer plugins={plugins as AllPluginSpec[]} />;
+    </>
+  );
 }
 
 LandingView.viewName = "landing";

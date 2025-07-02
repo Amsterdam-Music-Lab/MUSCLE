@@ -7,3 +7,4 @@
  */
 
 export { default as App } from "./App";
+export { default as Helmet } from "./Helmet";

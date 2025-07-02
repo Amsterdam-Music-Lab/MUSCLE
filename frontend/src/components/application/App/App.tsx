@@ -55,10 +55,12 @@ export default function App() {
       setParticipantLoading(false);
     }
   }, [setError, queryParams, setParticipant, setParticipantLoading]);
-
   return (
     <ThemeProvider>
-      <Helmet />
+      <Helmet>
+        <link rel="icon" type="image/png" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/favicon.ico" />
+      </Helmet>
       <BaseLayout>
         <Router>
           {/* The routes are in a separate component so that we can use
