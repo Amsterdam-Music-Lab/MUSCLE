@@ -58,7 +58,8 @@
       transform: scale(0.96);
     }
   }
-  &:focus {
+
+  &:not(.disabled):focus {
     outline: var(--outline-size) solid #ffffff;
     box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3);
   }
