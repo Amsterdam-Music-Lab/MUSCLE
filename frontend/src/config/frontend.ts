@@ -176,13 +176,6 @@ const landingView: ViewConfig = {
 
     footer,
   ],
-
-  helmet: {
-    title: "TuneTwins",
-    description:
-      "Test your musical memory! Can you find the matching tunes and clear the board? Play TuneTwins to find out — a science game from the University of Amsterdam.",
-    image: "./tunetwins-banner.jpg",
-  },
 };
 
 const finalView: ViewConfig = {
