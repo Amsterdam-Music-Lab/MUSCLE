@@ -19,6 +19,11 @@ import {
 } from "react-share";
 
 import styles from "./ShareOptions.module.scss";
+import { t } from "@/util/i18n";
+
+const copyToClipboard = async (message: string) => {
+  await navigator.clipboard.writeText(message);
+};
 
 interface ShareOptProps {
   config: ShareConfig;
@@ -101,12 +106,13 @@ function Share({ config, ...props }: ShareOptProps) {
 
 function ClipBoard({ config, ...props }: ShareOptProps) {
   const { style, ...rest } = props;
-  const copyToClipboard = async (url: string) => {
-    await navigator.clipboard.writeText(url);
-  };
+  const message = t("share.clipboard", {
+    message: config?.content,
+    url: config?.url,
+  });
   return (
     <div
-      onClick={() => copyToClipboard(config.url)}
+      onClick={() => copyToClipboard(message)}
       data-testid="clipboard-share"
       style={{ "--icon-size-correction": 0.85, ...style } as CSSProperties}
       {...rest}

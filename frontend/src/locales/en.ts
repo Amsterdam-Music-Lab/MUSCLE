@@ -51,8 +51,13 @@ const consentView = prefix("consentView", {
   title: "Consent",
 });
 
+const share = prefix("share", {
+  clipboard: "{{message}} Play the game yourself at {{url}}",
+});
+
 export const en = {
   ...common,
   ...feedbackForm,
   ...consentView,
+  ...share,
 };
