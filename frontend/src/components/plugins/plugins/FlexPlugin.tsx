@@ -28,7 +28,6 @@ function FlexPlugin({
   style = {},
   ...pluginRendererProps
 }: FlexPluginArgs) {
-  console.log(pluginRendererProps);
   return (
     <div
       style={{
