@@ -29,6 +29,11 @@ $padding-x: 0.5em;
     opacity: 1;
     width: 100%;
   }
+
+  &:not([data-expanded="true"]) .content {
+    /* Instead of display: none, to keep nice transitions */
+    pointer-events: none;
+  }
 }
 
 .content {
