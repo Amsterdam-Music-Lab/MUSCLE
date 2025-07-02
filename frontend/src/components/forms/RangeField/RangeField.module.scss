@@ -15,9 +15,8 @@
   --track-padding: calc(0.5 * var(--thumb-size));
   --label-margin: 0.5em;
 
-  &.showThumbLabel {
-    padding-top: calc(2 * var(--thumb-size));
-  }
+  overflow: hidden;
+
   &.showTicks {
     padding-bottom: var(--thumb-size);
   }
@@ -86,19 +85,26 @@
   &:focus-visible {
     outline: none;
   }
-}
 
-.thumbLabel {
-  position: absolute;
-  bottom: calc(
-    var(--thumb-size) + 0.5 * var(--track-padding) + 2 * var(--label-margin)
-  );
-  transform: translateX(-50%);
-  white-space: nowrap;
-  padding: 0.25em 0.5em;
-  font-size: 0.875em;
-  border-radius: 0.5em;
-  @extend .input-element;
+  .thumbLabel {
+    position: absolute;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 0.5em;
+    white-space: nowrap;
+    background-color: #ffffff66;
+    pointer-events: none;
+  }
+
+  &.right .thumbLabel {
+    right: 100%;
+  }
+
+  &.left .thumbLabel {
+    left: 100%;
+  }
 }
 
 .tick {

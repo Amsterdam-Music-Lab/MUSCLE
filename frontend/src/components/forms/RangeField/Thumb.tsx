@@ -22,17 +22,22 @@ export default function Thumb({
   className,
   ...divProps
 }) {
+  const value = props["aria-valuenow"];
+  const min = props["aria-valuemin"];
+  const max = props["aria-valuemax"];
+  const relPos = (value - min) / (max - min);
   return (
     <div
       className={classNames(
         styles.thumb,
         isDragged & styles.dragging,
+        relPos < 0.5 ? styles.left : styles.right,
         className
       )}
       {...props}
       {...divProps}
     >
-      {label && <div className={styles.thumbLabel}>{label}</div>}
+      {label !== undefined && <div className={styles.thumbLabel}>{label}</div>}
     </div>
   );
 }

@@ -151,7 +151,7 @@ export function RangeInput<Value>({
   tickLabels: initTickLabels,
   variant = "primary",
   thumbSize,
-  showThumbLabel = false,
+  showThumbLabel,
   showTicks = true,
   showTickLabels = true,
   autoTickLabels = true,
@@ -162,6 +162,14 @@ export function RangeInput<Value>({
   const [hasValue, setHasValue] = useState(values.length > 0);
   if (values.length > 1) {
     throw Error("A range field with multiple thumbs is not yet supported.");
+  }
+
+  // Don't show thumblabel when ticks are shown inside, unless
+  // explicitly set to true.
+  if (showTickLabelsInside && showThumbLabel === undefined) {
+    showThumbLabel = false;
+  } else {
+    showThumbLabel = showThumbLabel ?? true;
   }
 
   // Memoize the config so it's only computed when it changes

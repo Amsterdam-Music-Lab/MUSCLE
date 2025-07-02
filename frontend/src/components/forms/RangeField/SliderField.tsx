@@ -21,7 +21,7 @@ export default function SliderField<Value>({
 }: SliderFieldProps<Value>) {
   return (
     <RangeField
-      values={value ? [value] : []}
+      values={value !== undefined ? [value] : []}
       onChange={(values) => onChange(values[0] ?? undefined)}
       {...props}
     />
