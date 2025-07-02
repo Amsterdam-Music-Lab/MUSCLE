@@ -24,6 +24,19 @@ function prefix(prefix: string, object: Record<string, any>) {
 }
 
 /**
+ * Translations for common phrases
+ */
+const common = prefix("common", {
+  submit: "Submit",
+  next: "Next",
+  continue: "Continue",
+  cancel: "Cancel",
+  download: "Download",
+  deny: "Deny",
+  confirm: "Confirm",
+});
+
+/**
  * All translations for component/modules/FeedbackForm
  */
 const feedbackForm = prefix("feedbackForm", {
@@ -34,17 +47,12 @@ const feedbackForm = prefix("feedbackForm", {
   submitted: "Your feedback was submitted.",
 });
 
-/**
- * Translations for common phrases
- */
-const common = prefix("common", {
-  submit: "Submit",
-  next: "Next",
-  continue: "Continue",
-  cancel: "Cancel",
+const consentView = prefix("consentView", {
+  title: "Consent",
 });
 
 export const en = {
   ...common,
   ...feedbackForm,
+  ...consentView,
 };

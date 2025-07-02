@@ -27,15 +27,22 @@ export default {
 export const Default = {
   args: {
     experimentSlug: "experiment-slug",
-    title: "Informed consent",
     text: "This is the text",
     onConfirm: () => {
       console.log("Next button clicked");
     },
-    confirmLabel: "Confirm",
-    denyLabel: "Deny",
     consentHtml:
       "<p>This is the ConsentView component's text.</p><p>It can contain lists, headings, bold, italic and underlined text, you name it!</p><ul><li><b>Item 1</b></li><li><i>Item 2</i></li><li><u>Item 3</u></li></ul>",
+  },
+  decorators: [],
+};
+
+export const CustomLabels = {
+  args: {
+    ...Default.args,
+    title: "Please give informed consent",
+    confirmLabel: "I give consent",
+    denyLabel: "I do not give consent",
   },
   decorators: [],
 };

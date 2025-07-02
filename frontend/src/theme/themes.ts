@@ -47,6 +47,11 @@ export const mcgLight: Theme = {
   info: {
     solid: indigo,
   },
+  muted: {
+    solid: "#888",
+    startColor: "#777",
+    endColor: "#999",
+  },
   fullwidth: true,
   showAppBar: false,
   showGradientCircles: true,

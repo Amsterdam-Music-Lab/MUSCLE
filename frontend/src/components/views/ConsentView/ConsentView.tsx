@@ -19,6 +19,7 @@ import { RenderHtml } from "@/components/utils";
 import { LoadingView } from "../LoadingView";
 import styles from "./ConsentView.module.scss";
 import "@/scss/prose.scss";
+import { t } from "@/util/i18n";
 export interface ConsentViewProps {
   /**
    * A html string with the consent text
@@ -53,9 +54,9 @@ export default function ConsentView({
   consentHtml,
   participant,
   onConfirm = () => {},
-  title = "Consent",
-  confirmLabel = "Agree",
-  denyLabel = "Disagree",
+  title = t("consentView.title"),
+  confirmLabel = t("common.confirm"),
+  denyLabel = t("common.deny"),
 }: ConsentViewProps) {
   const [consent, loadingConsent] = useConsent(experimentSlug);
   const urlQueryString = window.location.search;
@@ -109,9 +110,9 @@ export default function ConsentView({
               data-testid="download-button"
               onClick={onDownload}
               outline={false}
-              variant="secondary"
+              variant="muted"
             >
-              Download consent form
+              {t("common.download")}
             </Button>
           </div>
         </Card.Section>

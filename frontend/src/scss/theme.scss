@@ -57,8 +57,20 @@ body,
   );
 }
 
+.fill-muted,
+.text-fill-muted {
+  background: gradient-fill(
+    var(--muted-start-color),
+    var(--muted-end-color),
+    var(--muted-scale, 1),
+    var(--muted-offset, 0),
+    var(--muted-angle, 70)
+  );
+}
+
 .text-fill-primary,
-.text-fill-secondary {
+.text-fill-secondary,
+.text-fill-muted {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

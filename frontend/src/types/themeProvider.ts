@@ -11,7 +11,7 @@ export type { ThemeName } from "@/theme/themes";
 
 type Color = string;
 
-export type Variant = "primary" | "secondary";
+export type Variant = "primary" | "secondary" | "danger" | "warning" | "muted";
 
 export interface ThemeFill extends GradientFill {
   /** The color to use when useGradients is false  */
