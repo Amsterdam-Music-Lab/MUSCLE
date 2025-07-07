@@ -60,7 +60,7 @@ class SocialMediaConfigInline(admin.StackedInline):
         return 1
 
 
-class ExperimentAdmin(admin.ModelAdmin, InlineActionsModelAdminMixin):
+class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     list_display = (
         "experiment_name",
         "slug_link",
@@ -78,7 +78,7 @@ class ExperimentAdmin(admin.ModelAdmin, InlineActionsModelAdminMixin):
     ]
 
     def experiment_name(self, obj):
-        return obj.name or "No name"
+        return obj.name or "<Unnamed>"
 
     experiment_name.short_description = "Name"
 

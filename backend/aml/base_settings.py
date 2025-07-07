@@ -135,6 +135,7 @@ LANGUAGES = [
     ("zh-hans", _("Chinese")),
 ]
 MODELTRANSLATION_LANGUAGES = [lang[0] for lang in LANGUAGES]
+MODELTRANSLATION_FALLBACK_LANGUAGES = ('en', 'nl')
 
 
 # Increase django limits for large data sets
