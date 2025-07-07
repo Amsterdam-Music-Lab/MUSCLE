@@ -1,13 +1,11 @@
 from django.conf import settings
 from django.contrib import admin, messages
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-
-from inline_actions.admin import InlineActionsModelAdminMixin
 from django.urls import reverse
 from django.utils.html import format_html
 
-from modeltranslation.admin import TabbedTranslationAdmin
-from nested_admin import NestedModelAdmin, NestedStackedInline, NestedTabularInline
+from inline_actions.admin import InlineActionsModelAdminMixin
 
 from experiment.models import (
     Block,
@@ -33,6 +31,9 @@ class BlockAdmin(admin.ModelAdmin):
     def has_module_permission(self, request):
         ''' Prevents the admin from being shown in the sidebar.'''
         return False
+
+    def _response_post_save(self, request, obj):
+        return HttpResponse('<script type="text/javascript">window.close()</script>')
 
 
 class PhaseInline(admin.StackedInline):
