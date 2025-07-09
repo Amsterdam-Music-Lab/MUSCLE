@@ -32,22 +32,24 @@
 
   {% if inline_admin_form.needs_explicit_pk_field %}{{ inline_admin_form.pk_field.field }}{% endif %}
   {% if inline_admin_form.fk_field %}{{ inline_admin_form.fk_field.field }}{% endif %}
+  {% if inline_admin_form.original %}
   <h4>Blocks</h4>
   <div class="block-container">
     {% for block in inline_admin_form|get_phase_blocks %}
       <div class="block-box">
-        <a href="javascript:window.open('/admin/experiment/block/{{block.pk}}/change/', '', 'width=600,height=800')">
+        <a class="change-block-link" href="javascript:window.open('/admin/experiment/block/{{block.pk}}/change/?_popup=1', '', 'width=600,height=800')">
         {{block}}
         </a>
       </div>
       <div class="block-connect"></div>
     {% endfor %}
     <div class="block-box">
-        <a class="addlink" href="javascript:window.open('/admin/experiment/block/add/', '', 'width=600,height=800')">
+        <a class="addlink" href="javascript:window.open('/admin/experiment/block/add/?phase_id={{ inline_admin_form.original.pk }}&_popup=1', '', 'width=600,height=800')">
             {% translate "Add" %}
         </a>
     </div>
   </div>
+  {% endif %}
 </div>{% endfor %}
   {% if inline_admin_formset.is_collapsible %}</details>{% endif %}
 </fieldset>

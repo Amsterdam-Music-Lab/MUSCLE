@@ -32,8 +32,26 @@ class BlockAdmin(admin.ModelAdmin):
         ''' Prevents the admin from being shown in the sidebar.'''
         return False
 
-    def _response_post_save(self, request, obj):
-        return HttpResponse('<script type="text/javascript">window.close()</script>')
+    def save_model(self, request, obj, form, changed):
+        if request.GET.get('phase_id'):
+            phase_id = int(request.GET.get('phase_id'))
+            phase = Phase.objects.get(pk=phase_id)
+            obj.phase = phase
+        super().save_model(request, obj, form, changed)
+
+    def response_change(self, request, obj):
+        return self._close_popup()
+
+    def response_add(self, request, obj, post_url_continue=None):
+        return self._close_popup()
+
+    def response_delete(self, request, obj_display, obj_id):
+        return self._close_popup()
+
+    def _close_popup(self):
+        return HttpResponse(
+            '<script type="text/javascript">window.close(); window.opener.location.reload();</script>'
+        )
 
 
 class PhaseInline(admin.StackedInline):
@@ -297,7 +315,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                 ]
             )
         )
-
 
 admin.site.register(Experiment, ExperimentAdmin)
 admin.site.register(Block, BlockAdmin)

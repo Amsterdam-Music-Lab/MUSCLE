@@ -1,8 +1,10 @@
-from django.test import TestCase, RequestFactory
 from django.contrib.admin.sites import AdminSite
+from django.contrib.auth import get_user_model
+from django.http import HttpResponseBadRequest
+from django.test import TestCase, RequestFactory
 from django.urls import reverse
-from django.utils.html import format_html
-from experiment.admin import ExperimentAdmin, PhaseAdmin
+
+from experiment.admin import BlockAdmin, ExperimentAdmin
 from experiment.models import Block, Experiment, Phase
 from section.models import Playlist
 from theme.models import ThemeConfig
@@ -51,51 +53,27 @@ class TestExperimentAdmin(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class PhaseAdminTest(TestCase):
+class PhaseInlineTemplateTest(TestCase):
     def setUp(self):
-        self.admin = PhaseAdmin(model=Phase, admin_site=AdminSite)
+        self.site = AdminSite()
+        self.admin = ExperimentAdmin(model=Experiment, admin_site=self.site)
+        self.user = get_user_model().objects.create_superuser(
+            username='admin', password='pass', email='admin@example.com'
+        )
+        self.client.login(username='admin', password='pass')
 
-    def test_phase_admin_related_experiment_method(self):
-        experiment = Experiment.objects.create(
-            slug="test-experiment", name="Test Experiment"
-        )
-        phase = Phase.objects.create(
-            index=1, randomize=False, experiment=experiment, dashboard=True
-        )
-        related_experiment = self.admin.related_experiment(phase)
-        expected_url = reverse("admin:experiment_experiment_change", args=[experiment.pk])
-        expected_related_experiment = format_html(
-            '<a href="{}">{}</a>', expected_url, experiment.name
-        )
-        self.assertEqual(related_experiment, expected_related_experiment)
-
-    def test_experiment_with_no_blocks(self):
-        experiment = Experiment.objects.create(
-            slug="no-blocks",
-            name="No Blocks",
-        )
+    def test_phase_inline_template_renders_blocks(self):
+        experiment = Experiment.objects.create(slug="inline-test", name="Inline Test")
         phase = Phase.objects.create(
             index=1, randomize=False, dashboard=True, experiment=experiment
         )
-        blocks = self.admin.blocks(phase)
-        self.assertEqual(blocks, "No blocks")
+        block = Block.objects.create(slug="block-inline", phase=phase)
 
-    def test_experiment_with_blocks(self):
-        experiment = Experiment.objects.create(
-            slug="with-blocks",
-            name="With Blocks",
-        )
-        phase = Phase.objects.create(
-            index=1, randomize=False, dashboard=True, experiment=experiment
-        )
-        block1 = Block.objects.create(slug="block-1", phase=phase)
-        block2 = Block.objects.create(slug="block-2", phase=phase)
-
-        blocks = self.admin.blocks(phase)
-        expected_blocks = format_html(
-            ", ".join([f"{block.slug}" for block in [block1, block2]])
-        )
-        self.assertEqual(blocks, expected_blocks)
+        url = reverse("admin:experiment_experiment_change", args=[experiment.pk])
+        response = self.client.get(url)
+        self.assertContains(response, "Blocks")
+        self.assertContains(response, block.slug)
+        self.assertContains(response, 'add/?phase_id=%s' % phase.pk)
 
 
 class TestDuplicateExperiment(TestCase):

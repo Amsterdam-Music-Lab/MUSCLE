@@ -2,8 +2,7 @@ import json
 import logging
 
 from django.http import Http404, HttpRequest, JsonResponse
-from django.shortcuts import redirect
-from django.utils.translation import activate, gettext_lazy as _, get_language
+from django.utils.translation import gettext_lazy as _, get_language
 from django_markup.markup import formatter
 
 from .models import Block, Experiment, Feedback, Session

@@ -2,6 +2,8 @@ from django import template
 
 register = template.Library()
 
+from experiment.models import Block
+
 
 @register.filter(name="get_langcode")
 def get_langcode(formset):
@@ -18,5 +20,4 @@ def get_block_slug(formset):
 
 @register.filter(name="get_phase_blocks")
 def get_phase_blocks(inline_admin_form):
-    if inline_admin_form.original:
-        return inline_admin_form.original.blocks.order_by('index').all()
+    return inline_admin_form.original.blocks.order_by('index').all()
