@@ -1,0 +1,66 @@
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+@import "@/scss/utils";
+
+// Margin by which the content is moved to the left under the
+// button to make sure the background runs flush
+$margin-left: 2em;
+$padding-x: 0.5em;
+
+.expandableButton {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 2.5em;
+  display: flex;
+
+  & > button {
+    flex-shrink: 0;
+    z-index: 1;
+  }
+
+  &[data-expanded="true"] .content {
+    opacity: 1;
+    width: 100%;
+  }
+
+  &:not([data-expanded="true"]) .content {
+    /* Instead of display: none, to keep nice transitions */
+    pointer-events: none;
+  }
+}
+
+.content {
+  position: relative;
+  width: 0;
+  display: flex;
+  opacity: 0;
+  transition: width 400ms ease-out, opacity 300ms ease;
+}
+
+.innerContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+
+  height: 100%;
+  margin-left: calc(-1 * $margin-left);
+  padding-left: calc($margin-left + $padding-x);
+  padding-right: calc($padding-x + 0.5em);
+  overflow: hidden;
+  border-radius: 0.75em;
+
+  @extend .bg-inset-sm, .sharp-border;
+  background-color: #fff;
+}
+
+.rounded .innerContent {
+  border-radius: 100em;
+}

@@ -1,0 +1,36 @@
+@import "@/scss/variables";
+@import "@/scss/utils.scss";
+@import "@/scss/theme.scss";
+
+.questionContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.question {
+  flex-grow: 1;
+  width: 100%;
+}
+
+.explainer {
+  @extend .text-muted;
+  margin-bottom: 1em;
+}
+
+.emphasizeTitle {
+  @extend .text-fill-primary;
+  font-weight: bold;
+}
+
+.expectedResponse {
+  @extend .small, .rounded-sm;
+  color: var(--info-solid);
+  padding: 0.25em 1em;
+  margin-top: 1em;
+  background: color-mix(in srgb, var(--info-solid) 5%, transparent);
+  strong {
+    font-weight: 600;
+  }
+}

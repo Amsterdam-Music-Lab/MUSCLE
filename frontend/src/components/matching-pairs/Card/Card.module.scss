@@ -1,0 +1,59 @@
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ * 
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+@import "@/scss/utils.scss";
+
+$transitionDuration: 500ms;
+
+.card {
+  // Note that the cards need not be square: this is a consequence
+  // of being in a square container
+  height: 100%;
+  cursor: pointer;
+  overflow: hidden;
+
+  // Todo!
+  border-radius: 15%;
+
+  box-shadow: 0 0 2em rgba(0, 0, 0, 0.1);
+
+  transition: transform ease-out $transitionDuration,
+    opacity ease-out $transitionDuration;
+  transform-style: preserve-3d;
+  perspective: 1000px; // Required for 3d flipping effect
+}
+
+.card:not(.disabled):not(.flipped):hover {
+  transform: rotateY(25deg) rotateX(3deg);
+}
+
+.flipped {
+  transform: rotateY(180deg);
+}
+
+.front,
+.back {
+  // Ensure the back and front fill the entire card.
+  width: 100%;
+  height: 100%;
+}
+
+.back {
+  display: flex;
+  justify-content: center;
+}
+
+.front {
+  transform: rotateY(180deg);
+}
+
+.disabled {
+  transition-duration: 300ms;
+  opacity: 0;
+  pointer-events: none;
+}

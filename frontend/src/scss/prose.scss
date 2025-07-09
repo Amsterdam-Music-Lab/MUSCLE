@@ -1,0 +1,23 @@
+@import "@/scss/theme.scss";
+
+.prose {
+  h1,
+  h2,
+  h3 {
+    @extend .text-fill-primary;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+    margin-top: 1rem;
+  }
+
+  hr {
+    margin: 2em 0;
+  }
+}

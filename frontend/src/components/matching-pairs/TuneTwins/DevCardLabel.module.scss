@@ -1,0 +1,8 @@
+@import "@/scss/utils";
+.devCardLabel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #fff;
+  @extend .text-light;
+}

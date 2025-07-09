@@ -1,0 +1,53 @@
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+@import "@/scss/animations";
+
+@keyframes rotate {
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+.circle {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  svg.circleSvg {
+    @extend .transition-appear;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  &:not(.rotate) svg.circleSvg {
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+  }
+
+  &.rotate svg.circleSvg {
+    animation-name: rotate;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+}
+
+.children {
+  margin: auto;
+  color: var(--circle-color, inherit);
+
+  & > * {
+    margin: auto;
+  }
+}
+
+.circlePercentage {
+  transition: stroke-dashoffset 0.1s linear;
+}

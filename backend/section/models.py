@@ -66,6 +66,9 @@ class Playlist(models.Model):
         errors = []
         sections = Section.objects.filter(playlist=self)
 
+        if self.url_prefix:
+            return self.csv
+
         for section in sections:
             filename = str(section.filename)
 

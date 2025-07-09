@@ -1,0 +1,154 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+@import "@/scss/animations.scss";
+@import "@/scss/variables.scss";
+
+$cupImage: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODUiIGhlaWdodD0iODYiIHZpZXdCb3g9IjAgMCA4NSA4NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTY3LjIwMjIgNi4wNTEyN0M2Ny4yMDIyIDcuNjk2MjIgNjcuMTYzIDkuMzIyNjUgNjcuMDg2NSAxMC45MjY5SDcxLjQyNzNDNzUuNzM1NSAxMC45MjY5IDc5LjI4NDMgMTQuNDM0NCA3OC43MzY0IDE4LjcwNzdDNzYuNDUyNSAzNi41MjA3IDY2LjQ4MDkgNDkuOTMwNCA1NC41MjU4IDQ5LjkzMDRMNTQuMzk2IDQ5LjkyOTlDNTMuMTk2NCA1MS4yNjgxIDUxLjkzNiA1Mi40MTAyIDUwLjYyNTMgNTMuMzM0OFY2My4zNjEyQzU2LjExODkgNjQuNzA5MSA2MC40MTk4IDY5LjA5MzEgNjEuNjQ3NSA3NC42MzI5SDYyLjAwMTVDNjMuMjU4IDc0LjYzMjkgNjQuMjc2NyA3NS42NTE1IDY0LjI3NjcgNzYuOTA4MUM2NC4yNzY3IDc4LjE2NDYgNjMuMjU4IDc5LjE4MzMgNjIuMDAxNSA3OS4xODMzSDIzLjMyM0MyMi4wNjY1IDc5LjE4MzMgMjEuMDQ3OCA3OC4xNjQ2IDIxLjA0NzggNzYuOTA4MUMyMS4wNDc4IDc1LjY1MTUgMjIuMDY2NSA3NC42MzI5IDIzLjMyMyA3NC42MzI5SDIzLjY3NzNDMjQuOTA1IDY5LjA5MzMgMjkuMjA1NiA2NC43MDk0IDM0LjY5ODkgNjMuMzYxM1Y1My41NTg1QzMzLjI3MTYgNTIuNTk2NiAzMS45MDIyIDUxLjM3ODEgMzAuNjA0IDQ5LjkyOTlMMzAuNDczNyA0OS45MzA0QzE4LjUxODUgNDkuOTMwNCA4LjU0NjkxIDM2LjUyMDcgNi4yNjMwMyAxOC43MDc3QzUuNzE1MTQgMTQuNDM0NCA5LjI2Mzk1IDEwLjkyNjkgMTMuNTcyMiAxMC45MjY5SDE3LjkxMzVDMTcuODM2OSA5LjMyMjY1IDE3Ljc5NzggNy42OTYyMiAxNy43OTc4IDYuMDUxMjdINjcuMjAyMlpNNjYuNzY0OSAxNS40NzczQzY1LjY2MDYgMjcuMjE5NCA2Mi41MzIgMzcuNTA3IDU4LjE0MjkgNDQuNzkyM0M2MS4wOTc2IDQzLjgyNzggNjQuMDE1NCA0MS42NjU4IDY2LjY0NTIgMzguMjMyMUM3MC4zNDEyIDMzLjQwNjEgNzMuMTYyNyAyNi4zOTggNzQuMjIyOSAxOC4xMjlDNzQuMzcxMyAxNi45NzIxIDczLjQwNzYgMTUuNDc3MyA3MS40MjczIDE1LjQ3NzNINjYuNzY0OVpNMTguMjM1MSAxNS40NzczSDEzLjU3MjJDMTEuNTkxOSAxNS40NzczIDEwLjYyODIgMTYuOTcyMSAxMC43NzY1IDE4LjEyOUMxMS44MzY3IDI2LjM5OCAxNC42NTgyIDMzLjQwNjEgMTguMzU0MiAzOC4yMzIxQzIwLjk4NDIgNDEuNjY2MSAyMy45MDIzIDQzLjgyODEgMjYuODU3MiA0NC43OTI2QzIyLjQ2OCAzNy41MDcyIDE5LjMzOTQgMjcuMjE5NSAxOC4yMzUxIDE1LjQ3NzNaTTQzLjE4ODIgMTIuODU2NEM0My41Mzk2IDEyLjg1NjQgNDMuODI0NiAxMy4xMzI1IDQzLjgyNDYgMTMuNDczMlYzNy45MTAyQzQzLjgyNDYgMzguMjUwOSA0My41Mzk2IDM4LjUyNyA0My4xODgyIDM4LjUyN0g0MS44MTI0QzQxLjQ2MSAzOC41MjcgNDEuMTc2IDM4LjI1MDkgNDEuMTc2IDM3LjkxMDJWMTMuNDczMkM0MS4xNzYgMTMuMTMyNSA0MS40NjEgMTIuODU2NCA0MS44MTI0IDEyLjg1NjRINDMuMTg4MlpNNDkuMTIxNyAyMy43NDE1QzQ5LjEyMTcgMjMuNDAwOCA0OC44MzY4IDIzLjEyNDYgNDguNDg1MyAyMy4xMjQ2SDQ3LjEwOTZDNDYuNzU4MSAyMy4xMjQ2IDQ2LjQ3MzEgMjMuNDAwOCA0Ni40NzMxIDIzLjc0MTVWMzcuOTEwMkM0Ni40NzMxIDM4LjI1MDkgNDYuNzU4MSAzOC41MjcgNDcuMTA5NiAzOC41MjdINDguNDg1M0M0OC44MzY4IDM4LjUyNyA0OS4xMjE3IDM4LjI1MDkgNDkuMTIxNyAzNy45MTAyVjIzLjc0MTVaTTU0LjQxODggMzEuNDQyN0M1NC40MTg4IDMxLjEwMiA1NC4xMzM5IDMwLjgyNTggNTMuNzgyNCAzMC44MjU4SDUyLjQwNjdDNTIuMDU1MiAzMC44MjU4IDUxLjc3MDMgMzEuMTAyIDUxLjc3MDMgMzEuNDQyN1YzNy45MTAyQzUxLjc3MDMgMzguMjUwOSA1Mi4wNTUyIDM4LjUyNyA1Mi40MDY3IDM4LjUyN0g1My43ODI0QzU0LjEzMzkgMzguNTI3IDU0LjQxODggMzguMjUwOSA1NC40MTg4IDM3LjkxMDJWMzEuNDQyN1pNMzguNTI3NCAyMy43NDE1QzM4LjUyNzQgMjMuNDAwOCAzOC4yNDI1IDIzLjEyNDYgMzcuODkxIDIzLjEyNDZIMzYuNTE1M0MzNi4xNjM4IDIzLjEyNDYgMzUuODc4OSAyMy40MDA4IDM1Ljg3ODkgMjMuNzQxNVYzNy45MTAyQzM1Ljg3ODkgMzguMjUwOSAzNi4xNjM4IDM4LjUyNyAzNi41MTUzIDM4LjUyN0gzNy44OTFDMzguMjQyNSAzOC41MjcgMzguNTI3NCAzOC4yNTA5IDM4LjUyNzQgMzcuOTEwMlYyMy43NDE1Wk0zMy4yMzAzIDMxLjQ0MjdDMzMuMjMwMyAzMS4xMDIgMzIuOTQ1NCAzMC44MjU4IDMyLjU5MzkgMzAuODI1OEgzMS4yMTgyQzMwLjg2NjcgMzAuODI1OCAzMC41ODE4IDMxLjEwMiAzMC41ODE4IDMxLjQ0MjdWMzcuOTEwMkMzMC41ODE4IDM4LjI1MDkgMzAuODY2NyAzOC41MjcgMzEuMjE4MiAzOC41MjdIMzIuNTkzOUMzMi45NDU0IDM4LjUyNyAzMy4yMzAzIDM4LjI1MDkgMzMuMjMwMyAzNy45MTAyVjMxLjQ0MjdaIiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==);
+
+$crownImage: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkzIiBoZWlnaHQ9IjE5MyIgdmlld0JveD0iMCAwIDE5MyAxOTMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMTAuNjAyIDIxLjk3Mkw5Ni41MTA3IDAuNTI1MzkxTDgyLjQxODkgMjEuOTcyTDYxLjUzMTMgNy4wNjQxN0w1Ni4xMzg1IDMyLjE1MzFMMzEuMjc2MSAyNS43OTc0TDM1LjMxMDYgNTEuMTQwM0w5LjgzMTE1IDU0LjE5NTFMMjIuNzQ4MiA3Ni4zNjkxTDAuMDkyNzczNCA4OC40MjJMMjAuMTQ3NyAxMDQuNDMyTDMuMzc2MTcgMTIzLjg1NUwyNy44NjA1IDEzMS41NEwxOS4yMzc5IDE1NS43MUw0NC44NDQ5IDE1NC4wMzFMNDUuNTM1OCAxNzkuNjg0TDY4LjgwNyAxNjguODY4TDc4LjcxODEgMTkyLjUzOUw5Ni41MTA3IDE3NC4wNDdMMTE0LjMwMyAxOTIuNTM5TDEyNC4yMTQgMTY4Ljg2OEwxNDcuNDg2IDE3OS42ODRMMTQ4LjE3NyAxNTQuMDMxTDE3My43ODQgMTU1LjcxTDE2NS4xNjEgMTMxLjU0TDE4OS42NDUgMTIzLjg1NUwxNzIuODc0IDEwNC40MzJMMTkyLjkyOSA4OC40MjJMMTcwLjI3MyA3Ni4zNjkxTDE4My4xOSA1NC4xOTUxTDE1Ny43MTEgNTEuMTQwM0wxNjEuNzQ1IDI1Ljc5NzRMMTM2Ljg4MyAzMi4xNTMxTDEzMS40OSA3LjA2NDE3TDExMC42MDIgMjEuOTcyWk05Ni41MDk4IDE3MC45MjJDMTM3LjEzOSAxNzAuOTIyIDE3MC4wNzUgMTM3Ljk4NiAxNzAuMDc1IDk3LjM1NjRDMTcwLjA3NSA1Ni43Mjc0IDEzNy4xMzkgMjMuNzkxIDk2LjUwOTggMjMuNzkxQzU1Ljg4MDcgMjMuNzkxIDIyLjk0NDMgNTYuNzI3NCAyMi45NDQzIDk3LjM1NjRDMjIuOTQ0MyAxMzcuOTg2IDU1Ljg4MDcgMTcwLjkyMiA5Ni41MDk4IDE3MC45MjJaIiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==);
+
+.cupContainer {
+  --cup-radius: 100px;
+  --cup-relative-size: 0.5;
+  --cup-color: #000;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  // This is determined by the rays image
+  width: calc(1.5 * var(--cup-radius));
+  height: calc(1.5 * var(--cup-radius));
+  overflow: hidden;
+  box-sizing: content-box;
+}
+
+.circle {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: calc(0.05 * var(--cup-radius));
+  width: var(--cup-radius);
+  height: var(--cup-radius);
+  margin: auto;
+  z-index: 2;
+
+  box-sizing: border-box;
+  border: calc(0.04 * var(--cup-radius)) solid white;
+  border-radius: 50%;
+  background-color: var(--cup-color);
+
+  &.halo {
+    box-shadow: 0 0 calc(0.25 * var(--cup-radius)) var(--cup-color);
+  }
+
+  // TODO rename to something like "appear"
+  @extend .circleIntro;
+}
+
+.rays {
+  position: absolute;
+  margin: auto;
+  width: calc(1.3 * var(--cup-radius));
+  height: calc(1.3 * var(--cup-radius));
+  background-image: $crownImage;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  z-index: 1;
+  opacity: 0.3;
+
+  .animate & {
+    animation-name: rotate;
+    animation-timing-function: linear;
+    animation-duration: 20s;
+    animation-iteration-count: infinite;
+  }
+}
+
+.cup {
+  width: calc(var(--cup-relative-size) * var(--cup-radius));
+  height: calc(var(--cup-relative-size) * var(--cup-radius));
+  background-image: $cupImage;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+
+  .animate & {
+    animation-iteration-count: infinite;
+    animation-name: bounce;
+    animation-duration: 2.8s;
+    animation-timing-function: ease-in-out;
+  }
+}
+
+.label {
+  width: 60%;
+  text-align: center;
+  font-size: 1.1rem;
+
+  &.uppercase {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 0.9em;
+    letter-spacing: 0.1em;
+  }
+}
+
+.diamond {
+  --cup-color: #1c79ef;
+
+  // &::after {
+  //   animation-delay: -0.588s;
+  // }
+}
+
+.platinum {
+  --cup-color: #7ddff5;
+
+  // &::after {
+  //   opacity: 0.05;
+  //   animation-delay: -0.588s;
+  // }
+}
+
+.gold {
+  --cup-color: #{$gold};
+}
+
+.silver {
+  --cup-color: #{$gray};
+
+  // &::before {
+  //   opacity: 0.05;
+  //   animation-duration: 40s;
+  // }
+}
+
+.bronze {
+  --cup-color: #ee8b6c;
+
+  // &::before {
+  //   opacity: 0.05;
+  //   animation-duration: 60s;
+  //   animation-name: none;
+  //   transform: scale(0.9);
+  // }
+}
+
+.plastic {
+  --cup-color: rgb(224, 227, 229);
+
+  // &::before {
+  //   display: none;
+  // }
+}

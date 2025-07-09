@@ -64,7 +64,7 @@ LOGGING = {
     }
 }
 
-RELOAD_PARTICIPANT_TARGET = 'http://app.amsterdammusiclab.nl'
+RELOAD_PARTICIPANT_TARGET = '/tunetwins/'
 
 TESTING = os.getenv('AML_TESTING', '') != 'False'
 

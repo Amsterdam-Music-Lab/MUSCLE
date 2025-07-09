@@ -1,0 +1,202 @@
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+@import "@/scss/utils";
+@import "@/scss/variables";
+
+// Structure
+//
+// - wrapper:   outer element, 100% h/w, with a padding.
+//              This element is watched for portrait/landscape orientation
+// - padding:   This element basically ensures the padding of the wrapper has
+//              an effect. It is a container that always contains its only child
+//              which maintains a fixed aspect ratio using the
+//              .contain-fixed-aspect-child util
+// - container  The actual container with a fixed aspect ratio that depens on
+//              the orientation of the wrapper (landscape/portrait). It is
+//              divided into four sections: the header, square, footer and aside.
+//              See stories for examples.
+
+// Minimum width of the container in landscape orientation
+// Min height determined automatically using the aspect ratio
+$minWidthLandscape: 350px;
+
+// Similar, but for portrait orientation
+$minHeightPortrait: 300px;
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+}
+
+.padding {
+  // Note that if the screen is small enough (<minHeight in landscape mode)
+  // the container will overflow at the top, and so part will be hidden...
+  // One solution is not to center the container, but that doesn't look
+  // very nice..
+  display: flex;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+  @extend .contain-fixed-aspect-child;
+}
+
+.container {
+  aspect-ratio: var(--sl-landscape-aspect-ratio);
+}
+
+.square {
+  aspect-ratio: 1;
+}
+
+// Landscape container
+.wrapper[data-orientation="landscape"] {
+  padding: 1em 2em;
+
+  .padding {
+    flex-direction: column;
+  }
+
+  .container {
+    min-width: var(--sl-landscape-min-width, $minWidthLandscape);
+    min-height: calc(
+      var(--sl-landscape-aspect-ratio-inverse) *
+        var(--sl-landscape-min-width, $minWidthLandscape)
+    );
+  }
+
+  .square {
+    height: calc(var(--sl-landscape-square-height) * 100%);
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .footer {
+    width: calc(
+      var(--sl-landscape-aspect-ratio-inverse) *
+        var(--sl-landscape-square-height) * 100%
+    );
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+
+  .footer,
+  .aside {
+    height: calc(100% - var(--sl-landscape-square-height) * 100%);
+  }
+
+  .header,
+  .aside {
+    width: calc(
+      100% - var(--sl-landscape-aspect-ratio-inverse) *
+        var(--sl-landscape-square-height) * 100%
+    );
+  }
+
+  .header {
+    position: absolute;
+    height: calc(var(--sl-landscape-square-height) * 100%);
+  }
+
+  .aside {
+    height: calc(100% - var(--sl-landscape-square-height) * 100%);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+}
+
+// Portrait container
+.wrapper[data-orientation="portrait"] {
+  padding: 1em 0.5em;
+
+  .padding {
+    flex-direction: row;
+  }
+
+  .container {
+    aspect-ratio: var(--sl-portrait-aspect-ratio);
+    display: flex;
+    flex-direction: column;
+
+    min-height: var(--sl-portrait-min-height, $minHeightPortrait);
+    min-width: calc(
+      var(--sl-portrait-aspect-ratio) *
+        var(--sl-portrait-min-height, $minHeightPortrait)
+    );
+  }
+
+  .square {
+    flex-shrink: 0;
+    flex-grow: 0;
+  }
+
+  .header {
+    // flex-grow: 1;
+    // flex-basis: var(--portrait-header-height);
+    flex-basis: calc(
+      var(--sl-portrait-header-height) * var(--sl-portrait-aspect-ratio) * 100%
+    );
+  }
+
+  // .header,
+  .footer {
+    flex-grow: 1;
+    //   flex-basis: calc(var(--sl-portrait-aspect-ratio) / 2 * 100%);
+  }
+}
+
+// Debugging
+.debug {
+  .container,
+  .header,
+  .square,
+  .footer,
+  .aside {
+    min-height: 1em;
+    min-width: 1em;
+    display: grid;
+    place-content: center;
+  }
+
+  &[data-orientation="landscape"] {
+    border: 1px solid blue;
+  }
+
+  &[data-orientation="portrait"] {
+    border: 1px solid red;
+  }
+
+  .container {
+    background-color: #f5f5f5;
+  }
+
+  .header {
+    background-color: #ff000044;
+  }
+
+  .main {
+    background-color: #0000ff44;
+  }
+
+  .square {
+    background-color: #ffff0044;
+  }
+
+  .footer {
+    background-color: #00ff0044;
+  }
+
+  .aside {
+    background-color: #00ffff44;
+  }
+}

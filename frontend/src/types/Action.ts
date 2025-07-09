@@ -1,4 +1,4 @@
-import Social from "@/types/Social";
+import { ShareConfig } from "@/types/share";
 import Block, { FeedbackInfo } from "@/types/Block";
 import Participant from "@/types/Participant";
 import { PlaybackArgs } from "./Playback";
@@ -64,8 +64,9 @@ export interface Final {
   block: Block;
   participant: Participant;
   score: number;
+  totalScore?: number;
   percentile?: number;
-  final_text: string | TrustedHTML;
+  final_text?: string | TrustedHTML;
   action_texts: {
     all_experiments: string;
     profile: string;
@@ -78,14 +79,14 @@ export interface Final {
   show_participant_link: boolean;
   participant_id_only: boolean;
   show_profile_link: boolean;
-  social: Social;
+  social: ShareConfig;
   feedback_info?: FeedbackInfo;
-  points: string;
-  rank: {
+  points?: string;
+  rank?: {
     class: string;
     text: string;
   };
-  logo: {
+  logo?: {
     image: string;
     link: string;
   };
@@ -107,14 +108,14 @@ export interface Loading {
 
 export type Action = SharedActionProps &
   (
-    | { view: "EXPLAINER" } & Explainer
-    | { view: "INFO" } & Info
-    | { view: "TRIAL_VIEW" } & Trial
-    | { view: 'SCORE' } & Score
-    | { view: 'FINAL' } & Final
-    | { view: 'PLAYLIST' } & Playlist
-    | { view: 'REDIRECT' } & Redirect
-    | { view: "LOADING" } & Loading
-  )
+    | ({ view: "EXPLAINER" } & Explainer)
+    | ({ view: "INFO" } & Info)
+    | ({ view: "TRIAL_VIEW" } & Trial)
+    | ({ view: "SCORE" } & Score)
+    | ({ view: "FINAL" } & Final)
+    | ({ view: "PLAYLIST" } & Playlist)
+    | ({ view: "REDIRECT" } & Redirect)
+    | ({ view: "LOADING" } & Loading)
+  );
 
 export default Action;

@@ -1,4 +1,6 @@
+from django.core.exceptions import ValidationError
 from django.test import override_settings, TestCase
+
 
 from section.models import Playlist, Section, Song
 
@@ -95,6 +97,22 @@ class PlaylistModelTest(TestCase):
         playlist.url_prefix = "https://test.com"
         playlist.save()
         self.assertEqual(playlist.url_prefix, "https://test.com/")
+
+    def test_no_file_validation_url_prefix(self):
+        playlist = Playlist.objects.get(name="TestPlaylist")
+        playlist.csv = (
+            "Måneskin,Zitti e buoni,0.0,10.0,maneskin.mp3,0,0\n"
+            "Duncan Laurence,Arcade,0.0,10.0,laurence.mp3,1,2\n"
+            "Netta,Toy,0.0,10.0,netta.mp3,tag,group\n"
+            "Salvador Sobral,Amar pelos dois,0.0,10.0,sobral.mp3,0,0\n"
+        )
+        playlist._update_sections()
+        playlist.save()
+        with self.assertRaises(ValidationError):
+            playlist.clean_csv()
+        playlist.url_prefix = "https://test.com"
+        playlist.save()
+        self.assertIsNotNone(playlist.clean_csv())
 
 
 class SectionModelTest(TestCase):

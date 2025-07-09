@@ -1,133 +1,137 @@
 .anim {
-    animation-timing-function: ease-out;
-    animation-duration: 1500ms;
-    animation-iteration-count: 1;
-    animation-fill-mode: both;
+  animation-timing-function: ease-out;
+  animation-duration: 1500ms;
+  animation-iteration-count: 1;
+  animation-fill-mode: both;
 }
 
 .anim-speed-2500 {
-    animation-duration: 2500ms;
+  animation-duration: 2500ms;
 }
 
 .anim-speed-1000 {
-    animation-duration: 1000ms;
+  animation-duration: 1000ms;
 }
 
 .anim-speed-500 {
-    animation-duration: 500ms;
+  animation-duration: 500ms;
 }
 
 .anim-speed-300 {
-    animation-duration: 300ms;
+  animation-duration: 300ms;
 }
 
 .anim-fade-in {
-    animation-name: fadeInAnimation;
+  animation-name: fadeInAnimation;
 }
 
 .anim-delay-1 {
-    animation-delay: 0.3s;
+  animation-delay: 0.3s;
 }
 
 .anim-delay-2 {
-    animation-delay: 0.6s;
+  animation-delay: 0.6s;
 }
 
 .anim-delay-3 {
-    animation-delay: 0.9s;
+  animation-delay: 0.9s;
 }
 
 .anim-delay-4 {
-    animation-delay: 0.9s;
+  animation-delay: 0.9s;
 }
 
 @keyframes fadeInAnimation {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .anim-fade-in-slide-left {
-    animation-name: fadeInSlideLeftAnimation;
+  animation-name: fadeInSlideLeftAnimation;
 }
 
 @keyframes fadeInSlideLeftAnimation {
-    0% {
-        opacity: 0;
-        transform: translateX(100px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(0);
-    }
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .anim-fade-in-slide-up {
-    animation-name: fadeInSlideUpAnimation;
+  animation-name: fadeInSlideUpAnimation;
 }
 
 @keyframes fadeInSlideUpAnimation {
-    0% {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes circleIntro {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-.circleIntro {
-    animation-name: circleIntro;
-    animation-duration: 2s;
-    animation-fill-mode: both;
-    animation-timing-function: ease-out;
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes bounce {
-    0% {
-        transform: scale(1.05) rotate(2deg);
-    }
-    25% {
-        transform: scale(0.95) rotate(0deg);
-    }
-    50% {
-        transform: scale(1.05) rotate(-2deg);
-    }
-    75% {
-        transform: scale(0.95) rotate(0deg);
-    }
-    100% {
-        transform: scale(1.05) rotate(2deg);
-    }
+  0% {
+    transform: scale(1.05) rotate(2deg);
+  }
+  25% {
+    transform: scale(0.95) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.05) rotate(-2deg);
+  }
+  75% {
+    transform: scale(0.95) rotate(0deg);
+  }
+  100% {
+    transform: scale(1.05) rotate(2deg);
+  }
 }
 
 @keyframes rotate {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-@keyframes circleIntro {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+@keyframes transition-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.transition-appear {
+  animation-name: transition-appear;
+  animation-duration: 2s;
+  animation-fill-mode: both;
+  animation-timing-function: ease-out;
+}
+
+.circleIntro {
+  @extend .transition-appear;
 }

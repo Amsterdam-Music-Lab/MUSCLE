@@ -1,0 +1,64 @@
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ * 
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+@keyframes trophyAnimation {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(0.5);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(1.1);
+  }
+  90% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.scoreBoard {
+  position: relative;
+
+  // override card default
+  overflow: visible;
+}
+
+.trophy {
+  position: absolute;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  top: -1em;
+  right: -1em;
+  z-index: 10;
+
+  svg {
+    animation: 700ms ease-in 0s 1 trophyAnimation;
+  }
+}
+
+.trophyLabel {
+  position: absolute;
+  font-size: 1.3em;
+  transform: rotate(-2deg);
+  top: -1em;
+  right: -0.5em;
+
+  font-weight: 800;
+  color: var(--text-light, #fff);
+}
+
+.trophyIcon {
+  position: absolute;
+}
