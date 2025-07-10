@@ -74,7 +74,7 @@ export default function LinkButton<T extends ElementType = "button">({
   } else if (isRelativeUrl(link)) {
     Component = Link;
     props = {
-      to: link,
+      to: `/redirect${link}`,
       className: classNames(styles.anchorButton, classes),
       ...props,
     };
