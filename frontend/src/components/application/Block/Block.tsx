@@ -63,7 +63,6 @@ export default function Block() {
   const { expSlug, blockSlug } = useParams();
   const [block, loadingBlock] = useBlock(blockSlug!);
   const [experiment, loadingExperiment] = useExperiment(expSlug!);
-  const [consent, loadingConsent] = useConsent(expSlug);
 
   //////////////////////////////////////////////////////////////////////
 
@@ -128,8 +127,7 @@ export default function Block() {
 
   //////////////////////////////////////////////////////////////////////
 
-  const isLoading =
-    loadingBlock || loadingExperiment || loadingConsent || !participant;
+  const isLoading = loadingBlock || loadingExperiment || !participant;
 
   /**
    * Go to the first round when the block and partipant have been loaded
@@ -143,9 +141,6 @@ export default function Block() {
       setError("Could not load the experiment");
     } else if (!block.session_id && session) {
       return setError("Session could not be created");
-    } else if (!consent) {
-      // Go back to the experiment page if consent is required
-      navigate(routes.experiment(expSlug));
     } else {
       // Finished loading!
       setBlock(block);
@@ -168,8 +163,6 @@ export default function Block() {
     loadingExperiment,
     participant,
     setError,
-    consent,
-    loadingConsent,
   ]);
 
   // Theme
@@ -190,11 +183,7 @@ export default function Block() {
   // Handle redirect actions
   useEffect(() => {
     if (currentAction?.view === "REDIRECT" && currentAction.url) {
-      // if (currentAction.url.startsWith("/")) {
-      // navigate(currentAction.url);
-      // } else {
-      window.location.href = currentAction.url;
-      // }
+      navigate(currentAction.url);
     }
   }, [currentAction, navigate]);
 

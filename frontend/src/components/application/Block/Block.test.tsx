@@ -140,7 +140,8 @@ describe("Block Component", () => {
     });
   });
 
-  it("redirects if consent has not yet been given", async () => {
+  it.skip("redirects if consent has not yet been given", async () => {
+    // This redirect is disabled as it caused a redirect loop
     useBlockMock.mockImplementation(() => [blockObj, false]);
     useExperimentMock.mockReturnValue([true, false]);
     useConsentMock.mockReturnValue([false, false]);
