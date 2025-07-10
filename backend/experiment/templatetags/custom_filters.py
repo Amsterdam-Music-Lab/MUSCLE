@@ -2,8 +2,6 @@ from django import template
 
 register = template.Library()
 
-from experiment.models import Block
-
 
 @register.filter(name="get_langcode")
 def get_langcode(formset):
