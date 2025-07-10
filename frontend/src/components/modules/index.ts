@@ -10,6 +10,7 @@ export * from "./Question";
 export * from "./FeedbackForm";
 export * from "./ParticipantLink";
 export * from "./Timeline";
+export * from "./Trophy";
 export * from "./ScoreCounter";
 export * from "./ScoreBadge";
 export * from "./ScoreBoard";

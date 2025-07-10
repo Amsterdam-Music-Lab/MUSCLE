@@ -14,6 +14,9 @@ export interface TimelineStep extends SVGSymbolProps {
 }
 
 export interface BaseTimeline {
+  /** The current active step */
+  currentStep?: number;
+
   dotSize?: number;
 
   trophySize?: number;

@@ -1,6 +1,7 @@
 import Timeline from "./Timeline";
 
 const timeline = {
+  currentStep: 4,
   symbols: [
     "dot",
     "dot",
@@ -15,6 +16,7 @@ const timeline = {
 };
 
 const timeline2 = {
+  currentStep: 7,
   symbols: [
     "star-5",
     "dot",
@@ -37,21 +39,18 @@ export default {
 export const Default = {
   args: {
     timeline: timeline,
-    step: 4,
   },
 };
 
 export const Alternative = {
   args: {
     timeline: timeline2,
-    step: 7,
   },
 };
 
 export const CustomFill = {
   args: {
     timeline: timeline,
-    step: 4,
     fillPast: {
       startColor: "#ff0000",
       endColor: "#00ff00",
@@ -64,7 +63,6 @@ export const CustomFill = {
 export const NoSymbols = {
   args: {
     timeline: timeline,
-    step: 5,
     showSymbols: false,
   },
 };
@@ -72,7 +70,6 @@ export const NoSymbols = {
 export const NoSpine = {
   args: {
     timeline: timeline,
-    step: 5,
     showSpine: false,
   },
 };
@@ -80,22 +77,12 @@ export const NoSpine = {
 export const NoDots = {
   args: {
     timeline: { ...timeline, showDots: false },
-    step: 5,
-  },
-};
-
-export const NoVariant = {
-  args: {
-    timeline: timeline2,
-    step: 7,
-    variant: null,
   },
 };
 
 export const PrimaryVariant = {
   args: {
     timeline: timeline2,
-    step: 7,
     variant: "primary",
   },
 };
@@ -103,7 +90,6 @@ export const PrimaryVariant = {
 export const SecondaryVariant = {
   args: {
     timeline: timeline2,
-    step: 7,
     variant: "secondary",
   },
 };
@@ -111,15 +97,14 @@ export const SecondaryVariant = {
 export const CustomizeEverything = {
   args: {
     timeline: {
+      currentStep: 3,
       steps: [
         { symbol: "dot" },
         { symbol: "star-4", fill: "#0ff" },
         { symbol: "star-5", fill: "#f00", size: 80 },
         { symbol: "star-6", size: 50, fill: "#ff0" },
       ],
-      // variant: "secondary",
       fill: "#0f0",
     },
-    step: 3,
   },
 };

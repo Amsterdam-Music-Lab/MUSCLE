@@ -89,6 +89,12 @@ import { qrCodePlugin } from "./plugins/QRCodePlugin";
 import type { FlexPluginMeta, FlexPluginSpec } from "./plugins/FlexPlugin";
 import { flexPlugin } from "./plugins/FlexPlugin";
 
+import type {
+  TrophyPluginMeta,
+  TrophyPluginSpec,
+} from "./plugins/TrophyPlugin";
+import { trophyPlugin } from "./plugins/TrophyPlugin";
+
 //
 // Combine all types
 //
@@ -108,7 +114,8 @@ export type AllPluginMeta =
   | MarkdownPluginMeta
   | CardPluginMeta
   | QRCodePluginMeta
-  | FlexPluginMeta;
+  | FlexPluginMeta
+  | TrophyPluginMeta;
 
 export type AllPluginSpec =
   | LogoPluginSpec
@@ -125,7 +132,8 @@ export type AllPluginSpec =
   | MarkdownPluginSpec
   | CardPluginSpec
   | QRCodePluginSpec
-  | FlexPluginSpec;
+  | FlexPluginSpec
+  | TrophyPluginSpec;
 
 export type PluginRegistry = Record<AllPluginMeta["name"], AllPluginMeta>;
 
@@ -146,4 +154,5 @@ export const pluginMetaRegistry: PluginRegistry = {
   [cardPlugin.name]: cardPlugin,
   [qrCodePlugin.name]: qrCodePlugin,
   [flexPlugin.name]: flexPlugin,
+  [trophyPlugin.name]: trophyPlugin,
 };

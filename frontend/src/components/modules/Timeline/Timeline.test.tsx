@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
 import { describe, test, expect } from "vitest";
 import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders.tsx";
 import Timeline, { processTimelineConfig } from "./Timeline.tsx";
@@ -55,15 +62,14 @@ describe("processTimelineConfig", () => {
 describe("Timeline component", () => {
   const timelineConfig = {
     symbols: ["dot", "star", "dot", "star-5"],
+    currentStep: 2,
     dotSize: 10,
     trophySize: 20,
     animate: true,
   } as TimelineConfig;
 
   test("renders symbols and spine segments", () => {
-    const { container } = render(
-      <Timeline timeline={timelineConfig} step={2} />
-    );
+    const { container } = render(<Timeline timeline={timelineConfig} />);
     const steps = container.querySelectorAll(`.${styles.step}`);
     expect(steps).toHaveLength(4);
     const spines = container.querySelectorAll(`.${styles.spineSegment}`);
@@ -71,7 +77,7 @@ describe("Timeline component", () => {
   });
 
   test("does not render symbols if showSymbols is false", () => {
-    render(<Timeline timeline={timelineConfig} step={1} showSymbols={false} />);
+    render(<Timeline timeline={timelineConfig} showSymbols={false} />);
 
     const symbols = document.querySelectorAll('[class*="symbol"]');
     expect(symbols.length).toBe(0);

@@ -6,56 +6,57 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+import { NarrowLayout } from "components/layout";
 import FinalView from "./FinalView";
 
 export default {
   title: "App/Views/FinalView",
   component: FinalView,
+  decorators: [
+    (Story) => (
+      <NarrowLayout>
+        <Story />
+      </NarrowLayout>
+    ),
+  ],
   parameters: {
-    layout: "fullscreen",
+    backgrounds: {
+      values: [{ value: "#ddd" }],
+    },
   },
-  tags: ["autodocs"],
 };
 
-function getFinalViewData(overrides = {}) {
-  return {
+const shareConfig = {
+  channels: ["facebook", "whatsapp", "twitter", "weibo", "share", "clipboard"],
+  url: "https://www.example.com",
+  content: "Hey! Check out this cool experiment",
+  tags: ["coolexperiment", "awesome"],
+};
+
+const timeline = {
+  currentStep: 4,
+  symbols: [
+    "dot",
+    "dot",
+    "star-4",
+    "dot",
+    "dot",
+    "star-5",
+    "dot",
+    "dot",
+    "star-6",
+  ],
+};
+
+export const Default = {
+  args: {
     score: 100,
     percentile: 66,
-    rank: {
-      text: "Rank",
-      class: "rank",
-    },
-    final_text: `
-            <p>You outperformed 66% of the players</p>
-
-            <table>
-                <tr><td>This game</td><td>100</td></tr>
-                <tr><td>Personal best</td><td>120</td></tr>
-                <tr><td>Average score</td><td>80</td></tr>
-            </table>
-        `,
-    points: "points",
     button: {
       text: "Button",
       link: "https://www.example.com",
     },
-    logo: {
-      image: "https://via.placeholder.com/150",
-      link: "https://www.example.com",
-    },
-    social: {
-      channels: [
-        "facebook",
-        "whatsapp",
-        "twitter",
-        "weibo",
-        "share",
-        "clipboard",
-      ],
-      url: "https://www.example.com",
-      content: "Hey! Check out this cool experiment",
-      tags: ["coolexperiment", "awesome"],
-    },
+    social: shareConfig,
     show_profile_link: true,
     action_texts: {
       all_experiments: "All experiments",
@@ -63,13 +64,14 @@ function getFinalViewData(overrides = {}) {
     },
     show_participant_link: true,
     participant_id_only: false,
-    feedback_info: {
-      header: "Feedback",
-      button: "Submit",
-      thank_you: "Thank you for your feedback!",
-      contact_body:
-        '<p>Please contact us at <a href="mailto:info@example.com">',
-    },
+    // feedback_info: {
+    //   header: "Feedback",
+    //   button: "Submit",
+    //   thank_you: "Thank you for your feedback!",
+    //   contact_body:
+    //     '<p>Please contact us at <a href="mailto:info@example.com">',
+    // },
+    timeline,
     block: {
       slug: "test",
     },
@@ -77,104 +79,42 @@ function getFinalViewData(overrides = {}) {
     onNext: () => {
       alert("Next");
     },
-    ...overrides,
-  };
-}
 
-const getDecorator = (Story) => (
-  <div
-    style={{
-      width: "100%",
-      height: "100%",
-      backgroundColor: "#aaa",
-      padding: "1rem",
-    }}
-  >
-    <Story />
-  </div>
-);
-
-export const Default = {
-  args: getFinalViewData(),
-  decorators: [getDecorator],
+    trophyContent: {
+      default: {
+        header: "Yay, you've earned a star! 💫",
+        body: "Play on and collect 'm all...",
+      },
+      first: {
+        header: "Congrats! You've earned your first star! 💫",
+        body: "Can you collect them all?",
+      },
+      last: {
+        header: "🎉 Woohoo! You've finished the game!",
+        body: "Play on? Let's start another round of games...",
+      },
+    },
+  },
 };
 
 // with relative button.link
 export const RelativeButtonLink = {
-  args: getFinalViewData({
+  args: {
+    ...Default.args,
     button: {
       text: "Play again",
       link: "/profile",
     },
-  }),
-  decorators: [getDecorator],
+  },
 };
 
-// with absolute button.link
-export const AbsoluteButtonLink = {
-  args: getFinalViewData({
-    button: {
-      text: "Button",
-      link: "https://www.example.com",
-    },
-  }),
-  decorators: [getDecorator],
+export const FirstTrophy = {
+  args: { ...Default.args, timeline: { ...timeline, currentStep: 3 } },
 };
 
-// without button.link
-export const NoButtonLink = {
-  args: getFinalViewData({
-    button: {
-      text: "Button",
-      link: "",
-    },
-  }),
-  decorators: [getDecorator],
-};
-
-// final text html test
-export const FinalViewTextHtml = {
-  args: getFinalViewData({
-    final_text: `
-            <p>You outperformed 66% of the players</p>
-            <table>
-                <tr><td>This game</td><td>100</td></tr>
-                <tr><td>Personal best</td><td>120</td></tr>
-                <tr><td>Average score</td><td>80</td></tr>
-            </table>
-            <h1>Heading 1</h1>
-            <h2>Heading 2</h2>
-            <h3>Heading 3</h3>
-            <h4>Heading 4</h4>
-            <p>Lorem ipsum dolor sit amet, <i>consectetur adipiscing elit</i>. Nullam eget nunc nec nunc. Aenean nec nunc nec nunc. <b>Curabitur nec nunc nec nunc</b>. Donec nec nunc nec nunc. Sed nec nunc nec nunc. Vestibulum</p>
-            <ul>
-                <li>Item 1</li>
-                <li>Item 2</li>
-                <li>Item 3</li>
-            </ul>
-            <ol>
-                <li>Item 1</li>
-                <li>Item 2</li>
-                <li>Item 3</li>
-            </ol>
-            <a href="https://www.example.com">Link</a>
-            <img src="https://cataas.com/cat" alt="Placeholder">
-            <pre><code>console.log("Hello, world!");</code></pre>
-            <pre><code>
-            function sum(a, b) {
-                return a + b;
-            }
-            </code></pre>
-        `,
-  }),
-  decorators: [getDecorator],
-};
-
-// no percentile, text centered
-export const PlainText = {
-  args: getFinalViewData({
-    percentile: undefined,
-    final_text: "<center>Well done!</center>",
-  }),
-  decorators: [getDecorator],
+export const TimelineCompleted = {
+  args: {
+    ...Default.args,
+    timeline: { ...timeline, currentStep: timeline.symbols.length },
+  },
 };
