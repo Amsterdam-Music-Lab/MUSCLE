@@ -13,7 +13,10 @@
   overflow: hidden;
   list-style: none;
   margin: 0;
-  padding: 0;
+
+  // Padding to make sure the top of the first label doesn't
+  // fall out of view
+  padding: calc(var(--list-label-size, 2em) / 4) 0;
 
   li {
     display: flex;
