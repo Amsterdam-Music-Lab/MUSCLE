@@ -9,7 +9,7 @@ from result.models import Result
 from section.models import Section
 from session.models import Session
 
-from experiment.actions import Explainer, Final, Trial
+from experiment.actions import Explainer, Final, Step, Trial
 from experiment.actions.playback import MatchingPairs
 from experiment.actions.types import FeedbackInfo
 from .matching_pairs import MatchingPairsGame
@@ -172,6 +172,42 @@ class MatchingPairs2025(MatchingPairsGame):
         random.shuffle(sections)
 
         return sections
+
+    def get_intro_explainer(self):
+        return Explainer(
+            instruction="",
+            steps=[
+                Step(
+                    description=_(
+                        'You get a board with 16 musical cards. **Pick a card,** and listen to it carefully...'
+                    )
+                ),
+                Step(
+                    description=_("Then try to **find a second card that matches it.**")
+                ),
+                Step(
+                    description=_(
+                        "**Find the 8 matching pairs** to clear the board and score points:"
+                    )
+                ),
+                Step(
+                    description=_(
+                        "**+20 points:** Matched first card with one you’ve heard before — memory wins!"
+                    )
+                ),
+                Step(
+                    description=_(
+                        "**-10 points:** Chose a wrong second card that’s heard before? Oops — penalty..."
+                    )
+                ),
+                Step(
+                    description=_(
+                        "Some cards sound **distorted** on purpose. Stay sharp!"
+                    )
+                ),
+            ],
+            step_numbers=True,
+        )
 
     def evaluate_sections_equal(
         self, first_section: Section, second_section: Section
