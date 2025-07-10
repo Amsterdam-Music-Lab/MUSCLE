@@ -41,11 +41,10 @@ export default function LoadingView({
   ...divProps
 }: LoadingViewProps) {
   return (
-    <div
-      className={classNames("transition-appear anim-speed-1000", className)}
-      {...divProps}
-    >
+    <div className={classNames("transition-appear", className)} {...divProps}>
       <Circle
+        radius={15}
+        strokeWidth={1}
         data-testid="loading"
         duration={duration}
         startTime={gapSize * duration}

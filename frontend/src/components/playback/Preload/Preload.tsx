@@ -97,7 +97,7 @@ export default function Preload({
   return (
     <div
       className={
-        "aha__preload d-flex flex-column justify-content-center align-items-center " +
+        "aha__preload d-flex flex-column justify-content-center align-items-center transition-appear" +
         classNames({ pulse: overtime || duration === 0 })
       }
     >
@@ -105,6 +105,12 @@ export default function Preload({
         key={preloadMessage + duration}
         duration={loaderDuration}
         onFinish={onTimePassed}
+        radius={15}
+        strokeWidth={1}
+        running={true}
+        rotate={true}
+        color="white"
+        style={{ marginLeft: "auto", marginRight: "auto", marginTop: "4rem" }}
       />
       {preloadMessage && (
         <div className="instruction d-flex justify-content-center align-items-center">
