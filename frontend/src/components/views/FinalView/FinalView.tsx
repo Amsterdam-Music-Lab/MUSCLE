@@ -208,14 +208,6 @@ FinalView.getViewProps = ({
   const numSteps = timeline?.symbols.length ?? timeline?.steps.length ?? 0;
   const sessionsPlayed = experiment.playedSessions ?? 0;
   const timelineStep = (sessionsPlayed % numSteps) + 1;
-  console.log(
-    "numSteps",
-    numSteps,
-    "sessions",
-    sessionsPlayed,
-    "step",
-    timelineStep
-  );
 
   return {
     block,
