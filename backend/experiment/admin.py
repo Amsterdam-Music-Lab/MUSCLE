@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib import admin, messages
+from django.db import models
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -17,6 +18,7 @@ from experiment.forms import (
     BlockForm,
     SocialMediaConfigForm,
 )
+from experiment.widgets import MarkdownPreviewTextInput
 from question.admin import QuestionSeriesInline
 from question.models import QuestionSeries, QuestionInSeries
 from .utils import export_json_results
@@ -95,6 +97,10 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         PhaseInline,
         SocialMediaConfigInline,
     ]
+
+    formfield_overrides = {
+        models.TextField: {"widget": MarkdownPreviewTextInput},
+    }
 
     def experiment_name(self, obj):
         return obj.name or "<Unnamed>"

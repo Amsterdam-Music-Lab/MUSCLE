@@ -4,7 +4,6 @@ from django.forms import (
     ChoiceField,
     ModelForm,
     MultipleChoiceField,
-    TextInput,
 )
 from django.utils.translation import gettext_lazy as _
 
@@ -13,14 +12,6 @@ from experiment.models import (
     SocialMediaConfig,
 )
 from experiment.rules import BLOCK_RULES
-
-
-class MarkdownPreviewTextInput(TextInput):
-    template_name = "widgets/markdown_preview_text_input.html"
-
-    class Media:
-        css = {"all": ["markdown_preview.css"]}
-        js = ["markdown_preview.js"]
 
 
 class BlockForm(ModelForm):
