@@ -6,10 +6,5 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-export * from "./BarPlot";
-export * from "./Card";
-export * from "./Circle";
-export * from "./CountDown";
-export * from "./List";
-export * from "./Modal";
-export * from "./ProgressBar";
+export type { ListProps } from "./List";
+export { default as List } from "./List";
