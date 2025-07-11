@@ -73,14 +73,6 @@ export default function Background({
   //   backgroundUrl = backendTheme?.backgroundUrl ?? backgroundUrl;
   // }
 
-  // Fallback: this gets the theme once and means it won't rerender when
-  // the theme changes in a block/experiment. This is used now to prevent
-  // glitches when the background rerenders
-  const backendTheme = useBackendTheme
-    ? useBoundStore.getState().theme
-    : undefined;
-  backgroundUrl = backendTheme?.backgroundUrl ?? backgroundUrl;
-
   return (
     (showGradientCircles || (showBackgroundImage && backgroundUrl)) && (
       <div className={classNames(styles.bg, className)} {...divProps}>
