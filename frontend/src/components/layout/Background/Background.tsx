@@ -66,11 +66,12 @@ export default function Background({
       ? showBackgroundImage
       : frontendTheme.showBackgroundImage ?? true;
 
-  let backendTheme;
-  backendTheme = useBoundStore((state) => state.theme);
-  if (useBackendTheme) {
-    backgroundUrl = backendTheme?.backgroundUrl ?? backgroundUrl;
-  }
+  // This would also trigger a render when a block/experiment changes a theme change
+  // let backendTheme;
+  // backendTheme = useBoundStore((state) => state.theme);
+  // if (useBackendTheme) {
+  //   backgroundUrl = backendTheme?.backgroundUrl ?? backgroundUrl;
+  // }
 
   return (
     (showGradientCircles || (showBackgroundImage && backgroundUrl)) && (

@@ -78,12 +78,9 @@ export function processTimelineConfig({
 export interface TimelineProps
   extends Omit<ProcessTimelineConfigProps, "timeline" | "animate"> {
   /**
-   * A timeline configuration object. See TimelineConfig type definition for details.
+   * A timeline configuration object. See Component documentation for details.
    */
   timeline: TimelineConfig;
-
-  /** The current step in the timeline */
-  step: number;
 
   /**
    * Fill of past symbols: everything up to and including the current step.
@@ -117,11 +114,39 @@ export interface TimelineProps
 }
 
 /**
- * Shows a responsive timeline with customizable steps.
+ * Shows a responsive timeline with customizable steps. A timeline is
+ * specified by a `TimelineConfig` object:
+ *
+ * ```ts
+ * const timelineConfig = {
+ *  // Option 1: configure all steps individually
+ *  steps: [
+ *      { symbol: "dot", size: 10, ... },
+ *      { symbol: "star-4", size: 20, ... },
+ *  ],
+ *
+ *  // Option 2: alternatively, specify only the symbols,
+ *  // use the same default config (see below) for all steps.
+ *  symbols: ['dot', 'dot', 'star-4', 'dot', ...],
+ *
+ *  // The current active step.
+ *  currentStep: 5,
+ *
+ *  // Args below are optional and used as defaults for each of the steps:
+ *  dotSize: 10,
+ *  trophySize: number, // Size of trophy's (non-dots)
+ *  showDots: true, // Whether to show the dots
+ *  variant: "primary", // Theme variant. If set, this should override the fill.
+ *  fill: {
+ *   startColor: "#ff0000",
+ *   endColor: "#00ff00",
+ *  },
+ *  animate: true,
+ * }
+ * ```
  */
 export default function Timeline({
   timeline,
-  step: currentStep = 0,
   fillPast,
   fillFuture = "#eeeeee",
   spineBgPast,
@@ -145,6 +170,13 @@ export default function Timeline({
     dotSize,
     trophySize,
   });
+
+  const currentStep = timeline.currentStep;
+  if (currentStep && currentStep > steps.length) {
+    console.warn(
+      `Current step (${currentStep}) exceeds the length of the timeline (${steps.length}).`
+    );
+  }
 
   const variantFill =
     useVariantFill(timeline.variant ?? variant ?? "primary") ?? "#000";

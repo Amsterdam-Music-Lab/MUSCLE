@@ -69,7 +69,7 @@ describe("Page Component Tests", () => {
     expect(container.querySelector(".custom-class")).toBeTruthy();
   });
 
-  it("renders background image from backend theme when useBackendTheme is true and backendTheme.backgroundUrl is set", () => {
+  it.skip("renders background image from backend theme when useBackendTheme is true and backendTheme.backgroundUrl is set", () => {
     useBoundStore.mockImplementation((selector) =>
       selector({ theme: { backgroundUrl: "backend.jpg" } })
     );
@@ -85,7 +85,7 @@ describe("Page Component Tests", () => {
     );
   });
 
-  it("does NOT render background image if backendTheme.backgroundUrl is falsy", () => {
+  it.skip("does NOT render background image if backendTheme.backgroundUrl is falsy", () => {
     useBoundStore.mockImplementation((selector) =>
       selector({ theme: { backgroundUrl: "" } })
     );
@@ -99,7 +99,7 @@ describe("Page Component Tests", () => {
     expect(queryByTestId("background-image")).toBeNull();
   });
 
-  it("renders background image if backendTheme.backgroundUrl is set, even if backgroundUrl prop is falsy", () => {
+  it.skip("renders background image if backendTheme.backgroundUrl is set, even if backgroundUrl prop is falsy", () => {
     useBoundStore.mockImplementation((selector) =>
       selector({ theme: { backgroundUrl: "https://backend.com/bg.jpg" } })
     );

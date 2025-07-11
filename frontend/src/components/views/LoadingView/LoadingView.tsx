@@ -32,7 +32,7 @@ export interface LoadingViewProps extends HTMLAttributes<HTMLDivElement> {
  * It is normally set by code during loading of data
  */
 export default function LoadingView({
-  label = "Loading...",
+  label,
   gapSize = 0.02,
   duration = 2,
   rotate = true,
@@ -43,11 +43,14 @@ export default function LoadingView({
   return (
     <div className={classNames("transition-appear", className)} {...divProps}>
       <Circle
+        radius={15}
+        strokeWidth={1}
         data-testid="loading"
         duration={duration}
         startTime={gapSize * duration}
         running={running}
         rotate={rotate}
+        color="white"
         style={{ margin: "auto" }}
       >
         {label && <span>{label}</span>}

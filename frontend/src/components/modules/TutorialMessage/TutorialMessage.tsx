@@ -10,10 +10,13 @@ import type { HTMLAttributes } from "react";
 import type { TutorialStep } from "@/types/tutorial";
 import classNames from "classnames";
 import styles from "./TutorialMessage.module.scss";
+import { Variant } from "@/types/themeProvider";
 
 interface TutorialMessageProps
   extends TutorialStep,
-    Omit<HTMLAttributes<HTMLDivElement>, "content" | "id"> {}
+    Omit<HTMLAttributes<HTMLDivElement>, "content" | "id"> {
+  variant: Variant;
+}
 
 export default function TutorialMessage({
   id,
@@ -23,10 +26,18 @@ export default function TutorialMessage({
   visible,
   className,
   children,
+  variant = "primary",
   ...divProps
 }: TutorialMessageProps) {
   return (
-    <div className={classNames(styles.container, className)} {...divProps}>
+    <div
+      className={classNames(
+        styles.container,
+        variant && `text-fill-${variant}`,
+        className
+      )}
+      {...divProps}
+    >
       <p className={styles.message}>
         {title && <span className={styles.title}>{title}</span>}
         {content}

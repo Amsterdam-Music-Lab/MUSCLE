@@ -32,7 +32,7 @@ const footer = {
   },
 };
 
-// Scoreboard plugin
+// Timeline used throughout the game
 const timelineSymbols = [
   "dot",
   "dot",
@@ -54,7 +54,7 @@ const qrPluginSpec = {
     plugins: [
       {
         name: "qrcode",
-        args: { value: "https://www.mcg.uva.nl/tunetwins/" },
+        args: { value: "https://tunetwins.app" },
       },
       {
         name: "markdown",
@@ -71,12 +71,6 @@ const scoreboard = {
   name: "scoreboard",
   args: {
     plugins: [
-      {
-        name: "logo",
-        enabled: false,
-        args: { name: "tunetwins" },
-      },
-
       // Ranking
       {
         // enabled: false,
@@ -181,6 +175,7 @@ const landingView: ViewConfig = {
 const finalView: ViewConfig = {
   plugins: [
     logo,
+    { name: "trophy" },
     scoreboard,
     {
       name: "linkButton",
@@ -198,13 +193,42 @@ const finalView: ViewConfig = {
     },
     footer,
   ],
+
+  trophyContent: {
+    default: {
+      header: "Yay, you've earned a star! 💫",
+      body: "Play on and collect 'm all...",
+    },
+    first: {
+      header: "Woohoo! You've earned your first star! 💫",
+      body: "Can you collect them all?",
+    },
+    last: {
+      header: "🎉 Amazing! You've finished the game!",
+      body: "Play on? Let's start another round of games...",
+    },
+  },
+};
+
+const tunetwinsView: ViewConfig = {
+  timeline: { symbols: timelineSymbols },
+  feedbackMessages: {
+    default: ["Pick a card..."],
+    cardSelected: ["Pick another card..."],
+    completedLuckyMatch: [
+      "Lucky guess!",
+      "Lucky you!",
+      "This is your lucky day!",
+    ],
+    completedMemoryMatch: ["Well done!", "Good job!", "Nice!", "Excellent!"],
+    completedNoMatch: ["No match, try again!"],
+    completedMisremembered: ["Nope, that's no match..."],
+  },
 };
 
 export default {
   showLanding: true,
   landing: landingView,
   final: finalView,
-  tunetwins: {
-    timeline: { symbols: timelineSymbols },
-  },
+  tunetwins: tunetwinsView,
 } as FrontendConfig;

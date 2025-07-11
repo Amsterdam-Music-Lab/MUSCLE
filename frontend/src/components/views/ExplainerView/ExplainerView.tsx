@@ -5,31 +5,35 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-
+import type { ReactNode } from "react";
 import { useEffect } from "react";
-import classNames from "classnames";
 import { Button } from "@/components/buttons";
-import { Card } from "@/components/ui";
+import { Card, List } from "@/components/ui";
 import { Explainer as ExplainerAction } from "@/types/Action";
 import { Logo } from "@/components/svg";
-import styles from "./ExplainerView.module.scss";
 
 export interface ExplainerViewProps extends ExplainerAction {
   onNext: () => void;
+
+  /** Label to show on the button. Default to "next" */
+  buttonText?: ReactNode;
+
+  /** Title for the card. Default to "Instructions" */
+  title?: ReactNode;
 }
 
 /**
- * Explainer is a block view that shows a list of steps
- * If the button has not been clicked, onNext will be called automatically after the timer expires (in milliseconds).
- * If timer == null, onNext will only be called after the button is clicked.
+ * Explainer is a block view that shows a list of steps.
+ * If the button has not been clicked, `onNext` will be called automatically after the timer expires (in milliseconds).
+ * If `timer == null`, `onNext` will only be called after the button is clicked.
  */
 export default function ExplainerView({
   instruction,
-  button_label: buttonText = "Next",
+  buttonText = "Next",
   steps = [],
   timer = null,
   onNext,
-  title = "Instructions...",
+  title = "Instructions",
 }: ExplainerViewProps) {
   useEffect(() => {
     if (timer != null) {
@@ -44,21 +48,19 @@ export default function ExplainerView({
     <>
       {/* TODO Use plugin system! */}
       <Logo name="tunetwins" fill="#fff" style={{ height: "3em" }} />
-      <Card data-testid="explainer" className={classNames(styles.explainer)}>
+
+      <Card data-testid="explainer">
         <Card.Header title={title}>{instruction}</Card.Header>
 
         {steps.length > 0 && (
           <Card.Section>
-            <ul>
-              {steps.map((step, index) => (
-                <ExplainerItem
-                  key={index}
-                  number={step.number}
-                  description={step.description}
-                  delay={index * 250}
-                />
-              ))}
-            </ul>
+            <List
+              items={steps.map((step) => ({
+                content: step.description,
+                label: step.number,
+              }))}
+              delay={250}
+            />
           </Card.Section>
         )}
       </Card>
@@ -82,30 +84,9 @@ ExplainerView.viewName = "explainer";
 ExplainerView.usesOwnLayout = false;
 ExplainerView.getViewProps = ({ action, onNext }) => ({
   instruction: action.instruction,
-  button_label: action.button_label,
+  buttonText: action.button_label,
   steps: action.steps,
   timer: action.timer,
   onNext,
 });
 ExplainerView.dependencies = ["action", "onNext"];
-
-interface ExplainerItemProps {
-  number: number | null;
-  description: string;
-  delay?: number;
-}
-
-/** ExplainerItems renders an item in the explainer list, with optional icon or number */
-const ExplainerItem = ({
-  number = null,
-  description,
-  delay = 0,
-}: ExplainerItemProps) => (
-  <li
-    className="anim anim-fade-in-slide-left anim-speed-300"
-    style={{ animationDelay: delay + "ms" }}
-  >
-    {number != null && <span className={styles.number}>{number}</span>}
-    <span>{description}</span>
-  </li>
-);

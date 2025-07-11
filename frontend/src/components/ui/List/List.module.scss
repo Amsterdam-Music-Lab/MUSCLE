@@ -6,36 +6,35 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-@use "sass:math";
 @import "@/scss/variables";
 @import "@/scss/utils";
 
-.explainer {
+.list {
   overflow: hidden;
+  list-style: none;
+  margin: 0;
 
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  // Padding to make sure the top of the first label doesn't
+  // fall out of view
+  padding: calc(var(--list-label-size, 2em) / 4) 0;
 
-    li {
-      display: flex;
-      margin-bottom: 1rem;
+  li {
+    display: flex;
+    margin-bottom: 1rem;
 
-      &:last-of-type {
-        margin-bottom: 0;
-      }
+    &:last-of-type {
+      margin-bottom: 0;
     }
   }
 }
 
-.number {
+.label {
   flex-shrink: 0;
   margin-right: 1em;
   display: inline-block;
   margin-top: -0.25em;
-  width: var(--explainer-number-size, 2em);
-  height: var(--explainer-number-size, 2em);
+  width: var(--list-label-size, 2em);
+  height: var(--list-label-size, 2em);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -46,14 +45,13 @@
 }
 
 @include media-breakpoint-down(sm) {
-  .explainer {
-    --explainer-number-size: 1.5em;
-    ul {
-      padding: 0;
-    }
-    .number {
-      margin-top: 0;
-      margin-right: 0.5em;
-    }
+  .list {
+    --list-label-size: 1.5em;
+    padding: 0;
+  }
+
+  .label {
+    margin-top: 0;
+    margin-right: 0.5em;
   }
 }

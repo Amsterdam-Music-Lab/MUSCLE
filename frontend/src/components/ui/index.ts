@@ -10,5 +10,6 @@ export * from "./BarPlot";
 export * from "./Card";
 export * from "./Circle";
 export * from "./CountDown";
+export * from "./List";
 export * from "./Modal";
 export * from "./ProgressBar";

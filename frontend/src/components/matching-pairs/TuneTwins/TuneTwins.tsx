@@ -66,9 +66,6 @@ export interface TuneTwinsProps extends UseTuneTwinsProps {
   /** Configuration of the timeline */
   timeline?: TimelineConfig;
 
-  /** Step on the timeline */
-  timelineStep?: number;
-
   /** Whether to show the timeline, even if one is specified. */
   showTimeline?: boolean;
 }
@@ -80,7 +77,6 @@ export interface TuneTwinsProps extends UseTuneTwinsProps {
 export default function TuneTwins({
   feedbackMessages: msg = DEFAULT_FEEDBACK,
   timeline,
-  timelineStep,
   showTimeline = true,
   showLogo = true,
   logo = "tunetwins",
@@ -181,7 +177,7 @@ export default function TuneTwins({
 
       {timeline && showTimeline && (
         <SquareLayout.Footer className={styles.footer}>
-          <Timeline timeline={timeline} step={timelineStep} />
+          <Timeline timeline={timeline} />
         </SquareLayout.Footer>
       )}
     </SquareLayout>
@@ -202,7 +198,7 @@ TuneTwins.getViewProps = ({
   }));
   const tutorial = convertTutorial(playbackArgs.tutorial);
   const timeline = frontendConfig?.tunetwins?.timeline;
-  const numSteps = timeline?.symbols.length ?? 0;
+  const numSteps = timeline?.symbols.length ?? timeline?.steps.length ?? 0;
   const sessionsPlayed = experiment.playedSessions ?? 0;
   const timelineStep = sessionsPlayed % numSteps;
 
@@ -213,8 +209,8 @@ TuneTwins.getViewProps = ({
     onTurnEnd: onFinishedPlaying,
     onSelectCard: (card) => playSection(card.id),
     tutorial,
-    timeline,
-    timelineStep,
+    timeline: { ...timeline, currentStep: timelineStep },
+    feedbackMessages: frontendConfig?.tunetwins?.feedbackMessages,
   };
 };
 

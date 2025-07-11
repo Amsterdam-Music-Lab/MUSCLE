@@ -14,6 +14,11 @@ type Story = StoryObj<typeof ScoreBoard>;
 const meta: Meta<typeof ScoreBoard> = {
   title: "Modules/Scoring/ScoreBoard",
   component: ScoreBoard,
+  parameters: {
+    backgrounds: {
+      values: [{ value: "#ddd" }],
+    },
+  },
 };
 
 export default meta;
@@ -30,6 +35,7 @@ export const Trophy: Story = {
   args: {
     ...Default.args,
     trophyIcon: "star-5",
+    trophyLabel: "Yay, you've won a star!",
   },
 };
 

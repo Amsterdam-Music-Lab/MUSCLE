@@ -11,6 +11,8 @@ import { AllPluginSpec } from "@/components/plugins/pluginRegistry";
 export interface ViewConfig {
   /** An iterable of plugins to show on this view */
   plugins?: AllPluginSpec[];
+
+  [key: string]: unknown; // allows arbitrary other props
 }
 export interface FinalViewConfig extends ViewConfig {}
 
