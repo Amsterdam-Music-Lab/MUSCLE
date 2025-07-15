@@ -156,6 +156,17 @@ const landingView: ViewConfig = {
             },
           },
 
+          {
+            name: "markdown",
+            wrapperProps: {
+              title: "Help us with your feedback!",
+            },
+            args: {
+              content:
+                "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly.",
+            },
+          },
+
           // more components...
         ],
       },
