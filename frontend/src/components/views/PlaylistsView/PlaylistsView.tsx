@@ -76,16 +76,6 @@ export default function PlaylistsView({
     </Card>
   );
 }
-PlaylistsView.viewName = "playlists";
-PlaylistsView.usesOwnLayout = false;
-PlaylistsView.getViewProps = ({ playlist, block, onNext, action }) => ({
-  playlist,
-  playlists: block?.playlists,
-  onSelect: onNext,
-  instruction: action.instruction,
-  title: "Playlists...",
-});
-PlaylistsView.dependencies = ["playlist", "block", "onNext", "action"];
 
 interface PlaylistItemProps extends CardSectionProps {
   playlist: Playlist;

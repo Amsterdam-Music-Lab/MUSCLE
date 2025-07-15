@@ -40,19 +40,3 @@ export default function AboutView({
     </ExperimentLayout>
   );
 }
-
-AboutView.viewName = "about";
-AboutView.usesOwnLayout = true;
-AboutView.getViewProps = ({ experiment }) => ({
-  experiment,
-  content: experiment.aboutContent,
-  slug: experiment.slug,
-  backButtonText: experiment.backButtonText,
-
-  // Passed on to ExperimentLayout
-  disclaimerHtml: experiment?.disclaimer,
-  privacyHtml: experiment?.privacy,
-  logos: experiment?.theme?.footer?.logos,
-  showFooter: experiment?.theme?.footer,
-});
-AboutView.dependencies = ["experiment"];

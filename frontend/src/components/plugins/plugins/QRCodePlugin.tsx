@@ -5,10 +5,15 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-import { useTheme } from "@/theme/ThemeProvider";
 import type { PluginMeta, PluginSpec } from "@/types/plugin";
-import { Variant } from "@/types/themeProvider";
-import { QRCodeSVG } from "qrcode.react";
+import type { Variant } from "@/types/themeProvider";
+import { useTheme } from "@/theme/ThemeProvider";
+import { lazy, Suspense } from "react";
+const QRCodeSVG = lazy(() =>
+  import("qrcode.react").then((mod) => ({
+    default: mod.QRCodeSVG,
+  }))
+);
 
 export interface QRCodePluginArgs {
   value: string;
@@ -27,13 +32,15 @@ function QRCode({
   const { theme } = useTheme();
   if (variant && !fgColor) fgColor = theme[variant]?.solid;
   return (
-    <QRCodeSVG
-      value={value}
-      level={level}
-      size={size}
-      fgColor={fgColor}
-      style={{ minWidth: `${size}px` }}
-    />
+    <Suspense fallback="Loading QR...">
+      <QRCodeSVG
+        value={value}
+        level={level}
+        size={size}
+        fgColor={fgColor}
+        style={{ minWidth: `${size}px` }}
+      />
+    </Suspense>
   );
 }
 

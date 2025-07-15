@@ -134,17 +134,3 @@ export default function ScoreView({
     </div>
   );
 }
-
-ScoreView.viewName = "score";
-ScoreView.usesOwnLayout = false;
-ScoreView.getViewProps = ({ action, onNext }) => ({
-  last_song: action.last_song,
-  score_meesage: action.score_meesage,
-  total_score: action.total_score,
-  texts: action.texts,
-  icon: action.icon,
-  feedback: action.feedback,
-  timer: action.timer,
-  onNext,
-});
-ScoreView.dependencies = ["action", "onNext"];

@@ -221,34 +221,3 @@ export default function Trial({
     </>
   );
 }
-
-Trial.viewName = "trial";
-Trial.usesOwnLayout = true;
-Trial.getViewProps = ({ action, onNext, onResult, experiment }) => {
-  let survey;
-  if (action.feedback_form) {
-    survey = {
-      questions: action.feedback_form?.form,
-      skippable: action.feedback_form?.is_skippable,
-      submitLabel: action.feedback_form?.submit_label,
-      skipLabel: action.feedback_form?.skip_label,
-    };
-  }
-
-  return {
-    playback: action.playback,
-    html: action.html,
-    survey,
-    onNext,
-    onResult,
-    experiment,
-    responseTime: action.config.response_time,
-    autoAdvance: action.config.auto_advance,
-    autoAdvanceTimer: action.config.auto_advance_timer,
-    listenFirst: action.config.listen_first,
-    showContinueButton: action.config.show_continue_button,
-    continueLabel: action.config.continue_label,
-    breakRoundOn: action.config.break_round_on,
-  };
-};
-Trial.dependencies = ["action"];

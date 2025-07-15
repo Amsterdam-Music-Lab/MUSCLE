@@ -8,12 +8,13 @@
 import type { HTMLAttributes, ReactNode, ComponentProps } from "react";
 import type { SVGSymbolName, SVGSymbolProps } from "@/types/svg";
 
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import classNames from "classnames";
-import ConfettiExplosion from "react-confetti-explosion";
 import { useTheme } from "@/theme/ThemeProvider";
 import { symbols as svgSymbols } from "@/components/svg";
 import styles from "./Trophy.module.scss";
+
+const ConfettiExplosion = lazy(() => import("react-confetti-explosion"));
 
 export interface TrophyProps extends HTMLAttributes<HTMLDivElement> {
   /** Name of the svg icon */
@@ -89,24 +90,26 @@ export default function Trophy({
     >
       <div className={styles.trophyIcon}>
         {showConfetti && exploding && (
-          <ConfettiExplosion
-            data-testid="confetti-explosion"
-            force={2}
-            duration={6000}
-            particleCount={250}
-            width={2000}
-            colors={[
-              theme?.primary?.startColor,
-              theme?.primary?.endColor,
-              theme?.secondary?.startColor,
-              theme?.secondary?.endColor,
-            ].filter((c) => c)}
-            {...confettiProps}
-            onComplete={() => {
-              setExploding(false);
-              if (confettiProps?.onComplete) confettiProps.onComplete();
-            }}
-          />
+          <Suspense>
+            <ConfettiExplosion
+              data-testid="confetti-explosion"
+              force={2}
+              duration={6000}
+              particleCount={250}
+              width={2000}
+              colors={[
+                theme?.primary?.startColor,
+                theme?.primary?.endColor,
+                theme?.secondary?.startColor,
+                theme?.secondary?.endColor,
+              ].filter((c) => c)}
+              {...confettiProps}
+              onComplete={() => {
+                setExploding(false);
+                if (confettiProps?.onComplete) confettiProps.onComplete();
+              }}
+            />
+          </Suspense>
         )}
         <Trophy
           size={100}

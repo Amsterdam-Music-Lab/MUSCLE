@@ -6,11 +6,17 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 import type { PluginMeta, PluginSpec } from "@/types/plugin";
-import ReactMarkdown from "react-markdown";
+import { lazy, Suspense } from "react";
+const ReactMarkdown = lazy(() => import("react-markdown"));
+
 export interface MarkdownPluginArgs {}
 
-function Markdown({ content }) {
-  return <ReactMarkdown children={content} />
+export function Markdown({ content }) {
+  return (
+    <Suspense fallback={<span className="transition-appear">Loading...</span>}>
+      <ReactMarkdown children={content} />
+    </Suspense>
+  );
 }
 
 export interface MarkdownPluginMeta extends PluginMeta<MarkdownPluginArgs> {

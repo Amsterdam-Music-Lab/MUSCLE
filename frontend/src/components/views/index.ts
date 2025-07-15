@@ -21,3 +21,4 @@ export * from "./ProfileView";
 export * from "./ScoreView";
 export * from "./StoreProfileView";
 export * from "./SurveyView";
+export { views } from "./views";

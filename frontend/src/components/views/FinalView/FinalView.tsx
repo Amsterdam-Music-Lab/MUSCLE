@@ -194,36 +194,3 @@ export default function FinalView({
     />
   );
 }
-
-FinalView.viewName = "final";
-FinalView.usesOwnLayout = false;
-FinalView.getViewProps = ({
-  block,
-  action,
-  participant,
-  onNext,
-  experiment,
-}) => {
-  const timeline = frontendConfig?.tunetwins?.timeline;
-  const numSteps = timeline?.symbols.length ?? timeline?.steps.length ?? 0;
-  const sessionsPlayed = experiment.playedSessions ?? 0;
-  const timelineStep = (sessionsPlayed % numSteps) + 1;
-
-  return {
-    block,
-    participant,
-    action_texts: action.action_texts,
-    button: action.button,
-    onNext,
-    show_participant_link: action.show_participant_link,
-    participant_id_only: action?.participant_id_only,
-    show_profile_link: action.show_profile_link,
-    social: action.social,
-    feedback_info: action.feedback_info,
-    percentile: action.percentile,
-    score: action.score,
-    totalScore: experiment.accumulatedScore + action.score,
-    timeline: { ...timeline, currentStep: timelineStep },
-  };
-};
-FinalView.dependencies = ["block", "state", "participant", "onNext"];

@@ -128,16 +128,3 @@ export default function ConsentView({
     </>
   );
 }
-
-ConsentView.usesOwnLayout = false;
-ConsentView.viewName = "consent";
-ConsentView.getViewProps = ({ participant, onNext, experiment }) => ({
-  experimentSlug: experiment.slug,
-  consentHtml: experiment.consent.text,
-  participant,
-  onConfirm: onNext,
-  title: experiment.consent.title,
-  confirmLabel: experiment.consent.confirm,
-  denyLabel: experiment.consent.deny,
-});
-ConsentView.dependencies = ["experiment", "participant", "onNext"];

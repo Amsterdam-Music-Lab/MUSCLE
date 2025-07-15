@@ -20,17 +20,16 @@ describe("Trophy", () => {
     expect(screen.getByText("You’ve earned a trophy")).toBeInTheDocument();
   });
 
-  it("shows confetti by default", () => {
+  it("shows confetti by default", async () => {
     render(<Trophy iconName="star" />);
-    expect(
-      screen.queryByTestId("confetti-explosion") // you may need to add a `data-testid`
-    ).toBeInTheDocument();
+    const confetti = await screen.findByTestId("confetti-explosion");
+    expect(confetti).toBeInTheDocument();
   });
 
   it("does not show confetti if showConfetti is false", () => {
     render(<Trophy iconName="star" showConfetti={false} />);
     expect(
-      screen.queryByTestId("confetti-explosion") // you may need to add a `data-testid`
+      screen.queryByTestId("confetti-explosion") 
     ).not.toBeInTheDocument();
   });
 
