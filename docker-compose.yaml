@@ -109,6 +109,7 @@ services:
     ports:
       - 3000:3000 # Vite development server
       - 6006:6006 # Storybook
+      - 4173:4173 # Vite preview server
       - 8888:8888 # vite-bundle-analyzer (see vite.config.ts)
     command: yarn start
 volumes:
