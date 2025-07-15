@@ -4581,7 +4581,6 @@ __metadata:
     react-helmet: "npm:^6.1.0"
     react-markdown: "npm:^10.1.0"
     react-range: "npm:^1.10.0"
-    react-rangeslider: "npm:^2.2.0"
     react-router: "npm:^6.25.1"
     react-router-dom: "npm:^6.25.1"
     react-select: "npm:^5.4.0"
@@ -4591,6 +4590,7 @@ __metadata:
     storybook: "npm:^8.6.0-alpha.1"
     typescript: "npm:^5.3.3"
     vite: "npm:^5.4.19"
+    vite-bundle-analyzer: "npm:^1.1.0"
     vite-tsconfig-paths: "npm:^4.3.2"
     vitest: "npm:^2.1.9"
     zustand: "npm:^4.4.7"
@@ -5235,7 +5235,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:^2.2.3, classnames@npm:^2.2.6":
+"classnames@npm:^2.2.6":
   version: 2.3.2
   resolution: "classnames@npm:2.3.2"
   checksum: 10c0/cd50ead57b4f97436aaa9f9885c6926323efc7c2bea8e3d4eb10e4e972aa6a1cfca1c7a0e06f8a199ca7498d4339e30bb6002e589e61c9f21248cbf3e8b0b18d
@@ -9130,18 +9130,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-rangeslider@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "react-rangeslider@npm:2.2.0"
-  dependencies:
-    classnames: "npm:^2.2.3"
-    resize-observer-polyfill: "npm:^1.4.2"
-  peerDependencies:
-    react: ^0.14.0 || ^15.0.0
-  checksum: 10c0/a511ad26833ca272ad8d833e914a3882d2fe02ef3092335e8d20f373da9c85e0a296798cc2bf1a96ade4330fca9e57953b3a9850529034e6518c756961bff3ba
-  languageName: node
-  linkType: hard
-
 "react-refresh@npm:^0.14.0":
   version: 0.14.0
   resolution: "react-refresh@npm:0.14.0"
@@ -9397,13 +9385,6 @@ __metadata:
   version: 1.0.0
   resolution: "requires-port@npm:1.0.0"
   checksum: 10c0/b2bfdd09db16c082c4326e573a82c0771daaf7b53b9ce8ad60ea46aa6e30aaf475fe9b164800b89f93b748d2c234d8abff945d2551ba47bf5698e04cd7713267
-  languageName: node
-  linkType: hard
-
-"resize-observer-polyfill@npm:^1.4.2":
-  version: 1.5.1
-  resolution: "resize-observer-polyfill@npm:1.5.1"
-  checksum: 10c0/5e882475067f0b97dc07e0f37c3e335ac5bc3520d463f777cec7e894bb273eddbfecb857ae668e6fb6881fd6f6bb7148246967172139302da50fa12ea3a15d95
   languageName: node
   linkType: hard
 
@@ -10632,6 +10613,15 @@ __metadata:
     "@types/unist": "npm:^3.0.0"
     vfile-message: "npm:^4.0.0"
   checksum: 10c0/e5d9eb4810623f23758cfc2205323e33552fb5972e5c2e6587babe08fe4d24859866277404fb9e2a20afb71013860d96ec806cb257536ae463c87d70022ab9ef
+  languageName: node
+  linkType: hard
+
+"vite-bundle-analyzer@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "vite-bundle-analyzer@npm:1.1.0"
+  bin:
+    analyze: dist/bin.js
+  checksum: 10c0/cc101f5e1560cf3555f0210d8e290c198eaaf915892a32227bf71759cb2366e9810c12027fc67b4e5184c60f3020f3ea5b1ef6cac26991bac165dcc5ff7b1d39
   languageName: node
   linkType: hard
 

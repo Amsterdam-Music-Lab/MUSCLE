@@ -26,6 +26,7 @@
     "sass": "^1.69.5",
     "typescript": "^5.3.3",
     "vite": "^5.4.19",
+    "vite-bundle-analyzer": "^1.1.0",
     "vite-tsconfig-paths": "^4.3.2",
     "zustand": "^4.4.7"
   },

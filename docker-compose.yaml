@@ -107,8 +107,9 @@ services:
       - VITE_STRICT=${FRONTEND_STRICT}
       - VITE_PLAUSIBLE_DOMAIN=${FRONTEND_PLAUSIBLE_DOMAIN}
     ports:
-      - 3000:3000
-      - 6006:6006
+      - 3000:3000 # Vite development server
+      - 6006:6006 # Storybook
+      - 8888:8888 # vite-bundle-analyzer (see vite.config.ts)
     command: yarn start
 volumes:
   db_data:
