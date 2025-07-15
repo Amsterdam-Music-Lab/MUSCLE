@@ -146,7 +146,7 @@ export default function View({ name, ...viewProps }: ViewProps) {
 
         {block && block?.feedback_info?.show_float_button && (
           <FloatingActionButton
-            icon="fa-comment"
+            iconName="comment"
             title="Your feedback"
             showFooter={false}
           >

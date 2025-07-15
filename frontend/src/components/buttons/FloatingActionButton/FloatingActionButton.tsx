@@ -12,6 +12,8 @@ import type { ModalProps } from "@/components/ui";
 import classNames from "classnames";
 import { Modal } from "@/components/ui";
 import styles from "./FloatingActionButton.module.scss";
+import { Icon } from "@/components/icons";
+import { IconName } from "@/components/icons";
 
 type Position =
   | "bottom-left"
@@ -22,8 +24,8 @@ type Position =
   | "center-right";
 
 interface FloatingActionHandleBaseProps {
-  /** Font Awesome icon class name. Default 'fa-comment' */
-  icon?: string;
+  /** Icon name, default 'comment' */
+  iconName?: IconName;
 
   /**
    * The position of the floating action button: 'bottom-left',
@@ -60,7 +62,7 @@ export interface FloatingActionButtonProps
  * Shows a floating button that opens an overlaid dialog when clicked.
  */
 export default function FloatingActionButton({
-  icon,
+  iconName,
   position,
   flush,
   variant,
@@ -70,7 +72,7 @@ export default function FloatingActionButton({
 }: FloatingActionButtonProps) {
   const Handle = (props) => (
     <FloatingActionHandle
-      icon={icon}
+      iconName={iconName}
       position={position}
       flush={flush}
       variant={variant}
@@ -88,7 +90,7 @@ interface FloatingActionHandleProps
 
 function FloatingActionHandle({
   position = "bottom-right",
-  icon,
+  iconName = "comment",
   flush = false,
   variant = "primary",
   offset = 1,
@@ -113,10 +115,7 @@ function FloatingActionHandle({
       }}
       {...props}
     >
-      <i
-        data-testid="floating-action-icon"
-        className={classNames(styles.icon, "fa", icon)}
-      />
+      <Icon name={iconName} data-testid="floating-action-icon" />
     </button>
   );
 }

@@ -20,6 +20,7 @@ import {
 
 import styles from "./ShareOptions.module.scss";
 import { t } from "@/util/i18n";
+import { Icon } from "@/components/icons";
 
 const copyToClipboard = async (message: string) => {
   await navigator.clipboard.writeText(message);
@@ -31,30 +32,28 @@ interface ShareOptProps {
 }
 
 function Facebook({ config, ...props }: ShareOptProps) {
-  const { style, ...rest } = props;
   return (
     <FacebookShareButton
       url={config.url}
       title={config.content}
       hashtag={config.tags[0]}
-      style={{ "--icon-size-correction": 0.85, ...style } as CSSProperties}
-      {...rest}
+      resetButtonStyle={false}
+      {...props}
     >
-      <i className="fa-brands fa-facebook-f fa-2x"></i>
+      <Icon name="facebook" />
     </FacebookShareButton>
   );
 }
 
 function Whatsapp({ config, ...props }: ShareOptProps) {
-  const { style, ...rest } = props;
   return (
     <WhatsappShareButton
       url={config.url}
       title={config.content}
-      style={{ "--icon-size-correction": 1, ...style } as CSSProperties}
-      {...rest}
+      resetButtonStyle={false}
+      {...props}
     >
-      <i className="fa-brands fa-whatsapp fa-2x"></i>
+      <Icon name="whatsapp" />
     </WhatsappShareButton>
   );
 }
@@ -65,18 +64,23 @@ function Twitter({ config, ...props }: ShareOptProps) {
       url={config.url}
       title={config.content}
       hashtags={config.tags}
+      resetButtonStyle={false}
       {...props}
-      style={{ "--icon-size-correction": 0.9 } as CSSProperties}
     >
-      <i className="fa-brands fa-x-twitter fa-2x"></i>
+      <Icon name="x" />
     </TwitterShareButton>
   );
 }
 
 function Weibo({ config, ...props }: ShareOptProps) {
   return (
-    <WeiboShareButton url={config.url} title={config.content} {...props}>
-      <i className="fa-brands fa-weibo fa-2x"></i>
+    <WeiboShareButton
+      resetButtonStyle={false}
+      url={config.url}
+      title={config.content}
+      {...props}
+    >
+      <Icon name="weibo" />
     </WeiboShareButton>
   );
 }
@@ -94,31 +98,29 @@ function Share({ config, ...props }: ShareOptProps) {
     }
   };
   return (
-    <div
+    <button
       onClick={() => shareContent(config.content, config.url)}
       data-testid="navigator-share"
       {...props}
     >
-      <i className="fa-solid fa-share-nodes fa-2x"></i>
-    </div>
+      <Icon name="share" />
+    </button>
   );
 }
 
 function ClipBoard({ config, ...props }: ShareOptProps) {
-  const { style, ...rest } = props;
   const message = t("share.clipboard", {
     message: config?.content,
     url: config?.url,
   });
   return (
-    <div
+    <button
       onClick={() => copyToClipboard(message)}
       data-testid="clipboard-share"
-      style={{ "--icon-size-correction": 0.85, ...style } as CSSProperties}
-      {...rest}
+      {...props}
     >
-      <i className="fa-solid fa-clipboard fa-2x"></i>
-    </div>
+      <Icon name="clipboard" />
+    </button>
   );
 }
 
@@ -162,9 +164,7 @@ export default function ShareOptions({
   return (
     <div className={classNames(styles.share, className)} {...divProps}>
       {shareComponents.map((Component, i) => (
-        <div key={i}>
-          <Component config={config} className={styles.button} />
-        </div>
+        <Component config={config} className={styles.button} key={i} />
       ))}
     </div>
   );
