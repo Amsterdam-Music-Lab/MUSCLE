@@ -13,45 +13,6 @@ $colors: (
   "teal": $teal,
 );
 
-// Gradient classes
-@each $name1, $color1 in $colors {
-  @each $name2, $color2 in $colors {
-    @if $name1 != $name2 {
-      .bg-#{$name1}-#{$name2} {
-        background: linear-gradient(70deg, $color1 -50%, $color2 150%);
-      }
-
-      .bg-subtle-#{$name1}-#{$name2} {
-        background: linear-gradient(70deg, $color1 -10%, $color2 500%);
-      }
-
-      .fill-#{$name1}-#{$name2} {
-        fill: linear-gradient(70deg, $color1 -50%, $color2 150%);
-      }
-
-      .text-#{$name1}-#{$name2} {
-        background: linear-gradient(70deg, $color1 -10%, $color2 110%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-
-        // To make sure it's not too wide
-        display: inline-block;
-      }
-
-      .text-subtle-#{$name1}-#{$name2} {
-        background: linear-gradient(70deg, $color1 -10%, $color2 400%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-
-        // To make sure it's not too wide
-        display: inline-block;
-      }
-    }
-  }
-}
-
 .bg-transparent {
   background: transparent !important;
 }
