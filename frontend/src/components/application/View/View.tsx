@@ -107,7 +107,7 @@ export default function View({ name, ...viewProps }: ViewProps) {
     session,
     name,
     setError,
-    t
+    t,
   ]);
 
   const Wrapper = viewMeta.usesOwnLayout ? Fragment : NarrowLayout;
