@@ -40,6 +40,3 @@ export default function ErrorView({
     </div>
   );
 }
-ErrorView.viewName = "error";
-ErrorView.usesOwnLayout = false;
-ErrorView.getViewProps = undefined;

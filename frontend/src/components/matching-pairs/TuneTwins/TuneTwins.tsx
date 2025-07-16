@@ -11,8 +11,8 @@ import type { UseTuneTwinsProps } from "../useTuneTwins";
 import type { TimelineConfig } from "@/types/timeline";
 import type { LogoName } from "@/components/svg";
 
+import { useMemo } from "react";
 import { useOrientation } from "@/hooks/OrientationProvider";
-import convertTutorial from "@/util/convertTutorial";
 import { useTuneTwins, TTComparisonResult, TTGameState } from "./useTuneTwins";
 import { Timeline, ScoreFeedback, TutorialMessage } from "@/components/modules";
 import { SquareLayout } from "@/components/layout";
@@ -21,8 +21,6 @@ import { Board } from "../Board";
 import { AudioCard } from "../AudioCard";
 import DevCardLabel from "./DevCardLabel";
 import styles from "./TuneTwins.module.scss";
-
-import frontendConfig from "@/config/frontend";
 
 const CARD_CLASSES = {
   [TTComparisonResult.NO_MATCH]: styles.nomatch,
@@ -107,6 +105,17 @@ export default function TuneTwins({
     cardClasses: CARD_CLASSES,
   });
   let tabCount = 0;
+
+  // Avoid unneccessary re-renders of the Timeline and Logo components
+  const MemoTimeline = useMemo(
+    () => <Timeline timeline={timeline} />,
+    [timeline]
+  );
+  const MemoLogo = useMemo(
+    () => <Logo name={logo} fill="#ccc" className={styles.logo} />,
+    [logo]
+  );
+
   return (
     <SquareLayout
       portraitHeaderHeight={0.55}
@@ -171,48 +180,18 @@ export default function TuneTwins({
 
       {showLogo && (
         <SquareLayout.Aside className={styles.aside}>
-          <Logo name={logo} fill="#ccc" className={styles.logo} />
+          {MemoLogo}
         </SquareLayout.Aside>
       )}
 
       {timeline && showTimeline && (
         <SquareLayout.Footer className={styles.footer}>
-          <Timeline timeline={timeline} />
+          {MemoTimeline}
         </SquareLayout.Footer>
       )}
     </SquareLayout>
   );
 }
-TuneTwins.viewName = "tunetwins";
-TuneTwins.usesOwnLayout = true;
-TuneTwins.getViewProps = ({
-  playbackArgs,
-  submitResult,
-  onFinishedPlaying,
-  playSection,
-  experiment,
-}) => {
-  const cards = playbackArgs.sections.map((section, index) => ({
-    id: index,
-    data: { boardposition: index + 1, ...section },
-  }));
-  const tutorial = convertTutorial(playbackArgs.tutorial);
-  const timeline = frontendConfig?.tunetwins?.timeline;
-  const numSteps = timeline?.symbols.length ?? timeline?.steps.length ?? 0;
-  const sessionsPlayed = experiment.playedSessions ?? 0;
-  const timelineStep = sessionsPlayed % numSteps;
-
-  return {
-    cards,
-    animate: playbackArgs.show_animation,
-    onGameEnd: () => submitResult({}),
-    onTurnEnd: onFinishedPlaying,
-    onSelectCard: (card) => playSection(card.id),
-    tutorial,
-    timeline: { ...timeline, currentStep: timelineStep },
-    feedbackMessages: frontendConfig?.tunetwins?.feedbackMessages,
-  };
-};
 
 interface TuneTwinsHeaderProps {
   turnScore?: number;

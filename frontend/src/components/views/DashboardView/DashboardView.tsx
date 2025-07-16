@@ -88,24 +88,3 @@ export default function DashboardView({
     </ExperimentLayout>
   );
 }
-
-DashboardView.viewName = "dashboard";
-DashboardView.usesOwnLayout = true;
-DashboardView.getViewProps = ({ experiment, participant }) => ({
-  name: experiment.name,
-  slug: experiment.slug,
-  description: experiment.description,
-  totalScore: experiment.totalScore,
-  nextBlock: experiment.nextBlock,
-  header: experiment?.theme?.header ?? {},
-  socialMediaConfig: experiment.socialMediaConfig,
-  participantId: participant?.participant_id_url,
-  dashboard: experiment.dashboard,
-
-  // Passed on to ExperimentLayout
-  disclaimerHtml: experiment?.disclaimer,
-  privacyHtml: experiment?.privacy,
-  logos: experiment?.theme?.footer?.logos,
-  showFooter: experiment?.theme?.footer,
-});
-DashboardView.dependencies = ["experiment", "participant"];

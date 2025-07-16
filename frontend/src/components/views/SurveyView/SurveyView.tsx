@@ -126,7 +126,3 @@ export default function SurveyView({
     </form>
   );
 }
-
-SurveyView.viewName = "survey";
-SurveyView.usesOwnLayout = true;
-SurveyView.getViewProps = undefined;

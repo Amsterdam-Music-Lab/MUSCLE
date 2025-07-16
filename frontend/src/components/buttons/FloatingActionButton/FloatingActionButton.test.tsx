@@ -22,30 +22,35 @@ vi.mock("@/components/ui", () => ({
   ),
 }));
 
+vi.mock("@/components/icons", () => ({
+  Icon: (props) => (
+    <i data-testid="mock-icon" data-props={JSON.stringify(props)} />
+  ),
+}));
+
 describe("FloatingActionButton", () => {
   it("renders with the default icon and position", () => {
     const { getByTestId } = render(
-      <FloatingActionButton icon="icon-class">
-        Test Content
-      </FloatingActionButton>
+      <FloatingActionButton>Test Content</FloatingActionButton>
     );
     const button = getByTestId("floating-action-button");
-    const icon = getByTestId("floating-action-icon");
-    expect(button).toBeInTheDocument();
-    expect(icon.classList.contains("icon-class")).toBe(true);
+    const icon = getByTestId("mock-icon");
+    const props = JSON.parse(icon.getAttribute("data-props")!);
+    expect(props.name).toBe("comment");
     expect(button.classList.contains(styles.right)).toBe(true);
     expect(button.classList.contains(styles.bottom)).toBe(true);
   });
 
   it("renders with a custom icon and position", () => {
     const { getByTestId } = render(
-      <FloatingActionButton icon="fa-star" position="bottom-left">
+      <FloatingActionButton iconName="facebook" position="bottom-left">
         Test Content
       </FloatingActionButton>
     );
     const button = getByTestId("floating-action-button");
-    const icon = getByTestId("floating-action-icon");
-    expect(icon.classList.contains("fa-star")).toBe(true);
+    const icon = getByTestId("mock-icon");
+    const props = JSON.parse(icon.getAttribute("data-props")!);
+    expect(props.name).toBe("facebook");
     expect(button.classList.contains(styles.left)).toBe(true);
     expect(button.classList.contains(styles.bottom)).toBe(true);
   });

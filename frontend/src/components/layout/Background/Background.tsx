@@ -8,7 +8,6 @@
 
 import type { HTMLAttributes } from "react";
 import classNames from "classnames";
-import useBoundStore from "@/util/stores";
 import { useTheme } from "@/theme/ThemeProvider";
 import { GradientCircles } from "@/components/svg";
 import styles from "./Background.module.scss";

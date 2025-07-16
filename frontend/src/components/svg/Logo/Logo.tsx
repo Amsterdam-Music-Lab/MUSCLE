@@ -8,6 +8,7 @@
 
 import type { CSSProperties, HTMLAttributes, SVGAttributes } from "react";
 import classNames from "classnames";
+import { lazy, Suspense } from "react";
 import type { Variant } from "@/types/themeProvider";
 import { useVariantFill } from "@/hooks/useVariantFill";
 import type { Fill } from "@/types/svg";
@@ -53,7 +54,7 @@ export default function Logo({
   style,
   ...props
 }: LogoProps) {
-  const Component = componentMap[name];
+  const Component = lazy(componentMap[name]);
   const variantFill = useVariantFill(variant ?? "primary") ?? "#000";
   fill = fill ?? variantFill;
   return (
@@ -77,7 +78,9 @@ export default function Logo({
       }
       {...props}
     >
-      <Component fill={knockout ? "#fff" : fill} type={type} />
+      <Suspense fallback={name}>
+        <Component fill={knockout ? "#fff" : fill} type={type} />
+      </Suspense>
     </div>
   );
 }

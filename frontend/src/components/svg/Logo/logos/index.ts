@@ -6,14 +6,10 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import UvA from "./UvA";
-import MCG from "./MCG";
-import AML from "./AML";
-import TuneTwins from "./TuneTwins";
-import NWO from "./NWO";
-
-export const components = { AML, MCG, TuneTwins, UvA, NWO };
-
-export const logos = Object.fromEntries(
-  Object.values(components).map((Component) => [Component._name, Component])
-);
+export const logos = {
+  uva: () => import("@/components/svg/Logo/logos/UvA"),
+  aml: () => import("@/components/svg/Logo/logos/AML"),
+  tunetwins: () => import("@/components/svg/Logo/logos/TuneTwins"),
+  nwo: () => import("@/components/svg/Logo/logos/NWO"),
+  mcg: () => import("@/components/svg/Logo/logos/MCG"),
+};

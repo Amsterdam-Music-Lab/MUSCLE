@@ -97,6 +97,3 @@ export default function StoreProfileView() {
     </>
   );
 }
-StoreProfileView.viewName = "storeProfile";
-StoreProfileView.usesOwnLayout = false;
-StoreProfileView.getViewProps = undefined;

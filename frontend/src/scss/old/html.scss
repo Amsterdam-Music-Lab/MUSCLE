@@ -1,0 +1,105 @@
+@import "./variables.scss";
+
+.html {
+  // &.neutral {
+  //   .aha__question .btn {
+  //     &:nth-of-type(1) {
+  //       @include btn-style($blue);
+  //     }
+  //     &:nth-of-type(2) {
+  //       @include btn-style($yellow);
+  //     }
+  //     &:nth-of-type(3) {
+  //       @include btn-style($teal);
+  //     }
+  //     &:nth-of-type(4) {
+  //       @include btn-style($pink);
+  //     }
+  //     &:nth-of-type(5) {
+  //       @include btn-style($indigo);
+  //     }
+  //   }
+  // }
+
+  // &.blue {
+  //   // Form styling
+  //   .aha__question .btn {
+  //     @include btn-style($blue);
+  //   }
+  // }
+
+  // &.pink {
+  //   // Form styling
+  //   .aha__question .btn {
+  //     @include btn-style($pink);
+  //   }
+  // }
+
+  // BC: Why is this needed?!
+  // .card.bg-blue {
+  //   height: 21vh;
+  //   background-color: $blue;
+
+  //   span {
+  //     margin-top: 5vh;
+  //   }
+
+  //   &.is-greyed-out {
+  //     border: 0.5rem solid grey;
+  //     background-color: transparent;
+  //     color: transparent;
+  //   }
+
+  //   .card-body {
+  //     text-align: left;
+  //     padding-top: 1vh;
+  //     ul {
+  //       padding: 0;
+  //     }
+  //   }
+
+  //   .card-title {
+  //     padding: 0;
+  //     font-size: 2.5vh;
+  //   }
+
+  //   .card-text {
+  //     font-size: 2vh;
+  //   }
+  // }
+
+  .prose {
+    h1,
+    h2,
+    h3 {
+      position: relative;
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+      text-align: left;
+
+      &:after {
+        content: "";
+        position: absolute;
+        background-color: $primary;
+        bottom: -5px;
+        left: -31px;
+        width: 100px;
+        height: 5px;
+      }
+    }
+
+    blockquote * {
+      margin: 50px 30px;
+      color: $primary;
+      text-shadow: 0 0 30px $primary;
+
+      @media (max-width: 720px) {
+        margin: 30px 20px;
+      }
+
+      &::after {
+        display: none;
+      }
+    }
+  }
+}

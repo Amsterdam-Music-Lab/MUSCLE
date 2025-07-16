@@ -5,7 +5,7 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-import type { HTMLAttributes } from "react";
+import type { HTMLAttributes, MutableRefObject } from "react";
 import type { TrialConfig } from "@/types/Trial";
 import type { IFeedbackForm } from "@/types/Action";
 import type { PlaybackArgs } from "@/types/Playback";
@@ -17,6 +17,27 @@ import { getAudioLatency, getCurrentTime, getTimeSince } from "@/util/time";
 import { Playback, View } from "@/components/application";
 import { RenderHtml } from "@/components/utils";
 import { Button } from "@/components/buttons";
+
+const checkBreakRound = (
+  values: string[],
+  breakConditions: TrialConfig["break_round_on"]
+) => {
+  switch (Object.keys(breakConditions)[0]) {
+    case "EQUALS":
+      return values.some((val) => breakConditions["EQUALS"]!.includes(val));
+    case "NOT":
+      return !values.some((val) => breakConditions["NOT"]!.includes(val));
+    default:
+      return false;
+  }
+};
+
+function getAndStoreDecisionTime(startTime: MutableRefObject<number>): number {
+  const decisionTime = getTimeSince(startTime.current);
+  // keep decisionTime in sessionStorage to be used by subsequent renders
+  window.sessionStorage.setItem("decisionTime", decisionTime.toString());
+  return decisionTime;
+}
 
 export interface Survey {
   /** The questions to show */
@@ -107,7 +128,7 @@ export default function Trial({
 
       // Submit to server
       const result = await onResult({
-        decision_time: getAndStoreDecisionTime(),
+        decision_time: getAndStoreDecisionTime(startTime),
         audio_latency_ms: getAudioLatency(),
         form: updatedQuestions,
         config: {
@@ -138,27 +159,6 @@ export default function Trial({
       onResult,
     ]
   );
-
-  const checkBreakRound = (
-    values: string[],
-    breakConditions: TrialConfig["break_round_on"]
-  ) => {
-    switch (Object.keys(breakConditions)[0]) {
-      case "EQUALS":
-        return values.some((val) => breakConditions["EQUALS"]!.includes(val));
-      case "NOT":
-        return !values.some((val) => breakConditions["NOT"]!.includes(val));
-      default:
-        return false;
-    }
-  };
-
-  const getAndStoreDecisionTime = () => {
-    const decisionTime = getTimeSince(startTime.current);
-    // keep decisionTime in sessionStorage to be used by subsequent renders
-    window.sessionStorage.setItem("decisionTime", decisionTime.toString());
-    return decisionTime;
-  };
 
   const finishedPlaying = useCallback(() => {
     if (autoAdvance) {
@@ -221,34 +221,3 @@ export default function Trial({
     </>
   );
 }
-
-Trial.viewName = "trial";
-Trial.usesOwnLayout = true;
-Trial.getViewProps = ({ action, onNext, onResult, experiment }) => {
-  let survey;
-  if (action.feedback_form) {
-    survey = {
-      questions: action.feedback_form?.form,
-      skippable: action.feedback_form?.is_skippable,
-      submitLabel: action.feedback_form?.submit_label,
-      skipLabel: action.feedback_form?.skip_label,
-    };
-  }
-
-  return {
-    playback: action.playback,
-    html: action.html,
-    survey,
-    onNext,
-    onResult,
-    experiment,
-    responseTime: action.config.response_time,
-    autoAdvance: action.config.auto_advance,
-    autoAdvanceTimer: action.config.auto_advance_timer,
-    listenFirst: action.config.listen_first,
-    showContinueButton: action.config.show_continue_button,
-    continueLabel: action.config.continue_label,
-    breakRoundOn: action.config.break_round_on,
-  };
-};
-Trial.dependencies = ["action"];

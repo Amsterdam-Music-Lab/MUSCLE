@@ -1,18 +1,7 @@
 /* Config */
-// Note that importing @csstools/normalize in index.tsx
-// (and also in ./storybook/preview.tsx)
-// makes bootstrap redundant - for TuneTwins at least
 @import "scss/reset";
-
 @import "scss/variables";
-@import "scss/images";
 @import "scss/layout";
 @import "scss/animations";
-@import "scss/elements";
-@import "scss/color-schemes";
 @import "scss/utils.scss";
-
 @import "scss/theme.scss";
-@import "scss/html.scss";
-
-@import "scss/fontawesome/include.scss";

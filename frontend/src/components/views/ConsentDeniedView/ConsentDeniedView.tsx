@@ -31,6 +31,3 @@ export default function ConsentDeniedView() {
     </>
   );
 }
-
-ConsentDeniedView.viewName = "consentDenied";
-ConsentDeniedView.usesOwnLayout = false;

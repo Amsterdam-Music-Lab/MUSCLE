@@ -79,14 +79,3 @@ export default function ExplainerView({
     </>
   );
 }
-
-ExplainerView.viewName = "explainer";
-ExplainerView.usesOwnLayout = false;
-ExplainerView.getViewProps = ({ action, onNext }) => ({
-  instruction: action.instruction,
-  buttonText: action.button_label,
-  steps: action.steps,
-  timer: action.timer,
-  onNext,
-});
-ExplainerView.dependencies = ["action", "onNext"];

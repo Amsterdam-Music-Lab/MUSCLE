@@ -107,14 +107,3 @@ export default function InfoView({
     </div>
   );
 }
-
-InfoView.viewName = "viewName";
-InfoView.usesOwnLayout = false;
-InfoView.getViewProps = ({ action, onNext }) => ({
-  html: action?.body,
-  title: action?.heading,
-  buttonText: action?.button_label,
-  buttonLink: action?.button_link,
-  onButtonClick: onNext,
-});
-InfoView.dependencies = ["action", "onNext"];

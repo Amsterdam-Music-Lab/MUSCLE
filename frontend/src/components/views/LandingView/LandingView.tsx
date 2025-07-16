@@ -35,7 +35,6 @@ const DEFAULT_PLUGINS = [
 export default function LandingView({
   experimentPath,
   plugins = DEFAULT_PLUGINS,
-  ...layoutProps
 }: LandingViewProps) {
   if (plugins) {
     plugins = plugins.map((plugin) => {
@@ -48,7 +47,3 @@ export default function LandingView({
   }
   return <PluginRenderer plugins={plugins as AllPluginSpec[]} />;
 }
-
-LandingView.viewName = "landing";
-LandingView.usesOwnLayout = false;
-LandingView.getViewProps = undefined;

@@ -6,36 +6,13 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import type { ComponentType } from "react";
-import { Fragment } from "react";
+import { ComponentType } from "react";
+import { Suspense, Fragment, useMemo } from "react";
 import { NarrowLayout, ViewTransition } from "@/components/layout";
 import { FloatingActionButton } from "@/components/buttons";
 import { FeedbackForm } from "@/components/modules";
 
-// Simple views
-import {
-  AboutView,
-  ErrorView,
-  InfoView,
-  ExplainerView,
-  FinalView,
-  LandingView,
-  LoadingView,
-  PlaylistsView,
-  ProfileView,
-  ScoreView,
-  StoreProfileView,
-  SurveyView,
-  ConsentView,
-  ConsentDeniedView,
-  DashboardView,
-} from "@/components/views";
-
-// Controller views
-import { Trial } from "../";
-
-// Other views
-import { TuneTwins } from "@/components/matching-pairs";
+import { views, LoadingView } from "@/components/views";
 import useBoundStore from "@/util/stores";
 import Action from "@/types/Action";
 import Block from "@/types/Block";
@@ -46,7 +23,7 @@ import { useSubmitFeedback } from "@/components/modules";
 
 export type ViewDependency = "block" | "action" | "participant" | "session";
 
-interface GetViewPropsArgs {
+export interface GetViewPropsArgs {
   action?: Action;
   block?: Block;
   participant?: Participant;
@@ -61,28 +38,6 @@ export interface BaseViewComponent<P = any> {
 }
 
 export type ViewComponent<P = any> = ComponentType<P> & BaseViewComponent<P>;
-
-const viewComponents: Record<string, ViewComponent<any>> = {
-  [AboutView.viewName]: AboutView,
-  [ConsentView.viewName]: ConsentView,
-  [ConsentDeniedView.viewName]: ConsentDeniedView,
-  [ErrorView.viewName]: ErrorView,
-  [ExplainerView.viewName]: ExplainerView,
-  [FinalView.viewName]: FinalView,
-  [InfoView.viewName]: InfoView,
-  [LandingView.viewName]: LandingView,
-  [LoadingView.viewName]: LoadingView,
-  [PlaylistsView.viewName]: PlaylistsView,
-  [ProfileView.viewName]: ProfileView,
-  [ScoreView.viewName]: ScoreView,
-  [SurveyView.viewName]: SurveyView,
-  [StoreProfileView.viewName]: StoreProfileView,
-  [TuneTwins.viewName]: TuneTwins,
-
-  // Use name directly as [View.viewName] raises test issues
-  dashboard: DashboardView,
-  trial: Trial,
-};
 
 export interface ViewProps {
   name: string;
@@ -100,28 +55,35 @@ export default function View({ name, ...viewProps }: ViewProps) {
   const session = useBoundStore((state) => state.session);
   const participant = useBoundStore((state) => state.participant);
 
-  if (!Object.keys(viewComponents).includes(name)) {
+  // Get ViewComponent and viewMeta
+  const entry = useMemo(() => views[name], [name]);
+  if (!entry) {
+    console.error(`View "${name}" not found`);
     setError(`Invalid view name "${name}"`);
   }
+  const { component: ViewComponent, meta: viewMeta } = entry;
 
-  const ViewComponent = viewComponents[name];
-  if (typeof ViewComponent.getViewProps === "function") {
-    // Ensure all the required dependencies are defined and throw an error otherwise
-    // This is mostly for debuggin purposes
+  // Compute viewProps (memoized for performance reasons)
+  const computedViewProps = useMemo(() => {
+    if (typeof viewMeta.getViewProps !== "function") {
+      return viewProps;
+    }
+    const deps = viewMeta.dependencies ?? [];
+
+    // Validate required dependencies
     const throwError = (varName: ViewDependency) => {
       setError(
-        `Required dependency "${varName}" for view "${ViewComponent.viewName}" is not defined`
+        `Required dependency "${varName}" for view "${name}" is not defined`
       );
     };
-    const deps = ViewComponent.dependencies ?? [];
+
     if (deps.includes("block") && !block) throwError("block");
     if (deps.includes("action") && !action) throwError("action");
     if (deps.includes("participant") && !participant) throwError("participant");
     if (deps.includes("session") && !session) throwError("session");
 
-    // Compute the views default props
     try {
-      viewProps = ViewComponent.getViewProps({
+      return viewMeta.getViewProps({
         block,
         action,
         participant,
@@ -132,21 +94,33 @@ export default function View({ name, ...viewProps }: ViewProps) {
       setError(
         `An error occurred while trying to render the view "${name}". The properties required to show the view could not be computed.\n (${e})`
       );
+      return viewProps; // fallback
     }
-  }
+  }, [
+    viewMeta,
+    viewProps,
+    block,
+    action,
+    participant,
+    session,
+    name,
+    setError,
+  ]);
 
-  const Wrapper = ViewComponent.usesOwnLayout ? Fragment : NarrowLayout;
+  const Wrapper = viewMeta.usesOwnLayout ? Fragment : NarrowLayout;
 
   const onSubmitFeedback = useSubmitFeedback(block?.slug, participant);
 
   return (
     <ViewTransition transitionKey={name}>
       <Wrapper>
-        <ViewComponent {...viewProps} />
+        <Suspense fallback={<LoadingView />}>
+          <ViewComponent {...computedViewProps} />
+        </Suspense>
 
         {block && block?.feedback_info?.show_float_button && (
           <FloatingActionButton
-            icon="fa-comment"
+            iconName="comment"
             title="Your feedback"
             showFooter={false}
           >

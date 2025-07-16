@@ -7,56 +7,41 @@
  */
 
 @import "@/scss/theme";
+@import "@/scss/utils";
 
 .share {
   --share-icon-size: 2rem;
-  --icon-size-correction: 1;
-  --icon-relative-size: 0.66;
 
   display: flex;
-  gap: 0.5em;
+  gap: 0em;
 
-  div {
+  button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: var(--share-icon-size);
+    height: var(--share-icon-size);
+
     cursor: pointer;
+    background-color: transparent;
+    color: #333;
     border-radius: 50%;
     transition: background 200ms ease;
+    border: none;
+    outline: none;
 
-    &:hover {
-      background-color: #eee;
+    &:hover,
+    &:active {
+      @extend .fill-primary;
+      color: #fff;
     }
 
     &:active {
-      background-color: #ccc;
+      outline: 2px solid #00000044;
     }
   }
 
-  button {
-    outline: none;
-  }
-
-  i {
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    text-align: center;
-
-    width: var(--share-icon-size);
-    height: var(--share-icon-size);
-    line-height: var(--share-icon-size);
-    font-size: calc(
-      var(--share-icon-size) * var(--icon-size-correction) *
-        var(--icon-relative-size)
-    );
-    text-align: center;
-
-    color: #444;
-  }
-
-  button:hover {
-    background: #ddd;
-
-    i {
-      @extend .text-fill-primary;
-    }
+  svg {
+    margin: auto;
   }
 }

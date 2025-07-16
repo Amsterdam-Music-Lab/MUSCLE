@@ -8,8 +8,8 @@
 import type { PluginMeta, PluginSpec } from "@/types/plugin";
 import type { LogoName } from "@/components/svg/Logo/Logo";
 
-import ReactMarkdown from "react-markdown";
 import { Logos } from "@/components/svg";
+import {Markdown} from "./MarkdownPlugin"
 
 export interface FooterPluginArgs {
   /** A list of logo names */
@@ -36,7 +36,7 @@ function FooterPlugin({ logos = [], disclaimer }: FooterPluginArgs) {
       {logos.length > 0 && <Logos logos={logos} />}
       {disclaimer && (
         <div className="small" style={{ color: "#fff", marginTop: "1em" }}>
-          <ReactMarkdown>{disclaimer}</ReactMarkdown>
+          <Markdown content={disclaimer} />
         </div>
       )}
     </div>

@@ -11,11 +11,10 @@ import type { Action } from "@/types/Action";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useBoundStore from "@/util/stores";
-import { getNextRound, useBlock, useExperiment, useConsent } from "@/API";
+import { getNextRound, useBlock, useExperiment } from "@/API";
 import useResultHandler from "@/hooks/useResultHandler";
 import { ViewTransition } from "@/components/layout";
 import { View } from "@/components/application";
-import { routes } from "@/config";
 
 const VIEW_NAMES = {
   TRIAL_VIEW: "trial",

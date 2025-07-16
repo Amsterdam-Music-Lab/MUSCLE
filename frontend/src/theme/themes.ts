@@ -18,8 +18,9 @@ const green = "#00b612";
 export const mcgLight: Theme = {
   name: "mcgLight",
   type: "light",
-  fontUrl:
-    "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+  // Disabled: see index.html
+  // fontUrl:
+  //   "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   fontFamily: "Inter, sans-serif",
   useGradients: true,
   background: "#ffffff",

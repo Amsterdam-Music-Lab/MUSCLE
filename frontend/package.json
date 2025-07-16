@@ -18,7 +18,6 @@
     "react-helmet": "^6.1.0",
     "react-markdown": "^10.1.0",
     "react-range": "^1.10.0",
-    "react-rangeslider": "^2.2.0",
     "react-router": "^6.25.1",
     "react-router-dom": "^6.25.1",
     "react-select": "^5.4.0",
@@ -27,6 +26,7 @@
     "sass": "^1.69.5",
     "typescript": "^5.3.3",
     "vite": "^5.4.19",
+    "vite-bundle-analyzer": "^1.1.0",
     "vite-tsconfig-paths": "^4.3.2",
     "zustand": "^4.4.7"
   },

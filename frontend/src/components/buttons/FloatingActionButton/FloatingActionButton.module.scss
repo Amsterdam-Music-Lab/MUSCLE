@@ -31,6 +31,7 @@
   }
 
   // Todo show focus!
+  // todo use input utils
   --outline-size: 3px;
   outline: var(--outline-size) solid #ffffff66;
   outline-offset: calc(-1 * var(--outline-size));
@@ -71,18 +72,13 @@
     top: 50%;
     transform: translateY(-50%);
   }
-}
 
-.icon {
-  // Determines the relative size of the icon compared to
-  // the button size. Note it will scale quadratically.
-  $factor: 1.25;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: calc($factor * $factor * var(--fa-button-font-size));
-  height: calc($factor * $factor * var(--fa-button-font-size));
-  font-size: var(--fa-button-font-size);
-  color: #fff;
+  svg {
+    // Determines the relative size of the icon compared to the button size
+    $factor: 0.66;
+    font-size: var(--fa-button-font-size);
+    width: calc($factor * 100%);
+    margin: auto;
+    color: #fff;
+  }
 }
