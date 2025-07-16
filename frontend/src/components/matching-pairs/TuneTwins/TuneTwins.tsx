@@ -11,6 +11,7 @@ import type { UseTuneTwinsProps } from "../useTuneTwins";
 import type { TimelineConfig } from "@/types/timeline";
 import type { LogoName } from "@/components/svg";
 
+import { useMemo } from "react";
 import { useOrientation } from "@/hooks/OrientationProvider";
 import { useTuneTwins, TTComparisonResult, TTGameState } from "./useTuneTwins";
 import { Timeline, ScoreFeedback, TutorialMessage } from "@/components/modules";
@@ -104,6 +105,17 @@ export default function TuneTwins({
     cardClasses: CARD_CLASSES,
   });
   let tabCount = 0;
+
+  // Avoid unneccessary re-renders of the Timeline and Logo components
+  const MemoTimeline = useMemo(
+    () => <Timeline timeline={timeline} />,
+    [timeline]
+  );
+  const MemoLogo = useMemo(
+    () => <Logo name={logo} fill="#ccc" className={styles.logo} />,
+    [logo]
+  );
+
   return (
     <SquareLayout
       portraitHeaderHeight={0.55}
@@ -168,13 +180,13 @@ export default function TuneTwins({
 
       {showLogo && (
         <SquareLayout.Aside className={styles.aside}>
-          <Logo name={logo} fill="#ccc" className={styles.logo} />
+          {MemoLogo}
         </SquareLayout.Aside>
       )}
 
       {timeline && showTimeline && (
         <SquareLayout.Footer className={styles.footer}>
-          <Timeline timeline={timeline} />
+          {MemoTimeline}
         </SquareLayout.Footer>
       )}
     </SquareLayout>
