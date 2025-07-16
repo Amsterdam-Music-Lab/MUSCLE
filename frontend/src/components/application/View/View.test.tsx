@@ -7,8 +7,9 @@
  */
 
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
 import View, { BaseViewComponent } from "./View";
 
 function getViewMock<P>({

@@ -7,7 +7,7 @@ import type {
 import { lazy } from "react";
 import { ErrorView, LoadingView } from "@/components/views";
 import convertTutorial from "@/util/convertTutorial";
-import frontendConfig from "@/config/frontend";
+import { config } from "@/config/frontend";
 
 type ViewMeta = {
   dependencies?: ViewDependency[];
@@ -46,8 +46,8 @@ views.consent = {
       participant,
       onConfirm: onNext,
       title: experiment.consent.title,
-      confirmLabel: experiment.consent.confirm,
-      denyLabel: experiment.consent.deny,
+      // confirmLabel: experiment.consent.confirm,
+      // denyLabel: experiment.consent.deny,
     }),
     dependencies: ["participant"],
   },
@@ -98,7 +98,7 @@ views.explainer = {
     getViewProps: ({ action, onNext }) => {
       return {
         instruction: action.instruction,
-        buttonText: action.button_label,
+        // buttonText: action.button_label,
         steps: action.steps,
         timer: action.timer,
         onNext,
@@ -113,7 +113,7 @@ views.final = {
   meta: {
     usesOwnLayout: false,
     getViewProps: ({ block, action, participant, onNext, experiment }) => {
-      const timeline = frontendConfig?.tunetwins?.timeline;
+      const timeline = config()?.tunetwins?.timeline;
       const numSteps = timeline?.symbols.length ?? timeline?.steps.length ?? 0;
       const sessionsPlayed = experiment.playedSessions ?? 0;
       const timelineStep = (sessionsPlayed % numSteps) + 1;
@@ -122,7 +122,7 @@ views.final = {
         block,
         participant,
         action_texts: action.action_texts,
-        button: action.button,
+        button: { ...action.button, text: undefined },
         onNext,
         show_participant_link: action.show_participant_link,
         participant_id_only: action?.participant_id_only,
@@ -242,7 +242,7 @@ views.tunetwins = {
         data: { boardposition: index + 1, ...section },
       }));
       const tutorial = convertTutorial(playbackArgs.tutorial);
-      const timeline = frontendConfig?.tunetwins?.timeline;
+      const timeline = config()?.tunetwins?.timeline;
       const numSteps = timeline?.symbols.length ?? timeline?.steps.length ?? 0;
       const sessionsPlayed = experiment.playedSessions ?? 0;
       const timelineStep = sessionsPlayed % numSteps;
@@ -255,7 +255,7 @@ views.tunetwins = {
         onSelectCard: (card) => playSection(card.id),
         tutorial,
         timeline: { ...timeline, currentStep: timelineStep },
-        feedbackMessages: frontendConfig?.tunetwins?.feedbackMessages,
+        // feedbackMessages: frontendConfig?.tunetwins?.feedbackMessages,
       };
     },
   },

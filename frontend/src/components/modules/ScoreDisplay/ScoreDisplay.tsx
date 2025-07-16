@@ -7,6 +7,7 @@
  */
 
 import type { HTMLAttributes, CSSProperties } from "react";
+import { useLingui } from "@lingui/react/macro";
 import type { Variant } from "@/types/themeProvider";
 import classNames from "classnames";
 import styles from "./ScoreDisplay.module.scss";
@@ -41,13 +42,14 @@ interface ScoreProps extends HTMLAttributes<HTMLDivElement> {
 export default function ScoreDisplay({
   score,
   label,
-  units = "pts",
+  units,
   size = 4,
   placeholder = "??",
   variant = "primary",
   center = false,
   ...props
 }: ScoreProps) {
+  const { t } = useLingui();
   const { className, style, ...rest } = props;
   return (
     <div
@@ -78,7 +80,7 @@ export default function ScoreDisplay({
                 `text-fill-${variant} small`
               )}
             >
-              {units}
+              {units ?? t`pts`}
             </span>
           ) : null}
         </div>

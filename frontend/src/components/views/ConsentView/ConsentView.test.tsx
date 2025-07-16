@@ -5,12 +5,13 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { saveAs } from "file-saver";
+import { MemoryRouter } from "react-router-dom";
+import { vi, Mock, expect, it, describe } from "vitest";
+import { fireEvent, waitFor } from "@testing-library/react";
+import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
 import ConsentView from "./ConsentView";
 import { useConsent } from "@/API";
-import { saveAs } from "file-saver";
-import { vi, Mock, expect, it, describe } from "vitest";
-import { MemoryRouter } from "react-router-dom";
 
 global.Blob = vi.fn().mockImplementation((content, options) => ({
   content,

@@ -91,6 +91,12 @@ services:
       - type: bind
         source: .vscode
         target: /client/.vscode
+      - type: bind
+        source: ./frontend/lingui.config.js
+        target: /client/lingui.config.js
+      - type: bind
+        source: ./frontend/babel.config.js
+        target: /client/babel.config.js
     environment:
       - VITE_API_ROOT=${FRONTEND_API_ROOT}
       - VITE_EXPERIMENT_SLUG=${FRONTEND_EXPERIMENT_SLUG}

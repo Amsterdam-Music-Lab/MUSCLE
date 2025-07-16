@@ -7,6 +7,8 @@
  */
 
 import type { HTMLAttributes } from "react";
+
+import { useLingui } from "@lingui/react/macro";
 import type { TutorialStep } from "@/types/tutorial";
 import classNames from "classnames";
 import styles from "./TutorialMessage.module.scss";
@@ -20,7 +22,7 @@ interface TutorialMessageProps
 
 export default function TutorialMessage({
   id,
-  title = "Explanation",
+  title,
   completed,
   content,
   visible,
@@ -29,6 +31,7 @@ export default function TutorialMessage({
   variant = "primary",
   ...divProps
 }: TutorialMessageProps) {
+  const { t } = useLingui();
   return (
     <div
       className={classNames(
@@ -39,7 +42,9 @@ export default function TutorialMessage({
       {...divProps}
     >
       <p className={styles.message}>
-        {title && <span className={styles.title}>{title}</span>}
+        {title && (
+          <span className={styles.title}>{title ?? t`Explanation`}</span>
+        )}
         {content}
       </p>
       {children}

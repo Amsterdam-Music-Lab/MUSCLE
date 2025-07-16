@@ -6,18 +6,20 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+import { useLingui } from "@lingui/react/macro";
 import { LinkButton } from "@/components/buttons";
 import { Card } from "@/components/ui";
 import { routes } from "@/config";
 
 export default function ConsentDeniedView() {
+  const { t } = useLingui();
   return (
     <>
       <Card>
-        <Card.Header title={"No consent was given"} />
+        <Card.Header title={t`No consent was given`} />
         <Card.Section>
-          Unfortunately, you cannot participate in this experiment if you do not
-          want to provide consent.
+          {t`Unfortunately, you cannot participate in this experiment if you do not
+          want to provide consent.`}
         </Card.Section>
       </Card>
       <LinkButton
@@ -26,7 +28,7 @@ export default function ConsentDeniedView() {
         rounded={false}
         size="lg"
       >
-        Go back to the homepage
+        {t`Go back to the homepage`}
       </LinkButton>
     </>
   );

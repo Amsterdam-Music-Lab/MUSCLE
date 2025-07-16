@@ -6,26 +6,15 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import type { AllPluginSpec } from "@/components/plugins";
 import type { ProfileData } from "@/types/profile";
+import { useMemo } from "react";
 import { Route, Routes } from "react-router-dom";
 import { EXPERIMENT_SLUG, routes } from "@/config";
 import useBoundStore from "@/util/stores";
 import { Redirect, InternalRedirect, Reload } from "@/components/utils";
 import { Block, Experiment, View } from "../";
 import { useParticipantScores } from "@/API";
-
-interface AppRoutesProps {
-  /**
-   * Whether to show the landing page
-   */
-  showLanding?: boolean;
-
-  /**
-   * Plugins to show on the landing page
-   */
-  landingPlugins?: AllPluginSpec[];
-}
+import { config } from "@/config/frontend";
 
 /**
  * The routes used by the app. This is a separate component, partly so that
@@ -33,30 +22,18 @@ interface AppRoutesProps {
  *
  * TODO this is no longer neeeded as ViewTransitions is further down the tree now (in View)
  */
-export default function AppRoutes({
-  showLanding = false,
-  landingPlugins = [],
-}: AppRoutesProps) {
+export default function AppRoutes() {
   const error = useBoundStore((state) => state.error);
   const participant = useBoundStore((state) => state.participant);
 
   return error ? (
     <View name="error" title="An error occured" message={error} />
   ) : !participant ? (
-    <HomeController showLanding={showLanding} landingPlugins={landingPlugins} />
+    <HomeController />
   ) : (
-    // <View name="loading" />
     <Routes>
       {/* Home: either a landing page or redirect to the experiment */}
-      <Route
-        index
-        element={
-          <HomeController
-            showLanding={showLanding}
-            landingPlugins={landingPlugins}
-          />
-        }
-      />
+      <Route index element={<HomeController />} />
 
       {/* Request reload for given participant */}
       <Route
@@ -93,7 +70,14 @@ export default function AppRoutes({
 
 // Controllers that handle additional logic or data fetching
 
-function HomeController({ showLanding, landingPlugins }) {
+function HomeController() {
+  const { showLanding, landingPlugins } = useMemo(() => {
+    const c = config();
+    return {
+      showLanding: c.showLanding ?? false,
+      landingPlugins: c.landing?.plugins ?? [],
+    };
+  }, []);
   const path = routes.experiment(EXPERIMENT_SLUG);
   return showLanding ? (
     <View name="landing" experimentPath={path} plugins={landingPlugins} />

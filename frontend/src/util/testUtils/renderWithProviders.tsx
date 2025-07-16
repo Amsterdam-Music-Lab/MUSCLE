@@ -8,11 +8,22 @@
 
 import type { ReactNode } from "react";
 import { render, RenderOptions } from "@testing-library/react";
+import { i18n } from "@lingui/core";
+import { I18nProvider } from "@lingui/react";
 import { ThemeProvider } from "@/theme/ThemeProvider";
+import { messages as messagesEn } from "@/locales/en/messages";
 
 const Providers = ({ children }: { children: ReactNode }) => {
+  // i18n setup
+  i18n.load("en", messagesEn);
+  i18n.activate("en");
+
   // Add other providers if needed
-  return <ThemeProvider>{children}</ThemeProvider>;
+  return (
+    <I18nProvider i18n={i18n}>
+      <ThemeProvider>{children}</ThemeProvider>
+    </I18nProvider>
+  );
 };
 
 export const renderWithProviders = (

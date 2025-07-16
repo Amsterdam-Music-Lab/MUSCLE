@@ -12,6 +12,7 @@ import axios from "axios";
 
 import { API_BASE_URL } from "@/config";
 import { URLS } from "@/API";
+import { useState } from "react";
 import useBoundStore from "@/util/stores";
 import useDisableRightClickOnTouchDevices from "@/hooks/useDisableRightClickOnTouchDevices";
 import useDisableIOSPinchZoomOnTouchDevices from "@/hooks/useDisableIOSPinchZoomOnTouchDevices";
@@ -20,8 +21,18 @@ import { BaseLayout } from "@/components/layout/BaseLayout";
 import AppRoutes from "./AppRoutes";
 import Helmet from "./Helmet";
 
-// TODO ideally load or populate this from the backend
-import frontendConfig from "@/config/frontend";
+// i18n
+import { i18n } from "@lingui/core";
+import { I18nProvider } from "@lingui/react";
+// import { messages as messagesEn } from "@/locales/en/messages";
+// import { messages as messagesNl } from "@/locales/nl/messages";
+// import { i18n } from "@lingui/core";
+
+import { dynamicActivate, detectLocale } from "@/i18n";
+
+// i18n.load("en", messagesEn);
+// i18n.load("nl", messagesNl);
+// i18n.activate("nl");
 
 /**
  * The root component of the application
@@ -34,6 +45,7 @@ export default function App() {
   const setError = useBoundStore((state) => state.setError);
   const setParticipant = useBoundStore((state) => state.setParticipant);
   const setParticipantLoading = useBoundStore((s) => s.setParticipantLoading);
+  const [locale,] = useState(detectLocale());
 
   // Disable gestures on touch devices
   useDisableRightClickOnTouchDevices();
@@ -55,22 +67,27 @@ export default function App() {
       setParticipantLoading(false);
     }
   }, [setError, queryParams, setParticipant, setParticipantLoading]);
+
+  useEffect(() => {
+    console.log("Activating locale:", locale);
+    dynamicActivate(locale);
+  }, [locale]);
+
   return (
-    <ThemeProvider>
-      <Helmet>
-        <link rel="icon" type="image/png" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/favicon.ico" />
-      </Helmet>
-      <BaseLayout>
-        <Router>
-          {/* The routes are in a separate component so that we can use
+    <I18nProvider i18n={i18n}>
+      <ThemeProvider>
+        <Helmet>
+          <link rel="icon" type="image/png" href="/favicon.ico" />
+          <link rel="apple-touch-icon" href="/favicon.ico" />
+        </Helmet>
+        <BaseLayout>
+          <Router>
+            {/* The routes are in a separate component so that we can use
           useLocation to get smooth page transitions */}
-          <AppRoutes
-            showLanding={frontendConfig.showLanding}
-            landingPlugins={frontendConfig?.landing?.plugins}
-          />
-        </Router>
-      </BaseLayout>
-    </ThemeProvider>
+            <AppRoutes />
+          </Router>
+        </BaseLayout>
+      </ThemeProvider>
+    </I18nProvider>
   );
 }

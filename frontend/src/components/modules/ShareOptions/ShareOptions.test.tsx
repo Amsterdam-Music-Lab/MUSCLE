@@ -9,8 +9,9 @@
 import type { ShareConfig } from "@/types/share";
 
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
 import ShareOptions from "./ShareOptions"; // Adjust the import path as necessary
 
 // Mock the next-share components

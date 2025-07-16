@@ -11,6 +11,7 @@ import type { UseTuneTwinsProps } from "../useTuneTwins";
 import type { TimelineConfig } from "@/types/timeline";
 import type { LogoName } from "@/components/svg";
 
+import { useLingui } from "@lingui/react/macro";
 import { useMemo } from "react";
 import { useOrientation } from "@/hooks/OrientationProvider";
 import { useTuneTwins, TTComparisonResult, TTGameState } from "./useTuneTwins";
@@ -38,19 +39,6 @@ type TTFeedbackMessage =
   | "completedMisremembered"
   | "gameEnd";
 
-const DEFAULT_FEEDBACK: Record<TTFeedbackMessage, string[]> = {
-  default: ["Pick a card..."],
-  cardSelected: ["Pick another card..."],
-  completedLuckyMatch: [
-    "Lucky guess!",
-    "Lucky you!",
-    "This is your lucky day!",
-  ],
-  completedMemoryMatch: ["Well done!", "Good job!", "Nice!", "Excellent!"],
-  completedNoMatch: ["No match, try again!"],
-  completedMisremembered: ["Nope, that's no match..."],
-};
-
 export interface TuneTwinsProps extends UseTuneTwinsProps {
   /** Feedback messages shown to the user after turning two cards */
   feedbackMessages?: Record<TTFeedbackMessage, string[]>;
@@ -73,15 +61,38 @@ export interface TuneTwinsProps extends UseTuneTwinsProps {
  * hook to manage the game state and logic, and includes feedback and tutorials.
  */
 export default function TuneTwins({
-  feedbackMessages: msg = DEFAULT_FEEDBACK,
+  feedbackMessages: msg,
   timeline,
   showTimeline = true,
   showLogo = true,
   logo = "tunetwins",
   ...props
 }: TuneTwinsProps) {
+  const { t } = useLingui();
+  if (!msg)
+    msg = {
+      default: [t`Pick a card...`],
+      cardSelected: [t`Pick another card...`],
+      completedLuckyMatch: [
+        t`Lucky guess!`,
+        t`Lucky you!`,
+        t`This is your lucky day!`,
+      ],
+      completedMemoryMatch: [
+        t`Well done!`,
+        t`Good job!`,
+        t`Nice!`,
+        t`Excellent!`,
+      ],
+      completedNoMatch: [t`No match, try again!`],
+      completedMisremembered: [
+        t`Nope, that's no match...`,
+        t`Not quite, try again!`,
+      ],
+    };
+
   const feedbackMessages = {
-    [TTGameState.DEFAULT]: msg.default,
+    [TTGameState.DEFAULT]: msg?.default,
     [TTGameState.CARD_SELECTED]: msg.cardSelected,
     [TTGameState.COMPLETED_LUCKY_MATCH]: msg.completedLuckyMatch,
     [TTGameState.COMPLETED_MEMORY_MATCH]: msg.completedMemoryMatch,
@@ -206,6 +217,7 @@ function TuneTwinsHeader({
   feedback,
   activeSteps,
 }: TuneTwinsHeaderProps) {
+  const { t } = useLingui();
   const orientation = useOrientation();
   return (
     <>
@@ -213,7 +225,7 @@ function TuneTwinsHeader({
         className={styles.feedback}
         turnScore={turnScore ?? undefined}
         totalScore={totalScore ?? 0}
-        totalScoreLabel="Total score"
+        totalScoreLabel={t`Total score`}
         center={orientation === "portrait"}
       >
         {feedback}

@@ -6,7 +6,7 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 import type { PluginMeta, PluginSpec } from "@/types/plugin";
-import { renderTemplate } from "@/util/renderTemplate";
+import { t } from "@lingui/core/macro";
 import { ProgressBar } from "@/components/ui";
 
 const DEFAULT_CUTOFF = 30;
@@ -51,18 +51,13 @@ function RankingPlugin({
 function getWrapperProps({
   percentile,
   cutoff = DEFAULT_CUTOFF,
-  headerAboveCutoff = "Congrats! You did better than {{percentile}}% of players at this level",
-  headerBelowCuttoff = "Congrats! You did better than {{cutoff}}% of players at this level",
 }: RankingPluginArgs) {
-  return {
-    title: renderTemplate(
-      percentile > cutoff ? headerAboveCutoff : headerBelowCuttoff,
-      {
-        percentile: percentile !== undefined ? Math.round(percentile) : "",
-        cutoff,
-      }
-    ),
-  };
+  percentile = percentile !== undefined ? Math.round(percentile) : "";
+  const title =
+    percentile > cutoff
+      ? t`Congrats! You did better than ${percentile}% of players at this level`
+      : t`Congrats! You did better than ${cutoff}% of players at this level`;
+  return { title };
 }
 
 function isVisible({ percentile }: RankingPluginArgs) {

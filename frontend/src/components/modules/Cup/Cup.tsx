@@ -7,12 +7,9 @@
  */
 
 import type { HTMLAttributes, CSSProperties } from "react";
+import { useLingui } from "@lingui/react/macro";
 import classNames from "classnames";
 import styles from "./Cup.module.scss";
-
-function capitalize(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
 
 export type CupType =
   | "diamond"
@@ -70,8 +67,17 @@ export default function Cup({
   style,
   ...divProps
 }: CupProps) {
+  const { t } = useLingui();
   if (label === undefined || label === true) {
-    label = capitalize(type);
+    const cupLabels: Record<CupType, string> = {
+      diamond: t`Diamond`,
+      platinum: t`Platinum`,
+      gold: t`Gold`,
+      silver: t`Silver`,
+      bronze: t`Bronze`,
+      plastic: t`Plastic`,
+    };
+    label = cupLabels[type];
   }
   return (
     <div

@@ -11,6 +11,7 @@ import useBoundStore from "@/util/stores";
 import { useExperiment } from "@/API";
 import useHeadDataFromExperiment from "@/hooks/useHeadDataFromExperiment";
 
+import { useLingui } from "@lingui/react/macro";
 import { Route, Routes, useParams } from "react-router-dom";
 import { routes } from "@/config";
 import { Block, View } from "@/components/application";
@@ -23,6 +24,7 @@ import { Redirect } from "@/components/utils";
  * on to the block view if possible.
  */
 export default function Experiment() {
+  const { t } = useLingui();
   const { expSlug } = useParams();
   const [experiment, loadingExperiment] = useExperiment(expSlug!);
   const [hasShownConsent, setHasShownConsent] = useState(false);
@@ -48,7 +50,7 @@ export default function Experiment() {
     return (
       <View
         name="error"
-        message={`Experiment "${expSlug}" could not be found.`}
+        message={t`Experiment "${expSlug}" could not be found.`}
       />
     );
   }
@@ -103,7 +105,7 @@ export default function Experiment() {
       {/* Otherwise: invalid path */}
       <Route
         path="*"
-        element={<View name="error" message="Page not found" />}
+        element={<View name="error" message={t`Page not found`} />}
       />
     </Routes>
   );

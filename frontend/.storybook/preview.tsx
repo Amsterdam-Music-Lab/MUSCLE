@@ -7,6 +7,10 @@ import { initWebAudioListener } from "../src/util/webAudio";
 import { MemoryRouter } from "react-router-dom";
 import { themes } from "../src/theme/themes";
 import { ThemeProvider } from "../src/theme/ThemeProvider";
+import { i18n } from "@lingui/core";
+import { I18nProvider } from "@lingui/react";
+import { messages as messagesEn } from "@/locales/en/messages";
+import { messages as messagesNl } from "@/locales/nl/messages";
 import "../src/index.scss";
 
 // Init audio listener
@@ -23,19 +27,32 @@ initialize({
   onUnhandledRequest: "bypass",
 });
 
+const localeMessages = {
+  en: messagesEn,
+  nl: messagesNl,
+};
+
 // Global decorator to provide the theme context
-const withThemeProvider = (Story, context) => {
+const withProviders = (Story, context) => {
   const themeName = context.globals.theme as ThemeName;
   const theme = themes[themeName] ?? themes.default;
 
+  // i18n setup
+  const locale = context.globals.locale;
+  const messages = localeMessages[locale] || messagesEn;
+  i18n.load(locale, messages);
+  i18n.activate(locale);
+
   return (
-    <ThemeProvider defaultTheme={theme}>
-      <MemoryRouter>
-        <div className="theme-root">
-          <Story />
-        </div>
-      </MemoryRouter>
-    </ThemeProvider>
+    <I18nProvider i18n={i18n}>
+      <ThemeProvider defaultTheme={theme}>
+        <MemoryRouter>
+          <div className="theme-root">
+            <Story />
+          </div>
+        </MemoryRouter>
+      </ThemeProvider>
+    </I18nProvider>
   );
 };
 
@@ -69,8 +86,18 @@ const preview: Preview = {
         showName: true,
       },
     },
+
+    locale: {
+      name: "Locale",
+      description: "Internationalization locale",
+      defaultValue: "en",
+      toolbar: {
+        icon: "globe",
+        items: Object.keys(localeMessages),
+      },
+    },
   },
-  decorators: [withThemeProvider],
+  decorators: [withProviders],
   tags: ["autodocs"],
 };
 

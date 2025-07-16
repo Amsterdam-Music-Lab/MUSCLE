@@ -7,7 +7,8 @@
  */
 
 import { QuestionViews } from "@/types/Question";
-import { render, screen } from "@testing-library/react";
+import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
+import { screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import SurveyView from "./SurveyView";
 

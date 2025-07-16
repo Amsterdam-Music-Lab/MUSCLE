@@ -6,7 +6,7 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import { render } from "@testing-library/react";
+import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
 import { BrowserRouter as Router } from "react-router-dom";
 import { it, expect, describe } from "vitest";
 import AboutView from "./AboutView";

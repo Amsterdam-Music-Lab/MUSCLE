@@ -8,7 +8,8 @@
 
 import "@testing-library/jest-dom";
 import { vi, describe, it, expect } from "vitest";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { fireEvent, waitFor } from "@testing-library/react";
+import { renderWithProviders as render } from "@/util/testUtils/renderWithProviders";
 import FeedbackForm from "./FeedbackForm";
 
 const mockOnSubmit = vi.fn();
