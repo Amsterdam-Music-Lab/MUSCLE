@@ -43,6 +43,12 @@ msgstr ""
 "of Amsterdam. This website processes only anonymized data. For more information, \n"
 "see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)"
 
+#. placeholder {0}: config?.content
+#. placeholder {1}: config?.url
+#: src/components/modules/ShareOptions/ShareOptions.tsx:113
+msgid "{0} Play the game yourself at {1}"
+msgstr "{0} Play the game yourself at {1}"
+
 #: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:55
 msgid "{turnScore} points"
 msgstr "{turnScore} points"
@@ -63,23 +69,31 @@ msgstr "⚠️ This game is still in development: we are currently beta testing.
 msgid "🎉 Amazing! You've finished the game!"
 msgstr "🎉 Amazing! You've finished the game!"
 
-#: src/components/views/AboutView/AboutView.tsx:26
+#: src/components/views/AboutView/AboutView.tsx:33
 msgid "About"
 msgstr "About"
 
-#: src/components/modules/FeedbackForm/FeedbackForm.tsx:58
+#: src/components/modules/FeedbackForm/FeedbackForm.tsx:59
 msgid "An error has occured. Your feedback could not be stored. Please try again later, or share your feedback via email."
 msgstr "An error has occured. Your feedback could not be stored. Please try again later, or share your feedback via email."
 
-#: src/components/views/ErrorView/ErrorView.tsx:27
+#: src/components/views/ErrorView/ErrorView.tsx:35
 msgid "An error has occured..."
 msgstr "An error has occured..."
 
-#: src/components/views/AboutView/AboutView.tsx:25
+#: src/components/application/View/View.tsx:97
+msgid ""
+"An error occurred while trying to render the view \"{name}\". The properties required to show the view could not be computed.\n"
+" ({e})"
+msgstr ""
+"An error occurred while trying to render the view \"{name}\". The properties required to show the view could not be computed.\n"
+" ({e})"
+
+#: src/components/views/AboutView/AboutView.tsx:40
 msgid "Back"
 msgstr "Back"
 
-#: src/components/modules/Cup/Cup.tsx:81
+#: src/components/modules/Cup/Cup.tsx:77
 msgid "Bronze"
 msgstr "Bronze"
 
@@ -87,7 +101,7 @@ msgstr "Bronze"
 msgid "Can you collect them all?"
 msgstr "Can you collect them all?"
 
-#: src/components/views/ConsentView/ConsentView.tsx:127
+#: src/components/views/ConsentView/ConsentView.tsx:128
 msgid "Confirm"
 msgstr "Confirm"
 
@@ -99,47 +113,51 @@ msgstr "Congrats! You did better than {{cutoff}}% of players at this level!"
 msgid "Congrats! You did better than {{percentile}}% of players at this level!"
 msgstr "Congrats! You did better than {{percentile}}% of players at this level!"
 
-#: src/components/plugins/plugins/RankingPlugin.tsx:64
+#: src/components/plugins/plugins/RankingPlugin.tsx:59
 msgid "Congrats! You did better than {cutoff}% of players at this level"
 msgstr "Congrats! You did better than {cutoff}% of players at this level"
 
-#: src/components/plugins/plugins/RankingPlugin.tsx:60
+#: src/components/plugins/plugins/RankingPlugin.tsx:58
 msgid "Congrats! You did better than {percentile}% of players at this level"
 msgstr "Congrats! You did better than {percentile}% of players at this level"
 
-#: src/components/views/ConsentView/ConsentView.tsx:108
+#: src/components/views/ConsentView/ConsentView.tsx:109
 msgid "Deny consent"
 msgstr "Deny consent"
 
-#: src/components/modules/Cup/Cup.tsx:77
+#: src/components/modules/Cup/Cup.tsx:73
 msgid "Diamond"
 msgstr "Diamond"
 
-#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:65
+#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:66
 msgid "Do you have any remarks or questions?"
 msgstr "Do you have any remarks or questions?"
 
-#: src/components/views/ConsentView/ConsentView.tsx:116
+#: src/components/views/ConsentView/ConsentView.tsx:117
 msgid "Download"
 msgstr "Download"
 
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:84
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:85
 msgid "Excellent!"
 msgstr "Excellent!"
 
-#: src/components/modules/TutorialMessage/TutorialMessage.tsx:24
+#: src/components/application/Experiment/Experiment.tsx:53
+msgid "Experiment \"{expSlug}\" could not be found."
+msgstr "Experiment \"{expSlug}\" could not be found."
+
+#: src/components/modules/TutorialMessage/TutorialMessage.tsx:46
 msgid "Explanation"
 msgstr "Explanation"
 
-#: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:30
+#: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:31
 msgid "Go back to the homepage"
 msgstr "Go back to the homepage"
 
-#: src/components/modules/Cup/Cup.tsx:79
+#: src/components/modules/Cup/Cup.tsx:75
 msgid "Gold"
 msgstr "Gold"
 
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:82
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:83
 msgid "Good job!"
 msgstr "Good job!"
 
@@ -147,68 +165,75 @@ msgstr "Good job!"
 msgid "Help us with your feedback!"
 msgstr "Help us with your feedback!"
 
-#: src/components/views/ConsentView/ConsentView.tsx:99
+#: src/components/views/ConsentView/ConsentView.tsx:100
 msgid "Informed consent"
 msgstr "Informed consent"
 
-#: src/components/views/ExplainerView/ExplainerView.tsx:37
+#: src/components/views/ExplainerView/ExplainerView.tsx:57
 msgid "Instructions"
 msgstr "Instructions"
 
-#: src/components/plugins/plugins/ScoresPlugin.tsx:26
+#: src/components/application/View/View.tsx:64
+msgid "Invalid view name \"{name}\""
+msgstr "Invalid view name \"{name}\""
+
+#: src/components/plugins/plugins/ScoresPlugin.tsx:36
 msgid "Last game"
 msgstr "Last game"
 
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:76
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:77
 msgid "Lucky guess!"
 msgstr "Lucky guess!"
 
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:77
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:78
 msgid "Lucky you!"
 msgstr "Lucky you!"
 
-#: src/components/views/ExplainerView/ExplainerView.tsx:33
+#: src/components/views/ExplainerView/ExplainerView.tsx:83
 msgid "Next"
 msgstr "Next"
 
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:83
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:84
 msgid "Nice!"
 msgstr "Nice!"
 
-#: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:18
+#: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:19
 msgid "No consent was given"
 msgstr "No consent was given"
 
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:86
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:87
 msgid "No match, try again!"
 msgstr "No match, try again!"
 
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:88
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:89
 msgid "Nope, that's no match..."
 msgstr "Nope, that's no match..."
 
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:89
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:90
 msgid "Not quite, try again!"
 msgstr "Not quite, try again!"
 
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:73
+#: src/components/application/Experiment/Experiment.tsx:108
+msgid "Page not found"
+msgstr "Page not found"
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:74
 msgid "Pick a card..."
 msgstr "Pick a card..."
 
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:74
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:75
 msgid "Pick another card..."
 msgstr "Pick another card..."
 
-#: src/components/modules/Cup/Cup.tsx:82
+#: src/components/modules/Cup/Cup.tsx:78
 msgid "Plastic"
 msgstr "Plastic"
 
-#: src/components/modules/Cup/Cup.tsx:78
+#: src/components/modules/Cup/Cup.tsx:74
 msgid "Platinum"
 msgstr "Platinum"
 
-#: src/config/frontend.ts:389
-#: src/components/views/FinalView/FinalView.tsx:185
+#: src/components/views/FinalView/FinalView.tsx:186
 msgid "Play another game!"
 msgstr "Play another game!"
 
@@ -220,27 +245,31 @@ msgstr "Play on and collect 'm all..."
 msgid "Play on? Let's start another round of games..."
 msgstr "Play on? Let's start another round of games..."
 
-#: src/components/modules/FeedbackForm/FeedbackForm.tsx:52
+#: src/components/modules/FeedbackForm/FeedbackForm.tsx:53
 msgid "Please provide some feedback"
 msgstr "Please provide some feedback"
 
-#: src/components/modules/ScoreDisplay/ScoreDisplay.tsx:45
+#: src/components/modules/ScoreDisplay/ScoreDisplay.tsx:83
 msgid "pts"
 msgstr "pts"
+
+#: src/components/application/View/View.tsx:78
+msgid "Required dependency \"{varName}\" for view \"{name}\" is not defined"
+msgstr "Required dependency \"{varName}\" for view \"{name}\" is not defined"
 
 #: src/components/views/ErrorView/ErrorView.tsx:39
 msgid "Return to the <0>home page</0>"
 msgstr "Return to the <0>home page</0>"
 
-#: src/config/frontend.ts:314
+#: src/components/plugins/plugins/SharePlugin.tsx:30
 msgid "Share"
 msgstr "Share"
 
-#: src/components/modules/Cup/Cup.tsx:80
+#: src/components/modules/Cup/Cup.tsx:76
 msgid "Silver"
 msgstr "Silver"
 
-#: src/components/views/SurveyView/SurveyView.tsx:57
+#: src/components/views/SurveyView/SurveyView.tsx:106
 msgid "Skip"
 msgstr "Skip"
 
@@ -248,12 +277,12 @@ msgstr "Skip"
 msgid "Start the game!"
 msgstr "Start the game!"
 
-#: src/components/views/SurveyView/SurveyView.tsx:56
-#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:76
+#: src/components/views/SurveyView/SurveyView.tsx:117
+#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
 msgid "Submit"
 msgstr "Submit"
 
-#: src/components/modules/FeedbackForm/FeedbackForm.tsx:89
+#: src/components/modules/FeedbackForm/FeedbackForm.tsx:90
 msgid "Submit more feedback"
 msgstr "Submit more feedback"
 
@@ -261,13 +290,13 @@ msgstr "Submit more feedback"
 msgid "Test Your Musical Memory!"
 msgstr "Test Your Musical Memory!"
 
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:78
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:79
 msgid "This is your lucky day!"
 msgstr "This is your lucky day!"
 
-#: src/components/plugins/plugins/ScoresPlugin.tsx:27
-#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:26
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:226
+#: src/components/plugins/plugins/ScoresPlugin.tsx:43
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
 msgid "Total score"
 msgstr "Total score"
 
@@ -283,11 +312,11 @@ msgstr ""
 "of Amsterdam. This website processes only anonymized data. For more information, \n"
 "see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)"
 
-#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:69
+#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:70
 msgid "Type your feedback..."
 msgstr "Type your feedback..."
 
-#: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:20
+#: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:21
 msgid ""
 "Unfortunately, you cannot participate in this experiment if you do not\n"
 "          want to provide consent."
@@ -295,7 +324,7 @@ msgstr ""
 "Unfortunately, you cannot participate in this experiment if you do not\n"
 "          want to provide consent."
 
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:81
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:82
 msgid "Well done!"
 msgstr "Well done!"
 
@@ -311,11 +340,11 @@ msgstr "Yay, you've earned a star! 💫"
 msgid "You got 0 points."
 msgstr "You got 0 points."
 
-#: src/components/application/View/View.tsx:125
+#: src/components/application/View/View.tsx:127
 msgid "Your feedback"
 msgstr "Your feedback"
 
-#: src/components/modules/FeedbackForm/FeedbackForm.tsx:75
+#: src/components/modules/FeedbackForm/FeedbackForm.tsx:76
 msgid "Your feedback was submitted."
 msgstr "Your feedback was submitted."
 
