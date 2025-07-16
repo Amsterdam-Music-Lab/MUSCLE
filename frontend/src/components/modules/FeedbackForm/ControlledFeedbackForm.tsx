@@ -7,7 +7,7 @@
  */
 
 import type { SubmitEvent, HTMLAttributes, ReactNode } from "react";
-import { t } from "@lingui/macro";
+import { useLingui } from "@lingui/react/macro";
 import classNames from "classnames";
 import { Button } from "@/components/buttons";
 import { TextAreaField } from "@/components/forms";
@@ -50,6 +50,7 @@ export default function ControlledFeedbackForm({
   children,
   ...formProps
 }: ControlledFeedbackFormProps) {
+  const { t } = useLingui();
   const handleSubmit = (event: SubmitEvent) => {
     event.preventDefault();
     if (onSubmit) onSubmit(value);

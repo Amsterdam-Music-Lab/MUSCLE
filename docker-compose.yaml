@@ -95,11 +95,8 @@ services:
         source: ./frontend/lingui.config.js
         target: /client/lingui.config.js
       - type: bind
-        source: ./frontend/eslint.config.js
-        target: /client/eslint.config.js
-      - type: bind
-        source: ./frontend/.babelrc
-        target: /client/.babelrc
+        source: ./frontend/babel.config.js
+        target: /client/babel.config.js
     environment:
       - VITE_API_ROOT=${FRONTEND_API_ROOT}
       - VITE_EXPERIMENT_SLUG=${FRONTEND_EXPERIMENT_SLUG}

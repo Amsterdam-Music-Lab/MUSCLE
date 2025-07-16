@@ -6,9 +6,7 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 import type { PluginMeta, PluginSpec } from "@/types/plugin";
-import { t } from "@lingui/macro";
-import { Trans } from "@lingui/react/macro";
-import { renderTemplate } from "@/util/renderTemplate";
+import { t } from "@lingui/core/macro";
 import { ProgressBar } from "@/components/ui";
 
 const DEFAULT_CUTOFF = 30;
@@ -56,15 +54,9 @@ function getWrapperProps({
 }: RankingPluginArgs) {
   percentile = percentile !== undefined ? Math.round(percentile) : "";
   const title =
-    percentile > cutoff ? (
-      <Trans>
-        Congrats! You did better than {percentile}% of players at this level
-      </Trans>
-    ) : (
-      <Trans>
-        Congrats! You did better than {cutoff}% of players at this level
-      </Trans>
-    );
+    percentile > cutoff
+      ? t`Congrats! You did better than ${percentile}% of players at this level`
+      : t`Congrats! You did better than ${cutoff}% of players at this level`;
   return { title };
 }
 

@@ -45,7 +45,7 @@ export default function App() {
   const setError = useBoundStore((state) => state.setError);
   const setParticipant = useBoundStore((state) => state.setParticipant);
   const setParticipantLoading = useBoundStore((s) => s.setParticipantLoading);
-  const [locale, setLocale] = useState(detectLocale());
+  const [locale,] = useState(detectLocale());
 
   // Disable gestures on touch devices
   useDisableRightClickOnTouchDevices();

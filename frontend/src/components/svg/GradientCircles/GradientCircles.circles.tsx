@@ -1,6 +1,6 @@
 import GradientCircles from "./GradientCircles";
 
-export default {
+const meta = {
   title: "Design System/SVG/GradientCircles",
   component: GradientCircles,
   parameters: {
@@ -8,6 +8,8 @@ export default {
   },
   tags: ["autodocs"],
 };
+
+export default meta;
 
 const decorator = (Story) => (
   <div style={{ height: "400px", position: "relative" }}>

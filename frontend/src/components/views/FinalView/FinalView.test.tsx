@@ -60,7 +60,7 @@ vi.mock("@/config", () => {
 
 vi.mock("@/config/frontend", () => ({
   __esModule: true,
-  default: {
+  config: () => ({
     final: {
       plugins: [
         { name: "scoreboard" },
@@ -68,7 +68,7 @@ vi.mock("@/config/frontend", () => ({
         { name: "userFeedback" },
       ],
     },
-  },
+  }),
 }));
 
 let mockNavigate = vi.fn();

@@ -11,7 +11,7 @@ import type { UseTuneTwinsProps } from "../useTuneTwins";
 import type { TimelineConfig } from "@/types/timeline";
 import type { LogoName } from "@/components/svg";
 
-import { t } from "@lingui/macro";
+import { useLingui } from "@lingui/react/macro";
 import { useMemo } from "react";
 import { useOrientation } from "@/hooks/OrientationProvider";
 import { useTuneTwins, TTComparisonResult, TTGameState } from "./useTuneTwins";
@@ -68,6 +68,7 @@ export default function TuneTwins({
   logo = "tunetwins",
   ...props
 }: TuneTwinsProps) {
+  const { t } = useLingui();
   if (!msg)
     msg = {
       default: [t`Pick a card...`],
@@ -216,6 +217,7 @@ function TuneTwinsHeader({
   feedback,
   activeSteps,
 }: TuneTwinsHeaderProps) {
+  const { t } = useLingui();
   const orientation = useOrientation();
   return (
     <>

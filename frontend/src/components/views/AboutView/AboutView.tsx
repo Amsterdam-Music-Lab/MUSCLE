@@ -6,11 +6,11 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+import { useLingui } from "@lingui/react/macro";
 import { RenderHtml } from "@/components/utils";
 import { ExperimentLayout, ExperimentLayoutProps } from "@/components/layout";
 import { LinkButton } from "@/components/buttons";
 import { Card } from "@/components/ui";
-import { t } from "@lingui/macro";
 
 export interface AboutViewProps extends ExperimentLayoutProps {
   content: string;
@@ -22,21 +22,22 @@ export interface AboutViewProps extends ExperimentLayoutProps {
 export default function AboutView({
   content,
   slug,
-  backButtonText = t`Back`,
-  title = t`About`,
+  backButtonText,
+  title,
   ...layoutProps
 }: AboutViewProps) {
+  const { t } = useLingui();
   return (
     <ExperimentLayout className="container" {...layoutProps}>
       <Card>
-        <Card.Header title={title} />
+        <Card.Header title={title ?? t`About`} />
         <Card.Section>
           <RenderHtml html={content} innerClassName="prose" />
         </Card.Section>
       </Card>
       <LinkButton link={`/${slug}`} variant="secondary" rounded={false}>
         <i className="fas fa-arrow-left mr-2"></i>
-        {backButtonText}
+        {backButtonText ?? t`Back`}
       </LinkButton>
     </ExperimentLayout>
   );

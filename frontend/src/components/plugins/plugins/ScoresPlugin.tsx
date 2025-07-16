@@ -9,7 +9,7 @@
 import type { PluginMeta, PluginSpec } from "@/types/plugin";
 import type { Variant } from "@/types/themeProvider";
 
-import { t } from "@lingui/macro";
+import { useLingui } from "@lingui/react/macro";
 import ScoreDisplay from "@/components/modules/ScoreDisplay/ScoreDisplay";
 
 interface ScoresPluginProps {
@@ -23,23 +23,24 @@ interface ScoresPluginProps {
 function ScoresPlugin({
   turnScore,
   totalScore,
-  turnScoreLabel = t`Last game`,
-  totalScoreLabel = t`Total score`,
+  turnScoreLabel,
+  totalScoreLabel,
   variant = "secondary",
 }: ScoresPluginProps) {
+  const { t } = useLingui();
   return (
     <div style={{ display: "flex" }}>
       <div style={{ width: "50%" }}>
         <ScoreDisplay
           score={turnScore}
-          label={turnScoreLabel}
+          label={turnScoreLabel ?? t`Last game`}
           variant={variant}
         />
       </div>
       <div style={{ width: "50%" }}>
         <ScoreDisplay
           score={totalScore}
-          label={totalScoreLabel}
+          label={totalScoreLabel ?? t`Total score`}
           variant={variant}
         />
       </div>

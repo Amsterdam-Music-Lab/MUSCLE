@@ -12,7 +12,7 @@ import { NarrowLayout, ViewTransition } from "@/components/layout";
 import { FloatingActionButton } from "@/components/buttons";
 import { FeedbackForm } from "@/components/modules";
 
-import { t } from "@lingui/macro";
+import { useLingui } from "@lingui/react/macro";
 import { views, LoadingView } from "@/components/views";
 import useBoundStore from "@/util/stores";
 import Action from "@/types/Action";
@@ -49,6 +49,7 @@ export interface ViewProps {
 }
 
 export default function View({ name, ...viewProps }: ViewProps) {
+  const { t } = useLingui();
   // Use state
   const setError = useBoundStore((state) => state.setError);
   const block = useBoundStore((state) => state.block);
@@ -60,7 +61,7 @@ export default function View({ name, ...viewProps }: ViewProps) {
   const entry = useMemo(() => views[name], [name]);
   if (!entry) {
     console.error(`View "${name}" not found`);
-    setError(`Invalid view name "${name}"`);
+    setError(t`Invalid view name "${name}"`);
   }
   const { component: ViewComponent, meta: viewMeta } = entry;
 
@@ -74,7 +75,7 @@ export default function View({ name, ...viewProps }: ViewProps) {
     // Validate required dependencies
     const throwError = (varName: ViewDependency) => {
       setError(
-        `Required dependency "${varName}" for view "${name}" is not defined`
+        t`Required dependency "${varName}" for view "${name}" is not defined`
       );
     };
 
@@ -93,7 +94,7 @@ export default function View({ name, ...viewProps }: ViewProps) {
       });
     } catch (e) {
       setError(
-        `An error occurred while trying to render the view "${name}". The properties required to show the view could not be computed.\n (${e})`
+        t`An error occurred while trying to render the view "${name}". The properties required to show the view could not be computed.\n (${e})`
       );
       return viewProps; // fallback
     }
@@ -106,6 +107,7 @@ export default function View({ name, ...viewProps }: ViewProps) {
     session,
     name,
     setError,
+    t
   ]);
 
   const Wrapper = viewMeta.usesOwnLayout ? Fragment : NarrowLayout;

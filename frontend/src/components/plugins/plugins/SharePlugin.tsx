@@ -9,7 +9,7 @@
 import type { PluginMeta, PluginSpec } from "@/types/plugin";
 import type { Variant } from "@/types/themeProvider";
 import type { ShareConfig } from "@/types/share";
-import { t } from "@lingui/macro";
+import { useLingui } from "@lingui/react/macro";
 import { ShareOptions } from "@/components/modules";
 import { ExpandableButton } from "@/components/buttons";
 
@@ -21,11 +21,16 @@ interface SharePluginProps {
 
 function SharePlugin({
   config,
-  label = t`Share`,
+  label,
   variant = "secondary",
 }: SharePluginProps) {
+  const { t } = useLingui();
   return (
-    <ExpandableButton title={label} rounded={true} variant={variant}>
+    <ExpandableButton
+      title={label ?? t`Share`}
+      rounded={true}
+      variant={variant}
+    >
       <ShareOptions config={config!} />
     </ExpandableButton>
   );

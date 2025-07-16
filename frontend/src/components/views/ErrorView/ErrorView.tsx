@@ -7,9 +7,8 @@
  */
 import type { HTMLAttributes } from "react";
 import classNames from "classnames";
+import { useLingui, Trans } from "@lingui/react/macro";
 import styles from "./ErrorView.module.scss";
-import { Trans } from "@lingui/react/macro";
-import { t } from "@lingui/macro";
 
 export interface ErrorViewProps extends HTMLAttributes<HTMLDivElement> {
   /** The error message to show */
@@ -24,15 +23,16 @@ export interface ErrorViewProps extends HTMLAttributes<HTMLDivElement> {
  */
 export default function ErrorView({
   message,
-  title = t`An error has occured...`,
+  title,
   className,
   children,
   ...divProps
 }: ErrorViewProps) {
+  const { t } = useLingui();
   return (
     <div className={classNames(styles.errorView, className)} {...divProps}>
       <div className={styles.card}>
-        <h1>{title}</h1>
+        <h1>{title ?? t`An error has occured...`}</h1>
         {message && <p className={styles.message}>{message}</p>}
         {children}
         <p className={styles.footer}>

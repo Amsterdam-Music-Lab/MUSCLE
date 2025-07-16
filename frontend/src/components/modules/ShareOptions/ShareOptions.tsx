@@ -11,6 +11,7 @@ import type { ShareConfig, ShareChannel } from "@/types/share";
 
 import { useRef } from "react";
 import classNames from "classnames";
+import { useLingui } from "@lingui/react/macro";
 import {
   FacebookShareButton,
   TwitterShareButton,
@@ -19,7 +20,6 @@ import {
 } from "react-share";
 
 import styles from "./ShareOptions.module.scss";
-import { t } from "@/util/i18n";
 import { Icon } from "@/components/icons";
 
 const copyToClipboard = async (message: string) => {
@@ -109,10 +109,8 @@ function Share({ config, ...props }: ShareOptProps) {
 }
 
 function ClipBoard({ config, ...props }: ShareOptProps) {
-  const message = t("share.clipboard", {
-    message: config?.content,
-    url: config?.url,
-  });
+  const { t } = useLingui();
+  const message = t`${config?.content} Play the game yourself at ${config?.url}`;
   return (
     <button
       onClick={() => copyToClipboard(message)}

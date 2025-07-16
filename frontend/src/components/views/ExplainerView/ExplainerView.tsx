@@ -11,8 +11,9 @@ import { Button } from "@/components/buttons";
 import { Card, List } from "@/components/ui";
 import { Explainer as ExplainerAction } from "@/types/Action";
 import { Logo } from "@/components/svg";
-import { t } from "@lingui/core/macro";
-import { useLingui } from "@lingui/react";
+import { useLingui } from "@lingui/react/macro";
+
+//  asdf
 
 export interface ExplainerViewProps extends ExplainerAction {
   onNext: () => void;
@@ -31,11 +32,11 @@ export interface ExplainerViewProps extends ExplainerAction {
  */
 export default function ExplainerView({
   instruction,
-  buttonText = t`Next`,
+  buttonText,
   steps = [],
   timer = null,
   onNext,
-  title = t`Instructions`,
+  title,
 }: ExplainerViewProps) {
   const { t } = useLingui();
   useEffect(() => {
@@ -53,7 +54,9 @@ export default function ExplainerView({
       <Logo name="tunetwins" fill="#fff" style={{ height: "3em" }} />
 
       <Card data-testid="explainer">
-        <Card.Header title={title}>{instruction}</Card.Header>
+        <Card.Header title={title ?? t`Instructions`}>
+          {instruction}
+        </Card.Header>
 
         {steps.length > 0 && (
           <Card.Section>
@@ -77,7 +80,7 @@ export default function ExplainerView({
         rounded={false}
         variant="secondary"
       >
-        {buttonText}
+        {buttonText ?? t`Next`}
       </Button>
     </>
   );

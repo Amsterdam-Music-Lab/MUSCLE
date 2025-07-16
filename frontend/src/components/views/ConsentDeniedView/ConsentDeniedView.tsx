@@ -6,12 +6,13 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
+import { useLingui } from "@lingui/react/macro";
 import { LinkButton } from "@/components/buttons";
 import { Card } from "@/components/ui";
 import { routes } from "@/config";
-import { t } from "@lingui/macro";
 
 export default function ConsentDeniedView() {
+  const { t } = useLingui();
   return (
     <>
       <Card>

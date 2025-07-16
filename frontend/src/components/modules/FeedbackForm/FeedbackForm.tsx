@@ -9,7 +9,7 @@
 import type { ReactNode } from "react";
 import type { ControlledFeedbackFormProps } from "./ControlledFeedbackForm";
 import { useState } from "react";
-import { t } from "@lingui/macro";
+import { useLingui } from "@lingui/react/macro";
 import { Button } from "@/components/buttons";
 import ControlledFeedbackForm from "./ControlledFeedbackForm";
 import styles from "./FeedbackForm.module.scss";
@@ -44,6 +44,7 @@ export default function FeedbackForm({
   className,
   ...formProps
 }: FeedbackFormProps) {
+  const { t } = useLingui();
   const [value, setValue] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState();

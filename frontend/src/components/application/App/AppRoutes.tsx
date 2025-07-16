@@ -6,7 +6,6 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 
-import type { AllPluginSpec } from "@/components/plugins";
 import type { ProfileData } from "@/types/profile";
 import { useMemo } from "react";
 import { Route, Routes } from "react-router-dom";
@@ -16,18 +15,6 @@ import { Redirect, InternalRedirect, Reload } from "@/components/utils";
 import { Block, Experiment, View } from "../";
 import { useParticipantScores } from "@/API";
 import { config } from "@/config/frontend";
-
-interface AppRoutesProps {
-  /**
-   * Whether to show the landing page
-   */
-  showLanding?: boolean;
-
-  /**
-   * Plugins to show on the landing page
-   */
-  landingPlugins?: AllPluginSpec[];
-}
 
 /**
  * The routes used by the app. This is a separate component, partly so that

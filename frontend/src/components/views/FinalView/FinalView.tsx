@@ -9,7 +9,7 @@
 import type { ScoreBoardProps } from "@/components/modules/ScoreBoard/ScoreBoard";
 import type { AllPluginSpec } from "@/components/plugins/pluginRegistry";
 
-import { t } from "@lingui/macro";
+import { useLingui } from "@lingui/react/macro";
 import { useMemo, useEffect } from "react";
 import { routes } from "@/config";
 import { finalizeSession } from "@/API";
@@ -89,13 +89,14 @@ export default function FinalView({
   trophyContent: initTrophyContent,
   ...pluginRendererProps
 }: FinalViewProps) {
+  const { t } = useLingui();
   let { plugins, trophyContent } = useMemo(() => {
     const frontendConfig = config();
     const plugins = initPlugins ?? frontendConfig?.final?.plugins;
     const trophyContent =
       initTrophyContent ?? frontendConfig?.final?.trophyContent;
     return { plugins, trophyContent };
-  }, []);
+  }, [initTrophyContent, initPlugins]);
 
   const session = useBoundStore((state) => state.session);
   useEffect(() => {

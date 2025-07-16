@@ -6,8 +6,7 @@
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
 import type { HTMLAttributes } from "react";
-import { t } from "@lingui/macro";
-
+import { useLingui } from "@lingui/react/macro";
 import classNames from "classnames";
 import { ScoreDisplay } from "@/components/modules";
 import styles from "./ScoreFeedback.module.scss";
@@ -23,12 +22,13 @@ interface FeedbackProps extends HTMLAttributes<HTMLDivElement> {
 export default function ScoreFeedback({
   turnScore,
   totalScore = 0,
-  totalScoreLabel = t`Total score`,
+  totalScoreLabel,
   center = false,
   children,
   className,
   ...divProps
 }: FeedbackProps) {
+  const { t } = useLingui();
   return (
     <div
       className={classNames(
@@ -40,7 +40,7 @@ export default function ScoreFeedback({
     >
       <ScoreDisplay
         score={totalScore}
-        label={totalScoreLabel}
+        label={totalScoreLabel ?? t`Total score`}
         center={center}
         variant="secondary"
       />

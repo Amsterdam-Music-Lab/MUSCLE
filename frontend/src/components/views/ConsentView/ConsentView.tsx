@@ -11,7 +11,7 @@ import type Participant from "@/types/Participant";
 import { useEffect } from "react";
 import { saveAs } from "file-saver";
 import { routes } from "@/config";
-import { t } from "@lingui/macro";
+import { useLingui } from "@lingui/react/macro";
 import classNames from "classnames";
 import { createConsent, useConsent } from "@/API";
 import { Button, LinkButton } from "@/components/buttons";
@@ -59,6 +59,7 @@ export default function ConsentView({
   confirmLabel,
   denyLabel,
 }: ConsentViewProps) {
+  const { t } = useLingui();
   const [consent, loadingConsent] = useConsent(experimentSlug);
   const urlQueryString = window.location.search;
 

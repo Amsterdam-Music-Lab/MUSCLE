@@ -5,7 +5,7 @@
  * This file is part of the MUSCLE project by Amsterdam Music Lab.
  * Licensed under the MIT License. See LICENSE file in the project root.
  */
-import { t } from "@lingui/macro";
+import { t } from "@lingui/core/macro";
 import type { FrontendConfig, ViewConfig } from "@/types/frontend";
 
 export function config(): FrontendConfig {
