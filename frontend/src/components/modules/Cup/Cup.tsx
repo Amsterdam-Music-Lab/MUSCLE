@@ -7,6 +7,8 @@
  */
 
 import type { HTMLAttributes, CSSProperties } from "react";
+import { t } from "@lingui/macro";
+
 import classNames from "classnames";
 import styles from "./Cup.module.scss";
 
@@ -71,7 +73,15 @@ export default function Cup({
   ...divProps
 }: CupProps) {
   if (label === undefined || label === true) {
-    label = capitalize(type);
+    const cupLabels: Record<CupType, string> = {
+      diamond: t`Diamond`,
+      platinum: t`Platinum`,
+      gold: t`Gold`,
+      silver: t`Silver`,
+      bronze: t`Bronze`,
+      plastic: t`Plastic`,
+    };
+    label = cupLabels[type];
   }
   return (
     <div

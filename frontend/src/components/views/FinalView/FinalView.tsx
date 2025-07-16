@@ -9,13 +9,14 @@
 import type { ScoreBoardProps } from "@/components/modules/ScoreBoard/ScoreBoard";
 import type { AllPluginSpec } from "@/components/plugins/pluginRegistry";
 
-import { useEffect } from "react";
+import { t } from "@lingui/macro";
+import { useMemo, useEffect } from "react";
 import { routes } from "@/config";
 import { finalizeSession } from "@/API";
 import useBoundStore from "@/util/stores";
 import { Final as FinalAction } from "@/types/Action";
 import { PluginRenderer } from "@/components/plugins";
-import frontendConfig from "@/config/frontend";
+import { config } from "@/config/frontend";
 import { processTimelineConfig } from "@/components/modules/Timeline/Timeline";
 import { TrophyProps } from "@/components/modules";
 
@@ -41,12 +42,6 @@ export interface FinalViewProps
    */
   trophyContent?: TrophyContent;
 }
-
-const DEFAULT_PLUGINS = [
-  { name: "scoreboard" },
-  { name: "linkButton" },
-  { name: "userFeedback" },
-] as AllPluginSpec[];
 
 /**
  * FinalView shows feedback on the scores in the block, and displays
@@ -90,10 +85,18 @@ export default function FinalView({
   score: turnScore,
   totalScore,
   timeline,
-  plugins = frontendConfig?.final?.plugins || DEFAULT_PLUGINS,
-  trophyContent = frontendConfig?.final?.trophyContent,
+  plugins: initPlugins,
+  trophyContent: initTrophyContent,
   ...pluginRendererProps
 }: FinalViewProps) {
+  let { plugins, trophyContent } = useMemo(() => {
+    const frontendConfig = config();
+    const plugins = initPlugins ?? frontendConfig?.final?.plugins;
+    const trophyContent =
+      initTrophyContent ?? frontendConfig?.final?.trophyContent;
+    return { plugins, trophyContent };
+  }, []);
+
   const session = useBoundStore((state) => state.session);
   useEffect(() => {
     finalizeSession({ session: session!, participant });
@@ -179,7 +182,7 @@ export default function FinalView({
           ...updated.args,
           link: button.link,
           onClick: onNext,
-          children: button.text,
+          children: button.text ?? t`Play another game!`,
         };
         break;
     }

@@ -7,6 +7,7 @@
  */
 
 import type { HTMLAttributes } from "react";
+import { t } from "@lingui/macro";
 import type { TutorialStep } from "@/types/tutorial";
 import classNames from "classnames";
 import styles from "./TutorialMessage.module.scss";
@@ -20,7 +21,7 @@ interface TutorialMessageProps
 
 export default function TutorialMessage({
   id,
-  title = "Explanation",
+  title = t`Explanation`,
   completed,
   content,
   visible,

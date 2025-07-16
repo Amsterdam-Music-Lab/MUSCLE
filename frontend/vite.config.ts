@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { analyzer, type AnalyzerPluginOptions } from "vite-bundle-analyzer";
+import { lingui } from "@lingui/vite-plugin";
 
 // Bundle analyzer served on port 8888 when ANALYZE_BUNDLE is set to true:
 // docker-compose exec client sh -c "ANALYZE_BUNDLE=true yarn vite build"
@@ -13,7 +14,12 @@ const analyzerOpts: AnalyzerPluginOptions = {
 };
 
 export default defineConfig({
-    plugins: [react(), tsconfigPaths(), ...(analyze ? [analyzer(analyzerOpts)] : [])],
+    plugins: [
+        react({ babel: { plugins: ["@lingui/babel-plugin-lingui-macro"] } }),
+        lingui(),
+        tsconfigPaths(),
+        ...(analyze ? [analyzer(analyzerOpts)] : []),
+    ],
     server: {
         host: "0.0.0.0",
         port: 3000,

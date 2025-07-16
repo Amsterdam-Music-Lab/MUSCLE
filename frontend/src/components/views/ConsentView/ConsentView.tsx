@@ -11,6 +11,7 @@ import type Participant from "@/types/Participant";
 import { useEffect } from "react";
 import { saveAs } from "file-saver";
 import { routes } from "@/config";
+import { t } from "@lingui/macro";
 import classNames from "classnames";
 import { createConsent, useConsent } from "@/API";
 import { Button, LinkButton } from "@/components/buttons";
@@ -19,7 +20,7 @@ import { RenderHtml } from "@/components/utils";
 import { LoadingView } from "../LoadingView";
 import styles from "./ConsentView.module.scss";
 import "@/scss/prose.scss";
-import { t } from "@/util/i18n";
+
 export interface ConsentViewProps {
   /**
    * A html string with the consent text
@@ -54,9 +55,9 @@ export default function ConsentView({
   consentHtml,
   participant,
   onConfirm = () => {},
-  title = t("consentView.title"),
-  confirmLabel = t("common.confirm"),
-  denyLabel = t("common.deny"),
+  title,
+  confirmLabel,
+  denyLabel,
 }: ConsentViewProps) {
   const [consent, loadingConsent] = useConsent(experimentSlug);
   const urlQueryString = window.location.search;
@@ -95,7 +96,7 @@ export default function ConsentView({
   return (
     <>
       <Card>
-        <Card.Header title={title} />
+        <Card.Header title={title ?? t`Informed consent`} />
 
         <Card.Section className={classNames(styles.consentHtml, "prose")}>
           <RenderHtml html={consentHtml} />
@@ -104,7 +105,7 @@ export default function ConsentView({
         <Card.Section>
           <div className={styles.buttons}>
             <LinkButton link={routes.noconsent(experimentSlug)} outline={false}>
-              {denyLabel}
+              {denyLabel ?? t`Deny consent`}
             </LinkButton>
             <Button
               data-testid="download-button"
@@ -112,7 +113,7 @@ export default function ConsentView({
               outline={false}
               variant="muted"
             >
-              {t("common.download")}
+              {t`Download`}
             </Button>
           </div>
         </Card.Section>
@@ -123,7 +124,7 @@ export default function ConsentView({
         rounded={false}
         size="lg"
         onClick={onAgree}
-        title={confirmLabel}
+        title={confirmLabel ?? t`Confirm`}
       />
     </>
   );

@@ -9,7 +9,7 @@
 import type { PluginMeta, PluginSpec } from "@/types/plugin";
 import type { Variant } from "@/types/themeProvider";
 import type { ShareConfig } from "@/types/share";
-
+import { t } from "@lingui/macro";
 import { ShareOptions } from "@/components/modules";
 import { ExpandableButton } from "@/components/buttons";
 
@@ -21,7 +21,7 @@ interface SharePluginProps {
 
 function SharePlugin({
   config,
-  label = "Share",
+  label = t`Share`,
   variant = "secondary",
 }: SharePluginProps) {
   return (

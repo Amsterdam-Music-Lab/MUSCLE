@@ -10,6 +10,7 @@ import { RenderHtml } from "@/components/utils";
 import { ExperimentLayout, ExperimentLayoutProps } from "@/components/layout";
 import { LinkButton } from "@/components/buttons";
 import { Card } from "@/components/ui";
+import { t } from "@lingui/macro";
 
 export interface AboutViewProps extends ExperimentLayoutProps {
   content: string;
@@ -21,8 +22,8 @@ export interface AboutViewProps extends ExperimentLayoutProps {
 export default function AboutView({
   content,
   slug,
-  backButtonText = "Back",
-  title = "About",
+  backButtonText = t`Back`,
+  title = t`About`,
   ...layoutProps
 }: AboutViewProps) {
   return (

@@ -7,6 +7,7 @@
  */
 
 import type { HTMLAttributes, CSSProperties } from "react";
+import { t } from "@lingui/macro";
 import type { Variant } from "@/types/themeProvider";
 import classNames from "classnames";
 import styles from "./ScoreDisplay.module.scss";
@@ -41,7 +42,7 @@ interface ScoreProps extends HTMLAttributes<HTMLDivElement> {
 export default function ScoreDisplay({
   score,
   label,
-  units = "pts",
+  units = t`pts`,
   size = 4,
   placeholder = "??",
   variant = "primary",

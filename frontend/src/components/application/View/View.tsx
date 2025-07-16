@@ -12,6 +12,7 @@ import { NarrowLayout, ViewTransition } from "@/components/layout";
 import { FloatingActionButton } from "@/components/buttons";
 import { FeedbackForm } from "@/components/modules";
 
+import { t } from "@lingui/macro";
 import { views, LoadingView } from "@/components/views";
 import useBoundStore from "@/util/stores";
 import Action from "@/types/Action";
@@ -121,13 +122,13 @@ export default function View({ name, ...viewProps }: ViewProps) {
         {block && block?.feedback_info?.show_float_button && (
           <FloatingActionButton
             iconName="comment"
-            title="Your feedback"
+            title={t`Your feedback`}
             showFooter={false}
           >
             <FeedbackForm
               onSubmit={onSubmitFeedback}
               thanks={block?.feedback_info.thank_you}
-              header={block?.feedback_info?.header}
+              // header={block?.feedback_info?.header}
               footer={
                 <RenderHtml
                   html={block?.feedback_info?.contact_body}

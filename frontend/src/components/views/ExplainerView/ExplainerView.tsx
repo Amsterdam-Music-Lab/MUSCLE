@@ -11,6 +11,8 @@ import { Button } from "@/components/buttons";
 import { Card, List } from "@/components/ui";
 import { Explainer as ExplainerAction } from "@/types/Action";
 import { Logo } from "@/components/svg";
+import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react";
 
 export interface ExplainerViewProps extends ExplainerAction {
   onNext: () => void;
@@ -29,12 +31,13 @@ export interface ExplainerViewProps extends ExplainerAction {
  */
 export default function ExplainerView({
   instruction,
-  buttonText = "Next",
+  buttonText = t`Next`,
   steps = [],
   timer = null,
   onNext,
-  title = "Instructions",
+  title = t`Instructions`,
 }: ExplainerViewProps) {
+  const { t } = useLingui();
   useEffect(() => {
     if (timer != null) {
       const id = setTimeout(onNext, timer);

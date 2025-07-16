@@ -9,47 +9,56 @@
 import type { PluginMeta, PluginSpec } from "@/types/plugin";
 import type { Variant } from "@/types/themeProvider";
 
+import { t } from "@lingui/macro";
 import ScoreDisplay from "@/components/modules/ScoreDisplay/ScoreDisplay";
 
 interface ScoresPluginProps {
-    turnScore?: number;
-    totalScore?: number;
-    turnScoreLabel?: string;
-    totalScoreLabel?: string;
-    variant?: Variant;
+  turnScore?: number;
+  totalScore?: number;
+  turnScoreLabel?: string;
+  totalScoreLabel?: string;
+  variant?: Variant;
 }
 
 function ScoresPlugin({
-    turnScore,
-    totalScore,
-    turnScoreLabel = "Last game",
-    totalScoreLabel = "Total score",
-    variant = "secondary",
+  turnScore,
+  totalScore,
+  turnScoreLabel = t`Last game`,
+  totalScoreLabel = t`Total score`,
+  variant = "secondary",
 }: ScoresPluginProps) {
-    return (
-        <div style={{ display: "flex" }}>
-            <div style={{ width: "50%" }}>
-                <ScoreDisplay score={turnScore} label={turnScoreLabel} variant={variant} />
-            </div>
-            <div style={{ width: "50%" }}>
-                <ScoreDisplay score={totalScore} label={totalScoreLabel} variant={variant} />
-            </div>
-        </div>
-    );
+  return (
+    <div style={{ display: "flex" }}>
+      <div style={{ width: "50%" }}>
+        <ScoreDisplay
+          score={turnScore}
+          label={turnScoreLabel}
+          variant={variant}
+        />
+      </div>
+      <div style={{ width: "50%" }}>
+        <ScoreDisplay
+          score={totalScore}
+          label={totalScoreLabel}
+          variant={variant}
+        />
+      </div>
+    </div>
+  );
 }
 
 export interface ScoresPluginArgs extends ScoresPluginProps {}
 
 export interface ScoresPluginMeta extends PluginMeta<ScoresPluginArgs> {
-    name: "scores";
+  name: "scores";
 }
 
 export interface ScoresPluginSpec extends PluginSpec<ScoresPluginArgs> {
-    name: "scores";
+  name: "scores";
 }
 
 export const scoresPlugin: ScoresPluginMeta = {
-    name: "scores",
-    component: ScoresPlugin,
-    description: "Displays the turn and total score",
+  name: "scores",
+  component: ScoresPlugin,
+  description: "Displays the turn and total score",
 };

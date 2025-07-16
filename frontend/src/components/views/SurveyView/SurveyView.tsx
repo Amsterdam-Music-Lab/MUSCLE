@@ -11,6 +11,7 @@ import type { Survey } from "@/components/application";
 import type SurveyQuestion from "@/types/Question";
 
 import { useState, useEffect } from "react";
+import { t } from "@lingui/macro";
 import { Question } from "@/components/modules";
 import { Button } from "@/components/buttons";
 import { Card } from "@/components/ui";
@@ -52,8 +53,8 @@ export default function SurveyView({
   onSubmit,
   disabled = false,
   skippable = false,
-  submitLabel = "Submit",
-  skipLabel = "Skip",
+  submitLabel = t`Submit`,
+  skipLabel = t`Skip`,
 }: SurveyViewProps) {
   const [isValid, setIsValid] = useState(false);
 
@@ -113,7 +114,6 @@ export default function SurveyView({
             <Button
               type="submit"
               title={submitLabel}
-              // onClick={handleSubmit}
               stretch={true}
               rounded={false}
               size="lg"

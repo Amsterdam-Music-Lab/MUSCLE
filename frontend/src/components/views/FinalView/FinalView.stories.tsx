@@ -53,7 +53,7 @@ export const Default = {
     score: 100,
     percentile: 66,
     button: {
-      text: "Button",
+      // text: "Button",
       link: "https://www.example.com",
     },
     social: shareConfig,

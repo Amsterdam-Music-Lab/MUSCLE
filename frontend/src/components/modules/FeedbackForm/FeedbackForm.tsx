@@ -8,9 +8,8 @@
 
 import type { ReactNode } from "react";
 import type { ControlledFeedbackFormProps } from "./ControlledFeedbackForm";
-
 import { useState } from "react";
-import { t } from "@/util/i18n";
+import { t } from "@lingui/macro";
 import { Button } from "@/components/buttons";
 import ControlledFeedbackForm from "./ControlledFeedbackForm";
 import styles from "./FeedbackForm.module.scss";
@@ -50,12 +49,14 @@ export default function FeedbackForm({
   const [error, setError] = useState();
 
   const handleSubmit = async (value: string) => {
-    if (value === "") return setError(t("feedbackForm.emptyFeedback"));
+    if (value === "") return setError(t`Please provide some feedback`);
     const result = await onSubmit(value);
     if (result?.status === "ok") {
       setSubmitted(true);
     } else {
-      setError(t("feedbackForm.submissionError"));
+      setError(
+        t`An error has occured. Your feedback could not be stored. Please try again later, or share your feedback via email.`
+      );
     }
   };
 
@@ -71,7 +72,7 @@ export default function FeedbackForm({
     <>
       <p>
         <span className="fw-semibold text-fill-primary">
-          {t("feedbackForm.submitted")}
+          {t`Your feedback was submitted.`}
         </span>{" "}
         {thanks}
       </p>
@@ -85,7 +86,7 @@ export default function FeedbackForm({
           setValue();
         }}
       >
-        {t("feedbackForm.submitMore")}
+        {t`Submit more feedback`}
       </Button>
     </>
   );

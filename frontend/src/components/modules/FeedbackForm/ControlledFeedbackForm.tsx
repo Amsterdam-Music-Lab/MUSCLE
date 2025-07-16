@@ -7,12 +7,11 @@
  */
 
 import type { SubmitEvent, HTMLAttributes, ReactNode } from "react";
-
+import { t } from "@lingui/macro";
 import classNames from "classnames";
 import { Button } from "@/components/buttons";
 import { TextAreaField } from "@/components/forms";
 import styles from "./FeedbackForm.module.scss";
-import { t } from "@/util/i18n";
 
 export interface ControlledFeedbackFormProps
   extends HTMLAttributes<HTMLFormElement> {
@@ -63,18 +62,18 @@ export default function ControlledFeedbackForm({
         onSubmit={handleSubmit}
         {...formProps}
       >
-        {header}
+        {header ?? t`Do you have any remarks or questions?`}
         <TextAreaField
           value={value}
           onChange={onChange}
-          placeholder={t("feedbackForm.placeholder")}
+          placeholder={t`Type your feedback...`}
           rows={rows}
           error={error}
           showError={true}
           className={styles.textarea}
         />
         <Button type="submit" variant="primary" stretch={true}>
-          {t("common.submit")}
+          {t`Submit`}
         </Button>
         {footer}
       </form>

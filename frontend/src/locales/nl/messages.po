@@ -1,0 +1,302 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2025-07-16 11:02+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: nl\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#: src/config/frontend.ts:322
+msgid ""
+"\n"
+"How good are you in memorizing music? \n"
+"Can you still remember tunes when some information is hidden?\n"
+"Find out with **TuneTwins**, a science game from the University of Amsterdam. \n"
+"Match melodies, clear the board, and minimize mistakes!\n"
+""
+msgstr ""
+"\n"
+"Hoe goed kun jij muziek onthouden? \n"
+"Kun je melodieën nog herinneren als sommige informatie verborgen is?\n"
+"Ontdek het met **TuneTwins**, een wetenschappelijk spel van de Universiteit van Amsterdam. \n"
+"Match melodieën, maak het bord leeg en maak zo min mogelijk fouten!\n"
+""
+
+#: src/config/frontend.ts:245
+msgid ""
+"\n"
+"TuneTwins was created by members of the Music Cognition Group \n"
+"and supported by the Dutch Research Council and Faculty of Humanities at the University \n"
+"of Amsterdam. This website processes only anonymized data. For more information, \n"
+"see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)"
+msgstr ""
+"\n"
+"TuneTwins is gemaakt door leden van de Music Cognition Group \n"
+"en wordt ondersteund door de Nederlandse Organisatie voor Wetenschappelijk Onderzoek en de Faculteit der Geesteswetenschappen van de Universiteit van Amsterdam. \n"
+"Deze website verwerkt alleen geanonimiseerde gegevens. Voor meer informatie, \n"
+"zie [UvA Privacy](https://www.uva.nl/nl/home/disclaimers/privacy.html)"
+
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:55
+msgid "{turnScore} points"
+msgstr "{turnScore} punten"
+
+#: src/config/frontend.ts:287
+msgid "**Invite your friends to play!** Simply ask them to scan this QR code."
+msgstr "**Nodig je vrienden uit om mee te spelen!** Laat ze deze QR-code scannen."
+
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:54
+msgid "+{turnScore} points"
+msgstr "+{turnScore} punten"
+
+#: src/config/frontend.ts:361
+msgid "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
+msgstr "⚠️ Dit spel is nog in ontwikkeling: we zijn momenteel aan het testen. Loop je tegen problemen aan of heb je suggesties? **Deel je feedback via de feedbackknop** die binnenkort rechtsonder verschijnt."
+
+#: src/config/frontend.ts:405
+msgid "🎉 Amazing! You've finished the game!"
+msgstr "🎉 Geweldig! Je hebt het spel uitgespeeld!"
+
+#: src/components/views/AboutView/AboutView.tsx:26
+msgid "About"
+msgstr "Over dit experiment"
+
+#: src/components/modules/FeedbackForm/FeedbackForm.tsx:58
+msgid "An error has occured. Your feedback could not be stored. Please try again later, or share your feedback via email."
+msgstr "Er is een fout opgetreden. Je feedback kon niet worden opgeslagen. Probeer het later opnieuw, of deel je feedback via e-mail."
+
+#: src/components/views/ErrorView/ErrorView.tsx:27
+msgid "An error has occured..."
+msgstr "Er is een fout opgetreden..."
+
+#: src/components/views/AboutView/AboutView.tsx:25
+msgid "Back"
+msgstr "Terug"
+
+#: src/components/modules/Cup/Cup.tsx:81
+msgid "Bronze"
+msgstr "Brons"
+
+#: src/config/frontend.ts:402
+msgid "Can you collect them all?"
+msgstr "Kan je ze allemaal verzamelen?"
+
+#: src/components/views/ConsentView/ConsentView.tsx:127
+msgid "Confirm"
+msgstr "Bevestigen"
+
+#: src/components/plugins/plugins/RankingPlugin.tsx:64
+msgid "Congrats! You did better than {cutoff}% of players at this level"
+msgstr "Gefeliciteerd! Dat is beter dan {cutoff}% van de spelers op dit niveau!"
+
+#: src/components/plugins/plugins/RankingPlugin.tsx:60
+msgid "Congrats! You did better than {percentile}% of players at this level"
+msgstr "Gefeliciteerd! Dat is beter dan {percentile}% van de spelers op dit niveau!"
+
+#: src/components/views/ConsentView/ConsentView.tsx:108
+msgid "Deny consent"
+msgstr "Weigeren"
+
+#: src/components/modules/Cup/Cup.tsx:77
+msgid "Diamond"
+msgstr "Diamant"
+
+#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:65
+msgid "Do you have any remarks or questions?"
+msgstr "Heb je opmerkingen of vragen?"
+
+#: src/components/views/ConsentView/ConsentView.tsx:116
+msgid "Download"
+msgstr "Downloaden"
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:84
+msgid "Excellent!"
+msgstr "Geweldig!"
+
+#: src/components/modules/TutorialMessage/TutorialMessage.tsx:24
+msgid "Explanation"
+msgstr "Toelichting"
+
+#: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:30
+msgid "Go back to the homepage"
+msgstr "Terug naar de homepage"
+
+#: src/components/modules/Cup/Cup.tsx:79
+msgid "Gold"
+msgstr "Goud"
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:82
+msgid "Good job!"
+msgstr "Goed gedaan!"
+
+#: src/config/frontend.ts:358
+msgid "Help us with your feedback!"
+msgstr "Help ons: deel je feedback!"
+
+#: src/components/views/ConsentView/ConsentView.tsx:99
+msgid "Informed consent"
+msgstr "Informatie en toestemming"
+
+#: src/components/views/ExplainerView/ExplainerView.tsx:37
+msgid "Instructions"
+msgstr "Instructies"
+
+#: src/components/plugins/plugins/ScoresPlugin.tsx:26
+msgid "Last game"
+msgstr "Laatste spel"
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:76
+msgid "Lucky guess!"
+msgstr "Goed gegokt!"
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:77
+msgid "Lucky you!"
+msgstr "Geluksvogel!"
+
+#: src/components/views/ExplainerView/ExplainerView.tsx:33
+msgid "Next"
+msgstr "Ga verder"
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:83
+msgid "Nice!"
+msgstr "Mooi!"
+
+#: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:18
+msgid "No consent was given"
+msgstr "Geen toestemming gegeven"
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:86
+msgid "No match, try again!"
+msgstr "Geen match, probeer het opnieuw!"
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:88
+msgid "Nope, that's no match..."
+msgstr "Nee, dat is geen match... "
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:89
+msgid "Not quite, try again!"
+msgstr "Bijna, probeer het opnieuw!"
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:73
+msgid "Pick a card..."
+msgstr "Kies een kaart..."
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:74
+msgid "Pick another card..."
+msgstr "Kies nog een kaart..."
+
+#: src/components/modules/Cup/Cup.tsx:82
+msgid "Plastic"
+msgstr "Plastic"
+
+#: src/components/modules/Cup/Cup.tsx:78
+msgid "Platinum"
+msgstr "Platina"
+
+#: src/config/frontend.ts:389
+#: src/components/views/FinalView/FinalView.tsx:185
+msgid "Play another game!"
+msgstr "Speel nog een spel!"
+
+#: src/config/frontend.ts:398
+msgid "Play on and collect 'm all..."
+msgstr "Speel verder en verzamel ze allemaal..."
+
+#: src/config/frontend.ts:406
+msgid "Play on? Let's start another round of games..."
+msgstr "Verder spelen? Begin met een nieuwe ronde..."
+
+#: src/components/modules/FeedbackForm/FeedbackForm.tsx:52
+msgid "Please provide some feedback"
+msgstr "Voer je feedback in"
+
+#: src/components/modules/ScoreDisplay/ScoreDisplay.tsx:45
+msgid "pts"
+msgstr "pt"
+
+#: src/components/views/ErrorView/ErrorView.tsx:39
+msgid "Return to the <0>home page</0>"
+msgstr "Ga terug naar de <0>homepage</0>"
+
+#: src/config/frontend.ts:314
+msgid "Share"
+msgstr "Delen"
+
+#: src/components/modules/Cup/Cup.tsx:80
+msgid "Silver"
+msgstr "Zilver"
+
+#: src/components/views/SurveyView/SurveyView.tsx:57
+msgid "Skip"
+msgstr "Overslaan"
+
+#: src/config/frontend.ts:373
+msgid "Start the game!"
+msgstr "Begin het spel!"
+
+#: src/components/views/SurveyView/SurveyView.tsx:56
+#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:76
+msgid "Submit"
+msgstr "Verzenden"
+
+#: src/components/modules/FeedbackForm/FeedbackForm.tsx:89
+msgid "Submit more feedback"
+msgstr "Verstuur meer feedback"
+
+#: src/config/frontend.ts:347
+msgid "Test Your Musical Memory!"
+msgstr "Test je muzikale geheugen!"
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:78
+msgid "This is your lucky day!"
+msgstr "Dit is je geluksdag!"
+
+#: src/components/plugins/plugins/ScoresPlugin.tsx:27
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:26
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:226
+msgid "Total score"
+msgstr "Totaalscore"
+
+#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:69
+msgid "Type your feedback..."
+msgstr "Typ je feedback..."
+
+#: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:20
+msgid ""
+"Unfortunately, you cannot participate in this experiment if you do not\n"
+"          want to provide consent."
+msgstr "Helaas kun je niet deelnemen aan dit experiment als je geen toestemming wilt geven."
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:81
+msgid "Well done!"
+msgstr "Goed gedaan!"
+
+#: src/config/frontend.ts:401
+msgid "Woohoo! You've earned your first star! 💫"
+msgstr "Wohoo! Je hebt je eerste ster verdiend! 💫"
+
+#: src/config/frontend.ts:397
+msgid "Yay, you've earned a star! 💫"
+msgstr "Yay, je hebt een ster verdiend! 💫"
+
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:52
+msgid "You got 0 points."
+msgstr "Je krijgt 0 punten."
+
+#: src/components/application/View/View.tsx:125
+msgid "Your feedback"
+msgstr "Deel je feedback"
+
+#: src/components/modules/FeedbackForm/FeedbackForm.tsx:75
+msgid "Your feedback was submitted."
+msgstr "Je feedback is verstuurd."
+
+#: src/config/frontend.ts:306
+msgid "Your progress..."
+msgstr "Je voortgang..."

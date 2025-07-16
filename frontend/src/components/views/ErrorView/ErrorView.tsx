@@ -8,6 +8,8 @@
 import type { HTMLAttributes } from "react";
 import classNames from "classnames";
 import styles from "./ErrorView.module.scss";
+import { Trans } from "@lingui/react/macro";
+import { t } from "@lingui/macro";
 
 export interface ErrorViewProps extends HTMLAttributes<HTMLDivElement> {
   /** The error message to show */
@@ -22,7 +24,7 @@ export interface ErrorViewProps extends HTMLAttributes<HTMLDivElement> {
  */
 export default function ErrorView({
   message,
-  title = "An error has occured...",
+  title = t`An error has occured...`,
   className,
   children,
   ...divProps
@@ -34,7 +36,9 @@ export default function ErrorView({
         {message && <p className={styles.message}>{message}</p>}
         {children}
         <p className={styles.footer}>
-          Return to the <a href="/">home page</a>.
+          <Trans>
+            Return to the <a href="/">home page</a>
+          </Trans>
         </p>
       </div>
     </div>
