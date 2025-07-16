@@ -43,8 +43,9 @@ export default function AppRoutes({
   return error ? (
     <View name="error" title="An error occured" message={error} />
   ) : !participant ? (
-    <View name="loading" />
+    <HomeController showLanding={showLanding} landingPlugins={landingPlugins} />
   ) : (
+    // <View name="loading" />
     <Routes>
       {/* Home: either a landing page or redirect to the experiment */}
       <Route
