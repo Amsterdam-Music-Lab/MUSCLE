@@ -7,7 +7,7 @@
  */
 
 import { ComponentType } from "react";
-import { Suspense, Fragment, lazy, useMemo } from "react";
+import { Suspense, Fragment, useMemo } from "react";
 import { NarrowLayout, ViewTransition } from "@/components/layout";
 import { FloatingActionButton } from "@/components/buttons";
 import { FeedbackForm } from "@/components/modules";
@@ -57,16 +57,11 @@ export default function View({ name, ...viewProps }: ViewProps) {
 
   // Get ViewComponent and viewMeta
   const entry = useMemo(() => views[name], [name]);
-  const { ViewComponent, viewMeta } = useMemo(() => {
-    if (!entry) {
-      console.error(`View "${name}" not found`);
-      setError(`Invalid view name "${name}"`);
-    }
-    const { component, meta: viewMeta } = entry;
-    const isLazy = typeof component === "function" && component.length === 0;
-    const ViewComponent = isLazy ? lazy(component) : component;
-    return { ViewComponent, viewMeta };
-  }, [name, entry, setError]);
+  if (!entry) {
+    console.error(`View "${name}" not found`);
+    setError(`Invalid view name "${name}"`);
+  }
+  const { component: ViewComponent, meta: viewMeta } = entry;
 
   // Compute viewProps (memoized for performance reasons)
   const computedViewProps = useMemo(() => {

@@ -4,6 +4,7 @@ import type {
 } from "@/components/application/View/View";
 
 // Non lazily-loaded
+import { lazy } from "react";
 import { ErrorView, LoadingView } from "@/components/views";
 import convertTutorial from "@/util/convertTutorial";
 import frontendConfig from "@/config/frontend";
@@ -17,7 +18,7 @@ type ViewMeta = {
 export const views: Record<string, { component: any; meta: ViewMeta }> = {};
 
 views.about = {
-  component: () => import("@/components/views/AboutView/AboutView"),
+  component: lazy(() => import("@/components/views/AboutView/AboutView")),
   meta: {
     usesOwnLayout: true,
     getViewProps: ({ experiment }) => ({
@@ -36,7 +37,7 @@ views.about = {
 };
 
 views.consent = {
-  component: () => import("@/components/views/ConsentView/ConsentView"),
+  component: lazy(() => import("@/components/views/ConsentView/ConsentView")),
   meta: {
     usesOwnLayout: false,
     getViewProps: ({ participant, onNext, experiment }) => ({
@@ -89,7 +90,9 @@ views.error = {
 };
 
 views.explainer = {
-  component: () => import("@/components/views/ExplainerView/ExplainerView"),
+  component: lazy(
+    () => import("@/components/views/ExplainerView/ExplainerView")
+  ),
   meta: {
     usesOwnLayout: false,
     getViewProps: ({ action, onNext }) => {
@@ -106,7 +109,7 @@ views.explainer = {
 };
 
 views.final = {
-  component: () => import("@/components/views/FinalView/FinalView"),
+  component: lazy(() => import("@/components/views/FinalView/FinalView")),
   meta: {
     usesOwnLayout: false,
     getViewProps: ({ block, action, participant, onNext, experiment }) => {
@@ -137,7 +140,7 @@ views.final = {
 };
 
 views.info = {
-  component: () => import("@/components/views/InfoView/InfoView"),
+  component: lazy(() => import("@/components/views/InfoView/InfoView")),
   meta: {
     usesOwnLayout: false,
     getViewProps: ({ action, onNext }) => ({
@@ -152,7 +155,7 @@ views.info = {
 };
 
 views.landing = {
-  component: () => import("@/components/views/LandingView/LandingView"),
+  component: lazy(() => import("@/components/views/LandingView/LandingView")),
   meta: { usesOwnLayout: false },
 };
 
@@ -165,7 +168,9 @@ views.loading = {
 };
 
 views.playlists = {
-  component: () => import("@/components/views/PlaylistsView/PlaylistsView"),
+  component: lazy(
+    () => import("@/components/views/PlaylistsView/PlaylistsView")
+  ),
   meta: {
     usesOwnLayout: false,
     getViewProps: ({ playlist, block, onNext, action }) => ({
@@ -180,12 +185,12 @@ views.playlists = {
 };
 
 views.profile = {
-  component: () => import("@/components/views/ProfileView/ProfileView"),
+  component: lazy(() => import("@/components/views/ProfileView/ProfileView")),
   meta: { usesOwnLayout: false },
 };
 
 views.trial = {
-  component: () => import("@/components/application/Trial/Trial"),
+  component: lazy(() => import("@/components/application/Trial/Trial")),
   meta: {
     usesOwnLayout: true,
     getViewProps: ({ action, onNext, onResult, experiment }) => {
@@ -220,7 +225,9 @@ views.trial = {
 };
 
 views.tunetwins = {
-  component: () => import("@/components/matching-pairs/TuneTwins/TuneTwins"),
+  component: lazy(
+    () => import("@/components/matching-pairs/TuneTwins/TuneTwins")
+  ),
   meta: {
     usesOwnLayout: true,
     getViewProps: ({
@@ -255,7 +262,7 @@ views.tunetwins = {
 };
 
 views.score = {
-  component: () => import("@/components/views/ScoreView/ScoreView"),
+  component: lazy(() => import("@/components/views/ScoreView/ScoreView")),
   meta: {
     usesOwnLayout: false,
     getViewProps: ({ action, onNext }) => ({
@@ -273,12 +280,13 @@ views.score = {
 };
 
 views.storeProfile = {
-  component: () =>
-    import("@/components/views/StoreProfileView/StoreProfileView"),
+  component: lazy(
+    () => import("@/components/views/StoreProfileView/StoreProfileView")
+  ),
   meta: { usesOwnLayout: false },
 };
 
 views.survey = {
-  component: () => import("@/components/views/SurveyView/SurveyView"),
+  component: lazy(() => import("@/components/views/SurveyView/SurveyView")),
   meta: { usesOwnLayout: true },
 };
