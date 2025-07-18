@@ -54,13 +54,16 @@ views.consent = {
 };
 
 views.consentDenied = {
-  component: () =>
-    import("@/components/views/ConsentDeniedView/ConsentDeniedView"),
+  component: lazy(
+    () => import("@/components/views/ConsentDeniedView/ConsentDeniedView")
+  ),
   meta: { usesOwnLayout: false },
 };
 
 views.dashboard = {
-  component: () => import("@/components/views/DashboardView/DashboardView"),
+  component: lazy(
+    () => import("@/components/views/DashboardView/DashboardView")
+  ),
   meta: {
     usesOwnLayout: true,
     getViewProps: ({ experiment, participant }) => ({
