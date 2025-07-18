@@ -337,7 +337,7 @@ msgstr ""
 
 #: experiment/rules/base.py:32 experiment/rules/matching_pairs_2025.py:60
 msgid "Do you have any remarks or questions?"
-msgstr ""
+msgstr "欢迎提出您的意见和建议！"
 
 #: experiment/rules/base.py:34 experiment/rules/matching_pairs_2025.py:62
 msgid "Submit"
@@ -882,70 +882,52 @@ msgstr ""
 msgid "Listen carefully to avoid mistakes and earn more points."
 msgstr ""
 
-#: experiment/rules/matching_pairs.py:69 experiment/rules/matching_pairs.py:174
-#: experiment/rules/matching_pairs_2025.py:79
-#: experiment/rules/questionnaire.py:21
-#, python-format
-msgid ""
-"Before starting the game, we would like to ask you %i demographic questions."
-msgstr ""
+#: experiment/rules/matching_pairs.py:69 experiment/rules/matching_pairs.py:174 #: experiment/rules/matching_pairs_2025.py:79 #: experiment/rules/questionnaire.py:21 #, python-format msgid "" "Before starting the game, we would like to ask you %i demographic questions." msgstr "游戏开始前，请您先回答 %i 个基本信息问题。"
 
-#: experiment/rules/matching_pairs_2025.py:43
-msgid ""
-"This was not a match, so you get 0 points. Please try again to see if you "
-"can find a matching pair."
-msgstr ""
+#: experiment/rules/matching_pairs_2025.py:43 
+msgid "This was not a match, so you get 0 points. Please try again to see if you can find a matching pair." 
+msgstr "这两张卡片不匹配，不得分。请继续尝试寻找匹配的卡片。"
 
-#: experiment/rules/matching_pairs_2025.py:46
-msgid ""
-"You got a matching pair, but you didn't hear both cards before. This is "
-"considered a lucky match. You get 10 points."
-msgstr ""
+#: experiment/rules/matching_pairs_2025.py:46 
+msgid "You got a matching pair, but you didn't hear the matching card before. This is considered a lucky match. You get 10 points." 
+msgstr "配对成功！不过您之前没听过第二张卡片，获得幸运分 10 分。"
 
-#: experiment/rules/matching_pairs_2025.py:48
-msgid "You got a matching pair. You get 20 points."
-msgstr ""
+#: experiment/rules/matching_pairs_2025.py:48 
+msgid "You got a matching pair. You get 20 points." 
+msgstr "匹配成功！获得 20 分！"
 
-#: experiment/rules/matching_pairs_2025.py:50
-msgid ""
-"You thought you found a matching pair, but you didn't. This is considered a "
-"misremembered pair. You lose 10 points."
-msgstr ""
+#: experiment/rules/matching_pairs_2025.py:50 
+msgid "You thought you found a matching pair, but you didn't. This is considered a misremembered pair. You lose 10 points." 
+msgstr "您以为这两张卡片是一对，但它们不匹配。记忆偏差，减 10 分。"
 
-#: experiment/rules/matching_pairs_2025.py:182
-msgid ""
-"You get a board with 16 musical cards. **Pick a card,** and listen to it "
-"carefully..."
-msgstr ""
+#: experiment/rules/matching_pairs_2025.py:182 
+msgid "You get a board with 16 musical cards. **Pick a card,** and listen to it carefully..." 
+msgstr "您将在游戏中看到16张音乐卡片。**请选择一张卡片**，仔细聆听..."
 
-#: experiment/rules/matching_pairs_2025.py:186
-msgid "Then try to **find a second card that matches it.**"
-msgstr ""
+#: experiment/rules/matching_pairs_2025.py:186 
+msgid "Then try to **find a second card that matches it.**" 
+msgstr "然后尝试**找到与之匹配的第二张卡片。**"
 
-#: experiment/rules/matching_pairs_2025.py:190
-msgid "**Find the 8 matching pairs** to clear the board and score points:"
-msgstr ""
+#: experiment/rules/matching_pairs_2025.py:190 
+msgid "**Find the 8 matching pairs** to clear the board and score points:" 
+msgstr "**找出全部8对匹配卡片**即可完成游戏，计分规则如下："
 
-#: experiment/rules/matching_pairs_2025.py:195
-msgid ""
-"**+20 points:** Matched first card with one you’ve heard before — memory "
-"wins!"
-msgstr ""
+#: experiment/rules/matching_pairs_2025.py:195 
+msgid "**+20 points:** Matched first card with one you've heard before — memory wins!" 
+msgstr "**+20分：**成功将第一张卡片与之前听过的卡片配对——精准记忆！"
 
-#: experiment/rules/matching_pairs_2025.py:200
-msgid ""
-"**-10 points:** Chose a wrong second card that’s heard before? Oops — "
-"penalty..."
-msgstr ""
+#: experiment/rules/matching_pairs_2025.py:200 
+msgid "**-10 points:** Chose a wrong second card that's heard before? Oops — penalty..." 
+msgstr "**-10分：**选择了之前听过但不匹配的第二张卡片？啊哦 —— 扣分..."
 
-#: experiment/rules/matching_pairs_2025.py:205
-msgid "Some cards sound **distorted** on purpose. Stay sharp!"
-msgstr ""
+#: experiment/rules/matching_pairs_2025.py:205 
+msgid "Some cards sound **distorted** on purpose. Stay sharp!" 
+msgstr "部分卡片的声音经过**失真处理**。但这正是挑战所在，请认真聆听辨别！"
 
-#: experiment/rules/matching_pairs_2025.py:288
-#, python-format
-msgid "You outperformed {}% of the players!"
-msgstr ""
+#: experiment/rules/matching_pairs_2025.py:288 #, python-format 
+msgid "You outperformed {}% of the players!" 
+msgstr "您的表现超越了 {}% 的玩家！"
+
 
 #: experiment/rules/musical_preferences.py:55
 msgid "Welcome to the Musical Preferences experiment!"
