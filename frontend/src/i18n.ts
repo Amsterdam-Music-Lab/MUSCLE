@@ -4,12 +4,16 @@ import { detect, fromNavigator } from "@lingui/detect-locale";
 export const locales = {
   en: "English",
   nl: "Nederlands",
+  zh: "中文",
 };
 
-export const defaultLocale = "nl";
+export const defaultLocale = "en";
 
 export function detectLocale() {
   const locale = detect(fromNavigator(), () => defaultLocale);
+  if (locale.startsWith("zh")) {
+    return "zh";
+  }
   if (locale.startsWith("nl")) {
     return "nl";
   }
