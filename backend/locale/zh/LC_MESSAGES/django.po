@@ -882,7 +882,12 @@ msgstr ""
 msgid "Listen carefully to avoid mistakes and earn more points."
 msgstr ""
 
-#: experiment/rules/matching_pairs.py:69 experiment/rules/matching_pairs.py:174 #: experiment/rules/matching_pairs_2025.py:79 #: experiment/rules/questionnaire.py:21 #, python-format msgid "" "Before starting the game, we would like to ask you %i demographic questions." msgstr "游戏开始前，请您先回答 %i 个基本信息问题。"
+#: experiment/rules/matching_pairs.py:69 experiment/rules/matching_pairs.py:174 
+#: experiment/rules/matching_pairs_2025.py:79 #: experiment/rules/questionnaire.py:21 
+#, python-format 
+msgid ""
+"Before starting the game, we would like to ask you %i demographic questions."
+msgstr "游戏开始前，请您先回答 %i 个基本信息问题。"
 
 #: experiment/rules/matching_pairs_2025.py:43 
 msgid "This was not a match, so you get 0 points. Please try again to see if you can find a matching pair." 
