@@ -20,44 +20,44 @@ msgstr ""
 
 #: experiment/actions/final.py:96
 msgid "plastic"
-msgstr ""
+msgstr "plástico"
 
 #: experiment/actions/final.py:97
 msgid "bronze"
-msgstr ""
+msgstr "bronze"
 
 #: experiment/actions/final.py:98
 msgid "silver"
-msgstr ""
+msgstr "prata"
 
 #: experiment/actions/final.py:99
 msgid "gold"
-msgstr ""
+msgstr "ouro"
 
 #: experiment/actions/final.py:100
 msgid "platinum"
-msgstr ""
+msgstr "platina"
 
 #: experiment/actions/final.py:101
 msgid "diamond"
-msgstr ""
+msgstr "diamante"
 
 #: experiment/actions/final.py:107
 msgid "Final score"
-msgstr ""
+msgstr "Pontuação final"
 
 #: experiment/actions/final.py:138 participant/views.py:45
 msgid "points"
-msgstr ""
+msgstr "pontos"
 
 #: experiment/actions/final.py:152 experiment/rules/hooked.py:106
 #: experiment/rules/thats_my_song.py:70
 msgid "Play again"
-msgstr ""
+msgstr "Jogar novamente"
 
 #: experiment/actions/final.py:153 participant/views.py:40
 msgid "My profile"
-msgstr ""
+msgstr "Meu perfil"
 
 #: experiment/actions/final.py:154
 #, fuzzy
@@ -69,25 +69,25 @@ msgstr "Fim do experimento"
 #: experiment/rules/huang_2022.py:83
 #: experiment/rules/musical_preferences.py:134 question/musicgens.py:30
 msgid "No"
-msgstr ""
+msgstr "Não"
 
 #: experiment/actions/form.py:131 experiment/rules/hooked.py:305
 #: experiment/rules/huang_2022.py:83
 #: experiment/rules/musical_preferences.py:134 question/musicgens.py:29
 msgid "Yes"
-msgstr ""
+msgstr "Sim"
 
 #: experiment/actions/form.py:335
 msgid "How much do you agree or disagree?"
-msgstr ""
+msgstr "Quanto você concorda ou discorda?"
 
 #: experiment/actions/form.py:352
 msgid "Completely Disagree"
-msgstr ""
+msgstr "Discordo completamente"
 
 #: experiment/actions/form.py:353 experiment/actions/form.py:362
 msgid "Strongly Disagree"
-msgstr ""
+msgstr "Discordo fortemente"
 
 #: experiment/actions/form.py:354 experiment/actions/form.py:363
 #: question/musicgens.py:302 question/thatsmysong.py:29
@@ -109,11 +109,11 @@ msgstr "Concordo"
 
 #: experiment/actions/form.py:357 experiment/actions/form.py:366
 msgid "Strongly Agree"
-msgstr ""
+msgstr "Concordo fortemente"
 
 #: experiment/actions/form.py:358
 msgid "Completely Agree"
-msgstr ""
+msgstr "Concordo completamente"
 
 #: experiment/actions/form.py:433 experiment/actions/trial.py:86
 #: experiment/actions/utils.py:43 experiment/rules/hooked.py:164
@@ -122,7 +122,7 @@ msgstr ""
 #: experiment/rules/speech2song.py:100 experiment/rules/speech2song.py:110
 #: experiment/rules/speech2song.py:136
 msgid "Continue"
-msgstr "Continue"
+msgstr "Continuar"
 
 #: experiment/actions/form.py:434
 msgid "Skip"
@@ -130,69 +130,69 @@ msgstr "Pular"
 
 #: experiment/actions/playlist.py:17
 msgid "Select a Playlist"
-msgstr ""
+msgstr "Selecionar uma Playlist"
 
 #: experiment/actions/score.py:57
 #, python-brace-format
 msgid "Round {get_rounds_passed} / {total_rounds}"
-msgstr ""
+msgstr "Rodada {get_rounds_passed} / {total_rounds}"
 
 #: experiment/actions/score.py:69
 msgid "Total Score"
-msgstr ""
+msgstr "Pontuação Total"
 
 #: experiment/actions/score.py:69 experiment/rules/musical_preferences.py:106
 msgid "Next"
-msgstr ""
+msgstr "Próximo"
 
 #: experiment/actions/score.py:69
 msgid "You listened to:"
-msgstr ""
+msgstr "Você ouviu:"
 
 #: experiment/actions/score.py:119
 msgid "No points"
-msgstr ""
+msgstr "Sem pontos"
 
 #: experiment/actions/score.py:123
 msgid "Incorrect"
-msgstr ""
+msgstr "Incorreto"
 
 #: experiment/actions/score.py:127
 msgid "Correct"
-msgstr ""
+msgstr "Correto"
 
 #: experiment/actions/utils.py:43 experiment/rules/congosamediff.py:184
 #: experiment/rules/musical_preferences.py:247
 msgid "End"
-msgstr ""
+msgstr "Fim"
 
 #: experiment/actions/wrappers.py:113 experiment/rules/hooked.py:296
 msgid "Get ready!"
-msgstr ""
+msgstr "Prepare-se!"
 
 #: experiment/actions/wrappers.py:114
 msgid "Do you recognize the song?"
-msgstr ""
+msgstr "Você reconhece a música?"
 
 #: experiment/actions/wrappers.py:121
 msgid "Keep imagining the music"
-msgstr ""
+msgstr "Continue imaginando a música"
 
 #: experiment/actions/wrappers.py:151
 msgid "Did the track come back in the right place?"
-msgstr ""
+msgstr "A faixa voltou no lugar certo?"
 
 #: experiment/management/commands/templates/experiment.py:37
 msgid "Please read the instructions carefully"
-msgstr ""
+msgstr "Por favor, leia as instruções com atenção."
 
 #: experiment/management/commands/templates/experiment.py:38
 msgid "Next step of explanation"
-msgstr ""
+msgstr "Próximo passo da explicação"
 
 #: experiment/management/commands/templates/experiment.py:39
 msgid "Another step of explanation"
-msgstr ""
+msgstr "Outro passo da explicação"
 
 #: experiment/management/commands/templates/experiment.py:61
 #: experiment/rules/congosamediff.py:186
@@ -203,68 +203,69 @@ msgstr "Participação Voluntária"
 
 #: experiment/management/commands/templates/experiment.py:75
 msgid "Do you like this song?"
-msgstr ""
+msgstr "Você gosta desta música?"
 
 #: experiment/management/commands/templates/experiment.py:85
 msgid "Test block"
-msgstr ""
+msgstr "Bloco de teste"
 
 #: experiment/models.py:427
 #, python-brace-format
 msgid ""
 "Content for social media sharing. Use {points} and {experiment_name} as "
 "placeholders."
-msgstr ""
+msgstr "Conteúdo para compartilhamento em redes sociais. Use {points} e {experiment_name} como "
+"placeholders."
 
 #: experiment/models.py:486
 msgid "List of tags for social media sharing"
-msgstr ""
+msgstr "Lista de tags para compartilhamento em redes sociais"
 
 #: experiment/models.py:490
 msgid ""
 "URL to be shared on social media. If empty, the experiment URL will be used."
-msgstr ""
+msgstr "URL a ser compartilhada nas redes sociais. Se estiver vazia, a URL do experimento será usada."
 
 #: experiment/models.py:494
 msgid "Facebook"
-msgstr ""
+msgstr "Facebook"
 
 #: experiment/models.py:495
 msgid "WhatsApp"
-msgstr ""
+msgstr "WhatsApp"
 
 #: experiment/models.py:496
 msgid "Twitter"
-msgstr ""
+msgstr "Twitter"
 
 #: experiment/models.py:497
 msgid "Weibo"
-msgstr ""
+msgstr "Weibo"
 
 #: experiment/models.py:498
 msgid "Share"
-msgstr ""
+msgstr "Compartilhar"
 
 #: experiment/models.py:499
 msgid "Clipboard"
-msgstr ""
+msgstr "Área de Transferência"
 
 #: experiment/models.py:505
 msgid "Selected social media channels for sharing"
-msgstr ""
+msgstr "Canais de mídia social selecionados para compartilhamento"
 
 #: experiment/models.py:539
 #, python-format
 msgid "I scored %(score)d points in %(experiment_name)s"
-msgstr ""
+msgstr "Eu marquei %(score)d pontos em %(experiment_name)s"
 
 #: experiment/rules/anisochrony.py:20
 msgid "IRREGULAR"
-msgstr ""
+msgstr "IRREGULAR"
 
 #: experiment/rules/anisochrony.py:21
 msgid "REGULAR"
-msgstr ""
+msgstr "REGULAR"
 
 #: experiment/rules/anisochrony.py:25
 #: experiment/rules/duration_discrimination.py:70
@@ -272,30 +273,30 @@ msgstr ""
 #: experiment/rules/h_bat.py:157 experiment/rules/hbat_bst.py:57
 #: experiment/rules/rhythm_discrimination.py:263
 msgid "Next fragment"
-msgstr ""
+msgstr "Próximo fragmento"
 
 #: experiment/rules/anisochrony.py:34
 msgid "The tones were {}. Your answer was CORRECT."
-msgstr ""
+msgstr "Os tons eram {}. Sua resposta estava CORRETA."
 
 #: experiment/rules/anisochrony.py:37
 msgid "The tones were {}. Your answer was INCORRECT."
-msgstr ""
+msgstr "Os tons eram {}. Sua resposta estava INCORRETA."
 
 #: experiment/rules/anisochrony.py:47 experiment/rules/h_bat.py:128
 msgid "In this test you will hear a series of tones for each trial."
-msgstr ""
+msgstr "Neste teste, você ouvirá uma série de tons para cada tentativa."
 
 #: experiment/rules/anisochrony.py:51
 msgid "It's your job to decide if the tones sound REGULAR or IRREGULAR"
-msgstr ""
+msgstr "É seu trabalho decidir se os tons soam REGULARES ou IRREGULARES."
 
 #: experiment/rules/anisochrony.py:55
 #: experiment/rules/duration_discrimination.py:141
 #: experiment/rules/h_bat.py:133 experiment/rules/practice.py:140
 msgid ""
 "During the experiment it will become more difficult to hear the difference."
-msgstr ""
+msgstr "Durante o experimento, ficará mais difícil ouvir a diferença."
 
 #: experiment/rules/anisochrony.py:60
 #: experiment/rules/duration_discrimination.py:143
@@ -340,11 +341,11 @@ msgstr ""
 
 #: experiment/rules/base.py:32 experiment/rules/matching_pairs_2025.py:60
 msgid "Do you have any remarks or questions?"
-msgstr ""
+msgstr "Você tem algum comentário ou pergunta?"
 
 #: experiment/rules/base.py:34 experiment/rules/matching_pairs_2025.py:62
 msgid "Submit"
-msgstr ""
+msgstr "Enviar"
 
 #: experiment/rules/base.py:38 experiment/rules/matching_pairs_2025.py:66
 msgid "We appreciate your feedback!"
@@ -853,95 +854,103 @@ msgstr ""
 msgid ""
 "TuneTwins is a musical version of \"Memory\". It consists of 16 musical "
 "fragments. Your task is to listen and find the 8 matching pairs."
-msgstr ""
+msgstr "TuneTwins é uma versão musical de \"Memory\". Ela consiste em 16 fragmentos musicais."
+"Sua tarefa é ouvir e encontrar os 8 pares correspondentes."
 
 #: experiment/rules/matching_pairs.py:50
 msgid ""
 "Some versions of the game are easy and you will have to listen for identical "
 "pairs. Some versions are more difficult and you will have to listen for "
 "similar pairs, one of which is distorted."
-msgstr ""
+msgstr "Algumas versões do jogo são fáceis e você terá de ouvir pares idênticos."
+"Algumas versões são mais difíceis e você terá de ouvir "
+"pares semelhantes, um dos quais está distorcido."
+
+#: experiment/rules/matching_pairs.py:103
+msgid "Click to start!"
+msgstr "Clique para começar!"
 
 #: experiment/rules/matching_pairs.py:53
 msgid "Click on another card to stop the current card from playing."
-msgstr ""
+msgstr "Clique em outro cartão para parar o cartão atual de tocar."
 
 #: experiment/rules/matching_pairs.py:54
 msgid "Finding a match removes the pair from the board."
-msgstr ""
+msgstr "Encontrar um par remove a dupla do tabuleiro."
 
 #: experiment/rules/matching_pairs.py:55
 msgid "Listen carefully to avoid mistakes and earn more points."
-msgstr ""
+msgstr "Ouça com atenção para evitar erros e ganhar mais pontos."
 
 #: experiment/rules/matching_pairs.py:69 experiment/rules/matching_pairs.py:174
 #: experiment/rules/matching_pairs_2025.py:79
 #: experiment/rules/questionnaire.py:21
 #, python-format
-msgid ""
-"Before starting the game, we would like to ask you %i demographic questions."
-msgstr ""
+msgid "Before starting the game, we would like to ask you {} demographic questions."
+msgstr "Antes de começar o jogo, gostaríamos de fazer {} perguntas demográficas."
 
 #: experiment/rules/matching_pairs_2025.py:43
 msgid ""
 "This was not a match, so you get 0 points. Please try again to see if you "
 "can find a matching pair."
-msgstr ""
+msgstr "Este não foi um par correspondente, então você ganha 0 pontos. Por favor, tente novamente para ver se consegue encontrar um par correspondente."
 
 #: experiment/rules/matching_pairs_2025.py:46
 msgid ""
 "You got a matching pair, but you didn't hear both cards before. This is "
 "considered a lucky match. You get 10 points."
-msgstr ""
+msgstr "Você conseguiu um par correspondente, mas não ouviu ambos os cartões antes. Isso é considerado um par sortudo. Você ganha 10 pontos."
 
 #: experiment/rules/matching_pairs_2025.py:48
 msgid "You got a matching pair. You get 20 points."
-msgstr ""
+msgstr "Você conseguiu um par correspondente. Você ganha 20 pontos."
 
 #: experiment/rules/matching_pairs_2025.py:50
 msgid ""
 "You thought you found a matching pair, but you didn't. This is considered a "
 "misremembered pair. You lose 10 points."
-msgstr ""
+msgstr "Você achou que encontrou um par correspondente, mas não encontrou. Isso é considerado um par mal lembrado. Você perde 10 pontos."
 
 #: experiment/rules/matching_pairs_2025.py:182
 msgid ""
 "You get a board with 16 musical cards. **Pick a card,** and listen to it "
 "carefully..."
-msgstr ""
+msgstr "Você recebe um tabuleiro com 16 cartões musicais. **Escolha um cartão** e ouça-o com atenção..."
 
 #: experiment/rules/matching_pairs_2025.py:186
 msgid "Then try to **find a second card that matches it.**"
-msgstr ""
+msgstr "Em seguida, tente **encontrar um segundo cartão que corresponda a ele.**"
 
 #: experiment/rules/matching_pairs_2025.py:190
 msgid "**Find the 8 matching pairs** to clear the board and score points:"
-msgstr ""
+msgstr "**Encontre os 8 pares correspondentes** para limpar o tabuleiro e marcar pontos:"
 
 #: experiment/rules/matching_pairs_2025.py:195
 msgid ""
 "**+20 points:** Matched first card with one you’ve heard before — memory "
 "wins!"
-msgstr ""
+msgstr "**+20 pontos:** Correspondência do primeiro cartão com um que você já ouviu antes — a memória "
+"vence!"
 
 #: experiment/rules/matching_pairs_2025.py:200
 msgid ""
 "**-10 points:** Chose a wrong second card that’s heard before? Oops — "
 "penalty..."
-msgstr ""
+msgstr "**-10 pontos:** Escolheu um segundo cartão errado que já foi ouvido? Oops — "
+"penalidade..."
 
 #: experiment/rules/matching_pairs_2025.py:205
 msgid "Some cards sound **distorted** on purpose. Stay sharp!"
-msgstr ""
+msgstr "Alguns cartões soam **distorcidos** de propósito. Fique atento!"
 
 #: experiment/rules/matching_pairs_2025.py:288
 #, python-format
-msgid "You outperformed {}% of the players!"
-msgstr ""
+msgid "You outperformed Bef% of the players!"
+msgstr "Você superou {}% dos jogadores!"
 
 #: experiment/rules/musical_preferences.py:55
 msgid "Welcome to the Musical Preferences experiment!"
-msgstr ""
+msgstr "Bem-vindo ao experimento de Preferências Musicais!"
 
 #: experiment/rules/musical_preferences.py:56
 msgid "Please start by checking your connection quality."
