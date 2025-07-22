@@ -76,9 +76,8 @@ class MatchingPairs2025(MatchingPairsGame):
             if questions:
                 intro_questions = Explainer(
                     instruction=_(
-                        "Before starting the game, we would like to ask you %i demographic questions."
-                        % (len(questions))
-                    ),
+                        "Before starting the game, we would like to ask you {} demographic questions."
+                    ).format(len(questions)),
                     steps=[],
                 )
                 actions.append(intro_questions)
@@ -100,7 +99,7 @@ class MatchingPairs2025(MatchingPairsGame):
         return self._get_final_actions(session)
 
     def get_short_explainer(self):
-        return Explainer("Click to start!", steps=[])
+        return Explainer(_("Click to start!"), steps=[])
 
     def _get_final_actions(self, session: Session):
         score = Final(

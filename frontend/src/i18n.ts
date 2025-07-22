@@ -5,6 +5,7 @@ export const locales = {
   en: "English",
   nl: "Nederlands",
   zh: "中文",
+  "pt-BR": "Português",
 };
 
 export const defaultLocale = "en";
@@ -16,6 +17,9 @@ export function detectLocale() {
   }
   if (locale.startsWith("nl")) {
     return "nl";
+  }
+  if (locale.startsWith("pt")) {
+    return "pt-BR";
   }
   return "en";
 }
