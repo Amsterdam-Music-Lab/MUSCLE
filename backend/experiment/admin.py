@@ -64,6 +64,7 @@ class PhaseInline(admin.StackedInline):
 
     class Media:
         css = {"all": ("phase_inline.css",)}
+        js = ["phase_inline.js"]
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
@@ -106,6 +107,14 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         return obj.name or "<Unnamed>"
 
     experiment_name.short_description = "Name"
+
+    def save_model(self, request, obj, form, changed):
+        """delete all phases which don't have associated blocks when saving"""
+        phases = obj.phases
+        for phase in phases.all():
+            if not phase.blocks.count():
+                phase.delete()
+        super().save_model(request, obj, form, changed)
 
     def redirect_to_overview(self):
         return redirect(reverse("admin:experiment_experiment_changelist"))
