@@ -1,7 +1,7 @@
 import json
 import logging
 
-from django.http import Http404, HttpRequest, JsonResponse
+from django.http import Http404, HttpResponseBadRequest, HttpRequest, JsonResponse
 from django.utils.translation import gettext_lazy as _, get_language
 from django_markup.markup import formatter
 
@@ -64,6 +64,8 @@ def get_block(request: HttpRequest, slug: str) -> JsonResponse:
 
 def post_feedback(request, slug):
     text = request.POST.get("feedback")
+    if not text:
+        return HttpResponseBadRequest()
     block = block_or_404(slug)
     feedback = Feedback(text=text, block=block)
     feedback.save()
