@@ -32,7 +32,7 @@ class ResultTest(TestCase):
 
     def test_get_non_existing(self):
         response = self.client.get('/result/speed_swallow/')
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 204)
 
     def test_get_multiple(self):
         Result.objects.create(
