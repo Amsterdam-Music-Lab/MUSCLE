@@ -120,7 +120,14 @@ def get_result(
     try:
         result = Result.objects.get(question_key=question_key, participant=participant)
     except Result.DoesNotExist:
-        return HttpResponse(status=204)
+        return HttpResponse(
+            status=204,
+        )
+    except Result.MultipleObjectsReturned:
+        return HttpResponse(
+            content="Error: multiple results found",
+            status=409,
+        )
 
     return JsonResponse({"answer": result.given_response},
                         json_dumps_params={'indent': 4})
