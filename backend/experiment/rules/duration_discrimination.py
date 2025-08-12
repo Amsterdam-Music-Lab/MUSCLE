@@ -205,8 +205,8 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
                     # register turnpoint
                     register_turnpoint(session, last_result)
                 if session.final_score == self.max_turnpoints + 1:
-                    # experiment is finished, None will be replaced by final view
-                    return None
+                    # maximum number of turnpoints reached, finalize block
+                    return self.finalize_block(session)
                 else:
                     # register decreasing difficulty
                     session.save_json_data({"direction": "decrease"})
@@ -235,7 +235,7 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
                 else:
                     action = self.get_next_trial(session)
         if not action:
-            # action is None if the audio file doesn't exist
+            # action is None if the audio file doesn't exist (outlier)
             return self.finalize_block(session)
         return action
 
