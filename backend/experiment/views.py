@@ -15,7 +15,7 @@ from experiment.serializers import (
 from experiment.rules import BLOCK_RULES
 from experiment.actions.utils import EXPERIMENT_KEY
 from participant.models import Participant
-from participant.utils import get_participant
+from participant.utils import get_or_create_participant
 from theme.serializers import serialize_theme
 
 logger = logging.getLogger(__name__)
@@ -32,7 +32,7 @@ def get_block(request: HttpRequest, slug: str) -> JsonResponse:
     if active_language.startswith("zh"):
         class_name = "chinese"
 
-    participant = get_participant(request)
+    participant = get_or_create_participant(request)
     session = Session(block=block, participant=participant)
 
     playlist = block.playlists.first()
@@ -108,7 +108,7 @@ def get_experiment(
         )
 
     request.session[EXPERIMENT_KEY] = slug
-    participant = get_participant(request)
+    participant = get_or_create_participant(request)
 
     phases = list(experiment.phases.order_by("index").all())
     if not len(phases):
