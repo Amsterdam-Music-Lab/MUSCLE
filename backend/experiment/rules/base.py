@@ -90,6 +90,17 @@ class BaseRules(object):
         message = "You correctly identified {} out of {} recognized songs!".format(correct, total)
         return score_message + " " + message
 
+    def has_played_before(self, session):
+        """Check if the current participant has completed this game previously."""
+        previous_games = Session.objects.filter(
+            participant=session.participant,
+            block=session.block,
+            finished_at__isnull=False,
+        )
+        if previous_games.count():
+            return True
+        return False
+
     def rank(self, session, exclude_unfinished=True):
         """Get rank based on session score"""
         score = session.final_score

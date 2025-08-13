@@ -1,8 +1,10 @@
-from django.test import TestCase
-from django.core.files.uploadedfile import SimpleUploadedFile
 import csv
+from datetime import datetime
 from unittest.mock import Mock
 from unittest import skip
+
+from django.test import TestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from experiment.actions import Explainer, Final, Score, Trial
 from experiment.models import Experiment, Phase, Block, ExperimentTranslatedContent, SocialMediaConfig
@@ -277,15 +279,8 @@ class HookedTest(TestCase):
                 self.assertEqual(actions[1].feedback_form.form[0].key, "dgf_generation")
                 self.assertEqual(actions[2].feedback_form.form[0].key, "dgf_gender_identity")
                 self.assertEqual(actions[3].feedback_form.form[0].key, "playlist_decades")
-                result = Result.objects.get(session=session, question_key="playlist_decades")
-                result.given_response = "1960s,1970s,1980s"
-                result.save()
-                generation = Result.objects.get(participant=self.participant, question_key="dgf_generation")
-                generation.given_response = "something"
-                generation.save()
-                gender = Result.objects.get(participant=self.participant, question_key="dgf_gender_identity")
-                gender.given_response = "and another thing"
-                gender.save()
+                self.save_playlist_choice(session)
+                self.save_profile_results(["dgf_generation", "dgf_gender_identity"])
             elif i == 1:
                 assert session.result_set.count() == 3
                 assert session.json_data.get("plan") is not None
@@ -308,6 +303,47 @@ class HookedTest(TestCase):
                     assert len(actions) == 3
                     assert actions[1].feedback_form.form[0].key in musicgen_keys
                     assert actions[2].feedback_form.form[0].key == "heard_before"
+
+    def test_second_playthrough(self):
+        block = Block.objects.get(slug="thats_my_song")
+        block.add_default_question_series()
+        playlist = Playlist.objects.get(name="ThatsMySong")
+        playlist._update_sections()
+        Session.objects.create(
+            block=block,
+            participant=self.participant,
+            playlist=playlist,
+            finished_at=datetime.now(),
+        )
+        session = Session.objects.create(
+            block=block, participant=self.participant, playlist=playlist
+        )
+        rules = session.block_rules()
+        # fake first round and populate results
+        rules.next_round(session)
+        self.save_playlist_choice(session)
+        self.save_profile_results(["dgf_generation", "dgf_gender_identity"])
+        # fake first song sync round
+        rules.next_round(session)
+        # the next round should have score, a demographic question, and three trials
+        next_actions = rules.next_round(session)
+        self.assertEqual(len(next_actions), 5)
+        self.assertIsInstance(next_actions[1], Trial)
+        self.assertEqual(next_actions[1].title, 'Questionnaire')
+
+    def save_playlist_choice(self, session) -> None:
+        result = Result.objects.get(session=session, question_key="playlist_decades")
+        result.given_response = "1960s,1970s,1980s"
+        result.save()
+
+    def save_profile_results(self, question_keys: list[str]) -> None:
+        """for already created profile results, enter a fake answer and save"""
+        for question_key in question_keys:
+            result = Result.objects.get(
+                participant=self.participant, question_key=question_key
+            )
+            result.given_response = "answer"
+            result.save()
 
     def test_hooked_china(self):
         block = Block.objects.get(slug="huang_2022")

@@ -1,4 +1,7 @@
+from datetime import datetime
+
 from django.test import TestCase
+
 from experiment.models import Block
 from session.models import Session
 from participant.models import Participant
@@ -43,3 +46,13 @@ class BaseRulesTest(TestCase):
         playlist = Playlist.objects.create()
         errors = base.validate_playlist(playlist)
         self.assertEqual(errors, ["The block must have at least one section."])
+
+    def test_has_played_before(self):
+        base = BaseRules()
+        block = Block.objects.create(slug="music-lab")
+        participant = Participant.objects.create()
+        session = Session.objects.create(block=block, participant=participant)
+        self.assertFalse(base.has_played_before(session))
+        session.finished_at = datetime.now()
+        session.save()
+        self.assertTrue(base.has_played_before(session))
