@@ -1,3 +1,16 @@
-.circle-content {
-    width: 85px;
+.circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+.circle-content {
+    position: absolute;
+    width: 90px;
+}
+
+.aha__histogram-container {
+    margin-top: -20px;
+    height: 80px;
+}
+
