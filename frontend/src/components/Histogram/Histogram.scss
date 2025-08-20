@@ -1,13 +1,13 @@
 .aha__histogram {
     display: flex;
     aspect-ratio: 1/1;
+    align-items: flex-end;
     padding: 10px;
 
     .aha__histogram-bar {
         border-radius: 1.5px;
-        background: white;
-        transition: height 1s ease-out;
     }
+
 
     &.active {
         div {

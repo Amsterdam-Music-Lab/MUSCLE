@@ -27,7 +27,7 @@ export const Default = Template.bind({});
 Default.args = {
     instruction: 'Listen to the audio',
     showAnimation: true,
-    responseTime: 5000,
+    responseTime: 50,
     className: '',
 };
 
@@ -40,7 +40,7 @@ WithoutAnimation.args = {
 export const LongResponseTime = Template.bind({});
 LongResponseTime.args = {
     ...Default.args,
-    responseTime: 10000,
+    responseTime: 200,
 };
 
 export const CustomInstruction = Template.bind({});
