@@ -14,7 +14,7 @@ class Questionnaire(BaseRules):
     def next_round(self, session: Session):
         actions = []
 
-        questions = self.get_open_questions(session)
+        questions = self.get_profile_question_trials(session, None)
         if questions:
             intro_questions = Explainer(
                 instruction=_(

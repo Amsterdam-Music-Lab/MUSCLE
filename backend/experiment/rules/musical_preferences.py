@@ -64,7 +64,7 @@ class MusicalPreferences(BaseRules):
             last_result = session.last_result()
             if last_result:
                 if last_result.score == 1:
-                    question_trials = self.get_open_questions(session)
+                    question_trials = self.get_profile_question_trials(session, None)
                     if question_trials:
                         n_questions = len(question_trials)
                         explainer = Explainer(

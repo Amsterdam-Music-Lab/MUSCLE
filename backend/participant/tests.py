@@ -51,7 +51,6 @@ class ParticipantTest(TestCase):
             score=5
         )
 
-
     def setUp(self):
         self.client = Client(
             HTTP_USER_AGENT='Agent 007'
@@ -111,8 +110,8 @@ class ParticipantTest(TestCase):
     def test_profile(self):
         assert len(self.participant.profile()) == 1
 
-    def test_profile_object(self):
-        po = self.participant.profile_object()
+    def test_profile_dict(self):
+        po = self.participant.profile_dict()
         assert len(po.keys()) == 2
         assert po.get('test1_score') == 2.5
 

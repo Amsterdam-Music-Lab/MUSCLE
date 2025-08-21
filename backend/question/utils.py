@@ -1,64 +1,42 @@
-from copy import deepcopy
-import random
+from typing import Generator
 
+from django.db.models import QuerySet
+
+from experiment.actions.form import (
+    BooleanQuestion,
+    ChoiceQuestion,
+    LikertQuestion,
+    LikertQuestionIcon,
+    NumberQuestion,
+    TextQuestion,
+    AutoCompleteQuestion,
+    Question,
+)
+from participant.models import Participant
+from question.models import Question
 from result.utils import prepare_profile_result
 
 
-def copy_shuffle(questions):
-    """ Makes a shuffled copy of a sequence of questions.
-
-    Args:
-    questions (list[Question]): A list of questions
-
-    Returns:
-    A shuffled copy of questions
-    """
-    qcopy = deepcopy(questions)
-    random.shuffle(qcopy)
-    return qcopy
-
-
-def total_unanswered_questions(participant, questions):
-    """ Return how many questions have not been answered yet by the participant
-
-    Args:
-        participant (Participant): Participant who answer questions
-        questions (list[Question]): List of questions
-
-    Returns:
-        Number of unanswered questions
-    """
-    profile_questions = participant.profile().values_list('question_key', flat=True)
-    return len([question for question in questions if question.key not in profile_questions])
-
-
-def question_by_key(key, questions, is_skippable=None, drop_choices=[]):
+def question_by_key(key: str, questions: list):
     """Return a copy of question with given key
 
     Args:
         key (str): Key of question
-        questions (list[Question]): List of questions
-        is_skippable (bool): True will make the returned questions skippable
-        drop_choices (list[str]): Choices in the question to be removed (if applicable)
 
     Returns:
-        A copy of question
+        the question, if it exists
     """
-    for question in questions:
-        if question.key == key:
-            q = deepcopy(question)
-            # Question is_skippable
-            if is_skippable is not None:
-                q.is_skippable = is_skippable
-            if hasattr(question, 'choices') and len(drop_choices):
-                for choice in drop_choices:
-                    q.choices.pop(choice, None)
-            return q
-    return None
+    return next((question for question in questions if question.key == key), None)
 
 
-def unanswered_questions(participant, questions, randomize=False, cutoff_index=None):
-    """Generator to give next unasked profile question and prepare its result
+def adjust_question_choices(choices: dict, drop_keys: list[str]) -> dict:
+    return {key: choices[key] for key in choices.keys() if key not in drop_keys}
+
+
+def get_unanswered_questions(
+    participant: Participant, question_set: QuerySet
+) -> Generator:
+    """Return next unasked profile question and prepare its result
 
     Args:
         participant (Participant): participant who will be checked for unanswered questions
@@ -70,11 +48,80 @@ def unanswered_questions(participant, questions, randomize=False, cutoff_index=N
         Next unasked profile question
 
     """
-    if randomize:
-        random.shuffle(questions)
-    for question in questions[:cutoff_index]:
-        profile_result = prepare_profile_result(question.key, participant)
-        if profile_result.given_response is None:
-            q = deepcopy(question)
-            q.result_id = profile_result.pk
-            yield q
+    keys_answered = participant.profile().values_list('question_key', flat=True)
+    for question_obj in question_set:
+        if question_obj.key in keys_answered:
+            continue
+        profile_result = prepare_profile_result(question_obj.key, participant)
+        question = create_question_db(question_obj)
+        question.result_id = profile_result.id
+        yield question
+
+
+def create_question_db(question: Question):
+    """Creates experiment.actions.form.question object from a Question in the database with key
+
+    Args:
+        key: Key of Question
+
+    Retuns:
+        experiment.actions.form.Question object
+    """
+
+    choices = {}
+    for choice in question.choice_set.all():
+        choices[choice.key] = choice.text
+
+    if question.type == "LikertQuestion":
+        return LikertQuestion(
+            key=question.key,
+            question=question.question,
+            explainer=question.explainer,
+            scale_steps=question.scale_steps,
+            choices=choices,
+        )
+    elif question.type == "LikertQuestionIcon":
+        return LikertQuestionIcon(
+            key=question.key,
+            question=question.question,
+            explainer=question.explainer,
+            scale_steps=question.scale_steps,
+        )
+    elif question.type == "NumberQuestion":
+        return NumberQuestion(
+            key=question.key,
+            question=question.question,
+            explainer=question.explainer,
+            min_value=question.min_value,
+            max_value=question.max_value,
+        )
+    elif question.type == "TextQuestion":
+        return TextQuestion(
+            key=question.key,
+            question=question.question,
+            explainer=question.explainer,
+            max_length=question.max_length,
+        )
+    elif question.type == "BooleanQuestion":
+        return BooleanQuestion(
+            key=question.key,
+            question=question.question,
+            explainer=question.explainer,
+            choices=choices,
+        )
+    elif question.type == "ChoiceQuestion":
+        return ChoiceQuestion(
+            key=question.key,
+            question=question.question,
+            explainer=question.explainer,
+            choices=choices,
+            min_values=question.min_values,
+            view=question.view,
+        )
+    elif question.type == "AutoCompleteQuestion":
+        return AutoCompleteQuestion(
+            key=question.key,
+            question=question.question,
+            explainer=question.explainer,
+            choices=choices,
+        )
