@@ -73,7 +73,7 @@ class BaseRules(object):
         """
         trials = []
         question_sets = session.block.questionseries_set.all()
-        if n_questions == None:
+        if n_questions is None:
             n_questions = sum(
                 question_set.questions.count() for question_set in question_sets
             )
