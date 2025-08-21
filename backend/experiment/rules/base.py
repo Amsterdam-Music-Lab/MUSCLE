@@ -1,15 +1,15 @@
 import logging
-from typing import Union
 
-from django.template.loader import render_to_string
-from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.template.loader import render_to_string
+from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.types import FeedbackInfo
-from experiment.actions import Final, Form, Trial
-from question.utils import unanswered_questions
-from question.questions import get_questions_from_series
+from experiment.actions.final import Final
+from experiment.actions.form import Form
+from experiment.actions.trial import Trial
+from question.utils import get_unanswered_questions
 from result.score import SCORING_RULES
 from session.models import Session
 
@@ -65,6 +65,57 @@ class BaseRules(object):
         )
         return f"/{session.block.phase.experiment.slug}{participant_id_url_param}"
 
+    def get_profile_question_trials(self, session, n_questions: int = 1) -> list[Trial]:
+        """Get a list of trials for questions not yet answered by the user
+        Args:
+            session: the current session
+            n_questions: the number of questions to return, set to `None` if all questions in the blocks' question sets should be returned at once
+        """
+        trials = []
+        question_sets = session.block.questionseries_set.all()
+        if n_questions == None:
+            n_questions = sum(
+                question_set.questions.count() for question_set in question_sets
+            )
+        for question_set in question_sets:
+            questions = (
+                question_set.questions.order_by("?")
+                if question_set.randomize
+                else question_set.questions
+            )
+            question_iterator = get_unanswered_questions(
+                session.participant, questions.all()
+            )
+            while len(trials) < n_questions:
+                try:
+                    question = next(question_iterator)
+                    trials.append(
+                        Trial(
+                            title=_("Questionnaire"),
+                            feedback_form=Form([question]),
+                        )
+                    )
+                except StopIteration:
+                    break
+        if len(trials) > 1:
+            for index, trial in enumerate(trials):
+                trial.title = _("Questionnaire %(index)i / %(total)i") % {
+                    "index": index + 1,
+                    "total": len(trials),
+                }
+        return trials
+
+    def has_played_before(self, session):
+        """Check if the current participant has completed this game previously."""
+        previous_games = Session.objects.filter(
+            participant=session.participant,
+            block=session.block,
+            finished_at__isnull=False,
+        )
+        if previous_games.count():
+            return True
+        return False
+
     def calculate_intermediate_score(self, session, result):
         """process result data during a trial (i.e., between next_round calls)
         return score
@@ -82,24 +133,13 @@ class BaseRules(object):
             if result.score:
                 total += 1
 
-                if result.score and result.score > 0:
+                if result.score > 0:
                     # if a result has score > 0, it was identified correctly
                     correct += 1
 
         score_message = "Well done!" if session.final_score > 0 else "Too bad!"
         message = "You correctly identified {} out of {} recognized songs!".format(correct, total)
         return score_message + " " + message
-
-    def has_played_before(self, session):
-        """Check if the current participant has completed this game previously."""
-        previous_games = Session.objects.filter(
-            participant=session.participant,
-            block=session.block,
-            finished_at__isnull=False,
-        )
-        if previous_games.count():
-            return True
-        return False
 
     def rank(self, session, exclude_unfinished=True):
         """Get rank based on session score"""
@@ -134,45 +174,6 @@ class BaseRules(object):
 
         # Default return, in case score isn't in the buckets
         return ranks["PLASTIC"]
-
-    def get_single_question(self, session, randomize=False):
-        """Get a random question from each question list, in priority completion order.
-
-        Participants will not continue to the next question set until they
-        have completed their current one.
-        """
-        questionnaire = unanswered_questions(
-            session.participant, get_questions_from_series(session.block.questionseries_set.all()), randomize
-        )
-        try:
-            question = next(questionnaire)
-            return Trial(title=_("Questionnaire"), feedback_form=Form([question], is_skippable=question.is_skippable))
-        except StopIteration:
-            return None
-
-    def get_open_questions(self, session, randomize=False, cutoff_index=None) -> Union[list, None]:
-        """Get a list of trials for questions not yet answered by the user"""
-
-        trials = []
-        questions = list(
-            unanswered_questions(
-                session.participant,
-                get_questions_from_series(session.block.questionseries_set.all()),
-                randomize,
-                cutoff_index,
-            )
-        )
-        open_questions = len(questions)
-        if not open_questions:
-            return None
-        for index, question in enumerate(questions):
-            trials.append(
-                Trial(
-                    title=_("Questionnaire %(index)i / %(total)i") % {"index": index + 1, "total": open_questions},
-                    feedback_form=Form([question], is_skippable=question.is_skippable),
-                )
-            )
-        return trials
 
     def validate_playlist(self, playlist: None):
         errors = []

@@ -6,7 +6,6 @@ from experiment.models import (
     Block,
     BlockTranslatedContent,
     Experiment,
-    ExperimentTranslatedContent,
     Phase,
 )
 from experiment.serializers import get_session_info, get_upcoming_block, serialize_block, serialize_phase

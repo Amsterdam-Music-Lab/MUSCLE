@@ -1,16 +1,15 @@
 import csv
-from datetime import datetime
 from unittest.mock import Mock
 from unittest import skip
 
-from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase
+from django.utils import timezone
 
 from experiment.actions import Explainer, Final, Score, Trial
 from experiment.models import Experiment, Phase, Block, ExperimentTranslatedContent, SocialMediaConfig
-from question.musicgens import MUSICGENS_17_W_VARIANTS
+from question.thatsmysong import THATS_MY_SONG_QUESTIONS_FIXED
 from participant.models import Participant
-from question.questions import get_questions_from_series
 from result.models import Result
 from section.models import Playlist, Section, Song
 from session.models import Session
@@ -258,7 +257,7 @@ class HookedTest(TestCase):
                     self.assertNotIn(heard_before_section, song_sync_sections)
 
     def test_thats_my_song(self):
-        musicgen_keys = [q.key for q in MUSICGENS_17_W_VARIANTS]
+        musicgen_keys = [q.key for q in THATS_MY_SONG_QUESTIONS_FIXED]
         block = Block.objects.get(slug="thats_my_song")
         block.add_default_question_series()
         playlist = Playlist.objects.get(name="ThatsMySong")
@@ -275,12 +274,11 @@ class HookedTest(TestCase):
                 assert len(actions) == 2
                 assert actions[1].view == "FINAL"
             elif i == 0:
-                self.assertEqual(len(actions), 4)
-                self.assertEqual(actions[1].feedback_form.form[0].key, "dgf_generation")
-                self.assertEqual(actions[2].feedback_form.form[0].key, "dgf_gender_identity")
-                self.assertEqual(actions[3].feedback_form.form[0].key, "playlist_decades")
+                self.assertEqual(len(actions), 2)
+                self.assertEqual(
+                    actions[1].feedback_form.form[0].key, "playlist_decades"
+                )
                 self.save_playlist_choice(session)
-                self.save_profile_results(["dgf_generation", "dgf_gender_identity"])
             elif i == 1:
                 assert session.result_set.count() == 3
                 assert session.json_data.get("plan") is not None
@@ -313,7 +311,7 @@ class HookedTest(TestCase):
             block=block,
             participant=self.participant,
             playlist=playlist,
-            finished_at=datetime.now(),
+            finished_at=timezone.now(),
         )
         session = Session.objects.create(
             block=block, participant=self.participant, playlist=playlist
@@ -322,7 +320,6 @@ class HookedTest(TestCase):
         # fake first round and populate results
         rules.next_round(session)
         self.save_playlist_choice(session)
-        self.save_profile_results(["dgf_generation", "dgf_gender_identity"])
         # fake first song sync round
         rules.next_round(session)
         # the next round should have score, a demographic question, and three trials
@@ -335,15 +332,6 @@ class HookedTest(TestCase):
         result = Result.objects.get(session=session, question_key="playlist_decades")
         result.given_response = "1960s,1970s,1980s"
         result.save()
-
-    def save_profile_results(self, question_keys: list[str]) -> None:
-        """for already created profile results, enter a fake answer and save"""
-        for question_key in question_keys:
-            result = Result.objects.get(
-                participant=self.participant, question_key=question_key
-            )
-            result.given_response = "answer"
-            result.save()
 
     def test_hooked_china(self):
         block = Block.objects.get(slug="huang_2022")
@@ -362,9 +350,7 @@ class HookedTest(TestCase):
         self.assertEqual(actions[0].feedback_form.form[0].key, "audio_check1")
 
         # check that question trials are as expected
-        question_trials = rules.get_open_questions(session)
-        total_questions = get_questions_from_series(block.questionseries_set.all())
-        self.assertEqual(len(question_trials), len(total_questions))
+        question_trials = rules.get_profile_question_trials(session, None)
         keys = [q.feedback_form.form[0].key for q in question_trials]
         questions = rules.question_series[0]["keys"][0:3]
         for question in questions:

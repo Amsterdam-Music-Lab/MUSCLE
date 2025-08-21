@@ -17,8 +17,16 @@ class ThatsMySong(Hooked):
 
     def __init__(self):
         self.question_series = [
-            {"name": "DEMOGRAPHICS", "keys": ["dgf_generation", "dgf_gender_identity"], "randomize": False},
-            {"name": "MUSICGENS_17_W_VARIANTS", "keys": QUESTION_GROUPS["MUSICGENS_17_W_VARIANTS"], "randomize": True},
+            {
+                "name": "THATSMYSONG_FIXED",
+                "keys": QUESTION_GROUPS["THATS_MY_SONG_FIXED"],
+                "randomize": False,
+            },
+            {
+                "name": "THATSMYSONG_RANDOM",
+                "keys": QUESTION_GROUPS["THATS_MY_SONG_RANDOM"],
+                "randomize": True,
+            },
         ]
 
     def feedback_info(self):
@@ -81,11 +89,6 @@ class ThatsMySong(Hooked):
             # get list of trials for demographic questions (first 2 questions)
             if session.result_set.filter(question_key="playlist_decades").count() == 0:
                 actions = [self.get_intro_explainer()]
-                questions = self.get_open_questions(session, cutoff_index=2)
-                if questions:
-                    for q in questions:
-                        actions.append(q)
-
                 question = ChoiceQuestion(
                     key="playlist_decades",
                     view="CHECKBOXES",
@@ -114,9 +117,9 @@ class ThatsMySong(Hooked):
             if round_number in range(1, question_offset):
                 actions.extend(self.next_song_sync_action(session, round_number))
             if round_number in range(question_offset, heard_before_offset):
-                question = self.get_single_question(session, randomize=True)
+                question = self.get_profile_question_trials(session)
                 if question:
-                    actions.append(question)
+                    actions.extend(question)
                 actions.extend(self.next_song_sync_action(session, round_number))
 
             # HeardBefore rounds
@@ -125,9 +128,9 @@ class ThatsMySong(Hooked):
                 actions.append(self.heard_before_explainer())
                 actions.append(self.next_heard_before_action(session, round_number))
             if round_number > heard_before_offset:
-                question = self.get_single_question(session, randomize=True)
+                question = self.get_profile_question_trials(session)
                 if question:
-                    actions.append(question)
+                    actions.extend(question)
                 actions.append(self.next_heard_before_action(session, round_number))
 
         return actions

@@ -1,6 +1,5 @@
-from datetime import datetime
-
 from django.test import TestCase
+from django.utils import timezone
 
 from experiment.models import Block
 from session.models import Session
@@ -53,6 +52,6 @@ class BaseRulesTest(TestCase):
         participant = Participant.objects.create()
         session = Session.objects.create(block=block, participant=participant)
         self.assertFalse(base.has_played_before(session))
-        session.finished_at = datetime.now()
+        session.finished_at = timezone.now()
         session.save()
         self.assertTrue(base.has_played_before(session))

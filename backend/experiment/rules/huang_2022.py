@@ -171,7 +171,7 @@ class Huang2022(Hooked):
                 actions.append(
                     self.next_heard_before_action(session, round_number))
             else:
-                questionnaire = self.get_open_questions(session)
+                questionnaire = self.get_profile_question_trials(session, None)
                 if questionnaire:
                     actions.extend([Explainer(
                         instruction=_("Please answer some questions \

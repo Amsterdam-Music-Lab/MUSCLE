@@ -52,7 +52,7 @@ class MatchingPairs2025(MatchingPairsGame):
         if session.get_rounds_passed() < 1:
             actions = []
 
-            questions = self.get_open_questions(session)
+            questions = self.get_profile_question_trials(session, None)
             if questions:
                 intro_questions = Explainer(
                     instruction=_(

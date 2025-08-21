@@ -68,11 +68,9 @@ class TwoAlternativeForced(BaseRules):
     def next_round(self, session):
         """
         Returns a list of actions.
-        Actions used here: Final, Trial (returned by get_open_questions(), next_trial_action()), Explainer (also returned by get_feedback())
+        Actions used here: Final, Trial (returned by get_profile_question_trials(), next_trial_action()), Explainer (also returned by get_feedback())
         """
-
-        # get_open_questions() returns questions that haven't been asked yet
-        actions = self.get_open_questions(session)
+        actions = self.get_profile_question_trials(session)
         if actions:
             return actions
 
