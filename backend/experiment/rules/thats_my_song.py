@@ -71,6 +71,7 @@ class ThatsMySong(Hooked):
                 Final(
                     session=session,
                     final_text=self.final_score_message(session)
+                    + " Thank you for playing. If you enjoyed the game, tell your doctor!"
                     + " For more information about this experiment, visit the Vanderbilt University Medical Center Music Cognition Lab.",
                     rank=self.rank(session),
                     show_profile_link=True,
