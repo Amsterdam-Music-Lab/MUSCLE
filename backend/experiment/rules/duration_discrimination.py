@@ -7,11 +7,16 @@ from django.utils.translation import gettext_lazy as _
 from .base import BaseRules
 from .practice import PracticeMixin
 from section.models import Section
-from experiment.actions import Trial, Explainer, Step
-from experiment.actions.form import ChoiceQuestion, Form
 from experiment.actions.playback import Autoplay
-from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
-from experiment.actions.utils import get_average_difference
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.form import Form
+from experiment.actions.question import ButtonArrayQuestion
+from experiment.actions.trial import Trial
+from experiment.actions.utils import (
+    final_action_with_optional_button,
+    get_average_difference,
+    render_feedback_trivia,
+)
 from experiment.rules.util.staircasing import register_turnpoint
 from result.models import Result
 from result.utils import prepare_result
@@ -104,8 +109,8 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
             return None
         question_text = self.get_question_text()
         key = self.task_description.replace(" ", "_")
-        question = ChoiceQuestion(
-            question=question_text,
+        question = ButtonArrayQuestion(
+            text=question_text,
             key=key,
             choices={
                 self.first_condition: self.first_condition_i18n,
@@ -115,7 +120,6 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
             result_id=prepare_result(
                 key, session, section=section, expected_response=trial_condition
             ),
-            submits=True,
         )
 
         playback = Autoplay([section])
@@ -205,8 +209,8 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
                     # register turnpoint
                     register_turnpoint(session, last_result)
                 if session.final_score == self.max_turnpoints + 1:
-                    # maximum number of turnpoints reached, finalize block
-                    return self.finalize_block(session)
+                    # experiment is finished, None will be replaced by final view
+                    return None
                 else:
                     # register decreasing difficulty
                     session.save_json_data({"direction": "decrease"})
@@ -235,7 +239,7 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
                 else:
                     action = self.get_next_trial(session)
         if not action:
-            # action is None if the audio file doesn't exist (outlier)
+            # action is None if the audio file doesn't exist
             return self.finalize_block(session)
         return action
 

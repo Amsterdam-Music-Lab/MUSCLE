@@ -2,7 +2,7 @@
 from typing import Optional
 
 from experiment.actions.base_action import BaseAction
-from experiment.actions.styles import ColorScheme
+from theme.styles import ColorScheme
 
 class QuestionAction(BaseAction):
 
@@ -39,11 +39,13 @@ class ChoiceQuestionAction(QuestionAction):
 
     Do not use this class directly, use the subclasses to select specific views
     """
-    def __init__(self, choices: dict, **kwargs):
+    def __init__(self, choices: dict, min_values: Optional[int] = None, **kwargs):
         super().__init__(**kwargs)
-        self.question_obj.choicequestion = ChoiceQuestion(
-            choices=choices, scoring_rule=self.scoring_rule, view=self.view
-        )
+        self.choices = choices
+        self.min_values = min_values
+
+    def action(self):
+        return {**super().action(), 'choices': self.choices}
 
 
 class OpenQuestionAction(QuestionAction):

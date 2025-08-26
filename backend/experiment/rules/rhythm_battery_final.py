@@ -1,8 +1,8 @@
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
-from question.questions import QUESTION_GROUPS
-from experiment.actions import Explainer, Final, Step
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
 
 from .base import BaseRules
 
@@ -13,26 +13,26 @@ class RhythmBatteryFinal(BaseRules):
     debrief_form = 'final/debrief_rhythm_unpaid.html'
     show_participant_final = False
 
-    def __init__(self):
-        self.question_series = [
-            {
-                "name": "MSI_F3_MUSICAL_TRAINING",
-                "keys": QUESTION_GROUPS["MSI_F3_MUSICAL_TRAINING"],
-                "randomize": True
-            },
-            {
-                "name": "Demographics",
-                "keys": [
-                    'dgf_gender_identity',
-                    'dgf_age',
-                    'dgf_education_gold_msi',
-                    'dgf_highest_qualification_expectation',
-                    'dgf_country_of_residence',
-                    'dgf_country_of_origin'
-                ],
-                "randomize": False
-            },
-        ]
+    # def __init__(self):
+    #     self.question_series = [
+    #         {
+    #             "name": "MSI_F3_MUSICAL_TRAINING",
+    #             "keys": QUESTION_GROUPS["MSI_F3_MUSICAL_TRAINING"],
+    #             "randomize": True
+    #         },
+    #         {
+    #             "name": "Demographics",
+    #             "keys": [
+    #                 'dgf_gender_identity',
+    #                 'dgf_age',
+    #                 'dgf_education_gold_msi',
+    #                 'dgf_highest_qualification_expectation',
+    #                 'dgf_country_of_residence',
+    #                 'dgf_country_of_origin'
+    #             ],
+    #             "randomize": False
+    #         },
+    #     ]
 
     def get_intro_explainer(self):
         return Explainer(
@@ -45,7 +45,7 @@ class RhythmBatteryFinal(BaseRules):
         )
 
     def next_round(self, session):
-        questions = self.get_profile_question_trials(session, None)
+        questions = self.get_open_questions(session)
         if questions:
             return [self.get_intro_explainer(), *questions]
         else:

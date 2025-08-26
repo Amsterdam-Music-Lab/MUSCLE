@@ -6,7 +6,9 @@ from result.models import Result
 from section.models import Playlist
 from session.models import Session
 
-from experiment.actions import Explainer, Final, Trial
+from experiment.actions.explainer import Explainer
+from experiment.actions.final import Final
+from experiment.actions.trial import Trial
 from experiment.rules.speech2song import sound, Speech2Song
 from experiment.serializers import serialize_actions
 

@@ -1,20 +1,26 @@
-import re
 import logging
-import random
 from os.path import join
+import re
+import random
+
 from django.template.loader import render_to_string
-from section.models import Playlist
-from experiment.utils import non_breaking_spaces
-from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Trial, Explainer, Step, Score, Final, Info
-from experiment.actions.form import ButtonArrayQuestion, Form
+
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
+from experiment.actions.info import Info
+from experiment.actions.form import Form
 from experiment.actions.playback import Multiplayer
-from experiment.actions.styles import ColorScheme
+from experiment.actions.question import ButtonArrayQuestion
+from experiment.actions.score import Score
+from experiment.actions.trial import Trial
 from experiment.actions.utils import get_current_experiment_url
-from experiment.utils import create_player_labels
-from .base import BaseRules
+from experiment.utils import create_player_labels, non_breaking_spaces
 from result.utils import prepare_result
+from section.models import Playlist
 from session.models import Session
+from theme.styles import ColorScheme
+from .base import BaseRules
+from .toontjehoger_1_mozart import toontjehoger_ranks
 
 logger = logging.getLogger(__name__)
 
@@ -98,13 +104,12 @@ class ToontjeHoger4Absolute(BaseRules):
         # Question
         key = 'pitch'
         question = ButtonArrayQuestion(
-            question=self.get_trial_question(),
+            text=self.get_trial_question(),
             key=key,
             choices={
                 "A": "A",
                 "B": "B",
             },
-            submits=True,
             result_id=prepare_result(
                 key,
                 session,

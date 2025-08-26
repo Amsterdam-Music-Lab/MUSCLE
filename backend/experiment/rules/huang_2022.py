@@ -4,13 +4,18 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from django.conf import settings
 
-from experiment.actions import HTML, Final, Explainer, Step, Redirect, Playlist, Trial
-from experiment.actions.form import BooleanQuestion, Form
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
+from experiment.actions.form import Form
+from experiment.actions.html import HTML
+from experiment.actions.question import ButtonArrayQuestion
+from experiment.actions.redirect import Redirect
+from experiment.actions.trial import Trial
 from experiment.actions.playback import Autoplay
-from experiment.actions.styles import ColorScheme
-from question.questions import QUESTION_GROUPS
+from experiment.actions.playlist import PlaylistSelection
 from result.utils import prepare_result
 from session.models import Session
+from theme.styles import ColorScheme
 from .hooked import Hooked
 
 logger = logging.getLogger(__name__)
@@ -78,13 +83,12 @@ class Huang2022(Hooked):
                 html = HTML(body='<h4>{}</h4>'.format(_('Do you hear the music?')))
                 form = Form(
                     form=[
-                        BooleanQuestion(
+                        ButtonArrayQuestion(
                             key='audio_check1',
                             choices={'no': _('No'), 'yes': _('Yes')},
                             result_id=prepare_result(
                                 'audio_check1', session, scoring_rule='BOOLEAN'
                             ),
-                            submits=True,
                             style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
                         )
                     ]
@@ -100,13 +104,12 @@ class Huang2022(Hooked):
                         html = HTML(body=render_to_string('html/huang_2022/audio_check.html'))
                         form = Form(
                             form=[
-                                BooleanQuestion(
+                                ButtonArrayQuestion(
                                     key='audio_check2',
                                     choices={'no': _('Quit'), 'yes': _('Try')},
                                     result_id=prepare_result(
                                         'audio_check2', session, scoring_rule='BOOLEAN'
                                     ),
-                                    submits=True,
                                     style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
                                 )
                             ]
@@ -148,7 +151,7 @@ class Huang2022(Hooked):
                         step_numbers=True,
                         button_label=_("Continue")
                     )
-                    playlist = Playlist(session.block.playlists.all())
+                    playlist = PlaylistSelection(session.block.playlists.all())
                     actions.extend([explainer, explainer_devices, playlist, *self.next_song_sync_action(session, round_number)])
         else:
             # Load the heard_before offset.
@@ -171,7 +174,7 @@ class Huang2022(Hooked):
                 actions.append(
                     self.next_heard_before_action(session, round_number))
             else:
-                questionnaire = self.get_profile_question_trials(session, None)
+                questionnaire = self.get_open_questions(session)
                 if questionnaire:
                     actions.extend([Explainer(
                         instruction=_("Please answer some questions \
@@ -208,12 +211,12 @@ class Huang2022(Hooked):
             if json_data.get('result') and json_data['result']['type'] == 'recognized':
                 n_sync_guessed += 1
                 sync_time += json_data['result']['recognition_time']
-                if result.score and result.score > 0:
+                if result.score > 0:
                     n_sync_correct += 1
             else:
                 if result.expected_response == 'old':
                     n_old_new_expected += 1
-                    if result.score and result.score > 0:
+                    if result.score > 0:
                         n_old_new_correct += 1
         thanks_message = _("Thank you for your contribution to science!")
         score_message = _(

@@ -1,9 +1,7 @@
-import random
-from unittest import skip
-
 from django.test import TestCase
 
-from experiment.actions import Explainer, Final, Trial
+from experiment.actions.explainer import Explainer
+from experiment.actions.trial import Trial
 from experiment.models import Block
 from participant.models import Participant
 from result.models import Result
@@ -86,33 +84,6 @@ class DDITest(TestCase):
         assert regular_trial.feedback_form
         section = regular_trial.playback.sections[0]
         assert section['id'] == diff_section.id
-
-    @skip(
-        "This test simulates playing through the whole experiment, uncomment this line to run"
-    )
-    def test_simulate_full_experiment(self):
-        n_games = 20
-        self.session.save_json_data(
-            {"practice_done": True, "difficulty": self.rules.start_diff}
-        )
-        for game in range(n_games):
-            for round_number in range(50):
-                print(f"Round {round_number+1} of game {game+1}")
-                actions = self.rules.next_round(self.session)
-                self.assertIsNotNone(actions)
-                if isinstance(actions, Trial):
-                    last_result = Result.objects.last()
-                    if last_result.expected_response == 'longer':
-                        last_result.score = random.choice([0, 1])
-                    else:
-                        last_result.score = random.choice([0, 2])
-                    last_result.save()
-                else:
-                    Result.objects.all().delete()
-                    self.session.final_score = 0
-                    self.session.save_json_data({"difficulty": self.rules.start_diff})
-                    self.assertIsInstance(actions, Final)
-                    break
 
 
 class AnisochronyTest(TestCase):

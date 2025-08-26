@@ -1,14 +1,20 @@
 import logging
-from django.template.loader import render_to_string
 from os.path import join
 
-from experiment.actions import Trial, Explainer, Step, Score, Final, Info
-from experiment.actions.form import ChoiceQuestion, Form
+from django.template.loader import render_to_string
+
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
+from experiment.actions.form import Form
+from experiment.actions.info import Info
 from experiment.actions.playback import Multiplayer
-from experiment.actions.styles import ColorScheme
+from experiment.actions.question import ButtonArrayQuestion
+from experiment.actions.score import Score
+from experiment.actions.trial import Trial
 from experiment.actions.utils import get_current_experiment_url
 from section.models import Playlist
 from session.models import Session
+from theme.styles import ColorScheme
 from .base import BaseRules
 from .toontjehoger_1_mozart import toontjehoger_ranks
 
@@ -115,15 +121,13 @@ class ToontjeHoger6Relative(BaseRules):
 
         # Question
         key = 'same_melody'
-        question = ChoiceQuestion(
-            question="Zijn deze twee melodieën hetzelfde?",
+        question = ButtonArrayQuestion(
+            text="Zijn deze twee melodieën hetzelfde?",
             key=key,
             choices={
                 "YES": "Ja",
                 "NO": "Nee",
             },
-            view='BUTTON_ARRAY',
-            submits=True,
             style=[ColorScheme.BOOLEAN],
             result_id=prepare_result(
                 key, session, section=section1, expected_response=expected_response

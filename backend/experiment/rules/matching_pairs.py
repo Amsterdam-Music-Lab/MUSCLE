@@ -4,8 +4,11 @@ import json
 from django.utils.translation import gettext_lazy as _
 
 from .base import BaseRules
-from experiment.actions import Explainer, Final, Playlist, Step, Trial
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
 from experiment.actions.playback import MatchingPairs
+from experiment.actions.playlist import PlaylistSelection
+from experiment.actions.trial import Trial
 from result.utils import prepare_result
 
 from section.models import Section
@@ -60,9 +63,9 @@ class MatchingPairsGame(BaseRules):
     def next_round(self, session):
         if session.get_rounds_passed() < 1:
             intro_explainer = self.get_intro_explainer()
-            playlist = Playlist(session.block.playlists.all())
+            playlist = PlaylistAction(session.block.playlists.all())
             actions = [intro_explainer, playlist]
-            questions = self.get_profile_question_trials(session, None)
+            questions = self.get_open_questions(session)
             if questions:
                 intro_questions = Explainer(
                     instruction=_(
@@ -140,7 +143,7 @@ class MatchingPairsGame(BaseRules):
         second_card = result_data["second_card"]
         second_section = Section.objects.get(pk=second_card["id"])
         second_card["filename"] = str(second_section.filename)
-        if self.evaluate_sections_equal(first_section, second_section):
+        if first_section.group == second_section.group:
             if second_card.get("seen"):
                 score = 20
                 given_response = "match"
@@ -157,17 +160,12 @@ class MatchingPairsGame(BaseRules):
         prepare_result("move", session, json_data=result_data, score=score, given_response=given_response)
         return score
 
-    def evaluate_sections_equal(
-        self, first_section: Section, second_section: Section
-    ) -> bool:
-        return first_section.group == second_section.group
-
     def next_round(self, session):
         if session.get_rounds_passed() < 1:
             intro_explainer = self.get_intro_explainer()
-            playlist = Playlist(session.block.playlists.all())
+            playlist = PlaylistSelection(session.block.playlists.all())
             actions = [intro_explainer, playlist]
-            questions = self.get_profile_question_trials(session, None)
+            questions = self.get_open_questions(session)
             if questions:
                 intro_questions = Explainer(
                     instruction=_(

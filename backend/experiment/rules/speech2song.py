@@ -4,14 +4,15 @@ from django.utils.translation import gettext as _
 
 from .base import BaseRules
 
-from experiment.actions import Explainer, Step, Final, Trial
-from experiment.actions.form import Form, RadiosQuestion
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
+from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay
-from question.languages import LanguageQuestion
-
-from session.models import Session
-
+from experiment.actions.question import RadiosQuestion
+from experiment.actions.trial import Trial
+from question.catalogues.languages import language_question
 from result.utils import prepare_result
+from session.models import Session
 
 
 class Speech2Song(BaseRules):
@@ -35,11 +36,11 @@ class Speech2Song(BaseRules):
                     'lang_mother',
                     'lang_second',
                     'lang_third',
-                    LanguageQuestion(_('English')).exposure_question().key,
-                    LanguageQuestion(_('Brazilian Portuguese')).exposure_question().key,
-                    LanguageQuestion(_('Mandarin Chinese')).exposure_question().key
+                    language_question(_('English')).key,
+                    language_question(_('Brazilian Portuguese')).key,
+                    language_question(_('Mandarin Chinese')).key,
                 ],
-                "randomize": False
+                "randomize": False,
             },
         ]
 
@@ -64,7 +65,7 @@ class Speech2Song(BaseRules):
         is_speech = True
         rounds_passed = session.get_rounds_passed(self.counted_result_keys)
         if rounds_passed == 0:
-            question_trials = self.get_profile_question_trials(session, None)
+            question_trials = self.get_open_questions(session)
             if question_trials:
                 session.save_json_data({'quesionnaire': True})
                 return [self.get_intro_explainer(), *question_trials]
@@ -193,7 +194,7 @@ def question_speech(session, section):
     key = 'speech2song'
     return RadiosQuestion(
         key=key,
-        question=_('Does this sound like song or speech to you?'),
+        text=_('Does this sound like song or speech to you?'),
         choices=[
             _('sounds exactly like speech'),
             _('sounds somewhat like speech'),
@@ -208,7 +209,7 @@ def question_sound(session, section):
     key = 'sound2music'
     return RadiosQuestion(
         key=key,
-        question=_(
+        text=_(
             'Does this sound like music or an environmental sound to you?'),
         choices=[
             _('sounds exactly like an environmental sound'),

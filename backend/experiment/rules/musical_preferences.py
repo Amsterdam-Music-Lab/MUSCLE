@@ -3,16 +3,23 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
-from experiment.actions import Explainer, Final, HTML, Redirect, Step, Trial
-from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, LikertQuestionIcon
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
+from experiment.actions.form import Form
+from experiment.actions.html import HTML
 from experiment.actions.playback import Autoplay
-from experiment.actions.styles import ColorScheme
+from experiment.actions.question import ButtonArrayQuestion, IconRangeQuestion
+from experiment.actions.redirect import Redirect
+from experiment.actions.trial import Trial
 
+from question.choice_sets.general import LIKERT_ICONS_7
 from result.utils import prepare_result
 from result.models import Result
 
 from section.models import Section
 from session.models import Session
+
+from theme.styles import ColorScheme
 
 from .base import BaseRules
 from .huang_2022 import get_test_playback
@@ -64,7 +71,7 @@ class MusicalPreferences(BaseRules):
             last_result = session.last_result()
             if last_result:
                 if last_result.score == 1:
-                    question_trials = self.get_profile_question_trials(session, None)
+                    question_trials = self.get_open_questions(session)
                     if question_trials:
                         n_questions = len(question_trials)
                         explainer = Explainer(
@@ -101,13 +108,12 @@ class MusicalPreferences(BaseRules):
                         html = HTML(body=render_to_string("html/huang_2022/audio_check.html"))
                         form = Form(
                             form=[
-                                BooleanQuestion(
+                                ButtonArrayQuestion(
                                     key="audio_check2",
                                     choices={"no": _("Quit"), "yes": _("Next")},
                                     result_id=prepare_result(
                                         "audio_check2", session, scoring_rule="BOOLEAN"
                                     ),
-                                    submits=True,
                                     style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
                                 )
                             ]
@@ -129,13 +135,12 @@ class MusicalPreferences(BaseRules):
                 html = HTML(body="<h4>{}</h4>".format(_("Do you hear the music?")))
                 form = Form(
                     form=[
-                        BooleanQuestion(
+                        ButtonArrayQuestion(
                             key="audio_check1",
                             choices={"no": _("No"), "yes": _("Yes")},
                             result_id=prepare_result(
                                 "audio_check1", session, scoring_rule="BOOLEAN"
                             ),
-                            submits=True,
                             style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
                         )
                     ]
@@ -207,16 +212,18 @@ class MusicalPreferences(BaseRules):
             return [feedback, self.get_final_view(session, top_participant, known_songs, round_number, top_all)]
         section = session.playlist.get_section(song_ids=session.get_unused_song_ids())
         like_key = "like_song"
-        likert = LikertQuestionIcon(
-            question=_("2. How much do you like this song?"),
+        likert = IconRangeQuestion(
+            text=_("2. How much do you like this song?"),
             key=like_key,
-            result_id=prepare_result(like_key, session, section=section, scoring_rule="LIKERT"),
+            choices=LIKERT_ICONS_7,
+            result_id=prepare_result(
+                like_key, session, section=section, scoring_rule="LIKERT"
+            ),
         )
         know_key = "know_song"
-        know = ChoiceQuestion(
-            question=_("1. Do you know this song?"),
+        know = ButtonArrayQuestion(
+            text=_("1. Do you know this song?"),
             key=know_key,
-            view="BUTTON_ARRAY",
             choices={"yes": "fa-check", "unsure": "fa-question", "no": "fa-xmark"},
             result_id=prepare_result(know_key, session, section=section),
             style=[ColorScheme.BOOLEAN],

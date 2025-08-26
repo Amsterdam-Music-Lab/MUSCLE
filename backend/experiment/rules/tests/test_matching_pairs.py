@@ -7,7 +7,7 @@ from participant.models import Participant
 from result.models import Result
 from section.models import Playlist
 from session.models import Session
-from question.questions import create_default_questions
+from question.catalogues.questions import create_default_questions
 
 
 class MatchingPairsTest(TestCase):

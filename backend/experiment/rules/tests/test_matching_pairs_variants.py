@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from experiment.actions import Trial
+from experiment.actions.trial import Trial
 from experiment.models import Block
 from participant.models import Participant
 from section.models import Playlist

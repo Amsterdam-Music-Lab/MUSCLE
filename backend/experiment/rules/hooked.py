@@ -4,15 +4,19 @@ import random
 from django.utils.translation import gettext_lazy as _
 
 from .base import BaseRules
-from experiment.actions import Explainer, Final, Playlist, Score, Step, Trial
-from experiment.actions.form import BooleanQuestion, Form
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
+from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay
-from experiment.actions.styles import ColorScheme, ButtonStyle
+from experiment.actions.playlist import PlaylistSelection
+from experiment.actions.question import ButtonArrayQuestion
+from experiment.actions.score import Score
+from experiment.actions.trial import Trial
 from experiment.actions.wrappers import song_sync
-from question.questions import QUESTION_GROUPS
 from result.utils import prepare_result
 from section.models import Section
 from session.models import Session
+from theme.styles import ColorScheme, ButtonStyle
 
 
 logger = logging.getLogger(__name__)
@@ -35,27 +39,27 @@ class Hooked(BaseRules):
     counted_result_keys = ["recognize", "heard_before"]
     play_method = "BUFFER"
 
-    def __init__(self):
-        self.question_series = [
-            {
-                "name": "DEMOGRAPHICS",
-                "keys": QUESTION_GROUPS["DEMOGRAPHICS"],
-                "randomize": True,
-            },  # 1. Demographic questions (7 questions)
-            {"name": "MSI_OTHER", "keys": ["msi_39_best_instrument"], "randomize": False},
-            {
-                "name": "MSI_FG_GENERAL",
-                "keys": QUESTION_GROUPS["MSI_FG_GENERAL"],
-                "randomize": True,
-            },  # 2. General music sophistication
-            {
-                "name": "MSI_ALL",
-                "keys": QUESTION_GROUPS["MSI_ALL"],
-                "randomize": True,
-            },  # 3. Complete music sophistication (20 questions)
-            {"name": "STOMP20", "keys": QUESTION_GROUPS["STOMP20"], "randomize": True},  # 4. STOMP (20 questions)
-            {"name": "TIPI", "keys": QUESTION_GROUPS["TIPI"], "randomize": True},  # 5. TIPI (10 questions)
-        ]
+    # def __init__(self):
+    #     self.question_series = [
+    #         {
+    #             "name": "DEMOGRAPHICS",
+    #             "keys": QUESTION_GROUPS["DEMOGRAPHICS"],
+    #             "randomize": True,
+    #         },  # 1. Demographic questions (7 questions)
+    #         {"name": "MSI_OTHER", "keys": ["msi_39_best_instrument"], "randomize": False},
+    #         {
+    #             "name": "MSI_FG_GENERAL",
+    #             "keys": QUESTION_GROUPS["MSI_FG_GENERAL"],
+    #             "randomize": True,
+    #         },  # 2. General music sophistication
+    #         {
+    #             "name": "MSI_ALL",
+    #             "keys": QUESTION_GROUPS["MSI_ALL"],
+    #             "randomize": True,
+    #         },  # 3. Complete music sophistication (20 questions)
+    #         {"name": "STOMP20", "keys": QUESTION_GROUPS["STOMP20"], "randomize": True},  # 4. STOMP (20 questions)
+    #         {"name": "TIPI", "keys": QUESTION_GROUPS["TIPI"], "randomize": True},  # 5. TIPI (10 questions)
+    #     ]
 
     def get_intro_explainer(self):
         """Explain the game"""
@@ -119,7 +123,7 @@ class Hooked(BaseRules):
             # Intro explainer
             actions.append(self.get_intro_explainer())
             # Choose playlist
-            actions.append(Playlist(session.block.playlists.all()))
+            actions.append(PlaylistSelection(session.block.playlists.all()))
 
             # Plan sections
             self.plan_sections(session)
@@ -134,9 +138,9 @@ class Hooked(BaseRules):
             if round_number in range(1, self.question_offset):
                 actions.extend(self.next_song_sync_action(session, round_number))
             elif round_number in range(self.question_offset, heard_before_offset):
-                question_trial = self.get_profile_question_trials(session)
+                question_trial = self.get_single_question(session)
                 if question_trial:
-                    actions.extend(question_trial)
+                    actions.append(question_trial)
                 actions.extend(self.next_song_sync_action(session, round_number))
 
             # HeardBefore rounds
@@ -145,9 +149,9 @@ class Hooked(BaseRules):
                 actions.append(self.heard_before_explainer())
                 actions.append(self.next_heard_before_action(session, round_number))
             elif round_number > heard_before_offset:
-                question_trial = self.get_profile_question_trials(session)
+                question_trial = self.get_single_question(session)
                 if question_trial:
-                    actions.extend(question_trial)
+                    actions.append(question_trial)
                 actions.append(self.next_heard_before_action(session, round_number))
 
         return actions
@@ -179,12 +183,12 @@ class Hooked(BaseRules):
                     n_sync_guessed += 1
                     json_data = result.json_data
                     sync_time += json_data.get("decision_time")
-                    if result.score and result.score > 0:
+                    if result.score > 0:
                         n_sync_correct += 1
             else:
                 if result.expected_response == "old":
                     n_old_new_expected += 1
-                    if result.score and result.score > 0:
+                    if result.score > 0:
                         n_old_new_correct += 1
 
         score_message = "Well done!" if session.final_score > 0 else "Too bad!"
@@ -298,13 +302,13 @@ class Hooked(BaseRules):
         key = "heard_before"
         form = Form(
             [
-                BooleanQuestion(
+                ButtonArrayQuestion(
                     key=key,
                     choices={
                         "new": _("No"),
                         "old": _("Yes"),
                     },
-                    question=_("Did you hear this song in previous rounds?"),
+                    text=_("Did you hear this song in previous rounds?"),
                     result_id=prepare_result(
                         key,
                         session,
@@ -312,7 +316,6 @@ class Hooked(BaseRules):
                         expected_response=condition,
                         scoring_rule="REACTION_TIME",
                     ),
-                    submits=True,
                     style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST, ButtonStyle.LARGE_GAP],
                 )
             ]

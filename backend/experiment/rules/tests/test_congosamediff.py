@@ -7,7 +7,9 @@ from participant.models import Participant
 from result.models import Result
 from section.models import Playlist, Section, Song
 from session.models import Session
-from experiment.actions import Explainer, Trial, Final
+from experiment.actions.explainer import Explainer
+from experiment.actions.final import Final
+from experiment.actions.trial import Trial
 from experiment.rules.congosamediff import CongoSameDiff
 
 

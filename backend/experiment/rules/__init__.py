@@ -17,7 +17,6 @@ from .matching_pairs_lite import MatchingPairsLite
 from .matching_pairs_icmpc import MatchingPairsICMPC
 from .matching_pairs_2025 import MatchingPairs2025
 from .musical_preferences import MusicalPreferences
-from .questionnaire import Questionnaire
 from .rhythm_battery_final import RhythmBatteryFinal
 from .rhythm_battery_intro import RhythmBatteryIntro
 from .rhythm_discrimination import RhythmDiscrimination
@@ -63,7 +62,6 @@ BLOCK_RULES = {
     MatchingPairsICMPC.ID: MatchingPairsICMPC,
     MatchingPairs2025.ID: MatchingPairs2025,
     MusicalPreferences.ID: MusicalPreferences,
-    Questionnaire.ID: Questionnaire,
     RhythmBatteryFinal.ID: RhythmBatteryFinal,
     RhythmBatteryIntro.ID: RhythmBatteryIntro,
     RhythmDiscrimination.ID: RhythmDiscrimination,
