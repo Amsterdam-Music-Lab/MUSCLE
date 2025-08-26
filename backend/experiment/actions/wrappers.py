@@ -3,16 +3,17 @@ from typing import Optional
 
 from django.utils.translation import gettext as _
 
-from .form import BooleanQuestion, ChoiceQuestion, Form
-from .styles import ButtonStyle, TextStyle
+from .form import Form
 from .playback import Autoplay, PlayButton
 from .trial import Trial
 
 from experiment.actions.utils import randomize_playhead
+from experiment.actions.question import ButtonArrayQuestion
+from question.choice_sets.general import BOOLEAN_NEGATIVE_FIRST
 from result.utils import prepare_result
 from section.models import Section
 from session.models import Session
-
+from theme.styles import ButtonStyle, ColorScheme, TextStyle
 
 def two_alternative_forced(
     session: Session,
@@ -51,7 +52,7 @@ def two_alternative_forced(
     key = "choice"
     button_style = [TextStyle.INVISIBLE, ButtonStyle.LARGE_GAP, ButtonStyle.LARGE_TEXT]
     button_style.extend(style)
-    question = ChoiceQuestion(
+    question = ButtonArrayQuestion(
         key=key,
         result_id=prepare_result(
             key,
@@ -62,13 +63,19 @@ def two_alternative_forced(
             comment=comment,
         ),
         choices=choices,
-        view="BUTTON_ARRAY",
-        submits=True,
         style=button_style,
     )
     feedback_form = Form([question])
     trial = Trial(playback=playback, feedback_form=feedback_form, title=title, config=config)
     return trial
+
+
+def boolean_question(
+    key, text, result, style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST, ButtonStyle.LARGE_GAP]
+):
+    return ButtonArrayQuestion(
+        key=key, text=text, result=result, choices=BOOLEAN_NEGATIVE_FIRST, style=style
+    )
 
 
 def song_sync(
@@ -98,12 +105,13 @@ def song_sync(
     recognize = Trial(
         feedback_form=Form(
             [
-                BooleanQuestion(
-                    key="recognize",
-                    result_id=prepare_result(
-                        "recognize", session, section=section, scoring_rule="SONG_SYNC_RECOGNITION"
+                boolean_question(
+                    result=prepare_result(
+                        "recognize",
+                        session,
+                        section=section,
+                        scoring_rule="SONG_SYNC_RECOGNITION",
                     ),
-                    submits=True,
                 )
             ]
         ),
@@ -132,9 +140,8 @@ def song_sync(
     correct_place = Trial(
         feedback_form=Form(
             [
-                BooleanQuestion(
+                boolean_question(
                     key="correct_place",
-                    submits=True,
                     result_id=prepare_result(
                         "correct_place",
                         session,

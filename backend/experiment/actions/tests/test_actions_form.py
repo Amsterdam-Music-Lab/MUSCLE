@@ -1,6 +1,19 @@
 from django.test import TestCase
 
-from experiment.actions.form import BooleanQuestion, ChoiceQuestion, Form, NumberQuestion, TextQuestion, DropdownQuestion, AutoCompleteQuestion, RadiosQuestion, ButtonArrayQuestion, RangeQuestion, LikertQuestion, LikertQuestionIcon
+from experiment.actions.form import Form
+from experiment.actions.question import (
+    AutoCompleteQuestion,
+    ButtonArrayQuestion,
+    CheckBoxQuestion,
+    DropdownQuestion,
+    IconRangeQuestion,
+    RangeQuestion,
+    RadiosQuestion,
+    NumberQuestion,
+    TextRangeQuestion,
+    TextQuestion,
+)
+from question.choice_sets.general import LIKERT_AGREE_7, LIKERT_ICONS_7
 
 
 class FormTest(TestCase):
@@ -66,37 +79,10 @@ class TextQuestionTest(TestCase):
         self.assertIn('max_length', action_result)
         self.assertEqual(action_result['max_length'], 100)
 
-
-class BooleanQuestionTest(TestCase):
+class MultipleChoiceQuestionTest(TestCase):
     def setUp(self):
-        self.boolean_question = BooleanQuestion(
-            key='test_key',
-            choices={
-                'no': 'No',
-                'yes': 'Yes'
-            }
-        )
-
-    def test_initialization(self):
-        self.assertEqual(self.boolean_question.key, 'test_key')
-        self.assertEqual(self.boolean_question.choices, {'no': 'No', 'yes': 'Yes'})
-
-    def test_action_method(self):
-        action_result = self.boolean_question.action()
-        self.assertIn('key', action_result)
-        self.assertIn('choices', action_result)
-        self.assertEqual(action_result['choices'], {'no': 'No', 'yes': 'Yes'})
-
-
-class ChoiceQuestionTest(TestCase):
-    def setUp(self):
-        self.choice_question = ChoiceQuestion(
-            key='test_key',
-            choices={
-                'no': 'No',
-                'yes': 'Yes'
-            },
-            min_values=1
+        self.choice_question = CheckBoxQuestion(
+            key='test_key', choices={'no': 'No', 'yes': 'Yes'}, min_values=1
         )
 
     def test_initialization(self):
@@ -219,32 +205,11 @@ class RangeQuestionTest(TestCase):
         self.assertEqual(action_result['max_value'], 10)
 
 
-class LikertQuestionCustomChoicesTest(TestCase):
+class TextRangeQuestionTest(TestCase):
     def setUp(self):
-        self.likert_question = LikertQuestion(
+        self.likert_question = TextRangeQuestion(
             key='test_key',
-            choices={
-                'no': 'No',
-                'yes': 'Yes'
-            },
-        )
-
-    def test_initialization(self):
-        self.assertEqual(self.likert_question.key, 'test_key')
-        self.assertEqual(self.likert_question.choices, {'no': 'No', 'yes': 'Yes'})
-
-    def test_action_method(self):
-        action_result = self.likert_question.action()
-        self.assertIn('key', action_result)
-        self.assertIn('choices', action_result)
-        self.assertEqual(action_result['choices'], {'no': 'No', 'yes': 'Yes'})
-
-
-class LikertQuestionSevenScaleStepsTest(TestCase):
-    def setUp(self):
-        self.likert_question = LikertQuestion(
-            key='test_key',
-            scale_steps=7,
+            choices=LIKERT_AGREE_7,
         )
 
     def test_initialization(self):
@@ -274,42 +239,10 @@ class LikertQuestionSevenScaleStepsTest(TestCase):
                 })
 
 
-class LikertQuestionFiveScaleStepsTest(TestCase):
+class IconRangeTest(TestCase):
     def setUp(self):
-        self.likert_question = LikertQuestion(
-            key='test_key',
-            scale_steps=5,
-        )
-
-    def test_initialization(self):
-        self.assertEqual(self.likert_question.key, 'test_key')
-        self.assertEqual(self.likert_question.choices, {
-                    1: "Strongly Disagree",
-                    2: "Disagree",
-                    3: "Neither Agree nor Disagree",
-                    4: "Agree",
-                    5: "Strongly Agree",
-                })
-
-    def test_action_method(self):
-        action_result = self.likert_question.action()
-        self.assertIn('key', action_result)
-        self.assertIn('choices', action_result)
-        self.assertEqual(action_result['choices'], {
-                    1: "Strongly Disagree",
-                    2: "Disagree",
-                    3: "Neither Agree nor Disagree",
-                    4: "Agree",
-                    5: "Strongly Agree",
-                })
-
-
-class LikertQuestionIconTest(TestCase):
-    def setUp(self):
-        self.likert_question_icon = LikertQuestionIcon(
-            key='test_key',
-            scale_steps=7,
-            likert_view="ICON_RANGE",
+        self.likert_question_icon = IconRangeQuestion(
+            key='test_key', choices=LIKERT_ICONS_7
         )
 
     def test_initialization(self):
