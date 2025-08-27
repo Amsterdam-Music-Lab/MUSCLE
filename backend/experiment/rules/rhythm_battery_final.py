@@ -3,6 +3,7 @@ from django.template.loader import render_to_string
 
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
+from question.catalogues.goldsmiths import MSI_F3_MUSICAL_TRAINING
 
 from .base import BaseRules
 
@@ -13,26 +14,26 @@ class RhythmBatteryFinal(BaseRules):
     debrief_form = 'final/debrief_rhythm_unpaid.html'
     show_participant_final = False
 
-    # def __init__(self):
-    #     self.question_series = [
-    #         {
-    #             "name": "MSI_F3_MUSICAL_TRAINING",
-    #             "keys": QUESTION_GROUPS["MSI_F3_MUSICAL_TRAINING"],
-    #             "randomize": True
-    #         },
-    #         {
-    #             "name": "Demographics",
-    #             "keys": [
-    #                 'dgf_gender_identity',
-    #                 'dgf_age',
-    #                 'dgf_education_gold_msi',
-    #                 'dgf_highest_qualification_expectation',
-    #                 'dgf_country_of_residence',
-    #                 'dgf_country_of_origin'
-    #             ],
-    #             "randomize": False
-    #         },
-    #     ]
+    def __init__(self):
+        self.question_series = [
+            {
+                "name": "MSI_F3_MUSICAL_TRAINING",
+                "keys": [question.key for question in MSI_F3_MUSICAL_TRAINING],
+                "randomize": True,
+            },
+            {
+                "name": "Demographics",
+                "keys": [
+                    'dgf_gender_identity',
+                    'dgf_age',
+                    'dgf_education_gold_msi',
+                    'dgf_highest_qualification_expectation',
+                    'dgf_country_of_residence',
+                    'dgf_country_of_origin',
+                ],
+                "randomize": False,
+            },
+        ]
 
     def get_intro_explainer(self):
         return Explainer(
@@ -45,7 +46,7 @@ class RhythmBatteryFinal(BaseRules):
         )
 
     def next_round(self, session):
-        questions = self.get_profile_question_trials(session)
+        questions = self.get_profile_question_trials(session, None)
         if questions:
             return [self.get_intro_explainer(), *questions]
         else:

@@ -73,9 +73,8 @@ def create_question_db(question: Question):
     else:
         return OpenQuestionAction(
             key=question.key,
-            question=question.question,
+            text=question.question,
             explainer=question.explainer,
-            scale_steps=question.scale_steps,
             min_value=question.min_value,
             max_value=question.max_value,
             max_length=question.max_length,

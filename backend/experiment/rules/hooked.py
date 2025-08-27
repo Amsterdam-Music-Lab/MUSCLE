@@ -13,6 +13,10 @@ from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
 from experiment.actions.wrappers import song_sync
+from question.catalogues.demographics import DEMOGRAPHICS
+from question.catalogues.goldsmiths import MSI_ALL, MSI_FG_GENERAL
+from question.catalogues.stomp import STOMP20
+from question.catalogues.tipi import TIPI
 from result.utils import prepare_result
 from section.models import Section
 from session.models import Session
@@ -39,27 +43,39 @@ class Hooked(BaseRules):
     counted_result_keys = ["recognize", "heard_before"]
     play_method = "BUFFER"
 
-    # def __init__(self):
-    #     self.question_series = [
-    #         {
-    #             "name": "DEMOGRAPHICS",
-    #             "keys": QUESTION_GROUPS["DEMOGRAPHICS"],
-    #             "randomize": True,
-    #         },  # 1. Demographic questions (7 questions)
-    #         {"name": "MSI_OTHER", "keys": ["msi_39_best_instrument"], "randomize": False},
-    #         {
-    #             "name": "MSI_FG_GENERAL",
-    #             "keys": QUESTION_GROUPS["MSI_FG_GENERAL"],
-    #             "randomize": True,
-    #         },  # 2. General music sophistication
-    #         {
-    #             "name": "MSI_ALL",
-    #             "keys": QUESTION_GROUPS["MSI_ALL"],
-    #             "randomize": True,
-    #         },  # 3. Complete music sophistication (20 questions)
-    #         {"name": "STOMP20", "keys": QUESTION_GROUPS["STOMP20"], "randomize": True},  # 4. STOMP (20 questions)
-    #         {"name": "TIPI", "keys": QUESTION_GROUPS["TIPI"], "randomize": True},  # 5. TIPI (10 questions)
-    #     ]
+    def __init__(self):
+        self.question_series = [
+            {
+                "name": "DEMOGRAPHICS",
+                "keys": [question.key for question in DEMOGRAPHICS],
+                "randomize": True,
+            },  # 1. Demographic questions (7 questions)
+            {
+                "name": "MSI_OTHER",
+                "keys": ["msi_39_best_instrument"],
+                "randomize": False,
+            },
+            {
+                "name": "MSI_FG_GENERAL",
+                "keys": [question.key for question in MSI_FG_GENERAL],
+                "randomize": True,
+            },  # 2. General music sophistication
+            {
+                "name": "MSI_ALL",
+                "keys": [question.key for question in MSI_ALL],
+                "randomize": True,
+            },  # 3. Complete music sophistication (20 questions)
+            {
+                "name": "STOMP20",
+                "keys": [question.key for question in STOMP20],
+                "randomize": True,
+            },  # 4. STOMP (20 questions)
+            {
+                "name": "TIPI",
+                "keys": [question.key for question in TIPI],
+                "randomize": True,
+            },  # 5. TIPI (10 questions)
+        ]
 
     def get_intro_explainer(self):
         """Explain the game"""
@@ -138,7 +154,7 @@ class Hooked(BaseRules):
             if round_number in range(1, self.question_offset):
                 actions.extend(self.next_song_sync_action(session, round_number))
             elif round_number in range(self.question_offset, heard_before_offset):
-                question_trial = self.get_single_question(session)
+                question_trial = self.get_profile_question_trials(session)
                 if question_trial:
                     actions.append(question_trial)
                 actions.extend(self.next_song_sync_action(session, round_number))
@@ -149,7 +165,7 @@ class Hooked(BaseRules):
                 actions.append(self.heard_before_explainer())
                 actions.append(self.next_heard_before_action(session, round_number))
             elif round_number > heard_before_offset:
-                question_trial = self.get_single_question(session)
+                question_trial = self.get_profile_question_trials(session)
                 if question_trial:
                     actions.append(question_trial)
                 actions.append(self.next_heard_before_action(session, round_number))

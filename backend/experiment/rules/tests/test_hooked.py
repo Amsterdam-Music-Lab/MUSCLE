@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 from unittest.mock import Mock
@@ -14,8 +15,8 @@ from experiment.models import (
     SocialMediaConfig,
 )
 from participant.models import Participant
-from question.catalogues.musicgens import MUSICGENS_17_W_VARIANTS
-from question.questions import create_default_questions, get_questions_from_series
+from question.catalogues.vanderbilt import THATS_MY_SONG_QUESTIONS_FIXED
+from question.questions import create_default_questions
 from result.models import Result
 from section.models import Playlist, Section, Song
 from session.models import Session
@@ -262,7 +263,7 @@ class HookedTest(TestCase):
                     self.assertNotIn(heard_before_section, song_sync_sections)
 
     def test_thats_my_song(self):
-        musicgen_keys = [q.key for q in MUSICGENS_17_W_VARIANTS]
+        tms_keys = [q.key for q in THATS_MY_SONG_QUESTIONS_FIXED]
         block = Block.objects.get(slug="thats_my_song")
         block.add_default_question_series()
         playlist = Playlist.objects.get(name="ThatsMySong")
@@ -279,19 +280,13 @@ class HookedTest(TestCase):
                 assert len(actions) == 2
                 assert actions[1].view == "FINAL"
             elif i == 0:
-                self.assertEqual(len(actions), 4)
-                self.assertEqual(actions[1].feedback_form.form[0].key, "dgf_generation")
-                self.assertEqual(actions[2].feedback_form.form[0].key, "dgf_gender_identity")
-                self.assertEqual(actions[3].feedback_form.form[0].key, "playlist_decades")
+                self.assertEqual(len(actions), 2)
+                self.assertEqual(
+                    actions[1].feedback_form.form[0].key, "playlist_decades"
+                )
                 result = Result.objects.get(session=session, question_key="playlist_decades")
                 result.given_response = "1960s,1970s,1980s"
                 result.save()
-                generation = Result.objects.get(participant=self.participant, question_key="dgf_generation")
-                generation.given_response = "something"
-                generation.save()
-                gender = Result.objects.get(participant=self.participant, question_key="dgf_gender_identity")
-                gender.given_response = "and another thing"
-                gender.save()
             elif i == 1:
                 assert session.result_set.count() == 3
                 assert session.json_data.get("plan") is not None
@@ -305,14 +300,14 @@ class HookedTest(TestCase):
                     assert actions[1].feedback_form.form[0].key == "recognize"
                 elif i < heard_before_offset + 1:
                     assert len(actions) == 5
-                    assert actions[1].feedback_form.form[0].key in musicgen_keys
+                    assert actions[1].feedback_form.form[0].key in tms_keys
                 elif i == heard_before_offset + 1:
                     assert len(actions) == 3
                     assert actions[1].view == "EXPLAINER"
                     assert actions[2].feedback_form.form[0].key == "heard_before"
                 else:
                     assert len(actions) == 3
-                    assert actions[1].feedback_form.form[0].key in musicgen_keys
+                    assert actions[1].feedback_form.form[0].key in tms_keys
                     assert actions[2].feedback_form.form[0].key == "heard_before"
 
     def test_hooked_china(self):
@@ -332,9 +327,11 @@ class HookedTest(TestCase):
         self.assertEqual(actions[0].feedback_form.form[0].key, "audio_check1")
 
         # check that question trials are as expected
-        question_trials = rules.get_profile_question_trials(session)
-        total_questions = get_questions_from_series(block.questionseries_set.all())
-        self.assertEqual(len(question_trials), len(total_questions))
+        question_trials = rules.get_profile_question_trials(session, None)
+        n_total_questions = block.questionseries_set.aggregate(Count("questions"))[
+            'questions__count'
+        ]
+        self.assertEqual(len(question_trials), n_total_questions)
         keys = [q.feedback_form.form[0].key for q in question_trials]
         questions = rules.question_series[0]["keys"][0:3]
         for question in questions:

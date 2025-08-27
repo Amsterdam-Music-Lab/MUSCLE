@@ -60,7 +60,7 @@ class OpenQuestionAction(QuestionAction):
             self.update_action(attribute, action)
             for attribute in ['min_value', 'max_value', 'max_length']
         ]
-        return self.serialized
+        return action
 
     def update_action(self, attribute, action):
         if getattr(self, attribute):

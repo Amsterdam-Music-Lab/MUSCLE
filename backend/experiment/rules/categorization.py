@@ -44,7 +44,7 @@ class Categorization(BaseRules):
 
         if not json_data.get("phase"):
             actions = [self.get_intro_explainer()]
-            questions = self.get_profile_question_trials(session)
+            questions = self.get_profile_question_trials(session, None)
             if questions:
                 actions.extend(questions)
             json_data = self.plan_experiment(session)

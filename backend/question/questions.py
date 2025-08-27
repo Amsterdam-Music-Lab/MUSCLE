@@ -64,27 +64,6 @@ for group, questions in QUESTION_GROUPS_DEFAULT.items():
     QUESTION_GROUPS[group] = [ q.key for q in questions ]
 
 
-def get_questions_from_series(questionseries_set):
-    """ Get Questions from a QuerySet of QuestionSeries
-
-    Args:
-        questionseries_set (Queryset[QuestionSeries]): QuerySet of QuestionSeries
-
-    Returns:
-        List of experiment.actions.form.Question objects
-    """
-
-    keys_all = []
-
-    for questionseries in questionseries_set:
-        keys = [qis.question.key for qis in questionseries.questioninseries_set.all()]
-        if questionseries.randomize:
-            random.shuffle(keys)
-        keys_all.extend(keys)
-
-    return [create_question_db(key) for key in keys_all]
-
-
 def create_default_questions(question_model=Question, choice_model=Choice, question_group_model=QuestionGroup):
     """Creates default questions and question groups in the database. Can be used with historical models.
 

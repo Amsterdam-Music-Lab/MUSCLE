@@ -1,9 +1,13 @@
 from typing import Final
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions import BooleanQuestion, Explainer, Final, Form, Step, Trial
+from experiment.actions.question import ButtonArrayQuestion
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
+from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay
-from experiment.rules.base import Base
+from experiment.actions.trial import Trial
+from experiment.rules.base import BaseRules
 from result.utils import prepare_result
 from session.models import Session
 
@@ -70,12 +74,11 @@ class NewBlockRuleset(BaseRules):
         key = 'test_trial'
         # get a random section
         section = session.playlist.get_section()
-        question = BooleanQuestion(
-            question=_(
-                "Do you like this song?"),
+        question = ButtonArrayQuestion(
+            text=_("Do you like this song?"),
             key=key,
             result_id=prepare_result(key, session, section=section),
-            submits=True
+            submits=True,
         )
         form = Form([question])
         playback = Autoplay([section])

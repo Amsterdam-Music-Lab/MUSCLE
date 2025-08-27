@@ -116,7 +116,6 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
                 self.first_condition: self.first_condition_i18n,
                 self.second_condition: self.second_condition_i18n,
             },
-            view="BUTTON_ARRAY",
             result_id=prepare_result(
                 key, session, section=section, expected_response=trial_condition
             ),

@@ -60,37 +60,6 @@ class MatchingPairsGame(BaseRules):
             step_numbers=True,
         )
 
-    def next_round(self, session):
-        if session.get_rounds_passed() < 1:
-            intro_explainer = self.get_intro_explainer()
-            playlist = PlaylistAction(session.block.playlists.all())
-            actions = [intro_explainer, playlist]
-            questions = self.get_profile_question_trials(session)
-            if questions:
-                intro_questions = Explainer(
-                    instruction=_(
-                        "Before starting the game, we would like to ask you %i demographic questions."
-                        % (len(questions))
-                    ),
-                    steps=[],
-                )
-                actions.append(intro_questions)
-                actions.extend(questions)
-            trial = self.get_matching_pairs_trial(session)
-            actions.append(trial)
-            return actions
-        else:
-            # final score saves the result from the cleared board into account
-            score = Final(
-                session,
-                title="Score",
-                final_text="Can you score higher than your friends and family? Share and let them try!",
-                button={"text": "Play again", "link": self.get_play_again_url(session)},
-                rank=self.rank(session, exclude_unfinished=False),
-                feedback_info=self.feedback_info(),
-            )
-            return [score]
-
     def select_sections(self, session):
         json_data = session.json_data
         pairs = json_data.get("pairs", [])
@@ -165,7 +134,7 @@ class MatchingPairsGame(BaseRules):
             intro_explainer = self.get_intro_explainer()
             playlist = PlaylistSelection(session.block.playlists.all())
             actions = [intro_explainer, playlist]
-            questions = self.get_profile_question_trials(session)
+            questions = self.get_profile_question_trials(session, None)
             if questions:
                 intro_questions = Explainer(
                     instruction=_(

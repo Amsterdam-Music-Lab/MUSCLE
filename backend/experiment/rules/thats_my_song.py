@@ -91,11 +91,6 @@ class ThatsMySong(Hooked):
             # get list of trials for demographic questions (first 2 questions)
             if session.result_set.filter(question_key="playlist_decades").count() == 0:
                 actions = [self.get_intro_explainer()]
-                questions = self.get_profile_question_trials(session, cutoff_index=2)
-                if questions:
-                    for q in questions:
-                        actions.append(q)
-
                 question = CheckBoxQuestion(
                     key="playlist_decades",
                     text=_("Choose two or more decades of music"),
@@ -125,9 +120,9 @@ class ThatsMySong(Hooked):
             if round_number in range(1, self.question_offset):
                 actions.extend(self.next_song_sync_action(session, round_number))
             if round_number in range(self.question_offset, heard_before_offset):
-                question = self.get_single_question(session, randomize=True)
+                question = self.get_profile_question_trials(session)
                 if question:
-                    actions.append(question)
+                    actions.extend(question)
                 actions.extend(self.next_song_sync_action(session, round_number))
 
             # HeardBefore rounds
@@ -136,9 +131,9 @@ class ThatsMySong(Hooked):
                 actions.append(self.heard_before_explainer())
                 actions.append(self.next_heard_before_action(session, round_number))
             if round_number > heard_before_offset:
-                question = self.get_single_question(session, randomize=True)
+                question = self.get_profile_question_trials(session)
                 if question:
-                    actions.append(question)
+                    actions.extend(question)
                 actions.append(self.next_heard_before_action(session, round_number))
 
         return actions

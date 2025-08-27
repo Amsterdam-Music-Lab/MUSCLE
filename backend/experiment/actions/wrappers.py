@@ -71,10 +71,17 @@ def two_alternative_forced(
 
 
 def boolean_question(
-    key, text, result, style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST, ButtonStyle.LARGE_GAP]
+    key: str,
+    text: str,
+    result_id: int,
+    style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST, ButtonStyle.LARGE_GAP],
 ):
     return ButtonArrayQuestion(
-        key=key, text=text, result=result, choices=BOOLEAN_NEGATIVE_FIRST, style=style
+        key=key,
+        text=text,
+        result_id=result_id,
+        choices=BOOLEAN_NEGATIVE_FIRST,
+        style=style,
     )
 
 
@@ -106,7 +113,9 @@ def song_sync(
         feedback_form=Form(
             [
                 boolean_question(
-                    result=prepare_result(
+                    key='recognize',
+                    text='',
+                    result_id=prepare_result(
                         "recognize",
                         session,
                         section=section,
@@ -142,6 +151,7 @@ def song_sync(
             [
                 boolean_question(
                     key="correct_place",
+                    text="",
                     result_id=prepare_result(
                         "correct_place",
                         session,

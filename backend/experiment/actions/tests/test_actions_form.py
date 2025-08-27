@@ -42,14 +42,12 @@ class NumberQuestionTest(TestCase):
             key='test_key',
             min_value=1,
             max_value=10,
-            input_type='number'
         )
 
     def test_initialization(self):
         self.assertEqual(self.number_question.key, 'test_key')
         self.assertEqual(self.number_question.min_value, 1)
         self.assertEqual(self.number_question.max_value, 10)
-        self.assertEqual(self.number_question.input_type, 'number')
 
     def test_action_method(self):
         action_result = self.number_question.action()
@@ -65,13 +63,11 @@ class TextQuestionTest(TestCase):
         self.text_question = TextQuestion(
             key='test_key',
             max_length=100,
-            input_type='text'
         )
 
     def test_initialization(self):
         self.assertEqual(self.text_question.key, 'test_key')
         self.assertEqual(self.text_question.max_length, 100)
-        self.assertEqual(self.text_question.input_type, 'text')
 
     def test_action_method(self):
         action_result = self.text_question.action()
