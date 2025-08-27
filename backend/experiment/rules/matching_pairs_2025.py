@@ -50,7 +50,7 @@ class MatchingPairs2025(MatchingPairsGame):
             # actions = [intro_explainer, playlist] if not has_played_before else [playlist]
             actions = [intro_explainer, playlist]
 
-            questions = self.get_open_questions(session)
+            questions = self.get_profile_questions(session)
             if questions:
                 intro_questions = Explainer(
                     instruction=_(

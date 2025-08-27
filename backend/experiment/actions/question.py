@@ -9,6 +9,7 @@ class QuestionAction(BaseAction):
     def __init__(
         self,
         key: str,
+        result_id: int = None,
         text: str = '',
         explainer: str = '',
         style: list[str] = [],
@@ -17,20 +18,11 @@ class QuestionAction(BaseAction):
     ):
         self.key = key
         self.text = text
+        self.result_id = result_id
         self.explainer = explainer
         self.scoring_rule = scoring_rule
         self.style = self._apply_style(style)
         self.view = view
-
-    def action(self):
-        return {
-            'key': self.key,
-            'text': self.text,
-            'explainer': self.explainer,
-            'scoring_rule': self.scoring_rule,
-            'style': self.style,
-            'view': self.view,
-        }
 
 
 class ChoiceQuestionAction(QuestionAction):
@@ -63,13 +55,16 @@ class OpenQuestionAction(QuestionAction):
         self.max_length = max_length
 
     def action(self):
-        self.serialized = super().action()
-        map(self.update_action, ['min_value', 'max_value', 'max_length'])
+        action = super().action()
+        [
+            self.update_action(attribute, action)
+            for attribute in ['min_value', 'max_value', 'max_length']
+        ]
         return self.serialized
 
-    def update_action(self, attribute):
+    def update_action(self, attribute, action):
         if getattr(self, attribute):
-            self.serialized.update({attribute: getattr(self, attribute)})
+            action.update({attribute: getattr(self, attribute)})
 
 
 class AutoCompleteQuestion(ChoiceQuestionAction):

@@ -13,6 +13,7 @@ from experiment.actions.redirect import Redirect
 from experiment.actions.trial import Trial
 from experiment.actions.playback import Autoplay
 from experiment.actions.playlist import PlaylistSelection
+from question.catalogues.goldsmiths import MSI_ALL
 from result.utils import prepare_result
 from session.models import Session
 from theme.styles import ColorScheme
@@ -34,8 +35,8 @@ class Huang2022(Hooked):
         self.question_series = [
             {
                 "name": "MSI_ALL",
-                "keys": QUESTION_GROUPS["MSI_ALL"],
-                "randomize": False
+                "keys": [question.key for question in MSI_ALL],
+                "randomize": False,
             },
             {
                 "name": "Demographics and other",
@@ -49,9 +50,9 @@ class Huang2022(Hooked):
                     'dgf_region_of_origin',
                     'dgf_region_of_residence',
                     'dgf_gender_identity_zh',
-                    'contact'
+                    'contact',
                 ],
-                "randomize": False
+                "randomize": False,
             },
         ]
 
@@ -174,7 +175,7 @@ class Huang2022(Hooked):
                 actions.append(
                     self.next_heard_before_action(session, round_number))
             else:
-                questionnaire = self.get_open_questions(session)
+                questionnaire = self.get_profile_questions(session)
                 if questionnaire:
                     actions.extend([Explainer(
                         instruction=_("Please answer some questions \

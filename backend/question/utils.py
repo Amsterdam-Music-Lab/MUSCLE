@@ -66,7 +66,6 @@ def create_question_db(question: Question):
             key=question.key,
             text=question.question,
             explainer=question.explainer,
-            scale_steps=question.scale_steps,
             choices=choices,
             view=question.view,
             min_values=question.min_values,

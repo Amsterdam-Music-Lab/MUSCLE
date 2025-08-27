@@ -93,6 +93,7 @@ class BaseRules(object):
                         feedback_form=Form([question_action]),
                     )
                 )
+            break
         for index, trial in enumerate(trials):
             trial.title = _("Questionnaire %(index)i / %(total)i") % {
                 "index": index + 1,

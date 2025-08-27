@@ -1,35 +1,30 @@
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions.form import LikertQuestion, RadiosQuestion
+from experiment.actions.question import TextRangeQuestion, RadiosQuestion
 
 
-def musicgens_question(key, question):
+def musicgens_question(key: str, text: str) -> TextRangeQuestion:
     """Define a standard MusicGens question"""
-    return LikertQuestion(
-        key = key,
-        question = question,
-        choices = {
+    return TextRangeQuestion(
+        key=key,
+        text=text,
+        choices={
             1: _("Never"),
             2: _("Rarely"),
             3: _("Once in a while"),
             4: _("Sometimes"),
             5: _("Very often"),
-            6: _("Always")
+            6: _("Always"),
         },
-        explainer = _("Please tell us how much you agree")
+        explainer=_("Please tell us how much you agree"),
+        scoring_rule='LIKERT',
     )
 
 
-def musicgens_radio_question(key, question):
+def musicgens_radio_question(key: str, text: str) -> RadiosQuestion:
     """Define a MusicGens question with three radio buttons """
     return RadiosQuestion(
-        key = key,
-        question = question,
-        choices = {
-            1: _("Yes"),
-            0: _("No"),
-            -1: _("I'm not sure")
-        }
+        key=key, text=text, choices={1: _("Yes"), 0: _("No"), -1: _("I'm not sure")}
     )
 
 
@@ -266,9 +261,11 @@ MUSICGENS_17_W_VARIANTS = [
 
 MUSICGENS_EXTRA = [
     RadiosQuestion(
-        key = "PHENOTYPES_1",
-        question = _("Please select the sentence that describes your level of achievement in music."),
-        choices = {
+        key="PHENOTYPES_1",
+        text=_(
+            "Please select the sentence that describes your level of achievement in music."
+        ),
+        choices={
             1: _("I have no training or recognised talent in this area."),
             2: _("I play one or more musical instruments proficiently."),
             3: _("I have played with a recognised orchestra or band."),
@@ -277,94 +274,118 @@ MUSICGENS_EXTRA = [
             6: _("My composition has been recorded."),
             7: _("Recordings of my composition have been sold publicly."),
             8: _("My compositions have been critiqued in a national publication."),
-            9: _(" My compositions have been critiqued in multiple national publications.")
-        }
+            9: _(
+                " My compositions have been critiqued in multiple national publications."
+            ),
+        },
     ),
     RadiosQuestion(
-        key = "PHENOTYPES_2",
-        question = _("How engaged with music are you? Singing, playing, and even writing music counts here. Please choose the answer which describes you best."),
-        choices = {
+        key="PHENOTYPES_2",
+        text=_(
+            "How engaged with music are you? Singing, playing, and even writing music counts here. Please choose the answer which describes you best."
+        ),
+        choices={
             1: _("I am not engaged in music at all."),
-            2: _("I am self-taught and play music privately, but I have never played, sung, or shown my music to others."),
-            3: _("I have taken lessons in music, but I have never played, sung, or shown my music to others."),
-            4: _("I have played or sung, or my music has been played in public concerts in my home town, but I have not been paid for this."),
-            5: _("I have played or sung, or my music has been played in public concerts in my home town, and I have been paid for this."),
+            2: _(
+                "I am self-taught and play music privately, but I have never played, sung, or shown my music to others."
+            ),
+            3: _(
+                "I have taken lessons in music, but I have never played, sung, or shown my music to others."
+            ),
+            4: _(
+                "I have played or sung, or my music has been played in public concerts in my home town, but I have not been paid for this."
+            ),
+            5: _(
+                "I have played or sung, or my music has been played in public concerts in my home town, and I have been paid for this."
+            ),
             6: _("I am professionally active as a musician."),
-            7: _("I am professionally active as a musician and have been reviewed/featured in the national or international media and/or have received an award for my musical activities.")
-        }
+            7: _(
+                "I am professionally active as a musician and have been reviewed/featured in the national or international media and/or have received an award for my musical activities."
+            ),
+        },
     ),
     RadiosQuestion(
-        key = "PHENOTYPES_3",
-        question = _("I have never been complimented for my talents as a musical performer."),
-        choices = {
+        key="PHENOTYPES_3",
+        text=_("I have never been complimented for my talents as a musical performer."),
+        choices={
             1: _("Completely disagree"),
             2: _("Strongly disagree"),
             3: _("Disagree"),
             4: _("Neither agree nor disagree"),
             5: _("Agree"),
             6: _("Strongly agree"),
-            7: _("Completely agree")
-        }
+            7: _("Completely agree"),
+        },
     ),
     RadiosQuestion(
-        key = "PHENOTYPES_4",
-        question = _("To what extent do you agree that you see yourself as someone who is sophisticated in art, music, or literature?"),
-        choices = {
+        key="PHENOTYPES_4",
+        text=_(
+            "To what extent do you agree that you see yourself as someone who is sophisticated in art, music, or literature?"
+        ),
+        choices={
             1: _("Agree strongly"),
             2: _("Agree moderately"),
             3: _("Agree slightly"),
             4: _("Disagree slightly"),
             5: _("Disagree moderately"),
-            6: _("Disagree strongly")
-        }
+            6: _("Disagree strongly"),
+        },
     ),
     RadiosQuestion(
-        key = "PHENOTYPES_5",
-        question = _("At the peak of my interest, I practised ___ hours on my primary instrument (including voice)."),
-        choices = {
+        key="PHENOTYPES_5",
+        text=_(
+            "At the peak of my interest, I practised ___ hours on my primary instrument (including voice)."
+        ),
+        choices={
             1: _("0"),
             2: _("0.5"),
             3: _("1"),
             4: _("1.5"),
             5: _("3–4"),
-            6: _("5 or more")
-        }
+            6: _("5 or more"),
+        },
     ),
     RadiosQuestion(
-        key = "PHENOTYPES_6",
-        question = _("How often did you play or sing during the most active period?"),
-        choices = {
+        key="PHENOTYPES_6",
+        text=_("How often did you play or sing during the most active period?"),
+        choices={
             1: _("Every day"),
             2: _("More than 1x per week"),
             3: _("1x per week"),
-            4: _("1x per month")
-        }
+            4: _("1x per month"),
+        },
     ),
     RadiosQuestion(
-        key = "PHENOTYPES_7",
-        question = _("How long (duration) did you play or sing during the most active period?"),
-        choices = {
+        key="PHENOTYPES_7",
+        text=_(
+            "How long (duration) did you play or sing during the most active period?"
+        ),
+        choices={
             1: _("More than 1 hour per week"),
             2: _("1 hour per week"),
-            3: _("Less than 1 hour per week")
-        }
+            3: _("Less than 1 hour per week"),
+        },
     ),
     RadiosQuestion(
-        key = "PHENOTYPES_8",
-        question = _("About how many hours do you usually spend each week playing a musical instrument?"),
-        choices = {
+        key="PHENOTYPES_8",
+        text=_(
+            "About how many hours do you usually spend each week playing a musical instrument?"
+        ),
+        choices={
             1: _("None"),
             2: _("1 hour or less a week"),
             3: _("2–3 hours a week"),
             4: _("4–5 hours a week"),
             5: _("6–7 hours a week"),
-            6: _("8 or more hours a week")
-        }
+            6: _("8 or more hours a week"),
+        },
     ),
     RadiosQuestion(
-        key = "PHENOTYPES_9",
-        question = _("Indicate approximately how many hours per week you have played or practiced any musical instrument at all, i.e., all different instruments, on average over the last 10 years."),
-        choices = {
+        key="PHENOTYPES_9",
+        text=_(
+            "Indicate approximately how many hours per week you have played or practiced any musical instrument at all, i.e., all different instruments, on average over the last 10 years."
+        ),
+        choices={
             1: _("less than 1 hour per week"),
             2: _("1 hour per week"),
             3: _("2 hours per week"),
@@ -374,7 +395,7 @@ MUSICGENS_EXTRA = [
             7: _("10–14 hours per week"),
             8: _("15–24 hours per week"),
             9: _("25–40 hours per week"),
-            10: _("41 or more hours per week")
-        }
-    )
+            10: _("41 or more hours per week"),
+        },
+    ),
 ]

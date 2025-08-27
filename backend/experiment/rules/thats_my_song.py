@@ -5,6 +5,10 @@ from experiment.actions.form import Form
 from experiment.actions.question import CheckBoxQuestion
 from experiment.actions.trial import Trial
 from result.utils import prepare_result
+from question.catalogues.vanderbilt import (
+    THATS_MY_SONG_QUESTIONS_FIXED,
+    THATS_MY_SONG_QUESTIONS_RANDOM,
+)
 from section.models import Section
 from session.models import Session
 from .hooked import Hooked
@@ -14,11 +18,19 @@ class ThatsMySong(Hooked):
     ID = "THATS_MY_SONG"
     consent_file = ""
 
-    # def __init__(self):
-    #     self.question_series = [
-    #         {"name": "DEMOGRAPHICS", "keys": ["dgf_generation", "dgf_gender_identity"], "randomize": False},
-    #         {"name": "MUSICGENS_17_W_VARIANTS", "keys": QUESTION_GROUPS["MUSICGENS_17_W_VARIANTS"], "randomize": True},
-    #     ]
+    def __init__(self):
+        self.question_series = [
+            {
+                "name": "VANDERBILT_FIXED",
+                "keys": [question.key for question in THATS_MY_SONG_QUESTIONS_FIXED],
+                "randomize": False,
+            },
+            {
+                "name": "VANDERBILT_RANDOM",
+                "keys": [question.key for question in THATS_MY_SONG_QUESTIONS_RANDOM],
+                "randomize": True,
+            },
+        ]
 
     def feedback_info(self):
         return None
@@ -79,7 +91,7 @@ class ThatsMySong(Hooked):
             # get list of trials for demographic questions (first 2 questions)
             if session.result_set.filter(question_key="playlist_decades").count() == 0:
                 actions = [self.get_intro_explainer()]
-                questions = self.get_open_questions(session, cutoff_index=2)
+                questions = self.get_profile_questions(session, cutoff_index=2)
                 if questions:
                     for q in questions:
                         actions.append(q)

@@ -4,9 +4,9 @@ from experiment.actions.explainer import Explainer
 from experiment.models import Experiment, ExperimentTranslatedContent, Block
 from experiment.rules.rhythm_battery_final import RhythmBatteryFinal
 from participant.models import Participant
+from question.questions import create_default_questions
 from section.models import Playlist
 from session.models import Session
-from question.catalogues.questions import create_default_questions
 
 
 class TestRhythmBatteryFinal(TestCase):

@@ -1,8 +1,6 @@
 from django.db import migrations
-from question.questions import create_default_questions
+
 from question import questions
-from django.core import management
-from django.utils import translation
 
 
 def populate_translation_fields(apps, schema_editor):
@@ -20,10 +18,3 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RunPython(populate_translation_fields, reverse_code=migrations.RunPython.noop),
     ]
-
-
-
-
-
-
-    

@@ -1,6 +1,6 @@
-from experiment.actions.form import Question, ChoiceQuestion
 from django.utils.translation import gettext_lazy as _
 
+from experiment.actions.question import DropdownQuestion, RadiosQuestion, TextQuestion
 
 region_choices = {
     'HD': '华东（山东、江苏、安徽、浙江、福建、江西、上海）',
@@ -16,39 +16,31 @@ region_choices = {
 }
 
 OTHER = [
-
-    ChoiceQuestion(
+    DropdownQuestion(
         key='dgf_region_of_origin',
-        view='DROPDOWN',
-        question=_(
-            "In which region did you spend the most formative years of your childhood and youth?"),
+        text=_(
+            "In which region did you spend the most formative years of your childhood and youth?"
+        ),
         choices=region_choices,
     ),
-
-    ChoiceQuestion(
-        view='DROPDOWN',
+    DropdownQuestion(
         key='dgf_region_of_residence',
-        question=_("In which region do you currently reside?"),
+        text=_("In which region do you currently reside?"),
         choices=region_choices,
     ),
-
-    ChoiceQuestion(
+    RadiosQuestion(
         key='dgf_gender_identity_zh',
-        view='RADIOS',
-        question="您目前对自己的性别认识?",
+        text="您目前对自己的性别认识?",
         choices={
             'male': "男",
             'Female': "女",
             'Others': "其他",
-            'no_answer': "不想回答"
-        }
+            'no_answer': "不想回答",
+        },
     ),
-
-    ChoiceQuestion(
-        view='DROPDOWN',
+    DropdownQuestion(
         key='dgf_genre_preference_zh',
-        question=_(
-            "To which group of musical genres do you currently listen most?"),
+        text=_("To which group of musical genres do you currently listen most?"),
         choices={
             'unpretentious': _("Pop/Country/Religious"),
             'Chinese artistic': _("Folk/Mountain songs"),
@@ -57,17 +49,13 @@ OTHER = [
             'intense': _("Rock/Punk/Metal"),
             'mellow': _("Dance/Electronic/New Age"),
             'contemporary': _("Hip-hop/R&B/Funk"),
-        }
+        },
     ),
-
-    Question(
-            key='contact',
-            explainer=_(
-                "Thank you so much for your feedback! Feel free to include your contact information if you would like a reply or skip if you wish to remain anonymous."
-            ),
-            question=_(
-                "Contact (optional):"
-            ),
-            is_skippable=True
-        )
+    TextQuestion(
+        key='contact',
+        explainer=_(
+            "Thank you so much for your feedback! Feel free to include your contact information if you would like a reply or skip if you wish to remain anonymous."
+        ),
+        text=_("Contact (optional):"),
+    ),
 ]

@@ -44,7 +44,7 @@ class Categorization(BaseRules):
 
         if not json_data.get("phase"):
             actions = [self.get_intro_explainer()]
-            questions = self.get_open_questions(session)
+            questions = self.get_profile_questions(session)
             if questions:
                 actions.extend(questions)
             json_data = self.plan_experiment(session)
@@ -474,6 +474,5 @@ repeat_training_or_quit = ButtonArrayQuestion(
     key="failed_training",
     text="You seem to have difficulties reacting correctly to the sound sequences. Is your audio on? If you want to give it another try, click on Ok.",
     choices={"continued": "OK", "aborted": "Exit"},
-    skippable=False,
     style=[ButtonStyle.LARGE_GAP, ButtonStyle.LARGE_TEXT, ColorScheme.BOOLEAN],
 )

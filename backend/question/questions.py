@@ -1,26 +1,35 @@
+import random
+
 from django.conf import settings
 from django.utils import translation
 
-from .demographics import DEMOGRAPHICS, EXTRA_DEMOGRAPHICS, DEMOGRAPHICS_OTHER
-from .goldsmiths import MSI_F1_ACTIVE_ENGAGEMENT, MSI_F2_PERCEPTUAL_ABILITIES, MSI_F3_MUSICAL_TRAINING, MSI_F4_SINGING_ABILITIES, MSI_F5_EMOTIONS, MSI_OTHER, MSI_FG_GENERAL, MSI_ALL
-from .languages import LANGUAGE, LANGUAGE_OTHER
-from .musicgens import MUSICGENS_17_W_VARIANTS
-from .stomp import STOMP
-from .tipi import TIPI
-from .other import OTHER
-from .thatsmysong import THATS_MY_SONG_QUESTIONS_FIXED, THATS_MY_SONG_QUESTIONS_RANDOM
-import random
-from .models import QuestionGroup, Question, Choice
-from experiment.actions.form import (
-    BooleanQuestion,
-    ChoiceQuestion,
-    LikertQuestion,
-    LikertQuestionIcon,
-    NumberQuestion,
-    TextQuestion,
-    AutoCompleteQuestion,
+from question.catalogues.demographics import (
+    DEMOGRAPHICS,
+    EXTRA_DEMOGRAPHICS,
+    DEMOGRAPHICS_OTHER,
 )
+from question.catalogues.goldsmiths import (
+    MSI_F1_ACTIVE_ENGAGEMENT,
+    MSI_F2_PERCEPTUAL_ABILITIES,
+    MSI_F3_MUSICAL_TRAINING,
+    MSI_F4_SINGING_ABILITIES,
+    MSI_F5_EMOTIONS,
+    MSI_OTHER,
+    MSI_FG_GENERAL,
+    MSI_ALL,
+)
+from question.catalogues.languages import LANGUAGE, LANGUAGE_OTHER
+from question.catalogues.musicgens import MUSICGENS_17_W_VARIANTS
+from question.catalogues.stomp import STOMP
+from question.catalogues.tipi import TIPI
+from question.catalogues.other import OTHER
+from question.catalogues.vanderbilt import (
+    THATS_MY_SONG_QUESTIONS_FIXED,
+    THATS_MY_SONG_QUESTIONS_RANDOM,
+)
+from question.models import QuestionGroup, Question, Choice
 from question.profile_scoring_rules import PROFILE_SCORING_RULES
+from question.utils import create_question_db
 
 # Default QuestionGroups used by command createquestions
 QUESTION_GROUPS_DEFAULT = {
@@ -98,7 +107,9 @@ def create_default_questions(question_model=Question, choice_model=Choice, quest
         for question in questions:
 
             if not question_model.objects.filter(key = question.key).exists():
-                q = question_model.objects.create(key = question.key, question = question.question, editable = False)
+                q = question_model.objects.create(
+                    key=question.key, question=question.text, editable=False
+                )
 
                 # Create translatable fields
                 for lang in settings.MODELTRANSLATION_LANGUAGES:
@@ -106,11 +117,11 @@ def create_default_questions(question_model=Question, choice_model=Choice, quest
                     translation.activate(lang)
 
                     # This should work, but doesn't
-                    #q.question = str(question.question)
-                    #q.explainer = str(question.explainer)
+                    # q.question = str(question.question)
+                    # q.explainer = str(question.explainer)
 
                     if hasattr(q, "question_"+lang_field):
-                        setattr(q, "question_"+lang_field, str(question.question))
+                        setattr(q, "question_" + lang_field, str(question.text))
                         setattr(q, "explainer_"+lang_field, str(question.explainer))
 
                 q.save()
@@ -123,7 +134,7 @@ def create_default_questions(question_model=Question, choice_model=Choice, quest
                         for lang in settings.MODELTRANSLATION_LANGUAGES:
                             lang_field = lang.replace("-","_")
                             translation.activate(lang)
-                            #choice.text = str(question.choices[key])
+                            # choice.text = str(question.choices[key])
                             if hasattr(choice, "text_"+lang_field):
                                 setattr(choice,"text_"+lang_field, str(question.choices[key]))
                         choice.save()
@@ -180,10 +191,10 @@ def populate_translation_fields(lang, question_model=Question):
             q = question_model.objects.get(key = question.key)
 
             # This should work, but doesn't
-            #q.question = str(question.question)
-            #q.explainer = str(question.explainer)
+            # q.question = str(question.question)
+            # q.explainer = str(question.explainer)
 
-            setattr(q, "question_"+lang_field, str(question.question))
+            setattr(q, "question_" + lang_field, str(question.text))
             setattr(q, "explainer_"+lang_field, str(question.explainer))
 
             q.save()
@@ -197,74 +208,3 @@ def populate_translation_fields(lang, question_model=Question):
                     choice.save()
 
     translation.activate('en')
-
-
-def create_question_db(key):
-    """ Creates experiment.actions.form.question object from a Question in the database with key
-
-    Args:
-        key: Key of Question
-
-    Retuns:
-        experiment.actions.form.Question object
-    """
-
-    question = Question.objects.get(key=key)
-
-    choices = {}
-    for choice in question.choice_set.all():
-        choices[choice.key] = choice.text
-
-    if question.type == "LikertQuestion":
-        return LikertQuestion(
-            key=question.key,
-            question=question.question,
-            explainer = question.explainer,
-            scale_steps = question.scale_steps,
-            choices = choices
-            )
-    elif question.type == "LikertQuestionIcon":
-        return LikertQuestionIcon(
-            key=question.key,
-            question=question.question,
-            explainer = question.explainer,
-            scale_steps = question.scale_steps
-            )
-    elif question.type == "NumberQuestion":
-        return NumberQuestion(
-            key=question.key,
-            question=question.question,
-            explainer = question.explainer,
-            min_value = question.min_value,
-            max_value = question.max_value
-            )
-    elif question.type == "TextQuestion":
-        return TextQuestion(
-            key=question.key,
-            question=question.question,
-            explainer = question.explainer,
-            max_length=question.max_length
-            )
-    elif question.type == "BooleanQuestion":
-        return BooleanQuestion(
-            key=question.key,
-            question=question.question,
-            explainer = question.explainer,
-            choices = choices
-            )
-    elif question.type == "ChoiceQuestion":
-        return ChoiceQuestion(
-            key=question.key,
-            question=question.question,
-            explainer = question.explainer,
-            choices = choices,
-            min_values=question.min_values,
-            view=question.view
-            )
-    elif question.type == "AutoCompleteQuestion":
-        return AutoCompleteQuestion(
-            key=question.key,
-            question=question.question,
-            explainer = question.explainer,
-            choices = choices
-            )

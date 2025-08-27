@@ -6,14 +6,19 @@ from experiment.actions.explainer import Explainer
 from experiment.actions.final import Final
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
-from experiment.models import Experiment, Phase, Block, ExperimentTranslatedContent, SocialMediaConfig
-from question.musicgens import MUSICGENS_17_W_VARIANTS
+from experiment.models import (
+    Experiment,
+    Phase,
+    Block,
+    ExperimentTranslatedContent,
+    SocialMediaConfig,
+)
 from participant.models import Participant
-from question.catalogues.questions import get_questions_from_series
+from question.catalogues.musicgens import MUSICGENS_17_W_VARIANTS
+from question.questions import create_default_questions, get_questions_from_series
 from result.models import Result
 from section.models import Playlist, Section, Song
 from session.models import Session
-from question.catalogues.questions import create_default_questions
 
 
 class HookedTest(TestCase):
@@ -327,7 +332,7 @@ class HookedTest(TestCase):
         self.assertEqual(actions[0].feedback_form.form[0].key, "audio_check1")
 
         # check that question trials are as expected
-        question_trials = rules.get_open_questions(session)
+        question_trials = rules.get_profile_questions(session)
         total_questions = get_questions_from_series(block.questionseries_set.all())
         self.assertEqual(len(question_trials), len(total_questions))
         keys = [q.feedback_form.form[0].key for q in question_trials]

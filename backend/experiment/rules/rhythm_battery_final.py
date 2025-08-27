@@ -45,7 +45,7 @@ class RhythmBatteryFinal(BaseRules):
         )
 
     def next_round(self, session):
-        questions = self.get_open_questions(session)
+        questions = self.get_profile_questions(session)
         if questions:
             return [self.get_intro_explainer(), *questions]
         else:
