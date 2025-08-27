@@ -30,9 +30,19 @@ class ResultTest(TestCase):
         session.save()
         logging.disable(logging.CRITICAL)
 
-    def test_get(self):
+    def test_get_non_existing(self):
         response = self.client.get('/result/speed_swallow/')
-        assert response.status_code == 204
+        self.assertEqual(response.status_code, 204)
+
+    def test_get_multiple(self):
+        Result.objects.create(
+            participant=self.participant, question_key="duplicate_key"
+        )
+        Result.objects.create(
+            participant=self.participant, question_key="duplicate_key"
+        )
+        response = self.client.get('/result/duplicate_key/')
+        self.assertEqual(response.status_code, 409)
 
     def test_create(self):
         result = Result.objects.create(

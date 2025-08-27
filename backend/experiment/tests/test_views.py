@@ -8,9 +8,10 @@ from experiment.models import (
     Block,
     BlockTranslatedContent,
     Experiment,
+    ExperimentTranslatedContent,
+    Feedback,
     Phase,
     SocialMediaConfig,
-    ExperimentTranslatedContent,
 )
 from experiment.rules.rhythm_battery_intro import RhythmBatteryIntro
 from participant.models import Participant
@@ -166,7 +167,7 @@ class TestExperimentViews(TestCase):
         serialized_coll_1 = serialize_phase(
             self.intermediate_phase, self.participant, 0
         )
-        total_score_1 = serialized_coll_1["totalScore"]
+        total_score_1 = serialized_coll_1["accumulatedScore"]
         self.assertEqual(total_score_1, 8)
         Session.objects.create(
             block=self.block3, participant=self.participant, finished_at=timezone.now(), final_score=8
@@ -174,7 +175,7 @@ class TestExperimentViews(TestCase):
         serialized_coll_2 = serialize_phase(
             self.intermediate_phase, self.participant, 0
         )
-        total_score_2 = serialized_coll_2["totalScore"]
+        total_score_2 = serialized_coll_2["accumulatedScore"]
         self.assertEqual(total_score_2, 16)
 
     def test_experiment_get_translated_content(self):
@@ -277,6 +278,20 @@ class TestExperimentViews(TestCase):
         self.assertEqual(len(response.json()["theme"]["header"]["score"]), 3)
         self.assertEqual(response.json()["rounds"], 3)
         self.assertEqual(response.json()["bonus_points"], 42)
+
+    def test_post_feedback(self):
+        request = {"feedback": "I have a lot of feedback here"}
+        self.client.post("/experiment/block/block1/feedback/", request)
+        self.assertEqual(Feedback.objects.count(), 1)
+        response = self.client.post(
+            "/experiment/block/nonexisting-slug/feedback/", request
+        )
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(Feedback.objects.count(), 1)
+        request = {"feedback": ""}
+        response = self.client.post("/experiment/block/block1/feedback/", request)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Feedback.objects.count(), 1)
 
 
 def create_theme_config(name="test_theme") -> ThemeConfig:

@@ -29,6 +29,10 @@
         justify-content: center;
         align-items: center;
 
+        .aha__circle {
+            margin-top: 50px;
+        }
+
         .aha__circle .circle-percentage {
             animation-duration: 2s;
             animation-fill-mode: both;

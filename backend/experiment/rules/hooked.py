@@ -134,9 +134,9 @@ class Hooked(BaseRules):
             if round_number in range(1, self.question_offset):
                 actions.extend(self.next_song_sync_action(session, round_number))
             elif round_number in range(self.question_offset, heard_before_offset):
-                question_trial = self.get_single_question(session)
+                question_trial = self.get_profile_question_trials(session)
                 if question_trial:
-                    actions.append(question_trial)
+                    actions.extend(question_trial)
                 actions.extend(self.next_song_sync_action(session, round_number))
 
             # HeardBefore rounds
@@ -145,9 +145,9 @@ class Hooked(BaseRules):
                 actions.append(self.heard_before_explainer())
                 actions.append(self.next_heard_before_action(session, round_number))
             elif round_number > heard_before_offset:
-                question_trial = self.get_single_question(session)
+                question_trial = self.get_profile_question_trials(session)
                 if question_trial:
-                    actions.append(question_trial)
+                    actions.extend(question_trial)
                 actions.append(self.next_heard_before_action(session, round_number))
 
         return actions
@@ -179,12 +179,12 @@ class Hooked(BaseRules):
                     n_sync_guessed += 1
                     json_data = result.json_data
                     sync_time += json_data.get("decision_time")
-                    if result.score > 0:
+                    if result.score and result.score > 0:
                         n_sync_correct += 1
             else:
                 if result.expected_response == "old":
                     n_old_new_expected += 1
-                    if result.score > 0:
+                    if result.score and result.score > 0:
                         n_old_new_correct += 1
 
         score_message = "Well done!" if session.final_score > 0 else "Too bad!"

@@ -43,7 +43,7 @@ const AutoPlay = ({ instruction, showAnimation, playSection, startedPlaying, fin
                         <div>
                             <CountDown duration={responseTime} running={running} />
                             <div className="aha__histogram-container">
-                                <Histogram running={running} />
+                                <Histogram running={running} bars={7}/>
                             </div>
                         </div>
                         : <div className="stationary">

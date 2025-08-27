@@ -5,6 +5,7 @@ on:
     branches:
       - develop
       - main
+      - tunetwins
     tags:
       - '*'
   workflow_dispatch:
@@ -12,6 +13,98 @@ on:
     types: [created]
 
 jobs:
+  deploy-tunetwins:
+    name: Deploy to dedicated TuneTwins server
+    environment: TuneTwins
+    runs-on: tunetwins
+
+    if: github.ref == 'refs/heads/tunetwins' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/tunetwins')
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    env:
+
+      # Variables
+      AML_ALLOWED_HOSTS: ${{ vars.AML_ALLOWED_HOSTS }}
+      AML_CORS_ORIGIN_WHITELIST: ${{ vars.AML_CORS_ORIGIN_WHITELIST }}
+      CSRF_TRUSTED_ORIGINS: ${{ vars.CSRF_TRUSTED_ORIGINS }}
+      AML_DEBUG: ${{ vars.AML_DEBUG }}
+      AML_LOCATION_PROVIDER: ${{ vars.AML_LOCATION_PROVIDER }}
+      AML_SUBPATH: ${{ vars.AML_SUBPATH }}
+      DJANGO_SETTINGS_MODULE: ${{ vars.DJANGO_SETTINGS_MODULE }}
+      SENTRY_ENVIRONMENT: "tunetwins"
+      SQL_DATABASE: ${{ vars.SQL_DATABASE }}
+      SQL_HOST: ${{ vars.SQL_HOST }}
+      SQL_PORT: ${{ vars.SQL_PORT }}
+      FRONTEND_API_ROOT: ${{ vars.FRONTEND_API_ROOT }}
+      FRONTEND_EXPERIMENT_SLUG: ${{ vars.FRONTEND_EXPERIMENT_SLUG }}
+      FRONTEND_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
+      FRONTEND_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
+      FRONTEND_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
+      FRONTEND_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
+      FRONTEND_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
+      FRONTEND_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
+      FRONTEND_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
+      FRONTEND_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
+      FRONTEND_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
+
+      # Secrets
+      AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
+      SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+      SQL_USER: ${{ secrets.SQL_USER }}
+      SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+      FRONTEND_SENTRY_DSN: ${{ secrets.FRONTEND_SENTRY_DSN }}
+      DJANGO_SUPERUSER_USERNAME: ${{ secrets.DJANGO_SUPERUSER_USERNAME }}
+      DJANGO_SUPERUSER_PASSWORD: ${{ secrets.DJANGO_SUPERUSER_PASSWORD }}
+      DJANGO_SUPERUSER_EMAIL: ${{ secrets.DJANGO_SUPERUSER_EMAIL }}
+
+      # Prevent podman services from exiting after startup
+      RUNNER_TRACKING_ID: ""
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create .env file
+        run: |
+          echo Deploying branch ${{ github.ref }} with commit ${{ github.sha }} to tunetwins environment
+          touch .env
+          echo "VITE_API_ROOT=$FRONTEND_API_ROOT" >> .env
+          echo "VITE_EXPERIMENT_SLUG=$FRONTEND_EXPERIMENT_SLUG" >> .env
+          echo "VITE_AML_HOME=$FRONTEND_AML_HOME" >> .env
+          echo "VITE_LOGO_URL=$FRONTEND_LOGO_URL" >> .env
+          echo "VITE_HTML_FAVICON=$FRONTEND_HTML_FAVICON" >> .env
+          echo "VITE_HTML_PAGE_TITLE=$FRONTEND_HTML_PAGE_TITLE" >> .env
+          echo "VITE_HTML_OG_DESCRIPTION=$FRONTEND_HTML_OG_DESCRIPTION" >> .env
+          echo "VITE_HTML_OG_IMAGE=$FRONTEND_HTML_OG_IMAGE" >> .env
+          echo "VITE_HTML_OG_TITLE=$FRONTEND_HTML_OG_TITLE" >> .env
+          echo "VITE_HTML_OG_URL=$FRONTEND_HTML_OG_URL" >> .env
+          echo "VITE_HTML_BODY_CLASS=$FRONTEND_HTML_BODY_CLASS" >> .env
+          echo "VITE_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
+          cp .env frontend/.env
+      - name: Build Podman images
+        run: podman-compose -f docker-compose-deploy.yml build
+      - name: Shut down running containers
+        run: podman compose -f docker-compose-deploy.yml down
+      - name: Deploy Podman images
+        run: podman-compose -f docker-compose-deploy.yml up -d
+      - name: Notify Sentry of new release
+        run: |
+            curl -X POST "https://sentry.io/api/0/organizations/uva-aml/releases/" \
+            -H "Authorization: Bearer ${{ secrets.SENTRY_AUTH_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+                "version": "${{ github.sha }}",
+                "refs": [{
+                    "repository": "Amsterdam-Music-Lab/MUSCLE",
+                    "commit": "${{ github.sha }}"
+                }],
+                "projects": ["muscle-frontend", "muscle-backend"],
+                "environment": "tunetwins"
+            }'
+      - name: Prune old images
+        run: podman image prune -a -f
+      - name: Check Podman images
+        run: podman-compose -f docker-compose-deploy.yml ps
+      - name: Check logs
+        run: podman-compose -f docker-compose-deploy.yml logs
 
   deploy-test:
     name: Deploy to test environment
@@ -19,7 +112,7 @@ jobs:
     runs-on: tst
 
     # this job runs only on commits to the develop branch or when manually triggered for a branch other than main
-    if: github.ref == 'refs/heads/develop' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main')
+    if: github.ref == 'refs/heads/develop' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main' && github.ref != 'refs/heads/tunetwins')
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:

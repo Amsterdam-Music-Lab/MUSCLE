@@ -85,12 +85,9 @@ def consent(request: HttpRequest) -> JsonResponse:
     '''
     participant = get_participant(request)
     data = json.loads(request.POST.get('json_data'))
-    result = Result.objects.create(
-        participant=participant,
-        question_key=data.get('key'),
-        given_response='agreed'
+    Result.objects.get_or_create(
+        participant=participant, question_key=data.get('key'), given_response='agreed'
     )
-    result.save()
     return JsonResponse({'status': 'ok'})
 
 
@@ -104,7 +101,7 @@ def current_profile(request: HttpRequest) -> JsonResponse:
         JsonResponse with serialized result objects
     """
     participant = get_participant(request)
-    return JsonResponse(participant.profile_object(), json_dumps_params={'indent': 4})
+    return JsonResponse(participant.profile_dict(), json_dumps_params={'indent': 4})
 
 
 def get_result(
@@ -123,7 +120,14 @@ def get_result(
     try:
         result = Result.objects.get(question_key=question_key, participant=participant)
     except Result.DoesNotExist:
-        return HttpResponse(status=204)
+        return HttpResponse(
+            status=204,
+        )
+    except Result.MultipleObjectsReturned:
+        return HttpResponse(
+            content="Error: multiple results found",
+            status=409,
+        )
 
     return JsonResponse({"answer": result.given_response},
                         json_dumps_params={'indent': 4})

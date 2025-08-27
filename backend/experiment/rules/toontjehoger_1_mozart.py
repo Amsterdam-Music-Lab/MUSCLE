@@ -89,7 +89,7 @@ class ToontjeHoger1Mozart(BaseRules):
     def get_answer_explainer(self, session, round):
         last_result = session.last_result()
 
-        correct_answer_given = last_result.score > 0
+        correct_answer_given = last_result.score and last_result.score > 0
 
         heading = "Goed gedaan!" if correct_answer_given else "Helaas!"
 

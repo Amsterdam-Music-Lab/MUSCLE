@@ -12,13 +12,6 @@ on:
       - '.github/workflows/docs.yml'
       - '.yarn/**'
       - '.storybook/**'
-  pull_request:
-    paths:
-      - 'frontend/**'
-      - 'backend/docs/**'
-      - '.github/workflows/docs.yml'
-      - '.yarn/**'
-      - '.storybook/**'
 
 permissions:
   contents: read

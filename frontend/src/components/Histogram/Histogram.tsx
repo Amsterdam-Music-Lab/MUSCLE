@@ -108,8 +108,6 @@ const Histogram: React.FC<HistogramProps> = ({
                 backgroundColor,
                 padding: padding ? padding : undefined,
                 borderRadius,
-                display: 'flex',
-                alignItems: 'flex-end',
             }}
         >
             {Array.from({ length: bars }, (_, index) => (
