@@ -91,7 +91,7 @@ class ThatsMySong(Hooked):
             # get list of trials for demographic questions (first 2 questions)
             if session.result_set.filter(question_key="playlist_decades").count() == 0:
                 actions = [self.get_intro_explainer()]
-                questions = self.get_profile_questions(session, cutoff_index=2)
+                questions = self.get_profile_question_trials(session, cutoff_index=2)
                 if questions:
                     for q in questions:
                         actions.append(q)

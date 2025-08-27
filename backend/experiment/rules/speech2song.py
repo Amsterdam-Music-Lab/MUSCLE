@@ -65,7 +65,7 @@ class Speech2Song(BaseRules):
         is_speech = True
         rounds_passed = session.get_rounds_passed(self.counted_result_keys)
         if rounds_passed == 0:
-            question_trials = self.get_profile_questions(session)
+            question_trials = self.get_profile_question_trials(session)
             if question_trials:
                 session.save_json_data({'quesionnaire': True})
                 return [self.get_intro_explainer(), *question_trials]
