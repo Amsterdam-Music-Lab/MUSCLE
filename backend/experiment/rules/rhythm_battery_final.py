@@ -1,8 +1,9 @@
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
-from question.questions import QUESTION_GROUPS
-from experiment.actions import Explainer, Final, Step
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
+from question.catalogues.goldsmiths import MSI_F3_MUSICAL_TRAINING
 
 from .base import BaseRules
 
@@ -17,8 +18,8 @@ class RhythmBatteryFinal(BaseRules):
         self.question_series = [
             {
                 "name": "MSI_F3_MUSICAL_TRAINING",
-                "keys": QUESTION_GROUPS["MSI_F3_MUSICAL_TRAINING"],
-                "randomize": True
+                "keys": [question.key for question in MSI_F3_MUSICAL_TRAINING],
+                "randomize": True,
             },
             {
                 "name": "Demographics",
@@ -28,9 +29,9 @@ class RhythmBatteryFinal(BaseRules):
                     'dgf_education_gold_msi',
                     'dgf_highest_qualification_expectation',
                     'dgf_country_of_residence',
-                    'dgf_country_of_origin'
+                    'dgf_country_of_origin',
                 ],
-                "randomize": False
+                "randomize": False,
             },
         ]
 

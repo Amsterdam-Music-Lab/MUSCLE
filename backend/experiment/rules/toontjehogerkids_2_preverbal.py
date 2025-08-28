@@ -1,13 +1,16 @@
 import logging
-from django.template.loader import render_to_string
-
-from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Explainer, Step, Score, Final, Info
-from .toontjehoger_2_preverbal import ToontjeHoger2Preverbal
 from os.path import join
 
-logger = logging.getLogger(__name__)
+from django.template.loader import render_to_string
 
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
+from experiment.actions.info import Info
+from experiment.actions.score import Score
+from .toontjehoger_1_mozart import toontjehoger_ranks
+from .toontjehoger_2_preverbal import ToontjeHoger2Preverbal
+
+logger = logging.getLogger(__name__)
 
 class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
     ID = "TOONTJE_HOGER_KIDS_2_PREVERBAL"

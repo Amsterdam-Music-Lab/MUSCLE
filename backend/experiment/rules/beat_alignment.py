@@ -4,10 +4,15 @@ import copy
 from django.utils.translation import gettext_lazy as _
 
 from .base import BaseRules
-from experiment.actions import Trial, Explainer, Step
-from experiment.actions.form import ChoiceQuestion, Form
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay
-from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
+from experiment.actions.question import ButtonArrayQuestion
+from experiment.actions.trial import Trial
+from experiment.actions.utils import (
+    final_action_with_optional_button,
+    render_feedback_trivia,
+)
 from result.utils import prepare_result
 from section.models import Playlist
 
@@ -115,18 +120,20 @@ class BeatAlignment(BaseRules):
         condition = section.song.name.split('_')[-1]
         expected_response = 'ON' if condition == 'on' else 'OFF'
         key = 'aligned'
-        question = ChoiceQuestion(
-            question=_(
-                "Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?"),
+        question = ButtonArrayQuestion(
+            text=_("Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?"),
             key=key,
             choices={
                 'ON': _('ALIGNED TO THE BEAT'),
-                'OFF': _('NOT ALIGNED TO THE BEAT')
+                'OFF': _('NOT ALIGNED TO THE BEAT'),
             },
-            view='BUTTON_ARRAY',
-            result_id=prepare_result(key, session, section=section,
-                expected_response=expected_response, scoring_rule='CORRECTNESS'),
-            submits=True
+            result_id=prepare_result(
+                key,
+                session,
+                section=section,
+                expected_response=expected_response,
+                scoring_rule='CORRECTNESS',
+            ),
         )
         form = Form([question])
         playback = Autoplay([section])

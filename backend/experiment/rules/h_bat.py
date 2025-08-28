@@ -6,11 +6,16 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import BaseRules
 from .practice import PracticeMixin
-from experiment.actions import Trial, Explainer, Step
-from experiment.actions.form import ChoiceQuestion, Form
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay
-from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
-from experiment.actions.utils import get_average_difference_level_based
+from experiment.actions.question import ButtonArrayQuestion
+from experiment.actions.trial import Trial
+from experiment.actions.utils import (
+    final_action_with_optional_button,
+    get_average_difference_level_based,
+    render_feedback_trivia,
+)
 from experiment.rules.util.staircasing import register_turnpoint
 from result.utils import prepare_result
 from section.models import Playlist, Section
@@ -89,9 +94,9 @@ class HBat(BaseRules, PracticeMixin):
             return None
 
         key = "slower_or_faster"
-        question = ChoiceQuestion(
+        question = ButtonArrayQuestion(
             key=key,
-            question=self.get_trial_question(),
+            text=self.get_trial_question(),
             choices={
                 self.first_condition: self.first_condition_i18n,
                 self.second_condition: self.second_condition_i18n,
@@ -103,8 +108,6 @@ class HBat(BaseRules, PracticeMixin):
                 expected_response=trial_condition,
                 scoring_rule="CORRECTNESS",
             ),
-            view="BUTTON_ARRAY",
-            submits=True,
         )
         playback = Autoplay([section])
         form = Form([question])

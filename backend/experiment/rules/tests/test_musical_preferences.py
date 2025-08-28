@@ -2,11 +2,11 @@ from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from experiment.rules.musical_preferences import MusicalPreferences
-from experiment.actions import Trial
-from experiment.models import Experiment, Phase, Block, ExperimentTranslatedContent, SocialMediaConfig
+from experiment.actions.trial import Trial
+from experiment.models import Block
 from participant.models import Participant
 from result.models import Result
-from section.models import Playlist, Section, Song
+from section.models import Playlist
 from session.models import Session
 
 

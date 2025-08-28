@@ -1,9 +1,6 @@
 from django.db import migrations
+
 from question.questions import create_default_questions
-from question.models import QuestionInSeries, Question
-from django.core import management
-from django.utils import translation
-import modeltranslation
 
 def recreate_default_questions(apps, schema_editor):
 
@@ -41,10 +38,3 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RunPython(recreate_default_questions, reverse_code=migrations.RunPython.noop),
     ]
-
-
-
-
-
-
-    

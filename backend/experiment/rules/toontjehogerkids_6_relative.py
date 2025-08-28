@@ -1,10 +1,14 @@
 import logging
-from django.template.loader import render_to_string
 from os.path import join
+
+from django.template.loader import render_to_string
+
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
+from experiment.actions.score import Score
+from experiment.actions.utils import get_current_experiment_url
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_6_relative import ToontjeHoger6Relative
-from experiment.actions import Explainer, Step, Score, Final, Info
-from experiment.actions.utils import get_current_experiment_url
 
 logger = logging.getLogger(__name__)
 

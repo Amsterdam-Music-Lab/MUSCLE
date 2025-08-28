@@ -2,16 +2,21 @@ import logging
 from django.template.loader import render_to_string
 from os.path import join
 from section.models import Playlist
-from experiment.actions import Trial, Explainer, Step, Score, Final, Info, HTML
-from experiment.actions.form import ButtonArrayQuestion, Form
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
+from experiment.actions.form import Form
+from experiment.actions.html import HTML
+from experiment.actions.info import Info
 from experiment.actions.playback import Autoplay
-from experiment.actions.styles import ColorScheme
-from experiment.models import Session
-from .base import BaseRules
-from experiment.utils import non_breaking_spaces
+from experiment.actions.question import ButtonArrayQuestion
+from experiment.actions.score import Score
+from experiment.actions.trial import Trial
 from experiment.actions.utils import get_current_experiment_url
-
+from experiment.models import Session
 from result.utils import prepare_result
+from theme.styles import ColorScheme
+from .base import BaseRules
+
 
 logger = logging.getLogger(__name__)
 
@@ -61,7 +66,7 @@ class ToontjeHoger1Mozart(BaseRules):
                 session,
                 section_group="1",
                 image_url=self.QUESTION_URL1,
-                question=self.get_task_explainer(),
+                text=self.get_task_explainer(),
                 expected_response="B",
             )
             # No combine_actions because of inconsistent next_round array wrapping in first round
@@ -75,7 +80,7 @@ class ToontjeHoger1Mozart(BaseRules):
                 session,
                 section_group="2",
                 image_url=self.QUESTION_URL2,
-                question=self.get_task_explainer(),
+                text=self.get_task_explainer(),
                 expected_response="B",
             )
             return [*answer_explainer, *score, *round]
@@ -89,7 +94,7 @@ class ToontjeHoger1Mozart(BaseRules):
     def get_answer_explainer(self, session, round):
         last_result = session.last_result()
 
-        correct_answer_given = last_result.score and last_result.score > 0
+        correct_answer_given = last_result.score > 0
 
         heading = "Goed gedaan!" if correct_answer_given else "Helaas!"
 
@@ -154,7 +159,7 @@ class ToontjeHoger1Mozart(BaseRules):
         # Question
         key = "expected_shape"
         question = ButtonArrayQuestion(
-            question=question,
+            text=question,
             key=key,
             choices={
                 "A": "A",
@@ -167,7 +172,6 @@ class ToontjeHoger1Mozart(BaseRules):
             result_id=prepare_result(
                 key, session, section=section, expected_response=expected_response
             ),
-            submits=True,
             style=[ColorScheme.TOONTJEHOGER],
         )
         form = Form([question])

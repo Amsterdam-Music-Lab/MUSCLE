@@ -1,11 +1,16 @@
 import logging
-import random
 from os.path import join
+import random
+
 from django.template.loader import render_to_string
+
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
+from experiment.actions.info import Info
+from experiment.actions.score import Score
+from experiment.actions.utils import get_current_experiment_url
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_5_tempo import ToontjeHoger5Tempo
-from experiment.actions import Explainer, Step, Score, Final, Info
-from experiment.actions.utils import get_current_experiment_url
 
 logger = logging.getLogger(__name__)
 

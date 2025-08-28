@@ -1,19 +1,24 @@
 import logging
 from os.path import join
+
 from django.template.loader import render_to_string
 
-from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Explainer, Step, Score, Final, Info, Trial
+from experiment.actions.explainer import Explainer, Step
 from experiment.actions.playback import PlayButton
-from experiment.actions.form import DropdownQuestion, Form
+from experiment.actions.final import Final
+from experiment.actions.form import Form
+from experiment.actions.info import Info
+from experiment.actions.question import DropdownQuestion
+from experiment.actions.score import Score
+from experiment.actions.trial import Trial
 from experiment.actions.utils import get_current_experiment_url
 from experiment.utils import non_breaking_spaces
-from .toontjehoger_3_plink import ToontjeHoger3Plink
+from result.utils import prepare_result
 from section.models import Section
 from session.models import Session
+from .toontjehoger_1_mozart import toontjehoger_ranks
+from .toontjehoger_3_plink import ToontjeHoger3Plink
 
-
-from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
@@ -84,7 +89,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         question1 = DropdownQuestion(
             key="plink",
             choices=choices,
-            question="Kies de artiest en de titel van het nummer",
+            text="Kies de artiest en de titel van het nummer",
             result_id=prepare_result("plink", session, section=section, expected_response=expected_response),
         )
         next_round.append(

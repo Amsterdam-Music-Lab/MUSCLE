@@ -7,7 +7,9 @@ from participant.models import Participant
 from result.models import Result
 from section.models import Playlist, Section, Song
 from session.models import Session
-from experiment.actions import Explainer, Trial, Final
+from experiment.actions.explainer import Explainer
+from experiment.actions.final import Final
+from experiment.actions.trial import Trial
 from experiment.rules.congosamediff import CongoSameDiff
 
 
@@ -68,11 +70,17 @@ class CongoSameDiffTest(TestCase):
 
         practice_action = congo_same_diff.next_round(self.session)
         self.assertIsInstance(practice_action, Trial)
-        self.assertEqual(practice_action.feedback_form.form[0].question, 'Is the third sound the SAME or DIFFERENT as the first two sounds?')
+        self.assertEqual(
+            practice_action.feedback_form.form[0].text,
+            'Is the third sound the SAME or DIFFERENT as the first two sounds?',
+        )
 
         next_action = congo_same_diff.next_round(self.session)
         self.assertIsInstance(next_action, Trial)
-        self.assertEqual(next_action.feedback_form.form[0].question, 'Did the participant complete the practice round correctly?')
+        self.assertEqual(
+            next_action.feedback_form.form[0].text,
+            'Did the participant complete the practice round correctly?',
+        )
 
         # check that if there is no `practice_done` result with `given_answer=YES`, we get another practice round
         practice_action = congo_same_diff.next_round(self.session)
@@ -91,9 +99,9 @@ class CongoSameDiffTest(TestCase):
         non_practice_action = congo_same_diff.next_round(self.session)
         self.assertIsInstance(non_practice_action, Trial)
         self.assertEqual(
-            non_practice_action.feedback_form.form[0].question,
-            'Is the third sound the SAME or DIFFERENT as the first two sounds?'
-            )
+            non_practice_action.feedback_form.form[0].text,
+            'Is the third sound the SAME or DIFFERENT as the first two sounds?',
+        )
         self.assertIn('NORMAL', non_practice_action.feedback_form.form[0].key)
 
     def test_get_next_trial(self):
@@ -104,7 +112,10 @@ class CongoSameDiffTest(TestCase):
         is_practice = True
         trial_action = congo_same_diff.get_next_trial(self.session, section, trial_index, len(subset), is_practice)
         assert isinstance(trial_action, Trial)
-        assert trial_action.feedback_form.form[0].question == 'Is the third sound the SAME or DIFFERENT as the first two sounds?'
+        assert (
+            trial_action.feedback_form.form[0].text
+            == 'Is the third sound the SAME or DIFFERENT as the first two sounds?'
+        )
 
     def test_get_final_round(self):
         congo_same_diff = CongoSameDiff()
