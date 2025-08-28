@@ -156,7 +156,7 @@ class Hooked(BaseRules):
             elif round_number in range(self.question_offset, heard_before_offset):
                 question_trial = self.get_profile_question_trials(session)
                 if question_trial:
-                    actions.append(question_trial)
+                    actions.extend(question_trial)
                 actions.extend(self.next_song_sync_action(session, round_number))
 
             # HeardBefore rounds
@@ -167,7 +167,7 @@ class Hooked(BaseRules):
             elif round_number > heard_before_offset:
                 question_trial = self.get_profile_question_trials(session)
                 if question_trial:
-                    actions.append(question_trial)
+                    actions.extend(question_trial)
                 actions.append(self.next_heard_before_action(session, round_number))
 
         return actions
