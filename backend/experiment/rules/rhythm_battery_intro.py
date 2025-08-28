@@ -49,7 +49,8 @@ class RhythmBatteryIntro(BaseRules):
                         result_id=result_pk,
                         style=[ColorScheme.BOOLEAN],
                     )
-                ]
+                ],
+                submit_label="",
             )
         elif round_number == 1:
             key = 'internet_connection'

@@ -110,7 +110,7 @@ class HBat(BaseRules, PracticeMixin):
             ),
         )
         playback = Autoplay([section])
-        form = Form([question])
+        form = Form([question], submit_label="")
         view = Trial(
             playback=playback,
             feedback_form=form,

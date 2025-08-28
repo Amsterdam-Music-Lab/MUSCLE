@@ -5,7 +5,6 @@ from django.db.models import QuerySet
 from experiment.actions.question import ChoiceQuestionAction, OpenQuestionAction
 from participant.models import Participant
 from question.models import Question
-from result.utils import prepare_profile_result
 
 
 def question_by_key(key: str, questions: list):
@@ -43,10 +42,7 @@ def get_unanswered_questions(
     for question_obj in question_set:
         if question_obj.key in keys_answered:
             continue
-        profile_result = prepare_profile_result(question_obj.key, participant)
-        question = create_question_db(question_obj)
-        question.result_id = profile_result.id
-        yield question
+        yield question_obj
 
 
 def create_question_db(question: Question):

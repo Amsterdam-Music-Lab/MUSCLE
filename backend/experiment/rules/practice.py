@@ -328,7 +328,7 @@ class PracticeMixin(object):
             ),
         )
         playback = Autoplay([section])
-        form = Form([question])
+        form = Form([question], submit_label="")
         return Trial(
             playback=playback,
             feedback_form=form,

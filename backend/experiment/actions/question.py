@@ -210,7 +210,9 @@ class NumberQuestion(OpenQuestionAction):
         max_value: int = 120,
         **kwargs,
     ) -> None:
-        super().__init__(view="STRING", min_value=min_value, max_value=max_value, **kwargs)
+        super().__init__(
+            view="NUMBER", min_value=min_value, max_value=max_value, **kwargs
+        )
 
 
 class RadiosQuestion(ChoiceQuestionAction):

@@ -118,7 +118,7 @@ class ToontjeHoger4Absolute(BaseRules):
             ),
             style=[ColorScheme.NEUTRAL_INVERTED],
         )
-        form = Form([question])
+        form = Form([question], submit_label="")
 
         trial = Trial(
             playback=playback,

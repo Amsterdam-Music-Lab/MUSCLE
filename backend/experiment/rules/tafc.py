@@ -131,7 +131,7 @@ class TwoAlternativeForced(BaseRules):
             style=button_style,
         )
 
-        feedback_form = Form([question])
+        feedback_form = Form([question], submit_label="")
 
         trial = Trial(
             playback=playback,

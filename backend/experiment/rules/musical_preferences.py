@@ -116,7 +116,8 @@ class MusicalPreferences(BaseRules):
                                     ),
                                     style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
                                 )
-                            ]
+                            ],
+                            submit_label="",
                         )
                         return Trial(
                             playback=playback,

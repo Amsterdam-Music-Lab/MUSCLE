@@ -168,13 +168,12 @@ class ToontjeHoger1Mozart(BaseRules):
                 "D": "D",
                 "E": "E",
             },
-            view="BUTTON_ARRAY",
             result_id=prepare_result(
                 key, session, section=section, expected_response=expected_response
             ),
             style=[ColorScheme.TOONTJEHOGER],
         )
-        form = Form([question])
+        form = Form([question], submit_label="")
 
         image_trial = Trial(
             html=HTML(body='<img src="{}" style="max-height:326px;max-width: 100%;"/>'.format(image_url)),

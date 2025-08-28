@@ -29,7 +29,6 @@ from question.catalogues.vanderbilt import (
 )
 from question.models import QuestionGroup, Question, Choice
 from question.profile_scoring_rules import PROFILE_SCORING_RULES
-from question.utils import create_question_db
 
 # Default QuestionGroups used by command createquestions
 QUESTION_GROUPS_DEFAULT = {

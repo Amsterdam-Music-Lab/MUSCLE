@@ -78,7 +78,6 @@ class NewBlockRuleset(BaseRules):
             text=_("Do you like this song?"),
             key=key,
             result_id=prepare_result(key, session, section=section),
-            submits=True,
         )
         form = Form([question])
         playback = Autoplay([section])

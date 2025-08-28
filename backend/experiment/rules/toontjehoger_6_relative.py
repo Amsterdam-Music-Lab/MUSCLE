@@ -133,7 +133,7 @@ class ToontjeHoger6Relative(BaseRules):
                 key, session, section=section1, expected_response=expected_response
             ),
         )
-        form = Form([question])
+        form = Form([question], submit_label="")
 
         # Player
         playback = Multiplayer(

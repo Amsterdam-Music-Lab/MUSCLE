@@ -12,7 +12,7 @@ export enum QuestionViews {
 
 export default interface Question {
     key: string;
-    question: string;
+    text: string;
     view: QuestionViews;
     value?: any;
     style?: any;
@@ -20,7 +20,7 @@ export default interface Question {
     expected_response?: string;
     choices?: { [key: string]: string };
     submits?: boolean;
-    is_skippable?: boolean;
+    skippable?: boolean;
     min_values?: number;
     min_value?: number;
     max_value?: number;

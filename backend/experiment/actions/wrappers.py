@@ -65,7 +65,7 @@ def two_alternative_forced(
         choices=choices,
         style=button_style,
     )
-    feedback_form = Form([question])
+    feedback_form = Form([question], submit_label="")
     trial = Trial(playback=playback, feedback_form=feedback_form, title=title, config=config)
     return trial
 
@@ -122,7 +122,8 @@ def song_sync(
                         scoring_rule="SONG_SYNC_RECOGNITION",
                     ),
                 )
-            ]
+            ],
+            submit_label="",
         ),
         playback=Autoplay(
             [section],

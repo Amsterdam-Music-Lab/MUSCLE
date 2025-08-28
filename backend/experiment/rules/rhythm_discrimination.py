@@ -148,7 +148,7 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
                 scoring_rule="CORRECTNESS",
             ),
         )
-        form = Form([question])
+        form = Form([question], submit_label="")
         playback = Autoplay([section])
 
         return Trial(

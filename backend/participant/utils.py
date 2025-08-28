@@ -37,7 +37,7 @@ def country(request: HttpRequest) -> str:
         request: Http request object
 
     Returns:
-        Country code from: `experiment.standards.iso_countries.ISO_COUNTRIES`
+        Country code from: `question.choice_sets.iso_countries.ISO_COUNTRIES`
 
     Example:
         Get country code from the request
@@ -76,7 +76,7 @@ def get_country_code(ip_address: str) -> str:
         ip_address (str): The ip address of the participant
 
     Returns:
-        Country code from: `experiment.standards.iso_countries.ISO_COUNTRIES`
+        Country code from: `question.choice_sets.iso_countries.ISO_COUNTRIES`
 
     Example:
         Get the country code from an ip address

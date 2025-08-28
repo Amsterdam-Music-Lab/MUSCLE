@@ -160,7 +160,7 @@ class ToontjeHoger2Preverbal(BaseRules):
             result_id=prepare_result(key, session, expected_response="C"),
             style=[ColorScheme.NEUTRAL_INVERTED],
         )
-        form = Form([question])
+        form = Form([question], submit_label="")
 
         image_trial = Trial(
             html=HTML(
