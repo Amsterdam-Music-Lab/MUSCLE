@@ -3,7 +3,6 @@ import { useState } from "react";
 import Question from "../Question/Question";
 import Button from "../Button/Button";
 import IQuestion from "@/types/Question";
-import { submitResultType } from "@/hooks/useResultHandler";
 
 interface FeedbackFormProps {
     formActive: boolean;
@@ -11,7 +10,7 @@ interface FeedbackFormProps {
     buttonLabel: string;
     skipLabel: string;
     isSkippable: boolean;
-    submitResult: submitResultType
+    submitResult: any;
 }
 
 /** FeedbackForm */
@@ -23,19 +22,17 @@ const FeedbackForm = ({
     isSkippable,
     submitResult,
 }: FeedbackFormProps) => {
-    const showSubmitButtons =
-        form.filter((formElement) => formElement.submits).length === 0;
 
     const [formValid, setFormValid] = useState(false);
 
     const onChange = (value: string | number | boolean, question_index: number) => {
         form[question_index].value = value;
-        if (form[question_index].submits) {
+        if (!buttonLabel) {
             submitResult();
         }
-        // for every non-skippable question, check that we have a value
+        // for every question, check that we have a value
         const validFormElements = form.filter(formElement => {
-            if (formElement.is_skippable || (formElement.value && validateFormElement(formElement))) {
+            if (formElement.value && validateFormElement(formElement)) {
                 return true;
             }
             return false;
@@ -65,7 +62,7 @@ const FeedbackForm = ({
                     />
                 ))}
                 {/* Continue button */}
-                {showSubmitButtons && (
+                {buttonLabel && (
 
                     <div className="row justify-content-around">
                         {isSkippable && (

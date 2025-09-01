@@ -8,6 +8,7 @@ export enum QuestionViews {
     TEXT_RANGE = "TEXT_RANGE",
     ICON_RANGE = "ICON_RANGE",
     STRING = "STRING",
+    NUMBER = "NUMBER"
 }
 
 export default interface Question {
@@ -17,10 +18,7 @@ export default interface Question {
     value?: any;
     style?: any;
     explainer?: string;
-    expected_response?: string;
     choices?: { [key: string]: string };
-    submits?: boolean;
-    skippable?: boolean;
     min_values?: number;
     min_value?: number;
     max_value?: number;

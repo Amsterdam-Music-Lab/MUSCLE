@@ -9,7 +9,7 @@ const form = [
     {
         key: 'test_question',
         view: QuestionViews.BUTTON_ARRAY,
-        question: ['What is the average speed of a Swallow?'],
+        text: ['What is the average speed of a Swallow?'],
         choices: { 'slow': '1 km/h', 'fast': '42 km/h' }
     }
 ]
