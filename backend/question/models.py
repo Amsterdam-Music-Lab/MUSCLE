@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+
 from experiment.models import Block
 
 
@@ -21,6 +23,18 @@ class Question(models.Model):
         is_skippable (bool): If question can be skipped during experiment
 
     """
+
+    class QuestionViews(models.TextChoices):
+        AUTOCOMPLETE = "AUTOCOMPLETE", _("Autocomplete")
+        BUTTON_ARRAY = "BUTTON_ARRAY", _("Button Array")
+        CHECKBOXES = "CHECKBOXES", _("Checkboxes")
+        DROPDOWN = "DROPDOWN", _("Dropdown")
+        ICON_RANGE = "ICONRANGE", _("Range slider with icons")
+        RADIOS = "RADIOS", _("Radio buttons")
+        RANGE = "RANGE", _("Present a range slider")
+        NUMBER = "NUMBER", _("Present a number field")
+        STRING = "STRING", _("Present a text field")
+        TEXT_RANGE = "TEXTRANGE", _("Range slider with text")
 
     key = models.SlugField(primary_key=True, max_length=128)
     question = models.CharField(max_length=1024)
@@ -59,13 +73,7 @@ class Question(models.Model):
 
     # ChoiceQuestion
     min_values = models.IntegerField(default=1)
-    VIEWS = [
-        ("BUTTON_ARRAY", "BUTTON_ARRAY"),
-        ("CHECKBOXES", "CHECKBOXES"),
-        ("RADIOS", "RADIOS"),
-        ("DROPDOWN", "DROPDOWN"),
-    ]
-    view = models.CharField(max_length=128, default="", choices=VIEWS)
+    view = models.CharField(max_length=128, default="", choices=QuestionViews)
 
     is_skippable = models.BooleanField(default=False)
 
