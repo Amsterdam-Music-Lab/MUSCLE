@@ -17,9 +17,7 @@ DATABASES = {
     }
 }
 
-TESTING = DEBUG
-
-if DEBUG and not TESTING:
+if DEBUG:
     # apps & middleware neeed to be appended for the debug toolbar
     INSTALLED_APPS += ["debug_toolbar"]
 
