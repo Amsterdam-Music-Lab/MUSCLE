@@ -1,12 +1,10 @@
 from django.db import migrations
 
-from question import questions
+from question.questions import create_default_questions
 
 
 def populate_translation_fields(apps, schema_editor):
-
-    QuestionH = apps.get_model("question", "Question")
-    questions.populate_translation_fields("zh-hans", question_model=QuestionH)
+    create_default_questions()
 
 
 class Migration(migrations.Migration):
