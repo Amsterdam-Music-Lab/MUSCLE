@@ -47,10 +47,3 @@ urlpatterns = [
 # Prefix all URLS with /server if AML_SUBPATH is set
 if settings.SUBPATH:
     urlpatterns = [path('server/', include(urlpatterns))]
-
-# Debug toolbar
-if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns += [
-        path("__debug__/", include(debug_toolbar.urls)),
-    ]

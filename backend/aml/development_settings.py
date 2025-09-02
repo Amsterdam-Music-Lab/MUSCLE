@@ -17,12 +17,6 @@ DATABASES = {
     }
 }
 
-if DEBUG:
-    # apps & middleware neeed to be appended for the debug toolbar
-    INSTALLED_APPS += ["debug_toolbar"]
-
-    MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
-
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
