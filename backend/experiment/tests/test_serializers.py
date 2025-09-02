@@ -7,7 +7,7 @@ from experiment.models import (
     Experiment,
     Phase,
 )
-from experiment.serializers import get_upcoming_block, serialize_block, serialize_phase
+from experiment.serializers import get_session_info, get_upcoming_block, serialize_block, serialize_phase
 from experiment.tests.test_views import create_theme_config
 from image.models import Image
 from participant.models import Participant
@@ -48,7 +48,8 @@ class SerializerTest(TestCase):
         next_block_slug = phase.get("nextBlock").get("slug")
         self.assertEqual(phase.get("dashboard"), [])
         self.assertEqual(next_block_slug, "rhythm_intro")
-        self.assertEqual(phase.get("totalScore"), 0)
+        self.assertEqual(phase.get("accumulatedScore"), 0)
+        self.assertEqual(phase.get("playedSessions"), 0)
         Session.objects.create(
             participant=self.participant,
             block=Block.objects.get(slug=next_block_slug),
@@ -56,6 +57,27 @@ class SerializerTest(TestCase):
         )
         phase = serialize_phase(self.phase1, self.participant, 0)
         self.assertIsNone(phase)
+
+    def test_get_phase_info(self):
+        blocks = list(self.phase2.blocks.all())
+        Session.objects.create(
+            participant=self.participant,
+            block=Block.objects.get(slug=blocks[0].slug),
+            final_score=10
+        )
+        Session.objects.create(
+            participant=self.participant,
+            block=Block.objects.get(slug=blocks[1].slug),
+            final_score=10
+        )
+        Session.objects.create(
+            participant=self.participant,
+            block=Block.objects.get(slug='rhythm_intro'),
+            final_score=10
+        )
+        phase_info = get_session_info(blocks, self.participant)
+        self.assertEqual(phase_info.get('playedSessions'), 2)
+        self.assertEqual(phase_info.get('accumulatedScore'), 20)
 
     def test_upcoming_block(self):
         block = get_upcoming_block(self.phase1, self.participant, 0)

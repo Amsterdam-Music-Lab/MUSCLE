@@ -62,7 +62,7 @@ class MatchingPairsGame(BaseRules):
             intro_explainer = self.get_intro_explainer()
             playlist = Playlist(session.block.playlists.all())
             actions = [intro_explainer, playlist]
-            questions = self.get_open_questions(session)
+            questions = self.get_profile_question_trials(session, None)
             if questions:
                 intro_questions = Explainer(
                     instruction=_(
@@ -140,7 +140,7 @@ class MatchingPairsGame(BaseRules):
         second_card = result_data["second_card"]
         second_section = Section.objects.get(pk=second_card["id"])
         second_card["filename"] = str(second_section.filename)
-        if first_section.group == second_section.group:
+        if self.evaluate_sections_equal(first_section, second_section):
             if second_card.get("seen"):
                 score = 20
                 given_response = "match"
@@ -157,12 +157,17 @@ class MatchingPairsGame(BaseRules):
         prepare_result("move", session, json_data=result_data, score=score, given_response=given_response)
         return score
 
+    def evaluate_sections_equal(
+        self, first_section: Section, second_section: Section
+    ) -> bool:
+        return first_section.group == second_section.group
+
     def next_round(self, session):
         if session.get_rounds_passed() < 1:
             intro_explainer = self.get_intro_explainer()
             playlist = Playlist(session.block.playlists.all())
             actions = [intro_explainer, playlist]
-            questions = self.get_open_questions(session)
+            questions = self.get_profile_question_trials(session, None)
             if questions:
                 intro_questions = Explainer(
                     instruction=_(

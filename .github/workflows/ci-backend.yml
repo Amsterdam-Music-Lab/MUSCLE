@@ -1,12 +1,6 @@
 name: Backend Test & Lint
 
 on:
-  push:
-    paths:
-      - 'backend/**'
-      - '.github/workflows/ci-backend.yml'
-      - 'docker-compose.yaml'
-      - '.env-github-actions'
   pull_request:
     paths:
       - 'backend/**'

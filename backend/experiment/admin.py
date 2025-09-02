@@ -21,7 +21,7 @@ from experiment.forms import (
 from experiment.widgets import MarkdownPreviewTextInput
 from question.admin import QuestionSeriesInline
 from question.models import QuestionSeries, QuestionInSeries
-from .utils import export_json_results
+from .utils import get_block_json_export_as_repsonse
 
 
 class BlockAdmin(admin.ModelAdmin):
@@ -248,8 +248,8 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         """Open researchers dashboard for an experiment"""
 
         if "_export" in request.POST:
-            blockId = request.POST.get("export-block")
-            return export_json_results(blockId)
+            block_slug = request.POST.get("export-block")
+            return get_block_json_export_as_repsonse(block_slug)
 
         all_blocks = obj.associated_blocks()
         all_participants = obj.current_participants()

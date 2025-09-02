@@ -1,7 +1,9 @@
 from random import shuffle
 from typing import Optional, TypedDict, Literal
 
+from django.db.models import Sum
 from django_markup.markup import formatter
+from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.consent import Consent
 from image.serializers import serialize_image
@@ -9,8 +11,6 @@ from participant.models import Participant
 from session.models import Session
 from theme.serializers import serialize_theme
 from .models import Block, Experiment, Phase, SocialMediaConfig
-
-from django.utils.translation import gettext_lazy as _
 
 
 def serialize_actions(actions):
@@ -89,7 +89,10 @@ def serialize_phase(phase: Phase, participant: Participant, times_played: int) -
         participant: Participant instance
 
     Returns:
-        A dictionary of the dashboard (if applicable), the next block, and the total score of the phase
+        a dictionary of the dashboard (if applicable),
+        the next block,
+        number of sessions played
+        accumlated score of the phase
     """
     blocks = list(phase.blocks.order_by("index").all())
 
@@ -97,14 +100,15 @@ def serialize_phase(phase: Phase, participant: Participant, times_played: int) -
     if not next_block:
         return None
 
-    total_score = get_total_score(blocks, participant)
+    session_info = get_session_info(blocks, participant)
+
     if phase.randomize:
         shuffle(blocks)
 
     return {
         "dashboard": [serialize_block(block, participant) for block in blocks] if phase.dashboard else [],
         "nextBlock": next_block,
-        "totalScore": total_score,
+        **session_info
     }
 
 
@@ -177,21 +181,24 @@ def get_finished_session_count(block: Block, participant: Participant) -> int:
     return Session.objects.filter(block=block, participant=participant, finished_at__isnull=False).count()
 
 
-def get_total_score(blocks: list, participant: Participant) -> int:
-    """Calculate total score of all blocks on the dashboard
+def get_session_info(blocks: list[Block], participant: Participant) -> dict:
+    """Return information of the sessions played by this participant in the blocks of this phase
 
     Args:
-        blocks: All blocks on the dashboard
-        participant: The participant we want the total score from
+        blocks: All blocks from the current phase
+        participant: The participant currently playing
 
     Returns:
-        Total score of given the blocks for this participant
+        dict with session count and accumulated score
     """
+    participant_sessions = participant.session_set.filter(
+        block__in=blocks
+    )
+    accumulated_score = participant_sessions.aggregate(
+        total_score=Sum("final_score")
+    )["total_score"] or 0
 
-    total_score = 0
-    for block in blocks:
-        sessions = Session.objects.filter(block=block, participant=participant)
-
-        for session in sessions:
-            total_score += session.final_score
-    return total_score
+    return {
+        "playedSessions": participant_sessions.count(),
+        "accumulatedScore": accumulated_score
+    }

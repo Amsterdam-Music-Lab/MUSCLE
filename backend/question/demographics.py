@@ -4,7 +4,7 @@ from experiment.actions.form import ChoiceQuestion, NumberQuestion, TextQuestion
 from experiment.standards.iso_countries import ISO_COUNTRIES
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from experiment.standards.isced_education import ISCED_EDUCATION_LEVELS
-from .utils import question_by_key
+from .utils import question_by_key, adjust_question_choices
 
 
 ATTAINED_EDUCATION_CHOICES = dict(
@@ -148,25 +148,35 @@ EXTRA_DEMOGRAPHICS = [
     )
 ]
 
-
 def demographics_other():
     questions = []
-
-    question = question_by_key('dgf_education', DEMOGRAPHICS, drop_choices=[
-                               'isced-2', 'isced-5'])
-    question.key = 'dgf_education_matching_pairs'
-    questions.append(question)
-
-    question = question_by_key(
-        'dgf_education', DEMOGRAPHICS, drop_choices=['isced-1'])
-    question.key = 'dgf_education_gold_msi'
-    questions.append(question)
-
-    question = question_by_key(
-        'dgf_education', DEMOGRAPHICS, drop_choices=['isced-5'])
-    question.key = 'dgf_education_huang_2022'
-    questions.append(question)
-
+    education_question = question_by_key('dgf_education', DEMOGRAPHICS)
+    questions.append(
+        ChoiceQuestion(
+            key='dgf_education_matching_pairs',
+            view='RADIOS',
+            question=education_question.question,
+            choices=adjust_question_choices(
+                ISCED_EDUCATION_LEVELS, ['isced-2', 'isced-5']
+            ),
+        )
+    )
+    questions.append(
+        ChoiceQuestion(
+            key='dgf_education_gold_msi',
+            view='RADIOS',
+            question=education_question.question,
+            choices=adjust_question_choices(ISCED_EDUCATION_LEVELS, ['isced-1']),
+        )
+    )
+    questions.append(
+        ChoiceQuestion(
+            key='dgf_education_huang_2022',
+            view='RADIOS',
+            question=education_question.question,
+            choices=adjust_question_choices(ISCED_EDUCATION_LEVELS, ['isced-5']),
+        )
+    )
     return questions
 
 

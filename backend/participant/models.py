@@ -73,7 +73,7 @@ class Participant(models.Model):
             "country_code": self.country_code,
             "access_info": self.access_info,
             "participant_id_url": self.participant_id_url,
-            "profile": self.profile_object()
+            "profile": self.profile_dict(),
         }
 
     def export_profiles(self) -> QuerySet[Result]:
@@ -109,7 +109,7 @@ class Participant(models.Model):
         """
         return self.result_set.all().filter(given_response__isnull=False)
 
-    def profile_object(self) -> dict:
+    def profile_dict(self) -> dict:
         """Get full profile data in one object
 
         Returns:
@@ -118,18 +118,17 @@ class Participant(models.Model):
         Example:
             Print all the questions, answers and scores from a participant's profile results
             ```python
-            all_profile_results = participant.profile_object()
+            all_profile_results = participant.profile_dict()
             for key, value in all_profile_results:
                 print(f"{key} - {value}")
             ```
         """
-        profile_object = {}
+        profile_dict = {}
         for profile in self.profile():
-            profile_object[profile.question_key] = profile.given_response
+            profile_dict[profile.question_key] = profile.given_response
             if profile.score:
-                profile_object['{}_score'.format(
-                    profile.question_key)] = profile.score
-        return profile_object
+                profile_dict[f'{profile.question_key}_score'] = profile.score
+        return profile_dict
 
     def is_dutch(self) -> bool:
         """Return if a participant is tagged with the country code of the Netherlands (nl)

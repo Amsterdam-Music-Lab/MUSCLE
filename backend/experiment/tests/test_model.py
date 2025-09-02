@@ -73,29 +73,6 @@ class BlockModelTest(TestCase):
         sessions = block.export_sessions()
         self.assertEqual(len(sessions), 0)
 
-    def test_block_export_table(self):
-        block = Block.objects.get(slug="test-block")
-        amount_of_sessions = 3
-
-        for i in range(amount_of_sessions):
-            session = Session.objects.create(
-                block=block, participant=Participant.objects.create()
-            )
-            Result.objects.create(
-                session=session,
-                expected_response=1,
-                given_response=1,
-                question_key="test_question_1",
-            )
-
-        session_keys = ["block_id", "block_name"]
-        result_keys = ["section_name", "result_created_at"]
-        export_options = {"wide_format": True}
-        rows, fieldnames = block.export_table(session_keys, result_keys, export_options)
-
-        self.assertEqual(len(rows), amount_of_sessions)
-        self.assertEqual(len(fieldnames), len(session_keys) + len(result_keys))
-
     def test_block_get_rules(self):
         block = Block.objects.get(slug="test-block")
         rules = block.get_rules()

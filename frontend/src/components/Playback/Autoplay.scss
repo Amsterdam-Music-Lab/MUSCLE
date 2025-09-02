@@ -1,5 +1,16 @@
-.aha__histogram-container {
-    height: 40px;
-    width: 100px;
-    margin-left: 15px
+.circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+.circle-content {
+    position: absolute;
+    width: 90px;
+}
+
+.aha__histogram-container {
+    margin-top: -20px;
+    height: 80px;
+}
+

@@ -1,4 +1,6 @@
-from io import text_encoding
+from django.conf import settings
+from django.utils import translation
+
 from .demographics import DEMOGRAPHICS, EXTRA_DEMOGRAPHICS, DEMOGRAPHICS_OTHER
 from .goldsmiths import MSI_F1_ACTIVE_ENGAGEMENT, MSI_F2_PERCEPTUAL_ABILITIES, MSI_F3_MUSICAL_TRAINING, MSI_F4_SINGING_ABILITIES, MSI_F5_EMOTIONS, MSI_OTHER, MSI_FG_GENERAL, MSI_ALL
 from .languages import LANGUAGE, LANGUAGE_OTHER
@@ -6,33 +8,42 @@ from .musicgens import MUSICGENS_17_W_VARIANTS
 from .stomp import STOMP
 from .tipi import TIPI
 from .other import OTHER
+from .thatsmysong import THATS_MY_SONG_QUESTIONS_FIXED, THATS_MY_SONG_QUESTIONS_RANDOM
 import random
 from .models import QuestionGroup, Question, Choice
-from experiment.actions.form import BooleanQuestion, ChoiceQuestion, LikertQuestion, LikertQuestionIcon, NumberQuestion, TextQuestion, AutoCompleteQuestion#, #RangeQuestion
-from django.conf import settings
-from django.utils import translation
-import sys
+from experiment.actions.form import (
+    BooleanQuestion,
+    ChoiceQuestion,
+    LikertQuestion,
+    LikertQuestionIcon,
+    NumberQuestion,
+    TextQuestion,
+    AutoCompleteQuestion,
+)
 from question.profile_scoring_rules import PROFILE_SCORING_RULES
 
 # Default QuestionGroups used by command createquestions
-QUESTION_GROUPS_DEFAULT = { "DEMOGRAPHICS" : DEMOGRAPHICS,
-    "EXTRA_DEMOGRAPHICS" : EXTRA_DEMOGRAPHICS,
-    "MSI_F1_ACTIVE_ENGAGEMENT" : MSI_F1_ACTIVE_ENGAGEMENT,
-    "MSI_F2_PERCEPTUAL_ABILITIES" : MSI_F2_PERCEPTUAL_ABILITIES,
-    "MSI_F3_MUSICAL_TRAINING" : MSI_F3_MUSICAL_TRAINING,
-    "MSI_F4_SINGING_ABILITIES" : MSI_F4_SINGING_ABILITIES,
-    "MSI_F5_EMOTIONS" : MSI_F5_EMOTIONS,
-    "MSI_OTHER" : MSI_OTHER,
-    "MSI_FG_GENERAL" : MSI_FG_GENERAL,
-    "MSI_ALL" : MSI_ALL,
-    "LANGUAGE" : LANGUAGE,
-    "MUSICGENS_17_W_VARIANTS" : MUSICGENS_17_W_VARIANTS,
-    "STOMP" : STOMP,
-    "STOMP20" : STOMP,
-    "TIPI" : TIPI,
-    "OTHER" : OTHER,
-    "DEMOGRAPHICS_OTHER" : DEMOGRAPHICS_OTHER,
-    "LANGUAGE_OTHER" : LANGUAGE_OTHER
+QUESTION_GROUPS_DEFAULT = {
+    "DEMOGRAPHICS": DEMOGRAPHICS,
+    "EXTRA_DEMOGRAPHICS": EXTRA_DEMOGRAPHICS,
+    "MSI_F1_ACTIVE_ENGAGEMENT": MSI_F1_ACTIVE_ENGAGEMENT,
+    "MSI_F2_PERCEPTUAL_ABILITIES": MSI_F2_PERCEPTUAL_ABILITIES,
+    "MSI_F3_MUSICAL_TRAINING": MSI_F3_MUSICAL_TRAINING,
+    "MSI_F4_SINGING_ABILITIES": MSI_F4_SINGING_ABILITIES,
+    "MSI_F5_EMOTIONS": MSI_F5_EMOTIONS,
+    "MSI_OTHER": MSI_OTHER,
+    "MSI_FG_GENERAL": MSI_FG_GENERAL,
+    "MSI_ALL": MSI_ALL,
+    "LANGUAGE": LANGUAGE,
+    "MUSICGENS_17_W_VARIANTS": MUSICGENS_17_W_VARIANTS,
+    "STOMP": STOMP,
+    "STOMP20": STOMP,
+    "TIPI": TIPI,
+    "OTHER": OTHER,
+    "DEMOGRAPHICS_OTHER": DEMOGRAPHICS_OTHER,
+    "LANGUAGE_OTHER": LANGUAGE_OTHER,
+    "THATS_MY_SONG_FIXED": THATS_MY_SONG_QUESTIONS_FIXED,
+    "THATS_MY_SONG_RANDOM": THATS_MY_SONG_QUESTIONS_RANDOM,
 }
 
 QUESTIONS = {}

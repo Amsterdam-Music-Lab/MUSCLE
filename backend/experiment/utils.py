@@ -133,85 +133,84 @@ def consent_upload_path(instance: Experiment, filename: str) -> str:
 
     join("consent", folder_name, f"{language}-{filename}")
 
-def export_json_results(block):
-        """Export block JSON data as zip archive, force download"""
 
-        this_block = Block.objects.get(id=block)
-        # Init empty querysets
-        all_results = Result.objects.none()
-        all_songs = Song.objects.none()
-        all_sections = Section.objects.none()
-        all_participants = Participant.objects.none()
-        all_profiles = Result.objects.none()
-        all_feedback = Feedback.objects.filter(block=this_block)
+def block_export_json_results(block_slug: str) -> ZipFile:
+    """Export block JSON data as zip archive"""
 
-        # Collect data
-        all_sessions = this_block.export_sessions().order_by("pk")
+    this_block = Block.objects.get(slug=block_slug)
+    # Init empty querysets
+    all_results = Result.objects.none()
+    all_songs = Song.objects.none()
+    all_sections = Section.objects.none()
+    all_participants = Participant.objects.none()
+    all_profiles = Result.objects.none()
+    all_feedback = Feedback.objects.filter(block=this_block)
 
-        for session in all_sessions:
-            all_results |= session.result_set.all()
-            all_participants |= Participant.objects.filter(pk=session.participant.pk)
-            all_profiles |= session.participant.export_profiles()
+    # Collect data
+    all_sessions = this_block.export_sessions().order_by("pk")
 
-        for playlist in this_block.playlists.all():
-            these_sections = playlist._export_sections()
-            all_sections |= these_sections
-            for section in these_sections:
-                if section.song:
-                    all_songs |= Song.objects.filter(pk=section.song.pk)
+    for session in all_sessions:
+        all_results |= session.result_set.all()
+        all_participants |= Participant.objects.filter(pk=session.participant.pk)
+        all_profiles |= session.participant.export_profiles()
 
-        # create empty zip file in memory
-        zip_buffer = BytesIO()
-        with ZipFile(zip_buffer, "w") as new_zip:
-            # serialize data to new json files within the zip file
-            new_zip.writestr(
-                "sessions.json", data=str(serializers.serialize("json", all_sessions))
-            )
-            new_zip.writestr(
-                "participants.json",
-                data=str(
-                    serializers.serialize("json", all_participants.order_by("pk"))
-                ),
-            )
-            new_zip.writestr(
-                "profiles.json",
-                data=str(
-                    serializers.serialize(
-                        "json", all_profiles.order_by("participant", "pk")
-                    )
-                ),
-            )
-            new_zip.writestr(
-                "results.json",
-                data=str(
-                    serializers.serialize("json", all_results.order_by("session"))
-                ),
-            )
-            new_zip.writestr(
-                "sections.json",
-                data=str(
-                    serializers.serialize(
-                        "json", all_sections.order_by("playlist", "pk")
-                    )
-                ),
-            )
-            new_zip.writestr(
-                "songs.json",
-                data=str(serializers.serialize("json", all_songs.order_by("pk"))),
-            )
-            new_zip.writestr(
-                "feedback.json",
-                data=str(serializers.serialize("json", all_feedback.order_by("pk"))),
-            )
+    for playlist in this_block.playlists.all():
+        these_sections = playlist._export_sections()
+        all_sections |= these_sections
+        for section in these_sections:
+            if section.song:
+                all_songs |= Song.objects.filter(pk=section.song.pk)
 
-        # create forced download response
-        response = HttpResponse(zip_buffer.getbuffer())
-        response["Content-Type"] = "application/x-zip-compressed"
-        response["Content-Disposition"] = (
-            'attachment; filename="'
-            + this_block.slug
-            + "-"
-            + timezone.now().isoformat()
-            + '.zip"'
+    # create empty zip file in memory
+    zip_buffer = BytesIO()
+    with ZipFile(zip_buffer, "w") as new_zip:
+        # serialize data to new json files within the zip file
+        new_zip.writestr(
+            "sessions.json", data=str(serializers.serialize("json", all_sessions))
         )
-        return response
+        new_zip.writestr(
+            "participants.json",
+            data=str(serializers.serialize("json", all_participants.order_by("pk"))),
+        )
+        new_zip.writestr(
+            "profiles.json",
+            data=str(
+                serializers.serialize(
+                    "json", all_profiles.order_by("participant", "pk")
+                )
+            ),
+        )
+        new_zip.writestr(
+            "results.json",
+            data=str(serializers.serialize("json", all_results.order_by("session"))),
+        )
+        new_zip.writestr(
+            "sections.json",
+            data=str(
+                serializers.serialize("json", all_sections.order_by("playlist", "pk"))
+            ),
+        )
+        new_zip.writestr(
+            "songs.json",
+            data=str(serializers.serialize("json", all_songs.order_by("pk"))),
+        )
+        new_zip.writestr(
+            "feedback.json",
+            data=str(serializers.serialize("json", all_feedback.order_by("pk"))),
+        )
+    return zip_buffer
+
+
+def get_block_json_export_as_repsonse(block_slug: str):
+    '''Create a download response for the admin experimenter dashboard'''
+    zip_buffer = block_export_json_results(block_slug)
+    response = HttpResponse(zip_buffer.getbuffer())
+    response["Content-Type"] = "application/x-zip-compressed"
+    response["Content-Disposition"] = (
+        'attachment; filename="'
+        + block_slug
+        + "-"
+        + timezone.now().isoformat()
+        + '.zip"'
+    )
+    return response
