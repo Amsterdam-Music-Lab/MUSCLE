@@ -73,7 +73,7 @@ class Question(models.Model):
 
     # ChoiceQuestion
     min_values = models.IntegerField(default=1)
-    view = models.CharField(max_length=128, default="", choices=QuestionViews)
+    view = models.CharField(max_length=16, default="", choices=QuestionViews.choices)
 
     is_skippable = models.BooleanField(default=False)
 

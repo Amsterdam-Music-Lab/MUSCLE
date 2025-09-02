@@ -36,9 +36,6 @@ class ChoiceQuestionAction(QuestionAction):
         self.choices = choices
         self.min_values = min_values
 
-    def action(self):
-        return {**super().action(), 'choices': self.choices}
-
 
 class OpenQuestionAction(QuestionAction):
 
@@ -53,18 +50,6 @@ class OpenQuestionAction(QuestionAction):
         self.min_value = min_value
         self.max_value = max_value
         self.max_length = max_length
-
-    def action(self):
-        action = super().action()
-        [
-            self.update_action(attribute, action)
-            for attribute in ['min_value', 'max_value', 'max_length']
-        ]
-        return action
-
-    def update_action(self, attribute, action):
-        if getattr(self, attribute):
-            action.update({attribute: getattr(self, attribute)})
 
 
 class AutoCompleteQuestion(ChoiceQuestionAction):
@@ -211,7 +196,7 @@ class NumberQuestion(OpenQuestionAction):
         **kwargs,
     ) -> None:
         super().__init__(
-            view="NUMBER", min_value=min_value, max_value=max_value, **kwargs
+            min_value=min_value, max_value=max_value, view="NUMBER", **kwargs
         )
 
 
@@ -259,9 +244,9 @@ class RangeQuestion(OpenQuestionAction):
         ```
     """
 
-    def __init__(self, min_value: int, max_value: int, **kwargs) -> None:
+    def __init__(self, min_value: int = 0, max_value: int = 0, **kwargs) -> None:
         super().__init__(
-            **kwargs, view='RANGE', min_value=min_value, max_value=max_value
+            min_value=min_value, max_value=max_value, view='RANGE', **kwargs
         )
 
 
@@ -303,4 +288,4 @@ class TextQuestion(OpenQuestionAction):
     def __init__(
         self, max_length: int = 64, **kwargs
     ) -> None:
-        super().__init__(view="STRING", max_length=max_length, **kwargs)
+        super().__init__(max_length=max_length, view="STRING", **kwargs)
