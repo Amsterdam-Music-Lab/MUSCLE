@@ -37,14 +37,14 @@
   <div class="block-container">
     {% for block in inline_admin_form|get_phase_blocks %}
       <div class="block-box">
-        <a class="change-block-link" href="javascript:window.open('/admin/experiment/block/{{block.pk}}/change/?_popup=1', '', 'width=600,height=800')">
+        <a class="change-block-link" href="javascript:window.open('{% url 'admin:experiment_block_change' block.pk %}', '', 'width=600,height=800')">
         {{block}}
         </a>
       </div>
       <div class="block-connect"></div>
     {% endfor %}
     <div class="block-box">
-        <a class="addlink" href="javascript:window.open('/admin/experiment/block/add/?phase_id={{ inline_admin_form.original.pk }}&_popup=1', '', 'width=600,height=800')">
+        <a class="addlink" href="javascript:window.open('{% url 'admin:experiment_block_add'%}?phase_id={{ inline_admin_form.original.pk }}', '', 'width=600,height=800')">
             {% translate "Add" %}
         </a>
     </div>
