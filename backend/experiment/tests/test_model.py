@@ -4,9 +4,7 @@ from image.models import Image
 from theme.models import ThemeConfig
 from experiment.models import (
     Block,
-    BlockTranslatedContent,
     Experiment,
-    ExperimentTranslatedContent,
     Phase,
 )
 from participant.models import Participant
@@ -27,9 +25,8 @@ class BlockModelTest(TestCase):
             logo_image=logo_image,
             background_image=background_image,
         )
-        experiment = Experiment.objects.create(slug="test-experiment")
-        ExperimentTranslatedContent.objects.create(
-            experiment=experiment, language="en", name="Experiment name"
+        experiment = Experiment.objects.create(
+            slug="test-experiment", name="Experiment name"
         )
         cls.phase = Phase.objects.create(experiment=experiment)
         block = Block.objects.create(
@@ -39,10 +36,6 @@ class BlockModelTest(TestCase):
             bonus_points=10,
             rules="RHYTHM_BATTERY_FINAL",
             theme_config=ThemeConfig.objects.get(name="Default"),
-        )
-        BlockTranslatedContent.objects.create(
-            block=block,
-            language="en",
             name="Test Block",
             description="Test block description",
         )
@@ -56,18 +49,6 @@ class BlockModelTest(TestCase):
             phase=self.phase, slug="test-block-no-content"
         )
         self.assertEqual(str(block_no_content), "test-block-no-content")
-
-    def test_block_str_without_pk(self):
-        block_no_pk = Block.objects.create(phase=self.phase)
-        BlockTranslatedContent.objects.create(
-            block=block_no_pk,
-            language="en",
-            name="Not yet deleted test block",
-            description="Deleted test block description",
-        )
-        self.assertEqual(str(block_no_pk), "Not yet deleted test block")
-        block_no_pk.delete()
-        self.assertEqual(str(block_no_pk), "Deleted/Unsaved Block")
 
     def test_block_session_count(self):
         block = Block.objects.get(slug="test-block")
@@ -103,7 +84,9 @@ class BlockModelTest(TestCase):
         amount_of_results = 3
         question_score = 1
 
-        session = Session.objects.create(block=block, participant=Participant.objects.create())
+        session = Session.objects.create(
+            block=block, participant=Participant.objects.create()
+        )
         for j in range(amount_of_results):
             Result.objects.create(
                 session=session,
@@ -127,19 +110,8 @@ class ExperimentModelTest(TestCase):
     def setUpTestData(cls):
         cls.experiment = Experiment.objects.create(
             slug="test-series",
-        )
-        ExperimentTranslatedContent.objects.create(
-            experiment=cls.experiment,
-            index=0,
-            language="en",
             name="Test Experiment",
-            description="Test experiment description in English.",
-        )
-        ExperimentTranslatedContent.objects.create(
-            experiment=cls.experiment,
-            index=1,
-            language="es",
-            name="Experimento de Prueba",
+            name_pt="Experimento de Prueba",
             description="Descripción de la experimento de prueba en español.",
         )
 
@@ -150,32 +122,3 @@ class ExperimentModelTest(TestCase):
             slug="test-series-no-content",
         )
         self.assertEqual(str(experiment_no_content), "test-series-no-content")
-
-    def test_get_fallback_content(self):
-        fallback_content = self.experiment.get_fallback_content()
-        self.assertIsNotNone(fallback_content)
-        self.assertEqual(fallback_content.language, "en")
-        self.assertEqual(fallback_content.name, "Test Experiment")
-
-    def test_get_translated_content_existing_language(self):
-        spanish_content = self.experiment.get_translated_content("es")
-        self.assertIsNotNone(spanish_content)
-        self.assertEqual(spanish_content.language, "es")
-        self.assertEqual(spanish_content.name, "Experimento de Prueba")
-
-    def test_get_translated_content_nonexistent_language_with_fallback(self):
-        french_content = self.experiment.get_translated_content("fr", fallback=True)
-        self.assertIsNotNone(french_content)
-        self.assertEqual(french_content.language, "en")  # Falls back to English
-        self.assertEqual(french_content.name, "Test Experiment")
-
-    def test_get_translated_content_nonexistent_language_without_fallback(self):
-        with self.assertRaises(ValueError):
-            self.experiment.get_translated_content("fr", fallback=False)
-
-    def test_get_translated_content_no_content_no_fallback(self):
-        experiment_no_content = Experiment.objects.create(
-            slug="test-series-no-content",
-        )
-        with self.assertRaises(ValueError):
-            experiment_no_content.get_translated_content("en", fallback=True)

@@ -7,7 +7,7 @@ from django.test import TestCase
 from django.utils import timezone
 
 from experiment.actions import Explainer, Final, Score, Trial
-from experiment.models import Experiment, Phase, Block, ExperimentTranslatedContent, SocialMediaConfig
+from experiment.models import Experiment, Phase, Block, SocialMediaConfig
 from question.thatsmysong import THATS_MY_SONG_QUESTIONS_FIXED
 from participant.models import Participant
 from result.models import Result
@@ -77,9 +77,8 @@ class HookedTest(TestCase):
 
     def test_hooked(self):
         n_rounds = 18
-        experiment = Experiment.objects.create(slug="HOOKED")
-        ExperimentTranslatedContent.objects.create(
-            experiment=experiment, language="en", name="Hooked", description="Test Hooked"
+        experiment = Experiment.objects.create(
+            slug="HOOKED", name="Hooked", description="Test Hooked"
         )
         SocialMediaConfig.objects.create(experiment=experiment, url="https://app.amsterdammusiclab.nl/hooked")
         phase = Phase.objects.create(experiment=experiment)

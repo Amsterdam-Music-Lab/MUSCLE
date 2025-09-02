@@ -35,6 +35,7 @@ urlpatterns = [
     path('theme/', include('theme.urls')),
     path('admin_interface/', include('admin_interface.urls')),
     path('admin/', admin.site.urls),
+    path("i18n/", include("django.conf.urls.i18n")),
 
     # Sentry debug (uncomment to test Sentry)
     # path('sentry-debug/', lambda request: 1 / 0),
