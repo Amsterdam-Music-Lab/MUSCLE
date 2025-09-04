@@ -1,0 +1,23 @@
+.block-box {
+    height: 40px;
+    border: .5vh solid var(--primary);
+    border-radius: .5vh;
+    padding: 0vh 1vh;
+    display: flex;
+    align-items: center;
+}
+
+.block-container {
+    display: flex;
+    flex-direction: row;
+    padding-left: 1vh;
+    padding-bottom: 3vh;
+}
+
+.block-connect {
+    border: .3vh solid var(--primary);
+    width: 3vh;
+    height: 0px;
+    margin-top: 20px;
+}
+

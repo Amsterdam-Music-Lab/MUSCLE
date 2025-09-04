@@ -8,10 +8,9 @@ from experiment.actions.final import Final
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
 from experiment.models import (
+    Block,
     Experiment,
     Phase,
-    Block,
-    ExperimentTranslatedContent,
     SocialMediaConfig,
 )
 from participant.models import Participant
@@ -83,9 +82,8 @@ class HookedTest(TestCase):
 
     def test_hooked(self):
         n_rounds = 18
-        experiment = Experiment.objects.create(slug="HOOKED")
-        ExperimentTranslatedContent.objects.create(
-            experiment=experiment, language="en", name="Hooked", description="Test Hooked"
+        experiment = Experiment.objects.create(
+            slug="HOOKED", name="Hooked", description="Test Hooked"
         )
         SocialMediaConfig.objects.create(experiment=experiment, url="https://app.amsterdammusiclab.nl/hooked")
         phase = Phase.objects.create(experiment=experiment)

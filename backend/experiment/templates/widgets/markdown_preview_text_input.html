@@ -6,7 +6,7 @@
     </div>
 
     <div class="tab-content active" id="tab-content-edit">
-        <textarea rows="{{ widget.attrs.rows|default:'16' }}" name="{{ widget.name }}" value="{{ widget.value|default:'' }}" placeholder="{{ widget.placeholder|default:''}}" {% include "django/forms/widgets/attrs.html" %}>{{ widget.value|default:'' }}</textarea>
+        <textarea rows="{{ widget.attrs.rows }}" name="{{ widget.name }}" value="{{ widget.value|default:'' }}" placeholder="{{ widget.placeholder|default:''}}" {% include "django/forms/widgets/attrs.html" %}>{{ widget.value|default:'' }}</textarea>
     </div>
 
     <div class="tab-content" id="tab-content-preview">
@@ -14,6 +14,6 @@
     </div>
 
     <!-- Render placeholder as html -->
-    <div class="help">{{ widget.attrs.help_text|default:'This field supports markdown syntax, allowing you to format text and embed images. For more information, see <a href="https://www.markdownguide.org/basic-syntax/" target="_blank" rel="noopener noreferrer">https://www.markdownguide.org/basic-syntax/</a> and be sure to use the preview tab to see how your content will be rendered.'|safe }}</div>
+    <div class="markdown-help help">{{ widget.attrs.help_text|default:'This field supports markdown syntax, allowing you to format text and embed images. For more information, see <a href="https://www.markdownguide.org/basic-syntax/" target="_blank" rel="noopener noreferrer">https://www.markdownguide.org/basic-syntax/</a> and be sure to use the preview tab to see how your content will be rendered.'|safe }}</div>
 
 </div>

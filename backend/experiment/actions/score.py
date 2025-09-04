@@ -66,7 +66,11 @@ class Score(BaseAction):
         if config:
             self.config.update(config)
         self.icon = icon
-        self.texts = {"score": _("Total Score"), "next": _("Next"), "listen_explainer": _("You listened to:")}
+        self.text = {
+            "score": _("Total Score"),
+            "next": _("Next"),
+            "listen_explainer": _("You listened to:"),
+        }
         self.last_song = result.section.song_label() if result else session.last_song()
         self.timer = timer
 
@@ -82,7 +86,7 @@ class Score(BaseAction):
             "title": self.title,
             "score": self.score,
             "score_message": self.score_message,
-            "texts": self.texts,
+            "texts": self.text,
             "feedback": self.feedback,
             "icon": self.icon,
             "timer": self.timer,

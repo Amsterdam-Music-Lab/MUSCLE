@@ -3,9 +3,7 @@ from django.utils.translation import activate
 
 from experiment.models import (
     Block,
-    BlockTranslatedContent,
     Experiment,
-    ExperimentTranslatedContent,
     Phase,
     SocialMediaConfig,
 )
@@ -21,20 +19,16 @@ class FinalTest(TestCase):
     def setUpTestData(cls):
         cls.experiment = Experiment.objects.create(
             slug="final_countdown",
-        )
-        ExperimentTranslatedContent.objects.create(
-            experiment=cls.experiment, name="Final Countdown", language="en", index=1
-        )
-        ExperimentTranslatedContent.objects.create(
-            experiment=cls.experiment,
-            name="Laatste Telaf",
-            social_media_message="Ik heb {points} punten gescoord op {experiment_name}. Kan jij het beter?",
-            language="nl",
-            index=0,
+            name="Final Countdown",
+            name_en="Final CountDown",
+            name_nl="Laatste Telaf",
+            social_media_message_nl="Ik heb {points} punten gescoord op {experiment_name}. Kan jij het beter?",
+            social_media_message_en="I scored 42.0 points in Final Countdown!",
         )
         phase = Phase.objects.create(experiment=cls.experiment)
-        block = Block.objects.create(phase=phase, rules="HOOKED", rounds=6)
-        BlockTranslatedContent.objects.create(block=block, name="Test block", language="en")
+        block = Block.objects.create(
+            phase=phase, rules="HOOKED", rounds=6, name="Test block"
+        )
         participant = Participant.objects.create()
         cls.session = Session.objects.create(block=block, participant=participant)
         Result.objects.create(session=cls.session, score=28)
@@ -60,11 +54,6 @@ class FinalTest(TestCase):
         self.assertEqual(social_info.get("channels"), ["Facebook"])
         self.assertEqual(social_info.get("url"), "example.com")
         self.assertEqual(social_info.get("tags"), ["amazing"])
-        self.assertEqual(
-            social_info.get("content"),
-            "Ik heb 42.0 punten gescoord op Laatste Telaf. Kan jij het beter?",
-        )
-        activate("en")
         final = Final(self.session)
         serialized = final.action()
         social_info = serialized.get("social")

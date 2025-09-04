@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.core.files.uploadedfile import SimpleUploadedFile
 
 from experiment.rules.musical_preferences import MusicalPreferences
 from experiment.actions.trial import Trial
