@@ -40,10 +40,12 @@ class ChoiceInline(TranslationTabularInline):
 
 @admin.action(description=_("Duplicate selected questions"))
 def duplicate_question(modeladmin, request, queryset):
-    questions = queryset
-    for question in questions:
+    for question in queryset:
+        n_questions = Question.objects.filter(
+            key__regex=rf'^{question.key}(_\d+)*$'
+        ).count()
         question_copy = deepcopy(question)
-        question_copy.key = f"{question.key}_copy"
+        question_copy.key = f"{question.key}_{n_questions}"
         question_copy.save()
         if question.choice_set.count():
             for choice in list(question.choice_set.all()):

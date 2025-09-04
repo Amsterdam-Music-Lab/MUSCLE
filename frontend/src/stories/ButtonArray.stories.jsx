@@ -58,7 +58,7 @@ export const CategorizationWithHiddenText = {
             explainer: "",
             question: "",
             result_id: 16549,
-            is_skippable: false,
+            skippable: false,
             submits: true,
             style: {
                 "invisible-text": true,
@@ -93,7 +93,7 @@ export const CategorizationWithHiddenTextDisabled = {
             view: "BUTTON_ARRAY",
             explainer: "",
             question: "",
-            is_skippable: false,
+            skippable: false,
             submits: true,
             style: {
                 "invisible-text": true,

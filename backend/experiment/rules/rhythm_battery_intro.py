@@ -1,12 +1,14 @@
 from django.utils.translation import gettext_lazy as _
 
 from .base import BaseRules
-from experiment.actions import Explainer, Step, Trial
-from experiment.actions.form import ChoiceQuestion, Form
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay
-from experiment.actions.styles import ColorScheme
+from experiment.actions.question import ButtonArrayQuestion
+from experiment.actions.trial import Trial
 from experiment.actions.utils import final_action_with_optional_button
 from result.utils import prepare_result
+from theme.styles import ColorScheme
 
 
 class RhythmBatteryIntro(BaseRules):
@@ -36,37 +38,34 @@ class RhythmBatteryIntro(BaseRules):
             result_pk = prepare_result(key, session, expected_response=key)
             feedback_form = Form(
                 [
-                    ChoiceQuestion(
+                    ButtonArrayQuestion(
                         key=key,
-                        question=_("Are you in a quiet room?"),
+                        text=_("Are you in a quiet room?"),
                         choices={
                             'YES': _('YES'),
                             'MODERATELY': _('MODERATELY'),
                             'NO': _('NO'),
                         },
                         result_id=result_pk,
-                        view='BUTTON_ARRAY',
-                        submits=True,
                         style=[ColorScheme.BOOLEAN],
                     )
-                ]
+                ],
+                submit_label="",
             )
         elif round_number == 1:
             key = 'internet_connection'
             result_pk = prepare_result(key, session, expected_response=key)
             feedback_form = Form(
                 [
-                    ChoiceQuestion(
+                    ButtonArrayQuestion(
                         key='internet_connection',
-                        question=_("Do you have a stable internet connection?"),
+                        text=_("Do you have a stable internet connection?"),
                         choices={
                             'YES': _('YES'),
                             'MODERATELY': _('MODERATELY'),
                             'NO': _('NO'),
                         },
-                        view='BUTTON_ARRAY',
                         result_id=result_pk,
-                        submits=True,
                         style=[ColorScheme.BOOLEAN],
                     )
                 ]
@@ -76,13 +75,11 @@ class RhythmBatteryIntro(BaseRules):
             result_pk = prepare_result(key, session, expected_response=key)
             feedback_form = Form(
                 [
-                    ChoiceQuestion(
+                    ButtonArrayQuestion(
                         key=key,
-                        question=_("Are you wearing headphones?"),
+                        text=_("Are you wearing headphones?"),
                         choices={'YES': _('YES'), 'NO': _('NO')},
-                        view='BUTTON_ARRAY',
                         result_id=result_pk,
-                        submits=True,
                         style=[ColorScheme.BOOLEAN],
                     )
                 ]
@@ -92,15 +89,13 @@ class RhythmBatteryIntro(BaseRules):
             result_pk = prepare_result(key, session, expected_response=key)
             feedback_form = Form(
                 [
-                    ChoiceQuestion(
+                    ButtonArrayQuestion(
                         key=key,
-                        question=_(
+                        text=_(
                             "Do you have sound notifications from other devices turned off?"
                         ),
                         choices={'YES': _('YES'), 'NO': _('NO')},
-                        view='BUTTON_ARRAY',
                         result_id=result_pk,
-                        submits=True,
                         style=[ColorScheme.BOOLEAN],
                     ),
                 ]

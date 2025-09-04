@@ -2,19 +2,9 @@ from typing import Generator
 
 from django.db.models import QuerySet
 
-from experiment.actions.form import (
-    BooleanQuestion,
-    ChoiceQuestion,
-    LikertQuestion,
-    LikertQuestionIcon,
-    NumberQuestion,
-    TextQuestion,
-    AutoCompleteQuestion,
-    Question,
-)
+from experiment.actions.question import ChoiceQuestionAction, OpenQuestionAction
 from participant.models import Participant
 from question.models import Question
-from result.utils import prepare_profile_result
 
 
 def question_by_key(key: str, questions: list):
@@ -52,10 +42,7 @@ def get_unanswered_questions(
     for question_obj in question_set:
         if question_obj.key in keys_answered:
             continue
-        profile_result = prepare_profile_result(question_obj.key, participant)
-        question = create_question_db(question_obj)
-        question.result_id = profile_result.id
-        yield question
+        yield question_obj
 
 
 def create_question_db(question: Question):
@@ -67,61 +54,25 @@ def create_question_db(question: Question):
     Retuns:
         experiment.actions.form.Question object
     """
-
-    choices = {}
-    for choice in question.choice_set.all():
-        choices[choice.key] = choice.text
-
-    if question.type == "LikertQuestion":
-        return LikertQuestion(
+    if question.choice_set.count():
+        choices = {}
+        for choice in question.choice_set.all():
+            choices[choice.key] = choice.text
+        return ChoiceQuestionAction(
             key=question.key,
-            question=question.question,
+            text=question.question,
             explainer=question.explainer,
-            scale_steps=question.scale_steps,
             choices=choices,
+            view=question.view,
+            min_values=question.min_values,
         )
-    elif question.type == "LikertQuestionIcon":
-        return LikertQuestionIcon(
+    else:
+        return OpenQuestionAction(
             key=question.key,
-            question=question.question,
-            explainer=question.explainer,
-            scale_steps=question.scale_steps,
-        )
-    elif question.type == "NumberQuestion":
-        return NumberQuestion(
-            key=question.key,
-            question=question.question,
+            text=question.question,
             explainer=question.explainer,
             min_value=question.min_value,
             max_value=question.max_value,
-        )
-    elif question.type == "TextQuestion":
-        return TextQuestion(
-            key=question.key,
-            question=question.question,
-            explainer=question.explainer,
             max_length=question.max_length,
-        )
-    elif question.type == "BooleanQuestion":
-        return BooleanQuestion(
-            key=question.key,
-            question=question.question,
-            explainer=question.explainer,
-            choices=choices,
-        )
-    elif question.type == "ChoiceQuestion":
-        return ChoiceQuestion(
-            key=question.key,
-            question=question.question,
-            explainer=question.explainer,
-            choices=choices,
-            min_values=question.min_values,
             view=question.view,
-        )
-    elif question.type == "AutoCompleteQuestion":
-        return AutoCompleteQuestion(
-            key=question.key,
-            question=question.question,
-            explainer=question.explainer,
-            choices=choices,
         )

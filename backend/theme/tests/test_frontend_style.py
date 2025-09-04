@@ -1,6 +1,6 @@
 import unittest
 
-from experiment.actions.styles import (
+from theme.styles import (
     ColorScheme,
     ConflictingStylesException,
     FrontendStyle,

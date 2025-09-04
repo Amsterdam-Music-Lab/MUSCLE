@@ -1,13 +1,13 @@
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions.form import LikertQuestion
+from experiment.actions.question import TextRangeQuestion
 
-def frequency_question(key, question):
+def frequency_question(key: str, text: str) -> TextRangeQuestion:
     """Define a question with frequency options"""
-    return LikertQuestion(
-        key = key,
-        question = question,
-        choices = {
+    return TextRangeQuestion(
+        key=key,
+        text=text,
+        choices={
             1: _("Never"),
             2: _("Not very often"),
             3: _("Occasionally"),
@@ -15,15 +15,15 @@ def frequency_question(key, question):
             5: _("Very often"),
             6: _("Always")
         },
-        explainer = _("Please tell us how much you agree")
+        explainer=_("Please tell us how often this happens to you")
     )
 
-def agreement_question(key, question):
+def agreement_question(key: str, text: str) -> TextRangeQuestion:
     """Define a question with agreement options"""
-    return LikertQuestion(
-        key = key,
-        question = question,
-        choices = {
+    return TextRangeQuestion(
+        key=key,
+        text=text,
+        choices={
             1: _("Completely disagree"),
             2: _("Strongly disagree"),
             3: _("Disagree"),
@@ -32,7 +32,7 @@ def agreement_question(key, question):
             6: _("Strongly agree"),
             7: _("Completely agree")
         },
-        explainer = _("Please tell us how much you agree")
+        explainer=_("Please tell us how much you agree")
     )
 
 THATS_MY_SONG_QUESTIONS_FIXED = [

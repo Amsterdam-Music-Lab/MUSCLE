@@ -1,7 +1,7 @@
 import logging
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions import Explainer, Step
+from experiment.actions.explainer import Explainer, Step
 from experiment.actions.utils import render_feedback_trivia
 from .duration_discrimination import DurationDiscrimination
 

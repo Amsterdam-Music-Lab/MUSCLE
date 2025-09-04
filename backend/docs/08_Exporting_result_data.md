@@ -157,12 +157,10 @@ A list of `Result` objects containing the participant's anwers to the profile qu
                     "silent": "1945 or earlier",
                     "millenial": "1981–1996"
                 },
-                "submits": false,
-                "question": "When were you born?",
+                "text": "When were you born?",
                 "explainer": "",
                 "result_id": 7983,
                 "min_values": 1,
-                "is_skippable": false,
                 "decision_time": 4.958999872207642
             }
         }
@@ -230,12 +228,10 @@ A list of session `Result` objects containing the participant's responses to the
                     "A": "___",
                     "B": "___"
                 },
-                "submits": true,
-                "question": "",
+                "text": "",
                 "explainer": "",
                 "result_id": 8051,
                 "min_values": 1,
-                "is_skippable": false,
                 "decision_time": 0.31099987030029297,
                 "expected_response": "B"
             }

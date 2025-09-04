@@ -16,10 +16,11 @@ class AdminTestCase(TestCase):
         request = RequestFactory().request()
         questions_to_duplicate = Question.objects.filter(key__startswith='dgf_country_of_origin')
         duplicate_question(question_admin, request, questions_to_duplicate)
-        duplicates = Question.objects.filter(key__endswith='copy')
+        duplicates = Question.objects.filter(
+            key__startswith='dgf_country_of_origin', key__endswith='1'
+        )
         self.assertEqual(duplicates.count(), 2)
         country_open = duplicates.get(key__contains='open')
         self.assertEqual(country_open.choice_set.count(), 0)
         country_choices = duplicates.exclude(key__contains='open').first()
         self.assertEqual(country_choices.choice_set.count(), 249)
-

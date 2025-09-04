@@ -1,21 +1,24 @@
-from experiment.actions.form import LikertQuestion
+from django.utils.translation import gettext_lazy as _
+
+from experiment.actions.question import TextRangeQuestion
 
 
-def stomp_question(key, genre):
+def stomp_question(key: str, genre: str) -> TextRangeQuestion:
     """Define a standard STOMP question for a genre"""
-    return LikertQuestion(
-        key = key,
-        question = "How much do you like %s music?" % genre,
-        choices = [
-            "Dislike Strongly",
-            "Dislike Moderately",
-            "Dislike a Little",
-            "Neither Like nor Dislike",
-            "Like a Little",
-            "Like Moderately",
-            "Like Strongly"
-        ],
-        explainer = "Indicate your musical preferences"
+    return TextRangeQuestion(
+        key=key,
+        text=_("How much do you like %s music?") % genre,
+        choices={
+            1: _("Dislike Strongly"),
+            2: _("Dislike Moderately"),
+            3: _("Dislike a Little"),
+            4: _("Neither Like nor Dislike"),
+            5: _("Like a Little"),
+            6: _("Like Moderately"),
+            7: _("Like Strongly"),
+        },
+        explainer="Indicate your musical preferences",
+        scoring_rule='LIKERT',
     )
 
 

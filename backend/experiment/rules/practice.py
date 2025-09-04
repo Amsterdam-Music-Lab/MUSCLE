@@ -4,8 +4,11 @@ from typing import Tuple, Union
 
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions import ChoiceQuestion, Form, Explainer, Step, Trial
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay
+from experiment.actions.question import ButtonArrayQuestion
+from experiment.actions.trial import Trial
 from result.utils import prepare_result
 from section.models import Section
 from session.models import Session
@@ -303,8 +306,8 @@ class PracticeMixin(object):
             round_number / self.n_practice_rounds
         )
         key = self.task_description.replace(" ", "_") + "_practice"
-        question = ChoiceQuestion(
-            question=_(
+        question = ButtonArrayQuestion(
+            text=_(
                 "Is the second tone %(first_condition)s or %(second_condition)s than the first tone?"
             )
             % {
@@ -316,7 +319,6 @@ class PracticeMixin(object):
                 self.first_condition: self.first_condition_i18n,
                 self.second_condition: self.second_condition_i18n,
             },
-            view="BUTTON_ARRAY",
             result_id=prepare_result(
                 key,
                 session,
@@ -324,10 +326,9 @@ class PracticeMixin(object):
                 expected_response=expected_response,
                 scoring_rule="CORRECTNESS",
             ),
-            submits=True,
         )
         playback = Autoplay([section])
-        form = Form([question])
+        form = Form([question], submit_label="")
         return Trial(
             playback=playback,
             feedback_form=form,

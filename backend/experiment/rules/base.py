@@ -9,8 +9,9 @@ from experiment.actions.types import FeedbackInfo
 from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.trial import Trial
-from question.utils import get_unanswered_questions
+from question.utils import create_question_db, get_unanswered_questions
 from result.score import SCORING_RULES
+from result.utils import prepare_profile_result
 from session.models import Session
 
 logger = logging.getLogger(__name__)
@@ -88,11 +89,18 @@ class BaseRules(object):
             )
             while len(trials) < n_questions:
                 try:
-                    question = next(question_iterator)
+                    question_obj = next(question_iterator)
+                    profile_result = prepare_profile_result(
+                        question_obj.key, session.participant
+                    )
+                    question = create_question_db(question_obj)
+                    question.result_id = profile_result.id
                     trials.append(
                         Trial(
                             title=_("Questionnaire"),
-                            feedback_form=Form([question]),
+                            feedback_form=Form(
+                                [question], is_skippable=question_obj.is_skippable
+                            ),
                         )
                     )
                 except StopIteration:
