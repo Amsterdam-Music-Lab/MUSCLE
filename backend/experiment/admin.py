@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 
 from inline_actions.admin import InlineActionsModelAdminMixin
+from modeltranslation.admin import TabbedTranslationAdmin
 
 from experiment.models import (
     Block,
@@ -24,7 +25,7 @@ from question.models import QuestionSeries, QuestionInSeries
 from .utils import get_block_json_export_as_repsonse
 
 
-class BlockAdmin(admin.ModelAdmin):
+class BlockAdmin(TabbedTranslationAdmin):
     model = Block
     inlines = [QuestionSeriesInline]
     autocomplete_fields = ["playlists"]
@@ -82,7 +83,7 @@ class SocialMediaConfigInline(admin.StackedInline):
         return 1
 
 
-class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
+class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
     list_display = (
         "experiment_name",
         "slug_link",
@@ -90,9 +91,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         "active",
     )
     inline_actions = ["experimenter_dashboard", "duplicate"]
-    fields = ["slug", "name", "description", "consent", "about_content",
-                  "disclaimer","privacy"]
-    change_form_template = "admin/experiment_change.html"
 
     inlines = [
         PhaseInline,
@@ -330,6 +328,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
                 ]
             )
         )
+
 
 admin.site.register(Experiment, ExperimentAdmin)
 admin.site.register(Block, BlockAdmin)

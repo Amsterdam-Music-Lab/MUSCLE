@@ -53,7 +53,7 @@ class Experiment(models.Model):
         null=True,
         validators=[experiment_slug_validator],
     )
-    name = models.CharField(max_length=64, default="")
+    name = models.CharField(max_length=64, blank=True, default="")
     description = models.TextField(blank=True, default="")
     consent = models.FileField(
         upload_to=consent_upload_path,
