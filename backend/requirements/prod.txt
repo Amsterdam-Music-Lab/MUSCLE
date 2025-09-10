@@ -31,7 +31,7 @@ coverage==7.3.2
     # via -r /server/requirements.in/base.txt
 defusedxml==0.7.1
     # via genbadge
-django==4.2.22
+django==4.2.24
     # via
     #   -r /server/requirements.in/base.txt
     #   django-cors-headers
