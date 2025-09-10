@@ -1,11 +1,12 @@
 import json
 import logging
 
-from django.http import Http404, HttpRequest, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponseBadRequest, JsonResponse
+from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _, get_language
 from django_markup.markup import formatter
 
-from .models import Block, Experiment, Feedback, Session
+from .models import Block, Experiment, Feedback, Phase, Session
 from section.models import Playlist
 from experiment.serializers import (
     serialize_block,
@@ -15,7 +16,7 @@ from experiment.serializers import (
 from experiment.rules import BLOCK_RULES
 from experiment.actions.utils import EXPERIMENT_KEY
 from participant.models import Participant
-from participant.utils import get_participant
+from participant.utils import get_or_create_participant
 from theme.serializers import serialize_theme
 
 logger = logging.getLogger(__name__)
@@ -25,14 +26,14 @@ def get_block(request: HttpRequest, slug: str) -> JsonResponse:
     """Get block data from active block with given :slug
     DO NOT modify session data here, it will break participant_id system
        (/participant and /block/<slug> are called at the same time by the frontend)"""
-    block = block_or_404(slug)
+    block = get_object_or_404(Block, slug=slug)
     class_name = ""
     active_language = get_language()
 
     if active_language.startswith("zh"):
         class_name = "chinese"
 
-    participant = get_participant(request)
+    participant = get_or_create_participant(request)
     session = Session(block=block, participant=participant)
 
     playlist = block.playlists.first()
@@ -62,20 +63,21 @@ def get_block(request: HttpRequest, slug: str) -> JsonResponse:
     return response
 
 
+def create_phase(request):
+    experiment_id = request.POST.get('experiment_id')
+    experiment = Experiment.objects.get(pk=experiment_id)
+    phase = Phase.objects.create(experiment=experiment)
+    return JsonResponse({"created": phase.id})
+
+
 def post_feedback(request, slug):
     text = request.POST.get("feedback")
-    block = block_or_404(slug)
+    if not text:
+        return HttpResponseBadRequest()
+    block = get_object_or_404(Block, slug=slug)
     feedback = Feedback(text=text, block=block)
     feedback.save()
     return JsonResponse({"status": "ok"})
-
-
-def block_or_404(slug):
-    # get block
-    try:
-        return Block.objects.get(slug=slug)
-    except Block.DoesNotExist:
-        raise Http404("Block does not exist")
 
 
 def add_default_question_series(request, slug):
@@ -108,7 +110,7 @@ def get_experiment(
         )
 
     request.session[EXPERIMENT_KEY] = slug
-    participant = get_participant(request)
+    participant = get_or_create_participant(request)
 
     phases = list(experiment.phases.order_by("index").all())
     if not len(phases):

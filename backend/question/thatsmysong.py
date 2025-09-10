@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions.form import LikertQuestion, RadiosQuestion
+from experiment.actions.form import LikertQuestion
 
 def frequency_question(key, question):
     """Define a question with frequency options"""

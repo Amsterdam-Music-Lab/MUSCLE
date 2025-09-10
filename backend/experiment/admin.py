@@ -1,80 +1,71 @@
 from django.conf import settings
 from django.contrib import admin, messages
+from django.db import models
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-
-from inline_actions.admin import InlineActionsModelAdminMixin
 from django.urls import reverse
 from django.utils.html import format_html
 
-from nested_admin import NestedModelAdmin, NestedStackedInline, NestedTabularInline
-
-from experiment.utils import (
-    check_missing_translations,
-    get_flag_emoji,
-    get_missing_content_blocks,
-)
+from inline_actions.admin import InlineActionsModelAdminMixin
+from modeltranslation.admin import TabbedTranslationAdmin
 
 from experiment.models import (
     Block,
     Experiment,
     Phase,
     SocialMediaConfig,
-    ExperimentTranslatedContent,
-    BlockTranslatedContent,
-    ExperimentTranslatedContent,
 )
-from question.admin import QuestionSeriesInline
 from experiment.forms import (
     BlockForm,
-    BlockTranslatedContentForm,
-    ExperimentForm,
-    ExperimentTranslatedContentForm,
     SocialMediaConfigForm,
 )
-
+from experiment.widgets import MarkdownPreviewTextInput
+from question.admin import QuestionSeriesInline
 from question.models import QuestionSeries, QuestionInSeries
 from .utils import get_block_json_export_as_repsonse
 
 
-class BlockTranslatedContentInline(NestedTabularInline):
-    model = BlockTranslatedContent
-    form = BlockTranslatedContentForm
-    extra = 0
-    fields = [
-        "name",
-        "description",
-    ]
-    can_delete = False
-    verbose_name = 'Block Text'
+class BlockAdmin(TabbedTranslationAdmin):
+    model = Block
+    inlines = [QuestionSeriesInline]
+    autocomplete_fields = ["playlists"]
+    form = BlockForm
 
-    def has_add_permission(self, request, obj):
+    def has_module_permission(self, request):
+        ''' Prevents the admin from being shown in the sidebar.'''
         return False
 
+    def save_model(self, request, obj, form, changed):
+        if request.GET.get('phase_id'):
+            phase_id = int(request.GET.get('phase_id'))
+            phase = Phase.objects.get(pk=phase_id)
+            obj.phase = phase
+        super().save_model(request, obj, form, changed)
 
-class ExperimentTranslatedContentInline(NestedStackedInline):
-    model = ExperimentTranslatedContent
-    form = ExperimentTranslatedContentForm
-    template = "admin/translated_content.html"
-    extra = 1
+    def response_change(self, request, obj):
+        return self._close_popup()
+
+    def response_add(self, request, obj, post_url_continue=None):
+        return self._close_popup()
+
+    def response_delete(self, request, obj_display, obj_id):
+        return self._close_popup()
+
+    def _close_popup(self):
+        return HttpResponse(
+            '<script type="text/javascript">window.close(); window.opener.location.reload();</script>'
+        )
 
 
-class BlockInline(NestedStackedInline):
-    model = Block
-    inlines = [BlockTranslatedContentInline, QuestionSeriesInline]
-    form = BlockForm
-    autocomplete_fields = ["playlists"]
-    classes = ["wide"]
-
-    def get_extra(self, request, obj=None, **kwargs):
-        if obj:
-            return 0
-        return 1
-
-
-class PhaseInline(NestedTabularInline):
+class PhaseInline(admin.StackedInline):
     model = Phase
     sortable_field_name = "index"
-    inlines = [BlockInline]
+    template = "admin/phase_inline.html"
+    show_change_link = True
+
+    class Media:
+        css = {"all": ("phase_inline.css",)}
+        js = ["phase_inline.js"]
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
@@ -82,7 +73,7 @@ class PhaseInline(NestedTabularInline):
         return 1
 
 
-class SocialMediaConfigInline(NestedStackedInline):
+class SocialMediaConfigInline(admin.StackedInline):
     form = SocialMediaConfigForm
     model = SocialMediaConfig
 
@@ -92,33 +83,36 @@ class SocialMediaConfigInline(NestedStackedInline):
         return 1
 
 
-class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
+class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
     list_display = (
-        "name",
+        "experiment_name",
         "slug_link",
         "remarks",
         "active",
     )
-    fields = [
-        "slug",
-        "active",
-        "theme_config",
-    ]
     inline_actions = ["experimenter_dashboard", "duplicate"]
-    form = ExperimentForm
+
     inlines = [
-        ExperimentTranslatedContentInline,
         PhaseInline,
         SocialMediaConfigInline,
     ]
 
-    class Media:
-        css = {"all": ("experiment_admin.css",)}
+    formfield_overrides = {
+        models.TextField: {"widget": MarkdownPreviewTextInput},
+    }
 
-    def name(self, obj):
-        content = obj.get_fallback_content()
+    def experiment_name(self, obj):
+        return obj.name or "<Unnamed>"
 
-        return content.name if content else "No name"
+    experiment_name.short_description = "Name"
+
+    def save_model(self, request, obj, form, changed):
+        """delete all phases which don't have associated blocks when saving"""
+        phases = obj.phases
+        for phase in phases.all():
+            if not phase.blocks.count():
+                phase.delete()
+        super().save_model(request, obj, form, changed)
 
     def redirect_to_overview(self):
         return redirect(reverse("admin:experiment_experiment_changelist"))
@@ -181,8 +175,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 )
 
             # order_by is inserted here to prevent a query error
-            exp_contents = obj.translated_content.order_by("name").all()
-            # order_by is inserted here to prevent a query error
             exp_phases = obj.phases.order_by("index").all()
 
             # Duplicate Experiment object
@@ -191,14 +183,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
             exp_copy._state.adding = True
             exp_copy.slug = f"{obj.slug}{slug_extension}"
             exp_copy.save()
-
-            # Duplicate experiment translated content objects
-            for content in exp_contents:
-                exp_content_copy = content
-                exp_content_copy.pk = None
-                exp_content_copy._state.adding = True
-                exp_content_copy.experiment = exp_copy
-                exp_content_copy.save()
 
             # Duplicate phases
             for phase in exp_phases:
@@ -212,7 +196,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 # Duplicate blocks in this phase
                 for block in these_blocks:
                     # order_by is inserted here to prevent a query error
-                    block_contents = block.translated_contents.order_by('name').all()
                     these_playlists = block.playlists.all()
                     question_series = QuestionSeries.objects.filter(block=block)
 
@@ -223,14 +206,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                     block_copy.phase = phase_copy
                     block_copy.save()
                     block_copy.playlists.set(these_playlists)
-
-                    # Duplicate Block translated content objects
-                    for content in block_contents:
-                        block_content_copy = content
-                        block_content_copy.pk = None
-                        block_content_copy._state.adding = True
-                        block_content_copy.block = block_copy
-                        block_content_copy.save()
 
                     # Duplicate the Block QuestionSeries
                     for series in question_series:
@@ -318,10 +293,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
     def remarks(self, obj):
         remarks_array = []
 
-        # Check if there is any translated content
-        content = obj.translated_content.first()
-
-        if not content:
+        if not obj.name:
             remarks_array.append(
                 {
                     "level": "warning",
@@ -330,29 +302,12 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 }
             )
 
-        has_consent = (
-            obj.translated_content.filter(consent__isnull=False)
-            .exclude(consent="")
-            .first()
-        )
-
-        if not has_consent:
+        if not obj.consent:
             remarks_array.append(
                 {
                     "level": "info",
                     "message": "📋 No consent form",
                     "title": "You may want to add a consent form (approved by an ethical board) to this experiment.",
-                }
-            )
-
-        missing_content_block_translations = check_missing_translations(obj)
-
-        if missing_content_block_translations:
-            remarks_array.append(
-                {
-                    "level": "warning",
-                    "message": "🌍 Missing block content",
-                    "title": missing_content_block_translations,
                 }
             )
 
@@ -365,12 +320,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
                 }
             )
 
-        # TODO: Check if all theme configs support the same languages as the experiment
-        # Implement this when the theme configs have been updated to support multiple languages
-
-        # TODO: Check if all social media configs support the same languages as the experiment
-        # Implement this when the social media configs have been updated to support multiple languages
-
         return format_html(
             "\n".join(
                 [
@@ -380,79 +329,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, NestedModelAdmin):
             )
         )
 
-    def save_model(self, request, obj, form, change):
-        # Save the model
-        super().save_model(request, obj, form, change)
-
-        # Check for missing translations after saving
-        missing_content_blocks = get_missing_content_blocks(obj)
-
-        if missing_content_blocks:
-            for block, missing_languages in missing_content_blocks:
-                missing_language_flags = [
-                    get_flag_emoji(language) for language in missing_languages
-                ]
-                self.message_user(
-                    request,
-                    f"Block {block.slug} does not have content in {', '.join(missing_language_flags)}",
-                    level=messages.WARNING,
-                )
-
-
-class PhaseAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
-    list_display = (
-        "name_link",
-        "related_experiment",
-        "index",
-        "dashboard",
-        "randomize",
-        "blocks",
-    )
-    fields = ["name", "experiment", "index", "dashboard", "randomize"]
-    inlines = [BlockInline]
-
-    def name_link(self, obj):
-        obj_name = obj.__str__()
-        url = reverse("admin:experiment_phase_change", args=[obj.pk])
-        return format_html('<a href="{}">{}</a>', url, obj_name)
-
-    def related_experiment(self, obj):
-        url = reverse("admin:experiment_experiment_change", args=[obj.experiment.pk])
-        content = obj.experiment.get_fallback_content()
-        experiment_name = content.name if content else "No name"
-        return format_html('<a href="{}">{}</a>', url, experiment_name)
-
-    def blocks(self, obj):
-        blocks = Block.objects.filter(phase=obj)
-
-        if not blocks:
-            return "No blocks"
-
-        return format_html(", ".join([block.slug for block in blocks]))
-
-
-class BlockTranslatedContentAdmin(admin.ModelAdmin):
-    list_display = ["name", "block", "language"]
-    list_filter = ["language"]
-    search_fields = [
-        "name",
-        "block__name",
-    ]
-
-    def blocks(self, obj):
-        # Block is manytomany, so we need to find it through the related name
-        blocks = Block.objects.filter(translated_contents=obj)
-
-        if not blocks:
-            return "No block"
-
-        return format_html(
-            ", ".join(
-                [
-                    f'<a href="/admin/experiment/block/{block.id}/change/">{block.name}</a>'
-                    for block in blocks
-                ]
-            )
-        )
 
 admin.site.register(Experiment, ExperimentAdmin)
+admin.site.register(Block, BlockAdmin)

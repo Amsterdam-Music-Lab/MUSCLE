@@ -62,7 +62,7 @@ class MatchingPairsGame(BaseRules):
             intro_explainer = self.get_intro_explainer()
             playlist = Playlist(session.block.playlists.all())
             actions = [intro_explainer, playlist]
-            questions = self.get_open_questions(session)
+            questions = self.get_profile_question_trials(session, None)
             if questions:
                 intro_questions = Explainer(
                     instruction=_(
@@ -167,7 +167,7 @@ class MatchingPairsGame(BaseRules):
             intro_explainer = self.get_intro_explainer()
             playlist = Playlist(session.block.playlists.all())
             actions = [intro_explainer, playlist]
-            questions = self.get_open_questions(session)
+            questions = self.get_profile_question_trials(session, None)
             if questions:
                 intro_questions = Explainer(
                     instruction=_(

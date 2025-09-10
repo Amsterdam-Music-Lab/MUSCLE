@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 from django.template import Template, Context
 from django_markup.markup import formatter
 from django.core.files import File
+from django.utils.translation import gettext_lazy as _
 
 from typing import Literal
 
@@ -75,7 +76,7 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
         ```
 
     Note:
-        - The text file is normally uploaded via the admin interface for the experiment, so most of the time (and by default) you will use an experiment's `translated_content.consent` file.
+        - The text file is normally uploaded via the admin interface for the experiment, so most of the time (and by default) you will use an experiment's `texts.consent` file.
         - This component is used in conjunction with the frontend Consent.tsx component
         - HTML templates can use Django template language
         - Markdown files are automatically converted to HTML
@@ -97,11 +98,16 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
                 ea sea expetenda suscipiantur contentiones."
 
     def __init__(
-        self, text: File, title: str = "Informed consent", confirm: str = "I agree", deny: str = "Stop", url: str = ""
+        self,
+        text: File,
+        title: str = "Informed consent",
+        confirm: str = _("I agree"),
+        deny: str = _("Stop"),
+        url: str = "",
     ) -> None:
         # Determine which text to use
         if text != "":
-            # Uploaded consent via file field: block.consent (High priority)
+            # Uploaded consent via file field: experiment.consent (High priority)
             with text.open("r") as f:
                 dry_text = f.read()
             render_format = get_render_format(text.url)

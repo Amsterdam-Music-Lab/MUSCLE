@@ -1,4 +1,7 @@
-from django.test import TestCase
+from os.path import dirname, join
+from shutil import rmtree
+
+from django.test import override_settings, TestCase
 from django.utils import timezone
 from django.core.files.uploadedfile import SimpleUploadedFile
 
@@ -6,11 +9,10 @@ from image.models import Image
 from experiment.serializers import serialize_phase
 from experiment.models import (
     Block,
-    BlockTranslatedContent,
     Experiment,
+    Feedback,
     Phase,
     SocialMediaConfig,
-    ExperimentTranslatedContent,
 )
 from experiment.rules.rhythm_battery_intro import RhythmBatteryIntro
 from participant.models import Participant
@@ -18,6 +20,7 @@ from participant.utils import PARTICIPANT_KEY
 from session.models import Session
 from theme.models import ThemeConfig, FooterConfig, HeaderConfig
 
+here = dirname(__file__)
 
 class TestExperimentViews(TestCase):
     @classmethod
@@ -27,10 +30,6 @@ class TestExperimentViews(TestCase):
         experiment = Experiment.objects.create(
             slug="test_series",
             theme_config=theme_config,
-        )
-        ExperimentTranslatedContent.objects.create(
-            experiment=experiment,
-            language="en",
             name="Test Series",
             description="Test Description",
             social_media_message="Please play this Test experiment!",
@@ -43,6 +42,11 @@ class TestExperimentViews(TestCase):
         cls.block3 = Block.objects.create(slug="block3", phase=cls.intermediate_phase)
         cls.final_phase = Phase.objects.create(experiment=experiment, index=3)
         cls.block4 = Block.objects.create(slug="block4", phase=cls.final_phase)
+
+    @classmethod
+    def tearDownClass(cls):
+        rmtree(join(here, 'consent'))
+        return super().tearDownClass()
 
     def setUp(self):
         session = self.client.session
@@ -134,15 +138,11 @@ class TestExperimentViews(TestCase):
         experiment = Experiment.objects.create(
             slug="no_social_media",
             theme_config=create_theme_config(name="no_social_media"),
-        )
-        self.intermediate_phase.experiment = experiment
-        self.intermediate_phase.save()
-        ExperimentTranslatedContent.objects.create(
-            experiment=experiment,
-            language="en",
             name="Test Experiment",
             description="Test Description",
         )
+        self.intermediate_phase.experiment = experiment
+        self.intermediate_phase.save()
         response = self.client.get("/experiment/no_social_media/")
         self.assertEqual(response.status_code, 200)
         self.assertNotIn("socialMedia", response.json())
@@ -177,32 +177,18 @@ class TestExperimentViews(TestCase):
         total_score_2 = serialized_coll_2["accumulatedScore"]
         self.assertEqual(total_score_2, 16)
 
-    def test_experiment_get_translated_content(self):
-        """Test get_translated_content method"""
-        experiment = Experiment.objects.get(slug="test_series")
-        translated_content = experiment.get_translated_content("en")
-        self.assertEqual(translated_content.name, "Test Series")
+    def test_experiment_translation(self):
+        """Test translations of experiment texts"""
 
-    def test_experiment_get_fallback_content(self):
-        """Test get_fallback_content method"""
-
-        experiment = Experiment.objects.create(slug="test_experiment_translated_content")
+        experiment = Experiment.objects.create(
+            slug="test_experiment_translated_content",
+            name_en="Test Experiment Translation",
+            description_en="Test experiment description in English.",
+            name_nl="Probeersel",
+            description_nl="Eens kijken of vertaling werkt.",
+        )
         self.intermediate_phase.experiment = experiment
         self.intermediate_phase.save()
-        ExperimentTranslatedContent.objects.create(
-            experiment=experiment,
-            index=0,
-            language="en",
-            name="Test Experiment Fallback Content",
-            description="Test experiment description in English.",
-        )
-        ExperimentTranslatedContent.objects.create(
-            experiment=experiment,
-            index=1,
-            language="es",
-            name="Experimento de Prueba",
-            description="Descripción de la experimento de prueba en español.",
-        )
 
         session = self.client.session
         session["participant_id"] = self.participant.id
@@ -214,28 +200,30 @@ class TestExperimentViews(TestCase):
             headers={"Accept-Language": "en-Gb"},
         )
         # since English translation is available, the English content should be returned
-        self.assertEqual(response.json().get("name"), "Test Experiment Fallback Content")
+        self.assertEqual(response.json().get("name"), "Test Experiment Translation")
 
         # request experiment with language set to Spanish
-        response = self.client.get("/experiment/test_experiment_translated_content/", headers={"Accept-Language": "es"})
+        response = self.client.get(
+            "/experiment/test_experiment_translated_content/",
+            headers={"Accept-Language": "nl"},
+        )
 
         # since Spanish translation is available, the Spanish content should be returned
-        self.assertEqual(response.json().get("name"), "Experimento de Prueba")
+        self.assertEqual(response.json().get("name"), "Probeersel")
 
         # request experiment with language set to Dutch
         response = self.client.get("/experiment/test_experiment_translated_content/", headers={"Accept-Language": "nl"})
 
         # since no Dutch translation is available, the fallback content should be returned
         self.assertEqual(
-            response.json().get("name"), "Test Experiment Fallback Content"
+            response.json().get("description"), "Eens kijken of vertaling werkt."
         )
 
+    @override_settings(MEDIA_ROOT=here)
     def test_get_block(self):
         # Create a block
-        experiment = Experiment.objects.create(slug="test-experiment")
-        ExperimentTranslatedContent.objects.create(
-            experiment=experiment,
-            language="en",
+        experiment = Experiment.objects.create(
+            slug="test-experiment",
             name="Test Experiment",
             description="Test Description",
             consent=SimpleUploadedFile("test-consent.md", b"test consent"),
@@ -249,12 +237,8 @@ class TestExperimentViews(TestCase):
             rounds=3,
             bonus_points=42,
             phase=phase,
-        )
-        BlockTranslatedContent.objects.create(
-            block=block,
             name="Test Block",
             description="This is a test block",
-            language="en",
         )
         participant = Participant.objects.create()
         participant.save()
@@ -277,6 +261,20 @@ class TestExperimentViews(TestCase):
         self.assertEqual(len(response.json()["theme"]["header"]["score"]), 3)
         self.assertEqual(response.json()["rounds"], 3)
         self.assertEqual(response.json()["bonus_points"], 42)
+
+    def test_post_feedback(self):
+        request = {"feedback": "I have a lot of feedback here"}
+        self.client.post("/experiment/block/block1/feedback/", request)
+        self.assertEqual(Feedback.objects.count(), 1)
+        response = self.client.post(
+            "/experiment/block/nonexisting-slug/feedback/", request
+        )
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(Feedback.objects.count(), 1)
+        request = {"feedback": ""}
+        response = self.client.post("/experiment/block/block1/feedback/", request)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Feedback.objects.count(), 1)
 
 
 def create_theme_config(name="test_theme") -> ThemeConfig:

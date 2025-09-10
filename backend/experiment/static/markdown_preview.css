@@ -33,7 +33,6 @@
 .tab-content {
     display: none;
     padding: 1rem;
-    min-height: 128px;
     background-color: var(--button-bg);
     margin-top: -1px;
     margin-bottom: .5rem;
@@ -46,8 +45,12 @@
 
 .tab-content textarea {
     width: 100%;
-    min-height: 256px !important;
+    min-height: 5rem !important;
     height: 100%;
     border: 0;
     border-radius: 5px;
+}
+
+.markdown-help {
+    margin-left: 0px !important;
 }

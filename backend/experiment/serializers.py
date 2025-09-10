@@ -3,12 +3,11 @@ from typing import Optional, TypedDict, Literal
 
 from django.db.models import Sum
 from django_markup.markup import formatter
-from django.utils.translation import activate, get_language, gettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.consent import Consent
 from image.serializers import serialize_image
 from participant.models import Participant
-from result.models import Result
 from session.models import Session
 from theme.serializers import serialize_theme
 from .models import Block, Experiment, Phase, SocialMediaConfig
@@ -21,19 +20,6 @@ def serialize_actions(actions):
     return actions.action()
 
 
-def get_experiment_translated_content(experiment):
-    language_code = get_language()[0:2]
-
-    translated_content = experiment.get_translated_content(language_code)
-
-    if not translated_content:
-        raise ValueError("No translated content found for this experiment")
-
-    # set language cookie to the first available translation for this experiment
-    activate(translated_content.language)
-    return translated_content
-
-
 def serialize_experiment(experiment: Experiment) -> dict:
     """Serialize experiment
 
@@ -44,31 +30,31 @@ def serialize_experiment(experiment: Experiment) -> dict:
         Basic info about an experiment
     """
 
-    translated_content = get_experiment_translated_content(experiment)
-
     serialized = {
         "slug": experiment.slug,
-        "name": translated_content.name,
-        "description": formatter(translated_content.description, filter_name="markdown"),
+        "name": experiment.name,
+        "description": experiment.description,
     }
 
-    if translated_content.consent:
-        serialized["consent"] = Consent(translated_content.consent).action()
-    elif experiment.get_fallback_content() and experiment.get_fallback_content().consent:
-        serialized["consent"] = Consent(experiment.get_fallback_content().consent).action()
+    if experiment.consent:
+        serialized["consent"] = Consent(experiment.consent).action()
 
     if experiment.theme_config:
         serialized["theme"] = serialize_theme(experiment.theme_config)
 
-    if translated_content.about_content:
-        serialized["aboutContent"] = formatter(translated_content.about_content, filter_name="markdown")
+    if experiment.about_content:
+        serialized["aboutContent"] = formatter(
+            experiment.about_content, filter_name="markdown"
+        )
         serialized["backButtonText"] = _("Back")
 
-    if translated_content.disclaimer:
-        serialized["disclaimer"] = formatter(translated_content.disclaimer, filter_name="markdown")
+    if experiment.disclaimer:
+        serialized["disclaimer"] = formatter(
+            experiment.disclaimer, filter_name="markdown"
+        )
 
-    if translated_content.privacy:
-        serialized["privacy"] = formatter(translated_content.privacy, filter_name="markdown")
+    if experiment.privacy:
+        serialized["privacy"] = formatter(experiment.privacy, filter_name="markdown")
 
     if hasattr(experiment, "social_media_config") and experiment.social_media_config:
         serialized["socialMedia"] = serialize_social_media_config(experiment.social_media_config)

@@ -38,7 +38,7 @@ defusedxml==0.7.1
     # via genbadge
 dill==0.3.8
     # via pylint
-django==4.2.21
+django==4.2.22
     # via
     #   -r /server/requirements.in/base.txt
     #   django-cors-headers
@@ -179,7 +179,7 @@ regex==2023.12.25
     # via
     #   mkdocs-material
     #   textile
-requests==2.32.0
+requests==2.32.4
     # via
     #   -r requirements.in/dev.txt
     #   genbadge
@@ -209,7 +209,7 @@ tqdm==4.66.3
     # via -r /server/requirements.in/base.txt
 typing-extensions==4.10.0
     # via psycopg
-urllib3==1.26.19
+urllib3==2.5.0
     # via
     #   requests
     #   sentry-sdk

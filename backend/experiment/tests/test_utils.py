@@ -9,7 +9,7 @@ from experiment.utils import (
     get_block_json_export_as_repsonse,
 )
 
-from experiment.models import Experiment, ExperimentTranslatedContent, Phase, Block, Feedback
+from experiment.models import Experiment, Phase, Block, Feedback
 from participant.models import Participant
 from session.models import Session
 from result.models import Result
@@ -30,9 +30,8 @@ class TestBlockExport(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        experiment = Experiment.objects.create(slug="test-experiment")
-        ExperimentTranslatedContent.objects.create(
-            experiment=experiment, language="en", name="Test Experiment"
+        experiment = Experiment.objects.create(
+            slug="test-experiment", name="Test Experiment"
         )
         phase = Phase.objects.create(experiment=experiment)
         cls.participant = Participant.objects.create(unique_hash=42)

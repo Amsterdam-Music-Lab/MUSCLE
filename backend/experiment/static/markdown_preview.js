@@ -153,7 +153,9 @@ class MarkdownPreview extends HTMLElement {
 
 customElements.define('markdown-preview', MarkdownPreview);
 
-function renderMarkdown(textarea, markdownPreview) {
+function renderMarkdown(widget) {
+    const markdownPreview = widget.querySelector('markdown-preview');
+    const textarea = widget.querySelector('textarea');
     const csrf = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
 
     const url = markdownPreview.getAttribute('data-url');
@@ -176,20 +178,12 @@ function renderMarkdown(textarea, markdownPreview) {
 
 function initializeMarkdownWidget(widget) {
     const tabs = widget.querySelectorAll('.tab');
-    const textarea = widget.querySelector('textarea');
-    const markdownPreview = widget.querySelector('markdown-preview');
 
     // Remove existing event listeners before adding new ones
     tabs.forEach(tab => {
         tab.removeEventListener('click', tabClickHandler);
         tab.addEventListener('click', tabClickHandler);
     });
-
-    textarea.removeEventListener('blur', textareaBlurHandler);
-    textarea.addEventListener('blur', textareaBlurHandler);
-
-    // Initial render
-    renderMarkdown(textarea, markdownPreview);
 }
 
 function tabClickHandler(event) {
@@ -203,12 +197,10 @@ function tabClickHandler(event) {
 
     tabContents.forEach(content => content.classList.remove('active'));
     tabContents[clickedIndex].classList.add('active');
-}
-
-function textareaBlurHandler(event) {
-    const widget = event.target.closest('.markdown-preview-text-input');
-    const markdownPreview = widget.querySelector('markdown-preview');
-    renderMarkdown(event.target, markdownPreview);
+    
+    if (clickedIndex === 1) {
+        renderMarkdown(widget);
+    }
 }
 
 function initializeAllMarkdownWidgets() {
@@ -240,10 +232,3 @@ document.addEventListener('DOMContentLoaded', function () {
     observer.observe(targetNode, config);
 });
 
-// Handle Django's formset 'add' button
-document.addEventListener('click', function (event) {
-    if (event.target.classList.contains('add-form-row')) {
-        // Wait for Django to add the new form to the DOM
-        setTimeout(initializeAllMarkdownWidgets, 0);
-    }
-});
