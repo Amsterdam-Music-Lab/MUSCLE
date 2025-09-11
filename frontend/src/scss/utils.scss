@@ -1,0 +1,272 @@
+@import "./variables.scss";
+
+$indigo: #2b2bee;
+$pink: #d843e2;
+$red: #fa5577;
+$yellow: #ffb14c;
+$teal: #39d7b8 !default;
+$colors: (
+  "indigo": $indigo,
+  "pink": $pink,
+  "red": $red,
+  "yellow": $yellow,
+  "teal": $teal,
+);
+
+.bg-transparent {
+  background: transparent !important;
+}
+
+.text-light {
+  color: #fff;
+}
+
+.text-light-gray {
+  color: #ddd;
+}
+
+.text-grey,
+.text-muted {
+  color: #999;
+}
+
+.bolder {
+  font-weight: bolder;
+}
+
+.fw-black {
+  font-weight: 900;
+}
+
+.fw-semibold {
+  font-weight: 600;
+}
+
+.small {
+  font-size: 0.875em;
+}
+
+.rounded-sm {
+  border-radius: calc(0.75rem * var(--border-radius));
+}
+
+.rounded-md {
+  border-radius: calc(1rem * var(--border-radius));
+}
+
+.rounded-lg {
+  border-radius: calc(1.5rem * var(--border-radius));
+}
+
+.rounded {
+  border-radius: 100em;
+}
+
+.bg-inset-xs {
+  background: #fff;
+  box-shadow: 0 0 0.75em rgba(0, 0, 0, 0.03) inset;
+}
+
+.bg-inset-sm {
+  background: #fff;
+  box-shadow: 0 0 1em rgba(0, 0, 0, 0.05) inset;
+}
+
+.bg-inset-lg {
+  background: #fff;
+  box-shadow: 0 0 1.5em rgba(0, 0, 0, 0.04) inset;
+}
+
+.sharp-border {
+  border: 1px solid #f5f5f5;
+}
+
+.aspect-square {
+  aspect-ratio: 1;
+}
+
+// A square grid that gets the number of columns from a --columns variable
+.square-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--columns, 4), 1fr);
+
+  & > * {
+    @extend .aspect-square;
+  }
+}
+
+.animate-rotate {
+  transform-origin: center center;
+  -webkit-animation: clockwise 15s infinite linear;
+  -moz-animation: clockwise 15s infinite linear;
+  animation: clockwise 15s infinite linear;
+}
+
+@-moz-keyframes clockwise {
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@keyframes clockwise {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+// }
+
+// Effectively a Bootstrap 5 feature::after
+// https://getbootstrap.com/docs/5.0/layout/breakpoints/
+@mixin media-breakpoint-up($point) {
+  @if $point == xs {
+    @content;
+  } @else if $point == sm {
+    @media (min-width: $breakpoint-sm) {
+      @content;
+    }
+  } @else if $point == md {
+    @media (min-width: $breakpoint-md) {
+      @content;
+    }
+  } @else if $point == lg {
+    @media (min-width: $breakpoint-lg) {
+      @content;
+    }
+  } @else if $point == xl {
+    @media (min-width: $breakpoint-xl) {
+      @content;
+    }
+  }
+}
+
+@mixin media-breakpoint-down($point) {
+  @if $point == xs {
+    @content;
+  } @else if $point == sm {
+    @media (max-width: $breakpoint-sm) {
+      @content;
+    }
+  } @else if $point == md {
+    @media (max-width: $breakpoint-md) {
+      @content;
+    }
+  } @else if $point == lg {
+    @media (max-width: $breakpoint-lg) {
+      @content;
+    }
+  } @else if $point == xl {
+    @media (max-width: $breakpoint-xl) {
+      @content;
+    }
+  }
+}
+
+@mixin flush {
+  // Remove border radius and left/right border
+  border-radius: unset !important;
+  border-right: 0;
+  border-left: 0;
+}
+
+.flush {
+  @include flush;
+}
+
+// Extra small
+@include media-breakpoint-down(xs) {
+  .xs-flush {
+    @include flush;
+  }
+}
+
+// Small
+@include media-breakpoint-down(sm) {
+  .sm-flush {
+    @include flush;
+  }
+}
+
+// Medium
+@include media-breakpoint-down(md) {
+  .md-flush {
+    @include flush;
+  }
+}
+
+.hover-color-change {
+  position: relative;
+  overflow: hidden; // clip the pseudo-element
+  isolation: isolate; // ensure stacking context
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--overlay-color, white);
+    mix-blend-mode: overlay;
+    opacity: 0;
+    transition: opacity 200ms ease;
+    z-index: 0;
+  }
+
+  &:not(:disabled):hover::before,
+  &:not(:disabled).hover::before {
+    opacity: var(--overlay-opacity, 0.25);
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.hover-lighter {
+  --overlay-color: #fff;
+  --overlay-opacity: 0.2;
+  @extend .hover-color-change;
+}
+
+.hover-darker {
+  --overlay-color: #000;
+  --overlay-opacity: 0.3;
+  @extend .hover-color-change;
+}
+
+.contain-fixed-aspect-child {
+  // Keep div in container while maintaining aspect ratio; see:
+  // https://stackoverflow.com/questions/40719015/keeping-div-aspect-ratio-and-centered-regardless-of-parents-aspect-ratio
+  position: relative;
+
+  & > * {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    max-height: 100%;
+    max-width: 100%;
+  }
+}
+
+.thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 0px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+}

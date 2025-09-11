@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@600&display=swap');
-
 $teal: #39d7b8;
 $yellow: #ffb14c;
 $pink: #d843e2;
@@ -11,7 +9,7 @@ $gray: #bdbebf;
 $gray-200: #e9ecef;
 $gray-900: #212529;
 $gold: #f9b900;
-$black: $gray-900;
+$black: $gray-200;
 
 $primary: $pink;
 $secondary: $gray-900;
@@ -20,11 +18,6 @@ $positive: $teal;
 $negative: $red;
 $warning: $yellow;
 $info: $blue;
-
-$facebook-blue: #4267b2;
-$twitter-blue: #1da1f2;
-
-$fa-font-path: "../public/vendor/font-awesome/webfonts";
 
 // breakpoints
 $breakpoint-xs: 0;

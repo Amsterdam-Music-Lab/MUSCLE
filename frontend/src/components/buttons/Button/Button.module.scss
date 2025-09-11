@@ -1,0 +1,97 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.5em 1em;
+  border-radius: 0.75em;
+
+  border: none;
+  outline: none;
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  color: white;
+
+  text-decoration: none;
+
+  &::before {
+    // Fix safari bug: don't show overlay outside button
+    border-radius: inherit;
+  }
+
+  &.disabled {
+    cursor: unset;
+    outline: none;
+  }
+
+  &.disabled::after {
+    content: "";
+    position: absolute;
+    border-radius: 0.75em;
+    inset: 0;
+    background: #fff;
+    opacity: 0.5;
+  }
+
+  &.outline,
+  &.outline:active {
+    --outline-size: 3px;
+    outline: var(--outline-size) solid #ffffff66;
+    outline-offset: calc(-1 * var(--outline-size));
+  }
+
+  &:not(.disabled) {
+    &:active {
+      transform: scale(0.96);
+    }
+  }
+
+  &:not(.disabled):focus {
+    outline: var(--outline-size) solid #ffffff;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.rounded {
+  border-radius: 100em;
+}
+
+.sm {
+  font-size: 0.8rem;
+  padding: 0.25em 0.75em;
+  // --outline-size: 1px;
+
+  &.outline {
+    --outline-size: 0px;
+  }
+}
+
+// .md is default
+
+.lg {
+  font-size: 1.3em;
+}
+
+.xl {
+  font-size: 1.5em;
+}
+
+.huge {
+  font-size: 3em;
+}
+
+.stretch {
+  width: 100%;
+}

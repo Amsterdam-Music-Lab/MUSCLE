@@ -64,6 +64,8 @@ class PlaylistAdminForm(forms.ModelForm):
                 'message': "Error: could not initialize csv.DictReader"
             }
 
+        if url_prefix:
+            return csv_data
         for row in reader:
             # Check if the file exists
             try:

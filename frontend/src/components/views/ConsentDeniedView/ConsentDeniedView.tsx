@@ -1,0 +1,35 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+import { useLingui } from "@lingui/react/macro";
+import { LinkButton } from "@/components/buttons";
+import { Card } from "@/components/ui";
+import { routes } from "@/config";
+
+export default function ConsentDeniedView() {
+  const { t } = useLingui();
+  return (
+    <>
+      <Card>
+        <Card.Header title={t`No consent was given`} />
+        <Card.Section>
+          {t`Unfortunately, you cannot participate in this experiment if you do not
+          want to provide consent.`}
+        </Card.Section>
+      </Card>
+      <LinkButton
+        link={routes.home()}
+        variant="secondary"
+        rounded={false}
+        size="lg"
+      >
+        {t`Go back to the homepage`}
+      </LinkButton>
+    </>
+  );
+}

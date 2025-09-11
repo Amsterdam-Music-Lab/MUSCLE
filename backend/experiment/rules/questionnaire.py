@@ -29,4 +29,4 @@ class Questionnaire(BaseRules):
 
         session.finish()
         session.save()
-        return Redirect(session.block.phase.experiment.slug)
+        return Redirect(settings.RELOAD_PARTICIPANT_TARGET)

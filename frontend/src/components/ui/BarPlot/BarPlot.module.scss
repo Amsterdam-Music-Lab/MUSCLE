@@ -1,0 +1,28 @@
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ * 
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+.plot {
+  display: flex;
+  justify-content: space-between;
+  gap: calc(var(--bar-available-gap-space, 30%) / var(--num-bars, 1));
+  height: 100%;
+}
+
+.column {
+  min-width: 2px;
+  flex-grow: 1;
+  display: flex;
+  align-items: end;
+}
+
+.bar {
+  width: 100%;
+  background-color: var(--bar-color, #fff);
+  border-radius: 10em;
+  transition: height var(--bar-transition-duration, 300ms) ease-in-out;
+}

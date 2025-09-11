@@ -1,0 +1,161 @@
+@import "@/scss/utils";
+
+body,
+.theme-root {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  // background-color: var(--background, transparent);
+  background-image: var(--background-url, "");
+
+  font-family: var(--font-family, sans-serif);
+  font-size: 14px;
+}
+
+@include media-breakpoint-up(lg) {
+  body,
+  .theme-root {
+    font-size: 16px;
+  }
+}
+
+// Gradients
+
+@function gradient-fill(
+  $start-color,
+  $end-color,
+  $scale: 1,
+  $offset: 0,
+  $angle: 70
+) {
+  @return linear-gradient(
+    calc(#{$angle} * 1deg),
+    #{$start-color} calc(100% * #{$offset} - 100% * (#{$scale} - 1)),
+    #{$end-color} calc(100% * #{$offset} + 100% + 100% * (#{$scale} - 1))
+  );
+}
+
+.fill-primary,
+.text-fill-primary {
+  background: gradient-fill(
+    var(--primary-start-color),
+    var(--primary-end-color),
+    var(--primary-scale, 1),
+    var(--primary-offset, 0),
+    var(--primary-angle, 70)
+  );
+}
+
+.fill-secondary,
+.text-fill-secondary {
+  background: gradient-fill(
+    var(--secondary-start-color),
+    var(--secondary-end-color),
+    var(--secondary-scale, 1),
+    var(--secondary-offset, 0),
+    var(--secondary-angle, 70)
+  );
+}
+
+.fill-muted,
+.text-fill-muted {
+  background: gradient-fill(
+    var(--muted-start-color),
+    var(--muted-end-color),
+    var(--muted-scale, 1),
+    var(--muted-offset, 0),
+    var(--muted-angle, 70)
+  );
+}
+
+.text-fill-primary,
+.text-fill-secondary,
+.text-fill-muted {
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  // To make sure it's not too wide
+  display: inline-block;
+}
+
+.text-light {
+  color: #fff;
+}
+
+.text-dark {
+  color: #000;
+}
+
+.text-primary {
+  color: var(--primary-solid);
+}
+
+.text-secondary {
+  color: var(--secondary-solid);
+}
+
+.text-succes {
+  color: var(--success-solid);
+}
+
+.text-info {
+  color: var(--info-solid);
+}
+
+.text-warning {
+  color: var(--warning-solid);
+}
+
+.text-danger {
+  color: var(--danger-solid);
+  // color: color-mix(in srgb, var(--danger-solid) 100%, black);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-family);
+}
+
+// Page transitions
+
+.transition-enter,
+.transition-enter-active {
+  z-index: 2 !important;
+}
+
+.transition-exit,
+.transition-exit-active {
+  z-index: 1;
+}
+
+.transition-enter,
+.transition-exit,
+.transition-enter-active,
+.transition-exit-active {
+  transition: opacity 2s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.transition-enter {
+  opacity: 0;
+}
+.transition-enter-active {
+  opacity: 1;
+  transition: opacity 2s ease;
+}
+
+.transition-exit {
+  opacity: 1;
+}
+.transition-exit-active {
+  opacity: 0;
+}

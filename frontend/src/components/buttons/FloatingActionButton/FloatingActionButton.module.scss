@@ -1,0 +1,84 @@
+/**
+ * Copyright (c) 2025 Amsterdam Music Lab
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+@import "@/scss/utils.scss";
+@import "@/scss/animations";
+
+.button {
+  --fa-button-offset: 1em;
+  --fa-button-font-size: 1.5em;
+
+  position: fixed;
+  display: flex;
+  z-index: 1000;
+
+  border: none;
+  box-shadow: 0 0 2em rgba(0, 0, 0, 0.2);
+  padding: 0.5rem;
+  @extend .rounded, .transition-appear;
+
+  transition: opacity 300ms ease;
+  opacity: 0.8;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  // Todo show focus!
+  // todo use input utils
+  --outline-size: 3px;
+  outline: var(--outline-size) solid #ffffff66;
+  outline-offset: calc(-1 * var(--outline-size));
+
+  &.left {
+    left: var(--fa-button-offset, 0px);
+
+    &.flushToWindowEdge {
+      left: 0px;
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
+    }
+
+    &.expanded {
+      left: 0px;
+    }
+  }
+
+  &.right {
+    right: var(--fa-button-offset, 0px);
+
+    &.flushToWindowEdge {
+      right: 0px;
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
+  }
+
+  &.top & {
+    top: var(--fa-button-offset, 0px);
+  }
+
+  &.bottom {
+    bottom: var(--fa-button-offset, 0px);
+  }
+
+  &.center {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  svg {
+    // Determines the relative size of the icon compared to the button size
+    $factor: 0.66;
+    font-size: var(--fa-button-font-size);
+    width: calc($factor * 100%);
+    margin: auto;
+    color: #fff;
+  }
+}

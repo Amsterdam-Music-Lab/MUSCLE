@@ -1,14 +1,17 @@
 from os.path import split
 import random
 
+
+from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 
 from result.models import Result
 from section.models import Section
 from session.models import Session
 
-from experiment.actions import Explainer, Final, Trial
+from experiment.actions import Explainer, Final, Step, Trial
 from experiment.actions.playback import MatchingPairs
+from experiment.actions.types import FeedbackInfo
 from .matching_pairs import MatchingPairsGame
 
 POSSIBLE_CONDITIONS = [
@@ -48,6 +51,23 @@ class MatchingPairs2025(MatchingPairsGame):
         ),
     }
 
+    def feedback_info(self) -> FeedbackInfo:
+        feedback_body = render_to_string(
+            "feedback/user_feedback.html", {"email": self.contact_email}
+        )
+        return {
+            # Header above the feedback form
+            "header": _("Do you have any remarks or questions?"),
+            # Button text
+            "button": _("Submit"),
+            # Body of the feedback form, can be HTML. Shown under the button
+            "contact_body": feedback_body,
+            # Thank you message after submitting feedback
+            "thank_you": _("We appreciate your feedback!"),
+            # Show a floating button on the right side of the screen to open the feedback form
+            "show_float_button": True,
+        }
+
     def next_round(self, session: Session):
         if session.get_rounds_passed() < 1:
             actions = []
@@ -56,9 +76,8 @@ class MatchingPairs2025(MatchingPairsGame):
             if questions:
                 intro_questions = Explainer(
                     instruction=_(
-                        "Before starting the game, we would like to ask you %i demographic questions."
-                        % (len(questions))
-                    ),
+                        "Before starting the game, we would like to ask you {} demographic questions."
+                    ).format(len(questions)),
                     steps=[],
                 )
                 actions.append(intro_questions)
@@ -80,7 +99,7 @@ class MatchingPairs2025(MatchingPairsGame):
         return self._get_final_actions(session)
 
     def get_short_explainer(self):
-        return Explainer("Click to start!", steps=[])
+        return Explainer(_("Click to start!"), steps=[])
 
     def _get_final_actions(self, session: Session):
         score = Final(
@@ -152,6 +171,42 @@ class MatchingPairs2025(MatchingPairsGame):
         random.shuffle(sections)
 
         return sections
+
+    def get_intro_explainer(self):
+        return Explainer(
+            instruction="",
+            steps=[
+                Step(
+                    description=_(
+                        'You get a board with 16 musical cards. **Pick a card,** and listen to it carefully...'
+                    )
+                ),
+                Step(
+                    description=_("Then try to **find a second card that matches it.**")
+                ),
+                Step(
+                    description=_(
+                        "**Find the 8 matching pairs** to clear the board and score points:"
+                    )
+                ),
+                Step(
+                    description=_(
+                        "**+20 points:** Matched first card with one you’ve heard before — memory wins!"
+                    )
+                ),
+                Step(
+                    description=_(
+                        "**-10 points:** Chose a wrong second card that’s heard before? Oops — penalty..."
+                    )
+                ),
+                Step(
+                    description=_(
+                        "Some cards sound **distorted** on purpose. Stay sharp!"
+                    )
+                ),
+            ],
+            step_numbers=True,
+        )
 
     def evaluate_sections_equal(
         self, first_section: Section, second_section: Section

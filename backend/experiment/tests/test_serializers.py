@@ -63,12 +63,14 @@ class SerializerTest(TestCase):
         Session.objects.create(
             participant=self.participant,
             block=Block.objects.get(slug=blocks[0].slug),
-            final_score=10
+            final_score=10,
+            finished_at=timezone.now(),
         )
         Session.objects.create(
             participant=self.participant,
             block=Block.objects.get(slug=blocks[1].slug),
-            final_score=10
+            final_score=10,
+            finished_at=timezone.now(),
         )
         Session.objects.create(
             participant=self.participant,

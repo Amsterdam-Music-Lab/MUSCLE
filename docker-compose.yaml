@@ -88,6 +88,15 @@ services:
       - type: bind
         source: ./frontend/index.html
         target: /client/index.html
+      - type: bind
+        source: .vscode
+        target: /client/.vscode
+      - type: bind
+        source: ./frontend/lingui.config.js
+        target: /client/lingui.config.js
+      - type: bind
+        source: ./frontend/babel.config.js
+        target: /client/babel.config.js
     environment:
       - VITE_API_ROOT=${FRONTEND_API_ROOT}
       - VITE_EXPERIMENT_SLUG=${FRONTEND_EXPERIMENT_SLUG}
@@ -104,8 +113,10 @@ services:
       - VITE_STRICT=${FRONTEND_STRICT}
       - VITE_PLAUSIBLE_DOMAIN=${FRONTEND_PLAUSIBLE_DOMAIN}
     ports:
-      - 3000:3000
-      - 6006:6006
+      - 3000:3000 # Vite development server
+      - 6006:6006 # Storybook
+      - 4173:4173 # Vite preview server
+      - 8888:8888 # vite-bundle-analyzer (see vite.config.ts)
     command: yarn start
 volumes:
   db_data:

@@ -1,16 +1,11 @@
 body.root {
-    user-select: none;
-    font-size: 16px;
-    background-image: url("/public/images/background.jpg");
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    min-height: 100vh;
+  min-height: 100vh;
+  overflow-x: hidden;
 
-    /* disable pinch zoom on iOS */
-    touch-action: manipulation;
+  /* disable pinch zoom on iOS */
+  touch-action: manipulation;
 }
 
 #root {
-    min-height: 100vh;
+  min-height: 100vh;
 }

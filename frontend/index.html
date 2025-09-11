@@ -1,27 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <link rel="icon" href="%VITE_HTML_FAVICON%" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-        />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="theme-color" content="#212529" />
-        <meta property="og:image:height" content="628" />
-        <meta property="og:image:width" content="1200"/>
 
-        <link rel="manifest" href="/manifest.json" />
-        <link
-            rel="stylesheet"
-            href="/vendor/bootstrap/bootstrap.min.css"
-        />
-        <title>%VITE_HTML_PAGE_TITLE%</title>
-    </head>
-    <body class="root %VITE_HTML_BODY_CLASS%">
-        <noscript>You need to enable JavaScript to run this app.</noscript>
-        <div id="root"></div>
-        <script type="module" src="/src/index.tsx"></script>
-    </body>
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%VITE_HTML_FAVICON%" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#212529" />
+  <meta property="og:image:height" content="628" />
+  <meta property="og:image:width" content="1200" />
+
+  <title>TuneTwins (Amsterdam Music Lab)</title>
+  <meta name="description" content="" />
+
+  <!-- Facebook Meta Tags -->
+  <meta property="og:url" content="https://tunetwins.amsterdammusiclab.nl/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="TuneTwins" />
+  <meta property="og:description"
+    content="Test your musical memory! Can you find the matching tunes and clear the board? Play TuneTwins to find out — a science game from the University of Amsterdam." />
+  <meta property="og:image" content="https://tunetwins.amsterdammusiclab.nl/tunetwins-banner.jpg" />
+
+  <!-- Twitter Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta property="twitter:domain" content="tunetwins.amsterdammusiclab.nl" />
+  <meta property="twitter:url" content="https://tunetwins.amsterdammusiclab.nl/" />
+  <meta name="twitter:title" content="TuneTwins" />
+  <meta name="twitter:description"
+    content="Test your musical memory! Can you find the matching tunes and clear the board? Play TuneTwins to find out — a science game from the University of Amsterdam." />
+  <meta name="twitter:image" content="https://tunetwins.amsterdammusiclab.nl/tunetwins-banner.jpg" />
+
+  <link rel="manifest" href="/manifest.json" />
+  <title>%VITE_HTML_PAGE_TITLE%</title>
+
+  <!-- Load fonts early -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
+</head>
+
+<body class="root %VITE_HTML_BODY_CLASS%">
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <script type="module" src="/src/index.tsx"></script>
+</body>
+
 </html>

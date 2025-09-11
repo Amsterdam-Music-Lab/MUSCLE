@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-06 14:24+0100\n"
+"POT-Creation-Date: 2025-07-18 14:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,107 +17,107 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: experiment/actions/final.py:92
+#: experiment/actions/final.py:96
 msgid "plastic"
 msgstr "塑料"
 
-#: experiment/actions/final.py:93
+#: experiment/actions/final.py:97
 msgid "bronze"
 msgstr "青铜"
 
-#: experiment/actions/final.py:94
+#: experiment/actions/final.py:98
 msgid "silver"
 msgstr "白银"
 
-#: experiment/actions/final.py:95
+#: experiment/actions/final.py:99
 msgid "gold"
 msgstr "黄金"
 
-#: experiment/actions/final.py:96
+#: experiment/actions/final.py:100
 msgid "platinum"
 msgstr "铂金"
 
-#: experiment/actions/final.py:97
+#: experiment/actions/final.py:101
 msgid "diamond"
 msgstr "钻石"
 
-#: experiment/actions/final.py:103
+#: experiment/actions/final.py:107
 msgid "Final score"
 msgstr "最终得分"
 
-#: experiment/actions/final.py:132 participant/views.py:45
+#: experiment/actions/final.py:138 participant/views.py:45
 msgid "points"
 msgstr "分"
 
-#: experiment/actions/final.py:145 experiment/rules/hooked.py:106
-#: experiment/rules/thats_my_song.py:67
+#: experiment/actions/final.py:152 experiment/rules/hooked.py:106
+#: experiment/rules/thats_my_song.py:70
 msgid "Play again"
 msgstr "再玩一次"
 
-#: experiment/actions/final.py:146 participant/views.py:40
+#: experiment/actions/final.py:153 participant/views.py:40
 msgid "My profile"
 msgstr "我的结果"
 
-#: experiment/actions/final.py:147
+#: experiment/actions/final.py:154
 msgid "All experiments"
 msgstr "实验结束"
 
-#: experiment/actions/form.py:71 experiment/rules/hooked.py:304
-#: experiment/rules/huang_2022.py:81
-#: experiment/rules/musical_preferences.py:132 question/musicgens.py:30
+#: experiment/actions/form.py:131 experiment/rules/hooked.py:304
+#: experiment/rules/huang_2022.py:83
+#: experiment/rules/musical_preferences.py:134 question/musicgens.py:30
 msgid "No"
 msgstr "否"
 
-#: experiment/actions/form.py:72 experiment/rules/hooked.py:305
-#: experiment/rules/huang_2022.py:81
-#: experiment/rules/musical_preferences.py:132 question/musicgens.py:29
+#: experiment/actions/form.py:131 experiment/rules/hooked.py:305
+#: experiment/rules/huang_2022.py:83
+#: experiment/rules/musical_preferences.py:134 question/musicgens.py:29
 msgid "Yes"
 msgstr "是"
 
-#: experiment/actions/form.py:122
+#: experiment/actions/form.py:335
 msgid "How much do you agree or disagree?"
 msgstr "您是否同意或不同意？请左右移动圆圈按钮至对应的回答。"
 
-#: experiment/actions/form.py:135
+#: experiment/actions/form.py:352
 msgid "Completely Disagree"
 msgstr "完全不同意"
 
-#: experiment/actions/form.py:136 experiment/actions/form.py:145
+#: experiment/actions/form.py:353 experiment/actions/form.py:362
 msgid "Strongly Disagree"
 msgstr "非常不同意"
 
-#: experiment/actions/form.py:137 experiment/actions/form.py:146
-#: question/musicgens.py:302
+#: experiment/actions/form.py:354 experiment/actions/form.py:363
+#: question/musicgens.py:302 question/thatsmysong.py:29
 msgid "Disagree"
 msgstr "不同意"
 
-#: experiment/actions/form.py:138 experiment/actions/form.py:147
+#: experiment/actions/form.py:355 experiment/actions/form.py:364
 msgid "Neither Agree nor Disagree"
 msgstr "即不同意也不反对"
 
-#: experiment/actions/form.py:139 experiment/actions/form.py:148
-#: question/musicgens.py:304
+#: experiment/actions/form.py:356 experiment/actions/form.py:365
+#: question/musicgens.py:304 question/thatsmysong.py:31
 msgid "Agree"
 msgstr "同意"
 
-#: experiment/actions/form.py:140 experiment/actions/form.py:149
+#: experiment/actions/form.py:357 experiment/actions/form.py:366
 msgid "Strongly Agree"
 msgstr "非常同意"
 
-#: experiment/actions/form.py:141
+#: experiment/actions/form.py:358
 msgid "Completely Agree"
 msgstr "完全同意"
 
-#: experiment/actions/form.py:178 experiment/actions/trial.py:57
-#: experiment/actions/utils.py:25 experiment/rules/hooked.py:164
-#: experiment/rules/huang_2022.py:137 experiment/rules/practice.py:192
-#: experiment/rules/rhythm_battery_intro.py:141
+#: experiment/actions/form.py:433 experiment/actions/trial.py:86
+#: experiment/actions/utils.py:43 experiment/rules/hooked.py:164
+#: experiment/rules/huang_2022.py:149 experiment/rules/practice.py:192
+#: experiment/rules/rhythm_battery_intro.py:145
 #: experiment/rules/speech2song.py:100 experiment/rules/speech2song.py:110
 #: experiment/rules/speech2song.py:136
 msgid "Continue"
 msgstr "继续"
 
-#: experiment/actions/form.py:178
+#: experiment/actions/form.py:434
 msgid "Skip"
 msgstr "跳过"
 
@@ -154,26 +154,26 @@ msgstr "不正确"
 msgid "Correct"
 msgstr "正确"
 
-#: experiment/actions/utils.py:25 experiment/rules/congosamediff.py:181
-#: experiment/rules/musical_preferences.py:243
+#: experiment/actions/utils.py:43 experiment/rules/congosamediff.py:184
+#: experiment/rules/musical_preferences.py:247
 msgid "End"
 msgstr "完成"
 
-#: experiment/actions/wrappers.py:64 experiment/rules/hooked.py:296
+#: experiment/actions/wrappers.py:113 experiment/rules/hooked.py:296
 msgid "Get ready!"
 msgstr "准备"
 
-#: experiment/actions/wrappers.py:65
+#: experiment/actions/wrappers.py:114
 #, fuzzy
 #| msgid "Do you recognise this song?"
 msgid "Do you recognize the song?"
 msgstr "您是否认出了这首歌曲？"
 
-#: experiment/actions/wrappers.py:75
+#: experiment/actions/wrappers.py:121
 msgid "Keep imagining the music"
 msgstr "继续默唱音乐"
 
-#: experiment/actions/wrappers.py:106
+#: experiment/actions/wrappers.py:151
 msgid "Did the track come back in the right place?"
 msgstr "歌曲回到正确的位置了吗？"
 
@@ -190,7 +190,7 @@ msgid "Another step of explanation"
 msgstr ""
 
 #: experiment/management/commands/templates/experiment.py:61
-#: experiment/rules/congosamediff.py:183
+#: experiment/rules/congosamediff.py:186
 #, fuzzy
 #| msgid "Voluntary participation"
 msgid "Thank you for participating!"
@@ -206,51 +206,51 @@ msgstr "您是否认出了这首歌曲？"
 msgid "Test block"
 msgstr ""
 
-#: experiment/models.py:532
+#: experiment/models.py:427
 #, python-brace-format
 msgid ""
 "Content for social media sharing. Use {points} and {experiment_name} as "
 "placeholders."
 msgstr ""
 
-#: experiment/models.py:586
+#: experiment/models.py:486
 msgid "List of tags for social media sharing"
 msgstr ""
 
-#: experiment/models.py:590
+#: experiment/models.py:490
 msgid ""
 "URL to be shared on social media. If empty, the experiment URL will be used."
 msgstr ""
 
-#: experiment/models.py:594
+#: experiment/models.py:494
 msgid "Facebook"
 msgstr ""
 
-#: experiment/models.py:595
+#: experiment/models.py:495
 msgid "WhatsApp"
 msgstr ""
 
-#: experiment/models.py:596
+#: experiment/models.py:496
 msgid "Twitter"
 msgstr ""
 
-#: experiment/models.py:597
+#: experiment/models.py:497
 msgid "Weibo"
 msgstr ""
 
-#: experiment/models.py:598
+#: experiment/models.py:498
 msgid "Share"
 msgstr ""
 
-#: experiment/models.py:599
+#: experiment/models.py:499
 msgid "Clipboard"
 msgstr ""
 
-#: experiment/models.py:605
+#: experiment/models.py:505
 msgid "Selected social media channels for sharing"
 msgstr ""
 
-#: experiment/models.py:643
+#: experiment/models.py:539
 #, python-format
 msgid "I scored %(score)d points in %(experiment_name)s"
 msgstr ""
@@ -267,7 +267,7 @@ msgstr ""
 #: experiment/rules/duration_discrimination.py:70
 #: experiment/rules/duration_discrimination_tone.py:21
 #: experiment/rules/h_bat.py:157 experiment/rules/hbat_bst.py:57
-#: experiment/rules/rhythm_discrimination.py:259
+#: experiment/rules/rhythm_discrimination.py:263
 msgid "Next fragment"
 msgstr ""
 
@@ -305,7 +305,7 @@ msgstr ""
 #: experiment/rules/beat_alignment.py:71
 #: experiment/rules/duration_discrimination.py:144
 #: experiment/rules/h_bat.py:136 experiment/rules/hbat_bst.py:31
-#: experiment/rules/rhythm_discrimination.py:237
+#: experiment/rules/rhythm_discrimination.py:241
 msgid "Remember: try not to move or tap along with the sounds"
 msgstr ""
 
@@ -335,23 +335,23 @@ msgid ""
 "brains use this to process rhythm even better!"
 msgstr ""
 
-#: experiment/rules/base.py:31
+#: experiment/rules/base.py:32 experiment/rules/matching_pairs_2025.py:60
 msgid "Do you have any remarks or questions?"
-msgstr ""
+msgstr "欢迎提出您的意见和建议！"
 
-#: experiment/rules/base.py:33
+#: experiment/rules/base.py:34 experiment/rules/matching_pairs_2025.py:62
 msgid "Submit"
 msgstr "提交"
 
-#: experiment/rules/base.py:37
+#: experiment/rules/base.py:38 experiment/rules/matching_pairs_2025.py:66
 msgid "We appreciate your feedback!"
 msgstr "感谢您的反馈！"
 
-#: experiment/rules/base.py:129 experiment/rules/musical_preferences.py:71
+#: experiment/rules/base.py:138 experiment/rules/musical_preferences.py:71
 msgid "Questionnaire"
 msgstr "问卷调查"
 
-#: experiment/rules/base.py:151
+#: experiment/rules/base.py:160
 #, python-format
 msgid "Questionnaire %(index)i / %(total)i"
 msgstr "调查问卷 %(index)i/%(total)i"
@@ -443,27 +443,27 @@ msgstr ""
 msgid "Beat alignment"
 msgstr ""
 
-#: experiment/rules/congosamediff.py:147
+#: experiment/rules/congosamediff.py:148
 msgid "Is the third sound the SAME or DIFFERENT as the first two sounds?"
 msgstr ""
 
-#: experiment/rules/congosamediff.py:150
+#: experiment/rules/congosamediff.py:152
 msgid "DEFINITELY SAME"
 msgstr ""
 
-#: experiment/rules/congosamediff.py:151
+#: experiment/rules/congosamediff.py:153
 msgid "PROBABLY SAME"
 msgstr ""
 
-#: experiment/rules/congosamediff.py:152
+#: experiment/rules/congosamediff.py:154
 msgid "PROBABLY DIFFERENT"
 msgstr ""
 
-#: experiment/rules/congosamediff.py:153
+#: experiment/rules/congosamediff.py:155
 msgid "DEFINITELY DIFFERENT"
 msgstr ""
 
-#: experiment/rules/congosamediff.py:154
+#: experiment/rules/congosamediff.py:156
 msgid "I DON’T KNOW"
 msgstr ""
 
@@ -700,7 +700,7 @@ msgid ""
 "cultures, much more complex meters also exist!"
 msgstr ""
 
-#: experiment/rules/hooked.py:67 experiment/rules/huang_2022.py:118
+#: experiment/rules/hooked.py:67 experiment/rules/huang_2022.py:130
 msgid ""
 "Do you recognise the song? Try to sing along. The faster you recognise "
 "songs, the more points you can earn."
@@ -709,7 +709,7 @@ msgstr ""
 "能识别出该音乐”，同时请在大脑中跟唱这段音乐。您在15秒内识别出歌曲的速度越快，"
 "您就能获得更多的分数。"
 
-#: experiment/rules/hooked.py:72 experiment/rules/huang_2022.py:120
+#: experiment/rules/hooked.py:72 experiment/rules/huang_2022.py:132
 msgid ""
 "Do you really know the song? Keep singing or imagining the music while the "
 "sound is muted. The music is still playing: you just can’t hear it!"
@@ -717,14 +717,14 @@ msgstr ""
 "当您识别出某首歌曲且点击'是'的瞬间，音乐声从这一秒开始会被静音。请您继续将静"
 "音前的音乐在脑海中接唱下去直到该音乐再次播放为止。"
 
-#: experiment/rules/hooked.py:77 experiment/rules/huang_2022.py:122
+#: experiment/rules/hooked.py:77 experiment/rules/huang_2022.py:134
 msgid ""
 "Was the music in the right place when the sound came back? Or did we jump to "
 "a different spot during the silence?"
 msgstr "当您再次听到声音时，您需要判断出此音乐与您脑海中的音乐是否同步。"
 
-#: experiment/rules/hooked.py:82 experiment/rules/huang_2022.py:125
-#: experiment/rules/huang_2022.py:169
+#: experiment/rules/hooked.py:82 experiment/rules/huang_2022.py:137
+#: experiment/rules/huang_2022.py:181
 #: experiment/rules/musical_preferences.py:82
 msgid "Let's go!"
 msgstr "开始吧！"
@@ -751,7 +751,7 @@ msgid "Did you hear this song in previous rounds?"
 msgstr "您是否在之前的识别环节里听到过这首歌曲？"
 
 #: experiment/rules/huang_2022.py:55
-#: experiment/rules/musical_preferences.py:253
+#: experiment/rules/musical_preferences.py:257
 msgid "Any remarks or questions (optional):"
 msgstr "建议或意见反馈，如技术问题(选填):"
 
@@ -760,33 +760,33 @@ msgid "Thank you for your feedback!"
 msgstr "感谢您的反馈!"
 
 #: experiment/rules/huang_2022.py:78
-#: experiment/rules/musical_preferences.py:127
+#: experiment/rules/musical_preferences.py:129
 msgid "Do you hear the music?"
 msgstr "您听到音乐了吗？"
 
-#: experiment/rules/huang_2022.py:88
-#: experiment/rules/musical_preferences.py:146
+#: experiment/rules/huang_2022.py:94
+#: experiment/rules/musical_preferences.py:150
 msgid "Audio check"
 msgstr "音频测试"
 
-#: experiment/rules/huang_2022.py:97
+#: experiment/rules/huang_2022.py:105
 #: experiment/rules/musical_preferences.py:106
 msgid "Quit"
 msgstr "退出"
 
-#: experiment/rules/huang_2022.py:97
+#: experiment/rules/huang_2022.py:105
 msgid "Try"
 msgstr "运行"
 
-#: experiment/rules/huang_2022.py:104
+#: experiment/rules/huang_2022.py:116
 msgid "Ready to experiment"
 msgstr "调试阶段"
 
-#: experiment/rules/huang_2022.py:115
+#: experiment/rules/huang_2022.py:127
 msgid "How to Play"
 msgstr "实验介绍"
 
-#: experiment/rules/huang_2022.py:127
+#: experiment/rules/huang_2022.py:139
 msgid ""
 "You can use your smartphone, computer or tablet to participate in this "
 "experiment. Please choose the best network in your area to participate in "
@@ -800,12 +800,12 @@ msgstr ""
 "网络环境不佳，有可能会导致音乐加载失败或实验运行不流畅等情况出现。您可以通过"
 "以下的渠道打开实验页面："
 
-#: experiment/rules/huang_2022.py:130
+#: experiment/rules/huang_2022.py:142
 msgid ""
 "Directly click the link on WeChat (smart phone or PC version, or WeChat Web)"
 msgstr "通过手机微信或电脑微信客户端/网页版的链接直接点开进入到实验页面;"
 
-#: experiment/rules/huang_2022.py:133
+#: experiment/rules/huang_2022.py:145
 msgid ""
 "If the link to load the experiment page through the WeChat app on your cell "
 "phone fails, you can copy and paste the link in the browser of your cell "
@@ -816,29 +816,29 @@ msgstr ""
 "通过复制黏贴实验链接到浏览器参与实验。您可以使用市面上目前的任何一种浏览器，"
 "如Safari、火狐、360等等。"
 
-#: experiment/rules/huang_2022.py:165
+#: experiment/rules/huang_2022.py:177
 msgid ""
 "Please answer some questions                         on your musical "
 "(Goldsmiths-MSI) and demographic background"
 msgstr "接下来是《金史密斯音乐素养》水平测试与人口统计特征问卷。"
 
-#: experiment/rules/huang_2022.py:206
+#: experiment/rules/huang_2022.py:218
 msgid "Thank you for your contribution to science!"
 msgstr "感谢您的参与以及对科学的贡献！"
 
-#: experiment/rules/huang_2022.py:208
+#: experiment/rules/huang_2022.py:220
 msgid "Well done!"
 msgstr "太棒了！"
 
-#: experiment/rules/huang_2022.py:208
+#: experiment/rules/huang_2022.py:220
 msgid "Too bad!"
 msgstr "有点糟哦！"
 
-#: experiment/rules/huang_2022.py:210
+#: experiment/rules/huang_2022.py:222
 msgid "You did not recognise any songs at first."
 msgstr "您起初并没有识别出任何歌曲。"
 
-#: experiment/rules/huang_2022.py:212
+#: experiment/rules/huang_2022.py:224
 #, python-format
 msgid ""
 "It took you %(n_seconds)d s to recognise a song on average,                 "
@@ -848,7 +848,7 @@ msgstr ""
 "您平均花了 %(n_seconds)d 秒识别出一首歌曲，并且在您认为您知道的 %(n_total)d "
 "首歌曲里, 您正确地识别出了 %(n_correct)d 首。"
 
-#: experiment/rules/huang_2022.py:218
+#: experiment/rules/huang_2022.py:230
 #, python-format
 msgid ""
 "During the bonus rounds, you remembered %(n_correct)d of the %(n_total)d "
@@ -882,33 +882,57 @@ msgstr ""
 msgid "Listen carefully to avoid mistakes and earn more points."
 msgstr ""
 
-#: experiment/rules/matching_pairs.py:69
-#, python-format
+#: experiment/rules/matching_pairs.py:69 experiment/rules/matching_pairs.py:174 
+#: experiment/rules/matching_pairs_2025.py:79 #: experiment/rules/questionnaire.py:21 
+#, python-format 
 msgid ""
 "Before starting the game, we would like to ask you %i demographic questions."
-msgstr ""
+msgstr "游戏开始前，请您先回答 %i 个基本信息问题。"
 
-#: experiment/rules/matching_pairs_2025.py:19
-msgid ""
-"This was not a match, so you get 0 points. Please try again to see if you "
-"can find a matching pair."
-msgstr ""
+#: experiment/rules/matching_pairs_2025.py:43 
+msgid "This was not a match, so you get 0 points. Please try again to see if you can find a matching pair." 
+msgstr "这两张卡片不匹配，不得分。请继续尝试寻找匹配的卡片。"
 
-#: experiment/rules/matching_pairs_2025.py:22
-msgid ""
-"You got a matching pair, but you didn't hear both cards before. This is "
-"considered a lucky match. You get 10 points."
-msgstr ""
+#: experiment/rules/matching_pairs_2025.py:46 
+msgid "You got a matching pair, but you didn't hear the matching card before. This is considered a lucky match. You get 10 points." 
+msgstr "配对成功！不过您之前没听过第二张卡片，获得幸运分 10 分。"
 
-#: experiment/rules/matching_pairs_2025.py:24
-msgid "You got a matching pair. You get 20 points."
-msgstr ""
+#: experiment/rules/matching_pairs_2025.py:48 
+msgid "You got a matching pair. You get 20 points." 
+msgstr "匹配成功！获得 20 分！"
 
-#: experiment/rules/matching_pairs_2025.py:26
-msgid ""
-"You thought you found a matching pair, but you didn't. This is considered a "
-"misremembered pair. You lose 10 points."
-msgstr ""
+#: experiment/rules/matching_pairs_2025.py:50 
+msgid "You thought you found a matching pair, but you didn't. This is considered a misremembered pair. You lose 10 points." 
+msgstr "您以为这两张卡片是一对，但它们不匹配。记忆偏差，减 10 分。"
+
+#: experiment/rules/matching_pairs_2025.py:182 
+msgid "You get a board with 16 musical cards. **Pick a card,** and listen to it carefully..." 
+msgstr "您将在游戏中看到16张音乐卡片。**请选择一张卡片**，仔细聆听..."
+
+#: experiment/rules/matching_pairs_2025.py:186 
+msgid "Then try to **find a second card that matches it.**" 
+msgstr "然后尝试**找到与之匹配的第二张卡片。**"
+
+#: experiment/rules/matching_pairs_2025.py:190 
+msgid "**Find the 8 matching pairs** to clear the board and score points:" 
+msgstr "**找出全部8对匹配卡片**即可完成游戏，计分规则如下："
+
+#: experiment/rules/matching_pairs_2025.py:195 
+msgid "**+20 points:** Matched first card with one you've heard before — memory wins!" 
+msgstr "**+20分：**成功将第一张卡片与之前听过的卡片配对——精准记忆！"
+
+#: experiment/rules/matching_pairs_2025.py:200 
+msgid "**-10 points:** Chose a wrong second card that's heard before? Oops — penalty..." 
+msgstr "**-10分：**选择了之前听过但不匹配的第二张卡片？啊哦 —— 扣分..."
+
+#: experiment/rules/matching_pairs_2025.py:205 
+msgid "Some cards sound **distorted** on purpose. Stay sharp!" 
+msgstr "部分卡片的声音经过**失真处理**。但这正是挑战所在，请认真聆听辨别！"
+
+#: experiment/rules/matching_pairs_2025.py:288 #, python-format 
+msgid "You outperformed {}% of the players!" 
+msgstr "您的表现超越了 {}% 的玩家！"
+
 
 #: experiment/rules/musical_preferences.py:55
 msgid "Welcome to the Musical Preferences experiment!"
@@ -960,36 +984,36 @@ msgstr "请佩戴耳机或使用设备扬声器。"
 msgid "Your final results will be displayed at the end."
 msgstr "您的实验结果将在最后显示。"
 
-#: experiment/rules/musical_preferences.py:118
+#: experiment/rules/musical_preferences.py:120
 msgid "Tech check"
 msgstr "调试阶段"
 
-#: experiment/rules/musical_preferences.py:156
+#: experiment/rules/musical_preferences.py:160
 msgid "Love unlocked"
 msgstr "解锁乐之爱"
 
-#: experiment/rules/musical_preferences.py:172
+#: experiment/rules/musical_preferences.py:176
 msgid "Knowledge unlocked"
 msgstr "解锁乐之识"
 
-#: experiment/rules/musical_preferences.py:192
+#: experiment/rules/musical_preferences.py:196
 msgid "Connection unlocked"
 msgstr "解锁乐之友"
 
-#: experiment/rules/musical_preferences.py:207
+#: experiment/rules/musical_preferences.py:211
 msgid "2. How much do you like this song?"
 msgstr "2. 您对这首歌的喜欢程度是？"
 
-#: experiment/rules/musical_preferences.py:213
+#: experiment/rules/musical_preferences.py:217
 msgid "1. Do you know this song?"
 msgstr "1. 您知道这首歌吗？"
 
-#: experiment/rules/musical_preferences.py:225
+#: experiment/rules/musical_preferences.py:229
 #, python-format
 msgid "Song %(round)s/%(total)s"
 msgstr "%(round)s/%(total)s首歌"
 
-#: experiment/rules/musical_preferences.py:245
+#: experiment/rules/musical_preferences.py:249
 msgid "Thank you for your participation and contribution to science!"
 msgstr "感谢您的参与以及对科学的贡献！"
 
@@ -1027,7 +1051,7 @@ msgstr "实验结束"
 
 #: experiment/rules/practice.py:185
 #, python-format
-msgid "You have answered %(n_correct)s or more practice trials incorrectly."
+msgid "You have answered %(n_correct)d or more practice trials incorrectly."
 msgstr ""
 
 #: experiment/rules/practice.py:189
@@ -1118,37 +1142,37 @@ msgid "Are you in a quiet room?"
 msgstr ""
 
 #: experiment/rules/rhythm_battery_intro.py:43
-#: experiment/rules/rhythm_battery_intro.py:60
-#: experiment/rules/rhythm_battery_intro.py:77
-#: experiment/rules/rhythm_battery_intro.py:95
+#: experiment/rules/rhythm_battery_intro.py:63
+#: experiment/rules/rhythm_battery_intro.py:82
+#: experiment/rules/rhythm_battery_intro.py:100
 msgid "YES"
 msgstr "是"
 
 #: experiment/rules/rhythm_battery_intro.py:44
-#: experiment/rules/rhythm_battery_intro.py:61
+#: experiment/rules/rhythm_battery_intro.py:64
 msgid "MODERATELY"
 msgstr ""
 
 #: experiment/rules/rhythm_battery_intro.py:45
-#: experiment/rules/rhythm_battery_intro.py:62
-#: experiment/rules/rhythm_battery_intro.py:78
-#: experiment/rules/rhythm_battery_intro.py:96
+#: experiment/rules/rhythm_battery_intro.py:65
+#: experiment/rules/rhythm_battery_intro.py:82
+#: experiment/rules/rhythm_battery_intro.py:100
 msgid "NO"
 msgstr "否"
 
-#: experiment/rules/rhythm_battery_intro.py:58
+#: experiment/rules/rhythm_battery_intro.py:61
 msgid "Do you have a stable internet connection?"
 msgstr ""
 
-#: experiment/rules/rhythm_battery_intro.py:75
+#: experiment/rules/rhythm_battery_intro.py:81
 msgid "Are you wearing headphones?"
 msgstr ""
 
-#: experiment/rules/rhythm_battery_intro.py:93
+#: experiment/rules/rhythm_battery_intro.py:98
 msgid "Do you have sound notifications from other devices turned off?"
 msgstr ""
 
-#: experiment/rules/rhythm_battery_intro.py:106
+#: experiment/rules/rhythm_battery_intro.py:110
 msgid ""
 "You can now set the sound to a comfortable level.                     You "
 "can then adjust the volume to as high a level as possible without it being "
@@ -1156,33 +1180,33 @@ msgid ""
 "level, click Continue"
 msgstr ""
 
-#: experiment/rules/rhythm_battery_intro.py:111
+#: experiment/rules/rhythm_battery_intro.py:115
 msgid ""
 "Please keep the eventual sound level the same over the course of the "
 "experiment."
 msgstr ""
 
-#: experiment/rules/rhythm_battery_intro.py:126
+#: experiment/rules/rhythm_battery_intro.py:130
 msgid "You are about to take part in an experiment about rhythm perception."
 msgstr ""
 
-#: experiment/rules/rhythm_battery_intro.py:129
+#: experiment/rules/rhythm_battery_intro.py:133
 msgid ""
 "We want to find out what the best way is to test whether someone has a good "
 "sense of rhythm!"
 msgstr ""
 
-#: experiment/rules/rhythm_battery_intro.py:132
+#: experiment/rules/rhythm_battery_intro.py:136
 msgid ""
 "You will be doing many little tasks that have something to do with rhythm."
 msgstr ""
 
-#: experiment/rules/rhythm_battery_intro.py:135
+#: experiment/rules/rhythm_battery_intro.py:139
 msgid ""
 "You will get a short explanation and a practice trial for each little task."
 msgstr ""
 
-#: experiment/rules/rhythm_battery_intro.py:138
+#: experiment/rules/rhythm_battery_intro.py:142
 msgid ""
 "You can get reimbursed for completing the entire experiment! Either by "
 "earning 6 euros, or by getting 1 research credit (for psychology students at "
@@ -1204,54 +1228,55 @@ msgstr ""
 
 #: experiment/rules/rhythm_discrimination.py:157
 #, python-format
-msgid "Rhythm discrimination: %s"
+msgid "Rhythm discrimination: %(title)s"
 msgstr ""
 
-#: experiment/rules/rhythm_discrimination.py:164
-#, python-format
-msgid "practice %(index)d of 4"
-msgstr ""
+#: experiment/rules/rhythm_discrimination.py:165
+#, fuzzy, python-format
+#| msgid "Questionnaire %(index)i / %(total)i"
+msgid "practice %(index)d of %(total)d"
+msgstr "调查问卷 %(index)i/%(total)i"
 
-#: experiment/rules/rhythm_discrimination.py:166
+#: experiment/rules/rhythm_discrimination.py:170
 #, python-format
 msgid "trial %(index)d of %(total)d"
 msgstr ""
 
-#: experiment/rules/rhythm_discrimination.py:229
+#: experiment/rules/rhythm_discrimination.py:233
 msgid ""
 "In this test you will hear the same rhythm twice. After that, you will hear "
 "a third rhythm."
 msgstr ""
 
-#: experiment/rules/rhythm_discrimination.py:234
+#: experiment/rules/rhythm_discrimination.py:238
 msgid ""
 "Your task is to decide whether this third rhythm is the SAME as the first "
 "two rhythms or DIFFERENT."
 msgstr ""
 
-#: experiment/rules/rhythm_discrimination.py:240
+#: experiment/rules/rhythm_discrimination.py:244
 msgid ""
 "This test will take around 6 minutes to complete. Try to stay focused for "
 "the entire test!"
 msgstr ""
 
-#: experiment/rules/rhythm_discrimination.py:252
+#: experiment/rules/rhythm_discrimination.py:256
 #, python-format
 msgid ""
 "The third rhythm is the %(correct_response)s. Your response was CORRECT."
 msgstr ""
 
-#: experiment/rules/rhythm_discrimination.py:256
+#: experiment/rules/rhythm_discrimination.py:260
 #, python-format
 msgid ""
 "The third rhythm is the %(correct_response)s. Your response was INCORRECT."
 msgstr ""
 
-#: experiment/rules/rhythm_discrimination.py:270
+#: experiment/rules/rhythm_discrimination.py:274
 msgid "Well done! You've answered {} percent correctly!"
 msgstr ""
 
-#: experiment/rules/rhythm_discrimination.py:274
+#: experiment/rules/rhythm_discrimination.py:278
 msgid ""
 "One reason for the             weird beep-tones in this test (instead of "
 "some nice drum-sound) is that it is used very often            in brain "
@@ -1402,12 +1427,16 @@ msgstr "听起来完全像音乐"
 msgid "Listen carefully"
 msgstr "请认真聆听"
 
-#: experiment/rules/thats_my_song.py:89
+#: experiment/rules/thats_my_song.py:92
 msgid "Choose two or more decades of music"
 msgstr ""
 
-#: experiment/rules/thats_my_song.py:94
+#: experiment/rules/thats_my_song.py:97
 msgid "Playlist selection"
+msgstr ""
+
+#: experiment/serializers.py:65
+msgid "Back"
 msgstr ""
 
 #: experiment/standards/isced_education.py:4
@@ -1441,6 +1470,27 @@ msgstr "硕士研究生或同等学历"
 #: experiment/standards/isced_education.py:11
 msgid "Doctoral degree or equivalent"
 msgstr "博士研究生或同等学历"
+
+#: experiment/templates/admin/question_series.html:39
+msgid "Delete?"
+msgstr ""
+
+#: experiment/templates/admin/question_series.html:65
+msgid "Change"
+msgstr ""
+
+#: experiment/templates/admin/question_series.html:65
+msgid "View"
+msgstr ""
+
+#: experiment/templates/admin/question_series.html:67
+msgid "View on site"
+msgstr ""
+
+#: experiment/templates/admin/question_series.html:128
+#, python-format
+msgid "Add another %(verbose_name)s"
+msgstr ""
 
 #: experiment/templates/consent/consent_MRI.html:2
 msgid ""
@@ -2783,6 +2833,10 @@ msgstr "您可以复制以下您参与实验的用户信息链接以便下次继
 msgid "copy"
 msgstr "复制"
 
+#: question/admin.py:41
+msgid "Duplicate selected questions"
+msgstr ""
+
 #: question/demographics.py:12
 msgid "Have not (yet) completed any school qualification"
 msgstr "尚未取得任何学历"
@@ -2976,6 +3030,7 @@ msgid "I can sing or play music from memory."
 msgstr "我可以凭记忆唱歌或演奏音乐"
 
 #: question/goldsmiths.py:27 question/musicgens.py:155
+#: question/thatsmysong.py:56
 msgid "I am able to hit the right notes when I sing along with a recording."
 msgstr "跟着原声歌曲唱歌时，我能够把音唱准。"
 
@@ -2986,6 +3041,7 @@ msgid ""
 msgstr "我能够比较或讨论同一首乐曲的两种演出版本。"
 
 #: question/goldsmiths.py:36 question/musicgens.py:298
+#: question/thatsmysong.py:65
 msgid "I have never been complimented for my talents as a musical performer."
 msgstr "从来没有人称赞过我在音乐表演方面有天分。"
 
@@ -3356,7 +3412,7 @@ msgstr "如果有的话，您的第三语言是什么？"
 msgid "Please rate your previous experience with {}"
 msgstr "请为您先前的 {} 经历打分"
 
-#: question/musicgens.py:12
+#: question/musicgens.py:12 question/thatsmysong.py:11
 msgid "Never"
 msgstr ""
 
@@ -3368,19 +3424,20 @@ msgstr ""
 msgid "Once in a while"
 msgstr ""
 
-#: question/musicgens.py:15
+#: question/musicgens.py:15 question/thatsmysong.py:14
 msgid "Sometimes"
 msgstr ""
 
-#: question/musicgens.py:16
+#: question/musicgens.py:16 question/thatsmysong.py:15
 msgid "Very often"
 msgstr ""
 
-#: question/musicgens.py:17
+#: question/musicgens.py:17 question/thatsmysong.py:16
 msgid "Always"
 msgstr ""
 
-#: question/musicgens.py:19
+#: question/musicgens.py:19 question/thatsmysong.py:18
+#: question/thatsmysong.py:35
 msgid "Please tell us how much you agree"
 msgstr ""
 
@@ -3418,7 +3475,7 @@ msgid ""
 "before or not."
 msgstr ""
 
-#: question/musicgens.py:63
+#: question/musicgens.py:63 question/thatsmysong.py:51
 #, fuzzy
 #| msgid "I can tell when people sing or play out of tune."
 msgid "I can tell when people sing out of tune."
@@ -3437,7 +3494,7 @@ msgid ""
 "I become tearful or cry when I listen to a melody that I like very much."
 msgstr ""
 
-#: question/musicgens.py:87
+#: question/musicgens.py:87 question/thatsmysong.py:52
 msgid "Music gives me shivers or goosebumps."
 msgstr ""
 
@@ -3460,7 +3517,7 @@ msgstr ""
 msgid "I feel like I am 'one' with the music."
 msgstr ""
 
-#: question/musicgens.py:107
+#: question/musicgens.py:107 question/thatsmysong.py:53
 #, fuzzy
 #| msgid "I would not consider myself a musician."
 msgid "I lose myself in music."
@@ -3507,7 +3564,7 @@ msgstr "如果有人唱歌或演奏走音了,我能够听得出来。"
 msgid "I can tell when music is sung or played in time with the beat."
 msgstr "如果有人唱歌或演奏时没对到拍子,我可以听出来。"
 
-#: question/musicgens.py:139
+#: question/musicgens.py:139 question/thatsmysong.py:39
 #, fuzzy
 #| msgid "I can sing or play music from memory."
 msgid "I can sing or play a song from memory."
@@ -3608,11 +3665,11 @@ msgstr ""
 msgid "I get music stuck in my head."
 msgstr ""
 
-#: question/musicgens.py:223
+#: question/musicgens.py:223 question/thatsmysong.py:59
 msgid "I have a piece of music stuck on repeat in my head."
 msgstr ""
 
-#: question/musicgens.py:227
+#: question/musicgens.py:227 question/thatsmysong.py:61
 msgid "Music makes me dance."
 msgstr ""
 
@@ -3743,13 +3800,13 @@ msgid ""
 "musical activities."
 msgstr ""
 
-#: question/musicgens.py:300
+#: question/musicgens.py:300 question/thatsmysong.py:27
 #, fuzzy
 #| msgid "Completely Disagree"
 msgid "Completely disagree"
 msgstr "完全不同意"
 
-#: question/musicgens.py:301
+#: question/musicgens.py:301 question/thatsmysong.py:28
 #, fuzzy
 #| msgid "Strongly Disagree"
 msgid "Strongly disagree"
@@ -3761,13 +3818,13 @@ msgstr "非常不同意"
 msgid "Neither agree nor disagree"
 msgstr "即不同意也不反对"
 
-#: question/musicgens.py:305
+#: question/musicgens.py:305 question/thatsmysong.py:32
 #, fuzzy
 #| msgid "Strongly Agree"
 msgid "Strongly agree"
 msgstr "非常同意"
 
-#: question/musicgens.py:306
+#: question/musicgens.py:306 question/thatsmysong.py:33
 #, fuzzy
 #| msgid "Completely Agree"
 msgid "Completely agree"
@@ -3991,27 +4048,73 @@ msgstr ""
 msgid "Contact (optional):"
 msgstr "微信号、手机、邮箱等（选填）："
 
+#: question/thatsmysong.py:12
+msgid "Not very often"
+msgstr ""
+
+#: question/thatsmysong.py:13
+msgid "Occasionally"
+msgstr ""
+
+#: question/thatsmysong.py:30
+#, fuzzy
+#| msgid "Neither Agree nor Disagree"
+msgid "Neither agree or disagree"
+msgstr "即不同意也不反对"
+
+#: question/thatsmysong.py:42
+#, fuzzy
+#| msgid "I can tell when people sing or play out of time with the beat."
+msgid "I can tell when people sing or play out of time with the beat of music."
+msgstr "如果有人唱歌或演奏时没对到拍子,我可以听出来。"
+
+#: question/thatsmysong.py:45
+msgid "I can recognize a piece of music after hearing just a few notes."
+msgstr ""
+
+#: question/thatsmysong.py:47
+msgid "My musical ability is important to my identity."
+msgstr ""
+
+#: question/thatsmysong.py:48
+msgid "Listening to music makes me feel less alone."
+msgstr ""
+
+#: question/thatsmysong.py:62
+msgid "I can tap in time with a musical beat."
+msgstr ""
+
+#: question/thatsmysong.py:70
+msgid ""
+"When I feel anxious, listening to music helps me see things in a more "
+"positive light."
+msgstr ""
+
+#: question/thatsmysong.py:74
+msgid "Making music helps me to socially connect with others."
+msgstr ""
+
 #: section/admin.py:106
 msgid "Cannot upload {}: {}"
 msgstr ""
 
-#: theme/serializers.py:27
+#: theme/serializers.py:23
 #, fuzzy
 #| msgid "Begin experiment"
 msgid "Next experiment"
 msgstr "实验结束"
 
-#: theme/serializers.py:28
+#: theme/serializers.py:24
 msgid "About us"
 msgstr ""
 
-#: theme/serializers.py:31
+#: theme/serializers.py:27
 #, fuzzy
 #| msgid "points"
 msgid "Points"
 msgstr "分"
 
-#: theme/serializers.py:32
+#: theme/serializers.py:28
 #, fuzzy
 #| msgid "No points"
 msgid "No points yet!"

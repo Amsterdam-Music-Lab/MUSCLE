@@ -1,0 +1,97 @@
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ * 
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+@keyframes trophyAppear {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(0.5);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(1.1);
+  }
+  90% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes trophyZoomInOut {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes wobble {
+  0% {
+    transform: rotate(calc(-1 * var(--wobble-angle, 3deg)));
+  }
+
+  50% {
+    transform: rotate(var(--wobble-angle, 3deg));
+  }
+
+  100% {
+    transform: rotate(calc(-1 * var(--wobble-angle, 3deg)));
+  }
+}
+
+.trophy {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  width: 100%;
+  z-index: 10;
+
+  &.wobble {
+    animation-name: wobble;
+    animation-duration: var(--wobble-duration, 4000ms);
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+  }
+}
+
+.trophyIcon {
+  svg {
+    animation: 700ms ease-in 0s 1 trophyAppear;
+  }
+}
+
+.trophyText {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 60%;
+  text-wrap: balance;
+
+  color: var(--text-light, #fff);
+  h3 {
+    font-size: 1.5em;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+}

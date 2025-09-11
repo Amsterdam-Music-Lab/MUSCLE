@@ -14,11 +14,6 @@ app_name = 'experiment'
 
 urlpatterns = [
     path('render_markdown/', render_markdown, name='render_markdown'),
-    path(
-        'validate_playlist/<str:rules_id>',
-        validate_block_playlist,
-        name='validate_block_playlist',
-    ),
     path('block/<slug:slug>/', get_block, name='block'),
     path('block/<slug:slug>/feedback/', post_feedback, name='feedback'),
     path(

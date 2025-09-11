@@ -1,12 +1,7 @@
 /* Config */
+@import "scss/reset";
 @import "scss/variables";
-@import "scss/images";
 @import "scss/layout";
 @import "scss/animations";
-@import "scss/elements";
-@import "scss/color-schemes";
-
-@import "scss/fontawesome/include.scss";
-
-/* Components */
-@import "components/components";
+@import "scss/utils.scss";
+@import "scss/theme.scss";

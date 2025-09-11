@@ -1,0 +1,331 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2025-07-16 11:02+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: zh\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#: src/config/frontend.ts:322
+msgid ""
+"\n"
+"How good are you in memorizing music? \n"
+"Can you still remember tunes when some information is hidden?\n"
+"Find out with **TuneTwins**, a science game from the University of Amsterdam. \n"
+"Match melodies, clear the board, and minimize mistakes!\n"
+""
+msgstr ""
+"\n"
+"您的音乐记忆力有多好？\n"
+"当部分信息被隐藏时，您还能记住音乐吗？\n"
+"快来体验**TuneTwins**，这是一款来自荷兰阿姆斯特丹大学的科学游戏。\n"
+"匹配音乐，清空棋盘，尽量减少错误！\n"
+""
+
+#: src/config/frontend.ts:245
+msgid ""
+"\n"
+"TuneTwins was created by members of the Music Cognition Group \n"
+"and supported by the Dutch Research Council and Faculty of Humanities at the University \n"
+"of Amsterdam. This website processes only anonymized data. For more information, \n"
+"see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)"
+msgstr ""
+"\n"
+"TuneTwins由音乐认知小组成员开发，\n"
+"并得到荷兰科学研究委员会和阿姆斯特丹大学人文学院的支持。\n"
+"本网站仅处理匿名数据。如需了解更多信息，\n"
+"请参阅[阿姆斯特丹大学隐私政策](https://www.uva.nl/en/home/disclaimers/privacy.html)"
+
+#. placeholder {0}: config?.content
+#. placeholder {1}: config?.url
+#: src/components/modules/ShareOptions/ShareOptions.tsx:113
+msgid "{0} Play the game yourself at {1}"
+msgstr "{0} 点击{1}亲自体验游戏吧"
+
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:55
+msgid "{turnScore} points"
+msgstr "{turnScore}分"
+
+#: src/config/frontend.ts:287
+msgid "**Invite your friends to play!** Simply ask them to scan this QR code."
+msgstr "分享二维码,**邀请朋友一起玩！** 。"
+
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:54
+msgid "+{turnScore} points"
+msgstr "+{turnScore}分"
+
+#: src/config/frontend.ts:361
+msgid "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
+msgstr "⚠️ 游戏仍在开发中：我们正在进行测试。如果您遇到任何问题或有建议，**请使用即将出现在右下角的反馈按钮**分享您的反馈。"
+
+#: src/config/frontend.ts:405
+msgid "🎉 Amazing! You've finished the game!"
+msgstr "🎉 太棒了！您完成了此局游戏！"
+
+#: src/components/views/AboutView/AboutView.tsx:33
+msgid "About"
+msgstr "关于此实验"
+
+#: src/components/modules/FeedbackForm/FeedbackForm.tsx:59
+msgid "An error has occured. Your feedback could not be stored. Please try again later, or share your feedback via email."
+msgstr "发生错误。无法保存您的反馈。请稍后重试，或通过电子邮件分享您的反馈。"
+
+#: src/components/views/ErrorView/ErrorView.tsx:35
+msgid "An error has occured..."
+msgstr "发生了一个错误..."
+
+#: src/components/application/View/View.tsx:97
+msgid ""
+"An error occurred while trying to render the view \"{name}\". The properties required to show the view could not be computed.\n"
+" ({e})"
+msgstr ""
+"渲染页面\"{name}\"时发生错误。无法计算显示页面所需的属性。\n"
+" ({e})"
+
+#: src/components/views/AboutView/AboutView.tsx:40
+msgid "Back"
+msgstr "返回"
+
+#: src/components/modules/Cup/Cup.tsx:77
+msgid "Bronze"
+msgstr "青铜"
+
+#: src/config/frontend.ts:402
+msgid "Can you collect them all?"
+msgstr "您能集齐所有星星吗？"
+
+#: src/components/views/ConsentView/ConsentView.tsx:128
+msgid "Confirm"
+msgstr "确认"
+
+#: src/components/plugins/plugins/RankingPlugin.tsx:59
+msgid "Congrats! You did better than {cutoff}% of players at this level"
+msgstr "祝贺您！您的表现超过了此级别{cutoff}%的玩家"
+
+#: src/components/plugins/plugins/RankingPlugin.tsx:58
+msgid "Congrats! You did better than {percentile}% of players at this level"
+msgstr "祝贺您！您的表现超过了此级别{percentile}%的玩家"
+
+#: src/components/views/ConsentView/ConsentView.tsx:109
+msgid "Deny consent"
+msgstr "拒绝"
+
+#: src/components/modules/Cup/Cup.tsx:73
+msgid "Diamond"
+msgstr "钻石"
+
+#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:66
+msgid "Do you have any remarks or questions?"
+msgstr "您有什么意见或问题吗？"
+
+#: src/components/views/ConsentView/ConsentView.tsx:117
+msgid "Download"
+msgstr "下载"
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:85
+msgid "Excellent!"
+msgstr "您太棒了！"
+
+#: src/components/application/Experiment/Experiment.tsx:53
+msgid "Experiment \"{expSlug}\" could not be found."
+msgstr "找不到实验\"{expSlug}\"。"
+
+#: src/components/modules/TutorialMessage/TutorialMessage.tsx:46
+msgid "Explanation"
+msgstr "说明"
+
+#: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:31
+msgid "Go back to the homepage"
+msgstr "返回主页"
+
+#: src/components/modules/Cup/Cup.tsx:75
+msgid "Gold"
+msgstr "黄金"
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:83
+msgid "Good job!"
+msgstr "出色！"
+
+#: src/config/frontend.ts:358
+msgid "Help us with your feedback!"
+msgstr "请分享您的反馈，以帮助我们改进！"
+
+#: src/components/views/ConsentView/ConsentView.tsx:100
+msgid "Informed consent"
+msgstr "知情同意"
+
+#: src/components/views/ExplainerView/ExplainerView.tsx:57
+msgid "Instructions"
+msgstr "游戏说明"
+
+#: src/components/application/View/View.tsx:64
+msgid "Invalid view name \"{name}\""
+msgstr "无效的页面名称\"{name}\""
+
+#: src/components/plugins/plugins/ScoresPlugin.tsx:36
+msgid "Last game"
+msgstr "上一局"
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:77
+msgid "Lucky guess!"
+msgstr "猜对了！"
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:78
+msgid "Lucky you!"
+msgstr "真幸运！"
+
+#: src/components/views/ExplainerView/ExplainerView.tsx:83
+msgid "Next"
+msgstr "下一步"
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:84
+msgid "Nice!"
+msgstr "不错！"
+
+#: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:19
+msgid "No consent was given"
+msgstr "未给予同意"
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:87
+msgid "No match, try again!"
+msgstr "不匹配，再试一次！"
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:89
+msgid "Nope, that's no match..."
+msgstr "可惜它们不匹配..."
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:90
+msgid "Not quite, try again!"
+msgstr "差一点，再试一次！"
+
+#: src/components/application/Experiment/Experiment.tsx:108
+msgid "Page not found"
+msgstr "页面未找到"
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:74
+msgid "Pick a card..."
+msgstr "选择一张卡片..."
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:75
+msgid "Pick another card..."
+msgstr "选择另一张卡片..."
+
+#: src/components/modules/Cup/Cup.tsx:78
+msgid "Plastic"
+msgstr "塑料"
+
+#: src/components/modules/Cup/Cup.tsx:74
+msgid "Platinum"
+msgstr "白金"
+
+#: src/components/views/FinalView/FinalView.tsx:186
+msgid "Play another game!"
+msgstr "再玩一局！"
+
+#: src/config/frontend.ts:398
+msgid "Play on and collect 'm all..."
+msgstr "继续游戏，收集全部..."
+
+#: src/config/frontend.ts:406
+msgid "Play on? Let's start another round of games..."
+msgstr "继续游戏？让我们开始新的一轮..."
+
+#: src/components/modules/FeedbackForm/FeedbackForm.tsx:53
+msgid "Please provide some feedback"
+msgstr "请提供您的反馈"
+
+#: src/components/modules/ScoreDisplay/ScoreDisplay.tsx:83
+msgid "pts"
+msgstr "分"
+
+#: src/components/application/View/View.tsx:78
+msgid "Required dependency \"{varName}\" for view \"{name}\" is not defined"
+msgstr "页面\"{name}\"所需的依赖项\"{varName}\"未定义"
+
+#: src/components/views/ErrorView/ErrorView.tsx:39
+msgid "Return to the <0>home page</0>"
+msgstr "返回<0>主页</0>"
+
+#: src/components/plugins/plugins/SharePlugin.tsx:30
+msgid "Share"
+msgstr "分享"
+
+#: src/components/modules/Cup/Cup.tsx:76
+msgid "Silver"
+msgstr "白银"
+
+#: src/components/views/SurveyView/SurveyView.tsx:106
+msgid "Skip"
+msgstr "跳过"
+
+#: src/config/frontend.ts:373
+msgid "Start the game!"
+msgstr "开始游戏！"
+
+#: src/components/views/SurveyView/SurveyView.tsx:117
+#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
+msgid "Submit"
+msgstr "提交"
+
+#: src/components/modules/FeedbackForm/FeedbackForm.tsx:90
+msgid "Submit more feedback"
+msgstr "提交更多反馈"
+
+#: src/config/frontend.ts:347
+msgid "Test Your Musical Memory!"
+msgstr "测试您的音乐记忆力！"
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:79
+msgid "This is your lucky day!"
+msgstr "今天您很幸运哦！"
+
+#: src/components/plugins/plugins/ScoresPlugin.tsx:43
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
+msgid "Total score"
+msgstr "总分"
+
+#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:70
+msgid "Type your feedback..."
+msgstr "输入您的反馈..."
+
+#: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:21
+msgid ""
+"Unfortunately, you cannot participate in this experiment if you do not\n"
+"          want to provide consent."
+msgstr "很遗憾，如果您不愿意提供同意，就无法参与此实验。"
+
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:82
+msgid "Well done!"
+msgstr "做得好！"
+
+#: src/config/frontend.ts:401
+msgid "Woohoo! You've earned your first star! 💫"
+msgstr "太棒了！您获得了第一颗星星！💫"
+
+#: src/config/frontend.ts:397
+msgid "Yay, you've earned a star! 💫"
+msgstr "耶，您赢得了一颗星星！💫"
+
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:52
+msgid "You got 0 points."
+msgstr "您得到了0分。"
+
+#: src/components/application/View/View.tsx:127
+msgid "Your feedback"
+msgstr "分享您的反馈"
+
+#: src/components/modules/FeedbackForm/FeedbackForm.tsx:76
+msgid "Your feedback was submitted."
+msgstr "您的反馈已提交。"
+
+#: src/config/frontend.ts:306
+msgid "Your progress..."
+msgstr "您的进度..."

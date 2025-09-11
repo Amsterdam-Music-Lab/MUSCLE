@@ -66,19 +66,19 @@ export const useConsent = (slug: string) =>
     useGet<ConsentResponse>(API_BASE_URL + URLS.result.get('consent_' + slug));
 
 interface CreateConsentParams {
-    experiment: IExperiment;
+    experimentSlug: IExperiment['slug'];
     participant: Pick<Participant, 'csrf_token'>;
 }
 
 /** Create consent for given experiment */
-export const createConsent = async ({ experiment, participant }: CreateConsentParams) => {
+export const createConsent = async ({ experimentSlug, participant }: CreateConsentParams) => {
     try {
         const response = await axios.post(
             API_BASE_URL + URLS.result.consent,
             qs.stringify({
                 json_data: JSON.stringify(
                     {
-                        key: "consent_" + experiment.slug,
+                        key: "consent_" + experimentSlug,
                         value: true,
                     }
                 ),

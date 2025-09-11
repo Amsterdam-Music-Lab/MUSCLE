@@ -1,0 +1,100 @@
+/**
+ * Copyright (c) 2025 Bas Cornelissen
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is part of the MUSCLE project by Amsterdam Music Lab.
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
+
+import type { HTMLAttributes, CSSProperties } from "react";
+import { useLingui } from "@lingui/react/macro";
+import type { Variant } from "@/types/themeProvider";
+import classNames from "classnames";
+import styles from "./ScoreDisplay.module.scss";
+
+interface ScoreProps extends HTMLAttributes<HTMLDivElement> {
+  /** The score */
+  score?: number;
+
+  /** A descriptive label shown underneath the score */
+  label?: string;
+
+  /** The unit shown as a superscript. Default "pts". */
+  units?: string;
+
+  /** A placeholder shown when no score is specified. Default "??" */
+  placeholder?: string;
+
+  /** The size of the score in rems. Default 4 */
+  size?: number;
+
+  /** The variant color */
+  variant?: Variant;
+
+  /** Whether to center the component */
+  center?: boolean;
+}
+
+/**
+ * A large score with optional units as superscript and an optional label below.
+ * When no score is passed, a placeholder text (default "??") is shown.
+ */
+export default function ScoreDisplay({
+  score,
+  label,
+  units,
+  size = 4,
+  placeholder = "??",
+  variant = "primary",
+  center = false,
+  ...props
+}: ScoreProps) {
+  const { t } = useLingui();
+  const { className, style, ...rest } = props;
+  return (
+    <div
+      className={classNames(
+        styles.scoreDisplay,
+        className,
+        center && styles.center,
+        "score-display"
+      )}
+      style={{ "--score-display-font-size": size, ...style } as CSSProperties}
+      {...rest}
+    >
+      <div className={styles.score}>
+        {/* Wrap in an extra div to be able to center the component. */}
+        <div>
+          <span
+            className={classNames(
+              styles.scoreValue,
+              score !== undefined ? `text-fill-${variant}` : "text-light-gray"
+            )}
+          >
+            {score === undefined ? placeholder : score}
+          </span>
+          {units && score !== undefined ? (
+            <span
+              className={classNames(
+                styles.scoreUnits,
+                `text-fill-${variant} small`
+              )}
+            >
+              {units ?? t`pts`}
+            </span>
+          ) : null}
+        </div>
+      </div>
+      {label && (
+        <div
+          className={classNames(
+            styles.scoreLabel,
+            "text-muted small score-label"
+          )}
+        >
+          {label}
+        </div>
+      )}
+    </div>
+  );
+}
