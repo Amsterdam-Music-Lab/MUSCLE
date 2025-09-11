@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-18 14:20+0200\n"
+"POT-Creation-Date: 2025-09-11 10:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,31 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Language: nl_NL\n"
 "X-Source-Language: C\n"
+
+#: aml/base_settings.py:132 experiment/rules/speech2song.py:38
+#: question/languages.py:59
+msgid "English"
+msgstr ""
+
+#: aml/base_settings.py:133
+msgid "Dutch"
+msgstr ""
+
+#: aml/base_settings.py:134
+msgid "Portuguese"
+msgstr ""
+
+#: aml/base_settings.py:135
+msgid "Chinese"
+msgstr ""
+
+#: experiment/actions/consent.py:104
+msgid "I agree"
+msgstr "Akkoord"
+
+#: experiment/actions/consent.py:105
+msgid "Stop"
+msgstr ""
 
 #: experiment/actions/final.py:96
 msgid "plastic"
@@ -48,16 +73,16 @@ msgstr ""
 msgid "Final score"
 msgstr "Eindscore"
 
-#: experiment/actions/final.py:138 participant/views.py:45
+#: experiment/actions/final.py:138 participant/views.py:46
 msgid "points"
 msgstr "punten"
 
 #: experiment/actions/final.py:152 experiment/rules/hooked.py:106
-#: experiment/rules/thats_my_song.py:70
+#: experiment/rules/thats_my_song.py:79
 msgid "Play again"
 msgstr "Opnieuw spelen"
 
-#: experiment/actions/final.py:153 participant/views.py:40
+#: experiment/actions/final.py:153 participant/views.py:41
 msgid "My profile"
 msgstr ""
 
@@ -133,27 +158,27 @@ msgstr ""
 msgid "Round {get_rounds_passed} / {total_rounds}"
 msgstr "Ronde {get_rounds_passed} van {total_rounds}"
 
-#: experiment/actions/score.py:69
+#: experiment/actions/score.py:70
 msgid "Total Score"
 msgstr "Eindscore"
 
-#: experiment/actions/score.py:69 experiment/rules/musical_preferences.py:106
+#: experiment/actions/score.py:71 experiment/rules/musical_preferences.py:106
 msgid "Next"
 msgstr "Volgende"
 
-#: experiment/actions/score.py:69
+#: experiment/actions/score.py:72
 msgid "You listened to:"
 msgstr "Je luisterde naar:"
 
-#: experiment/actions/score.py:119
+#: experiment/actions/score.py:123
 msgid "No points"
 msgstr "Geen punten"
 
-#: experiment/actions/score.py:123
+#: experiment/actions/score.py:127
 msgid "Incorrect"
 msgstr "Onjuist"
 
-#: experiment/actions/score.py:127
+#: experiment/actions/score.py:131
 msgid "Correct"
 msgstr "Correct"
 
@@ -176,6 +201,26 @@ msgstr ""
 
 #: experiment/actions/wrappers.py:151
 msgid "Did the track come back in the right place?"
+msgstr ""
+
+#: experiment/forms.py:62
+msgid "The name and description will be displayed in dashboard mode."
+msgstr ""
+
+#: experiment/forms.py:64
+msgid ""
+"An image that will be displayed on the experiment page and as a meta image "
+"in search engines."
+msgstr ""
+
+#: experiment/forms.py:67
+#, python-brace-format
+msgid ""
+"The slug is used to identify the block in the URL so you can access it on "
+"the web as follows: app.amsterdammusiclab.nl/{slug} <br>            It must "
+"be unique, lowercase and contain only letters, numbers, and hyphens. Nor can "
+"it start with any of the following reserved words: admin, server, block, "
+"participant, result, section, session, static."
 msgstr ""
 
 #: experiment/management/commands/templates/experiment.py:37
@@ -203,51 +248,51 @@ msgstr ""
 msgid "Test block"
 msgstr ""
 
-#: experiment/models.py:427
+#: experiment/models.py:68
 #, python-brace-format
 msgid ""
 "Content for social media sharing. Use {points} and {experiment_name} as "
 "placeholders."
 msgstr ""
 
-#: experiment/models.py:486
+#: experiment/models.py:323
 msgid "List of tags for social media sharing"
 msgstr ""
 
-#: experiment/models.py:490
+#: experiment/models.py:327
 msgid ""
 "URL to be shared on social media. If empty, the experiment URL will be used."
 msgstr ""
 
-#: experiment/models.py:494
+#: experiment/models.py:331
 msgid "Facebook"
 msgstr ""
 
-#: experiment/models.py:495
+#: experiment/models.py:332
 msgid "WhatsApp"
 msgstr ""
 
-#: experiment/models.py:496
+#: experiment/models.py:333
 msgid "Twitter"
 msgstr ""
 
-#: experiment/models.py:497
+#: experiment/models.py:334
 msgid "Weibo"
 msgstr ""
 
-#: experiment/models.py:498
+#: experiment/models.py:335
 msgid "Share"
 msgstr ""
 
-#: experiment/models.py:499
+#: experiment/models.py:336
 msgid "Clipboard"
 msgstr ""
 
-#: experiment/models.py:505
+#: experiment/models.py:342
 msgid "Selected social media channels for sharing"
 msgstr ""
 
-#: experiment/models.py:539
+#: experiment/models.py:375
 #, python-format
 msgid "I scored %(score)d points in %(experiment_name)s"
 msgstr ""
@@ -354,11 +399,11 @@ msgstr "Verzenden"
 msgid "We appreciate your feedback!"
 msgstr "We waarderen je feedback!"
 
-#: experiment/rules/base.py:138 experiment/rules/musical_preferences.py:71
+#: experiment/rules/base.py:94 experiment/rules/musical_preferences.py:71
 msgid "Questionnaire"
 msgstr ""
 
-#: experiment/rules/base.py:160
+#: experiment/rules/base.py:102
 #, python-format
 msgid "Questionnaire %(index)i / %(total)i"
 msgstr "Vraag %(index)d van %(total)d"
@@ -792,8 +837,6 @@ msgid "Did you hear the same song during previous rounds?"
 msgstr ""
 
 #: experiment/rules/hooked.py:203
-#, fuzzy, python-format
-#| msgid "Round %(number)d / %(total)d"
 msgid "Round %(number)d / %(total)d"
 msgstr "Ronde %(index)d van %(total)d"
 
@@ -902,7 +945,9 @@ msgstr ""
 msgid ""
 "TuneTwins is a musical version of \"Memory\". It consists of 16 musical "
 "fragments. Your task is to listen and find the 8 matching pairs."
-msgstr "TuneTwins is een muzikale versie van \"Memory\". Het bestaat uit 16 muzikale fragmenten. Je taak is om te luisteren en de 8 matchende paren te vinden."
+msgstr ""
+"TuneTwins is een muzikale versie van \"Memory\". Het bestaat uit 16 muzikale "
+"fragmenten. Je taak is om te luisteren en de 8 matchende paren te vinden."
 
 #: experiment/rules/matching_pairs.py:50
 msgid ""
@@ -910,10 +955,6 @@ msgid ""
 "pairs. Some versions are more difficult and you will have to listen for "
 "similar pairs, one of which is distorted."
 msgstr ""
-
-#: experiment/rules/matching_pairs.py:103
-msgid "Click to start!"
-msgstr "Klik om te starten!"
 
 #: experiment/rules/matching_pairs.py:53
 msgid "Click on another card to stop the current card from playing."
@@ -927,22 +968,27 @@ msgstr "Als je een match vindt, verdwijnt het paar kaarten van het bord."
 msgid "Listen carefully to avoid mistakes and earn more points."
 msgstr "Luister aandachtig om fouten te voorkomen en meer punten te verdienen."
 
-#: experiment/rules/matching_pairs_2025.py:79
+#: experiment/rules/matching_pairs.py:69 experiment/rules/matching_pairs.py:174
 #: experiment/rules/questionnaire.py:21
-msgid "Before starting the game, we would like to ask you {} demographic questions."
-msgstr "Voordat het spel begint, willen we je {} demografische vragen stellen."
+msgid ""
+"Before starting the game, we would like to ask you %i demographic questions."
+msgstr "Voordat het spel begint, willen we je %i demografische vragen stellen."
 
 #: experiment/rules/matching_pairs_2025.py:43
 msgid ""
 "This was not a match, so you get 0 points. Please try again to see if you "
 "can find a matching pair."
-msgstr "Dit was geen match, dus je krijgt 0 punten. Probeer opnieuw een matchend paar te vinden."
+msgstr ""
+"Dit was geen match, dus je krijgt 0 punten. Probeer opnieuw een matchend "
+"paar te vinden."
 
 #: experiment/rules/matching_pairs_2025.py:46
 msgid ""
 "You got a matching pair, but you didn't hear both cards before. This is "
 "considered a lucky match. You get 10 points."
-msgstr "Je hebt een matchend paar gevonden, maar je hebt beide kaarten niet eerder gehoord: een toevalstreffer. Je krijgt 10 punten."
+msgstr ""
+"Je hebt een matchend paar gevonden, maar je hebt beide kaarten niet eerder "
+"gehoord: een toevalstreffer. Je krijgt 10 punten."
 
 #: experiment/rules/matching_pairs_2025.py:48
 msgid "You got a matching pair. You get 20 points."
@@ -952,41 +998,57 @@ msgstr "Je hebt een matchend paar gevonden. Je krijgt 20 punten."
 msgid ""
 "You thought you found a matching pair, but you didn't. This is considered a "
 "misremembered pair. You lose 10 points."
-msgstr "Je dacht een matchend paar te hebben gevonden, maar dat was niet zo. Je hebt het verkeerd herinnerd en verliest 10 punten."
+msgstr ""
+"Je dacht een matchend paar te hebben gevonden, maar dat was niet zo. Je hebt "
+"het verkeerd herinnerd en verliest 10 punten."
 
-#: experiment/rules/matching_pairs_2025.py:182
+#: experiment/rules/matching_pairs_2025.py:79
+msgid ""
+"Before starting the game, we would like to ask you {} demographic questions."
+msgstr "Voordat het spel begint, willen we je {} demografische vragen stellen."
+
+#: experiment/rules/matching_pairs_2025.py:102
+msgid "Click to start!"
+msgstr "Klik om te starten!"
+
+#: experiment/rules/matching_pairs_2025.py:181
 msgid ""
 "You get a board with 16 musical cards. **Pick a card,** and listen to it "
 "carefully..."
-msgstr "Je ziet zo een bord met 16 muzikale kaarten. **Kies een kaart** en luister goed..."
+msgstr ""
+"Je ziet zo een bord met 16 muzikale kaarten. **Kies een kaart** en luister "
+"goed..."
 
-#: experiment/rules/matching_pairs_2025.py:186
+#: experiment/rules/matching_pairs_2025.py:185
 msgid "Then try to **find a second card that matches it.**"
 msgstr "Probeer dan een **matchende tweede kaart te vinden**."
 
-#: experiment/rules/matching_pairs_2025.py:190
+#: experiment/rules/matching_pairs_2025.py:189
 msgid "**Find the 8 matching pairs** to clear the board and score points:"
-msgstr "**Vind de 8 matchende paren** om het bord leeg te maken en punten te scoren:"
+msgstr ""
+"**Vind de 8 matchende paren** om het bord leeg te maken en punten te scoren:"
 
-#: experiment/rules/matching_pairs_2025.py:195
+#: experiment/rules/matching_pairs_2025.py:194
 msgid ""
 "**+20 points:** Matched first card with one you’ve heard before — memory "
 "wins!"
-msgstr "**+20 punten:** Eerste kaart gematcht met een die je eerder hebt gehoord — geheugen "
-"wint!"
+msgstr ""
+"**+20 punten:** Eerste kaart gematcht met een die je eerder hebt gehoord — "
+"geheugen wint!"
 
-#: experiment/rules/matching_pairs_2025.py:200
+#: experiment/rules/matching_pairs_2025.py:199
 msgid ""
 "**-10 points:** Chose a wrong second card that’s heard before? Oops — "
 "penalty..."
-msgstr "**-10 punten:** Verkeerde tweede kaart gekozen die eerder is gehoord? Oeps — "
+msgstr ""
+"**-10 punten:** Verkeerde tweede kaart gekozen die eerder is gehoord? Oeps — "
 "je verliest punten..."
 
-#: experiment/rules/matching_pairs_2025.py:205
+#: experiment/rules/matching_pairs_2025.py:204
 msgid "Some cards sound **distorted** on purpose. Stay sharp!"
 msgstr "Sommige kaarten klinken **vervormd** opzettelijk. Blijf scherp!"
 
-#: experiment/rules/matching_pairs_2025.py:288
+#: experiment/rules/matching_pairs_2025.py:287
 #, python-format
 msgid "You outperformed {}% of the players!"
 msgstr ""
@@ -1366,10 +1428,6 @@ msgstr ""
 "maken veel lawaai. Het piepgeluid helpt mensen in de scanner om het ritme "
 "goed te kunnen horen."
 
-#: experiment/rules/speech2song.py:38 question/languages.py:59
-msgid "English"
-msgstr ""
-
 #: experiment/rules/speech2song.py:39 question/languages.py:60
 msgid "Brazilian Portuguese"
 msgstr ""
@@ -1505,15 +1563,15 @@ msgstr ""
 msgid "Listen carefully"
 msgstr ""
 
-#: experiment/rules/thats_my_song.py:92
+#: experiment/rules/thats_my_song.py:96
 msgid "Choose two or more decades of music"
 msgstr ""
 
-#: experiment/rules/thats_my_song.py:97
+#: experiment/rules/thats_my_song.py:101
 msgid "Playlist selection"
 msgstr ""
 
-#: experiment/serializers.py:65
+#: experiment/serializers.py:49
 msgid "Back"
 msgstr "Terug"
 
@@ -1549,20 +1607,35 @@ msgstr "HBO of WO masteropleiding (of gelijkwaardig)"
 msgid "Doctoral degree or equivalent"
 msgstr "Doctoraal/PhD (of gelijkwaardig)"
 
-#: experiment/templates/admin/question_series.html:39
-msgid "Delete?"
+#: experiment/templates/admin/experiment/block/submit_line.html:4
+msgid "Save"
 msgstr ""
 
+#: experiment/templates/admin/experiment/block/submit_line.html:7
+msgid "Delete"
+msgstr ""
+
+#: experiment/templates/admin/phase_inline.html:21
 #: experiment/templates/admin/question_series.html:65
 msgid "Change"
 msgstr ""
 
+#: experiment/templates/admin/phase_inline.html:21
 #: experiment/templates/admin/question_series.html:65
 msgid "View"
 msgstr ""
 
+#: experiment/templates/admin/phase_inline.html:23
 #: experiment/templates/admin/question_series.html:67
 msgid "View on site"
+msgstr ""
+
+#: experiment/templates/admin/phase_inline.html:48
+msgid "Add"
+msgstr ""
+
+#: experiment/templates/admin/question_series.html:39
+msgid "Delete?"
 msgstr ""
 
 #: experiment/templates/admin/question_series.html:128
@@ -1740,12 +1813,12 @@ msgstr "Compensatie"
 #: experiment/templates/consent/consent_MRI.html:17
 msgid ""
 " As compensation for your participation, you receive 15 euros. To receive "
-"this compensation, make sure to register your participation on the lab.uva."
-"nl website! "
+"this compensation, make sure to register your participation on the "
+"lab.uva.nl website! "
 msgstr ""
 "Ter compensatie van uw deelname kunt u 15 euro ontvangen. Om deze "
-"compensatie te ontvangen moet u als proefpersoon registreren op de lab.uva."
-"nl website!"
+"compensatie te ontvangen moet u als proefpersoon registreren op de "
+"lab.uva.nl website!"
 
 #: experiment/templates/consent/consent_MRI.html:18
 #: experiment/templates/consent/consent_categorization.html:13
@@ -1768,8 +1841,8 @@ msgid ""
 "protection officer of the University of Amsterdam via fg@uva.nl. "
 msgstr ""
 "Mocht u vragen hebben over dit onderzoek, vooraf of achteraf, dan kunt u "
-"zich wenden tot de verantwoordelijke onderzoeker, Dr. Atser Damsma (a."
-"damsma@uva.nl). Voor eventuele formele klachten over dit onderzoek kunt u "
+"zich wenden tot de verantwoordelijke onderzoeker, Dr. Atser Damsma "
+"(a.damsma@uva.nl). Voor eventuele formele klachten over dit onderzoek kunt u "
 "zich wenden tot het lid van de Facultaire Commissie Ethiek (FMG) van de "
 "Universiteit van Amsterdam, Dr. Yair Pinto (y.pinto@uva.nl). Voor vragen of "
 "klachten over de verwerking van uw persoonsgegevens kunt u tevens contact "
@@ -1900,15 +1973,17 @@ msgstr ""
 #: experiment/templates/consent/consent_categorization.html:14
 msgid ""
 " For further information on the research project, please contact Zhiyuan "
-"Ning (e-mail <a href=\"mailto:z.ning@biology.leidenuniv.nl\">z.ning@biology."
-"leidenuniv.nl</a>; Institute of Biology, Leiden University, P.O. Box 9505, "
-"2300 RA Leiden, The Netherlands) or Jiaxin Li (e-mail: <a href=\"mailto:j."
-"li5@uva.nl\">j.li5@uva.nl</a>; Science Park 107, 1098 GE Amsterdam, The "
-"Netherlands). If you have any complaints regarding this research project, "
-"you can contact the secretary of the Ethics Committee of the Faculty of "
-"Humanities of the University of Amsterdam (phone number: +31 20 525 3054; e-"
-"mail: <a href=\"mailto:commissie-ethiek-fgw@uva.nl\">commissie-ethiek-"
-"fgw@uva.nl</a>; Kloveniersburgwal 48, 1012 CX Amsterdam). "
+"Ning (e-mail <a "
+"href=\"mailto:z.ning@biology.leidenuniv.nl\">z.ning@biology.leidenuniv.nl</"
+"a>; Institute of Biology, Leiden University, P.O. Box 9505, 2300 RA Leiden, "
+"The Netherlands) or Jiaxin Li (e-mail: <a "
+"href=\"mailto:j.li5@uva.nl\">j.li5@uva.nl</a>; Science Park 107, 1098 GE "
+"Amsterdam, The Netherlands). If you have any complaints regarding this "
+"research project, you can contact the secretary of the Ethics Committee of "
+"the Faculty of Humanities of the University of Amsterdam (phone number: +31 "
+"20 525 3054; e-mail: <a href=\"mailto:commissie-ethiek-"
+"fgw@uva.nl\">commissie-ethiek-fgw@uva.nl</a>; Kloveniersburgwal 48, 1012 CX "
+"Amsterdam). "
 msgstr ""
 
 #: experiment/templates/consent/consent_categorization.html:15
@@ -2786,11 +2861,11 @@ msgstr ""
 msgid "All players' top 3 favourite songs:"
 msgstr ""
 
-#: experiment/views.py:56
+#: experiment/views.py:57
 msgid "Loading"
 msgstr ""
 
-#: participant/views.py:42
+#: participant/views.py:43
 #, python-format
 msgid ""
 "You have participated in %(count)d Amsterdam Music Lab experiment. Your best "
@@ -2801,13 +2876,13 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: participant/views.py:46
+#: participant/views.py:47
 msgid ""
 "Use the following link to continue with your profile at another moment or on "
 "another device."
 msgstr ""
 
-#: participant/views.py:80
+#: participant/views.py:81
 msgid "copy"
 msgstr "kopiëren"
 
@@ -2989,7 +3064,7 @@ msgstr ""
 msgid "Professional"
 msgstr ""
 
-#: question/demographics.py:177
+#: question/demographics.py:187
 msgid "Enter a name to enter the ICMPC hall of fame"
 msgstr ""
 
@@ -3992,16 +4067,10 @@ msgid "Occasionally"
 msgstr ""
 
 #: question/thatsmysong.py:30
-#, fuzzy
-#| msgid "Neither agree nor disagree"
 msgid "Neither agree or disagree"
 msgstr "Niet mee eens of oneens"
 
 #: question/thatsmysong.py:42
-#, fuzzy
-#| msgid ""
-#| "I can tell when people sing or play out of time with the beat of the "
-#| "music."
 msgid "I can tell when people sing or play out of time with the beat of music."
 msgstr "Ik kan het horen als iemand uit de maat zingt of speelt."
 
@@ -4053,9 +4122,6 @@ msgstr "Nog geen punten!"
 
 #~ msgid "practice %(index)d of %(n_rounds)d"
 #~ msgstr "oefentrial %(index)d van %(total)d"
-
-#~ msgid "I agree"
-#~ msgstr "Akkoord"
 
 #, fuzzy
 #~| msgid "All experiments"

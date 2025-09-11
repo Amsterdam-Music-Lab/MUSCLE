@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-18 14:19+0200\n"
+"POT-Creation-Date: 2025-09-11 10:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,31 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: aml/base_settings.py:132 experiment/rules/speech2song.py:38
+#: question/languages.py:59
+msgid "English"
+msgstr "inglês"
+
+#: aml/base_settings.py:133
+msgid "Dutch"
+msgstr ""
+
+#: aml/base_settings.py:134
+msgid "Portuguese"
+msgstr "português brasileiro"
+
+#: aml/base_settings.py:135
+msgid "Chinese"
+msgstr "chinês mandarim"
+
+#: experiment/actions/consent.py:104
+msgid "I agree"
+msgstr "Concordo"
+
+#: experiment/actions/consent.py:105
+msgid "Stop"
+msgstr "Parar"
 
 #: experiment/actions/final.py:96
 msgid "plastic"
@@ -46,22 +71,20 @@ msgstr "diamante"
 msgid "Final score"
 msgstr "Pontuação final"
 
-#: experiment/actions/final.py:138 participant/views.py:45
+#: experiment/actions/final.py:138 participant/views.py:46
 msgid "points"
 msgstr "pontos"
 
 #: experiment/actions/final.py:152 experiment/rules/hooked.py:106
-#: experiment/rules/thats_my_song.py:70
+#: experiment/rules/thats_my_song.py:79
 msgid "Play again"
 msgstr "Jogar novamente"
 
-#: experiment/actions/final.py:153 participant/views.py:40
+#: experiment/actions/final.py:153 participant/views.py:41
 msgid "My profile"
 msgstr "Meu perfil"
 
 #: experiment/actions/final.py:154
-#, fuzzy
-#| msgid "End of experiment"
 msgid "All experiments"
 msgstr "Fim do experimento"
 
@@ -91,10 +114,8 @@ msgstr "Discordo fortemente"
 
 #: experiment/actions/form.py:354 experiment/actions/form.py:363
 #: question/musicgens.py:302 question/thatsmysong.py:29
-#, fuzzy
-#| msgid "I agree"
 msgid "Disagree"
-msgstr "Concordo"
+msgstr "Discordo"
 
 #: experiment/actions/form.py:355 experiment/actions/form.py:364
 msgid "Neither Agree nor Disagree"
@@ -102,8 +123,6 @@ msgstr ""
 
 #: experiment/actions/form.py:356 experiment/actions/form.py:365
 #: question/musicgens.py:304 question/thatsmysong.py:31
-#, fuzzy
-#| msgid "I agree"
 msgid "Agree"
 msgstr "Concordo"
 
@@ -137,27 +156,27 @@ msgstr "Selecionar uma Playlist"
 msgid "Round {get_rounds_passed} / {total_rounds}"
 msgstr "Rodada {get_rounds_passed} / {total_rounds}"
 
-#: experiment/actions/score.py:69
+#: experiment/actions/score.py:70
 msgid "Total Score"
 msgstr "Pontuação Total"
 
-#: experiment/actions/score.py:69 experiment/rules/musical_preferences.py:106
+#: experiment/actions/score.py:71 experiment/rules/musical_preferences.py:106
 msgid "Next"
 msgstr "Próximo"
 
-#: experiment/actions/score.py:69
+#: experiment/actions/score.py:72
 msgid "You listened to:"
 msgstr "Você ouviu:"
 
-#: experiment/actions/score.py:119
+#: experiment/actions/score.py:123
 msgid "No points"
 msgstr "Sem pontos"
 
-#: experiment/actions/score.py:123
+#: experiment/actions/score.py:127
 msgid "Incorrect"
 msgstr "Incorreto"
 
-#: experiment/actions/score.py:127
+#: experiment/actions/score.py:131
 msgid "Correct"
 msgstr "Correto"
 
@@ -182,6 +201,26 @@ msgstr "Continue imaginando a música"
 msgid "Did the track come back in the right place?"
 msgstr "A faixa voltou no lugar certo?"
 
+#: experiment/forms.py:62
+msgid "The name and description will be displayed in dashboard mode."
+msgstr ""
+
+#: experiment/forms.py:64
+msgid ""
+"An image that will be displayed on the experiment page and as a meta image "
+"in search engines."
+msgstr ""
+
+#: experiment/forms.py:67
+#, python-brace-format
+msgid ""
+"The slug is used to identify the block in the URL so you can access it on "
+"the web as follows: app.amsterdammusiclab.nl/{slug} <br>            It must "
+"be unique, lowercase and contain only letters, numbers, and hyphens. Nor can "
+"it start with any of the following reserved words: admin, server, block, "
+"participant, result, section, session, static."
+msgstr ""
+
 #: experiment/management/commands/templates/experiment.py:37
 msgid "Please read the instructions carefully"
 msgstr "Por favor, leia as instruções com atenção."
@@ -196,10 +235,8 @@ msgstr "Outro passo da explicação"
 
 #: experiment/management/commands/templates/experiment.py:61
 #: experiment/rules/congosamediff.py:186
-#, fuzzy
-#| msgid "Voluntary participation"
 msgid "Thank you for participating!"
-msgstr "Participação Voluntária"
+msgstr "Obrigado por participar!"
 
 #: experiment/management/commands/templates/experiment.py:75
 msgid "Do you like this song?"
@@ -209,52 +246,55 @@ msgstr "Você gosta desta música?"
 msgid "Test block"
 msgstr "Bloco de teste"
 
-#: experiment/models.py:427
+#: experiment/models.py:68
 #, python-brace-format
 msgid ""
 "Content for social media sharing. Use {points} and {experiment_name} as "
 "placeholders."
-msgstr "Conteúdo para compartilhamento em redes sociais. Use {points} e {experiment_name} como "
-"placeholders."
+msgstr ""
+"Conteúdo para compartilhamento em redes sociais. Use {points} e "
+"{experiment_name} como placeholders."
 
-#: experiment/models.py:486
+#: experiment/models.py:323
 msgid "List of tags for social media sharing"
 msgstr "Lista de tags para compartilhamento em redes sociais"
 
-#: experiment/models.py:490
+#: experiment/models.py:327
 msgid ""
 "URL to be shared on social media. If empty, the experiment URL will be used."
-msgstr "URL a ser compartilhada nas redes sociais. Se estiver vazia, a URL do experimento será usada."
+msgstr ""
+"URL a ser compartilhada nas redes sociais. Se estiver vazia, a URL do "
+"experimento será usada."
 
-#: experiment/models.py:494
+#: experiment/models.py:331
 msgid "Facebook"
 msgstr "Facebook"
 
-#: experiment/models.py:495
+#: experiment/models.py:332
 msgid "WhatsApp"
 msgstr "WhatsApp"
 
-#: experiment/models.py:496
+#: experiment/models.py:333
 msgid "Twitter"
 msgstr "Twitter"
 
-#: experiment/models.py:497
+#: experiment/models.py:334
 msgid "Weibo"
 msgstr "Weibo"
 
-#: experiment/models.py:498
+#: experiment/models.py:335
 msgid "Share"
 msgstr "Compartilhar"
 
-#: experiment/models.py:499
+#: experiment/models.py:336
 msgid "Clipboard"
 msgstr "Área de Transferência"
 
-#: experiment/models.py:505
+#: experiment/models.py:342
 msgid "Selected social media channels for sharing"
 msgstr "Canais de mídia social selecionados para compartilhamento"
 
-#: experiment/models.py:539
+#: experiment/models.py:375
 #, python-format
 msgid "I scored %(score)d points in %(experiment_name)s"
 msgstr "Eu marquei %(score)d pontos em %(experiment_name)s"
@@ -351,11 +391,11 @@ msgstr "Enviar"
 msgid "We appreciate your feedback!"
 msgstr ""
 
-#: experiment/rules/base.py:138 experiment/rules/musical_preferences.py:71
+#: experiment/rules/base.py:94 experiment/rules/musical_preferences.py:71
 msgid "Questionnaire"
 msgstr ""
 
-#: experiment/rules/base.py:160
+#: experiment/rules/base.py:102
 #, python-format
 msgid "Questionnaire %(index)i / %(total)i"
 msgstr ""
@@ -753,8 +793,6 @@ msgid "Any remarks or questions (optional):"
 msgstr ""
 
 #: experiment/rules/huang_2022.py:56
-#, fuzzy
-#| msgid "Thank you for contributing your time to science!"
 msgid "Thank you for your feedback!"
 msgstr "Obrigado por dedicar o seu tempo à ciência!"
 
@@ -778,8 +816,6 @@ msgid "Try"
 msgstr ""
 
 #: experiment/rules/huang_2022.py:116
-#, fuzzy
-#| msgid "End of experiment"
 msgid "Ready to experiment"
 msgstr "Fim do experimento"
 
@@ -818,8 +854,6 @@ msgid ""
 msgstr ""
 
 #: experiment/rules/huang_2022.py:218
-#, fuzzy
-#| msgid "Thank you for contributing your time to science!"
 msgid "Thank you for your contribution to science!"
 msgstr "Obrigado por dedicar o seu tempo à ciência!"
 
@@ -854,21 +888,19 @@ msgstr ""
 msgid ""
 "TuneTwins is a musical version of \"Memory\". It consists of 16 musical "
 "fragments. Your task is to listen and find the 8 matching pairs."
-msgstr "TuneTwins é uma versão musical de \"Memory\". Ela consiste em 16 fragmentos musicais."
-"Sua tarefa é ouvir e encontrar os 8 pares correspondentes."
+msgstr ""
+"TuneTwins é uma versão musical de \"Memory\". Ela consiste em 16 fragmentos "
+"musicais.Sua tarefa é ouvir e encontrar os 8 pares correspondentes."
 
 #: experiment/rules/matching_pairs.py:50
 msgid ""
 "Some versions of the game are easy and you will have to listen for identical "
 "pairs. Some versions are more difficult and you will have to listen for "
 "similar pairs, one of which is distorted."
-msgstr "Algumas versões do jogo são fáceis e você terá de ouvir pares idênticos."
-"Algumas versões são mais difíceis e você terá de ouvir "
-"pares semelhantes, um dos quais está distorcido."
-
-#: experiment/rules/matching_pairs.py:103
-msgid "Click to start!"
-msgstr "Clique para começar!"
+msgstr ""
+"Algumas versões do jogo são fáceis e você terá de ouvir pares "
+"idênticos.Algumas versões são mais difíceis e você terá de ouvir pares "
+"semelhantes, um dos quais está distorcido."
 
 #: experiment/rules/matching_pairs.py:53
 msgid "Click on another card to stop the current card from playing."
@@ -883,23 +915,27 @@ msgid "Listen carefully to avoid mistakes and earn more points."
 msgstr "Ouça com atenção para evitar erros e ganhar mais pontos."
 
 #: experiment/rules/matching_pairs.py:69 experiment/rules/matching_pairs.py:174
-#: experiment/rules/matching_pairs_2025.py:79
 #: experiment/rules/questionnaire.py:21
-#, python-format
-msgid "Before starting the game, we would like to ask you {} demographic questions."
-msgstr "Antes de começar o jogo, gostaríamos de fazer {} perguntas demográficas."
+msgid ""
+"Before starting the game, we would like to ask you %i demographic questions."
+msgstr ""
+"Antes de começar o jogo, gostaríamos de fazer %i perguntas demográficas."
 
 #: experiment/rules/matching_pairs_2025.py:43
 msgid ""
 "This was not a match, so you get 0 points. Please try again to see if you "
 "can find a matching pair."
-msgstr "Este não foi um par correspondente, então você ganha 0 pontos. Por favor, tente novamente para ver se consegue encontrar um par correspondente."
+msgstr ""
+"Este não foi um par correspondente, então você ganha 0 pontos. Por favor, "
+"tente novamente para ver se consegue encontrar um par correspondente."
 
 #: experiment/rules/matching_pairs_2025.py:46
 msgid ""
 "You got a matching pair, but you didn't hear both cards before. This is "
 "considered a lucky match. You get 10 points."
-msgstr "Você conseguiu um par correspondente, mas não ouviu ambos os cartões antes. Isso é considerado um par sortudo. Você ganha 10 pontos."
+msgstr ""
+"Você conseguiu um par correspondente, mas não ouviu ambos os cartões antes. "
+"Isso é considerado um par sortudo. Você ganha 10 pontos."
 
 #: experiment/rules/matching_pairs_2025.py:48
 msgid "You got a matching pair. You get 20 points."
@@ -909,43 +945,61 @@ msgstr "Você conseguiu um par correspondente. Você ganha 20 pontos."
 msgid ""
 "You thought you found a matching pair, but you didn't. This is considered a "
 "misremembered pair. You lose 10 points."
-msgstr "Você achou que encontrou um par correspondente, mas não encontrou. Isso é considerado um par mal lembrado. Você perde 10 pontos."
+msgstr ""
+"Você achou que encontrou um par correspondente, mas não encontrou. Isso é "
+"considerado um par mal lembrado. Você perde 10 pontos."
 
-#: experiment/rules/matching_pairs_2025.py:182
+#: experiment/rules/matching_pairs_2025.py:79
+msgid ""
+"Before starting the game, we would like to ask you {} demographic questions."
+msgstr ""
+"Antes de começar o jogo, gostaríamos de fazer {} perguntas demográficas."
+
+#: experiment/rules/matching_pairs_2025.py:102
+msgid "Click to start!"
+msgstr "Clique para começar!"
+
+#: experiment/rules/matching_pairs_2025.py:181
 msgid ""
 "You get a board with 16 musical cards. **Pick a card,** and listen to it "
 "carefully..."
-msgstr "Você recebe um tabuleiro com 16 cartões musicais. **Escolha um cartão** e ouça-o com atenção..."
+msgstr ""
+"Você recebe um tabuleiro com 16 cartões musicais. **Escolha um cartão** e "
+"ouça-o com atenção..."
 
-#: experiment/rules/matching_pairs_2025.py:186
+#: experiment/rules/matching_pairs_2025.py:185
 msgid "Then try to **find a second card that matches it.**"
-msgstr "Em seguida, tente **encontrar um segundo cartão que corresponda a ele.**"
+msgstr ""
+"Em seguida, tente **encontrar um segundo cartão que corresponda a ele.**"
 
-#: experiment/rules/matching_pairs_2025.py:190
+#: experiment/rules/matching_pairs_2025.py:189
 msgid "**Find the 8 matching pairs** to clear the board and score points:"
-msgstr "**Encontre os 8 pares correspondentes** para limpar o tabuleiro e marcar pontos:"
+msgstr ""
+"**Encontre os 8 pares correspondentes** para limpar o tabuleiro e marcar "
+"pontos:"
 
-#: experiment/rules/matching_pairs_2025.py:195
+#: experiment/rules/matching_pairs_2025.py:194
 msgid ""
 "**+20 points:** Matched first card with one you’ve heard before — memory "
 "wins!"
-msgstr "**+20 pontos:** Correspondência do primeiro cartão com um que você já ouviu antes — a memória "
-"vence!"
+msgstr ""
+"**+20 pontos:** Correspondência do primeiro cartão com um que você já ouviu "
+"antes — a memória vence!"
 
-#: experiment/rules/matching_pairs_2025.py:200
+#: experiment/rules/matching_pairs_2025.py:199
 msgid ""
 "**-10 points:** Chose a wrong second card that’s heard before? Oops — "
 "penalty..."
-msgstr "**-10 pontos:** Escolheu um segundo cartão errado que já foi ouvido? Oops — "
+msgstr ""
+"**-10 pontos:** Escolheu um segundo cartão errado que já foi ouvido? Oops — "
 "penalidade..."
 
-#: experiment/rules/matching_pairs_2025.py:205
+#: experiment/rules/matching_pairs_2025.py:204
 msgid "Some cards sound **distorted** on purpose. Stay sharp!"
 msgstr "Alguns cartões soam **distorcidos** de propósito. Fique atento!"
 
-#: experiment/rules/matching_pairs_2025.py:288
-#, python-format
-msgid "You outperformed Bef% of the players!"
+#: experiment/rules/matching_pairs_2025.py:287
+msgid "You outperformed {}% of the players!"
 msgstr "Você superou {}% dos jogadores!"
 
 #: experiment/rules/musical_preferences.py:55
@@ -1026,8 +1080,6 @@ msgid "Song %(round)s/%(total)s"
 msgstr ""
 
 #: experiment/rules/musical_preferences.py:249
-#, fuzzy
-#| msgid "Thank you for contributing your time to science!"
 msgid "Thank you for your participation and contribution to science!"
 msgstr "Obrigado por dedicar o seu tempo à ciência!"
 
@@ -1060,10 +1112,8 @@ msgid "First you will hear %(n_practice_rounds)d practice trials."
 msgstr ""
 
 #: experiment/rules/practice.py:174
-#, fuzzy
-#| msgid "End of experiment"
 msgid "Begin experiment"
-msgstr "Fim do experimento"
+msgstr "Iniciar experimento"
 
 #: experiment/rules/practice.py:185
 #, python-format
@@ -1295,10 +1345,6 @@ msgid ""
 "scanner             to hear the rhythm really well."
 msgstr ""
 
-#: experiment/rules/speech2song.py:38 question/languages.py:59
-msgid "English"
-msgstr "inglês"
-
 #: experiment/rules/speech2song.py:39 question/languages.py:60
 msgid "Brazilian Portuguese"
 msgstr "português brasileiro"
@@ -1446,15 +1492,15 @@ msgstr "soa exatamente como música"
 msgid "Listen carefully"
 msgstr "Ouça atentamente"
 
-#: experiment/rules/thats_my_song.py:92
+#: experiment/rules/thats_my_song.py:96
 msgid "Choose two or more decades of music"
 msgstr ""
 
-#: experiment/rules/thats_my_song.py:97
+#: experiment/rules/thats_my_song.py:101
 msgid "Playlist selection"
 msgstr ""
 
-#: experiment/serializers.py:65
+#: experiment/serializers.py:49
 msgid "Back"
 msgstr ""
 
@@ -1490,20 +1536,35 @@ msgstr ""
 msgid "Doctoral degree or equivalent"
 msgstr ""
 
-#: experiment/templates/admin/question_series.html:39
-msgid "Delete?"
+#: experiment/templates/admin/experiment/block/submit_line.html:4
+msgid "Save"
 msgstr ""
 
+#: experiment/templates/admin/experiment/block/submit_line.html:7
+msgid "Delete"
+msgstr ""
+
+#: experiment/templates/admin/phase_inline.html:21
 #: experiment/templates/admin/question_series.html:65
 msgid "Change"
 msgstr ""
 
+#: experiment/templates/admin/phase_inline.html:21
 #: experiment/templates/admin/question_series.html:65
 msgid "View"
 msgstr ""
 
+#: experiment/templates/admin/phase_inline.html:23
 #: experiment/templates/admin/question_series.html:67
 msgid "View on site"
+msgstr ""
+
+#: experiment/templates/admin/phase_inline.html:48
+msgid "Add"
+msgstr ""
+
+#: experiment/templates/admin/question_series.html:39
+msgid "Delete?"
 msgstr ""
 
 #: experiment/templates/admin/question_series.html:128
@@ -1512,18 +1573,6 @@ msgid "Add another %(verbose_name)s"
 msgstr ""
 
 #: experiment/templates/consent/consent_MRI.html:2
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    You are about to take part in the ‘Cross-Linguistic Investigation of "
-#| "the Speech-to-Song Illusion’ research project\n"
-#| "    conducted by Gustav-Hein Frieberg (MSc student) under supervision of "
-#| "Dr. Makiko Sadakata at the University of\n"
-#| "    Amsterdam Musicology Department. Before the research project can "
-#| "begin, it is important that you read about the\n"
-#| "    procedures we will be applying. Make sure to read the following "
-#| "information carefully.\n"
-#| "    "
 msgid ""
 " You will be taking part in the experiment “Neural correlates of rhythmic "
 "abilities” conducted by Dr Atser Damsma of the Institute for Logic, Language "
@@ -1531,19 +1580,10 @@ msgid ""
 "can begin, it is important that you read about the procedures we will be "
 "applying. Make sure to read this information carefully. "
 msgstr ""
-"\n"
-"Você está prestes a participar do projecto de pesquisa 'Investigação "
-"Translinguística da Ilusão 'Fala Para Canto‘‘, conduzido por Gustav-Hein "
-"Frieberg (estudante de mestrado), sob supervisão de Makiko Sadakata do "
-"Departamento de Musicologia da Universidade de Amsterdão. Antes do início da "
-"pesquisa, é importante que você leia atentamente as informações referentes "
-"ao procedimento do experimento."
 
 #: experiment/templates/consent/consent_MRI.html:3
 #: experiment/templates/consent/consent_rhythm.html:3
 #: experiment/templates/consent/consent_rhythm_unpaid.html:3
-#, fuzzy
-#| msgid "Purpose of the research project"
 msgid "Purpose of the Research Project"
 msgstr "Propósito da Pesquisa"
 
@@ -1580,8 +1620,6 @@ msgstr ""
 #: experiment/templates/consent/consent_MRI.html:8
 #: experiment/templates/consent/consent_rhythm.html:7
 #: experiment/templates/consent/consent_rhythm_unpaid.html:7
-#, fuzzy
-#| msgid "Instructions and procedure"
 msgid "Instructions and Procedure"
 msgstr "Instruções e Procedimento"
 
@@ -1604,8 +1642,6 @@ msgstr ""
 #: experiment/templates/consent/consent_MRI.html:10
 #: experiment/templates/consent/consent_rhythm.html:9
 #: experiment/templates/consent/consent_rhythm_unpaid.html:9
-#, fuzzy
-#| msgid "Voluntary participation"
 msgid "Voluntary Participation"
 msgstr "Participação Voluntária"
 
@@ -1621,8 +1657,6 @@ msgstr ""
 #: experiment/templates/consent/consent_MRI.html:12
 #: experiment/templates/consent/consent_rhythm.html:11
 #: experiment/templates/consent/consent_rhythm_unpaid.html:11
-#, fuzzy
-#| msgid "Discomfort, Risks & Insurance"
 msgid "Discomfort, Risks, and Insurance"
 msgstr "Desconforto, Riscos e Seguros"
 
@@ -1662,8 +1696,8 @@ msgstr ""
 #: experiment/templates/consent/consent_MRI.html:17
 msgid ""
 " As compensation for your participation, you receive 15 euros. To receive "
-"this compensation, make sure to register your participation on the lab.uva."
-"nl website! "
+"this compensation, make sure to register your participation on the "
+"lab.uva.nl website! "
 msgstr ""
 
 #: experiment/templates/consent/consent_MRI.html:18
@@ -1690,8 +1724,6 @@ msgstr ""
 #: experiment/templates/consent/consent_MRI.html:20
 #: experiment/templates/consent/consent_rhythm.html:19
 #: experiment/templates/consent/consent_rhythm_unpaid.html:17
-#, fuzzy
-#| msgid "Informed consent"
 msgid "Informed Consent"
 msgstr "Consentimento livre"
 
@@ -1706,10 +1738,8 @@ msgid ""
 msgstr ""
 
 #: experiment/templates/consent/consent_categorization.html:2
-#, fuzzy
-#| msgid "Voluntary participation"
 msgid " Dear participant, "
-msgstr "Participação Voluntária"
+msgstr "Caro participante, "
 
 #: experiment/templates/consent/consent_categorization.html:3
 msgid ""
@@ -1773,16 +1803,6 @@ msgid "Discomfort, Risks & Insurance"
 msgstr "Desconforto, Riscos e Seguros"
 
 #: experiment/templates/consent/consent_categorization.html:10
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    The risks of participating in this research are no greater than in "
-#| "everyday situations at home. Previous experience\n"
-#| "    in similar research has shown that no or hardly any discomfort is to "
-#| "be expected for participants. For all research\n"
-#| "    at the University of Amsterdam, a standard liability insurance "
-#| "applies.\n"
-#| "    "
 msgid ""
 " The risks of participating in this research are no greater than in everyday "
 "situations at home. Previous experience in similar research has shown that "
@@ -1790,7 +1810,6 @@ msgid ""
 "research at the University of Amsterdam (where the current online experiment "
 "is served), a standard liability insurance applies. "
 msgstr ""
-"\n"
 "Os riscos da participação neste projeto não são maiores do que quaisquer "
 "situações do dia-a-dia. Experiências prévias em pesquisas semelhantes "
 "demonstraram que nenhum ou quase nenhum desconforto é esperado por parte dos "
@@ -1816,38 +1835,20 @@ msgid ""
 msgstr ""
 
 #: experiment/templates/consent/consent_categorization.html:14
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    For further information on the research project, please contact "
-#| "Gustav-Hein Frieberg (phone number: +31 6 83 676\n"
-#| "    490; email: gusfrieberg@gmail.com).\n"
-#| "    If you have any complaints regarding this research project, you can "
-#| "contact the secretary of the Ethics Committee of\n"
-#| "    the Faculty of Humanities of the University of Amsterdam (phone "
-#| "number: +31 20 525 3054; email:\n"
-#| "    commissie-ethiek-fgw@uva.nl; address: Kloveniersburgwal 48, 1012 CX "
-#| "Amsterdam)\n"
-#| "    "
 msgid ""
 " For further information on the research project, please contact Zhiyuan "
-"Ning (e-mail <a href=\"mailto:z.ning@biology.leidenuniv.nl\">z.ning@biology."
-"leidenuniv.nl</a>; Institute of Biology, Leiden University, P.O. Box 9505, "
-"2300 RA Leiden, The Netherlands) or Jiaxin Li (e-mail: <a href=\"mailto:j."
-"li5@uva.nl\">j.li5@uva.nl</a>; Science Park 107, 1098 GE Amsterdam, The "
-"Netherlands). If you have any complaints regarding this research project, "
-"you can contact the secretary of the Ethics Committee of the Faculty of "
-"Humanities of the University of Amsterdam (phone number: +31 20 525 3054; e-"
-"mail: <a href=\"mailto:commissie-ethiek-fgw@uva.nl\">commissie-ethiek-"
-"fgw@uva.nl</a>; Kloveniersburgwal 48, 1012 CX Amsterdam). "
+"Ning (e-mail <a "
+"href=\"mailto:z.ning@biology.leidenuniv.nl\">z.ning@biology.leidenuniv.nl</"
+"a>; Institute of Biology, Leiden University, P.O. Box 9505, 2300 RA Leiden, "
+"The Netherlands) or Jiaxin Li (e-mail: <a "
+"href=\"mailto:j.li5@uva.nl\">j.li5@uva.nl</a>; Science Park 107, 1098 GE "
+"Amsterdam, The Netherlands). If you have any complaints regarding this "
+"research project, you can contact the secretary of the Ethics Committee of "
+"the Faculty of Humanities of the University of Amsterdam (phone number: +31 "
+"20 525 3054; e-mail: <a href=\"mailto:commissie-ethiek-"
+"fgw@uva.nl\">commissie-ethiek-fgw@uva.nl</a>; Kloveniersburgwal 48, 1012 CX "
+"Amsterdam). "
 msgstr ""
-"\n"
-"Para obter mais informações, favor entrar em contato com Gustav-Hein "
-"Frieberg (número de celular: +31 6 83 676 490; e-mail: gusfrieberg@gmail."
-"com).Em caso de queixas sobre este projeto de pesquisa, favor contatar o "
-"secretariado da Commissão Ética das Ciências Humanas da Universidade de "
-"Amsterdão (número de telefone: +31 20 525 3053; e-mail: commissie-ethiek-"
-"fgw@uva.nl; endereço: Kloveniersburgwal 48, 1012 CX Amsterdão)."
 
 #: experiment/templates/consent/consent_categorization.html:15
 #: experiment/templates/consent/consent_hooked.html:79
@@ -1857,18 +1858,6 @@ msgid "Informed consent"
 msgstr "Consentimento livre"
 
 #: experiment/templates/consent/consent_categorization.html:16
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    I consent to participate in this research on an entirely voluntary "
-#| "basis. I retain the right to revoke this consent\n"
-#| "    without having to provide any reasons for my decision. I am aware "
-#| "that I am entitled to discontinue the research at\n"
-#| "    any time and can withdraw my participation up to 8 days after the "
-#| "research has ended. If I decide to stop or\n"
-#| "    withdraw my consent, all the information gathered up until then will "
-#| "be permanently deleted.\n"
-#| "    "
 msgid ""
 " I hereby declare that I have been clearly informed about the research "
 "project, conducted by Zhiyuan Ning as described above. I consent to "
@@ -1882,28 +1871,8 @@ msgid ""
 "information may not be viewed by third parties without my express "
 "permission. "
 msgstr ""
-"\n"
-"Concordo em participar desta pesquisa de modo voluntário. Retenho o o "
-"direito a revogar o meu consentimento sem a necessidade de fornecer "
-"quaisquer motivos para a minha decisão. Estou ciênte de que tenho o direito "
-"a descontinuar o experimento a qualquer momento e de que posso retirar a "
-"participação até oito dias após o término do experimento. Caso que decida "
-"parar ou retirar o meu consentimento, todas as informações coletadas até "
-"então serão excluídas permanentemente."
 
 #: experiment/templates/consent/consent_hooked.html:3
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    You are about to take part in the ‘Cross-Linguistic Investigation of "
-#| "the Speech-to-Song Illusion’ research project\n"
-#| "    conducted by Gustav-Hein Frieberg (MSc student) under supervision of "
-#| "Dr. Makiko Sadakata at the University of\n"
-#| "    Amsterdam Musicology Department. Before the research project can "
-#| "begin, it is important that you read about the\n"
-#| "    procedures we will be applying. Make sure to read the following "
-#| "information carefully.\n"
-#| "    "
 msgid ""
 "\n"
 "    You will be taking part in the Hooked on Music research project "
@@ -1914,13 +1883,6 @@ msgid ""
 "carefully.\n"
 "    "
 msgstr ""
-"\n"
-"Você está prestes a participar do projecto de pesquisa 'Investigação "
-"Translinguística da Ilusão 'Fala Para Canto‘‘, conduzido por Gustav-Hein "
-"Frieberg (estudante de mestrado), sob supervisão de Makiko Sadakata do "
-"Departamento de Musicologia da Universidade de Amsterdão. Antes do início da "
-"pesquisa, é importante que você leia atentamente as informações referentes "
-"ao procedimento do experimento."
 
 #: experiment/templates/consent/consent_hooked.html:8
 #: experiment/templates/consent/consent_huang2021.html:11
@@ -2002,18 +1964,6 @@ msgid "Voluntary participation"
 msgstr "Participação Voluntária"
 
 #: experiment/templates/consent/consent_hooked.html:46
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    You will be participating in this research project on a voluntary "
-#| "basis. This means you are free to stop taking part\n"
-#| "    at any stage. This will not have any personal consequences and you "
-#| "will not be obliged to finish the procedures\n"
-#| "    described above. You can also decide to withdraw your participation "
-#| "up to 8 days after the research has ended. If\n"
-#| "    you decide to stop or withdraw your consent, all the information "
-#| "gathered up until then will be permanently deleted.\n"
-#| "    "
 msgid ""
 " You will be participating in this research project on a voluntary basis. "
 "This means you are free to stop taking part at any stage. This will not have "
@@ -2024,7 +1974,6 @@ msgid ""
 "will be permanently deleted. \n"
 "    "
 msgstr ""
-"\n"
 "A sua participação neste projeto de pesquisa é voluntária. Isso significa "
 "que você tem direito a terminar a sua participação a qualquer momento. Isso "
 "não terá quaisquer consequências e você não é obrigado a finalizar o "
@@ -2034,18 +1983,7 @@ msgstr ""
 "então serão excluídas permanentemente."
 
 #: experiment/templates/consent/consent_hooked.html:53
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    The risks of participating in this research are no greater than in "
-#| "everyday situations at home. Previous experience\n"
-#| "    in similar research has shown that no or hardly any discomfort is to "
-#| "be expected for participants. For all research\n"
-#| "    at the University of Amsterdam, a standard liability insurance "
-#| "applies.\n"
-#| "    "
 msgid ""
-" \n"
 "    The risks of participating in this research are no greater than in "
 "everyday situations at home. Previous experience in similar research has "
 "shown that no or hardly any discomfort is to be expected for participants. "
@@ -2053,7 +1991,6 @@ msgid ""
 "insurance applies.\n"
 "    "
 msgstr ""
-"\n"
 "Os riscos da participação neste projeto não são maiores do que quaisquer "
 "situações do dia-a-dia. Experiências prévias em pesquisas semelhantes "
 "demonstraram que nenhum ou quase nenhum desconforto é esperado por parte dos "
@@ -2061,21 +1998,7 @@ msgstr ""
 "Amsterdão, aplica-se um seguro de responsabilidade."
 
 #: experiment/templates/consent/consent_hooked.html:61
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    The information gathered over the course of this research will be "
-#| "used for further analysis and publication in\n"
-#| "    scientific journals only. No personal details will not be used in "
-#| "these publications, and we guarantee that you will\n"
-#| "    remain anonymous under all circumstances.\n"
-#| "    The data gathered during the research will be encrypted and stored "
-#| "separately from your personal details. These\n"
-#| "    personal details and the encryption key are only accessible to "
-#| "members of the research staff.\n"
-#| "    "
 msgid ""
-" \n"
 "    The information gathered over the course of this research will be used "
 "for further analysis and publication in scientific journals only. Fully "
 "anonymised data collected during the experiment (e.g., whether each musical "
@@ -2085,7 +2008,6 @@ msgid ""
 "anonymous under all circumstances.\n"
 "    "
 msgstr ""
-"\n"
 "Os dados coletados durante o experimento serão usados apenas para efeitos de "
 "análise subsequente e publicação em jornais científicos. Nenhum dado dos "
 "participantes será usado em qualquer publicação, garantindo que você "
@@ -2103,15 +2025,6 @@ msgid ""
 msgstr ""
 
 #: experiment/templates/consent/consent_hooked.html:74
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    If I have any complaints regarding this research, I can contact the "
-#| "secretary of the Ethics Committee of the Faculty\n"
-#| "    of Humanities of the University of Amsterdam (phone no: +31 20 525 "
-#| "3054; email: commissie-ethiek-fgw@uva.nl;\n"
-#| "    address: Kloveniersburgwal 48, 1012 CX Amsterdam).\n"
-#| "    "
 msgid ""
 "\n"
 "    If you have any complaints regarding this research project, you can "
@@ -2138,20 +2051,7 @@ msgid ""
 msgstr ""
 
 #: experiment/templates/consent/consent_hooked.html:88
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    I consent to participate in this research on an entirely voluntary "
-#| "basis. I retain the right to revoke this consent\n"
-#| "    without having to provide any reasons for my decision. I am aware "
-#| "that I am entitled to discontinue the research at\n"
-#| "    any time and can withdraw my participation up to 8 days after the "
-#| "research has ended. If I decide to stop or\n"
-#| "    withdraw my consent, all the information gathered up until then will "
-#| "be permanently deleted.\n"
-#| "    "
 msgid ""
-" \n"
 "    I consent to participate in this research on an entirely voluntary "
 "basis. I retain the right to revoke this consent without having to provide "
 "any reasons for my decision. I am aware that I am entitled to discontinue "
@@ -2160,7 +2060,6 @@ msgid ""
 "all the information gathered up until then will be permanently deleted. \n"
 "    "
 msgstr ""
-"\n"
 "Concordo em participar desta pesquisa de modo voluntário. Retenho o o "
 "direito a revogar o meu consentimento sem a necessidade de fornecer "
 "quaisquer motivos para a minha decisão. Estou ciênte de que tenho o direito "
@@ -2170,14 +2069,6 @@ msgstr ""
 "então serão excluídas permanentemente."
 
 #: experiment/templates/consent/consent_hooked.html:94
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    If my research results are used in scientific publications or made "
-#| "public in any other way, they will be fully\n"
-#| "    anonymised. My personal information may not be viewed by third "
-#| "parties without my express permission.\n"
-#| "    "
 msgid ""
 "\n"
 "    If my research results are used in scientific publications or made "
@@ -2193,18 +2084,6 @@ msgstr ""
 "explícita."
 
 #: experiment/templates/consent/consent_huang2021.html:3
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    You are about to take part in the ‘Cross-Linguistic Investigation of "
-#| "the Speech-to-Song Illusion’ research project\n"
-#| "    conducted by Gustav-Hein Frieberg (MSc student) under supervision of "
-#| "Dr. Makiko Sadakata at the University of\n"
-#| "    Amsterdam Musicology Department. Before the research project can "
-#| "begin, it is important that you read about the\n"
-#| "    procedures we will be applying. Make sure to read the following "
-#| "information carefully.\n"
-#| "    "
 msgid ""
 "\n"
 "    You will be taking part in the Hooked on Music: China research project "
@@ -2216,13 +2095,6 @@ msgid ""
 "    read this information carefully.\n"
 "    "
 msgstr ""
-"\n"
-"Você está prestes a participar do projecto de pesquisa 'Investigação "
-"Translinguística da Ilusão 'Fala Para Canto‘‘, conduzido por Gustav-Hein "
-"Frieberg (estudante de mestrado), sob supervisão de Makiko Sadakata do "
-"Departamento de Musicologia da Universidade de Amsterdão. Antes do início da "
-"pesquisa, é importante que você leia atentamente as informações referentes "
-"ao procedimento do experimento."
 
 #: experiment/templates/consent/consent_huang2021.html:14
 msgid ""
@@ -2286,18 +2158,6 @@ msgid ""
 msgstr ""
 
 #: experiment/templates/consent/consent_huang2021.html:54
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    You will be participating in this research project on a voluntary "
-#| "basis. This means you are free to stop taking part\n"
-#| "    at any stage. This will not have any personal consequences and you "
-#| "will not be obliged to finish the procedures\n"
-#| "    described above. You can also decide to withdraw your participation "
-#| "up to 8 days after the research has ended. If\n"
-#| "    you decide to stop or withdraw your consent, all the information "
-#| "gathered up until then will be permanently deleted.\n"
-#| "    "
 msgid ""
 " You will be participating in this research project on a voluntary basis. "
 "This means you are free\n"
@@ -2308,7 +2168,6 @@ msgid ""
 "you decide to stop or withdraw your consent,\n"
 "    all the information gathered up until then will be permanently deleted. "
 msgstr ""
-"\n"
 "A sua participação neste projeto de pesquisa é voluntária. Isso significa "
 "que você tem direito a terminar a sua participação a qualquer momento. Isso "
 "não terá quaisquer consequências e você não é obrigado a finalizar o "
@@ -2318,16 +2177,6 @@ msgstr ""
 "então serão excluídas permanentemente."
 
 #: experiment/templates/consent/consent_huang2021.html:62
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    The risks of participating in this research are no greater than in "
-#| "everyday situations at home. Previous experience\n"
-#| "    in similar research has shown that no or hardly any discomfort is to "
-#| "be expected for participants. For all research\n"
-#| "    at the University of Amsterdam, a standard liability insurance "
-#| "applies.\n"
-#| "    "
 msgid ""
 " The risks of participating in this research are no greater than in everyday "
 "situations at home.\n"
@@ -2336,7 +2185,6 @@ msgid ""
 "expected for participants. For all research\n"
 "    at the University of Amsterdam, a standard liability insurance applies. "
 msgstr ""
-"\n"
 "Os riscos da participação neste projeto não são maiores do que quaisquer "
 "situações do dia-a-dia. Experiências prévias em pesquisas semelhantes "
 "demonstraram que nenhum ou quase nenhum desconforto é esperado por parte dos "
@@ -2358,19 +2206,6 @@ msgid ""
 msgstr ""
 
 #: experiment/templates/consent/consent_huang2021.html:78
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    For further information on the research project, please contact "
-#| "Gustav-Hein Frieberg (phone number: +31 6 83 676\n"
-#| "    490; email: gusfrieberg@gmail.com).\n"
-#| "    If you have any complaints regarding this research project, you can "
-#| "contact the secretary of the Ethics Committee of\n"
-#| "    the Faculty of Humanities of the University of Amsterdam (phone "
-#| "number: +31 20 525 3054; email:\n"
-#| "    commissie-ethiek-fgw@uva.nl; address: Kloveniersburgwal 48, 1012 CX "
-#| "Amsterdam)\n"
-#| "    "
 msgid ""
 " For further information on the research project, please contact Xuan Huang "
 "(e-mail:\n"
@@ -2386,13 +2221,6 @@ msgid ""
 "+31 20 525 3054; e-mail:\n"
 "    commissie-ethiek-fgw@uva.nl; Kloveniersburgwal 48, 1012 CX Amsterdam)."
 msgstr ""
-"\n"
-"Para obter mais informações, favor entrar em contato com Gustav-Hein "
-"Frieberg (número de celular: +31 6 83 676 490; e-mail: gusfrieberg@gmail."
-"com).Em caso de queixas sobre este projeto de pesquisa, favor contatar o "
-"secretariado da Commissão Ética das Ciências Humanas da Universidade de "
-"Amsterdão (número de telefone: +31 20 525 3053; e-mail: commissie-ethiek-"
-"fgw@uva.nl; endereço: Kloveniersburgwal 48, 1012 CX Amsterdão)."
 
 #: experiment/templates/consent/consent_huang2021.html:90
 msgid ""
@@ -2405,18 +2233,6 @@ msgid ""
 msgstr ""
 
 #: experiment/templates/consent/consent_huang2021.html:96
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    I consent to participate in this research on an entirely voluntary "
-#| "basis. I retain the right to revoke this consent\n"
-#| "    without having to provide any reasons for my decision. I am aware "
-#| "that I am entitled to discontinue the research at\n"
-#| "    any time and can withdraw my participation up to 8 days after the "
-#| "research has ended. If I decide to stop or\n"
-#| "    withdraw my consent, all the information gathered up until then will "
-#| "be permanently deleted.\n"
-#| "    "
 msgid ""
 " I consent to participate in this research on an entirely voluntary basis. I "
 "retain the right to\n"
@@ -2432,7 +2248,6 @@ msgid ""
 "without my express permission.\n"
 "    "
 msgstr ""
-"\n"
 "Concordo em participar desta pesquisa de modo voluntário. Retenho o o "
 "direito a revogar o meu consentimento sem a necessidade de fornecer "
 "quaisquer motivos para a minha decisão. Estou ciênte de que tenho o direito "
@@ -2442,10 +2257,8 @@ msgstr ""
 "então serão excluídas permanentemente."
 
 #: experiment/templates/consent/consent_musical_preferences.html:2
-#, fuzzy
-#| msgid "Voluntary participation"
 msgid "Dear participant,"
-msgstr "Participação Voluntária"
+msgstr "Caro participante, "
 
 #: experiment/templates/consent/consent_musical_preferences.html:4
 msgid ""
@@ -2484,8 +2297,6 @@ msgid ""
 msgstr ""
 
 #: experiment/templates/consent/consent_musical_preferences.html:27
-#, fuzzy
-#| msgid "Introduction"
 msgid "Instructions"
 msgstr "Introdução"
 
@@ -2508,40 +2319,24 @@ msgid ""
 msgstr ""
 
 #: experiment/templates/consent/consent_musical_preferences.html:40
-#, fuzzy
-#| msgid "Voluntary participation"
 msgid "Voluntary participation & risks"
 msgstr "Participação Voluntária"
 
 #: experiment/templates/consent/consent_musical_preferences.html:43
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    You will be participating in this research project on a voluntary "
-#| "basis. This means you are free to stop taking part\n"
-#| "    at any stage. This will not have any personal consequences and you "
-#| "will not be obliged to finish the procedures\n"
-#| "    described above. You can also decide to withdraw your participation "
-#| "up to 8 days after the research has ended. If\n"
-#| "    you decide to stop or withdraw your consent, all the information "
-#| "gathered up until then will be permanently deleted.\n"
-#| "    "
 msgid ""
-"\n"
 "You will be participating in this research on a voluntary basis. This means "
 "you are free to stop taking part at any stage without consequences or "
 "penalty.  If you decide to stop or withdraw your consent, all the "
 "information gathered up until then will be permanently deleted. This "
 "research has no known risks.\n"
 msgstr ""
-"\n"
 "A sua participação neste projeto de pesquisa é voluntária. Isso significa "
 "que você tem direito a terminar a sua participação a qualquer momento. Isso "
 "não terá quaisquer consequências e você não é obrigado a finalizar o "
 "procedimento descrito acima. Você também tem direito a retirar a sua "
 "participação até oito dias após o término do experimento. Se você decidir "
 "terminar ou retirar a sua participação, toas as informações coletadas até "
-"então serão excluídas permanentemente."
+"então serão excluídas permanentemente.\n"
 
 #: experiment/templates/consent/consent_musical_preferences.html:48
 msgid "Privacy"
@@ -2558,19 +2353,6 @@ msgid ""
 msgstr ""
 
 #: experiment/templates/consent/consent_musical_preferences.html:60
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    For further information on the research project, please contact "
-#| "Gustav-Hein Frieberg (phone number: +31 6 83 676\n"
-#| "    490; email: gusfrieberg@gmail.com).\n"
-#| "    If you have any complaints regarding this research project, you can "
-#| "contact the secretary of the Ethics Committee of\n"
-#| "    the Faculty of Humanities of the University of Amsterdam (phone "
-#| "number: +31 20 525 3054; email:\n"
-#| "    commissie-ethiek-fgw@uva.nl; address: Kloveniersburgwal 48, 1012 CX "
-#| "Amsterdam)\n"
-#| "    "
 msgid ""
 " For further information, please contact Xuan Huang (x.huang@uva.nl) or Dr. "
 "John Ashley Burgoyne (j.a.burgoyne@uva.nl). If you have any complaints "
@@ -2579,36 +2361,15 @@ msgid ""
 "(commissie-ethiek-fgw@uva.nl).\n"
 "    "
 msgstr ""
-"\n"
-"Para obter mais informações, favor entrar em contato com Gustav-Hein "
-"Frieberg (número de celular: +31 6 83 676 490; e-mail: gusfrieberg@gmail."
-"com).Em caso de queixas sobre este projeto de pesquisa, favor contatar o "
-"secretariado da Commissão Ética das Ciências Humanas da Universidade de "
-"Amsterdão (número de telefone: +31 20 525 3053; e-mail: commissie-ethiek-"
-"fgw@uva.nl; endereço: Kloveniersburgwal 48, 1012 CX Amsterdão)."
 
 #: experiment/templates/consent/consent_musical_preferences.html:67
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    I consent to participate in this research on an entirely voluntary "
-#| "basis. I retain the right to revoke this consent\n"
-#| "    without having to provide any reasons for my decision. I am aware "
-#| "that I am entitled to discontinue the research at\n"
-#| "    any time and can withdraw my participation up to 8 days after the "
-#| "research has ended. If I decide to stop or\n"
-#| "    withdraw my consent, all the information gathered up until then will "
-#| "be permanently deleted.\n"
-#| "    "
 msgid ""
-" \n"
 "    I have been clearly informed about the research project and I consent to "
 "participate in this research. I retain the right to revoke this consent "
 "without having to provide any reasons for my decision. I am aware that I am "
 "entitled to discontinue the research at any time and can withdraw my "
 "participation. "
 msgstr ""
-"\n"
 "Concordo em participar desta pesquisa de modo voluntário. Retenho o o "
 "direito a revogar o meu consentimento sem a necessidade de fornecer "
 "quaisquer motivos para a minha decisão. Estou ciênte de que tenho o direito "
@@ -2619,18 +2380,6 @@ msgstr ""
 
 #: experiment/templates/consent/consent_rhythm.html:2
 #: experiment/templates/consent/consent_rhythm_unpaid.html:2
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    You are about to take part in the ‘Cross-Linguistic Investigation of "
-#| "the Speech-to-Song Illusion’ research project\n"
-#| "    conducted by Gustav-Hein Frieberg (MSc student) under supervision of "
-#| "Dr. Makiko Sadakata at the University of\n"
-#| "    Amsterdam Musicology Department. Before the research project can "
-#| "begin, it is important that you read about the\n"
-#| "    procedures we will be applying. Make sure to read the following "
-#| "information carefully.\n"
-#| "    "
 msgid ""
 " You will be taking part in the experiment “Who’s got rhythm?” conducted by "
 "Dr Fleur Bouwer of the Psychology Department at the University of Amsterdam. "
@@ -2638,13 +2387,6 @@ msgid ""
 "the procedures we will be applying. Make sure to read this information "
 "carefully. "
 msgstr ""
-"\n"
-"Você está prestes a participar do projecto de pesquisa 'Investigação "
-"Translinguística da Ilusão 'Fala Para Canto‘‘, conduzido por Gustav-Hein "
-"Frieberg (estudante de mestrado), sob supervisão de Makiko Sadakata do "
-"Departamento de Musicologia da Universidade de Amsterdão. Antes do início da "
-"pesquisa, é importante que você leia atentamente as informações referentes "
-"ao procedimento do experimento."
 
 #: experiment/templates/consent/consent_rhythm.html:4
 #: experiment/templates/consent/consent_rhythm_unpaid.html:4
@@ -2860,11 +2602,12 @@ msgid ""
 msgstr ""
 "\n"
 "Para obter mais informações, favor entrar em contato com Gustav-Hein "
-"Frieberg (número de celular: +31 6 83 676 490; e-mail: gusfrieberg@gmail."
-"com).Em caso de queixas sobre este projeto de pesquisa, favor contatar o "
-"secretariado da Commissão Ética das Ciências Humanas da Universidade de "
-"Amsterdão (número de telefone: +31 20 525 3053; e-mail: commissie-ethiek-"
-"fgw@uva.nl; endereço: Kloveniersburgwal 48, 1012 CX Amsterdão)."
+"Frieberg (número de celular: +31 6 83 676 490; e-mail: "
+"gusfrieberg@gmail.com).Em caso de queixas sobre este projeto de pesquisa, "
+"favor contatar o secretariado da Commissão Ética das Ciências Humanas da "
+"Universidade de Amsterdão (número de telefone: +31 20 525 3053; e-mail: "
+"commissie-ethiek-fgw@uva.nl; endereço: Kloveniersburgwal 48, 1012 CX "
+"Amsterdão)."
 
 #: experiment/templates/consent/consent_speech2song.html:72
 msgid "Informed consent form"
@@ -2992,10 +2735,8 @@ msgid "If you want to know more about our research, check out"
 msgstr ""
 
 #: experiment/templates/final/debrief_rhythm_unpaid.html:6
-#, fuzzy
-#| msgid "Man"
 msgid "and"
-msgstr "Homen"
+msgstr "e"
 
 #: experiment/templates/final/experiment_series.html:2
 msgid ""
@@ -3078,11 +2819,11 @@ msgstr ""
 msgid "All players' top 3 favourite songs:"
 msgstr ""
 
-#: experiment/views.py:56
+#: experiment/views.py:57
 msgid "Loading"
 msgstr ""
 
-#: participant/views.py:42
+#: participant/views.py:43
 #, python-format
 msgid ""
 "You have participated in %(count)d Amsterdam Music Lab experiment. Your best "
@@ -3093,13 +2834,13 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: participant/views.py:46
+#: participant/views.py:47
 msgid ""
 "Use the following link to continue with your profile at another moment or on "
 "another device."
 msgstr ""
 
-#: participant/views.py:80
+#: participant/views.py:81
 msgid "copy"
 msgstr ""
 
@@ -3258,16 +2999,12 @@ msgid "Retired"
 msgstr ""
 
 #: question/demographics.py:130
-#, fuzzy
-#| msgid "What is your age?"
 msgid "What is your gender?"
-msgstr "Qual é a sua idade?"
+msgstr "Qual é o seu gênero?"
 
 #: question/demographics.py:141
-#, fuzzy
-#| msgid "Please rate your previous experience:"
 msgid "Please select your level of musical experience:"
-msgstr "Por favor indique a sua experiência prévia:"
+msgstr "Selecione seu nível de experiência musical:"
 
 #: question/demographics.py:143 question/musicgens.py:356
 msgid "None"
@@ -3285,7 +3022,7 @@ msgstr ""
 msgid "Professional"
 msgstr ""
 
-#: question/demographics.py:177
+#: question/demographics.py:187
 msgid "Enter a name to enter the ICMPC hall of fame"
 msgstr ""
 
@@ -3718,10 +3455,8 @@ msgid "Please tell us how much you agree"
 msgstr ""
 
 #: question/musicgens.py:31
-#, fuzzy
-#| msgid "no exposure"
 msgid "I'm not sure"
-msgstr "nenhuma exposição"
+msgstr "Eu não tenho certeza"
 
 #: question/musicgens.py:39
 msgid "Can you clap in time with a musical beat?"
@@ -4079,20 +3814,16 @@ msgid "Agree slightly"
 msgstr ""
 
 #: question/musicgens.py:316
-#, fuzzy
-#| msgid "I agree"
 msgid "Disagree slightly"
-msgstr "Concordo"
+msgstr ""
 
 #: question/musicgens.py:317
 msgid "Disagree moderately"
 msgstr ""
 
 #: question/musicgens.py:318
-#, fuzzy
-#| msgid "I agree"
 msgid "Disagree strongly"
-msgstr "Concordo"
+msgstr ""
 
 #: question/musicgens.py:323
 msgid ""
@@ -4224,10 +3955,8 @@ msgid ""
 msgstr ""
 
 #: question/other.py:31
-#, fuzzy
-#| msgid "With which gender do you currently most identify?"
 msgid "In which region do you currently reside?"
-msgstr "Qual é a sua identidade de gênero?"
+msgstr "Em qual região você reside atualmente?"
 
 #: question/other.py:54
 msgid "Folk/Mountain songs"
@@ -4299,10 +4028,8 @@ msgid "Cannot upload {}: {}"
 msgstr ""
 
 #: theme/serializers.py:23
-#, fuzzy
-#| msgid "End of experiment"
 msgid "Next experiment"
-msgstr "Fim do experimento"
+msgstr "Próxima experiência"
 
 #: theme/serializers.py:24
 msgid "About us"
@@ -4315,12 +4042,6 @@ msgstr ""
 #: theme/serializers.py:28
 msgid "No points yet!"
 msgstr ""
-
-#~ msgid "I agree"
-#~ msgstr "Concordo"
-
-#~ msgid "Stop"
-#~ msgstr "Parar"
 
 #~ msgid "Exposure to {}"
 #~ msgstr "Exposição a {}"
