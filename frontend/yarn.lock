@@ -4471,7 +4471,7 @@ __metadata:
     "@vitejs/plugin-react": "npm:^4.2.1"
     "@vitest/coverage-istanbul": "npm:^2.1.4"
     "@vitest/coverage-v8": "npm:^2.1.4"
-    axios: "npm:>=1.8.2"
+    axios: "npm:>=1.12.0"
     axios-mock-adapter: "npm:^1.22.0"
     classnames: "npm:^2.2.6"
     coverage-badges-cli: "npm:^1.2.5"
@@ -4746,14 +4746,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:>=1.8.2":
-  version: 1.8.4
-  resolution: "axios@npm:1.8.4"
+"axios@npm:>=1.12.0":
+  version: 1.12.1
+  resolution: "axios@npm:1.12.1"
   dependencies:
     follow-redirects: "npm:^1.15.6"
-    form-data: "npm:^4.0.0"
+    form-data: "npm:^4.0.4"
     proxy-from-env: "npm:^1.1.0"
-  checksum: 10c0/450993c2ba975ffccaf0d480b68839a3b2435a5469a71fa2fb0b8a55cdb2c2ae47e609360b9c1e2b2534b73dfd69e2733a1cf9f8215bee0bcd729b72f801b0ce
+  checksum: 10c0/eda4dff56c02d13b950fd9487b678ac197ce5f21dfc98df73632df29e45d8dd24602a34e8d9b6e016d84a41ef7fd7fc4a7618060a72cc536b91cda1eaa9cd907
   languageName: node
   linkType: hard
 
@@ -6400,7 +6400,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-data@npm:^4.0.0":
+"form-data@npm:^4.0.4":
   version: 4.0.4
   resolution: "form-data@npm:4.0.4"
   dependencies:
