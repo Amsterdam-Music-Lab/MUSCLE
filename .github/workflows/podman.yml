@@ -202,8 +202,8 @@ jobs:
 
   backup-acceptance:
     name: Backup acceptance database before deployment
-    # this job runs only on commits to the main branch, tags, or when manually triggered for the main branch
-    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags') || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    # this job runs only on commits to the main branch, or when manually triggered for the main branch
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
     uses: ./.github/workflows/db-backup-template.yml
     with:
       runner: ACC
@@ -214,8 +214,8 @@ jobs:
     runs-on: ACC
     needs: backup-acceptance
 
-    # this job runs only on commits to the main branch, tags, or when manually triggered for the main branch
-    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags') || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    # this job runs only on commits to the main branch, or when manually triggered for the main branch
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
