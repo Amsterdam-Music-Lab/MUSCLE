@@ -1,6 +1,5 @@
-import copy
 from os.path import join
-from typing import Any, List, Optional
+from typing import List, Optional
 
 from django.db import models
 from django.utils import timezone
