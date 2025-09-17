@@ -6,7 +6,7 @@
   "dependencies": {
     "@sentry/react": "^8.40.0",
     "@vitejs/plugin-react": "^4.2.1",
-    "axios": ">=1.8.2",
+    "axios": ">=1.12.0",
     "classnames": "^2.2.6",
     "email-validator": "^2.0.4",
     "file-saver": "^2.0.5",
