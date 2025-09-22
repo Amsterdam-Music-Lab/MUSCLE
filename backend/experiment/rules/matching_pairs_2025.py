@@ -14,19 +14,6 @@ from experiment.actions.playback import MatchingPairs
 from experiment.actions.types import FeedbackInfo
 from .matching_pairs import MatchingPairsGame
 
-POSSIBLE_CONDITIONS = [
-    ["O", "0"],
-    ["TD", "1"],
-    ["TD", "2"],
-    ["TD", "3"],
-    ["TD", "4"],
-    ["TD", "5"],
-    ["SD", "1"],
-    ["SD", "2"],
-    ["SD", "3"],
-    ["SD", "4"],
-    ["SD", "5"],
-]
 
 class MatchingPairs2025(MatchingPairsGame):
     """This is the working version of the Matching Pairs game for the 2025 Tunetwins experiment.
@@ -141,26 +128,24 @@ class MatchingPairs2025(MatchingPairsGame):
         return previous_games_results.exists()
 
     def _select_sections(self, session: Session) -> list[Section]:
-        condition, difficulty = self._select_least_played_condition_difficulty_pair(
-            session
-        )
+        cond, diff = self._select_least_played_condition_difficulty_pair(session)
 
         songs = self._select_least_played_songs(session)
 
         sections = list(
             session.playlist.section_set.filter(
-                song__pk__in=songs, group=condition, tag=difficulty
+                song__pk__in=songs, group=cond, tag=diff
             )
         )
         if not len(sections) == self.num_pairs:
             raise ValueError(
                 "Not enough sections found for condition {} and difficulty {}".format(
-                    condition, difficulty
+                    cond, diff
                 )
             )
 
         # if condition type not 'original', select the equivalent original sections
-        if condition != "O":
+        if cond != "O":
             equivalents = list(
                 session.playlist.section_set.filter(group="O", song__in=songs)
             )
@@ -171,6 +156,10 @@ class MatchingPairs2025(MatchingPairsGame):
         random.shuffle(sections)
 
         return sections
+
+    def _get_possible_conditions(self, session):
+        conditions = list(set(session.playlist.section_set.values_list('group', 'tag')))
+        return conditions
 
     def get_intro_explainer(self):
         return Explainer(
@@ -216,6 +205,7 @@ class MatchingPairs2025(MatchingPairsGame):
     def _select_least_played_condition_difficulty_pair(
         self, session: Session
     ) -> tuple[str, str]:
+        possible_conditions = self._get_possible_conditions(session)
         condition_results = session.participant.result_set.filter(
             question_key='condition'
         ).order_by('score')
@@ -228,14 +218,14 @@ class MatchingPairs2025(MatchingPairsGame):
             session.save_json_data({'condition': cond, 'difficulty': difficulty})
             return cond, difficulty
         elif len(condition_results) == 0:
-            cond, difficulty = random.choice(POSSIBLE_CONDITIONS)
+            cond, difficulty = random.choice(possible_conditions)
         else:
             played_conditions = [
-                cond.split('_')
+                tuple(cond.split('_'))
                 for cond in condition_results.values_list('given_response', flat=True)
             ]
             unplayed_conditions = [
-                cond for cond in POSSIBLE_CONDITIONS if cond not in played_conditions
+                cond for cond in possible_conditions if cond not in played_conditions
             ]
             cond, difficulty = random.choice(unplayed_conditions)
         condition = f"{cond}_{difficulty}"
