@@ -65,7 +65,6 @@ class PhaseInline(admin.StackedInline):
 
     class Media:
         css = {"all": ("phase_inline.css",)}
-        js = ["phase_inline.js"]
 
     def get_extra(self, request, obj=None, **kwargs):
         if obj:
