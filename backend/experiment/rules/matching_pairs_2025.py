@@ -315,5 +315,8 @@ class MatchingPairs2025(MatchingPairsGame):
             output.update({'group': 'O', 'tag': 0})
         else:
             top_directory = split(head)[1]
-            output.update({'group': top_directory, 'tag': tail[1]})
+            # stage 1
+            # output.update({'group': top_directory, 'tag': tail[1]})
+            # stage 2
+            output.update({'group': top_directory, 'tag': tail})
         return output
