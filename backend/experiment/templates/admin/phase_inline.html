@@ -45,7 +45,7 @@
     {% endfor %}
     {% endif %}
     <div class="block-box">
-        <a class="addlink" href="javascript:window.open('{% url 'admin:experiment_block_add'%}', '', 'width=670,height=800')">
+        <a class="addlink" href="javascript:window.open('{% url 'admin:experiment_block_add'%}?phase_id={{ inline_admin_form.original.pk }}', '', 'width=670,height=800')">
             {% translate "Add" %}
         </a>
     </div>
