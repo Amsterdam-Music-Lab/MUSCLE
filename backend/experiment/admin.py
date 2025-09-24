@@ -62,14 +62,11 @@ class PhaseInline(admin.StackedInline):
     sortable_field_name = "index"
     template = "admin/phase_inline.html"
     show_change_link = True
+    extra = 0
 
     class Media:
+        js = ["add_phase_handler.js"]
         css = {"all": ("phase_inline.css",)}
-
-    def get_extra(self, request, obj=None, **kwargs):
-        if obj:
-            return 0
-        return 1
 
 
 class SocialMediaConfigInline(admin.StackedInline):
@@ -96,6 +93,12 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
         SocialMediaConfigInline,
     ]
 
+    def get_formsets_with_inlines(self, request, obj=None):
+        """only show inlines if the experiment has already been saved"""
+        if obj:
+            for inline in self.get_inline_instances(request, obj):
+                yield inline.get_formset(request, obj), inline
+
     formfield_overrides = {
         models.TextField: {"widget": MarkdownPreviewTextInput},
     }
@@ -107,10 +110,11 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
 
     def save_model(self, request, obj, form, changed):
         """delete all phases which don't have associated blocks when saving"""
-        phases = obj.phases
-        for phase in phases.all():
-            if not phase.blocks.count():
-                phase.delete()
+        if obj.pk:
+            phases = obj.phases
+            for phase in phases.all():
+                if not phase.blocks.count():
+                    phase.delete()
         super().save_model(request, obj, form, changed)
 
     def redirect_to_overview(self):
