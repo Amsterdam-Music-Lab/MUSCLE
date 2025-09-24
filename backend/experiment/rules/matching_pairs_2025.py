@@ -1,29 +1,19 @@
 from os.path import split
 import random
 
+
+from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 
 from result.models import Result
 from section.models import Section
 from session.models import Session
 
-from experiment.actions import Explainer, Final, Trial
+from experiment.actions import Explainer, Final, Step, Trial
 from experiment.actions.playback import MatchingPairs
+from experiment.actions.types import FeedbackInfo
 from .matching_pairs import MatchingPairsGame
 
-POSSIBLE_CONDITIONS = [
-    ["O", "0"],
-    ["TD", "1"],
-    ["TD", "2"],
-    ["TD", "3"],
-    ["TD", "4"],
-    ["TD", "5"],
-    ["SD", "1"],
-    ["SD", "2"],
-    ["SD", "3"],
-    ["SD", "4"],
-    ["SD", "5"],
-]
 
 class MatchingPairs2025(MatchingPairsGame):
     """This is the working version of the Matching Pairs game for the 2025 Tunetwins experiment.
@@ -48,6 +38,23 @@ class MatchingPairs2025(MatchingPairsGame):
         ),
     }
 
+    def feedback_info(self) -> FeedbackInfo:
+        feedback_body = render_to_string(
+            "feedback/user_feedback.html", {"email": self.contact_email}
+        )
+        return {
+            # Header above the feedback form
+            "header": _("Do you have any remarks or questions?"),
+            # Button text
+            "button": _("Submit"),
+            # Body of the feedback form, can be HTML. Shown under the button
+            "contact_body": feedback_body,
+            # Thank you message after submitting feedback
+            "thank_you": _("We appreciate your feedback!"),
+            # Show a floating button on the right side of the screen to open the feedback form
+            "show_float_button": True,
+        }
+
     def next_round(self, session: Session):
         if session.get_rounds_passed() < 1:
             actions = []
@@ -56,9 +63,8 @@ class MatchingPairs2025(MatchingPairsGame):
             if questions:
                 intro_questions = Explainer(
                     instruction=_(
-                        "Before starting the game, we would like to ask you %i demographic questions."
-                        % (len(questions))
-                    ),
+                        "Before starting the game, we would like to ask you {} demographic questions."
+                    ).format(len(questions)),
                     steps=[],
                 )
                 actions.append(intro_questions)
@@ -80,7 +86,7 @@ class MatchingPairs2025(MatchingPairsGame):
         return self._get_final_actions(session)
 
     def get_short_explainer(self):
-        return Explainer("Click to start!", steps=[])
+        return Explainer(_("Click to start!"), steps=[])
 
     def _get_final_actions(self, session: Session):
         score = Final(
@@ -122,26 +128,24 @@ class MatchingPairs2025(MatchingPairsGame):
         return previous_games_results.exists()
 
     def _select_sections(self, session: Session) -> list[Section]:
-        condition, difficulty = self._select_least_played_condition_difficulty_pair(
-            session
-        )
+        cond, diff = self._select_least_played_condition_difficulty_pair(session)
 
         songs = self._select_least_played_songs(session)
 
         sections = list(
             session.playlist.section_set.filter(
-                song__pk__in=songs, group=condition, tag=difficulty
+                song__pk__in=songs, group=cond, tag=diff
             )
         )
         if not len(sections) == self.num_pairs:
             raise ValueError(
                 "Not enough sections found for condition {} and difficulty {}".format(
-                    condition, difficulty
+                    cond, diff
                 )
             )
 
         # if condition type not 'original', select the equivalent original sections
-        if condition != "O":
+        if cond != "O":
             equivalents = list(
                 session.playlist.section_set.filter(group="O", song__in=songs)
             )
@@ -153,6 +157,46 @@ class MatchingPairs2025(MatchingPairsGame):
 
         return sections
 
+    def _get_possible_conditions(self, session):
+        conditions = list(set(session.playlist.section_set.values_list('group', 'tag')))
+        return conditions
+
+    def get_intro_explainer(self):
+        return Explainer(
+            instruction="",
+            steps=[
+                Step(
+                    description=_(
+                        'You get a board with 16 musical cards. **Pick a card,** and listen to it carefully...'
+                    )
+                ),
+                Step(
+                    description=_("Then try to **find a second card that matches it.**")
+                ),
+                Step(
+                    description=_(
+                        "**Find the 8 matching pairs** to clear the board and score points:"
+                    )
+                ),
+                Step(
+                    description=_(
+                        "**+20 points:** Matched first card with one you’ve heard before — memory wins!"
+                    )
+                ),
+                Step(
+                    description=_(
+                        "**-10 points:** Chose a wrong second card that’s heard before? Oops — penalty..."
+                    )
+                ),
+                Step(
+                    description=_(
+                        "Some cards sound **distorted** on purpose. Stay sharp!"
+                    )
+                ),
+            ],
+            step_numbers=True,
+        )
+
     def evaluate_sections_equal(
         self, first_section: Section, second_section: Section
     ) -> bool:
@@ -161,6 +205,7 @@ class MatchingPairs2025(MatchingPairsGame):
     def _select_least_played_condition_difficulty_pair(
         self, session: Session
     ) -> tuple[str, str]:
+        possible_conditions = self._get_possible_conditions(session)
         condition_results = session.participant.result_set.filter(
             question_key='condition'
         ).order_by('score')
@@ -173,14 +218,14 @@ class MatchingPairs2025(MatchingPairsGame):
             session.save_json_data({'condition': cond, 'difficulty': difficulty})
             return cond, difficulty
         elif len(condition_results) == 0:
-            cond, difficulty = random.choice(POSSIBLE_CONDITIONS)
+            cond, difficulty = random.choice(possible_conditions)
         else:
             played_conditions = [
-                cond.split('_')
+                tuple(cond.split('_'))
                 for cond in condition_results.values_list('given_response', flat=True)
             ]
             unplayed_conditions = [
-                cond for cond in POSSIBLE_CONDITIONS if cond not in played_conditions
+                cond for cond in possible_conditions if cond not in played_conditions
             ]
             cond, difficulty = random.choice(unplayed_conditions)
         condition = f"{cond}_{difficulty}"
@@ -270,5 +315,8 @@ class MatchingPairs2025(MatchingPairsGame):
             output.update({'group': 'O', 'tag': 0})
         else:
             top_directory = split(head)[1]
-            output.update({'group': top_directory, 'tag': tail[1]})
+            # stage 1
+            # output.update({'group': top_directory, 'tag': tail[1]})
+            # stage 2
+            output.update({'group': top_directory, 'tag': tail})
         return output

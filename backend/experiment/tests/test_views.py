@@ -216,7 +216,7 @@ class TestExperimentViews(TestCase):
 
         # since no Dutch translation is available, the fallback content should be returned
         self.assertEqual(
-            response.json().get("description"), "Eens kijken of vertaling werkt."
+            response.json().get("description"), "<p>Eens kijken of vertaling werkt.</p>"
         )
 
     @override_settings(MEDIA_ROOT=here)

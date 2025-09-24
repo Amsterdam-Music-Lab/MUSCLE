@@ -12,15 +12,13 @@ from section.models import Playlist, Song
 from session.models import Session
 from question.questions import create_default_questions
 
-from experiment.rules.matching_pairs_2025 import POSSIBLE_CONDITIONS
 
 class MatchingPairs2025Test(TestCase):
     @classmethod
     def setUpTestData(cls):
         create_default_questions()
-        section_csv = cls.create_section_csv()
         cls.playlist = Playlist.objects.create(name="TestMatchingPairs2025")
-        cls.playlist.csv = section_csv
+        cls.playlist.csv = cls.create_section_csv()
         cls.playlist._update_sections()
         cls.playlist.save()
         cls.participant = Participant.objects.create()
@@ -67,7 +65,9 @@ class MatchingPairs2025Test(TestCase):
     def create_fake_condition_results(
         self, n_results: int = 5, score: int = 1
     ) -> tuple[str, str]:
-        conditions = random.sample(POSSIBLE_CONDITIONS, n_results)
+        conditions = random.sample(
+            self.rules._get_possible_conditions(self.session), n_results
+        )
         for cond in conditions:
             result, _created = Result.objects.get_or_create(
                 participant=self.session.participant,
@@ -83,7 +83,9 @@ class MatchingPairs2025Test(TestCase):
         condition, difficulty = (
             self.rules._select_least_played_condition_difficulty_pair(self.session)
         )
-        self.assertIn([condition, difficulty], POSSIBLE_CONDITIONS)
+        self.assertIn(
+            (condition, difficulty), self.rules._get_possible_conditions(self.session)
+        )
 
     def test_select_condition_repeated_play(self):
         """Test that selecting a condition / difficulty pair works with repeated play"""
@@ -91,7 +93,7 @@ class MatchingPairs2025Test(TestCase):
         condition, difficulty = condition, difficulty = (
             self.rules._select_least_played_condition_difficulty_pair(self.session)
         )
-        self.assertNotIn([condition, difficulty], played_conditions)
+        self.assertNotIn((condition, difficulty), played_conditions)
 
     def test_select_condition_all_conditions_played(self):
         """Test that selecting a condition / difficulty pair works when all conditions have been played at least once"""
@@ -100,7 +102,7 @@ class MatchingPairs2025Test(TestCase):
         condition, difficulty = condition, difficulty = (
             self.rules._select_least_played_condition_difficulty_pair(self.session)
         )
-        self.assertNotIn([condition, difficulty], played_multiple)
+        self.assertNotIn((condition, difficulty), played_multiple)
 
     def create_fake_song_results(
         self, n_results: int = 5, score: float = 1
@@ -278,6 +280,10 @@ class MatchingPairs2025Test(TestCase):
         final_action = self.rules._get_final_actions(session)[0]
         self.assertIsInstance(final_action, Final)
         self.assertEqual(final_action.total_score, 100)
+
+    def test_get_possible_conditions(self):
+        possible_conditions = self.rules._get_possible_conditions(self.session)
+        self.assertEqual(len(possible_conditions), 11)
 
 
 @skip("This test simulates repeated playthroughs, comment this line out to run")
