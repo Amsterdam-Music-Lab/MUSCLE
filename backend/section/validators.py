@@ -13,7 +13,7 @@ def file_exists_validator(value: str):
     filename = value
 
     if not filename.startswith('http'):
-        full_file_path = f'./upload/{filename}'
+        full_file_path = os.path.join('/server', 'upload', filename)
         if not os.path.isfile(full_file_path):
             raise ValidationError(
                 (f"Error: File '{filename}' cannot be found"),
