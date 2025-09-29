@@ -4,8 +4,12 @@ import json
 from django.utils.translation import gettext_lazy as _
 
 from .base import BaseRules
-from experiment.actions import Explainer, Final, Playlist, Step, Trial
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
 from experiment.actions.playback import MatchingPairs
+from experiment.actions.playlist import PlaylistSelection
+from experiment.actions.trial import Trial
+from question.utils import create_education_variant
 from result.utils import prepare_result
 
 from section.models import Section
@@ -22,10 +26,17 @@ class MatchingPairsGame(BaseRules):
     random_seed = None
 
     def __init__(self):
-        self.question_series = [
+        self.add_custom_questions(
+            [
+                create_education_variant(
+                    'dgf_education_matching_pairs', ['isced-2', 'isced-5']
+                ),
+            ]
+        )
+        self.question_catalogues = [
             {
                 "name": "Demographics",
-                "keys": [
+                "question_keys": [
                     "dgf_gender_identity",
                     "dgf_generation",
                     "dgf_musical_experience",
@@ -56,37 +67,6 @@ class MatchingPairsGame(BaseRules):
             ],
             step_numbers=True,
         )
-
-    def next_round(self, session):
-        if session.get_rounds_passed() < 1:
-            intro_explainer = self.get_intro_explainer()
-            playlist = Playlist(session.block.playlists.all())
-            actions = [intro_explainer, playlist]
-            questions = self.get_profile_question_trials(session, None)
-            if questions:
-                intro_questions = Explainer(
-                    instruction=_(
-                        "Before starting the game, we would like to ask you %i demographic questions."
-                        % (len(questions))
-                    ),
-                    steps=[],
-                )
-                actions.append(intro_questions)
-                actions.extend(questions)
-            trial = self.get_matching_pairs_trial(session)
-            actions.append(trial)
-            return actions
-        else:
-            # final score saves the result from the cleared board into account
-            score = Final(
-                session,
-                title="Score",
-                final_text="Can you score higher than your friends and family? Share and let them try!",
-                button={"text": "Play again", "link": self.get_play_again_url(session)},
-                rank=self.rank(session, exclude_unfinished=False),
-                feedback_info=self.feedback_info(),
-            )
-            return [score]
 
     def select_sections(self, session):
         json_data = session.json_data
@@ -140,7 +120,7 @@ class MatchingPairsGame(BaseRules):
         second_card = result_data["second_card"]
         second_section = Section.objects.get(pk=second_card["id"])
         second_card["filename"] = str(second_section.filename)
-        if self.evaluate_sections_equal(first_section, second_section):
+        if first_section.group == second_section.group:
             if second_card.get("seen"):
                 score = 20
                 given_response = "match"
@@ -157,15 +137,10 @@ class MatchingPairsGame(BaseRules):
         prepare_result("move", session, json_data=result_data, score=score, given_response=given_response)
         return score
 
-    def evaluate_sections_equal(
-        self, first_section: Section, second_section: Section
-    ) -> bool:
-        return first_section.group == second_section.group
-
     def next_round(self, session):
         if session.get_rounds_passed() < 1:
             intro_explainer = self.get_intro_explainer()
-            playlist = Playlist(session.block.playlists.all())
+            playlist = PlaylistSelection(session.block.playlists.all())
             actions = [intro_explainer, playlist]
             questions = self.get_profile_question_trials(session, None)
             if questions:

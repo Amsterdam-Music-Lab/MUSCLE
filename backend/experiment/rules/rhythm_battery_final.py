@@ -1,8 +1,10 @@
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
-from question.questions import QUESTION_GROUPS
-from experiment.actions import Explainer, Final, Step
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
+from question.utils import catalogue_keys
+from question.utils import catalogue_keys
 
 from .base import BaseRules
 
@@ -14,23 +16,23 @@ class RhythmBatteryFinal(BaseRules):
     show_participant_final = False
 
     def __init__(self):
-        self.question_series = [
+        self.question_catalogues = [
             {
                 "name": "MSI_F3_MUSICAL_TRAINING",
-                "keys": QUESTION_GROUPS["MSI_F3_MUSICAL_TRAINING"],
-                "randomize": True
+                "question_keys": catalogue_keys('MSI_F3_MUSICAL_TRAINING'),
+                "randomize": True,
             },
             {
                 "name": "Demographics",
-                "keys": [
+                "question_keys": [
                     'dgf_gender_identity',
                     'dgf_age',
                     'dgf_education_gold_msi',
                     'dgf_highest_qualification_expectation',
                     'dgf_country_of_residence',
-                    'dgf_country_of_origin'
+                    'dgf_country_of_origin',
                 ],
-                "randomize": False
+                "randomize": False,
             },
         ]
 

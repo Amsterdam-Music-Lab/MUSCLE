@@ -1,18 +1,16 @@
 from django.test import TestCase
-from django.core.files.uploadedfile import SimpleUploadedFile
-from experiment.actions import Explainer
+
+from experiment.actions.explainer import Explainer
 from experiment.models import Experiment, Block
 from experiment.rules.rhythm_battery_final import RhythmBatteryFinal
 from participant.models import Participant
 from section.models import Playlist
 from session.models import Session
-from question.questions import create_default_questions
 
 
 class TestRhythmBatteryFinal(TestCase):
     @classmethod
     def setUpTestData(cls):
-        create_default_questions()
         Experiment.objects.create(
             slug="MARKDOWN_EXPERIMENT",
         )

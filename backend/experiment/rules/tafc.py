@@ -30,30 +30,21 @@ Setup block data in the admin panel
     * Save and continue editing
     * QUESTION SERIES -> Add rules' default and save
 """
+from django.db.models import Avg
 
 from .base import BaseRules
-from experiment.actions import Explainer, Trial, Final
+from experiment.actions.explainer import Explainer
+from experiment.actions.final import Final
 from experiment.actions.playback import PlayButton
-from experiment.actions.styles import ButtonStyle, ColorScheme, TextStyle
-from django.db.models import Avg
-from experiment.actions.form import Form, ChoiceQuestion
+from experiment.actions.question import ButtonArrayQuestion
+from experiment.actions.trial import Trial
+from experiment.actions.form import Form
 from result.utils import prepare_result
+from theme.styles import ButtonStyle, ColorScheme, TextStyle
 
 
 class TwoAlternativeForced(BaseRules):
-    # Add to __init.py__ file in the same directory as the current file:
-    #    from .tafc import TwoAlternativeForced
-    # To BLOCK_RULES dictionary in __init.py__
-    #    TwoAlternativeForced.ID: TwoAlternativeForced
     ID = 'TWO_ALTERNATIVE_FORCED'
-
-    def __init__(self):
-        # Create questionaire to ask for age, gender, native language and musical experience. It will be run after a session is created.
-        self.question_series = [{
-            "name": "EXTRA_DEMOGRAPHICS",
-            "keys": ['dgf_age', 'dgf_gender_reduced', 'dgf_native_language', 'dgf_musical_experience'],
-            "randomize": False
-        }]
 
     def get_intro_explainer(self) -> Explainer:
         """
@@ -70,6 +61,8 @@ class TwoAlternativeForced(BaseRules):
         Returns a list of actions.
         Actions used here: Final, Trial (returned by get_profile_question_trials(), next_trial_action()), Explainer (also returned by get_feedback())
         """
+
+        # get_profile_question_trials() returns questions that haven't been asked yet
         actions = self.get_profile_question_trials(session)
         if actions:
             return actions
@@ -101,7 +94,7 @@ class TwoAlternativeForced(BaseRules):
         # Determine expected response, in this case section tag (A or B)
         expected_response = section.tag
 
-        # Build Trial action, configure through config argument. Trial has Playback and Form with ChoiceQuestion to submit response.
+        # Build Trial action, configure through config argument. Trial has Playback and Form with ButtonArrayQuestion to submit response.
 
         playback = PlayButton([section])
 
@@ -112,7 +105,7 @@ class TwoAlternativeForced(BaseRules):
             ButtonStyle.LARGE_GAP,
             ButtonStyle.LARGE_TEXT,
         ]
-        question = ChoiceQuestion(
+        question = ButtonArrayQuestion(
             key=key,
             result_id=prepare_result(
                 key,
@@ -121,17 +114,12 @@ class TwoAlternativeForced(BaseRules):
                 expected_response=expected_response,
                 scoring_rule='CORRECTNESS',
             ),
-            question="A or B?",
-            choices={
-                'A': 'Answer A',
-                'B': 'Answer B'
-            },
-            view='BUTTON_ARRAY',
-            submits=True,
-            style=button_style
+            text="A or B?",
+            choices={'A': 'Answer A', 'B': 'Answer B'},
+            style=button_style,
         )
 
-        feedback_form = Form([question])
+        feedback_form = Form([question], submit_label="")
 
         trial = Trial(
             playback=playback,

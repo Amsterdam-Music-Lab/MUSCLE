@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from django.db.models.query import QuerySet
 
-from experiment.actions import Final
+from experiment.actions.final import Final
 from session.models import Session, Result
 
 EXPERIMENT_KEY = "experiment"

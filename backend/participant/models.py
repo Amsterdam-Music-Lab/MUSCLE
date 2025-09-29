@@ -3,8 +3,9 @@ import uuid
 from django.contrib.humanize.templatetags.humanize import naturalday
 from django.db import models
 from django.db.models.query import QuerySet
-from question.models import QuestionGroup
 from django.db.models import Sum
+
+from question.utils import catalogue_keys
 from result.models import Result
 
 class Participant(models.Model):
@@ -187,11 +188,11 @@ class Participant(models.Model):
 
         return scores
 
-    def score_sum(self, question_group_key:str) -> float:
-        """ Sums scores of all profile results with questions in a question group
+    def score_sum(self, catalogue_key: str) -> float:
+        """Sums scores of all profile results with questions in a question group
 
         Args:
-            question_group_key: from `question.models.QuestionGroup.key`
+            catalogue_key: key from `question.catalogues.predefined_catalogues`
 
         Returns:
             Total score of all profile results from a Participant
@@ -203,6 +204,6 @@ class Participant(models.Model):
             ```
         """
 
-        question_keys = QuestionGroup.objects.get(key=question_group_key).questions.values_list("key", flat=True)
+        question_keys = catalogue_keys(catalogue_key)
 
         return self.result_set.all().filter(question_key__in=question_keys).aggregate(Sum("score"))['score__sum']

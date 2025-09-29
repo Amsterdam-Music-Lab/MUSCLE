@@ -7,13 +7,11 @@ from participant.models import Participant
 from result.models import Result
 from section.models import Playlist
 from session.models import Session
-from question.questions import create_default_questions
 
 
 class MatchingPairsTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        create_default_questions()
         section_csv = (
             "default,Crown_1_E1,0.0,10.0,MatchingPairs/Original/Crown_1_E1.mp3,Original,6\n"
             "default,Crown_1_E1,0.0,10.0,MatchingPairs/1stDegradation/Crown_1_E1.mp3,1stDegradation,6\n"

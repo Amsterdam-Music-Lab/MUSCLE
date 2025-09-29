@@ -7,14 +7,12 @@ from .utils import get_participant, PARTICIPANT_KEY
 from experiment.models import Block
 from session.models import Session
 from result.models import Result
-from question.questions import create_default_questions
 
 
 class ParticipantTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        create_default_questions()
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.block = Block.objects.create(
             rules='RHYTHM_BATTERY_INTRO', slug='test')

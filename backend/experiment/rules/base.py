@@ -9,8 +9,13 @@ from experiment.actions.types import FeedbackInfo
 from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.trial import Trial
-from question.utils import get_unanswered_questions
+from question.models import Question
+from question.utils import (
+    create_questions_in_database,
+    get_unanswered_questions,
+)
 from result.score import SCORING_RULES
+from result.utils import prepare_profile_result
 from session.models import Session
 
 logger = logging.getLogger(__name__)
@@ -21,9 +26,10 @@ class BaseRules(object):
 
     contact_email = settings.CONTACT_MAIL
     counted_result_keys = []
+    question_series = []
 
-    def __init__(self):
-        self.question_series = []
+    def add_custom_questions(self, question_catalogue: list[Question]):
+        create_questions_in_database(question_catalogue)
 
     def feedback_info(self) -> FeedbackInfo:
         feedback_body = render_to_string("feedback/user_feedback.html", {"email": self.contact_email})
@@ -88,11 +94,18 @@ class BaseRules(object):
             )
             while len(trials) < n_questions:
                 try:
-                    question = next(question_iterator)
+                    question_obj = next(question_iterator)
+                    profile_result = prepare_profile_result(
+                        question_obj.key, session.participant
+                    )
+                    question = question_obj.convert_to_action()
+                    question.result_id = profile_result.id
                     trials.append(
                         Trial(
                             title=_("Questionnaire"),
-                            feedback_form=Form([question]),
+                            feedback_form=Form(
+                                [question], is_skippable=question_obj.is_skippable
+                            ),
                         )
                     )
                 except StopIteration:

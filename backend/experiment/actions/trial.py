@@ -41,11 +41,10 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
         key = 'test_trial'
         section = session.playlist.get_section()
         question = BooleanQuestion(
-            question=_(
+            text=_(
                 "Do you like this song?"),
             key=key,
             result_id=prepare_result(key, session, section=section),
-            submits=True
         )
         form = Form([question])
         playback = Autoplay([section])

@@ -1,8 +1,11 @@
 from os.path import join
 from django.template.loader import render_to_string
-from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Explainer, Step, Final, Info
+
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
+from experiment.actions.info import Info
 from experiment.actions.utils import get_current_experiment_url
+from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_4_absolute import ToontjeHoger4Absolute
 
 

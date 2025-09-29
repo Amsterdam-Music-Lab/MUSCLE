@@ -11,7 +11,7 @@ from participant.models import Participant
 from result.models import Result
 from session.models import Session
 
-from experiment.actions import Final
+from experiment.actions.final import Final
 
 
 class FinalTest(TestCase):

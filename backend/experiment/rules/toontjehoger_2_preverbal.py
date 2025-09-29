@@ -4,15 +4,21 @@ from os.path import join
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Trial, Explainer, Step, Score, Final, Playlist, Info, HTML
-from experiment.actions.form import ButtonArrayQuestion, ChoiceQuestion, Form
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
+from experiment.actions.form import Form
+from experiment.actions.html import HTML
+from experiment.actions.info import Info
 from experiment.actions.playback import ImagePlayer
-from experiment.actions.styles import ColorScheme
+from experiment.actions.question import ButtonArrayQuestion
+from experiment.actions.score import Score
+from experiment.actions.trial import Trial
 from experiment.actions.utils import get_current_experiment_url
 from experiment.utils import create_player_labels
-from .base import BaseRules
 from result.utils import prepare_result
 from section.models import Playlist
+from theme.styles import ColorScheme
+from .base import BaseRules
 
 logger = logging.getLogger(__name__)
 
@@ -144,19 +150,17 @@ class ToontjeHoger2Preverbal(BaseRules):
         # Question
         key = 'expected_spectrogram'
         question = ButtonArrayQuestion(
-            question=self.get_round1_question(),
+            text=self.get_round1_question(),
             key=key,
             choices={
                 'A': 'A',
                 'B': 'B',
                 'C': 'C',
             },
-            view='BUTTON_ARRAY',
-            submits=True,
             result_id=prepare_result(key, session, expected_response="C"),
             style=[ColorScheme.NEUTRAL_INVERTED],
         )
-        form = Form([question])
+        form = Form([question], submit_label="")
 
         image_trial = Trial(
             html=HTML(
@@ -247,15 +251,13 @@ class ToontjeHoger2Preverbal(BaseRules):
 
         # Question
         key = 'baby'
-        question = ChoiceQuestion(
-            question=self.get_round_2_question(),
+        question = ButtonArrayQuestion(
+            text=self.get_round_2_question(),
             key=key,
             choices={
                 "A": "A",
                 "B": "B",
             },
-            view='BUTTON_ARRAY',
-            submits=True,
             result_id=prepare_result(key, session, expected_response="A"),
             style=[ColorScheme.NEUTRAL_INVERTED],
         )

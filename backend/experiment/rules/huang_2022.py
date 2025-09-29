@@ -4,13 +4,20 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from django.conf import settings
 
-from experiment.actions import HTML, Final, Explainer, Step, Redirect, Playlist, Trial
-from experiment.actions.form import BooleanQuestion, Form
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
+from experiment.actions.form import Form
+from experiment.actions.html import HTML
+from experiment.actions.question import ButtonArrayQuestion
+from experiment.actions.redirect import Redirect
+from experiment.actions.trial import Trial
 from experiment.actions.playback import Autoplay
-from experiment.actions.styles import ColorScheme
-from question.questions import QUESTION_GROUPS
+from experiment.actions.playlist import PlaylistSelection
+from question.models import Question
+from question.utils import catalogue_keys, create_choice_set, create_education_variant
 from result.utils import prepare_result
 from session.models import Session
+from theme.styles import ColorScheme
 from .hooked import Hooked
 
 logger = logging.getLogger(__name__)
@@ -26,15 +33,20 @@ class Huang2022(Hooked):
     default_consent_file = 'consent/consent_huang2021.html'
 
     def __init__(self):
-        self.question_series = [
+        self.add_custom_questions(HUANG_2022_QUESTIONS)
+        self.question_catalogues = [
             {
                 "name": "MSI_ALL",
-                "keys": QUESTION_GROUPS["MSI_ALL"],
-                "randomize": False
+                "question_keys": catalogue_keys('MSI_F1_ACTIVE_ENGAGEMENT')
+                + catalogue_keys('MSI_F2_PERCEPTUAL_ABILITIES')
+                + catalogue_keys('MSI_F3_MUSICAL_TRAINING')
+                + catalogue_keys('MSI_F4_SINGING_ABILITIES')
+                + catalogue_keys('MSI_F5_EMOTIONS'),
+                "randomize": False,
             },
             {
                 "name": "Demographics and other",
-                "keys": [
+                "question_keys": [
                     'msi_39_best_instrument',
                     'dgf_genre_preference_zh',
                     'dgf_generation',
@@ -44,9 +56,9 @@ class Huang2022(Hooked):
                     'dgf_region_of_origin',
                     'dgf_region_of_residence',
                     'dgf_gender_identity_zh',
-                    'contact'
+                    'contact',
                 ],
-                "randomize": False
+                "randomize": False,
             },
         ]
 
@@ -78,13 +90,12 @@ class Huang2022(Hooked):
                 html = HTML(body='<h4>{}</h4>'.format(_('Do you hear the music?')))
                 form = Form(
                     form=[
-                        BooleanQuestion(
+                        ButtonArrayQuestion(
                             key='audio_check1',
                             choices={'no': _('No'), 'yes': _('Yes')},
                             result_id=prepare_result(
                                 'audio_check1', session, scoring_rule='BOOLEAN'
                             ),
-                            submits=True,
                             style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
                         )
                     ]
@@ -100,13 +111,12 @@ class Huang2022(Hooked):
                         html = HTML(body=render_to_string('html/huang_2022/audio_check.html'))
                         form = Form(
                             form=[
-                                BooleanQuestion(
+                                ButtonArrayQuestion(
                                     key='audio_check2',
                                     choices={'no': _('Quit'), 'yes': _('Try')},
                                     result_id=prepare_result(
                                         'audio_check2', session, scoring_rule='BOOLEAN'
                                     ),
-                                    submits=True,
                                     style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
                                 )
                             ]
@@ -148,7 +158,7 @@ class Huang2022(Hooked):
                         step_numbers=True,
                         button_label=_("Continue")
                     )
-                    playlist = Playlist(session.block.playlists.all())
+                    playlist = PlaylistSelection(session.block.playlists.all())
                     actions.extend([explainer, explainer_devices, playlist, *self.next_song_sync_action(session, round_number)])
         else:
             # Load the heard_before offset.
@@ -171,7 +181,9 @@ class Huang2022(Hooked):
                 actions.append(
                     self.next_heard_before_action(session, round_number))
             else:
-                questionnaire = self.get_profile_question_trials(session, None)
+                questionnaire = self.get_profile_question_trials(
+                    session, n_questions=None
+                )
                 if questionnaire:
                     actions.extend([Explainer(
                         instruction=_("Please answer some questions \
@@ -208,12 +220,12 @@ class Huang2022(Hooked):
             if json_data.get('result') and json_data['result']['type'] == 'recognized':
                 n_sync_guessed += 1
                 sync_time += json_data['result']['recognition_time']
-                if result.score and result.score > 0:
+                if result.score > 0:
                     n_sync_correct += 1
             else:
                 if result.expected_response == 'old':
                     n_old_new_expected += 1
-                    if result.score and result.score > 0:
+                    if result.score > 0:
                         n_old_new_correct += 1
         thanks_message = _("Thank you for your contribution to science!")
         score_message = _(
@@ -245,3 +257,76 @@ def get_test_playback():
         show_animation=True
     )
     return playback
+
+
+region_choices = {
+    'HD': '华东（山东、江苏、安徽、浙江、福建、江西、上海）',
+    'HN': '华南（广东、广西、海南）',
+    'HZ': '华中（湖北、湖南、河南、江西）',
+    'HB': '华北（北京、天津、河北、山西、内蒙古）',
+    'XB': '西北（宁夏、新疆、青海、陕西、甘肃）',
+    'XN': '西南（四川、云南、贵州、西藏、重庆）',
+    'DB': '东北（辽宁、吉林、黑龙江）',
+    'GAT': '港澳台（香港、澳门、台湾）',
+    'QT': '国外',
+    'no_answer': '不想回答',
+}
+
+HUANG_2022_QUESTIONS = [
+    Question(
+        key='dgf_region_of_origin',
+        question=_(
+            "In which region did you spend the most formative years of your childhood and youth?"
+        ),
+        type="DropdownQuestion",
+        choices=create_choice_set('regions_china', region_choices),
+    ),
+    Question(
+        key='dgf_region_of_residence',
+        question=_("In which region do you currently reside?"),
+        type="DropdownQuestion",
+        choices=create_choice_set('regions_china', region_choices),
+    ),
+    Question(
+        key='dgf_gender_identity_zh',
+        question="您目前对自己的性别认识?",
+        type="RadiosQuestion",
+        choices=create_choice_set(
+            'gender_identity_china',
+            {
+                'male': "男",
+                'Female': "女",
+                'Others': "其他",
+                'no_answer': "不想回答",
+            },
+        ),
+    ),
+    create_education_variant(
+        question_key='dgf_education_huang_2022', drop_keys=['isced-5']
+    ),
+    Question(
+        key='dgf_genre_preference_zh',
+        question=_("To which group of musical genres do you currently listen most?"),
+        type="DropdownQuestion",
+        choices=create_choice_set(
+            'dgf_genre_preference_zh_choices',
+            {
+                'unpretentious': _("Pop/Country/Religious"),
+                'Chinese artistic': _("Folk/Mountain songs"),
+                'sophisticated': _("Western classical music/Jazz/Opera/Musical"),
+                'classical': _("Chinese opera"),
+                'intense': _("Rock/Punk/Metal"),
+                'mellow': _("Dance/Electronic/New Age"),
+                'contemporary': _("Hip-hop/R&B/Funk"),
+            },
+        ),
+    ),
+    Question(
+        key='contact',
+        explainer=_(
+            "Thank you so much for your feedback! Feel free to include your contact information if you would like a reply or skip if you wish to remain anonymous."
+        ),
+        question=_("Contact (optional):"),
+        type="TextQuestion",
+    ),
+]

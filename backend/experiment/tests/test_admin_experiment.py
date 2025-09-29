@@ -1,15 +1,13 @@
 from django.contrib.admin.sites import AdminSite
 from django.contrib.auth import get_user_model
-from django.http import HttpResponseBadRequest
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
 
-from experiment.admin import BlockAdmin, ExperimentAdmin
+from experiment.admin import ExperimentAdmin
 from experiment.models import Block, Experiment, Phase
 from section.models import Playlist
 from theme.models import ThemeConfig
 from question.models import QuestionSeries, QuestionInSeries, Question
-from question.questions import create_default_questions
 
 # Expected field count per model
 EXPECTED_BLOCK_FIELDS = 10
@@ -134,7 +132,6 @@ class TestDuplicateExperiment(TestCase):
         cls.block1.playlists.add(cls.playlist1)
         cls.block1.playlists.add(cls.playlist2)
         cls.block1.save()
-        create_default_questions()
         cls.question_series = QuestionSeries.objects.create(block=cls.block2, index=0)
         cls.questions = Question.objects.all()
         index = 0

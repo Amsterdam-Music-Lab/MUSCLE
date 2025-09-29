@@ -279,19 +279,28 @@ class Block(models.Model):
     def add_default_question_series(self):
         """Add default question_series to block"""
 
-        from experiment.rules import BLOCK_RULES
-        from question.models import Question, QuestionSeries, QuestionInSeries
-
-        question_series = getattr(BLOCK_RULES[self.rules](), "question_series", None)
+        question_series = getattr(self.get_rules(), "question_catalogues", None)
         if question_series:
             for i, question_series in enumerate(question_series):
-                qs = QuestionSeries.objects.create(
-                    name=question_series["name"], block=self, index=i + 1, randomize=question_series["randomize"]
+                qs, _created = QuestionSeries.objects.get_or_create(
+                    name=question_series["name"],
+                    block=self,
                 )
-                for i, question in enumerate(question_series["keys"]):
-                    QuestionInSeries.objects.create(
-                        question_series=qs, question=Question.objects.get(pk=question), index=i + 1
-                    )
+                if _created:
+                    # only set these when the object is created, so we don't overwrite changes by admin user
+                    qs.index = (i + 1,)
+                    qs.randomize = question_series["randomize"]
+                    qs.save()
+                    for i, question in enumerate(question_series["question_keys"]):
+                        QuestionInSeries.objects.create(
+                            question_series=qs,
+                            question=Question.objects.get(pk=question),
+                            index=i + 1,
+                        )
+
+    def save(self, **kwargs):
+        super().save(**kwargs)  # Call the "real" save() method.
+        self.add_default_question_series()
 
 
 class Feedback(models.Model):
