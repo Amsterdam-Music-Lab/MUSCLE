@@ -93,6 +93,7 @@ services:
             - VITE_SENTRY_DSN=${FRONTEND_SENTRY_DSN}
             - VITE_STRICT=${FRONTEND_STRICT}
             - VITE_PLAUSIBLE_DOMAIN=${FRONTEND_PLAUSIBLE_DOMAIN}
+            - PUBLIC_URL=${PUBLIC_URL}
         restart: "no"
 
     # This service is responsible for serving
