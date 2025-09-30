@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.db.models import Sum
 
-from question.utils import catalogue_keys
+from question.models import QuestionSeries
 from result.models import Result
 
 class Participant(models.Model):
@@ -188,22 +188,20 @@ class Participant(models.Model):
 
         return scores
 
-    def score_sum(self, catalogue_key: str) -> float:
-        """Sums scores of all profile results with questions in a question group
+    def score_sum(self, catalogue: QuestionSeries) -> float:
+        """Sums scores of all profile results with questions in a question catalogue
 
         Args:
-            catalogue_key: key from `question.catalogues.predefined_catalogues`
+            catalogue: Question.QuestionSeries
 
         Returns:
             Total score of all profile results from a Participant
 
         Example:
-            Get the total score of all participant's profile results from a specific question group
+            Get the total score of all participant's profile results from a specific question series
             ```python
-            score_sum = participant.score_sum()
+            score_sum = participant.score_sum(catalogue)
             ```
         """
-
-        question_keys = catalogue_keys(catalogue_key)
-
+        question_keys = catalogue.questions.value_list('key')
         return self.result_set.all().filter(question_key__in=question_keys).aggregate(Sum("score"))['score__sum']

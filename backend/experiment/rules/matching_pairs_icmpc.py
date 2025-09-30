@@ -8,7 +8,6 @@ class MatchingPairsICMPC(MatchingPairsGame):
     ID = "MATCHING_PAIRS_ICMPC"
 
     def __init__(self):
-        self.add_custom_questions([ICMPC_HALL_OF_FAME])
         super().__init__()
         self.question_series[0]["question_keys"].append("fame_name")
 

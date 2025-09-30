@@ -10,10 +10,7 @@ from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.trial import Trial
 from question.models import Question
-from question.utils import (
-    create_questions_in_database,
-    get_unanswered_questions,
-)
+from question.utils import get_unanswered_questions
 from result.score import SCORING_RULES
 from result.utils import prepare_profile_result
 from session.models import Session
@@ -27,9 +24,6 @@ class BaseRules(object):
     contact_email = settings.CONTACT_MAIL
     counted_result_keys = []
     question_series = []
-
-    def add_custom_questions(self, question_catalogue: list[Question]):
-        create_questions_in_database(question_catalogue)
 
     def feedback_info(self) -> FeedbackInfo:
         feedback_body = render_to_string("feedback/user_feedback.html", {"email": self.contact_email})
@@ -78,16 +72,14 @@ class BaseRules(object):
             n_questions: the number of questions to return, set to `None` if all questions in the blocks' question sets should be returned at once
         """
         trials = []
-        question_sets = session.block.questionseries_set.all()
+        catalogues = session.block.questionseries_set.all()
         if n_questions is None:
-            n_questions = sum(
-                question_set.questions.count() for question_set in question_sets
-            )
-        for question_set in question_sets:
+            n_questions = sum(catalogue.questions.count() for catalogue in catalogues)
+        for catalogue in catalogues:
             questions = (
-                question_set.questions.order_by("?")
-                if question_set.randomize
-                else question_set.questions
+                catalogue.questions.order_by("?")
+                if catalogue.randomize
+                else catalogue.questions
             )
             question_iterator = get_unanswered_questions(
                 session.participant, questions.all()

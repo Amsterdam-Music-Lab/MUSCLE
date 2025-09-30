@@ -15,15 +15,13 @@ from experiment.actions.trial import Trial
 from result.utils import prepare_result
 from result.models import Result
 
-from question.choice_sets import get_choice_set
-
 from section.models import Section
 from session.models import Session
 
 from theme.styles import ColorScheme
 
 from .base import BaseRules
-from .huang_2022 import get_test_playback, HUANG_2022_QUESTIONS
+from .huang_2022 import get_test_playback
 
 
 class MusicalPreferences(BaseRules):
@@ -43,17 +41,16 @@ class MusicalPreferences(BaseRules):
     know_score = {"yes": 2, "unsure": 1, "no": 0}
 
     def __init__(self):
-        self.add_custom_questions(HUANG_2022_QUESTIONS)
         self.question_catalogues = [
             {
-                "name": "Question series Musical Preferences",
+                "name": "Musical Preferences",
                 "question_keys": [
                     "msi_38_listen_music",
                     "dgf_genre_preference_zh",
                     "dgf_gender_identity_zh",
                     "dgf_age",
-                    "dgf_region_of_origin",
-                    "dgf_region_of_residence",
+                    "dgf_region_of_origin_zh",
+                    "dgf_region_of_residence_zh",
                 ],
                 "randomize": False,
             },

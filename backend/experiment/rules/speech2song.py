@@ -10,7 +10,6 @@ from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay
 from experiment.actions.question import RadiosQuestion
 from experiment.actions.trial import Trial
-from question.catalogues.languages import language_question
 from result.utils import prepare_result
 from session.models import Session
 
@@ -37,9 +36,7 @@ class Speech2Song(BaseRules):
                     'lang_mother',
                     'lang_second',
                     'lang_third',
-                    'lang_exposure_en',
-                    'lang_exposure_pt-br',
-                    'lang_exposure_zh',
+                    'lang_exposure',  # edited to include a version of `en`, `pt-br` and `zh`
                 ],
                 "randomize": False,
             },
@@ -238,10 +235,3 @@ def sound(section):
     )
 
     return view
-
-
-SPEECH2SONG_QUESTIONS = [
-    language_question('lang_exposure_en', _('English')),
-    language_question('lang_exposure_pt-br', _('Brazilian Portuguese')),
-    language_question('lang_exposure_zh', _('Mandarin Chinese')),
-]

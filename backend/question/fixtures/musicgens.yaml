@@ -1,0 +1,843 @@
+# Questions, choice sets and choices for the Musicality Genomics project
+- model: question.question
+  pk: P01_1
+  fields:
+    question: Can you clap in time with a musical beat?
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P01_2
+  fields:
+    question: I can tap my foot in time with the beat of the music I hear.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P01_3
+  fields:
+    question: When listening to music, can you move in time with the beat?
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P02_1
+  fields:
+    question: I can recognise a piece of music after hearing just a few notes.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P02_2
+  fields:
+    question: I can easily recognise a familiar song.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P02_3
+  fields:
+    question: When I hear the beginning of a song I know immediately whether I've
+      heard it before or not.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P03_1
+  fields:
+    question: I can tell when people sing out of tune.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P03_2
+  fields:
+    question: I am able to judge whether someone is a good singer or not.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P03_3
+  fields:
+    question: I find it difficult to spot mistakes in a performance of a song even
+      if I know the tune.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P04_1
+  fields:
+    question: I feel chills when I hear music that I like.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P04_2
+  fields:
+    question: I get emotional listening to certain pieces of music.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P04_3
+  fields:
+    question: I become tearful or cry when I listen to a melody that I like very much.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P04_4
+  fields:
+    question: Music gives me shivers or goosebumps.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P05_1
+  fields:
+    question: When I listen to music I'm absorbed by it.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P05_2
+  fields:
+    question: While listening to music, I become so involved that I forget about myself
+      and my surroundings.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P05_3
+  fields:
+    question: When I listen to music I get so caught up in it that I don't notice
+      anything.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P05_4
+  fields:
+    question: I feel like I am 'one' with the music.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P05_5
+  fields:
+    question: I lose myself in music.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P06_1
+  fields:
+    question: I like listening to music.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P06_2
+  fields:
+    question: I enjoy music.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P06_3
+  fields:
+    question: I listen to music for pleasure.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P06_4
+  fields:
+    question: Music is kind of an addiction for me - I couldn't live without it.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P07_1
+  fields:
+    question: I can tell when people sing or play out of time with the beat of the
+      music.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P07_2
+  fields:
+    question: I can hear when people are not in sync when they play a song.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P07_3
+  fields:
+    question: I can tell when music is sung or played in time with the beat.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P08_1
+  fields:
+    question: I can sing or play a song from memory.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P08_2
+  fields:
+    question: Singing or playing music from memory is easy for me.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P08_3
+  fields:
+    question: I find it hard to sing or play a song from memory.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P09_1
+  fields:
+    question: When I sing, I have no idea whether I'm in tune or not.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P09_2
+  fields:
+    question: I am able to hit the right notes when I sing along with a recording.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P09_3
+  fields:
+    question: I can sing along with other people.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P10_1
+  fields:
+    question: I have no sense for rhythm (when I listen, play or dance to music).
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P10_2
+  fields:
+    question: Understanding the rhythm of a piece is easy for me (when I listen, play
+      or dance to music).
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P10_3
+  fields:
+    question: I have a good sense of rhythm (when I listen, play, or dance to music).
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P11_1
+  fields:
+    question: Do you have absolute pitch? Absolute pitch is the ability to recognise
+      and name an isolated musical tone without a reference tone, e.g. being able
+      to say 'F#' if someone plays that note on the piano.
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: ''
+    choices: BOOLEAN_UNDECIDED
+- model: question.question
+  pk: P11_2
+  fields:
+    question: Do you have perfect pitch?
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: ''
+    choices: BOOLEAN_UNDECIDED
+- model: question.question
+  pk: P11_3
+  fields:
+    question: If someone plays a note on an instrument and you can't see what note
+      it is, can you still name it (e.g. say that is a 'C' or an 'F')?
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: ''
+    choices: BOOLEAN_UNDECIDED
+- model: question.question
+  pk: P12_1
+  fields:
+    question: Can you hear the difference between two melodies?
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P12_2
+  fields:
+    question: I can recognise differences between melodies even if they are similar.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P12_3
+  fields:
+    question: I can tell when two melodies are the same or different.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P13_1
+  fields:
+    question: I make up new melodies in my mind.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P13_2
+  fields:
+    question: I make up songs, even when I'm just singing to myself.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P13_3
+  fields:
+    question: I like to play around with new melodies that come to my mind.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P14_1
+  fields:
+    question: I have a melody stuck in my mind.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P14_2
+  fields:
+    question: I experience earworms.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P14_3
+  fields:
+    question: I get music stuck in my head.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P14_4
+  fields:
+    question: I have a piece of music stuck on repeat in my head.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P15_1
+  fields:
+    question: Music makes me dance.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P15_2
+  fields:
+    question: I don't like to dance, not even with music I like.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P15_3
+  fields:
+    question: I can dance to a beat.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P15_4
+  fields:
+    question: I easily get into a groove when listening to music.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P16_1
+  fields:
+    question: Can you hear the difference between two rhythms?
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P16_2
+  fields:
+    question: I can tell when two rhythms are the same or different.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P16_3
+  fields:
+    question: I can recognise differences between rhythms even if they are similar.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P17_1
+  fields:
+    question: I can't help humming or singing along to music that I like.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P17_2
+  fields:
+    question: When I hear a tune I like a lot I can't help tapping or moving to its
+      beat.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: P17_3
+  fields:
+    question: Hearing good music makes me want to sing along.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: PHENOTYPES_1
+  fields:
+    question: Please select the sentence that describes your level of achievement
+      in music.
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: LIKERT
+    choices: MUSICGENS_ACHIEVEMENT
+- model: question.question
+  pk: PHENOTYPES_2
+  fields:
+    question: How engaged with music are you? Singing, playing, and even writing music
+      counts here. Please choose the answer which describes you best.
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: LIKERT
+    choices: MUSICGENS_ENGAGEMENT
+- model: question.question
+  pk: PHENOTYPES_3
+  fields:
+    question: I have never been complimented for my talents as a musical performer.
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: REVERSE_LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: PHENOTYPES_4
+  fields:
+    question: To what extent do you agree that you see yourself as someone who is
+      sophisticated in art, music, or literature?
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_6
+- model: question.question
+  pk: PHENOTYPES_5
+  fields:
+    question: At the peak of my interest, I practised ___ hours on my primary instrument
+      (including voice).
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: LIKERT
+    choices: MUSICGENS_PRACTICE
+- model: question.question
+  pk: PHENOTYPES_6
+  fields:
+    question: How often did you play or sing during the most active period?
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: REVERSE_LIKERT
+    choices: MUSICGENS_PLAY_FREQUENCY_PEAK
+- model: question.question
+  pk: PHENOTYPES_7
+  fields:
+    question: How long (duration) did you play or sing during the most active period?
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: REVERSE_LIKERT
+    choices: MUSICGENS_PLAY_DURATION_PEAK
+- model: question.question
+  pk: PHENOTYPES_8
+  fields:
+    question: About how many hours do you usually spend each week playing a musical
+      instrument?
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: LIKERT
+    choices: MUSICGENS_PLAY_FREQUENCY_CURRENT
+- model: question.question
+  pk: PHENOTYPES_9
+  fields:
+    question: Indicate approximately how many hours per week you have played or practiced
+      any musical instrument at all, i.e., all different instruments, on average over
+      the last 10 years.
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: LIKERT
+    choices: MUSICGENS_PLAY_DURATION_CURRENT
+- model: question.choiceset
+  pk: MUSICGENS_ACHIEVEMENT
+  fields: {}
+- model: question.choiceset
+  pk: MUSICGENS_ENGAGEMENT
+  fields: {}
+- model: question.choiceset
+  pk: MUSICGENS_PLAY_DURATION_CURRENT
+  fields: {}
+- model: question.choiceset
+  pk: MUSICGENS_PLAY_DURATION_PEAK
+  fields: {}
+- model: question.choiceset
+  pk: MUSICGENS_PLAY_FREQUENCY_CURRENT
+  fields: {}
+- model: question.choiceset
+  pk: MUSICGENS_PLAY_FREQUENCY_PEAK
+  fields: {}
+- model: question.choiceset
+  pk: MUSICGENS_PRACTICE
+  fields: {}
+- model: question.choice
+  fields:
+    key: '1'
+    text: I have no training or recognised talent in this area.
+    index: 0
+    set: MUSICGENS_ACHIEVEMENT
+- model: question.choice
+  fields:
+    key: '2'
+    text: I play one or more musical instruments proficiently.
+    index: 1
+    set: MUSICGENS_ACHIEVEMENT
+- model: question.choice
+  fields:
+    key: '3'
+    text: I have played with a recognised orchestra or band.
+    index: 2
+    set: MUSICGENS_ACHIEVEMENT
+- model: question.choice
+  fields:
+    key: '4'
+    text: I have composed an original piece of music.
+    index: 3
+    set: MUSICGENS_ACHIEVEMENT
+- model: question.choice
+  fields:
+    key: '5'
+    text: My musical talent has been critiqued in a local publication.
+    index: 4
+    set: MUSICGENS_ACHIEVEMENT
+- model: question.choice
+  fields:
+    key: '6'
+    text: My composition has been recorded.
+    index: 5
+    set: MUSICGENS_ACHIEVEMENT
+- model: question.choice
+  fields:
+    key: '7'
+    text: Recordings of my composition have been sold publicly.
+    index: 6
+    set: MUSICGENS_ACHIEVEMENT
+- model: question.choice
+  fields:
+    key: '8'
+    text: My compositions have been critiqued in a national publication.
+    index: 7
+    set: MUSICGENS_ACHIEVEMENT
+- model: question.choice
+  fields:
+    key: '9'
+    text: ' My compositions have been critiqued in multiple national publications.'
+    index: 8
+    set: MUSICGENS_ACHIEVEMENT
+- model: question.choice
+  fields:
+    key: '1'
+    text: I am not engaged in music at all.
+    index: 0
+    set: MUSICGENS_ENGAGEMENT
+- model: question.choice
+  fields:
+    key: '2'
+    text: I am self-taught and play music privately, but I have never played, sung,
+      or shown my music to others.
+    index: 1
+    set: MUSICGENS_ENGAGEMENT
+- model: question.choice
+  fields:
+    key: '3'
+    text: I have taken lessons in music, but I have never played, sung, or shown my
+      music to others.
+    index: 2
+    set: MUSICGENS_ENGAGEMENT
+- model: question.choice
+  fields:
+    key: '4'
+    text: I have played or sung, or my music has been played in public concerts in
+      my home town, but I have not been paid for this.
+    index: 3
+    set: MUSICGENS_ENGAGEMENT
+- model: question.choice
+  fields:
+    key: '5'
+    text: I have played or sung, or my music has been played in public concerts in
+      my home town, and I have been paid for this.
+    index: 4
+    set: MUSICGENS_ENGAGEMENT
+- model: question.choice
+  fields:
+    key: '6'
+    text: I am professionally active as a musician.
+    index: 5
+    set: MUSICGENS_ENGAGEMENT
+- model: question.choice
+  fields:
+    key: '7'
+    text: I am professionally active as a musician and have been reviewed/featured
+      in the national or international media and/or have received an award for my
+      musical activities.
+    index: 6
+    set: MUSICGENS_ENGAGEMENT
+- model: question.choice
+  fields:
+    key: '1'
+    text: less than 1 hour per week
+    index: 0
+    set: MUSICGENS_PLAY_DURATION_CURRENT
+- model: question.choice
+  fields:
+    key: '2'
+    text: 1 hour per week
+    index: 1
+    set: MUSICGENS_PLAY_DURATION_CURRENT
+- model: question.choice
+  fields:
+    key: '3'
+    text: 2 hours per week
+    index: 2
+    set: MUSICGENS_PLAY_DURATION_CURRENT
+- model: question.choice
+  fields:
+    key: '4'
+    text: 3 hours per week
+    index: 3
+    set: MUSICGENS_PLAY_DURATION_CURRENT
+- model: question.choice
+  fields:
+    key: '5'
+    text: 4–5 hours per week
+    index: 4
+    set: MUSICGENS_PLAY_DURATION_CURRENT
+- model: question.choice
+  fields:
+    key: '6'
+    text: 6–9 hours per week
+    index: 5
+    set: MUSICGENS_PLAY_DURATION_CURRENT
+- model: question.choice
+  fields:
+    key: '7'
+    text: 10–14 hours per week
+    index: 6
+    set: MUSICGENS_PLAY_DURATION_CURRENT
+- model: question.choice
+  fields:
+    key: '8'
+    text: 15–24 hours per week
+    index: 7
+    set: MUSICGENS_PLAY_DURATION_CURRENT
+- model: question.choice
+  fields:
+    key: '9'
+    text: 25–40 hours per week
+    index: 8
+    set: MUSICGENS_PLAY_DURATION_CURRENT
+- model: question.choice
+  fields:
+    key: '10'
+    text: 41 or more hours per week
+    index: 9
+    set: MUSICGENS_PLAY_DURATION_CURRENT
+- model: question.choice
+  fields:
+    key: '1'
+    text: More than 1 hour per week
+    index: 0
+    set: MUSICGENS_PLAY_DURATION_PEAK
+- model: question.choice
+  fields:
+    key: '2'
+    text: 1 hour per week
+    index: 1
+    set: MUSICGENS_PLAY_DURATION_PEAK
+- model: question.choice
+  fields:
+    key: '3'
+    text: Less than 1 hour per week
+    index: 2
+    set: MUSICGENS_PLAY_DURATION_PEAK
+- model: question.choice
+  fields:
+    key: '1'
+    text: None
+    index: 0
+    set: MUSICGENS_PLAY_FREQUENCY_CURRENT
+- model: question.choice
+  fields:
+    key: '2'
+    text: 1 hour or less a week
+    index: 1
+    set: MUSICGENS_PLAY_FREQUENCY_CURRENT
+- model: question.choice
+  fields:
+    key: '3'
+    text: 2–3 hours a week
+    index: 2
+    set: MUSICGENS_PLAY_FREQUENCY_CURRENT
+- model: question.choice
+  fields:
+    key: '4'
+    text: 4–5 hours a week
+    index: 3
+    set: MUSICGENS_PLAY_FREQUENCY_CURRENT
+- model: question.choice
+  fields:
+    key: '5'
+    text: 6–7 hours a week
+    index: 4
+    set: MUSICGENS_PLAY_FREQUENCY_CURRENT
+- model: question.choice
+  fields:
+    key: '6'
+    text: 8 or more hours a week
+    index: 5
+    set: MUSICGENS_PLAY_FREQUENCY_CURRENT
+- model: question.choice
+  fields:
+    key: '1'
+    text: Every day
+    index: 0
+    set: MUSICGENS_PLAY_FREQUENCY_PEAK
+- model: question.choice
+  fields:
+    key: '2'
+    text: More than 1x per week
+    index: 1
+    set: MUSICGENS_PLAY_FREQUENCY_PEAK
+- model: question.choice
+  fields:
+    key: '3'
+    text: 1x per week
+    index: 2
+    set: MUSICGENS_PLAY_FREQUENCY_PEAK
+- model: question.choice
+  fields:
+    key: '4'
+    text: 1x per month
+    index: 3
+    set: MUSICGENS_PLAY_FREQUENCY_PEAK
+- model: question.choice
+  fields:
+    key: '1'
+    text: '0'
+    index: 0
+    set: MUSICGENS_PRACTICE
+- model: question.choice
+  fields:
+    key: '2'
+    text: '0.5'
+    index: 1
+    set: MUSICGENS_PRACTICE
+- model: question.choice
+  fields:
+    key: '3'
+    text: '1'
+    index: 2
+    set: MUSICGENS_PRACTICE
+- model: question.choice
+  fields:
+    key: '4'
+    text: '1.5'
+    index: 3
+    set: MUSICGENS_PRACTICE
+- model: question.choice
+  fields:
+    key: '5'
+    text: 3–4
+    index: 4
+    set: MUSICGENS_PRACTICE
+- model: question.choice
+  fields:
+    key: '6'
+    text: 5 or more
+    index: 5
+    set: MUSICGENS_PRACTICE

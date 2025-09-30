@@ -52,7 +52,7 @@ class Question(models.Model):
     key = models.SlugField(primary_key=True, max_length=128)
     question = models.CharField(max_length=1024)
     explainer = models.TextField(blank=True, default="")
-    editable = models.BooleanField(default=True, editable=False)
+    from_python = models.BooleanField(default=False, editable=False)
 
     type = models.CharField(max_length=32, default="", choices=QuestionTypes.choices)
 
@@ -61,20 +61,23 @@ class Question(models.Model):
         ("REVERSE_LIKERT", "REVERSE_LIKERT"),
         ("CATEGORIES_TO_LIKERT", "CATEGORIES_TO_LIKERT"),
     ]
-    profile_scoring_rule = models.CharField(blank = True, max_length=128,  default="", choices=PROFILE_SCORING_RULES)
+    profile_scoring_rule = models.CharField(
+        blank=True, max_length=128, default="", choices=PROFILE_SCORING_RULES
+    )
 
-    # NumberQuestion
-    min_value = models.FloatField(blank=True, default=0)
-    max_value = models.FloatField(blank=True, default=120)
+    # only applicable for Number/RangeQuestion
+    min_value = models.FloatField(blank=True, null=True)
+    max_value = models.FloatField(blank=True, null=True)
 
-    # TextQuestion
-    max_length = models.IntegerField(blank=True, default=64)
+    # only applicable for TextQuestion: maximal length of text
+    max_length = models.IntegerField(blank=True, null=True)
 
     # ChoiceQuestion
-    min_values = models.IntegerField(blank=True, default=1)
     choices = models.ForeignKey(
         'question.ChoiceSet', null=True, on_delete=models.SET_NULL
     )
+    # only applicable for CheckBoxQuestion
+    min_values = models.IntegerField(blank=True, null=True)
 
     is_skippable = models.BooleanField(default=False)
 
@@ -115,7 +118,7 @@ class ChoiceSet(models.Model):
     """A collection of choices for a question"""
 
     key = models.SlugField(max_length=64, primary_key=True)
-    from_python = models.BooleanField(default=False)
+    from_python = models.BooleanField(default=False, editable=False)
 
     def create_choices(self, choices: dict):
         index = 0

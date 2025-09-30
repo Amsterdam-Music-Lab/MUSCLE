@@ -1,0 +1,672 @@
+# questions, choice sets and choices for the Goldsmiths Musical Sophistication Index
+- model: question.question
+  pk: msi_01_music_activities
+  fields:
+    question: I spend a lot of my free time doing music-related activities.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_02_shivers
+  fields:
+    question: I sometimes choose music that can trigger shivers down my spine.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_03_writing
+  fields:
+    question: I enjoy writing about music, for example on blogs and forums.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_04_sing_along
+  fields:
+    question: If somebody starts singing a song I don’t know, I can usually join in.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_05_good_singer
+  fields:
+    question: I am able to judge whether someone is a good singer or not.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_06_song_first_time
+  fields:
+    question: I usually know when I’m hearing a song for the first time.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_07_from_memory
+  fields:
+    question: I can sing or play music from memory.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_08_intrigued_styles
+  fields:
+    question: I’m intrigued by musical styles I’m not familiar with and want to find
+      out more.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_09_rarely_emotions
+  fields:
+    question: Pieces of music rarely evoke emotions for me.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT_REVERSED
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_10_sing_with_recording
+  fields:
+    question: I am able to hit the right notes when I sing along with a recording.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_11_spot_mistakes
+  fields:
+    question: I find it difficult to spot mistakes in a performance of a song even
+      if I know the tune.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT_REVERSED
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_12_performance_diff
+  fields:
+    question: I can compare and discuss differences between two performances or versions
+      of the same piece of music.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_13_trouble_recognising
+  fields:
+    question: I have trouble recognising a familiar song when played in a different
+      way or by a different performer.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT_REVERSED
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_14_never_complimented
+  fields:
+    question: I have never been complimented for my talents as a musical performer.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT_REVERSED
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_15_internet_search_music
+  fields:
+    question: I often read or search the internet for things related to music.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_16_motivate
+  fields:
+    question: I often pick certain music to motivate or excite me.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_17_not_sing_harmony
+  fields:
+    question: I am not able to sing in harmony when somebody is singing a familiar
+      tune.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT_REVERSED
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_18_out_of_beat
+  fields:
+    question: I can tell when people sing or play out of time with the beat.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_19_identify_special
+  fields:
+    question: I am able to identify what is special about a given musical piece.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_20_talk_emotions
+  fields:
+    question: I am able to talk about the emotions that a piece of music evokes for
+      me.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_21_spend_income
+  fields:
+    question: I don’t spend much of my disposable income on music.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT_REVERSED
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_22_out_of_tune
+  fields:
+    question: I can tell when people sing or play out of tune.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_23_no_idea_in_tune
+  fields:
+    question: When I sing, I have no idea whether I’m in tune or not.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT_REVERSED
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_24_music_addiction
+  fields:
+    question: 'Music is kind of an addiction for me: I couldn’t live without it.'
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_25_sing_public
+  fields:
+    question: I don’t like singing in public because I’m afraid that I would sing
+      wrong notes.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT_REVERSED
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_26_genre
+  fields:
+    question: When I hear a piece of music I can usually identify its genre.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_27_consider_musician
+  fields:
+    question: I would not consider myself a musician.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT_REVERSED
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_28_track_new
+  fields:
+    question: ' I keep track of new music that I come across (e.g. new artists or
+      recordings).'
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_29_sing_after_hearing
+  fields:
+    question: After hearing a new song two or three times, I can usually sing it by
+      myself.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_30_sing_back
+  fields:
+    question: I only need to hear a new tune once and I can sing it back hours later.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_31_memories
+  fields:
+    question: Music can evoke my memories of past people and places.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: msi_32_practice_years
+  fields:
+    question: I engaged in regular, daily practice of a musical instrument (including
+      voice) for _ years.
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: LIKERT
+    choices: GMSI_YEARS_PRACTICED
+- model: question.question
+  pk: msi_33_practice_daily
+  fields:
+    question: At the peak of my interest, I practised my primary instrument for _
+      hours per day.
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: LIKERT
+    choices: GMSI_HOURS_DAILY_PRACTICE
+- model: question.question
+  pk: msi_34_attended_events
+  fields:
+    question: I have attended _ live music events as an audience member in the past
+      twelve months.
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: LIKERT
+    choices: GMSI_ATTENDED_EVENTS
+- model: question.question
+  pk: msi_35_theory_training
+  fields:
+    question: I have had formal training in music theory for _ years.
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: LIKERT
+    choices: GMSI_YEARS_THEORY_TRAINING
+- model: question.question
+  pk: msi_36_instrumental_training
+  fields:
+    question: I have had _ years of formal training on a musical instrument (including
+      voice) during my lifetime.
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: LIKERT
+    choices: GMSI_YEARS_INSTRUMENTAL_TRAINING
+- model: question.question
+  pk: msi_37_play_instruments
+  fields:
+    question: How many musical instruments can you play?
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: LIKERT
+    choices: GMSI_N_INSTRUMENTS
+- model: question.question
+  pk: msi_38_listen_music
+  fields:
+    question: I listen attentively to music for _ per day.
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: LIKERT
+    choices: GMSI_DAILY_MUSIC_LISTENING
+- model: question.question
+  pk: msi_39_best_instrument
+  fields:
+    question: 'The instrument I play best, including voice (or none), is:'
+    explainer: ''
+    type: TextQuestion
+    profile_scoring_rule: ''
+    choices: null
+- model: question.question
+  pk: 'ST_01_age_instrument'
+  fields:
+    question: What age did you start to play an instrument?
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: ''
+    choices: GMSI_AGE_STARTED_INSTRUMENT
+- model: question.question
+  pk: 'AP_01_absolute_pitch'
+  fields:
+    question: Do you have absolute pitch? Absolute or perfect pitch is the ability to recognise and name an isolated musical tone without a reference tone, e.g. being able to say 'F#' if someone plays that note on the piano.
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: ''
+    choices: BOOLEAN
+- model: question.choiceset
+  pk: GMSI_AGE_STARTED_INSTRUMENT
+  fields: {}
+- model: question.choiceset
+  pk: GMSI_ATTENDED_EVENTS
+  fields: {}
+- model: question.choiceset
+  pk: GMSI_DAILY_MUSIC_LISTENING
+  fields: {}
+- model: question.choiceset
+  pk: GMSI_HOURS_DAILY_PRACTICE
+  fields: {}
+- model: question.choiceset
+  pk: GMSI_N_INSTRUMENTS
+  fields: {}
+- model: question.choiceset
+  pk: GMSI_YEARS_INSTRUMENTAL_TRAINING
+  fields: {}
+- model: question.choiceset
+  pk: GMSI_YEARS_PRACTICED
+  fields: {}
+- model: question.choiceset
+  pk: GMSI_YEARS_THEORY_TRAINING
+  fields: {}
+- model: question.choice
+  fields:
+    key: 2 - 19
+    text: 2 - 19
+    index: 0
+    set: GMSI_AGE_STARTED_INSTRUMENT
+- model: question.choice
+  fields:
+    key: I don’t play any instrument.
+    text: I don’t play any instrument.
+    index: 1
+    set: GMSI_AGE_STARTED_INSTRUMENT
+- model: question.choice
+  fields:
+    key: '0.0'
+    text: '0'
+    index: 0
+    set: GMSI_ATTENDED_EVENTS
+- model: question.choice
+  fields:
+    key: '1.0'
+    text: '1'
+    index: 1
+    set: GMSI_ATTENDED_EVENTS
+- model: question.choice
+  fields:
+    key: '2.0'
+    text: '2'
+    index: 2
+    set: GMSI_ATTENDED_EVENTS
+- model: question.choice
+  fields:
+    key: '3.0'
+    text: '3'
+    index: 3
+    set: GMSI_ATTENDED_EVENTS
+- model: question.choice
+  fields:
+    key: 4-6
+    text: 4-6
+    index: 4
+    set: GMSI_ATTENDED_EVENTS
+- model: question.choice
+  fields:
+    key: 7-10
+    text: 7-10
+    index: 5
+    set: GMSI_ATTENDED_EVENTS
+- model: question.choice
+  fields:
+    key: 11+
+    text: 11 or more
+    index: 6
+    set: GMSI_ATTENDED_EVENTS
+- model: question.choice
+  fields:
+    key: 0-15
+    text: 0-15 min
+    index: 0
+    set: GMSI_DAILY_MUSIC_LISTENING
+- model: question.choice
+  fields:
+    key: 15-30
+    text: 15-30 min
+    index: 1
+    set: GMSI_DAILY_MUSIC_LISTENING
+- model: question.choice
+  fields:
+    key: 30-60
+    text: 30-60 min
+    index: 2
+    set: GMSI_DAILY_MUSIC_LISTENING
+- model: question.choice
+  fields:
+    key: 60-90
+    text: 60-90 min
+    index: 3
+    set: GMSI_DAILY_MUSIC_LISTENING
+- model: question.choice
+  fields:
+    key: 2h
+    text: 2 hrs
+    index: 4
+    set: GMSI_DAILY_MUSIC_LISTENING
+- model: question.choice
+  fields:
+    key: 2-3h
+    text: 2-3 hrs
+    index: 5
+    set: GMSI_DAILY_MUSIC_LISTENING
+- model: question.choice
+  fields:
+    key: 4h+
+    text: 4 hrs or more
+    index: 6
+    set: GMSI_DAILY_MUSIC_LISTENING
+- model: question.choice
+  fields:
+    key: '0'
+    text: 0 hours
+    index: 0
+    set: GMSI_HOURS_DAILY_PRACTICE
+- model: question.choice
+  fields:
+    key: '0.5'
+    text: 0.5 hours
+    index: 1
+    set: GMSI_HOURS_DAILY_PRACTICE
+- model: question.choice
+  fields:
+    key: '1'
+    text: 1 hour
+    index: 2
+    set: GMSI_HOURS_DAILY_PRACTICE
+- model: question.choice
+  fields:
+    key: '1.5'
+    text: 1.5 hours
+    index: 3
+    set: GMSI_HOURS_DAILY_PRACTICE
+- model: question.choice
+  fields:
+    key: '2'
+    text: 2 hours
+    index: 4
+    set: GMSI_HOURS_DAILY_PRACTICE
+- model: question.choice
+  fields:
+    key: 3-4
+    text: 3-4 hours
+    index: 5
+    set: GMSI_HOURS_DAILY_PRACTICE
+- model: question.choice
+  fields:
+    key: 5+
+    text: 5 or more hours
+    index: 6
+    set: GMSI_HOURS_DAILY_PRACTICE
+- model: question.choice
+  fields:
+    key: '0'
+    text: '0'
+    index: 0
+    set: GMSI_N_INSTRUMENTS
+- model: question.choice
+  fields:
+    key: '1'
+    text: '1'
+    index: 1
+    set: GMSI_N_INSTRUMENTS
+- model: question.choice
+  fields:
+    key: '2'
+    text: '2'
+    index: 2
+    set: GMSI_N_INSTRUMENTS
+- model: question.choice
+  fields:
+    key: '3'
+    text: '3'
+    index: 3
+    set: GMSI_N_INSTRUMENTS
+- model: question.choice
+  fields:
+    key: '4'
+    text: '4'
+    index: 4
+    set: GMSI_N_INSTRUMENTS
+- model: question.choice
+  fields:
+    key: '5'
+    text: '5'
+    index: 5
+    set: GMSI_N_INSTRUMENTS
+- model: question.choice
+  fields:
+    key: 6+
+    text: 6 or more
+    index: 6
+    set: GMSI_N_INSTRUMENTS
+- model: question.choice
+  fields:
+    key: '0'
+    text: '0'
+    index: 0
+    set: GMSI_YEARS_INSTRUMENTAL_TRAINING
+- model: question.choice
+  fields:
+    key: '0.5'
+    text: '0.5'
+    index: 1
+    set: GMSI_YEARS_INSTRUMENTAL_TRAINING
+- model: question.choice
+  fields:
+    key: '1'
+    text: '1'
+    index: 2
+    set: GMSI_YEARS_INSTRUMENTAL_TRAINING
+- model: question.choice
+  fields:
+    key: '2'
+    text: '2'
+    index: 3
+    set: GMSI_YEARS_INSTRUMENTAL_TRAINING
+- model: question.choice
+  fields:
+    key: 3-5
+    text: 3-5
+    index: 4
+    set: GMSI_YEARS_INSTRUMENTAL_TRAINING
+- model: question.choice
+  fields:
+    key: 6-9
+    text: 6-9
+    index: 5
+    set: GMSI_YEARS_INSTRUMENTAL_TRAINING
+- model: question.choice
+  fields:
+    key: 10+
+    text: 10 or more
+    index: 6
+    set: GMSI_YEARS_INSTRUMENTAL_TRAINING
+- model: question.choice
+  fields:
+    key: '0'
+    text: 0 years
+    index: 0
+    set: GMSI_YEARS_PRACTICED
+- model: question.choice
+  fields:
+    key: '1'
+    text: 1 year
+    index: 1
+    set: GMSI_YEARS_PRACTICED
+- model: question.choice
+  fields:
+    key: '2'
+    text: 2 years
+    index: 2
+    set: GMSI_YEARS_PRACTICED
+- model: question.choice
+  fields:
+    key: '3'
+    text: 3 years
+    index: 3
+    set: GMSI_YEARS_PRACTICED
+- model: question.choice
+  fields:
+    key: 4-5
+    text: 4–5 years
+    index: 4
+    set: GMSI_YEARS_PRACTICED
+- model: question.choice
+  fields:
+    key: 6-9
+    text: 6–9 years
+    index: 5
+    set: GMSI_YEARS_PRACTICED
+- model: question.choice
+  fields:
+    key: 10+
+    text: 10 or more years
+    index: 6
+    set: GMSI_YEARS_PRACTICED
+- model: question.choice
+  fields:
+    key: '0'
+    text: '0'
+    index: 0
+    set: GMSI_YEARS_THEORY_TRAINING
+- model: question.choice
+  fields:
+    key: '0.5'
+    text: '0.5'
+    index: 1
+    set: GMSI_YEARS_THEORY_TRAINING
+- model: question.choice
+  fields:
+    key: '1'
+    text: '1'
+    index: 2
+    set: GMSI_YEARS_THEORY_TRAINING
+- model: question.choice
+  fields:
+    key: '2'
+    text: '2'
+    index: 3
+    set: GMSI_YEARS_THEORY_TRAINING
+- model: question.choice
+  fields:
+    key: '3'
+    text: '3'
+    index: 4
+    set: GMSI_YEARS_THEORY_TRAINING
+- model: question.choice
+  fields:
+    key: 4-6
+    text: 4-6
+    index: 5
+    set: GMSI_YEARS_THEORY_TRAINING
+- model: question.choice
+  fields:
+    key: 7+
+    text: 7 or more
+    index: 6
+    set: GMSI_YEARS_THEORY_TRAINING

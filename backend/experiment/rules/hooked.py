@@ -13,7 +13,7 @@ from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
 from experiment.actions.wrappers import song_sync
-from question.utils import catalogue_keys
+from question.preset_catalogues import get_preset_catalogue
 from result.utils import prepare_result
 from section.models import Section
 from session.models import Session
@@ -44,28 +44,28 @@ class Hooked(BaseRules):
         self.question_catalogues = [
             {
                 "name": "DEMOGRAPHICS",
-                "question_keys": catalogue_keys('DEMOGRAPHICS')
+                "question_keys": get_preset_catalogue('DEMOGRAPHICS')
                 + ["msi_39_best_instrument"],
                 "randomize": True,
             },  # 1. Demographic questions (7 questions)
             {
                 "name": "MSI_FG_GENERAL",
-                "question_keys": catalogue_keys('MSI_FG_GENERAL'),
+                "question_keys": get_preset_catalogue('MSI_FG_GENERAL'),
                 "randomize": True,
             },  # 2. General music sophistication
             {
                 "name": "MSI_ALL",
-                "question_keys": catalogue_keys('MSI_ALL'),
+                "question_keys": get_preset_catalogue('MSI_ALL'),
                 "randomize": True,
             },  # 3. Complete music sophistication (20 questions)
             {
                 "name": "STOMP20",
-                "question_keys": catalogue_keys('STOMP20'),
+                "question_keys": get_preset_catalogue('STOMP20'),
                 "randomize": True,
             },  # 4. STOMP (20 questions)
             {
                 "name": "TIPI",
-                "question_keys": catalogue_keys('TIPI'),
+                "question_keys": get_preset_catalogue('TIPI'),
                 "randomize": True,
             },  # 5. TIPI (10 questions)
         ]

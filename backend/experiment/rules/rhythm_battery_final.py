@@ -3,9 +3,7 @@ from django.template.loader import render_to_string
 
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
-from question.utils import catalogue_keys
-from question.utils import catalogue_keys
-
+from question.preset_catalogues import get_preset_catalogue
 from .base import BaseRules
 
 
@@ -19,7 +17,7 @@ class RhythmBatteryFinal(BaseRules):
         self.question_catalogues = [
             {
                 "name": "MSI_F3_MUSICAL_TRAINING",
-                "question_keys": catalogue_keys('MSI_F3_MUSICAL_TRAINING'),
+                "question_keys": get_preset_catalogue('MSI_F3_MUSICAL_TRAINING'),
                 "randomize": True,
             },
             {

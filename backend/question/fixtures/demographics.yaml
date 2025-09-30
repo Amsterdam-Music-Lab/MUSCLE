@@ -1,0 +1,3128 @@
+# all demographic questions, choice sets and choices
+- model: question.question
+  pk: dgf_age
+  fields:
+    question: What is your age?
+    explainer: ''
+    type: NumberQuestion
+    min_value: 6
+    max_value: 120
+    profile_scoring_rule: ''
+    choices: null
+- model: question.question
+  pk: dgf_country_of_origin
+  fields:
+    question: In which country did you spend the most formative years of your childhood
+      and youth?
+    explainer: ''
+    type: DropdownQuestion
+    profile_scoring_rule: ''
+    choices: ISO_COUNTRIES
+- model: question.question
+  pk: dgf_country_of_origin_open
+  fields:
+    question: In which country did you spend the most formative years of your childhood
+      and youth?
+    explainer: ''
+    type: TextQuestion
+    profile_scoring_rule: ''
+    choices: null
+- model: question.question
+  pk: dgf_country_of_residence
+  fields:
+    question: In which country do you currently reside?
+    explainer: ''
+    type: DropdownQuestion
+    profile_scoring_rule: ''
+    choices: ISO_COUNTRIES
+- model: question.question
+  pk: dgf_country_of_residence_open
+  fields:
+    question: In which country do you currently reside?
+    explainer: ''
+    type: TextQuestion
+    profile_scoring_rule: ''
+    choices: null
+- model: question.question
+  pk: dgf_education
+  fields:
+    question: What is the highest educational qualification that you have attained?
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: ''
+    choices: ATTAINED_EDUCATION
+- model: question.question
+  pk: dgf_education_gold_msi
+  fields:
+    question: What is the highest educational qualification that you have attained?
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: ''
+    choices: ISCED_EDUCATION_LEVELS_GOLDSMITHS
+- model: question.question
+  pk: dgf_gender_identity
+  fields:
+    question: With which gender do you currently most identify?
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: ''
+    choices: GENDER_COMPLETE
+- model: question.question
+  pk: dgf_gender_reduced
+  fields:
+    question: What is your gender?
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: ''
+    choices: GENDER_REDUCED
+- model: question.question
+  pk: dgf_generation
+  fields:
+    question: When were you born?
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: ''
+    choices: GENERATION
+- model: question.question
+  pk: dgf_genre_preference
+  fields:
+    question: To which group of musical genres do you currently listen most?
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: ''
+    choices: MUSIC_GENRE
+- model: question.question
+  pk: dgf_highest_qualification_expectation
+  fields:
+    question: If you are still in education, what is the highest qualification you
+      expect to obtain?
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: ''
+    choices: EXPECTED_EDUCATION
+- model: question.question
+  pk: dgf_musical_experience
+  fields:
+    question: 'Please select your level of musical experience:'
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: ''
+    choices: MUSICAL_EXPERIENCE
+- model: question.question
+  pk: dgf_native_language
+  fields:
+    question: What is your native language?
+    explainer: ''
+    type: DropdownQuestion
+    profile_scoring_rule: ''
+    choices: ISO_LANGUAGES
+- model: question.question
+  pk: dgf_occupational_status
+  fields:
+    question: Occupational status
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: ''
+    choices: OCCUPATIONAL_STATUS
+- model: question.question
+  pk: lang_exposure
+  fields:
+    question: "Please rate your previous experience:"
+    explainer: ''
+    type: TextQuestion
+    profile_scoring_rule: ''
+    choices: LANG_EXPOSURE
+- model: question.question
+  pk: lang_mother
+  fields:
+    question: What is your mother tongue?
+    explainer: ''
+    type: TextQuestion
+    profile_scoring_rule: ''
+    choices: null
+- model: question.question
+  pk: lang_second
+  fields:
+    question: What is your second language, if applicable?
+    explainer: You can skip this question
+    type: TextQuestion
+    profile_scoring_rule: ''
+    is_skippable: True
+    choices: null
+- model: question.question
+  pk: lang_third
+  fields:
+    question: What is your third language, if applicable?
+    explainer: You can skip this question
+    type: TextQuestion
+    profile_scoring_rule: ''
+    is_skippable: True
+    choices: null
+- model: question.choiceset
+  pk: ATTAINED_EDUCATION
+  fields: {}
+- model: question.choiceset
+  pk: EXPECTED_EDUCATION
+  fields: {}
+- model: question.choiceset
+  pk: GENDER_REDUCED
+  fields: {}
+- model: question.choiceset
+  pk: GENERATION
+  fields: {}
+- model: question.choiceset
+  pk: ISCED_EDUCATION_LEVELS_GOLDSMITHS
+  fields: {}
+- model: question.choiceset
+  pk: ISO_COUNTRIES
+  fields: {}
+- model: question.choiceset
+  pk: ISO_LANGUAGES
+  fields: {}
+- model: question.question.choiceset
+  pk: LANG_EXPOSURE
+  fields: {}
+- model: question.choiceset
+  pk: MUSICAL_EXPERIENCE
+  fields: {}
+- model: question.choiceset
+  pk: MUSIC_GENRE
+  fields: {}
+- model: question.choiceset
+  pk: OCCUPATIONAL_STATUS
+  fields: {}
+- model: question.choice
+  fields:
+    key: isced-1
+    text: Primary school
+    index: 0
+    set: ATTAINED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-2
+    text: Vocational qualification at about 16 years of age (GCSE)
+    index: 1
+    set: ATTAINED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-3
+    text: Secondary diploma (A-levels/high school)
+    index: 2
+    set: ATTAINED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-4
+    text: Post-16 vocational course
+    index: 3
+    set: ATTAINED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-5
+    text: Associate's degree or 2-year professional diploma
+    index: 4
+    set: ATTAINED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-6
+    text: Bachelor or equivalent
+    index: 5
+    set: ATTAINED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-7
+    text: Master or equivalent
+    index: 6
+    set: ATTAINED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-8
+    text: Doctoral degree or equivalent
+    index: 7
+    set: ATTAINED_EDUCATION
+- model: question.choice
+  fields:
+    key: none
+    text: Have not (yet) completed any school qualification
+    index: 8
+    set: ATTAINED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-1
+    text: Primary school
+    index: 0
+    set: EXPECTED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-2
+    text: Vocational qualification at about 16 years of age (GCSE)
+    index: 1
+    set: EXPECTED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-3
+    text: Secondary diploma (A-levels/high school)
+    index: 2
+    set: EXPECTED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-4
+    text: Post-16 vocational course
+    index: 3
+    set: EXPECTED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-5
+    text: Associate's degree or 2-year professional diploma
+    index: 4
+    set: EXPECTED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-6
+    text: Bachelor or equivalent
+    index: 5
+    set: EXPECTED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-7
+    text: Master or equivalent
+    index: 6
+    set: EXPECTED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-8
+    text: Doctoral degree or equivalent
+    index: 7
+    set: EXPECTED_EDUCATION
+- model: question.choice
+  fields:
+    key: none
+    text: Not applicable
+    index: 8
+    set: EXPECTED_EDUCATION
+- model: question.choice
+  fields:
+    key: M
+    text: Male
+    index: 0
+    set: GENDER_REDUCED
+- model: question.choice
+  fields:
+    key: F
+    text: Female
+    index: 1
+    set: GENDER_REDUCED
+- model: question.choice
+  fields:
+    key: X
+    text: Other
+    index: 2
+    set: GENDER_REDUCED
+- model: question.choice
+  fields:
+    key: U
+    text: Undisclosed
+    index: 3
+    set: GENDER_REDUCED
+- model: question.choice
+  fields:
+    key: silent
+    text: 1945 or earlier
+    index: 0
+    set: GENERATION
+- model: question.choice
+  fields:
+    key: boomer
+    text: 1946–1964
+    index: 1
+    set: GENERATION
+- model: question.choice
+  fields:
+    key: gen_x
+    text: 1965-1980
+    index: 2
+    set: GENERATION
+- model: question.choice
+  fields:
+    key: millenial
+    text: 1981–1996
+    index: 3
+    set: GENERATION
+- model: question.choice
+  fields:
+    key: gen_z
+    text: 1997 or later
+    index: 4
+    set: GENERATION
+- model: question.choice
+  fields:
+    key: isced-2
+    text: Vocational qualification at about 16 years of age (GCSE)
+    index: 0
+    set: ISCED_EDUCATION_LEVELS_GOLDSMITHS
+- model: question.choice
+  fields:
+    key: isced-3
+    text: Secondary diploma (A-levels/high school)
+    index: 1
+    set: ISCED_EDUCATION_LEVELS_GOLDSMITHS
+- model: question.choice
+  fields:
+    key: isced-4
+    text: Post-16 vocational course
+    index: 2
+    set: ISCED_EDUCATION_LEVELS_GOLDSMITHS
+- model: question.choice
+  fields:
+    key: isced-5
+    text: Associate's degree or 2-year professional diploma
+    index: 3
+    set: ISCED_EDUCATION_LEVELS_GOLDSMITHS
+- model: question.choice
+  fields:
+    key: isced-6
+    text: Bachelor or equivalent
+    index: 4
+    set: ISCED_EDUCATION_LEVELS_GOLDSMITHS
+- model: question.choice
+  fields:
+    key: isced-7
+    text: Master or equivalent
+    index: 5
+    set: ISCED_EDUCATION_LEVELS_GOLDSMITHS
+- model: question.choice
+  fields:
+    key: isced-8
+    text: Doctoral degree or equivalent
+    index: 6
+    set: ISCED_EDUCATION_LEVELS_GOLDSMITHS
+- model: question.choice
+  fields:
+    key: af
+    text: Afghanistan
+    index: 0
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ax
+    text: Åland Islands
+    index: 1
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: al
+    text: Albania
+    index: 2
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: dz
+    text: Algeria
+    index: 3
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: as
+    text: American Samoa
+    index: 4
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ad
+    text: Andorra
+    index: 5
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ao
+    text: Angola
+    index: 6
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ai
+    text: Anguilla
+    index: 7
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: aq
+    text: Antarctica
+    index: 8
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ag
+    text: Antigua and Barbuda
+    index: 9
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ar
+    text: Argentina
+    index: 10
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: am
+    text: Armenia
+    index: 11
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: aw
+    text: Aruba
+    index: 12
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: au
+    text: Australia
+    index: 13
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: at
+    text: Austria
+    index: 14
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: az
+    text: Azerbaijan
+    index: 15
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: bs
+    text: Bahamas
+    index: 16
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: bh
+    text: Bahrain
+    index: 17
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: bd
+    text: Bangladesh
+    index: 18
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: bb
+    text: Barbados
+    index: 19
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: by
+    text: Belarus
+    index: 20
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: be
+    text: Belgium
+    index: 21
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: bz
+    text: Belize
+    index: 22
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: bj
+    text: Benin
+    index: 23
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: bm
+    text: Bermuda
+    index: 24
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: bt
+    text: Bhutan
+    index: 25
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: bo
+    text: Bolivia), Plurinational State of
+    index: 26
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: bq
+    text: Bonaire), Sint Eustatius and Saba
+    index: 27
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ba
+    text: Bosnia and Herzegovina
+    index: 28
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: bw
+    text: Botswana
+    index: 29
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: bv
+    text: Bouvet Island
+    index: 30
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: br
+    text: Brazil
+    index: 31
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: io
+    text: British Indian Ocean Territory
+    index: 32
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: bn
+    text: Brunei Darussalam
+    index: 33
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: bg
+    text: Bulgaria
+    index: 34
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: bf
+    text: Burkina Faso
+    index: 35
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: bi
+    text: Burundi
+    index: 36
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: kh
+    text: Cambodia
+    index: 37
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: cm
+    text: Cameroon
+    index: 38
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ca
+    text: Canada
+    index: 39
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: cv
+    text: Cape Verde
+    index: 40
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ky
+    text: Cayman Islands
+    index: 41
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: cf
+    text: Central African Republic
+    index: 42
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: td
+    text: Chad
+    index: 43
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: cl
+    text: Chile
+    index: 44
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: cn
+    text: China
+    index: 45
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: cx
+    text: Christmas Island
+    index: 46
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: cc
+    text: Cocos (Keeling) Islands
+    index: 47
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: co
+    text: Colombia
+    index: 48
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: km
+    text: Comoros
+    index: 49
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: cg
+    text: Congo
+    index: 50
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: cd
+    text: Congo), the Democratic Republic of the
+    index: 51
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ck
+    text: Cook Islands
+    index: 52
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: cr
+    text: Costa Rica
+    index: 53
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ci
+    text: Côte d'Ivoire
+    index: 54
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: hr
+    text: Croatia
+    index: 55
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: cu
+    text: Cuba
+    index: 56
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: cw
+    text: Curaçao
+    index: 57
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: cy
+    text: Cyprus
+    index: 58
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: cz
+    text: Czech Republic
+    index: 59
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: dk
+    text: Denmark
+    index: 60
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: dj
+    text: Djibouti
+    index: 61
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: dm
+    text: Dominica
+    index: 62
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: do
+    text: Dominican Republic
+    index: 63
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ec
+    text: Ecuador
+    index: 64
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: eg
+    text: Egypt
+    index: 65
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: sv
+    text: El Salvador
+    index: 66
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: gq
+    text: Equatorial Guinea
+    index: 67
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: er
+    text: Eritrea
+    index: 68
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ee
+    text: Estonia
+    index: 69
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: et
+    text: Ethiopia
+    index: 70
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: fk
+    text: Falkland Islands (Malvinas)
+    index: 71
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: fo
+    text: Faroe Islands
+    index: 72
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: fj
+    text: Fiji
+    index: 73
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: fi
+    text: Finland
+    index: 74
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: fr
+    text: France
+    index: 75
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: gf
+    text: French Guiana
+    index: 76
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: pf
+    text: French Polynesia
+    index: 77
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: tf
+    text: French Southern Territories
+    index: 78
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ga
+    text: Gabon
+    index: 79
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: gm
+    text: Gambia
+    index: 80
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ge
+    text: Georgia
+    index: 81
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: de
+    text: Germany
+    index: 82
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: gh
+    text: Ghana
+    index: 83
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: gi
+    text: Gibraltar
+    index: 84
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: gr
+    text: Greece
+    index: 85
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: gl
+    text: Greenland
+    index: 86
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: gd
+    text: Grenada
+    index: 87
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: gp
+    text: Guadeloupe
+    index: 88
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: gu
+    text: Guam
+    index: 89
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: gt
+    text: Guatemala
+    index: 90
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: gg
+    text: Guernsey
+    index: 91
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: gn
+    text: Guinea
+    index: 92
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: gw
+    text: Guinea-Bissau
+    index: 93
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: gy
+    text: Guyana
+    index: 94
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ht
+    text: Haiti
+    index: 95
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: hm
+    text: Heard Island and McDonald Islands
+    index: 96
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: va
+    text: Holy See (Vatican City State)
+    index: 97
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: hn
+    text: Honduras
+    index: 98
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: hk
+    text: Hong Kong
+    index: 99
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: hu
+    text: Hungary
+    index: 100
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: is
+    text: Iceland
+    index: 101
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: in
+    text: India
+    index: 102
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: id
+    text: Indonesia
+    index: 103
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ir
+    text: Iran), Islamic Republic of
+    index: 104
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: iq
+    text: Iraq
+    index: 105
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ie
+    text: Ireland
+    index: 106
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: im
+    text: Isle of Man
+    index: 107
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: il
+    text: Israel
+    index: 108
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: it
+    text: Italy
+    index: 109
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: jm
+    text: Jamaica
+    index: 110
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: jp
+    text: Japan
+    index: 111
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: je
+    text: Jersey
+    index: 112
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: jo
+    text: Jordan
+    index: 113
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: kz
+    text: Kazakhstan
+    index: 114
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ke
+    text: Kenya
+    index: 115
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ki
+    text: Kiribati
+    index: 116
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: kp
+    text: Korea), Democratic People's Republic of
+    index: 117
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: kr
+    text: Korea), Republic of
+    index: 118
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: kw
+    text: Kuwait
+    index: 119
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: kg
+    text: Kyrgyzstan
+    index: 120
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: la
+    text: Lao People's Democratic Republic
+    index: 121
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: lv
+    text: Latvia
+    index: 122
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: lb
+    text: Lebanon
+    index: 123
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ls
+    text: Lesotho
+    index: 124
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: lr
+    text: Liberia
+    index: 125
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ly
+    text: Libya
+    index: 126
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: li
+    text: Liechtenstein
+    index: 127
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: lt
+    text: Lithuania
+    index: 128
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: lu
+    text: Luxembourg
+    index: 129
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: mo
+    text: Macao
+    index: 130
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: mk
+    text: Macedonia), the Former Yugoslav Republic of
+    index: 131
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: mg
+    text: Madagascar
+    index: 132
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: mw
+    text: Malawi
+    index: 133
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: my
+    text: Malaysia
+    index: 134
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: mv
+    text: Maldives
+    index: 135
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ml
+    text: Mali
+    index: 136
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: mt
+    text: Malta
+    index: 137
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: mh
+    text: Marshall Islands
+    index: 138
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: mq
+    text: Martinique
+    index: 139
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: mr
+    text: Mauritania
+    index: 140
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: mu
+    text: Mauritius
+    index: 141
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: yt
+    text: Mayotte
+    index: 142
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: mx
+    text: Mexico
+    index: 143
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: fm
+    text: Micronesia), Federated States of
+    index: 144
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: md
+    text: Moldova), Republic of
+    index: 145
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: mc
+    text: Monaco
+    index: 146
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: mn
+    text: Mongolia
+    index: 147
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: me
+    text: Montenegro
+    index: 148
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ms
+    text: Montserrat
+    index: 149
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ma
+    text: Morocco
+    index: 150
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: mz
+    text: Mozambique
+    index: 151
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: mm
+    text: Myanmar
+    index: 152
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: na
+    text: Namibia
+    index: 153
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: nr
+    text: Nauru
+    index: 154
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: np
+    text: Nepal
+    index: 155
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: nl
+    text: Netherlands
+    index: 156
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: nc
+    text: New Caledonia
+    index: 157
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: nz
+    text: New Zealand
+    index: 158
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ni
+    text: Nicaragua
+    index: 159
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ne
+    text: Niger
+    index: 160
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ng
+    text: Nigeria
+    index: 161
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: nu
+    text: Niue
+    index: 162
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: nf
+    text: Norfolk Island
+    index: 163
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: mp
+    text: Northern Mariana Islands
+    index: 164
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: 'no'
+    text: Norway
+    index: 165
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: om
+    text: Oman
+    index: 166
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: pk
+    text: Pakistan
+    index: 167
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: pw
+    text: Palau
+    index: 168
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ps
+    text: Palestine), State of
+    index: 169
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: pa
+    text: Panama
+    index: 170
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: pg
+    text: Papua New Guinea
+    index: 171
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: py
+    text: Paraguay
+    index: 172
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: pe
+    text: Peru
+    index: 173
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ph
+    text: Philippines
+    index: 174
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: pn
+    text: Pitcairn
+    index: 175
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: pl
+    text: Poland
+    index: 176
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: pt
+    text: Portugal
+    index: 177
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: pr
+    text: Puerto Rico
+    index: 178
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: qa
+    text: Qatar
+    index: 179
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: re
+    text: Réunion
+    index: 180
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ro
+    text: Romania
+    index: 181
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ru
+    text: Russian Federation
+    index: 182
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: rw
+    text: Rwanda
+    index: 183
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: bl
+    text: Saint Barthélemy
+    index: 184
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: sh
+    text: Saint Helena), Ascension and Tristan da Cunha
+    index: 185
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: kn
+    text: Saint Kitts and Nevis
+    index: 186
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: lc
+    text: Saint Lucia
+    index: 187
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: mf
+    text: Saint Martin (French part)
+    index: 188
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: pm
+    text: Saint Pierre and Miquelon
+    index: 189
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: vc
+    text: Saint Vincent and the Grenadines
+    index: 190
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ws
+    text: Samoa
+    index: 191
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: sm
+    text: San Marino
+    index: 192
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: st
+    text: Sao Tome and Principe
+    index: 193
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: sa
+    text: Saudi Arabia
+    index: 194
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: sn
+    text: Senegal
+    index: 195
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: rs
+    text: Serbia
+    index: 196
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: sc
+    text: Seychelles
+    index: 197
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: sl
+    text: Sierra Leone
+    index: 198
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: sg
+    text: Singapore
+    index: 199
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: sx
+    text: Sint Maarten (Dutch part)
+    index: 200
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: sk
+    text: Slovakia
+    index: 201
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: si
+    text: Slovenia
+    index: 202
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: sb
+    text: Solomon Islands
+    index: 203
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: so
+    text: Somalia
+    index: 204
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: za
+    text: South Africa
+    index: 205
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: gs
+    text: South Georgia and the South Sandwich Islands
+    index: 206
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ss
+    text: South Sudan
+    index: 207
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: es
+    text: Spain
+    index: 208
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: lk
+    text: Sri Lanka
+    index: 209
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: sd
+    text: Sudan
+    index: 210
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: sr
+    text: Suriname
+    index: 211
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: sj
+    text: Svalbard and Jan Mayen
+    index: 212
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: sz
+    text: Swaziland
+    index: 213
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: se
+    text: Sweden
+    index: 214
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ch
+    text: Switzerland
+    index: 215
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: sy
+    text: Syrian Arab Republic
+    index: 216
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: tw
+    text: Taiwan), Province of China
+    index: 217
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: tj
+    text: Tajikistan
+    index: 218
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: tz
+    text: Tanzania), United Republic of
+    index: 219
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: th
+    text: Thailand
+    index: 220
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: tl
+    text: Timor-Leste
+    index: 221
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: tg
+    text: Togo
+    index: 222
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: tk
+    text: Tokelau
+    index: 223
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: to
+    text: Tonga
+    index: 224
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: tt
+    text: Trinidad and Tobago
+    index: 225
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: tn
+    text: Tunisia
+    index: 226
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: tr
+    text: Turkey
+    index: 227
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: tm
+    text: Turkmenistan
+    index: 228
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: tc
+    text: Turks and Caicos Islands
+    index: 229
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: tv
+    text: Tuvalu
+    index: 230
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ug
+    text: Uganda
+    index: 231
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ua
+    text: Ukraine
+    index: 232
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ae
+    text: United Arab Emirates
+    index: 233
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: gb
+    text: United Kingdom
+    index: 234
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: us
+    text: United States
+    index: 235
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: um
+    text: United States Minor Outlying Islands
+    index: 236
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: uy
+    text: Uruguay
+    index: 237
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: uz
+    text: Uzbekistan
+    index: 238
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: vu
+    text: Vanuatu
+    index: 239
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ve
+    text: Venezuela), Bolivarian Republic of
+    index: 240
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: vn
+    text: Viet Nam
+    index: 241
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: vg
+    text: Virgin Islands), British
+    index: 242
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: vi
+    text: Virgin Islands), U.S.
+    index: 243
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: wf
+    text: Wallis and Futuna
+    index: 244
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: eh
+    text: Western Sahara
+    index: 245
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ye
+    text: Yemen
+    index: 246
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: zm
+    text: Zambia
+    index: 247
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: zw
+    text: Zimbabwe
+    index: 248
+    set: ISO_COUNTRIES
+- model: question.choice
+  fields:
+    key: ab
+    text: Abkhazian
+    index: 0
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: aa
+    text: Afar
+    index: 1
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: af
+    text: Afrikaans
+    index: 2
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ak
+    text: Akan
+    index: 3
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sq
+    text: Albanian
+    index: 4
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: am
+    text: Amharic
+    index: 5
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ar
+    text: Arabic
+    index: 6
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: an
+    text: Aragonese
+    index: 7
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: hy
+    text: Armenian
+    index: 8
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: as
+    text: Assamese
+    index: 9
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: av
+    text: Avaric
+    index: 10
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ae
+    text: Avestan
+    index: 11
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ay
+    text: Aymara
+    index: 12
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: az
+    text: Azerbaijani
+    index: 13
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: bm
+    text: Bambara
+    index: 14
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ba
+    text: Bashkir
+    index: 15
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: eu
+    text: Basque
+    index: 16
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: be
+    text: Belarusian
+    index: 17
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: bn
+    text: Bengali
+    index: 18
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: bh
+    text: Bihari languages
+    index: 19
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: bi
+    text: Bislama
+    index: 20
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: nb
+    text: Bokmål), Norwegian; Norwegian Bokmål
+    index: 21
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: bs
+    text: Bosnian
+    index: 22
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: br
+    text: Breton
+    index: 23
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: bg
+    text: Bulgarian
+    index: 24
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: my
+    text: Burmese
+    index: 25
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ca
+    text: Catalan; Valencian
+    index: 26
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: km
+    text: Central Khmer
+    index: 27
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ch
+    text: Chamorro
+    index: 28
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ce
+    text: Chechen
+    index: 29
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ny
+    text: Chichewa; Chewa; Nyanja
+    index: 30
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: zh
+    text: Chinese
+    index: 31
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: cu
+    text: Church Slavic; Old Slavonic; Church Slavonic; Old Bulgarian; Old Church
+      Slavonic
+    index: 32
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: cv
+    text: Chuvash
+    index: 33
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: kw
+    text: Cornish
+    index: 34
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: co
+    text: Corsican
+    index: 35
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: cr
+    text: Cree
+    index: 36
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: hr
+    text: Croatian
+    index: 37
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: cs
+    text: Czech
+    index: 38
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: da
+    text: Danish
+    index: 39
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: dv
+    text: Divehi; Dhivehi; Maldivian
+    index: 40
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: nl
+    text: Dutch; Flemish
+    index: 41
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: dz
+    text: Dzongkha
+    index: 42
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: en
+    text: English
+    index: 43
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: eo
+    text: Esperanto
+    index: 44
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: et
+    text: Estonian
+    index: 45
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ee
+    text: Ewe
+    index: 46
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: fo
+    text: Faroese
+    index: 47
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: fj
+    text: Fijian
+    index: 48
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: fi
+    text: Finnish
+    index: 49
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: fr
+    text: French
+    index: 50
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ff
+    text: Fulah
+    index: 51
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: gd
+    text: Gaelic; Scottish Gaelic
+    index: 52
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: gl
+    text: Galician
+    index: 53
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: lg
+    text: Ganda
+    index: 54
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ka
+    text: Georgian
+    index: 55
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: de
+    text: German
+    index: 56
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: el
+    text: Greek), Modern (1453-)
+    index: 57
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: gn
+    text: Guarani
+    index: 58
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: gu
+    text: Gujarati
+    index: 59
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ht
+    text: Haitian; Haitian Creole
+    index: 60
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ha
+    text: Hausa
+    index: 61
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: he
+    text: Hebrew
+    index: 62
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: hz
+    text: Herero
+    index: 63
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: hi
+    text: Hindi
+    index: 64
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ho
+    text: Hiri Motu
+    index: 65
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: hu
+    text: Hungarian
+    index: 66
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: is
+    text: Icelandic
+    index: 67
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: io
+    text: Ido
+    index: 68
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ig
+    text: Igbo
+    index: 69
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: id
+    text: Indonesian
+    index: 70
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ia
+    text: Interlingua (International Auxiliary Language Association)
+    index: 71
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ie
+    text: Interlingue; Occidental
+    index: 72
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: iu
+    text: Inuktitut
+    index: 73
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ik
+    text: Inupiaq
+    index: 74
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ga
+    text: Irish
+    index: 75
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: it
+    text: Italian
+    index: 76
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ja
+    text: Japanese
+    index: 77
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: jv
+    text: Javanese
+    index: 78
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: kl
+    text: Kalaallisut; Greenlandic
+    index: 79
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: kn
+    text: Kannada
+    index: 80
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: kr
+    text: Kanuri
+    index: 81
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ks
+    text: Kashmiri
+    index: 82
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: kk
+    text: Kazakh
+    index: 83
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ki
+    text: Kikuyu; Gikuyu
+    index: 84
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: rw
+    text: Kinyarwanda
+    index: 85
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ky
+    text: Kirghiz; Kyrgyz
+    index: 86
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: kv
+    text: Komi
+    index: 87
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: kg
+    text: Kongo
+    index: 88
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ko
+    text: Korean
+    index: 89
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: kj
+    text: Kuanyama; Kwanyama
+    index: 90
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ku
+    text: Kurdish
+    index: 91
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: lo
+    text: Lao
+    index: 92
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: la
+    text: Latin
+    index: 93
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: lv
+    text: Latvian
+    index: 94
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: li
+    text: Limburgan; Limburger; Limburgish
+    index: 95
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ln
+    text: Lingala
+    index: 96
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: lt
+    text: Lithuanian
+    index: 97
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: lu
+    text: Luba-Katanga
+    index: 98
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: lb
+    text: Luxembourgish; Letzeburgesch
+    index: 99
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: mk
+    text: Macedonian
+    index: 100
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: mg
+    text: Malagasy
+    index: 101
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ms
+    text: Malay
+    index: 102
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ml
+    text: Malayalam
+    index: 103
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: mt
+    text: Maltese
+    index: 104
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: gv
+    text: Manx
+    index: 105
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: mi
+    text: Maori
+    index: 106
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: mr
+    text: Marathi
+    index: 107
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: mh
+    text: Marshallese
+    index: 108
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: mn
+    text: Mongolian
+    index: 109
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: na
+    text: Nauru
+    index: 110
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: nv
+    text: Navajo; Navaho
+    index: 111
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: nd
+    text: Ndebele), North; North Ndebele
+    index: 112
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: nr
+    text: Ndebele), South; South Ndebele
+    index: 113
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ng
+    text: Ndonga
+    index: 114
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ne
+    text: Nepali
+    index: 115
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: se
+    text: Northern Sami
+    index: 116
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: 'no'
+    text: Norwegian
+    index: 117
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: nn
+    text: Norwegian Nynorsk; Nynorsk), Norwegian
+    index: 118
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: oc
+    text: Occitan (post 1500)
+    index: 119
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: oj
+    text: Ojibwa
+    index: 120
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: or
+    text: Oriya
+    index: 121
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: om
+    text: Oromo
+    index: 122
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: os
+    text: Ossetian; Ossetic
+    index: 123
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: pi
+    text: Pali
+    index: 124
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: pa
+    text: Panjabi; Punjabi
+    index: 125
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: fa
+    text: Persian
+    index: 126
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: pl
+    text: Polish
+    index: 127
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: pt
+    text: Portuguese
+    index: 128
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ps
+    text: Pushto; Pashto
+    index: 129
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: qu
+    text: Quechua
+    index: 130
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ro
+    text: Romanian; Moldavian; Moldovan
+    index: 131
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: rm
+    text: Romansh
+    index: 132
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: rn
+    text: Rundi
+    index: 133
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ru
+    text: Russian
+    index: 134
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sm
+    text: Samoan
+    index: 135
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sg
+    text: Sango
+    index: 136
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sa
+    text: Sanskrit
+    index: 137
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sc
+    text: Sardinian
+    index: 138
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sr
+    text: Serbian
+    index: 139
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sn
+    text: Shona
+    index: 140
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ii
+    text: Sichuan Yi; Nuosu
+    index: 141
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sd
+    text: Sindhi
+    index: 142
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: si
+    text: Sinhala; Sinhalese
+    index: 143
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sk
+    text: Slovak
+    index: 144
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sl
+    text: Slovenian
+    index: 145
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: so
+    text: Somali
+    index: 146
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: st
+    text: Sotho), Southern
+    index: 147
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: es
+    text: Spanish; Castilian
+    index: 148
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: su
+    text: Sundanese
+    index: 149
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sw
+    text: Swahili
+    index: 150
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ss
+    text: Swati
+    index: 151
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sv
+    text: Swedish
+    index: 152
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: tl
+    text: Tagalog
+    index: 153
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ty
+    text: Tahitian
+    index: 154
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: tg
+    text: Tajik
+    index: 155
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ta
+    text: Tamil
+    index: 156
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: tt
+    text: Tatar
+    index: 157
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: te
+    text: Telugu
+    index: 158
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: th
+    text: Thai
+    index: 159
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: bo
+    text: Tibetan
+    index: 160
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ti
+    text: Tigrinya
+    index: 161
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: to
+    text: Tonga (Tonga Islands)
+    index: 162
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ts
+    text: Tsonga
+    index: 163
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: tn
+    text: Tswana
+    index: 164
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: tr
+    text: Turkish
+    index: 165
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: tk
+    text: Turkmen
+    index: 166
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: tw
+    text: Twi
+    index: 167
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ug
+    text: Uighur; Uyghur
+    index: 168
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: uk
+    text: Ukrainian
+    index: 169
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ur
+    text: Urdu
+    index: 170
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: uz
+    text: Uzbek
+    index: 171
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ve
+    text: Venda
+    index: 172
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: vi
+    text: Vietnamese
+    index: 173
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: vo
+    text: Volapük
+    index: 174
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: wa
+    text: Walloon
+    index: 175
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: cy
+    text: Welsh
+    index: 176
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: fy
+    text: Western Frisian
+    index: 177
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: wo
+    text: Wolof
+    index: 178
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: xh
+    text: Xhosa
+    index: 179
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: yi
+    text: Yiddish
+    index: 180
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: yo
+    text: Yoruba
+    index: 181
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: za
+    text: Zhuang; Chuang
+    index: 182
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: zu
+    text: Zulu
+    index: 183
+    set: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: fluent
+    text: fluent
+    index: 0
+    set: LANG_EXPOSURE
+- model: question.choice
+  fields:
+    key: intm
+    text: intermediate
+    index: 1
+    set: LANG_EXPOSURE
+- model: question.choice
+  fields:
+    key: beginner
+    text: beginner
+    index: 2
+    set: LANG_EXPOSURE
+- model: question.choice
+  fields:
+    key: some_exp
+    text: some exposure
+    index: 3
+    set: LANG_EXPOSURE
+- model: question.choice
+  fields:
+    key: no_exp
+    text: no exposure
+    index: 4
+    set: LANG_EXPOSURE
+- model: question.choice
+  fields:
+    key: none
+    text: None
+    index: 0
+    set: MUSICAL_EXPERIENCE
+- model: question.choice
+  fields:
+    key: moderate
+    text: Moderate
+    index: 1
+    set: MUSICAL_EXPERIENCE
+- model: question.choice
+  fields:
+    key: extensive
+    text: Extensive
+    index: 2
+    set: MUSICAL_EXPERIENCE
+- model: question.choice
+  fields:
+    key: professional
+    text: Professional
+    index: 3
+    set: MUSICAL_EXPERIENCE
+- model: question.choice
+  fields:
+    key: mellow
+    text: Dance/Electronic/New Age
+    index: 0
+    set: MUSIC_GENRE
+- model: question.choice
+  fields:
+    key: unpretentious
+    text: Pop/Country/Religious
+    index: 1
+    set: MUSIC_GENRE
+- model: question.choice
+  fields:
+    key: sophisticated
+    text: Jazz/Folk/Classical
+    index: 2
+    set: MUSIC_GENRE
+- model: question.choice
+  fields:
+    key: intense
+    text: Rock/Punk/Metal
+    index: 3
+    set: MUSIC_GENRE
+- model: question.choice
+  fields:
+    key: contemporary
+    text: Hip-hop/R&B/Funk
+    index: 4
+    set: MUSIC_GENRE
+- model: question.choice
+  fields:
+    key: student
+    text: Still at School
+    index: 0
+    set: OCCUPATIONAL_STATUS
+- model: question.choice
+  fields:
+    key: higher education
+    text: At University
+    index: 1
+    set: OCCUPATIONAL_STATUS
+- model: question.choice
+  fields:
+    key: full-time
+    text: In Full-time employment
+    index: 2
+    set: OCCUPATIONAL_STATUS
+- model: question.choice
+  fields:
+    key: part-time
+    text: In Part-time employment
+    index: 3
+    set: OCCUPATIONAL_STATUS
+- model: question.choice
+  fields:
+    key: flexible work
+    text: Self-employed
+    index: 4
+    set: OCCUPATIONAL_STATUS
+- model: question.choice
+  fields:
+    key: family
+    text: Homemaker/full time parent
+    index: 5
+    set: OCCUPATIONAL_STATUS
+- model: question.choice
+  fields:
+    key: unemployment
+    text: Unemployed
+    index: 6
+    set: OCCUPATIONAL_STATUS
+- model: question.choice
+  fields:
+    key: retirement
+    text: Retired
+    index: 7
+    set: OCCUPATIONAL_STATUS

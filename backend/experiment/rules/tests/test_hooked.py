@@ -14,7 +14,7 @@ from experiment.models import (
     SocialMediaConfig,
 )
 from participant.models import Participant
-from question.utils import catalogue_keys
+from question.preset_catalogues import get_preset_catalogue
 from result.models import Result
 from section.models import Playlist, Section, Song
 from session.models import Session
@@ -259,7 +259,7 @@ class HookedTest(TestCase):
                     self.assertNotIn(heard_before_section, song_sync_sections)
 
     def test_thats_my_song(self):
-        tms_keys = catalogue_keys('THATS_MY_SONG_QUESTIONS_FIXED')
+        tms_keys = get_preset_catalogue('THATS_MY_SONG_QUESTIONS_FIXED')
         block = Block.objects.get(slug="thats_my_song")
         block.add_default_question_series()
         playlist = Playlist.objects.get(name="ThatsMySong")

@@ -9,7 +9,6 @@ from experiment.actions.final import Final
 from experiment.actions.playback import MatchingPairs
 from experiment.actions.playlist import PlaylistSelection
 from experiment.actions.trial import Trial
-from question.utils import create_education_variant
 from result.utils import prepare_result
 
 from section.models import Section
@@ -26,13 +25,6 @@ class MatchingPairsGame(BaseRules):
     random_seed = None
 
     def __init__(self):
-        self.add_custom_questions(
-            [
-                create_education_variant(
-                    'dgf_education_matching_pairs', ['isced-2', 'isced-5']
-                ),
-            ]
-        )
         self.question_catalogues = [
             {
                 "name": "Demographics",
@@ -41,7 +33,7 @@ class MatchingPairsGame(BaseRules):
                     "dgf_generation",
                     "dgf_musical_experience",
                     "dgf_country_of_origin",
-                    "dgf_education_matching_pairs",
+                    "dgf_education",  # edited: dropped isced-2 and isced-5 from choice set
                 ],
                 "randomize": False,
             },

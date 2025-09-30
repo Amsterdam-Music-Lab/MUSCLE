@@ -1,0 +1,21 @@
+
+PRESET_CATALOGUES = {
+    'DEMOGRAPHICS': ['dgf_gender_identity', 'dgf_generation', 'dgf_country_of_origin', 'dgf_education', 'dgf_country_of_residence', 'dgf_genre_preference'],
+    'MSI_FG_GENERAL': ['msi_01_music_activities', 'msi_03_writing', 'msi_04_sing_along', 'msi_07_from_memory', 'msi_12_performance_diff', 'msi_14_never_complimented', 'msi_15_internet_search_music', 'msi_17_not_sing_harmony', 'msi_19_identify_special', 'msi_23_no_idea_in_tune', 'msi_24_music_addiction', 'msi_25_sing_public', 'msi_27_consider_musician', 'msi_29_sing_after_hearing', 'msi_32_practice_years', 'msi_33_practice_daily', 'msi_37_play_instruments'],
+    'MSI_F1_ACTIVE_ENGAGEMENT': ['msi_01_music_activities', 'msi_03_writing', 'msi_08_intrigued_styles', 'msi_15_internet_search_music', 'msi_21_spend_income', 'msi_28_track_new', 'msi_34_attended_events', 'msi_38_listen_music'],
+    'MSI_F2_PERCEPTUAL_ABILITIES': ['msi_05_good_singer', 'msi_06_song_first_time', 'msi_11_spot_mistakes', 'msi_12_performance_diff', 'msi_13_trouble_recognising', 'msi_18_out_of_beat', 'msi_22_out_of_tune', 'msi_26_genre'],
+    'MSI_F3_MUSICAL_TRAINING': ['msi_14_never_complimented', 'msi_27_consider_musician', 'msi_32_practice_years', 'msi_33_practice_daily', 'msi_35_theory_training', 'msi_36_instrumental_training', 'msi_37_play_instruments'],
+    'MSI_F4_SINGING_ABILITIES': ['msi_04_sing_along', 'msi_07_from_memory', 'msi_10_sing_with_recording', 'msi_17_not_sing_harmony', 'msi_25_sing_public', 'msi_29_sing_after_hearing', 'msi_30_sing_back'],
+    'MSI_F5_EMOTIONS': ['msi_02_shivers', 'msi_09_rarely_emotions', 'msi_16_motivate', 'msi_19_identify_special', 'msi_20_talk_emotions', 'msi_31_memories'],
+    'MSI_OTHER': ['msi_39_best_instrument', 'ST_01_age_instrument', 'AP_01_absolute_pitch'],
+    'MUSICGENS': ["P01_1", "P01_2", "P01_3", "P02_1", "P02_2", "P02_3",  "P03_1", "P03_2", "P03_3", "P04_1", "P04_2", "P04_3", "P04_4", "P05_1", "P05_2", "P05_3", "P05_4", "P05_5", "P06_1", "P06_2", "P06_3", "P06_4", "P07_1", "P07_2", "P07_3", "P08_1", "P08_2", "P08_3", "P09_1", "P09_2", "P09_3", "P10_1", "P10_2", "P10_3", "P11_1", "P11_2", "P11_3", "P12_1", "P12_2", "P12_3", "P13_1", "P13_2", "P13_3", "P14_1", "P14_2", "P14_3", "P14_4", "P15_1", "P15_2", "P15_3", "P15_4", "P16_1", "P16_2", "P16_3", "P17_1", "P17_2", "P17_3"],
+    'MUSICGENS_OTHER': ["PHENOTYPES_1", "PHENOTYPES_2", "PHENOTYPES_3", "PHENOTYPES_4", "PHENOTYPES_5", "PHENOTYPES_6", "PHENOTYPES_7", "PHENOTYPES_8", "PHENOTYPES_9"],
+    'STOMP20': ['stomp_alternative', 'stomp_blues', 'stomp_classical', 'stomp_country', 'stomp_dance', 'stomp_folk', 'stomp_funk', 'stomp_gospel', 'stomp_metal', 'stomp_world', 'stomp_jazz', 'stomp_new_age', 'stomp_opera', 'stomp_pop', 'stomp_punk', 'stomp_rap', 'stomp_reggae', 'stomp_religious', 'stomp_rock', 'stomp_rnb'],
+    'STOMP': ['stomp_alternative', 'stomp_blues', 'stomp_classical', 'stomp_country', 'stomp_dance', 'stomp_folk', 'stomp_funk', 'stomp_gospel', 'stomp_metal', 'stomp_world', 'stomp_jazz', 'stomp_new_age', 'stomp_opera', 'stomp_pop', 'stomp_punk', 'stomp_rap', 'stomp_reggae', 'stomp_religious', 'stomp_rock', 'stomp_rnb', 'stomp_bluegrass', 'stomp_oldies', 'stomp_soundtracks'],
+    'TIPI': ['tipi_op', 'tipi_on', 'tipi_cp', 'tipi_cn', 'tipi_ep', 'tipi_en', 'tipi_ap', 'tipi_an', 'tipi_np', 'tipi_nn'],
+    'VANDERBILT_FIXED': ["P08_1", "P07_1", "VB_01", "VB_02", "VB_03"],
+    'VANDERBILT_RANDOM': ["P03_1", "P04_4", "P05_5", "P09_2", "P14_4", "P15_1", "VB_04", "PHENOTYPES_3", "VB_05", "VB_06"]
+}
+
+def get_preset_catalogue(key: str):
+    return PRESET_CATALOGUES.get(key)

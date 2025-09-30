@@ -5,7 +5,7 @@ from experiment.actions.form import Form
 from experiment.actions.question import CheckBoxQuestion
 from experiment.actions.trial import Trial
 from result.utils import prepare_result
-from question.utils import catalogue_keys
+from question.preset_catalogues import get_preset_catalogue
 from section.models import Section
 from session.models import Session
 from .hooked import Hooked
@@ -19,12 +19,12 @@ class ThatsMySong(Hooked):
         self.question_catalogues = [
             {
                 "name": "VANDERBILT_FIXED",
-                "question_keys": catalogue_keys('THATS_MY_SONG_QUESTIONS_FIXED'),
+                "question_keys": get_preset_catalogue('VANDERBILT_FIXED'),
                 "randomize": False,
             },
             {
                 "name": "VANDERBILT_RANDOM",
-                "question_keys": catalogue_keys('THATS_MY_SONG_QUESTIONS_RANDOM'),
+                "question_keys": get_preset_catalogue('VANDERBILT_RANDOM'),
                 "randomize": True,
             },
         ]
