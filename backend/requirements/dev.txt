@@ -38,7 +38,7 @@ defusedxml==0.7.1
     # via genbadge
 dill==0.3.8
     # via pylint
-django==4.2.24
+django==4.2.25
     # via
     #   -r /server/requirements.in/base.txt
     #   django-cors-headers
