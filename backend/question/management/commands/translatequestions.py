@@ -62,6 +62,8 @@ class Command(BaseCommand):
                 country_key = next(
                     (key for key in countries.keys() if key.lower() == choice.key)
                 )
+                if not country_key:
+                    continue
                 setattr(choice, 'text', countries[country_key])
                 choice.save()
         with open(f"{filepath}/{lang_code}/languages.json") as f:
@@ -75,7 +77,9 @@ class Command(BaseCommand):
         choices = Choice.objects.filter(question__key='dgf_native_language')
         for choice in choices:
             language_key = next(
-                (key for key in languages.keys() if key.lower() == choice.key)
+                (key for key in languages.keys() if key.lower() == choice.key), None
             )
+            if not language_key:
+                continue
             setattr(choice, 'text', languages[language_key])
             choice.save()
