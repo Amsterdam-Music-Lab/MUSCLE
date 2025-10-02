@@ -1,7 +1,7 @@
 # Builder image
 FROM docker.io/node:18-alpine as builder
 
-ARG FRONTEND_STATIC_URL
+ARG VITE_STATIC_URL
 
 WORKDIR /client
 RUN yarn set version 4.1.1
@@ -15,7 +15,7 @@ COPY .env /client/
 
 RUN yarn
 # build with the base path set to FRONTEND_STATIC_URL (to pull from CDN) or "/" as fallback
-RUN yarn build --base ${FRONTEND_STATIC_URL:-/}
+RUN yarn build --base ${VITE_STATIC_URL:-/}
 
 # Runner image that serves the built app using nginx
 FROM docker.io/nginx:alpine as runner
