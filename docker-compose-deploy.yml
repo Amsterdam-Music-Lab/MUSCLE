@@ -109,9 +109,11 @@ services:
             - 8080:80
         depends_on:
             - client-builder
-            # - server
+            - server
         volumes:
-            # - /home/github-runner/podman-volumes/server-static:/usr/share/nginx/html/django_static
-            # - /home/github-runner/podman-volumes/server-uploads:/usr/share/nginx/html/upload
+            - /home/github-runner/podman-volumes/server-static:/usr/share/nginx/html/django_static
+            - /home/github-runner/podman-volumes/server-uploads:/usr/share/nginx/html/upload
             - ./nginx/custom-nginx.conf:/etc/nginx/conf.d/default.conf
+        environment:
+            - VITE_STATIC_URL=${FRONTEND_STATIC_URL} # needed since this is declared as ARG in Dockerfile
         restart: always
