@@ -142,6 +142,7 @@ jobs:
       FRONTEND_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
       FRONTEND_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
       FRONTEND_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
+      FRONTEND_STATIC_URL: ${{ vars.FRONTEND_STATIC_URL || '/' }}
 
       # Secrets
       AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
@@ -174,6 +175,7 @@ jobs:
           echo "VITE_HTML_OG_URL=$FRONTEND_HTML_OG_URL" >> .env
           echo "VITE_HTML_BODY_CLASS=$FRONTEND_HTML_BODY_CLASS" >> .env
           echo "VITE_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
+          echo "VITE_STATIC_URL=$FRONTEND_STATIC_URL" >> .env
           cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build

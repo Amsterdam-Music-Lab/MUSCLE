@@ -91,7 +91,7 @@ services:
             - VITE_HTML_OG_URL=${FRONTEND_HTML_OG_URL}
             - VITE_HTML_BODY_CLASS=${FRONTEND_HTML_BODY_CLASS}
             - VITE_SENTRY_DSN=${FRONTEND_SENTRY_DSN}
-            - VITE_STRICT=${FRONTEND_STRICT}
+            - VITE_STRICTLY=${FRONTEND_STRICT}
             - VITE_PLAUSIBLE_DOMAIN=${FRONTEND_PLAUSIBLE_DOMAIN}
         restart: "no"
 
@@ -103,6 +103,8 @@ services:
             context: ./frontend
             dockerfile: Dockerfile
             target: runner
+            args:
+                - VITE_STATIC_URL=${FRONTEND_STATIC_URL}
         command: nginx -g 'daemon off;'
         ports:
             - 8080:80
