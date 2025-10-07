@@ -33,7 +33,6 @@ const IconRange = ({ question, value, onChange}: IconRangeProps) => {
     return (
         <div className={classNames("aha__text-range", question.style, { empty: emptyValue })}>
             <RangeTitle
-                // this prop does not exist on RangeTitle
                 question={question}
                 value={value}
                 sliderValue={sliderValue}

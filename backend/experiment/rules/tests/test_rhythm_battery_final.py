@@ -9,13 +9,14 @@ from session.models import Session
 
 
 class TestRhythmBatteryFinal(TestCase):
+    fixtures = ["choices_general", "demographics", "goldsmiths_msi"]
+
     @classmethod
     def setUpTestData(cls):
         Experiment.objects.create(
             slug="MARKDOWN_EXPERIMENT",
         )
         block = Block.objects.create(slug="test_md", rules=RhythmBatteryFinal.ID)
-        block.add_default_question_series()
         Session.objects.create(
             block=block, playlist=Playlist.objects.create(name="test"), participant=Participant.objects.create()
         )

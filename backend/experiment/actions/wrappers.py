@@ -80,7 +80,7 @@ def boolean_question(
         key=key,
         text=text,
         result_id=result_id,
-        choices=ChoiceSet.objects.get('BOOLEAN_NEGATIVE_FIRST'),
+        choices=ChoiceSet.objects.get(pk='BOOLEAN_NEGATIVE_FIRST').to_dict(),
         style=style,
     )
 

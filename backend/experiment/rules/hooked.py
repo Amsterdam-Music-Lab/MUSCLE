@@ -97,7 +97,7 @@ class Hooked(BaseRules):
 
     def next_round(self, session: Session):
         """Get action data for the next round"""
-        round_number = session.get_rounds_passed(self.counted_result_keys)
+        round_number = session.get_rounds_passed()
 
         # If the number of results equals the number of block.rounds,
         # close the session and return data for the final_score view.

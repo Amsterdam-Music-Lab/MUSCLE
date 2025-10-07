@@ -51,7 +51,7 @@ class Huang2022(Hooked):
                     'dgf_region_of_origin_zh',
                     'dgf_region_of_residence_zh',
                     'dgf_gender_identity_zh',
-                    'contact',
+                    # edited: add open question `contact` asking for contact details
                 ],
                 "randomize": False,
             },
@@ -71,7 +71,7 @@ class Huang2022(Hooked):
         json_data = session.json_data
         # Get next round number and initialise actions list. Two thirds of
         # rounds will be song_sync; the remainder heard_before.
-        round_number = session.get_rounds_passed(self.counted_result_keys)
+        round_number = session.get_rounds_passed()
         total_rounds = session.block.rounds
 
         # Collect actions.

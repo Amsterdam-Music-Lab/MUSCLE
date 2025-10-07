@@ -10,6 +10,8 @@ from session.models import Session
 
 
 class MatchingPairsTest(TestCase):
+    fixtures = ["demographics"]
+
     @classmethod
     def setUpTestData(cls):
         section_csv = (
@@ -40,10 +42,7 @@ class MatchingPairsTest(TestCase):
     def test_next_round(self):
         self.rules.num_pairs = 2
         actions = self.rules.next_round(self.session)
-        self.assertEqual(len(actions), 3)
-        self.block.add_default_question_series()
-        actions = self.rules.next_round(self.session)
-        # expect five extra question rounds and one extra explainer
+        # explainer + five question rounds and one extra explainer + matching pairs trial
         self.assertEqual(len(actions), 9)
 
     def test_matching_pairs_trial(self):

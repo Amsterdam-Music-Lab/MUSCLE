@@ -29,63 +29,54 @@ class BlockModelTest(TestCase):
             slug="test-experiment", name="Experiment name"
         )
         cls.phase = Phase.objects.create(experiment=experiment)
-        block = Block.objects.create(
+        cls.block = Block.objects.create(
             phase=cls.phase,
             slug="test-block",
             rounds=5,
             bonus_points=10,
-            rules="RHYTHM_BATTERY_FINAL",
+            rules="QUESTIONNAIRE",
             theme_config=ThemeConfig.objects.get(name="Default"),
             name="Test Block",
             description="Test block description",
         )
 
     def test_block_str(self):
-        block = Block.objects.get(slug="test-block")
-        self.assertEqual(str(block), "Test Block")
+        self.assertEqual(str(self.block), "Test Block")
 
     def test_block_str_without_content(self):
         block_no_content = Block.objects.create(
-            phase=self.phase, slug="test-block-no-content"
+            phase=self.phase, slug="test-block-no-content", rules="QUESTIONNAIRE"
         )
         self.assertEqual(str(block_no_content), "test-block-no-content")
 
     def test_block_session_count(self):
-        block = Block.objects.get(slug="test-block")
-        self.assertEqual(block.session_count(), 0)
+        self.assertEqual(self.block.session_count(), 0)
 
     def test_block_playlist_count(self):
-        block = Block.objects.get(slug="test-block")
-        self.assertEqual(block.playlist_count(), 0)
+        self.assertEqual(self.block.playlist_count(), 0)
 
     def test_block_current_participants(self):
-        block = Block.objects.get(slug="test-block")
-        participants = block.current_participants()
+        participants = self.block.current_participants()
         self.assertEqual(len(participants), 0)
 
     def test_block_export_admin(self):
-        block = Block.objects.get(slug="test-block")
-        exported_data = block._export_admin()
+        exported_data = self.block._export_admin()
         self.assertEqual(exported_data["block"]["name"], "Test Block")
 
     def test_block_export_sessions(self):
-        block = Block.objects.get(slug="test-block")
-        sessions = block.export_sessions()
+        sessions = self.block.export_sessions()
         self.assertEqual(len(sessions), 0)
 
     def test_block_get_rules(self):
-        block = Block.objects.get(slug="test-block")
-        rules = block.get_rules()
+        rules = self.block.get_rules()
         self.assertIsNotNone(rules)
 
     def test_block_max_score(self):
-        block = Block.objects.get(slug="test-block")
-
         amount_of_results = 3
         question_score = 1
 
         session = Session.objects.create(
-            block=block, participant=Participant.objects.create()
+            block=self.block, participant=Participant.objects.create()
         )
         for j in range(amount_of_results):
             Result.objects.create(
@@ -99,8 +90,8 @@ class BlockModelTest(TestCase):
         session.save()
 
         question_scores = amount_of_results * question_score
-        bonus_points = block.bonus_points
-        max_score = block.max_score()
+        bonus_points = self.block.bonus_points
+        max_score = self.block.max_score()
         self.assertEqual(max_score, question_scores + bonus_points)
         self.assertEqual(max_score, 13.0)
 

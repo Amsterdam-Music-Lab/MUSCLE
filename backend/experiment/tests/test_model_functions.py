@@ -5,6 +5,8 @@ from experiment.models import Block, Experiment, Phase
 
 
 class TestModelBlock(TestCase):
+    fixtures = ["choices_general", "musicgens", "vanderbilt"]
+
     @classmethod
     def setUpTestData(cls):
         cls.block = Block.objects.create(rules="THATS_MY_SONG", slug="hooked", rounds=42)
@@ -12,12 +14,20 @@ class TestModelBlock(TestCase):
     def test_separate_rules_instance(self):
         rules1 = self.block.get_rules()
         rules2 = self.block.get_rules()
-        keys1 = rules1.question_series[0]["keys"] + rules1.question_series[1]["keys"]
-        keys2 = rules2.question_series[0]["keys"] + rules2.question_series[1]["keys"]
+        keys1 = (
+            rules1.question_catalogues[0]["question_keys"]
+            + rules1.question_catalogues[1]["question_keys"]
+        )
+        keys2 = (
+            rules2.question_catalogues[0]["question_keys"]
+            + rules2.question_catalogues[1]["question_keys"]
+        )
         assert keys1 == keys2
 
 
 class TestModelExperiment(TestCase):
+    fixtures = ["choices_general", "musicgens", "vanderbilt"]
+
     @classmethod
     def setUpTestData(cls):
         cls.experiment = Experiment.objects.create(name="test_experiment")

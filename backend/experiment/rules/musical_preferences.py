@@ -11,13 +11,11 @@ from experiment.actions.playback import Autoplay
 from experiment.actions.question import ButtonArrayQuestion, IconRangeQuestion
 from experiment.actions.redirect import Redirect
 from experiment.actions.trial import Trial
-
+from question.models import ChoiceSet
 from result.utils import prepare_result
 from result.models import Result
-
 from section.models import Section
 from session.models import Session
-
 from theme.styles import ColorScheme
 
 from .base import BaseRules
@@ -64,7 +62,7 @@ class MusicalPreferences(BaseRules):
         )
 
     def next_round(self, session: Session):
-        round_number = session.get_rounds_passed(self.counted_result_keys)
+        round_number = session.get_rounds_passed()
         actions = []
         if round_number == 0:
             last_result = session.last_result()
@@ -215,7 +213,15 @@ class MusicalPreferences(BaseRules):
         likert = IconRangeQuestion(
             text=_("2. How much do you like this song?"),
             key=like_key,
-            choices=get_choice_set('LIKERT_ICONS_7'),
+            choices={
+                1: 'fa-face-grin-hearts',
+                2: 'fa-face-grin',
+                3: 'fa-face-smile',
+                4: 'fa-face-meh',
+                5: 'fa-face-frown',
+                6: 'fa-face-frown-open',
+                7: 'fa-face-angry',
+            },
             result_id=prepare_result(
                 like_key, session, section=section, scoring_rule="LIKERT"
             ),

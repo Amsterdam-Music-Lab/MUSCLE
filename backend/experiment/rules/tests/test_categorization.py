@@ -7,6 +7,8 @@ from experiment.rules.categorization import Categorization
 from result.models import Result
 
 class CategorizationRuleTest(TestCase):
+    fixtures = ["demographics"]
+
     @classmethod
     def setUpTestData(cls):
         section_csv = (
@@ -124,7 +126,7 @@ class CategorizationRuleTest(TestCase):
         # Test explainer
         self.assertEqual(categorization.get_intro_explainer().action()['instruction'], first_next_round[0].instruction)
 
-        #Test second next_round
+        # Test second next_round
         second_next_round = categorization.next_round(self.session)
         self.assertEqual(self.session.json_data.get('phase'), 'training-1A')
         self.assertEqual(self.session.json_data.get('training_rounds'), '0')

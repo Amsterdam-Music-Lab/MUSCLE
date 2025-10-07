@@ -27,7 +27,7 @@ class CongoSameDiff(BaseRules):
         ).exists()
 
         if practice_done:
-            round_number = session.get_rounds_passed(self.counted_result_keys)
+            round_number = session.get_rounds_passed()
             total_trials_count = self.get_total_trials_count(session)
 
             # if the participant has completed all trials, return the final round

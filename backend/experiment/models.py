@@ -10,6 +10,7 @@ from django.db.models.query import QuerySet
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from theme.models import ThemeConfig
 from image.models import Image
+from question.models import Question, QuestionInSeries, QuestionSeries
 from session.models import Session
 
 from .validators import markdown_html_validator, block_slug_validator, experiment_slug_validator
@@ -278,23 +279,30 @@ class Block(models.Model):
 
     def add_default_question_series(self):
         """Add default question_series to block"""
-
-        question_series = getattr(self.get_rules(), "question_catalogues", None)
-        if question_series:
-            for i, question_series in enumerate(question_series):
+        try:
+            rules = self.get_rules()
+        except ValueError:
+            return
+        question_catalogues = getattr(rules, "question_catalogues", [])
+        if question_catalogues:
+            for i, catalogue in enumerate(question_catalogues):
                 qs, _created = QuestionSeries.objects.get_or_create(
-                    name=question_series["name"],
-                    block=self,
+                    name=catalogue["name"], block=self, index=i
                 )
                 if _created:
                     # only set these when the object is created, so we don't overwrite changes by admin user
-                    qs.index = (i + 1,)
-                    qs.randomize = question_series["randomize"]
+                    qs.randomize = catalogue["randomize"]
                     qs.save()
-                    for i, question in enumerate(question_series["question_keys"]):
+                    for i, question in enumerate(catalogue["question_keys"]):
+                        try:
+                            question_obj = Question.objects.get(pk=question)
+                        except Question.DoesNotExist:
+                            raise Question.DoesNotExist(
+                                f"Question with key {question} does not exist."
+                            )
                         QuestionInSeries.objects.create(
                             question_series=qs,
-                            question=Question.objects.get(pk=question),
+                            question=question_obj,
                             index=i + 1,
                         )
 

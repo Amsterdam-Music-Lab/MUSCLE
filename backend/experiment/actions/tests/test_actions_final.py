@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.utils.translation import activate
 
 from experiment.models import (
     Block,
@@ -27,7 +26,7 @@ class FinalTest(TestCase):
         )
         phase = Phase.objects.create(experiment=cls.experiment)
         block = Block.objects.create(
-            phase=phase, rules="HOOKED", rounds=6, name="Test block"
+            phase=phase, rules="QUESTIONNAIRE", rounds=6, name="Test block"
         )
         participant = Participant.objects.create()
         cls.session = Session.objects.create(block=block, participant=participant)

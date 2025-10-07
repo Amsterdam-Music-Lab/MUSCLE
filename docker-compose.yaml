@@ -55,7 +55,7 @@ services:
       - SQL_HOST=${SQL_HOST}
     ports:
       - 8000:8000
-    command: bash -c "python manage.py migrate && python manage.py bootstrap && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
   client:
     build:
       context: ./frontend

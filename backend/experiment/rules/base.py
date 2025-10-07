@@ -23,7 +23,6 @@ class BaseRules(object):
 
     contact_email = settings.CONTACT_MAIL
     counted_result_keys = []
-    question_series = []
 
     def feedback_info(self) -> FeedbackInfo:
         feedback_body = render_to_string("feedback/user_feedback.html", {"email": self.contact_email})

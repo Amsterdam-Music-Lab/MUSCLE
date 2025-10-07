@@ -57,7 +57,7 @@ class Session(models.Model):
         self.finished_at = timezone.now()
         self.final_score = self.total_score()
 
-    def get_rounds_passed(self, counted_result_keys: list = []) -> int:
+    def get_rounds_passed(self) -> int:
         """Get number of rounds passed, measured by the number of results on this session,
         taking into account the `counted_result_keys` array that may be defined per rules file
 
@@ -68,8 +68,10 @@ class Session(models.Model):
             number of results, filtered by `counted_result_keys`, if supplied
         """
         results = self.result_set
-        if counted_result_keys:
-            results = results.filter(question_key__in=counted_result_keys)
+        if self.block_rules().counted_result_keys:
+            results = results.filter(
+                question_key__in=self.block_rules().counted_result_keys
+            )
         return results.count()
 
     def get_used_song_ids(self, exclude: dict = {}) -> Iterable[int]:

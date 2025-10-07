@@ -8,9 +8,7 @@ from ..base import BaseRules
 
 class BaseRulesTest(TestCase):
     def test_get_play_again_url(self):
-        block = Block.objects.create(
-            slug="music-lab",
-        )
+        block = Block.objects.create(slug="music-lab", rules="QUESTIONNAIRE")
         session = Session.objects.create(
             block=block,
             participant=Participant.objects.create(),
@@ -20,9 +18,7 @@ class BaseRulesTest(TestCase):
         self.assertEqual(play_again_url, "/block/music-lab")
 
     def test_get_play_again_url_with_participant_id(self):
-        block = Block.objects.create(
-            slug="music-lab",
-        )
+        block = Block.objects.create(slug="music-lab", rules="QUESTIONNAIRE")
         participant = Participant.objects.create(
             participant_id_url="42",
         )

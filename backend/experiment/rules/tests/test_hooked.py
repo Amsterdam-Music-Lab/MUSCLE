@@ -21,7 +21,18 @@ from session.models import Session
 
 
 class HookedTest(TestCase):
-    fixtures = ["playlist", "experiment"]
+    fixtures = [
+        "playlist",
+        "experiment",
+        "choices_general",
+        "demographics",
+        "demographics_zh",
+        "goldsmiths_msi",
+        "musicgens",
+        "stomp",
+        "tipi",
+        "vanderbilt",
+    ]
 
     @classmethod
     def setUpTestData(cls):
@@ -85,8 +96,9 @@ class HookedTest(TestCase):
         )
         SocialMediaConfig.objects.create(experiment=experiment, url="https://app.amsterdammusiclab.nl/hooked")
         phase = Phase.objects.create(experiment=experiment)
-        block = Block.objects.create(slug="Hooked", rules="HOOKED", rounds=n_rounds, phase=phase)
-        block.add_default_question_series()
+        block = Block.objects.create(
+            slug="Hooked", rules="HOOKED", rounds=n_rounds, phase=phase
+        )
         session = Session.objects.create(block=block, participant=self.participant, playlist=self.playlist)
         rules = session.block_rules()
         for i in range(n_rounds + 1):
@@ -144,6 +156,7 @@ class HookedTest(TestCase):
     def _run_eurovision(self, session_type):
         n_rounds = 6
         block = Block.objects.create(slug="Test-Eurovision", rules="EUROVISION_2020", rounds=n_rounds)
+
         session = Session.objects.create(block=block, participant=self.participant, playlist=self.playlist)
         rules = session.block_rules()
         rules.question_offset = 3
@@ -187,7 +200,9 @@ class HookedTest(TestCase):
     def _run_kuiper(self, session_type):
         self.assertEqual(Result.objects.count(), 0)
         n_rounds = 6
-        block = Block.objects.create(slug="Test-Christmas", rules="KUIPER_2020", rounds=n_rounds)
+        block = Block.objects.create(
+            slug="Test-Christmas", rules="KUIPER_2020", rounds=n_rounds
+        )
         playlist = Playlist.objects.create(name="Test-Christmas")
         playlist.csv = (
             "Band Aid,1984 - Do They Know It’s Christmas,1.017,45.0,Kerstmuziek/Do They Know It_s Christmas00.01.017.i.s.mp3,0,100000707\n"
@@ -259,7 +274,7 @@ class HookedTest(TestCase):
                     self.assertNotIn(heard_before_section, song_sync_sections)
 
     def test_thats_my_song(self):
-        tms_keys = get_preset_catalogue('THATS_MY_SONG_QUESTIONS_FIXED')
+        tms_keys = get_preset_catalogue('VANDERBILT_FIXED')
         block = Block.objects.get(slug="thats_my_song")
         block.add_default_question_series()
         playlist = Playlist.objects.get(name="ThatsMySong")
@@ -329,6 +344,6 @@ class HookedTest(TestCase):
         ]
         self.assertEqual(len(question_trials), n_total_questions)
         keys = [q.feedback_form.form[0].key for q in question_trials]
-        questions = rules.question_series[0]["keys"][0:3]
+        questions = rules.question_catalogues[0]["question_keys"][0:3]
         for question in questions:
             self.assertIn(question, keys)

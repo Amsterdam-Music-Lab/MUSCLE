@@ -127,9 +127,9 @@
 - model: question.question
   pk: lang_exposure
   fields:
-    question: "Please rate your previous experience:"
+    question: 'Please rate your previous experience:'
     explainer: ''
-    type: TextQuestion
+    type: RadiosQuestion
     profile_scoring_rule: ''
     choices: LANG_EXPOSURE
 - model: question.question
@@ -165,6 +165,9 @@
   pk: EXPECTED_EDUCATION
   fields: {}
 - model: question.choiceset
+  pk: GENDER_COMPLETE
+  fields: {}
+- model: question.choiceset
   pk: GENDER_REDUCED
   fields: {}
 - model: question.choiceset
@@ -179,7 +182,7 @@
 - model: question.choiceset
   pk: ISO_LANGUAGES
   fields: {}
-- model: question.question.choiceset
+- model: question.choiceset
   pk: LANG_EXPOSURE
   fields: {}
 - model: question.choiceset

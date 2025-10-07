@@ -6,16 +6,20 @@ from .models import Participant
 from .utils import get_participant, PARTICIPANT_KEY
 from experiment.models import Block
 from session.models import Session
+from question.preset_catalogues import get_preset_catalogue
 from result.models import Result
 
 
 class ParticipantTest(TestCase):
+    fixtures = ["choices_general", "goldsmiths_msi"]
 
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.block = Block.objects.create(
             rules='RHYTHM_BATTERY_INTRO', slug='test')
+        cls.block.create_catalogue(get_preset_catalogue("MSI_F1_ACTIVE_ENGAGEMENT"))
+        cls.block.create_catalogue(get_preset_catalogue("MSI_F2_PERCEPTUAL_ABILITIES"))
         cls.session = Session.objects.create(
             block=cls.block,
             participant=cls.participant,

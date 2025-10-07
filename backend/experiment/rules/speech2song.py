@@ -24,7 +24,6 @@ class Speech2Song(BaseRules):
     n_rounds_per_trial = 2
 
     def __init__(self):
-        self.add_custom_questions(SPEECH2SONG_QUESTIONS)
         self.question_catalogues = [
             {
                 "name": "Question series Speech2Song",
@@ -36,7 +35,7 @@ class Speech2Song(BaseRules):
                     'lang_mother',
                     'lang_second',
                     'lang_third',
-                    'lang_exposure',  # edited to include a version of `en`, `pt-br` and `zh`
+                    'lang_exposure',  # should be edited to include a version of `en`, `pt-br` and `zh`
                 ],
                 "randomize": False,
             },
@@ -61,11 +60,11 @@ class Speech2Song(BaseRules):
         # group_ids for practice (0), or one of the speech blocks (1-3)
         actions = []
         is_speech = True
-        rounds_passed = session.get_rounds_passed(self.counted_result_keys)
+        rounds_passed = session.get_rounds_passed()
         if rounds_passed == 0:
-            question_trials = self.get_profile_question_trials(session)
+            question_trials = self.get_profile_question_trials(session, None)
             if question_trials:
-                session.save_json_data({'quesionnaire': True})
+                session.save_json_data({'questionnaire': True})
                 return [self.get_intro_explainer(), *question_trials]
             elif session.json_data.get("questionnaire"):
                 explainer = Explainer(
