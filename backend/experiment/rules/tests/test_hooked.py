@@ -276,7 +276,7 @@ class HookedTest(TestCase):
     def test_thats_my_song(self):
         tms_keys = get_preset_catalogue('VANDERBILT_FIXED')
         block = Block.objects.get(slug="thats_my_song")
-        block.add_default_question_series()
+        block.add_default_question_catalogues()
         playlist = Playlist.objects.get(name="ThatsMySong")
         playlist._update_sections()
         session = Session.objects.create(block=block, participant=self.participant, playlist=playlist)
@@ -323,7 +323,7 @@ class HookedTest(TestCase):
 
     def test_hooked_china(self):
         block = Block.objects.get(slug="huang_2022")
-        block.add_default_question_series()
+        block.add_default_question_catalogues()
         playlist = Playlist.objects.get(name="Cantpop")
         playlist._update_sections()
         session = Session.objects.create(block=block, participant=self.participant, playlist=playlist)

@@ -2,13 +2,13 @@ import json
 from django.utils import timezone
 
 from django.test import Client, TestCase
-from .models import Participant
-from .utils import get_participant, PARTICIPANT_KEY
 from experiment.models import Block
-from session.models import Session
+from participant.models import Participant
+from participant.utils import get_participant, PARTICIPANT_KEY
+from question.models import QuestionSeries
 from question.preset_catalogues import get_preset_catalogue
 from result.models import Result
-
+from session.models import Session
 
 class ParticipantTest(TestCase):
     fixtures = ["choices_general", "goldsmiths_msi"]
@@ -16,10 +16,7 @@ class ParticipantTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
-        cls.block = Block.objects.create(
-            rules='RHYTHM_BATTERY_INTRO', slug='test')
-        cls.block.create_catalogue(get_preset_catalogue("MSI_F1_ACTIVE_ENGAGEMENT"))
-        cls.block.create_catalogue(get_preset_catalogue("MSI_F2_PERCEPTUAL_ABILITIES"))
+        cls.block = Block.objects.create(rules='RHYTHM_BATTERY_INTRO', slug='test')
         cls.session = Session.objects.create(
             block=cls.block,
             participant=cls.participant,
@@ -129,9 +126,25 @@ class ParticipantTest(TestCase):
         assert participant.country_code == 'BLA'
 
     def test_score_sum(self):
-        score_sum = self.participant.score_sum("MSI_F1_ACTIVE_ENGAGEMENT")
+        self.block.create_catalogue(
+            {
+                "name": "test_msi1",
+                "question_keys": get_preset_catalogue("MSI_F1_ACTIVE_ENGAGEMENT"),
+            }
+        )
+        self.block.create_catalogue(
+            {
+                "name": "test_msi2",
+                "question_keys": get_preset_catalogue("MSI_F2_PERCEPTUAL_ABILITIES"),
+            }
+        )
+        score_sum = self.participant.score_sum(
+            QuestionSeries.objects.get(block=self.block, name="test_msi1")
+        )
         assert score_sum == 8
-        score_sum = self.participant.score_sum("MSI_F2_PERCEPTUAL_ABILITIES")
+        score_sum = self.participant.score_sum(
+            QuestionSeries.objects.get(block=self.block, name="test_msi2")
+        )
         assert score_sum is None
 
     def test_session_count(self):

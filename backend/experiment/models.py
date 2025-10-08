@@ -277,8 +277,8 @@ class Block(models.Model):
 
         return 0
 
-    def add_default_question_series(self):
-        """Add default question_series to block"""
+    def add_default_question_catalogues(self):
+        """Add default question catalogues to block"""
         try:
             rules = self.get_rules()
         except ValueError:
@@ -286,29 +286,34 @@ class Block(models.Model):
         question_catalogues = getattr(rules, "question_catalogues", [])
         if question_catalogues:
             for i, catalogue in enumerate(question_catalogues):
-                qs, _created = QuestionSeries.objects.get_or_create(
-                    name=catalogue["name"], block=self, index=i
+                self.create_catalogue(catalogue, i)
+
+    def create_catalogue(self, catalogue: dict, index: int = 0):
+        """create a question catalogue for this block based on a catalogue dict specifying name and question keys"""
+        qs, _created = QuestionSeries.objects.get_or_create(
+            name=catalogue["name"], block=self, index=index
+        )
+        if _created:
+            # only set these when the object is created, so we don't overwrite changes by admin user
+            qs.randomize = catalogue.get("randomize", False)
+            qs.save()
+
+        for i, question in enumerate(catalogue["question_keys"]):
+            try:
+                question_obj = Question.objects.get(pk=question)
+            except Question.DoesNotExist:
+                raise Question.DoesNotExist(
+                    f"Question with key {question} does not exist."
                 )
-                if _created:
-                    # only set these when the object is created, so we don't overwrite changes by admin user
-                    qs.randomize = catalogue["randomize"]
-                    qs.save()
-                    for i, question in enumerate(catalogue["question_keys"]):
-                        try:
-                            question_obj = Question.objects.get(pk=question)
-                        except Question.DoesNotExist:
-                            raise Question.DoesNotExist(
-                                f"Question with key {question} does not exist."
-                            )
-                        QuestionInSeries.objects.create(
-                            question_series=qs,
-                            question=question_obj,
-                            index=i + 1,
-                        )
+            QuestionInSeries.objects.create(
+                question_series=qs,
+                question=question_obj,
+                index=i + 1,
+            )
 
     def save(self, **kwargs):
         super().save(**kwargs)  # Call the "real" save() method.
-        self.add_default_question_series()
+        self.add_default_question_catalogues()
 
 
 class Feedback(models.Model):

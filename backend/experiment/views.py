@@ -80,12 +80,6 @@ def post_feedback(request, slug):
     return JsonResponse({"status": "ok"})
 
 
-def add_default_question_series(request, slug):
-    if request.method == "POST":
-        Block.objects.get(slug=slug).add_default_question_series()
-    return JsonResponse({})
-
-
 def get_experiment(
     request: HttpRequest,
     slug: str,

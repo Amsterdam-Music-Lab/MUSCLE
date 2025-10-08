@@ -203,5 +203,5 @@ class Participant(models.Model):
             score_sum = participant.score_sum(catalogue)
             ```
         """
-        question_keys = catalogue.questions.value_list('key')
+        question_keys = catalogue.questions.values_list('key')
         return self.result_set.all().filter(question_key__in=question_keys).aggregate(Sum("score"))['score__sum']

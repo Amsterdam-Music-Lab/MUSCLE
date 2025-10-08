@@ -194,10 +194,10 @@ class QuestionSeries(models.Model):
 
     def __str__(self):
         return _(
-            "QuestionSeries %(qs_name)s of experiment %(exp_name)s: %(n_questions)i questions"
+            "QuestionSeries %(qs_name)s of block with slug %(block_slug)s: %(n_questions)i questions"
         ) % {
             'qs_name': self.name,
-            'exp_name': self.block.phase.experiment.slug,
+            'block_slug': self.block.slug,
             'n_questions': self.questioninseries_set.count() if self.pk else 0,
         }
 
