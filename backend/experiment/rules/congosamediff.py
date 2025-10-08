@@ -65,8 +65,9 @@ class CongoSameDiff(BaseRules):
 
         else:
             # practice is not done yet;
-            # load the practice trials
-            round_number = session.get_rounds_passed()
+            # load the practice trials, count all results
+            self.counted_result_keys = []
+            round_number = session.get_rounds_passed(apply_results_filter=False)
             practice_trials_subset = session.playlist.section_set.filter(
                 tag__contains='practice'
             )

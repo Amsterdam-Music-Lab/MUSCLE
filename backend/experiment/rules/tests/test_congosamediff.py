@@ -56,13 +56,13 @@ class CongoSameDiffTest(TestCase):
             question_key='practice_done',
             given_response='YES'
         )
-
-        self.session.get_rounds_passed = lambda x: 2
-        final_action = congo_same_diff.next_round(self.session)
-        assert isinstance(final_action, Final)
+        with patch.object(self.session, 'get_rounds_passed', return_value=2):
+            final_action = congo_same_diff.next_round(self.session)
+            assert isinstance(final_action, Final)
 
     def test_next_round_practice_trial(self):
         congo_same_diff = CongoSameDiff()
+        congo_same_diff.counted_result_keys = []
 
         first_actions = congo_same_diff.next_round(self.session)
         self.assertEqual(len(first_actions), 2)
