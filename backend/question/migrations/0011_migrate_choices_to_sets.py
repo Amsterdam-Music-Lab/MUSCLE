@@ -10,18 +10,37 @@ def choice_to_choice_set(apps, schema_editor):
         if linked_question:
             cs, has_created_choice_set = ChoiceSetModel.objects.get_or_create(key=f"{linked_question.key}_choices")
             choice.set = cs
-            choice.save()
             if has_created_choice_set:
                 linked_question.choices = cs
                 linked_question.save()
+            try:
+                choice.save()
+            except:
+                choice.delete()  # we have more choices in the choice->question setup
+    ChoiceModel.objects.filter(
+        set__isnull=True
+    ).delete()  # to be safe, delete choices without choice set
 
 def choice_to_question(apps, schema_editor):
     ChoiceModel = apps.get_model("question.Choice")
-    for choice in ChoiceModel.objects.all():
-        linked_choice_set = getattr(choice, 'set', None)
-        if linked_choice_set:
-            choice.question = linked_choice_set.question_set.first()
-            choice.save()
+    ChoiceSetModel = apps.get_model("question.ChoiceSet")
+    QuestionModel = apps.get_model("question.Question")
+    for question in QuestionModel.objects.all():
+        choice_set = getattr(question, 'choices', None)
+        if choice_set:
+            ChoiceModel.objects.bulk_create(
+                [
+                    ChoiceModel(
+                        question=question,
+                        key=choice.key,
+                        text=choice.text,
+                        index=choice.index,
+                    )
+                    for choice in choice_set.choices.all()
+                ]
+            )
+    ChoiceSetModel.objects.all().delete()  # to ensure we leave no dangling choices
+
 
 class Migration(migrations.Migration):
 
