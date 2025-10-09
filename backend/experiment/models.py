@@ -88,8 +88,7 @@ class Experiment(models.Model):
             Associated blocks
         """
 
-        phases = self.phases.all()
-        return [block for phase in phases for block in list(phase.blocks.all())]
+        return list(Block.objects.filter(phase__experiment=self))
 
     def export_sessions(self) -> QuerySet[Session]:
         """export sessions for this experiment
