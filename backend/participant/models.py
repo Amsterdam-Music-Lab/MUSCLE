@@ -54,10 +54,7 @@ class Participant(models.Model):
             result_count = participant.result_count()
             ```
         """
-        c = 0
-        for session in self.session_set.all():
-            c += session.result_set.count()
-        return c
+        return Result.objects.filter(session__participant=self).count()
 
     result_count.short_description = 'Results'
 
