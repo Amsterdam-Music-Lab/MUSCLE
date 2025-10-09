@@ -90,17 +90,16 @@ class Experiment(models.Model):
 
         return list(Block.objects.filter(phase__experiment=self))
 
-    def export_sessions(self) -> QuerySet[Session]:
+    def associated_sessions(self) -> QuerySet[Session]:
         """export sessions for this experiment
 
         Returns:
             Associated sessions
         """
 
-        all_sessions = Session.objects.none()
-        for block in self.associated_blocks():
-            all_sessions |= Session.objects.filter(block=block).order_by("-started_at")
-        return all_sessions
+        return Session.objects.filter(block__phase__experiment=self).order_by(
+            "-started_at"
+        )
 
     def current_participants(self) -> list["Participant"]:
         """Get distinct list of participants
@@ -108,11 +107,9 @@ class Experiment(models.Model):
         Returns:
             (participant.models.Participant): Associated participants
         """
+        from participant.models import Participant
 
-        participants = {}
-        for session in self.export_sessions():
-            participants[session.participant.id] = session.participant
-        return participants.values()
+        return Participant.objects.filter(session__in=self.associated_sessions())
 
     def export_feedback(self) -> QuerySet[Session]:
         """export feedback for the blocks in this experiment
@@ -243,8 +240,8 @@ class Block(models.Model):
             },
         }
 
-    def export_sessions(self):
-        # export session objects
+    def associated_sessions(self):
+        """return all sessions associated with this block"""
         return self.session_set.all()
 
     def get_rules(self) -> "experiment.rules.base.Base":

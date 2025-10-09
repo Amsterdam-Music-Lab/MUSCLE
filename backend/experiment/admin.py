@@ -254,7 +254,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
 
         all_blocks = obj.associated_blocks()
         all_participants = obj.current_participants()
-        all_sessions = obj.export_sessions()
+        all_sessions = obj.associated_sessions()
         all_feedback = obj.export_feedback()
         collect_data = {
             "participant_count": len(all_participants),

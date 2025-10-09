@@ -147,7 +147,7 @@ def block_export_json_results(block_slug: str) -> ZipFile:
     all_feedback = Feedback.objects.filter(block=this_block)
 
     # Collect data
-    all_sessions = this_block.export_sessions().order_by("pk")
+    all_sessions = this_block.associated_sessions().order_by("pk")
 
     for session in all_sessions:
         all_results |= session.result_set.all()

@@ -68,9 +68,9 @@ class BlockModelTest(TestCase):
         exported_data = block._export_admin()
         self.assertEqual(exported_data["block"]["name"], "Test Block")
 
-    def test_block_export_sessions(self):
+    def test_block_associated_sessions(self):
         block = Block.objects.get(slug="test-block")
-        sessions = block.export_sessions()
+        sessions = block.associated_sessions()
         self.assertEqual(len(sessions), 0)
 
     def test_block_get_rules(self):

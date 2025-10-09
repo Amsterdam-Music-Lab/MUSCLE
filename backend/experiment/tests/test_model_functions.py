@@ -41,7 +41,7 @@ class TestModelExperiment(TestCase):
 
         self.assertEqual(experiment.associated_blocks(), [block, block2, block3])
 
-    def test_export_sessions(self):
+    def test_associated_sessions(self):
         experiment = self.experiment
         phase = Phase.objects.create(experiment=experiment)
         block = Block.objects.create(rules="THATS_MY_SONG", slug="hooked", rounds=42, phase=phase)
@@ -52,7 +52,7 @@ class TestModelExperiment(TestCase):
                 Session(block=block, participant=self.participant3),
             ]
         )
-        sessions = experiment.export_sessions()
+        sessions = experiment.associated_sessions()
         self.assertEqual(len(sessions), 3)
 
     def test_current_participants(self):
