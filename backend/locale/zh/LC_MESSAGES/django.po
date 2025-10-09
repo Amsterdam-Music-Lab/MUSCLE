@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-18 14:18+0200\n"
+"POT-Creation-Date: 2025-10-09 11:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,35 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: aml/base_settings.py:132 experiment/rules/speech2song.py:38
+#: question/languages.py:59
+msgid "English"
+msgstr "英语"
+
+#: aml/base_settings.py:133
+msgid "Dutch"
+msgstr ""
+
+#: aml/base_settings.py:134
+#, fuzzy
+#| msgid "Brazilian Portuguese"
+msgid "Portuguese"
+msgstr "巴西葡萄牙语"
+
+#: aml/base_settings.py:135
+#, fuzzy
+#| msgid "Chinese opera"
+msgid "Chinese"
+msgstr "中国戏曲类（如京剧、粤剧、评弹等）"
+
+#: experiment/actions/consent.py:104
+msgid "I agree"
+msgstr "同意"
+
+#: experiment/actions/consent.py:105
+msgid "Stop"
+msgstr "停止"
 
 #: experiment/actions/final.py:96
 msgid "plastic"
@@ -45,16 +74,16 @@ msgstr "钻石"
 msgid "Final score"
 msgstr "最终得分"
 
-#: experiment/actions/final.py:138 participant/views.py:45
+#: experiment/actions/final.py:138 participant/views.py:46
 msgid "points"
 msgstr "分"
 
 #: experiment/actions/final.py:152 experiment/rules/hooked.py:106
-#: experiment/rules/thats_my_song.py:70
+#: experiment/rules/thats_my_song.py:79
 msgid "Play again"
 msgstr "再玩一次"
 
-#: experiment/actions/final.py:153 participant/views.py:40
+#: experiment/actions/final.py:153 participant/views.py:41
 msgid "My profile"
 msgstr "我的结果"
 
@@ -130,27 +159,27 @@ msgstr "请选择一个曲库"
 msgid "Round {get_rounds_passed} / {total_rounds}"
 msgstr ""
 
-#: experiment/actions/score.py:69
+#: experiment/actions/score.py:70
 msgid "Total Score"
 msgstr "总得分"
 
-#: experiment/actions/score.py:69 experiment/rules/musical_preferences.py:106
+#: experiment/actions/score.py:71 experiment/rules/musical_preferences.py:106
 msgid "Next"
 msgstr "下一首"
 
-#: experiment/actions/score.py:69
+#: experiment/actions/score.py:72
 msgid "You listened to:"
 msgstr "您听到的是: "
 
-#: experiment/actions/score.py:119
+#: experiment/actions/score.py:123
 msgid "No points"
 msgstr "零分"
 
-#: experiment/actions/score.py:123
+#: experiment/actions/score.py:127
 msgid "Incorrect"
 msgstr "不正确"
 
-#: experiment/actions/score.py:127
+#: experiment/actions/score.py:131
 msgid "Correct"
 msgstr "正确"
 
@@ -176,6 +205,26 @@ msgstr "继续默唱音乐"
 #: experiment/actions/wrappers.py:151
 msgid "Did the track come back in the right place?"
 msgstr "歌曲回到正确的位置了吗？"
+
+#: experiment/forms.py:62
+msgid "The name and description will be displayed in dashboard mode."
+msgstr ""
+
+#: experiment/forms.py:64
+msgid ""
+"An image that will be displayed on the experiment page and as a meta image "
+"in search engines."
+msgstr ""
+
+#: experiment/forms.py:67
+#, python-brace-format
+msgid ""
+"The slug is used to identify the block in the URL so you can access it on "
+"the web as follows: app.amsterdammusiclab.nl/{slug} <br>            It must "
+"be unique, lowercase and contain only letters, numbers, and hyphens. Nor can "
+"it start with any of the following reserved words: admin, server, block, "
+"participant, result, section, session, static."
+msgstr ""
 
 #: experiment/management/commands/templates/experiment.py:37
 msgid "Please read the instructions carefully"
@@ -206,51 +255,51 @@ msgstr "您是否认出了这首歌曲？"
 msgid "Test block"
 msgstr ""
 
-#: experiment/models.py:427
+#: experiment/models.py:68
 #, python-brace-format
 msgid ""
 "Content for social media sharing. Use {points} and {experiment_name} as "
 "placeholders."
 msgstr ""
 
-#: experiment/models.py:486
+#: experiment/models.py:323
 msgid "List of tags for social media sharing"
 msgstr ""
 
-#: experiment/models.py:490
+#: experiment/models.py:327
 msgid ""
 "URL to be shared on social media. If empty, the experiment URL will be used."
 msgstr ""
 
-#: experiment/models.py:494
+#: experiment/models.py:331
 msgid "Facebook"
 msgstr ""
 
-#: experiment/models.py:495
+#: experiment/models.py:332
 msgid "WhatsApp"
 msgstr ""
 
-#: experiment/models.py:496
+#: experiment/models.py:333
 msgid "Twitter"
 msgstr ""
 
-#: experiment/models.py:497
+#: experiment/models.py:334
 msgid "Weibo"
 msgstr ""
 
-#: experiment/models.py:498
+#: experiment/models.py:335
 msgid "Share"
 msgstr ""
 
-#: experiment/models.py:499
+#: experiment/models.py:336
 msgid "Clipboard"
 msgstr ""
 
-#: experiment/models.py:505
+#: experiment/models.py:342
 msgid "Selected social media channels for sharing"
 msgstr ""
 
-#: experiment/models.py:539
+#: experiment/models.py:375
 #, python-format
 msgid "I scored %(score)d points in %(experiment_name)s"
 msgstr ""
@@ -335,23 +384,23 @@ msgid ""
 "brains use this to process rhythm even better!"
 msgstr ""
 
-#: experiment/rules/base.py:32 experiment/rules/matching_pairs_2025.py:60
+#: experiment/rules/base.py:32 experiment/rules/matching_pairs_2025.py:47
 msgid "Do you have any remarks or questions?"
 msgstr "欢迎提出您的意见和建议！"
 
-#: experiment/rules/base.py:34 experiment/rules/matching_pairs_2025.py:62
+#: experiment/rules/base.py:34 experiment/rules/matching_pairs_2025.py:49
 msgid "Submit"
 msgstr "提交"
 
-#: experiment/rules/base.py:38 experiment/rules/matching_pairs_2025.py:66
+#: experiment/rules/base.py:38 experiment/rules/matching_pairs_2025.py:53
 msgid "We appreciate your feedback!"
 msgstr "感谢您的反馈！"
 
-#: experiment/rules/base.py:138 experiment/rules/musical_preferences.py:71
+#: experiment/rules/base.py:94 experiment/rules/musical_preferences.py:71
 msgid "Questionnaire"
 msgstr "问卷调查"
 
-#: experiment/rules/base.py:160
+#: experiment/rules/base.py:102
 #, python-format
 msgid "Questionnaire %(index)i / %(total)i"
 msgstr "调查问卷 %(index)i/%(total)i"
@@ -882,57 +931,95 @@ msgstr ""
 msgid "Listen carefully to avoid mistakes and earn more points."
 msgstr ""
 
-#: experiment/rules/matching_pairs.py:69 experiment/rules/matching_pairs.py:174 
-#: experiment/rules/matching_pairs_2025.py:79 #: experiment/rules/questionnaire.py:21 
-#, python-format 
+#: experiment/rules/matching_pairs.py:69 experiment/rules/matching_pairs.py:174
+#: experiment/rules/questionnaire.py:21
+#, python-format
 msgid ""
 "Before starting the game, we would like to ask you %i demographic questions."
 msgstr "游戏开始前，请您先回答 %i 个基本信息问题。"
 
-#: experiment/rules/matching_pairs_2025.py:43 
-msgid "This was not a match, so you get 0 points. Please try again to see if you can find a matching pair." 
+#: experiment/rules/matching_pairs_2025.py:30
+msgid ""
+"This was not a match, so you get 0 points. Please try again to see if you "
+"can find a matching pair."
 msgstr "这两张卡片不匹配，不得分。请继续尝试寻找匹配的卡片。"
 
-#: experiment/rules/matching_pairs_2025.py:46 
-msgid "You got a matching pair, but you didn't hear the matching card before. This is considered a lucky match. You get 10 points." 
+#: experiment/rules/matching_pairs_2025.py:33
+#, fuzzy
+#| msgid ""
+#| "You got a matching pair, but you didn't hear the matching card before. "
+#| "This is considered a lucky match. You get 10 points."
+msgid ""
+"You got a matching pair, but you didn't hear both cards before. This is "
+"considered a lucky match. You get 10 points."
 msgstr "配对成功！不过您之前没听过第二张卡片，获得幸运分 10 分。"
 
-#: experiment/rules/matching_pairs_2025.py:48 
-msgid "You got a matching pair. You get 20 points." 
+#: experiment/rules/matching_pairs_2025.py:35
+msgid "You got a matching pair. You get 20 points."
 msgstr "匹配成功！获得 20 分！"
 
-#: experiment/rules/matching_pairs_2025.py:50 
-msgid "You thought you found a matching pair, but you didn't. This is considered a misremembered pair. You lose 10 points." 
+#: experiment/rules/matching_pairs_2025.py:37
+msgid ""
+"You thought you found a matching pair, but you didn't. This is considered a "
+"misremembered pair. You lose 10 points."
 msgstr "您以为这两张卡片是一对，但它们不匹配。记忆偏差，减 10 分。"
 
-#: experiment/rules/matching_pairs_2025.py:182 
-msgid "You get a board with 16 musical cards. **Pick a card,** and listen to it carefully..." 
+#: experiment/rules/matching_pairs_2025.py:66
+#, fuzzy
+#| msgid ""
+#| "Before starting the game, we would like to ask you %i demographic "
+#| "questions."
+msgid ""
+"Before starting the game, we would like to ask you {} demographic questions."
+msgstr "游戏开始前，请您先回答 %i 个基本信息问题。"
+
+#: experiment/rules/matching_pairs_2025.py:89
+msgid "Click to start!"
+msgstr ""
+
+#: experiment/rules/matching_pairs_2025.py:170
+msgid ""
+"You get a board with 16 musical cards. **Pick a card,** and listen to it "
+"carefully..."
 msgstr "您将在游戏中看到16张音乐卡片。**请选择一张卡片**，仔细聆听..."
 
-#: experiment/rules/matching_pairs_2025.py:186 
-msgid "Then try to **find a second card that matches it.**" 
+#: experiment/rules/matching_pairs_2025.py:174
+msgid "Then try to **find a second card that matches it.**"
 msgstr "然后尝试**找到与之匹配的第二张卡片。**"
 
-#: experiment/rules/matching_pairs_2025.py:190 
-msgid "**Find the 8 matching pairs** to clear the board and score points:" 
+#: experiment/rules/matching_pairs_2025.py:178
+msgid "**Find the 8 matching pairs** to clear the board and score points:"
 msgstr "**找出全部8对匹配卡片**即可完成游戏，计分规则如下："
 
-#: experiment/rules/matching_pairs_2025.py:195 
-msgid "**+20 points:** Matched first card with one you've heard before — memory wins!" 
+#: experiment/rules/matching_pairs_2025.py:183
+#, fuzzy
+#| msgid ""
+#| "**+20 points:** Matched first card with one you've heard before — memory "
+#| "wins!"
+msgid ""
+"**+20 points:** Matched first card with one you’ve heard before — memory "
+"wins!"
 msgstr "**+20分：**成功将第一张卡片与之前听过的卡片配对——精准记忆！"
 
-#: experiment/rules/matching_pairs_2025.py:200 
-msgid "**-10 points:** Chose a wrong second card that's heard before? Oops — penalty..." 
+#: experiment/rules/matching_pairs_2025.py:188
+#, fuzzy
+#| msgid ""
+#| "**-10 points:** Chose a wrong second card that's heard before? Oops — "
+#| "penalty..."
+msgid ""
+"**-10 points:** Chose a wrong second card that’s heard before? Oops — "
+"penalty..."
 msgstr "**-10分：**选择了之前听过但不匹配的第二张卡片？啊哦 —— 扣分..."
 
-#: experiment/rules/matching_pairs_2025.py:205 
-msgid "Some cards sound **distorted** on purpose. Stay sharp!" 
+#: experiment/rules/matching_pairs_2025.py:193
+msgid "Some cards sound **distorted** on purpose. Stay sharp!"
 msgstr "部分卡片的声音经过**失真处理**。但这正是挑战所在，请认真聆听辨别！"
 
-#: experiment/rules/matching_pairs_2025.py:288 #, python-format 
-msgid "You outperformed {}% of the players!" 
+#: experiment/rules/matching_pairs_2025.py:277
+#, fuzzy, python-format
+#| msgid "You outperformed {}% of the players!"
+msgid "You outperformed {}% of the players!"
 msgstr "您的表现超越了 {}% 的玩家！"
-
 
 #: experiment/rules/musical_preferences.py:55
 msgid "Welcome to the Musical Preferences experiment!"
@@ -1284,10 +1371,6 @@ msgid ""
 "scanner             to hear the rhythm really well."
 msgstr ""
 
-#: experiment/rules/speech2song.py:38 question/languages.py:59
-msgid "English"
-msgstr "英语"
-
 #: experiment/rules/speech2song.py:39 question/languages.py:60
 msgid "Brazilian Portuguese"
 msgstr "巴西葡萄牙语"
@@ -1427,15 +1510,15 @@ msgstr "听起来完全像音乐"
 msgid "Listen carefully"
 msgstr "请认真聆听"
 
-#: experiment/rules/thats_my_song.py:92
+#: experiment/rules/thats_my_song.py:96
 msgid "Choose two or more decades of music"
 msgstr ""
 
-#: experiment/rules/thats_my_song.py:97
+#: experiment/rules/thats_my_song.py:101
 msgid "Playlist selection"
 msgstr ""
 
-#: experiment/serializers.py:65
+#: experiment/serializers.py:49
 msgid "Back"
 msgstr ""
 
@@ -1471,20 +1554,35 @@ msgstr "硕士研究生或同等学历"
 msgid "Doctoral degree or equivalent"
 msgstr "博士研究生或同等学历"
 
-#: experiment/templates/admin/question_series.html:39
-msgid "Delete?"
+#: experiment/templates/admin/experiment/block/submit_line.html:4
+msgid "Save"
 msgstr ""
 
+#: experiment/templates/admin/experiment/block/submit_line.html:7
+msgid "Delete"
+msgstr ""
+
+#: experiment/templates/admin/phase_inline.html:21
 #: experiment/templates/admin/question_series.html:65
 msgid "Change"
 msgstr ""
 
+#: experiment/templates/admin/phase_inline.html:21
 #: experiment/templates/admin/question_series.html:65
 msgid "View"
 msgstr ""
 
+#: experiment/templates/admin/phase_inline.html:23
 #: experiment/templates/admin/question_series.html:67
 msgid "View on site"
+msgstr ""
+
+#: experiment/templates/admin/phase_inline.html:48
+msgid "Add"
+msgstr ""
+
+#: experiment/templates/admin/question_series.html:39
+msgid "Delete?"
 msgstr ""
 
 #: experiment/templates/admin/question_series.html:128
@@ -1621,8 +1719,8 @@ msgstr ""
 #: experiment/templates/consent/consent_MRI.html:17
 msgid ""
 " As compensation for your participation, you receive 15 euros. To receive "
-"this compensation, make sure to register your participation on the lab.uva."
-"nl website! "
+"this compensation, make sure to register your participation on the "
+"lab.uva.nl website! "
 msgstr ""
 
 #: experiment/templates/consent/consent_MRI.html:18
@@ -1646,8 +1744,8 @@ msgid ""
 "protection officer of the University of Amsterdam via fg@uva.nl. "
 msgstr ""
 "Mocht u vragen hebben over dit onderzoek, vooraf of achteraf, dan kunt u "
-"zich wenden tot de verantwoordelijke onderzoeker, Dr. Atser Damsma (a."
-"damsma@uva.nl). Voor eventuele formele klachten over dit onderzoek kunt u "
+"zich wenden tot de verantwoordelijke onderzoeker, Dr. Atser Damsma "
+"(a.damsma@uva.nl). Voor eventuele formele klachten over dit onderzoek kunt u "
 "zich wenden tot het lid van de Facultaire Commissie Ethiek (FMG) van de "
 "Universiteit van Amsterdam, Dr. Yair Pinto (y.pinto@uva.nl). Voor vragen of "
 "klachten over de verwerking van uw persoonsgegevens kunt u tevens contact "
@@ -1773,15 +1871,17 @@ msgstr ""
 #: experiment/templates/consent/consent_categorization.html:14
 msgid ""
 " For further information on the research project, please contact Zhiyuan "
-"Ning (e-mail <a href=\"mailto:z.ning@biology.leidenuniv.nl\">z.ning@biology."
-"leidenuniv.nl</a>; Institute of Biology, Leiden University, P.O. Box 9505, "
-"2300 RA Leiden, The Netherlands) or Jiaxin Li (e-mail: <a href=\"mailto:j."
-"li5@uva.nl\">j.li5@uva.nl</a>; Science Park 107, 1098 GE Amsterdam, The "
-"Netherlands). If you have any complaints regarding this research project, "
-"you can contact the secretary of the Ethics Committee of the Faculty of "
-"Humanities of the University of Amsterdam (phone number: +31 20 525 3054; e-"
-"mail: <a href=\"mailto:commissie-ethiek-fgw@uva.nl\">commissie-ethiek-"
-"fgw@uva.nl</a>; Kloveniersburgwal 48, 1012 CX Amsterdam). "
+"Ning (e-mail <a "
+"href=\"mailto:z.ning@biology.leidenuniv.nl\">z.ning@biology.leidenuniv.nl</"
+"a>; Institute of Biology, Leiden University, P.O. Box 9505, 2300 RA Leiden, "
+"The Netherlands) or Jiaxin Li (e-mail: <a "
+"href=\"mailto:j.li5@uva.nl\">j.li5@uva.nl</a>; Science Park 107, 1098 GE "
+"Amsterdam, The Netherlands). If you have any complaints regarding this "
+"research project, you can contact the secretary of the Ethics Committee of "
+"the Faculty of Humanities of the University of Amsterdam (phone number: +31 "
+"20 525 3054; e-mail: <a href=\"mailto:commissie-ethiek-"
+"fgw@uva.nl\">commissie-ethiek-fgw@uva.nl</a>; Kloveniersburgwal 48, 1012 CX "
+"Amsterdam). "
 msgstr ""
 "  如您需了解关于本研究项目的更多信息，请联系Xuan Huang(邮箱: x.huang@uva.nl; "
 "地址: Science Park 107, 1098 GE Amsterdam)或者John A. Burgoyne 博士 ( 电话: "
@@ -1907,11 +2007,11 @@ msgstr ""
 "\n"
 "  在音乐识别实验的第一个阶段，您将听到一些简短的音乐片段，请您尝试尽快回答‘是"
 "否能识别出该音乐‘。同时请在大脑中一起跟唱这段音乐。当您告诉我们您识别出了一段"
-"音乐时，该音乐会继续播放，但是声音将会被静音几秒钟。请您此时继续在心里“默"
-"唱”该音乐直到它再次播放为止。有时候音乐会回到正确的位置，但有时候在静音期间，"
-"同一段音乐会被向前或向后播放。当您在静音后再次听到音乐时，您需要判断出该音乐"
-"是否回到正确的位置。在实验的第二阶段，您仍将听到一些简短的音乐片段，此时您需"
-"要回答您是否在实验的第一阶段听过这些音乐。"
+"音乐时，该音乐会继续播放，但是声音将会被静音几秒钟。请您此时继续在心里“默唱”"
+"该音乐直到它再次播放为止。有时候音乐会回到正确的位置，但有时候在静音期间，同"
+"一段音乐会被向前或向后播放。当您在静音后再次听到音乐时，您需要判断出该音乐是"
+"否回到正确的位置。在实验的第二阶段，您仍将听到一些简短的音乐片段，此时您需要"
+"回答您是否在实验的第一阶段听过这些音乐。"
 
 #: experiment/templates/consent/consent_hooked.html:39
 msgid ""
@@ -2150,11 +2250,11 @@ msgid ""
 msgstr ""
 "  在音乐识别实验的第一个阶段，您将听到一些简短的音乐片段，请您尝试尽快回答‘是"
 "否能识别出该音乐‘。同时请在大脑中一起跟唱这段音乐。当您告诉我们您识别出了一段"
-"音乐时，该音乐会继续播放，但是声音将会被静音几秒钟。请您此时继续在心里“默"
-"唱”该音乐直到它再次播放为止。有时候音乐会回到正确的位置，但有时候在静音期间，"
-"同一段音乐会被向前或向后播放。当您在静音后再次听到音乐时，您需要判断出该音乐"
-"是否回到正确的位置。在实验的第二阶段，您仍将听到一些简短的音乐片段，此时您需"
-"要回答您是否在实验的第一阶段听过这些音乐。"
+"音乐时，该音乐会继续播放，但是声音将会被静音几秒钟。请您此时继续在心里“默唱”"
+"该音乐直到它再次播放为止。有时候音乐会回到正确的位置，但有时候在静音期间，同"
+"一段音乐会被向前或向后播放。当您在静音后再次听到音乐时，您需要判断出该音乐是"
+"否回到正确的位置。在实验的第二阶段，您仍将听到一些简短的音乐片段，此时您需要"
+"回答您是否在实验的第一阶段听过这些音乐。"
 
 #: experiment/templates/consent/consent_huang2021.html:54
 msgid ""
@@ -2808,11 +2908,11 @@ msgstr "在%(n_songs)s首歌曲里，您知道 %(n_known_songs)s首。"
 msgid "All players' top 3 favourite songs:"
 msgstr "其他人最喜欢的3首歌曲是："
 
-#: experiment/views.py:56
+#: experiment/views.py:57
 msgid "Loading"
 msgstr "加载中"
 
-#: participant/views.py:42
+#: participant/views.py:43
 #, python-format
 msgid ""
 "You have participated in %(count)d Amsterdam Music Lab experiment. Your best "
@@ -2823,13 +2923,13 @@ msgid_plural ""
 msgstr[0] "你参加了阿姆斯特丹音乐实验室的 %(count)d 个实验。你最好的成绩是："
 msgstr[1] "你参加了阿姆斯特丹音乐实验室的 %(count)d 个实验。你最好的成绩是："
 
-#: participant/views.py:46
+#: participant/views.py:47
 msgid ""
 "Use the following link to continue with your profile at another moment or on "
 "another device."
 msgstr "您可以复制以下您参与实验的用户信息链接以便下次继续参与实验。"
 
-#: participant/views.py:80
+#: participant/views.py:81
 msgid "copy"
 msgstr "复制"
 
@@ -3009,7 +3109,7 @@ msgstr ""
 msgid "Professional"
 msgstr ""
 
-#: question/demographics.py:177
+#: question/demographics.py:187
 msgid "Enter a name to enter the ICMPC hall of fame"
 msgstr ""
 
@@ -4123,12 +4223,6 @@ msgstr "零分"
 #~ msgid "Round {} / {}"
 #~ msgstr "{} / {}轮"
 
-#~ msgid "I agree"
-#~ msgstr "同意"
-
-#~ msgid "Stop"
-#~ msgstr "停止"
-
 #~ msgid "I consent and continue."
 #~ msgstr "同意"
 
@@ -4264,13 +4358,13 @@ msgstr "零分"
 #~ "  该实验包括两部分：一个音乐识别实验与一份《金史密斯音乐素养》水平测试。我"
 #~ "们也将对人口统计特征进行一个简短的问卷调查。 该实验需要20-30分钟。在实验完"
 #~ "成后,您将看到结果。\n"
-#~ "  在音乐识别实验的第一个阶段，您将听到一些简短的音乐片段，请您尝试尽快回"
-#~ "答‘是否能识别出该音乐‘。同时请在大脑中一起跟唱这段音乐。当您告诉我们您识别"
-#~ "出了一段音乐时，该音乐会继续播放，但是声音将会被静音几秒钟。请您此时继续在"
-#~ "心里“默唱”该音乐直到它再次播放为止。有时候音乐会回到正确的位置，但有时候在"
-#~ "静音期间，同一段音乐会被向前或向后播放。当您在静音后再次听到音乐时，您需要"
-#~ "判断出该音乐是否回到正确的位置。在实验的第二阶段，您仍将听到一些简短的音乐"
-#~ "片段，此时您需要回答您是否在实验的第一阶段听过这些音乐。"
+#~ "  在音乐识别实验的第一个阶段，您将听到一些简短的音乐片段，请您尝试尽快回答"
+#~ "‘是否能识别出该音乐‘。同时请在大脑中一起跟唱这段音乐。当您告诉我们您识别出"
+#~ "了一段音乐时，该音乐会继续播放，但是声音将会被静音几秒钟。请您此时继续在心"
+#~ "里“默唱”该音乐直到它再次播放为止。有时候音乐会回到正确的位置，但有时候在静"
+#~ "音期间，同一段音乐会被向前或向后播放。当您在静音后再次听到音乐时，您需要判"
+#~ "断出该音乐是否回到正确的位置。在实验的第二阶段，您仍将听到一些简短的音乐片"
+#~ "段，此时您需要回答您是否在实验的第一阶段听过这些音乐。"
 
 #~ msgid "Music stopped playing"
 #~ msgstr "音乐突然停止播放，无读秒数"
