@@ -120,17 +120,6 @@ class ChoiceSet(models.Model):
     key = models.SlugField(max_length=64, primary_key=True)
     from_python = models.BooleanField(default=False, editable=False)
 
-    def create_choices(self, choices: dict):
-        index = 0
-        for choice in choices.keys():
-            choice_obj, _created = Choice.objects.get_or_create(
-                set=self, key=choice, text=choices[choice]
-            )
-            choice_obj.populate_translated_fields('text')
-            choice_obj.index = index
-            choice_obj.save()
-            index += 1
-
     def to_dict(self):
         return {choice.key: choice.text for choice in self.choices.all()}
 
@@ -151,23 +140,13 @@ class Choice(models.Model):
     index = models.PositiveIntegerField(default=0)
     set = models.ForeignKey(
         ChoiceSet,
-        null=True,
         on_delete=models.CASCADE,
         related_name='choices',
-    )
-    question = models.ForeignKey(
-        Question,
-        null=True,
-        on_delete=models.CASCADE,
     )
 
     class Meta:
         ordering = ["index"]
         unique_together = ["key", "set"]
-
-    def populate_translated_fields(self, field_name: str):
-        _populate_translated_fields(self, field_name)
-        self.save()
 
 
 class QuestionSeries(models.Model):
