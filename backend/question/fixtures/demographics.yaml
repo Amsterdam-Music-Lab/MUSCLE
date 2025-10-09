@@ -328,6 +328,48 @@
     set: GENDER_REDUCED
 - model: question.choice
   fields:
+    key: male
+    text: 'Man'
+    index: 0
+    set: GENDER_COMPLETE
+- model: question.choice
+  fields:
+    key: trans_male
+    text: 'Transgender man'
+    index: 1
+    set: GENDER_COMPLETE
+- model: question.choice
+  fields:
+    key: trans_female
+    text: 'Transgender woman'
+    index: 2
+    set: GENDER_COMPLETE
+- model: question.choice
+  fields:
+    key: female
+    text: 'Woman'
+    index: 3
+    set: GENDER_COMPLETE
+- model: question.choice
+  fields:
+    key: non_conforming
+    text: 'Non-conforming or questioning'
+    index: 4
+    set: GENDER_COMPLETE
+- model: question.choice
+  fields:
+    key: intersex
+    text: 'Intersex or two-spirit'
+    index: 5
+    set: GENDER_COMPLETE
+- model: question.choice
+  fields:
+    key: non_answer
+    text: 'Prefer not to answer'
+    index: 6
+    set: GENDER_COMPLETE
+- model: question.choice
+  fields:
     key: silent
     text: 1945 or earlier
     index: 0
