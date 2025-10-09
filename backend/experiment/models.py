@@ -111,17 +111,14 @@ class Experiment(models.Model):
 
         return Participant.objects.filter(session__in=self.associated_sessions())
 
-    def export_feedback(self) -> QuerySet[Session]:
-        """export feedback for the blocks in this experiment
+    def associated_feedback(self) -> QuerySet[Session]:
+        """return feedback for the blocks in this experiment
 
         Returns:
             Associated block feedback
         """
 
-        all_feedback = Feedback.objects.none()
-        for block in self.associated_blocks():
-            all_feedback |= Feedback.objects.filter(block=block)
-        return all_feedback
+        return Feedback.objects.filter(block__in=self.associated_blocks())
 
 
 class Phase(models.Model):
