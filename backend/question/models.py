@@ -50,7 +50,7 @@ class Question(models.Model):
         )
 
     key = models.SlugField(primary_key=True, max_length=128)
-    question = models.CharField(max_length=1024)
+    text = models.CharField(max_length=1024)
     explainer = models.TextField(blank=True, default="")
     from_python = models.BooleanField(default=False, editable=False)
 
