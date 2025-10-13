@@ -70,9 +70,9 @@ class SessionTest(TestCase):
             final_score=42,
             finished_at=timezone.now()
         )
-        rank = finished_session.percentile_rank(exclude_unfinished=True)
+        rank = finished_session.percentile_rank({'finished_at__isnull': False})
         assert rank == 75.0
-        rank = finished_session.percentile_rank(exclude_unfinished=False)
+        rank = finished_session.percentile_rank({})
         assert rank == 62.5
 
     def test_last_result(self):
