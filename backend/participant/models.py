@@ -7,6 +7,13 @@ from question.models import QuestionGroup
 from django.db.models import Sum
 from result.models import Result
 
+
+class PartipantManager(models.Manager):
+
+    def with_accumulative_score(self):
+        return self.annotate(accumulative_score=Sum("session__final_score"))
+
+
 class Participant(models.Model):
     """Main participant, base for profile and sessions
 
@@ -22,6 +29,7 @@ class Participant(models.Model):
     country_code = models.CharField(max_length=3, default="")
     access_info = models.CharField(max_length=512, default="", null=True)
     participant_id_url = models.CharField(max_length=128, null=True, unique=True)
+    objects = PartipantManager()
 
     def __str__(self):
         return "Participant {}".format(self.id)
@@ -41,6 +49,14 @@ class Participant(models.Model):
         return self.session_set.count()
 
     session_count.short_description = 'Sessions'
+
+    def percentile_rank_accumulative_score(self) -> float:
+        all_participants = Participant.objects.with_accumulative_score()
+        this_score = all_participants.get(pk=self.pk).accumulative_score
+        n_participants = all_participants.count()
+        n_lte = all_participants.filter(accumulative_score__lte=this_score).count()
+        n_eq = all_participants.filter(accumulative_score=this_score).count()
+        return 100.0 * (n_lte - (0.5 * n_eq)) / n_participants
 
     def result_count(self) -> int:
         """Get the total number of results

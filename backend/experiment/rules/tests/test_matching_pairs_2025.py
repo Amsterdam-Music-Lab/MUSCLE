@@ -238,7 +238,8 @@ class MatchingPairs2025Test(TestCase):
         self.create_session(120, json_data)
         session = self.create_session(100, json_data)
         percentile = self.rules._get_percentile_rank(session)
-        self.assertEqual(percentile, 57)
+        expected = (5 - 0.5 * 2) / 7 * 100  # 5 lower or equal, 2 equal, 7 total
+        self.assertAlmostEqual(percentile, expected)
 
     def test_other_conditions_do_not_affect_percentile_rank(self):
         target_data = {'condition': 'TD', 'difficulty': '4'}
@@ -249,7 +250,8 @@ class MatchingPairs2025Test(TestCase):
         self.create_session(20, {'condition': 'SD', 'difficulty': '2'})
         self.create_session(20, {'condition': 'SD', 'difficulty': '2'})
         percentile = self.rules._get_percentile_rank(session)
-        self.assertEqual(percentile, 62)
+        expected = (3 - 0.5 * 1) / 4 * 100  #  3 lower or equal, 1 equal, 4 total
+        self.assertEqual(percentile, expected)
 
     def test_has_played_before_returns_false(self):
         """Test that _has_played_before returns False when there are no previous results."""

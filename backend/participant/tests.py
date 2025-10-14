@@ -231,3 +231,33 @@ class ParticipantTest(TestCase):
         self.assertEqual(these_scores[0]['rank'], {'text': 'silver', 'class': 'silver'})
         self.assertEqual(these_scores[0]['score'], 30.0)
         self.assertEqual(these_scores[0]['date'], "today")
+
+    def test_percentile_rank_accumulative_score(self):
+        second_participant = Participant.objects.create()
+        third_participant = Participant.objects.create()
+        self._create_sessions(self.participant, 5)
+        self._create_sessions(second_participant, 10)
+        self._create_sessions(third_participant, 2)
+        participants_managed = Participant.objects.with_accumulative_score()
+        self.assertEqual(
+            participants_managed.get(pk=self.participant.pk).accumulative_score, 50
+        )
+        self.assertEqual(
+            participants_managed.get(pk=second_participant.pk).accumulative_score, 100
+        )
+        self.assertEqual(
+            participants_managed.get(pk=third_participant.pk).accumulative_score, 20
+        )
+        perc_acc = self.participant.percentile_rank_accumulative_score()
+        expected = (
+            (2 - 0.5 * 1) / 3 * 100
+        )  # 2 participants lower or equal, 1 equal, 3 total
+        self.assertEqual(perc_acc, expected)
+
+    def _create_sessions(self, participant: Participant, n_sessions: int):
+        Session.objects.bulk_create(
+            [
+                Session(block=self.block, participant=participant, final_score=10)
+                for n in range(n_sessions)
+            ]
+        )
