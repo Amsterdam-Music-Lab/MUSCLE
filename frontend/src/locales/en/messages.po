@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/config/frontend.ts:322
+#: src/config/frontend.ts:87
 msgid ""
 "\n"
 "How good are you in memorizing music? \n"
@@ -29,7 +29,7 @@ msgstr ""
 "Match melodies, clear the board, and minimize mistakes!\n"
 ""
 
-#: src/config/frontend.ts:245
+#: src/config/frontend.ts:21
 msgid ""
 "\n"
 "TuneTwins was created by members of the Music Cognition Group \n"
@@ -53,7 +53,7 @@ msgstr "{0} Play the game yourself at {1}"
 msgid "{turnScore} points"
 msgstr "{turnScore} points"
 
-#: src/config/frontend.ts:287
+#: src/config/frontend.ts:63
 msgid "**Invite your friends to play!** Simply ask them to scan this QR code."
 msgstr "**Invite your friends to play!** Simply ask them to scan this QR code."
 
@@ -61,11 +61,15 @@ msgstr "**Invite your friends to play!** Simply ask them to scan this QR code."
 msgid "+{turnScore} points"
 msgstr "+{turnScore} points"
 
-#: src/config/frontend.ts:361
-msgid "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
-msgstr "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
+#: src/config/frontend.ts:126
+msgid "⚠️ Note: The first load may take a while due to the amount of content, but later runs will be smoother."
+msgstr "⚠️ Note: The first load may take a while due to the amount of content, but later runs will be smoother."
 
-#: src/config/frontend.ts:405
+#: src/config/frontend.ts:361
+#~ msgid "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
+#~ msgstr "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
+
+#: src/config/frontend.ts:170
 msgid "🎉 Amazing! You've finished the game!"
 msgstr "🎉 Amazing! You've finished the game!"
 
@@ -97,7 +101,7 @@ msgstr "Back"
 msgid "Bronze"
 msgstr "Bronze"
 
-#: src/config/frontend.ts:402
+#: src/config/frontend.ts:167
 msgid "Can you collect them all?"
 msgstr "Can you collect them all?"
 
@@ -106,12 +110,12 @@ msgid "Confirm"
 msgstr "Confirm"
 
 #: src/config/frontend.ts:306
-msgid "Congrats! You did better than {{cutoff}}% of players at this level!"
-msgstr "Congrats! You did better than {{cutoff}}% of players at this level!"
+#~ msgid "Congrats! You did better than {{cutoff}}% of players at this level!"
+#~ msgstr "Congrats! You did better than {{cutoff}}% of players at this level!"
 
 #: src/config/frontend.ts:305
-msgid "Congrats! You did better than {{percentile}}% of players at this level!"
-msgstr "Congrats! You did better than {{percentile}}% of players at this level!"
+#~ msgid "Congrats! You did better than {{percentile}}% of players at this level!"
+#~ msgstr "Congrats! You did better than {{percentile}}% of players at this level!"
 
 #: src/components/plugins/plugins/RankingPlugin.tsx:59
 msgid "Congrats! You did better than {cutoff}% of players at this level"
@@ -161,7 +165,7 @@ msgstr "Gold"
 msgid "Good job!"
 msgstr "Good job!"
 
-#: src/config/frontend.ts:358
+#: src/config/frontend.ts:123
 msgid "Help us with your feedback!"
 msgstr "Help us with your feedback!"
 
@@ -234,14 +238,15 @@ msgid "Platinum"
 msgstr "Platinum"
 
 #: src/components/views/FinalView/FinalView.tsx:186
+#: src/config/frontend.ts:154
 msgid "Play another game!"
 msgstr "Play another game!"
 
-#: src/config/frontend.ts:398
+#: src/config/frontend.ts:163
 msgid "Play on and collect 'm all..."
 msgstr "Play on and collect 'm all..."
 
-#: src/config/frontend.ts:406
+#: src/config/frontend.ts:171
 msgid "Play on? Let's start another round of games..."
 msgstr "Play on? Let's start another round of games..."
 
@@ -273,12 +278,12 @@ msgstr "Silver"
 msgid "Skip"
 msgstr "Skip"
 
-#: src/config/frontend.ts:373
+#: src/config/frontend.ts:138
 msgid "Start the game!"
 msgstr "Start the game!"
 
-#: src/components/views/SurveyView/SurveyView.tsx:117
 #: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
+#: src/components/views/SurveyView/SurveyView.tsx:117
 msgid "Submit"
 msgstr "Submit"
 
@@ -286,7 +291,7 @@ msgstr "Submit"
 msgid "Submit more feedback"
 msgstr "Submit more feedback"
 
-#: src/config/frontend.ts:347
+#: src/config/frontend.ts:112
 msgid "Test Your Musical Memory!"
 msgstr "Test Your Musical Memory!"
 
@@ -294,23 +299,23 @@ msgstr "Test Your Musical Memory!"
 msgid "This is your lucky day!"
 msgstr "This is your lucky day!"
 
-#: src/components/plugins/plugins/ScoresPlugin.tsx:43
-#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
+#: src/components/plugins/plugins/ScoresPlugin.tsx:43
 msgid "Total score"
 msgstr "Total score"
 
 #: src/config/frontend.ts:20
-msgid ""
-"TuneTwins was created by members of the Music Cognition Group \n"
-"and supported by the Dutch Research Council and Faculty of Humanities at the University \n"
-"of Amsterdam. This website processes only anonymized data. For more information, \n"
-"see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)"
-msgstr ""
-"TuneTwins was created by members of the Music Cognition Group \n"
-"and supported by the Dutch Research Council and Faculty of Humanities at the University \n"
-"of Amsterdam. This website processes only anonymized data. For more information, \n"
-"see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)"
+#~ msgid ""
+#~ "TuneTwins was created by members of the Music Cognition Group \n"
+#~ "and supported by the Dutch Research Council and Faculty of Humanities at the University \n"
+#~ "of Amsterdam. This website processes only anonymized data. For more information, \n"
+#~ "see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)"
+#~ msgstr ""
+#~ "TuneTwins was created by members of the Music Cognition Group \n"
+#~ "and supported by the Dutch Research Council and Faculty of Humanities at the University \n"
+#~ "of Amsterdam. This website processes only anonymized data. For more information, \n"
+#~ "see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)"
 
 #: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:70
 msgid "Type your feedback..."
@@ -328,11 +333,11 @@ msgstr ""
 msgid "Well done!"
 msgstr "Well done!"
 
-#: src/config/frontend.ts:401
+#: src/config/frontend.ts:166
 msgid "Woohoo! You've earned your first star! 💫"
 msgstr "Woohoo! You've earned your first star! 💫"
 
-#: src/config/frontend.ts:397
+#: src/config/frontend.ts:162
 msgid "Yay, you've earned a star! 💫"
 msgstr "Yay, you've earned a star! 💫"
 
@@ -348,6 +353,6 @@ msgstr "Your feedback"
 msgid "Your feedback was submitted."
 msgstr "Your feedback was submitted."
 
-#: src/config/frontend.ts:306
+#: src/config/frontend.ts:79
 msgid "Your progress..."
 msgstr "Your progress..."

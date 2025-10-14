@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/config/frontend.ts:322
+#: src/config/frontend.ts:87
 msgid ""
 "\n"
 "How good are you in memorizing music? \n"
@@ -29,7 +29,7 @@ msgstr ""
 "Match melodieën, maak het bord leeg en maak zo min mogelijk fouten!\n"
 ""
 
-#: src/config/frontend.ts:245
+#: src/config/frontend.ts:21
 msgid ""
 "\n"
 "TuneTwins was created by members of the Music Cognition Group \n"
@@ -53,7 +53,7 @@ msgstr "{0} Probeer het zelf op {1}"
 msgid "{turnScore} points"
 msgstr "{turnScore} punten"
 
-#: src/config/frontend.ts:287
+#: src/config/frontend.ts:63
 msgid "**Invite your friends to play!** Simply ask them to scan this QR code."
 msgstr "**Nodig je vrienden uit om mee te spelen!** Laat ze deze QR-code scannen."
 
@@ -61,11 +61,15 @@ msgstr "**Nodig je vrienden uit om mee te spelen!** Laat ze deze QR-code scannen
 msgid "+{turnScore} points"
 msgstr "+{turnScore} punten"
 
-#: src/config/frontend.ts:361
-msgid "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
-msgstr "⚠️ Dit spel is nog in ontwikkeling: we zijn momenteel aan het testen. Loop je tegen problemen aan of heb je suggesties? **Deel je feedback via de feedbackknop** die binnenkort rechtsonder verschijnt."
+#: src/config/frontend.ts:126
+msgid "⚠️ Note: The first load may take a while due to the amount of content, but later runs will be smoother."
+msgstr ""
 
-#: src/config/frontend.ts:405
+#: src/config/frontend.ts:361
+#~ msgid "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
+#~ msgstr "⚠️ Dit spel is nog in ontwikkeling: we zijn momenteel aan het testen. Loop je tegen problemen aan of heb je suggesties? **Deel je feedback via de feedbackknop** die binnenkort rechtsonder verschijnt."
+
+#: src/config/frontend.ts:170
 msgid "🎉 Amazing! You've finished the game!"
 msgstr "🎉 Geweldig! Je hebt het spel uitgespeeld!"
 
@@ -97,7 +101,7 @@ msgstr "Terug"
 msgid "Bronze"
 msgstr "Brons"
 
-#: src/config/frontend.ts:402
+#: src/config/frontend.ts:167
 msgid "Can you collect them all?"
 msgstr "Kan je ze allemaal verzamelen?"
 
@@ -153,7 +157,7 @@ msgstr "Goud"
 msgid "Good job!"
 msgstr "Goed gedaan!"
 
-#: src/config/frontend.ts:358
+#: src/config/frontend.ts:123
 msgid "Help us with your feedback!"
 msgstr "Help ons: deel je feedback!"
 
@@ -226,14 +230,15 @@ msgid "Platinum"
 msgstr "Platina"
 
 #: src/components/views/FinalView/FinalView.tsx:186
+#: src/config/frontend.ts:154
 msgid "Play another game!"
 msgstr "Speel nog een spel!"
 
-#: src/config/frontend.ts:398
+#: src/config/frontend.ts:163
 msgid "Play on and collect 'm all..."
 msgstr "Speel verder en verzamel ze allemaal..."
 
-#: src/config/frontend.ts:406
+#: src/config/frontend.ts:171
 msgid "Play on? Let's start another round of games..."
 msgstr "Verder spelen? Begin met een nieuwe ronde..."
 
@@ -265,12 +270,12 @@ msgstr "Zilver"
 msgid "Skip"
 msgstr "Overslaan"
 
-#: src/config/frontend.ts:373
+#: src/config/frontend.ts:138
 msgid "Start the game!"
 msgstr "Begin het spel!"
 
-#: src/components/views/SurveyView/SurveyView.tsx:117
 #: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
+#: src/components/views/SurveyView/SurveyView.tsx:117
 msgid "Submit"
 msgstr "Verzenden"
 
@@ -278,7 +283,7 @@ msgstr "Verzenden"
 msgid "Submit more feedback"
 msgstr "Verstuur meer feedback"
 
-#: src/config/frontend.ts:347
+#: src/config/frontend.ts:112
 msgid "Test Your Musical Memory!"
 msgstr "Test je muzikale geheugen!"
 
@@ -286,9 +291,9 @@ msgstr "Test je muzikale geheugen!"
 msgid "This is your lucky day!"
 msgstr "Dit is je geluksdag!"
 
-#: src/components/plugins/plugins/ScoresPlugin.tsx:43
-#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
+#: src/components/plugins/plugins/ScoresPlugin.tsx:43
 msgid "Total score"
 msgstr "Totaalscore"
 
@@ -306,11 +311,11 @@ msgstr "Helaas kun je niet deelnemen aan dit experiment als je geen toestemming 
 msgid "Well done!"
 msgstr "Goed gedaan!"
 
-#: src/config/frontend.ts:401
+#: src/config/frontend.ts:166
 msgid "Woohoo! You've earned your first star! 💫"
 msgstr "Wohoo! Je hebt je eerste ster verdiend! 💫"
 
-#: src/config/frontend.ts:397
+#: src/config/frontend.ts:162
 msgid "Yay, you've earned a star! 💫"
 msgstr "Yay, je hebt een ster verdiend! 💫"
 
@@ -326,6 +331,6 @@ msgstr "Deel je feedback"
 msgid "Your feedback was submitted."
 msgstr "Je feedback is verstuurd."
 
-#: src/config/frontend.ts:306
+#: src/config/frontend.ts:79
 msgid "Your progress..."
 msgstr "Je voortgang..."

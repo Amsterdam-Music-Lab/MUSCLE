@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/config/frontend.ts:322
+#: src/config/frontend.ts:87
 msgid ""
 "\n"
 "How good are you in memorizing music? \n"
@@ -29,6 +29,19 @@ msgstr ""
 "Combine melodias, limpe o tabuleiro e minimize os erros!\n"
 ""
 
+#: src/config/frontend.ts:21
+msgid ""
+"\n"
+"TuneTwins was created by members of the Music Cognition Group \n"
+"and supported by the Dutch Research Council and Faculty of Humanities at the University \n"
+"of Amsterdam. This website processes only anonymized data. For more information, \n"
+"see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)"
+msgstr ""
+"O TuneTwins foi criado por membros do Music Cognition Group \n"
+"e apoiado pelo Conselho de Pesquisa Holandês e pela Faculdade de Ciências Humanas da Universidade \n"
+"de Amsterdã. Este site processa apenas dados anônimos. Para obter mais informações, \n"
+"consulte [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)"
+
 #. placeholder {0}: config?.content
 #. placeholder {1}: config?.url
 #: src/components/modules/ShareOptions/ShareOptions.tsx:113
@@ -39,7 +52,7 @@ msgstr "{0} Jogue o jogo você mesmo em {1}"
 msgid "{turnScore} points"
 msgstr "{turnScore} pontos"
 
-#: src/config/frontend.ts:287
+#: src/config/frontend.ts:63
 msgid "**Invite your friends to play!** Simply ask them to scan this QR code."
 msgstr "**Convide seus amigos para jogar!** Simplesmente peça a eles para escanear este código QR.\""
 
@@ -47,14 +60,19 @@ msgstr "**Convide seus amigos para jogar!** Simplesmente peça a eles para escan
 msgid "+{turnScore} points"
 msgstr "+{turnScore} points"
 
-#: src/config/frontend.ts:361
-msgid "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
-msgstr "⚠️ Este jogo ainda está em desenvolvimento: no momento, estamos fazendo testes beta. Se você encontrar algum problema ou tiver sugestões, **compartilhe seu feedback usando o botão de feedback** que aparecerá no canto inferior direito em breve.\n"
-"\n"
-"\n"
-"⚠️ Observe também que este aplicativo usa traduções automáticas para o português. Informe-nos caso encontre problemas."
+#: src/config/frontend.ts:126
+msgid "⚠️ Note: The first load may take a while due to the amount of content, but later runs will be smoother."
+msgstr ""
 
-#: src/config/frontend.ts:405
+#: src/config/frontend.ts:361
+#~ msgid "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
+#~ msgstr ""
+#~ "⚠️ Este jogo ainda está em desenvolvimento: no momento, estamos fazendo testes beta. Se você encontrar algum problema ou tiver sugestões, **compartilhe seu feedback usando o botão de feedback** que aparecerá no canto inferior direito em breve.\n"
+#~ "\n"
+#~ "\n"
+#~ "⚠️ Observe também que este aplicativo usa traduções automáticas para o português. Informe-nos caso encontre problemas."
+
+#: src/config/frontend.ts:170
 msgid "🎉 Amazing! You've finished the game!"
 msgstr "🎉 Incrível! Você terminou o jogo!"
 
@@ -86,7 +104,7 @@ msgstr "Voltar"
 msgid "Bronze"
 msgstr "Bronze"
 
-#: src/config/frontend.ts:402
+#: src/config/frontend.ts:167
 msgid "Can you collect them all?"
 msgstr "Você consegue coletar todos?"
 
@@ -142,7 +160,7 @@ msgstr "Ouro"
 msgid "Good job!"
 msgstr "Bom trabalho!"
 
-#: src/config/frontend.ts:358
+#: src/config/frontend.ts:123
 msgid "Help us with your feedback!"
 msgstr "Ajude-nos com seu feedback!"
 
@@ -215,14 +233,15 @@ msgid "Platinum"
 msgstr "Platina"
 
 #: src/components/views/FinalView/FinalView.tsx:186
+#: src/config/frontend.ts:154
 msgid "Play another game!"
 msgstr "Jogar outro jogo!"
 
-#: src/config/frontend.ts:398
+#: src/config/frontend.ts:163
 msgid "Play on and collect 'm all..."
 msgstr "Continue jogando e colete todos..."
 
-#: src/config/frontend.ts:406
+#: src/config/frontend.ts:171
 msgid "Play on? Let's start another round of games..."
 msgstr "Continuar jogando? Vamos começar outra rodada de jogos..."
 
@@ -254,12 +273,12 @@ msgstr "Prata"
 msgid "Skip"
 msgstr "Pular"
 
-#: src/config/frontend.ts:373
+#: src/config/frontend.ts:138
 msgid "Start the game!"
 msgstr "Começar o jogo!"
 
-#: src/components/views/SurveyView/SurveyView.tsx:117
 #: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
+#: src/components/views/SurveyView/SurveyView.tsx:117
 msgid "Submit"
 msgstr "Enviar"
 
@@ -267,7 +286,7 @@ msgstr "Enviar"
 msgid "Submit more feedback"
 msgstr "Enviar mais feedback"
 
-#: src/config/frontend.ts:347
+#: src/config/frontend.ts:112
 msgid "Test Your Musical Memory!"
 msgstr "Teste sua memória musical!"
 
@@ -275,24 +294,11 @@ msgstr "Teste sua memória musical!"
 msgid "This is your lucky day!"
 msgstr "Este é o seu dia de sorte!"
 
-#: src/components/plugins/plugins/ScoresPlugin.tsx:43
-#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
+#: src/components/plugins/plugins/ScoresPlugin.tsx:43
 msgid "Total score"
 msgstr "Pontuação total"
-
-#: src/config/frontend.ts:245
-msgid ""
-"\n"
-"TuneTwins was created by members of the Music Cognition Group \n"
-"and supported by the Dutch Research Council and Faculty of Humanities at the University \n"
-"of Amsterdam. This website processes only anonymized data. For more information, \n"
-"see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)"
-msgstr ""
-"O TuneTwins foi criado por membros do Music Cognition Group \n"
-"e apoiado pelo Conselho de Pesquisa Holandês e pela Faculdade de Ciências Humanas da Universidade \n"
-"de Amsterdã. Este site processa apenas dados anônimos. Para obter mais informações, \n"
-"consulte [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)"
 
 #: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:70
 msgid "Type your feedback..."
@@ -310,11 +316,11 @@ msgstr ""
 msgid "Well done!"
 msgstr "Muito bem!"
 
-#: src/config/frontend.ts:401
+#: src/config/frontend.ts:166
 msgid "Woohoo! You've earned your first star! 💫"
 msgstr "Woohoo! Você ganhou sua primeira estrela! 💫"
 
-#: src/config/frontend.ts:397
+#: src/config/frontend.ts:162
 msgid "Yay, you've earned a star! 💫"
 msgstr "Yay, você ganhou uma estrela! 💫"
 
@@ -330,6 +336,6 @@ msgstr "Seu feedback"
 msgid "Your feedback was submitted."
 msgstr "Seu feedback foi enviado."
 
-#: src/config/frontend.ts:306
+#: src/config/frontend.ts:79
 msgid "Your progress..."
 msgstr "Seu progresso..."
