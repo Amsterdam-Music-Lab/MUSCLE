@@ -45,7 +45,7 @@
     "lint": "eslint src/**/*.{js,jsx,ts,tsx}",
     "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx}",
     "build-storybook": "storybook build",
-    "extract": "lingui extract src/components",
+    "extract": "lingui extract",
     "compile": "lingui compile --typescript"
   },
   "eslintConfig": {

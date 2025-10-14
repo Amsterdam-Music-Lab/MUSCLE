@@ -14,7 +14,9 @@ COPY . /client/
 COPY .env /client/
 
 RUN yarn
-# build with the base path set to FRONTEND_STATIC_URL (to pull from CDN) or "/" as fallback
+# copy locale files to public folder
+RUN cp -r src/locales public/locales/
+# build with the base path set to VITE_STATIC_URL (to pull from CDN) or "/" as fallback
 RUN yarn build --base ${VITE_STATIC_URL:-/}
 
 # Runner image that serves the built app using nginx
