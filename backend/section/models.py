@@ -242,20 +242,17 @@ class Playlist(models.Model):
         """Update csv data for admin"""
         csvfile = CsvStringBuilder()
         writer = csv.writer(csvfile)
-        for section in self.section_set.all():
-            if section.song:
-                this_artist = section.artist_name()
-                this_name = section.song_name()
-            else:
-                this_artist = ''
-                this_name = ''
-            writer.writerow([this_artist,
-                            this_name,
-                            section.start_time,
-                            section.duration,
-                            section.filename,
-                            section.tag,
-                            section.group])
+        values = self.section_set.values_list(
+            "song__artist",
+            "song__name",
+            "start_time",
+            "duration",
+            "filename",
+            "tag",
+            "group",
+        )
+        for row in values:
+            writer.writerow(row)
         csv_string = csvfile.csv_string
         return ''.join(csv_string)
 
