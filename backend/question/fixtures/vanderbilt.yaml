@@ -1,4 +1,4 @@
-- model: question.question
+- model: question.text
   pk: VB_01
   fields:
     question: I can recognize a piece of music after hearing just a few notes.
@@ -6,7 +6,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: VB_02
   fields:
     question: My musical ability is important to my identity.
@@ -14,7 +14,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: VB_03
   fields:
     question: Listening to music makes me feel less alone.
@@ -22,7 +22,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: VB_04
   fields:
     question: I can tap in time with a musical beat.
@@ -30,7 +30,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: VB_05
   fields:
     question: When I feel anxious, listening to music helps me see things in a more
@@ -39,7 +39,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: VB_06
   fields:
     question: Making music helps me to socially connect with others.

@@ -1,5 +1,5 @@
 # questions, choice sets and choices for the Goldsmiths Musical Sophistication Index
-- model: question.question
+- model: question.text
   pk: msi_01_music_activities
   fields:
     question: I spend a lot of my free time doing music-related activities.
@@ -7,7 +7,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_02_shivers
   fields:
     question: I sometimes choose music that can trigger shivers down my spine.
@@ -15,7 +15,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_03_writing
   fields:
     question: I enjoy writing about music, for example on blogs and forums.
@@ -23,7 +23,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_04_sing_along
   fields:
     question: If somebody starts singing a song I don’t know, I can usually join in.
@@ -31,7 +31,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_05_good_singer
   fields:
     question: I am able to judge whether someone is a good singer or not.
@@ -39,7 +39,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_06_song_first_time
   fields:
     question: I usually know when I’m hearing a song for the first time.
@@ -47,7 +47,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_07_from_memory
   fields:
     question: I can sing or play music from memory.
@@ -55,7 +55,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_08_intrigued_styles
   fields:
     question: I’m intrigued by musical styles I’m not familiar with and want to find
@@ -64,7 +64,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_09_rarely_emotions
   fields:
     question: Pieces of music rarely evoke emotions for me.
@@ -72,7 +72,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT_REVERSED
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_10_sing_with_recording
   fields:
     question: I am able to hit the right notes when I sing along with a recording.
@@ -80,7 +80,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_11_spot_mistakes
   fields:
     question: I find it difficult to spot mistakes in a performance of a song even
@@ -89,7 +89,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT_REVERSED
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_12_performance_diff
   fields:
     question: I can compare and discuss differences between two performances or versions
@@ -98,7 +98,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_13_trouble_recognising
   fields:
     question: I have trouble recognising a familiar song when played in a different
@@ -107,7 +107,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT_REVERSED
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_14_never_complimented
   fields:
     question: I have never been complimented for my talents as a musical performer.
@@ -115,7 +115,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT_REVERSED
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_15_internet_search_music
   fields:
     question: I often read or search the internet for things related to music.
@@ -123,7 +123,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_16_motivate
   fields:
     question: I often pick certain music to motivate or excite me.
@@ -131,7 +131,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_17_not_sing_harmony
   fields:
     question: I am not able to sing in harmony when somebody is singing a familiar
@@ -140,7 +140,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT_REVERSED
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_18_out_of_beat
   fields:
     question: I can tell when people sing or play out of time with the beat.
@@ -148,7 +148,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_19_identify_special
   fields:
     question: I am able to identify what is special about a given musical piece.
@@ -156,7 +156,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_20_talk_emotions
   fields:
     question: I am able to talk about the emotions that a piece of music evokes for
@@ -165,7 +165,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_21_spend_income
   fields:
     question: I don’t spend much of my disposable income on music.
@@ -173,7 +173,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT_REVERSED
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_22_out_of_tune
   fields:
     question: I can tell when people sing or play out of tune.
@@ -181,7 +181,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_23_no_idea_in_tune
   fields:
     question: When I sing, I have no idea whether I’m in tune or not.
@@ -189,7 +189,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT_REVERSED
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_24_music_addiction
   fields:
     question: 'Music is kind of an addiction for me: I couldn’t live without it.'
@@ -197,7 +197,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_25_sing_public
   fields:
     question: I don’t like singing in public because I’m afraid that I would sing
@@ -206,7 +206,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT_REVERSED
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_26_genre
   fields:
     question: When I hear a piece of music I can usually identify its genre.
@@ -214,7 +214,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_27_consider_musician
   fields:
     question: I would not consider myself a musician.
@@ -222,7 +222,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT_REVERSED
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_28_track_new
   fields:
     question: ' I keep track of new music that I come across (e.g. new artists or
@@ -231,7 +231,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_29_sing_after_hearing
   fields:
     question: After hearing a new song two or three times, I can usually sing it by
@@ -240,7 +240,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_30_sing_back
   fields:
     question: I only need to hear a new tune once and I can sing it back hours later.
@@ -248,7 +248,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_31_memories
   fields:
     question: Music can evoke my memories of past people and places.
@@ -256,7 +256,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: msi_32_practice_years
   fields:
     question: I engaged in regular, daily practice of a musical instrument (including
@@ -265,7 +265,7 @@
     type: RadiosQuestion
     profile_scoring_rule: LIKERT
     choices: GMSI_YEARS_PRACTICED
-- model: question.question
+- model: question.text
   pk: msi_33_practice_daily
   fields:
     question: At the peak of my interest, I practised my primary instrument for _
@@ -274,7 +274,7 @@
     type: RadiosQuestion
     profile_scoring_rule: LIKERT
     choices: GMSI_HOURS_DAILY_PRACTICE
-- model: question.question
+- model: question.text
   pk: msi_34_attended_events
   fields:
     question: I have attended _ live music events as an audience member in the past
@@ -283,7 +283,7 @@
     type: RadiosQuestion
     profile_scoring_rule: LIKERT
     choices: GMSI_ATTENDED_EVENTS
-- model: question.question
+- model: question.text
   pk: msi_35_theory_training
   fields:
     question: I have had formal training in music theory for _ years.
@@ -291,7 +291,7 @@
     type: RadiosQuestion
     profile_scoring_rule: LIKERT
     choices: GMSI_YEARS_THEORY_TRAINING
-- model: question.question
+- model: question.text
   pk: msi_36_instrumental_training
   fields:
     question: I have had _ years of formal training on a musical instrument (including
@@ -300,7 +300,7 @@
     type: RadiosQuestion
     profile_scoring_rule: LIKERT
     choices: GMSI_YEARS_INSTRUMENTAL_TRAINING
-- model: question.question
+- model: question.text
   pk: msi_37_play_instruments
   fields:
     question: How many musical instruments can you play?
@@ -308,7 +308,7 @@
     type: RadiosQuestion
     profile_scoring_rule: LIKERT
     choices: GMSI_N_INSTRUMENTS
-- model: question.question
+- model: question.text
   pk: msi_38_listen_music
   fields:
     question: I listen attentively to music for _ per day.
@@ -316,7 +316,7 @@
     type: RadiosQuestion
     profile_scoring_rule: LIKERT
     choices: GMSI_DAILY_MUSIC_LISTENING
-- model: question.question
+- model: question.text
   pk: msi_39_best_instrument
   fields:
     question: 'The instrument I play best, including voice (or none), is:'
@@ -324,7 +324,7 @@
     type: TextQuestion
     profile_scoring_rule: ''
     choices: null
-- model: question.question
+- model: question.text
   pk: 'ST_01_age_instrument'
   fields:
     question: What age did you start to play an instrument?
@@ -332,7 +332,7 @@
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: GMSI_AGE_STARTED_INSTRUMENT
-- model: question.question
+- model: question.text
   pk: 'AP_01_absolute_pitch'
   fields:
     question: Do you have absolute pitch? Absolute or perfect pitch is the ability to recognise and name an isolated musical tone without a reference tone, e.g. being able to say 'F#' if someone plays that note on the piano.

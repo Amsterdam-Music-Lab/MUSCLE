@@ -1,5 +1,5 @@
 # Questions, choice sets and choices for the Musicality Genomics project
-- model: question.question
+- model: question.text
   pk: P01_1
   fields:
     question: Can you clap in time with a musical beat?
@@ -7,7 +7,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P01_2
   fields:
     question: I can tap my foot in time with the beat of the music I hear.
@@ -15,7 +15,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P01_3
   fields:
     question: When listening to music, can you move in time with the beat?
@@ -23,7 +23,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P02_1
   fields:
     question: I can recognise a piece of music after hearing just a few notes.
@@ -31,7 +31,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P02_2
   fields:
     question: I can easily recognise a familiar song.
@@ -39,7 +39,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P02_3
   fields:
     question: When I hear the beginning of a song I know immediately whether I've
@@ -48,7 +48,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P03_1
   fields:
     question: I can tell when people sing out of tune.
@@ -56,7 +56,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P03_2
   fields:
     question: I am able to judge whether someone is a good singer or not.
@@ -64,7 +64,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P03_3
   fields:
     question: I find it difficult to spot mistakes in a performance of a song even
@@ -73,7 +73,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P04_1
   fields:
     question: I feel chills when I hear music that I like.
@@ -81,7 +81,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P04_2
   fields:
     question: I get emotional listening to certain pieces of music.
@@ -89,7 +89,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P04_3
   fields:
     question: I become tearful or cry when I listen to a melody that I like very much.
@@ -97,7 +97,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P04_4
   fields:
     question: Music gives me shivers or goosebumps.
@@ -105,7 +105,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P05_1
   fields:
     question: When I listen to music I'm absorbed by it.
@@ -113,7 +113,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P05_2
   fields:
     question: While listening to music, I become so involved that I forget about myself
@@ -122,7 +122,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P05_3
   fields:
     question: When I listen to music I get so caught up in it that I don't notice
@@ -131,7 +131,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P05_4
   fields:
     question: I feel like I am 'one' with the music.
@@ -139,7 +139,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P05_5
   fields:
     question: I lose myself in music.
@@ -147,7 +147,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P06_1
   fields:
     question: I like listening to music.
@@ -155,7 +155,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P06_2
   fields:
     question: I enjoy music.
@@ -163,7 +163,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P06_3
   fields:
     question: I listen to music for pleasure.
@@ -171,7 +171,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P06_4
   fields:
     question: Music is kind of an addiction for me - I couldn't live without it.
@@ -179,7 +179,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P07_1
   fields:
     question: I can tell when people sing or play out of time with the beat of the
@@ -188,7 +188,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P07_2
   fields:
     question: I can hear when people are not in sync when they play a song.
@@ -196,7 +196,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P07_3
   fields:
     question: I can tell when music is sung or played in time with the beat.
@@ -204,7 +204,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P08_1
   fields:
     question: I can sing or play a song from memory.
@@ -212,7 +212,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P08_2
   fields:
     question: Singing or playing music from memory is easy for me.
@@ -220,7 +220,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P08_3
   fields:
     question: I find it hard to sing or play a song from memory.
@@ -228,7 +228,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P09_1
   fields:
     question: When I sing, I have no idea whether I'm in tune or not.
@@ -236,7 +236,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P09_2
   fields:
     question: I am able to hit the right notes when I sing along with a recording.
@@ -244,7 +244,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P09_3
   fields:
     question: I can sing along with other people.
@@ -252,7 +252,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P10_1
   fields:
     question: I have no sense for rhythm (when I listen, play or dance to music).
@@ -260,7 +260,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P10_2
   fields:
     question: Understanding the rhythm of a piece is easy for me (when I listen, play
@@ -269,7 +269,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P10_3
   fields:
     question: I have a good sense of rhythm (when I listen, play, or dance to music).
@@ -277,7 +277,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P11_1
   fields:
     question: Do you have absolute pitch? Absolute pitch is the ability to recognise
@@ -287,7 +287,7 @@
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: BOOLEAN_UNDECIDED
-- model: question.question
+- model: question.text
   pk: P11_2
   fields:
     question: Do you have perfect pitch?
@@ -295,7 +295,7 @@
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: BOOLEAN_UNDECIDED
-- model: question.question
+- model: question.text
   pk: P11_3
   fields:
     question: If someone plays a note on an instrument and you can't see what note
@@ -304,7 +304,7 @@
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: BOOLEAN_UNDECIDED
-- model: question.question
+- model: question.text
   pk: P12_1
   fields:
     question: Can you hear the difference between two melodies?
@@ -312,7 +312,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P12_2
   fields:
     question: I can recognise differences between melodies even if they are similar.
@@ -320,7 +320,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P12_3
   fields:
     question: I can tell when two melodies are the same or different.
@@ -328,7 +328,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P13_1
   fields:
     question: I make up new melodies in my mind.
@@ -336,7 +336,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P13_2
   fields:
     question: I make up songs, even when I'm just singing to myself.
@@ -344,7 +344,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P13_3
   fields:
     question: I like to play around with new melodies that come to my mind.
@@ -352,7 +352,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P14_1
   fields:
     question: I have a melody stuck in my mind.
@@ -360,7 +360,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P14_2
   fields:
     question: I experience earworms.
@@ -368,7 +368,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P14_3
   fields:
     question: I get music stuck in my head.
@@ -376,7 +376,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P14_4
   fields:
     question: I have a piece of music stuck on repeat in my head.
@@ -384,7 +384,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P15_1
   fields:
     question: Music makes me dance.
@@ -392,7 +392,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P15_2
   fields:
     question: I don't like to dance, not even with music I like.
@@ -400,7 +400,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P15_3
   fields:
     question: I can dance to a beat.
@@ -408,7 +408,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P15_4
   fields:
     question: I easily get into a groove when listening to music.
@@ -416,7 +416,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P16_1
   fields:
     question: Can you hear the difference between two rhythms?
@@ -424,7 +424,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P16_2
   fields:
     question: I can tell when two rhythms are the same or different.
@@ -432,7 +432,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P16_3
   fields:
     question: I can recognise differences between rhythms even if they are similar.
@@ -440,7 +440,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P17_1
   fields:
     question: I can't help humming or singing along to music that I like.
@@ -448,7 +448,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P17_2
   fields:
     question: When I hear a tune I like a lot I can't help tapping or moving to its
@@ -457,7 +457,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: P17_3
   fields:
     question: Hearing good music makes me want to sing along.
@@ -465,7 +465,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_FREQUENCY_6
-- model: question.question
+- model: question.text
   pk: PHENOTYPES_1
   fields:
     question: Please select the sentence that describes your level of achievement
@@ -474,7 +474,7 @@
     type: RadiosQuestion
     profile_scoring_rule: LIKERT
     choices: MUSICGENS_ACHIEVEMENT
-- model: question.question
+- model: question.text
   pk: PHENOTYPES_2
   fields:
     question: How engaged with music are you? Singing, playing, and even writing music
@@ -483,7 +483,7 @@
     type: RadiosQuestion
     profile_scoring_rule: LIKERT
     choices: MUSICGENS_ENGAGEMENT
-- model: question.question
+- model: question.text
   pk: PHENOTYPES_3
   fields:
     question: I have never been complimented for my talents as a musical performer.
@@ -491,7 +491,7 @@
     type: RadiosQuestion
     profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: PHENOTYPES_4
   fields:
     question: To what extent do you agree that you see yourself as someone who is
@@ -500,7 +500,7 @@
     type: RadiosQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_6
-- model: question.question
+- model: question.text
   pk: PHENOTYPES_5
   fields:
     question: At the peak of my interest, I practised ___ hours on my primary instrument
@@ -509,7 +509,7 @@
     type: RadiosQuestion
     profile_scoring_rule: LIKERT
     choices: MUSICGENS_PRACTICE
-- model: question.question
+- model: question.text
   pk: PHENOTYPES_6
   fields:
     question: How often did you play or sing during the most active period?
@@ -517,7 +517,7 @@
     type: RadiosQuestion
     profile_scoring_rule: REVERSE_LIKERT
     choices: MUSICGENS_PLAY_FREQUENCY_PEAK
-- model: question.question
+- model: question.text
   pk: PHENOTYPES_7
   fields:
     question: How long (duration) did you play or sing during the most active period?
@@ -525,7 +525,7 @@
     type: RadiosQuestion
     profile_scoring_rule: REVERSE_LIKERT
     choices: MUSICGENS_PLAY_DURATION_PEAK
-- model: question.question
+- model: question.text
   pk: PHENOTYPES_8
   fields:
     question: About how many hours do you usually spend each week playing a musical
@@ -534,7 +534,7 @@
     type: RadiosQuestion
     profile_scoring_rule: LIKERT
     choices: MUSICGENS_PLAY_FREQUENCY_CURRENT
-- model: question.question
+- model: question.text
   pk: PHENOTYPES_9
   fields:
     question: Indicate approximately how many hours per week you have played or practiced

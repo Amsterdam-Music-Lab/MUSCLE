@@ -1,4 +1,4 @@
-- model: question.question
+- model: question.text
   pk: dgf_education_zh
   fields:
     question: What is the highest educational qualification that you have attained?
@@ -6,7 +6,7 @@
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: ZH_EDUCATION
-- model: question.question
+- model: question.text
   pk: dgf_gender_identity_zh
   fields:
     question: What is your gender?
@@ -14,7 +14,7 @@
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: ZH_GENDER
-- model: question.question
+- model: question.text
   pk: dgf_genre_preference_zh
   fields:
     question: To which group of musical genres do you currently listen most?
@@ -22,7 +22,7 @@
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: ZH_GENRE
-- model: question.question
+- model: question.text
   pk: dgf_region_of_origin_zh
   fields:
     question: In which region did you spend the most formative years of your childhood
@@ -31,7 +31,7 @@
     type: DropdownQuestion
     profile_scoring_rule: ''
     choices: ZH_REGIONS
-- model: question.question
+- model: question.text
   pk: dgf_region_of_residence_zh
   fields:
     question: In which region do you currently reside?

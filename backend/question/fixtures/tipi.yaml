@@ -1,5 +1,5 @@
 # Questions for the Ten-Item Personality Inventory (TIPI)
-- model: question.question
+- model: question.text
   pk: tipi_an
   fields:
     question: I see myself as critical and quarrelsome.
@@ -7,7 +7,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: tipi_ap
   fields:
     question: I see myself as sympathetic and warm.
@@ -15,7 +15,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: tipi_cn
   fields:
     question: I see myself as disorganised and careless.
@@ -23,7 +23,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: tipi_cp
   fields:
     question: I see myself as dependable and self-disciplined.
@@ -31,7 +31,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: tipi_en
   fields:
     question: I see myself as reserved and quiet.
@@ -39,7 +39,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: tipi_ep
   fields:
     question: I see myself as extraverted and enthusiastic.
@@ -47,7 +47,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: tipi_nn
   fields:
     question: I see myself as calm and emotionally stable.
@@ -55,7 +55,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: tipi_np
   fields:
     question: I see myself as anxious and easily upset.
@@ -63,7 +63,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: tipi_on
   fields:
     question: I see myself as conventional and uncreative.
@@ -71,7 +71,7 @@
     type: TextRangeQuestion
     profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
-- model: question.question
+- model: question.text
   pk: tipi_op
   fields:
     question: I see myself as open to new experiences and complex.

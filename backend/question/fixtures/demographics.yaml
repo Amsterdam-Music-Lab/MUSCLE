@@ -1,5 +1,5 @@
 # all demographic questions, choice sets and choices
-- model: question.question
+- model: question.text
   pk: dgf_age
   fields:
     question: What is your age?
@@ -9,7 +9,7 @@
     max_value: 120
     profile_scoring_rule: ''
     choices: null
-- model: question.question
+- model: question.text
   pk: dgf_country_of_origin
   fields:
     question: In which country did you spend the most formative years of your childhood
@@ -18,7 +18,7 @@
     type: DropdownQuestion
     profile_scoring_rule: ''
     choices: ISO_COUNTRIES
-- model: question.question
+- model: question.text
   pk: dgf_country_of_origin_open
   fields:
     question: In which country did you spend the most formative years of your childhood
@@ -27,7 +27,7 @@
     type: TextQuestion
     profile_scoring_rule: ''
     choices: null
-- model: question.question
+- model: question.text
   pk: dgf_country_of_residence
   fields:
     question: In which country do you currently reside?
@@ -35,7 +35,7 @@
     type: DropdownQuestion
     profile_scoring_rule: ''
     choices: ISO_COUNTRIES
-- model: question.question
+- model: question.text
   pk: dgf_country_of_residence_open
   fields:
     question: In which country do you currently reside?
@@ -43,7 +43,7 @@
     type: TextQuestion
     profile_scoring_rule: ''
     choices: null
-- model: question.question
+- model: question.text
   pk: dgf_education
   fields:
     question: What is the highest educational qualification that you have attained?
@@ -51,7 +51,7 @@
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: ATTAINED_EDUCATION
-- model: question.question
+- model: question.text
   pk: dgf_education_gold_msi
   fields:
     question: What is the highest educational qualification that you have attained?
@@ -59,7 +59,7 @@
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: ISCED_EDUCATION_LEVELS_GOLDSMITHS
-- model: question.question
+- model: question.text
   pk: dgf_gender_identity
   fields:
     question: With which gender do you currently most identify?
@@ -67,7 +67,7 @@
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: GENDER_COMPLETE
-- model: question.question
+- model: question.text
   pk: dgf_gender_reduced
   fields:
     question: What is your gender?
@@ -75,7 +75,7 @@
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: GENDER_REDUCED
-- model: question.question
+- model: question.text
   pk: dgf_generation
   fields:
     question: When were you born?
@@ -83,7 +83,7 @@
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: GENERATION
-- model: question.question
+- model: question.text
   pk: dgf_genre_preference
   fields:
     question: To which group of musical genres do you currently listen most?
@@ -91,7 +91,7 @@
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: MUSIC_GENRE
-- model: question.question
+- model: question.text
   pk: dgf_highest_qualification_expectation
   fields:
     question: If you are still in education, what is the highest qualification you
@@ -100,7 +100,7 @@
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: EXPECTED_EDUCATION
-- model: question.question
+- model: question.text
   pk: dgf_musical_experience
   fields:
     question: 'Please select your level of musical experience:'
@@ -108,7 +108,7 @@
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: MUSICAL_EXPERIENCE
-- model: question.question
+- model: question.text
   pk: dgf_native_language
   fields:
     question: What is your native language?
@@ -116,7 +116,7 @@
     type: DropdownQuestion
     profile_scoring_rule: ''
     choices: ISO_LANGUAGES
-- model: question.question
+- model: question.text
   pk: dgf_occupational_status
   fields:
     question: Occupational status
@@ -124,7 +124,7 @@
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: OCCUPATIONAL_STATUS
-- model: question.question
+- model: question.text
   pk: lang_exposure
   fields:
     question: 'Please rate your previous experience:'
@@ -132,7 +132,7 @@
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: LANG_EXPOSURE
-- model: question.question
+- model: question.text
   pk: lang_mother
   fields:
     question: What is your mother tongue?
@@ -140,7 +140,7 @@
     type: TextQuestion
     profile_scoring_rule: ''
     choices: null
-- model: question.question
+- model: question.text
   pk: lang_second
   fields:
     question: What is your second language, if applicable?
@@ -149,7 +149,7 @@
     profile_scoring_rule: ''
     is_skippable: True
     choices: null
-- model: question.question
+- model: question.text
   pk: lang_third
   fields:
     question: What is your third language, if applicable?

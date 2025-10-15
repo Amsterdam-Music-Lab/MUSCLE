@@ -82,7 +82,7 @@ class Question(models.Model):
     is_skippable = models.BooleanField(default=False)
 
     def __str__(self):
-        return "(" + self.key + ") " + self.question
+        return "(" + self.key + ") " + self.text
 
     def populate_translated_fields(self, field_name: str):
         _populate_translated_fields(self, field_name)
@@ -92,10 +92,10 @@ class Question(models.Model):
         if self.choices:
             choices = self.choices.to_dict()
             question_action = question_type(
-                key=self.key, text=self.question, choices=choices
+                key=self.key, text=self.text, choices=choices
             )
         else:
-            question_action = question_type(key=self.key, text=self.question)
+            question_action = question_type(key=self.key, text=self.text)
         optional_fields = [
             'min_value',
             'max_value',
