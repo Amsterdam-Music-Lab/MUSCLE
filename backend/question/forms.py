@@ -1,5 +1,4 @@
-from django.forms import ModelForm, ValidationError, ChoiceField, BaseInlineFormSet
-
+from django.forms import ModelForm
 
 class QuestionForm(ModelForm):
 
@@ -8,6 +7,12 @@ class QuestionForm(ModelForm):
         if not self.instance.pk:
             type_choices = [('', '---')] + self.fields['type'].choices
             self.fields['type'].choices = type_choices
+        else:
+            if self.instance.from_python:
+                [
+                    setattr(self.fields[field_name], 'disabled', True)
+                    for field_name in self.fields.keys()
+                ]
 
     class Meta:
         help_texts = {
