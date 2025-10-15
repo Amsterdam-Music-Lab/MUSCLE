@@ -3,8 +3,7 @@ from copy import deepcopy
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from modeltranslation.admin import TabbedTranslationAdmin, TranslationStackedInline
-
+from modeltranslation.admin import TabbedTranslationAdmin
 from question.models import (
     Choice,
     ChoiceSet,
@@ -12,7 +11,7 @@ from question.models import (
     QuestionSeries,
     QuestionInSeries,
 )
-from question.forms import QuestionForm, QuestionSeriesForm
+from question.forms import QuestionForm
 
 
 class QuestionInSeriesInline(admin.TabularInline):
@@ -27,7 +26,7 @@ class QuestionSeriesInline(admin.TabularInline):
     show_change_link = True
 
 
-class ChoiceInline(TranslationStackedInline):
+class ChoiceInline(admin.StackedInline):
     model = Choice
     extra = 0
     show_change_link = True
@@ -54,50 +53,12 @@ class QuestionAdmin(TabbedTranslationAdmin):
     form = QuestionForm
     actions = [duplicate_question]
 
-    def get_fieldsets(self, request, obj=None):
-
-        fieldsets = super().get_fieldsets(request, obj)
-
-        fields = fieldsets[0][1]["fields"]
-        fields_to_show = set() # in addition to key, question(_lang), explainer(_lang), type
-        fields_to_remove_all = {
-            'profile_scoring_rule',
-            'min_value',
-            'max_value',
-            'max_length',
-            'min_values',
-        }
-        fields_to_remove_extra = set()
-
-        choice_types = [
-            "AutoCompleteQuestion",
-            "ButtonArrayQuestion",
-            "CheckboxQuestion",
-            "DropdownQuestion",
-            "IconRangeQuestion",
-            "RadiosQuestion",
-            "TextRangeQuestion",
-        ]
-        if obj:
-            if obj.type in choice_types:
-                fields_to_show = {"choices", "profile_scoring_rule"}
-                if obj.type == "CheckboxQuestion":
-                    fields_to_show.update({"min_values"})
-            elif obj.type in ["NumberQuestion", "RangeQuestion"]:
-                fields_to_show = {"min_value","max_value"}
-            elif obj.type == "TextQuestion":
-                fields_to_show = {"max_length"}
-
-        fields_to_remove = (fields_to_remove_all - fields_to_show) | fields_to_remove_extra
-        for f in fields_to_remove:
-            fields.remove(f)
-
-        return fieldsets
+    class Media:
+        js = ["question_admin.js"]
 
 
 class QuestionSeriesAdmin(admin.ModelAdmin):
     inlines = [QuestionInSeriesInline]
-    form = QuestionSeriesForm
 
 
 admin.site.register(ChoiceSet, ChoiceSetAdmin)

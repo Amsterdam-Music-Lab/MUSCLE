@@ -5,27 +5,14 @@ class QuestionForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        if kwargs.get('instance') is None:
-
-            self.fields['type'].help_text = "Click 'Save and continue editing' to customize"
-
-        else:
-
-            if not kwargs.get('instance').editable:
-                self.fields["key"].disabled = True
-
-            type = self.fields.get("type", None)
-            if type:
-                self.fields["type"].disabled = True
+        if not self.instance.pk:
+            type_choices = [('', '---')] + self.fields['type'].choices
+            self.fields['type'].choices = type_choices
 
     class Meta:
         help_texts = {
-            "scale_steps" : "Non-empty choices field overrides this value",
-            "min_values" : "Only affects CHECKBOXES view"
+            "min_value": "The minimum number allowed in the Number / Range question",
+            "max_value": "The maximum number allowed in the Number / Range question",
+            "min_values": "How many options should be selected by participant in the Checkbox question",
+            "max_length": "The maximum number of characters allowed in the Text question",
         }
-
-
-class QuestionSeriesForm(ModelForm):
-    class Media:
-        js = ["questionseries_admin.js"]
