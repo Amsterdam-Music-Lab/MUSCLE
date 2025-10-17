@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, TextInput
 
 class QuestionForm(ModelForm):
 
@@ -21,3 +21,4 @@ class QuestionForm(ModelForm):
             "min_values": "How many options should be selected by participant in the Checkbox question",
             "max_length": "The maximum number of characters allowed in the Text question",
         }
+        widgets = {'text': TextInput(attrs={'size': '100%'})}

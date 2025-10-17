@@ -35,6 +35,7 @@ class ChoiceInline(admin.StackedInline):
 class ChoiceSetAdmin(admin.ModelAdmin):
     model = ChoiceSet
     inlines = [ChoiceInline]
+    change_form_template = 'question_change.html'
 
 
 @admin.action(description=_("Duplicate selected questions"))
@@ -52,6 +53,7 @@ class QuestionAdmin(TabbedTranslationAdmin):
 
     form = QuestionForm
     actions = [duplicate_question]
+    change_form_template = 'question_change.html'
 
     class Media:
         js = ["question_admin.js"]
