@@ -1,158 +1,158 @@
 # all demographic questions, choice sets and choices
-- model: question.text
+- model: question.question
   pk: dgf_age
   fields:
-    question: What is your age?
+    text: What is your age?
     explainer: ''
     type: NumberQuestion
     min_value: 6
     max_value: 120
     profile_scoring_rule: ''
     choices: null
-- model: question.text
+- model: question.question
   pk: dgf_country_of_origin
   fields:
-    question: In which country did you spend the most formative years of your childhood
+    text: In which country did you spend the most formative years of your childhood
       and youth?
     explainer: ''
     type: DropdownQuestion
     profile_scoring_rule: ''
     choices: ISO_COUNTRIES
-- model: question.text
+- model: question.question
   pk: dgf_country_of_origin_open
   fields:
-    question: In which country did you spend the most formative years of your childhood
+    text: In which country did you spend the most formative years of your childhood
       and youth?
     explainer: ''
     type: TextQuestion
     profile_scoring_rule: ''
     choices: null
-- model: question.text
+- model: question.question
   pk: dgf_country_of_residence
   fields:
-    question: In which country do you currently reside?
+    text: In which country do you currently reside?
     explainer: ''
     type: DropdownQuestion
     profile_scoring_rule: ''
     choices: ISO_COUNTRIES
-- model: question.text
+- model: question.question
   pk: dgf_country_of_residence_open
   fields:
-    question: In which country do you currently reside?
+    text: In which country do you currently reside?
     explainer: ''
     type: TextQuestion
     profile_scoring_rule: ''
     choices: null
-- model: question.text
+- model: question.question
   pk: dgf_education
   fields:
-    question: What is the highest educational qualification that you have attained?
+    text: What is the highest educational qualification that you have attained?
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: ATTAINED_EDUCATION
-- model: question.text
+- model: question.question
   pk: dgf_education_gold_msi
   fields:
-    question: What is the highest educational qualification that you have attained?
+    text: What is the highest educational qualification that you have attained?
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: ISCED_EDUCATION_LEVELS_GOLDSMITHS
-- model: question.text
+- model: question.question
   pk: dgf_gender_identity
   fields:
-    question: With which gender do you currently most identify?
+    text: With which gender do you currently most identify?
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: GENDER_COMPLETE
-- model: question.text
+- model: question.question
   pk: dgf_gender_reduced
   fields:
-    question: What is your gender?
+    text: What is your gender?
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: GENDER_REDUCED
-- model: question.text
+- model: question.question
   pk: dgf_generation
   fields:
-    question: When were you born?
+    text: When were you born?
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: GENERATION
-- model: question.text
+- model: question.question
   pk: dgf_genre_preference
   fields:
-    question: To which group of musical genres do you currently listen most?
+    text: To which group of musical genres do you currently listen most?
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: MUSIC_GENRE
-- model: question.text
+- model: question.question
   pk: dgf_highest_qualification_expectation
   fields:
-    question: If you are still in education, what is the highest qualification you
+    text: If you are still in education, what is the highest qualification you
       expect to obtain?
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: EXPECTED_EDUCATION
-- model: question.text
+- model: question.question
   pk: dgf_musical_experience
   fields:
-    question: 'Please select your level of musical experience:'
+    text: 'Please select your level of musical experience:'
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: MUSICAL_EXPERIENCE
-- model: question.text
+- model: question.question
   pk: dgf_native_language
   fields:
-    question: What is your native language?
+    text: What is your native language?
     explainer: ''
     type: DropdownQuestion
     profile_scoring_rule: ''
     choices: ISO_LANGUAGES
-- model: question.text
+- model: question.question
   pk: dgf_occupational_status
   fields:
-    question: Occupational status
+    text: Occupational status
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: OCCUPATIONAL_STATUS
-- model: question.text
+- model: question.question
   pk: lang_exposure
   fields:
-    question: 'Please rate your previous experience:'
+    text: 'Please rate your previous experience:'
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''
     choices: LANG_EXPOSURE
-- model: question.text
+- model: question.question
   pk: lang_mother
   fields:
-    question: What is your mother tongue?
+    text: What is your mother tongue?
     explainer: ''
     type: TextQuestion
     profile_scoring_rule: ''
     choices: null
-- model: question.text
+- model: question.question
   pk: lang_second
   fields:
-    question: What is your second language, if applicable?
+    text: What is your second language, if applicable?
     explainer: You can skip this question
     type: TextQuestion
     profile_scoring_rule: ''
     is_skippable: True
     choices: null
-- model: question.text
+- model: question.question
   pk: lang_third
   fields:
-    question: What is your third language, if applicable?
+    text: What is your third language, if applicable?
     explainer: You can skip this question
     type: TextQuestion
     profile_scoring_rule: ''

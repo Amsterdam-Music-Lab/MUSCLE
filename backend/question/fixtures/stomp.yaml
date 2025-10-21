@@ -1,184 +1,184 @@
 # Questions for the Short Test Of Music Preferences (STOMP)
-- model: question.text
+- model: question.question
   pk: stomp_alternative
   fields:
-    question: How much do you like alternative music?
+    text: How much do you like alternative music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_bluegrass
   fields:
-    question: How much do you like bluegrass music?
+    text: How much do you like bluegrass music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_blues
   fields:
-    question: How much do you like blues music?
+    text: How much do you like blues music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_classical
   fields:
-    question: How much do you like classical music?
+    text: How much do you like classical music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_country
   fields:
-    question: How much do you like country music?
+    text: How much do you like country music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_dance
   fields:
-    question: How much do you like dance and electronic music?
+    text: How much do you like dance and electronic music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_folk
   fields:
-    question: How much do you like folk music?
+    text: How much do you like folk music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_funk
   fields:
-    question: How much do you like funk music?
+    text: How much do you like funk music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_gospel
   fields:
-    question: How much do you like gospel music?
+    text: How much do you like gospel music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_jazz
   fields:
-    question: How much do you like jazz music?
+    text: How much do you like jazz music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_metal
   fields:
-    question: How much do you like heavy metal music?
+    text: How much do you like heavy metal music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_new_age
   fields:
-    question: How much do you like new-age music?
+    text: How much do you like new-age music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_oldies
   fields:
-    question: How much do you like oldies music?
+    text: How much do you like oldies music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_opera
   fields:
-    question: How much do you like opera music?
+    text: How much do you like opera music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_pop
   fields:
-    question: How much do you like pop music?
+    text: How much do you like pop music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_punk
   fields:
-    question: How much do you like punk music?
+    text: How much do you like punk music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_rap
   fields:
-    question: How much do you like rap and hip-hop music?
+    text: How much do you like rap and hip-hop music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_reggae
   fields:
-    question: How much do you like reggae music?
+    text: How much do you like reggae music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_religious
   fields:
-    question: How much do you like religious music?
+    text: How much do you like religious music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_rnb
   fields:
-    question: How much do you like soul and R&B music?
+    text: How much do you like soul and R&B music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_rock
   fields:
-    question: How much do you like rock music?
+    text: How much do you like rock music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_soundtracks
   fields:
-    question: How much do you like soundtracks and theme-song music?
+    text: How much do you like soundtracks and theme-song music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_PREFERENCE_7
-- model: question.text
+- model: question.question
   pk: stomp_world
   fields:
-    question: How much do you like world music?
+    text: How much do you like world music?
     explainer: Indicate your musical preferences
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
