@@ -1,31 +1,4 @@
-# Choice sets and choices for Boolean and Likert questions
-- model: question.choiceset
-  pk: BOOLEAN
-  fields: {}
-- model: question.choiceset
-  pk: BOOLEAN_NEGATIVE_FIRST
-  fields: {}
-- model: question.choiceset
-  pk: BOOLEAN_UNDECIDED
-  fields: {}
-- model: question.choiceset
-  pk: LIKERT_AGREE_5
-  fields: {}
-- model: question.choiceset
-  pk: LIKERT_AGREE_6
-  fields: {}
-- model: question.choiceset
-  pk: LIKERT_AGREE_7
-  fields: {}
-- model: question.choiceset
-  pk: LIKERT_FREQUENCY_6
-  fields: {}
-- model: question.choiceset
-  pk: LIKERT_ICONS_7
-  fields: {}
-- model: question.choiceset
-  pk: LIKERT_PREFERENCE_7
-  fields: {}
+# Choices for Boolean and Likert questions
 - model: question.choice
   fields:
     key: 'yes'

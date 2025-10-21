@@ -9,7 +9,6 @@ from experiment.actions.types import FeedbackInfo
 from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.trial import Trial
-from question.models import Question
 from question.utils import get_unanswered_questions
 from result.score import SCORING_RULES
 from result.utils import prepare_profile_result
