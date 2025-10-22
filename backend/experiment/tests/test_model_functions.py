@@ -5,7 +5,6 @@ from experiment.models import Block, Experiment, Phase
 
 
 class TestModelBlock(TestCase):
-    fixtures = ["choices_general", "musicgens", "vanderbilt"]
 
     @classmethod
     def setUpTestData(cls):
@@ -26,7 +25,6 @@ class TestModelBlock(TestCase):
 
 
 class TestModelExperiment(TestCase):
-    fixtures = ["choices_general", "musicgens", "vanderbilt"]
 
     @classmethod
     def setUpTestData(cls):

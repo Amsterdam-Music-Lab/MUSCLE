@@ -10,7 +10,6 @@ from session.models import Session
 
 
 class MatchingPairsTest(TestCase):
-    fixtures = ["demographics"]
 
     @classmethod
     def setUpTestData(cls):

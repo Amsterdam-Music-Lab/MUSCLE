@@ -6,8 +6,8 @@ from session.models import Session
 from experiment.rules.categorization import Categorization
 from result.models import Result
 
+
 class CategorizationRuleTest(TestCase):
-    fixtures = ["demographics"]
 
     @classmethod
     def setUpTestData(cls):

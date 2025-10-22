@@ -14,7 +14,6 @@ from experiment.serializers import serialize_actions
 
 
 class Speech2SongTest(TestCase):
-    fixtures = ["demographics"]
 
     @classmethod
     def setUpTestData(cls):

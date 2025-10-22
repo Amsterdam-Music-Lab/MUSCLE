@@ -201,7 +201,6 @@ class RangeQuestionTest(TestCase):
 
 
 class TextRangeQuestionTest(TestCase):
-    fixtures = ["choices_general"]
 
     def setUp(self):
         self.likert_question = TextRangeQuestion(
@@ -243,7 +242,6 @@ class TextRangeQuestionTest(TestCase):
 
 
 class IconRangeTest(TestCase):
-    fixtures = ["choices_general"]
 
     def setUp(self):
         self.likert_question_icon = IconRangeQuestion(

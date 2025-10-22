@@ -9,7 +9,6 @@ from session.models import Session
 
 
 class TestRhythmBatteryFinal(TestCase):
-    fixtures = ["choices_general", "demographics", "goldsmiths_msi"]
 
     @classmethod
     def setUpTestData(cls):

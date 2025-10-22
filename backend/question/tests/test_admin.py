@@ -6,14 +6,14 @@ from question.models import Question
 
 class AdminTestCase(TestCase):
 
-    fixtures = ['demographics']
-
     def test_duplicate_question(self):
         question_admin = QuestionAdmin(model=Question, admin_site=AdminSite())
         request = RequestFactory().request()
         questions_to_duplicate = Question.objects.filter(key__startswith='dgf_country_of_origin')
         duplicate_question(question_admin, request, questions_to_duplicate)
-        duplicates = Question.objects.filter(key__endswith='1')
+        duplicates = Question.objects.filter(
+            key__startswith='dgf_country_of_origin', key__endswith='1'
+        )
         self.assertEqual(duplicates.count(), 2)
         country_open = duplicates.get(key__contains='open')
         self.assertIsNone(country_open.choices)

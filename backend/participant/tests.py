@@ -10,8 +10,8 @@ from question.preset_catalogues import get_preset_catalogue
 from result.models import Result
 from session.models import Session
 
+
 class ParticipantTest(TestCase):
-    fixtures = ["choices_general", "goldsmiths_msi"]
 
     @classmethod
     def setUpTestData(cls):
