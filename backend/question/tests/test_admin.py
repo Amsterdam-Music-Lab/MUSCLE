@@ -4,7 +4,8 @@ from django.test import RequestFactory, TestCase
 from question.admin import duplicate_question, QuestionAdmin
 from question.models import Question
 
-class AdminTestCase(TestCase):
+
+class QuestionAdminTestCase(TestCase):
 
     def test_duplicate_question(self):
         question_admin = QuestionAdmin(model=Question, admin_site=AdminSite())

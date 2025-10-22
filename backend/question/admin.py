@@ -11,7 +11,7 @@ from question.models import (
     QuestionSeries,
     QuestionInSeries,
 )
-from question.forms import QuestionForm
+from question.forms import QuestionForm, QuestionSeriesForm
 
 
 class QuestionInSeriesInline(admin.TabularInline):
@@ -61,6 +61,7 @@ class QuestionAdmin(TabbedTranslationAdmin):
 
 class QuestionSeriesAdmin(admin.ModelAdmin):
     inlines = [QuestionInSeriesInline]
+    form = QuestionSeriesForm
 
 
 admin.site.register(ChoiceSet, ChoiceSetAdmin)

@@ -1,4 +1,7 @@
-from django.forms import ModelForm, TextInput
+from django.forms import ChoiceField, ModelForm, TextInput
+
+from question.models import Question, QuestionInSeries, QuestionSeries
+from question.preset_catalogues import PRESET_CATALOGUES
 
 class QuestionForm(ModelForm):
 
@@ -22,3 +25,45 @@ class QuestionForm(ModelForm):
             "max_length": "The maximum number of characters allowed in the Text question",
         }
         widgets = {'text': TextInput(attrs={'size': '100%'})}
+
+QUESTION_CATALOGUE_CHOICES = [(None, '-----')] + [
+    (key, key) for key in PRESET_CATALOGUES.keys()
+]
+
+class QuestionSeriesForm(ModelForm):
+    questions_from_catalogue = ChoiceField(
+        choices=QUESTION_CATALOGUE_CHOICES,
+        initial=None,
+        required=False,
+        label="Add all questions from catalogue",
+    )
+
+    class Meta:
+        model = QuestionSeries
+        fields = '__all__'
+
+    def save(self, commit=True):
+        instance = super().save(commit=commit)
+        catalogue_key = self.cleaned_data.get('questions_from_catalogue')
+        if catalogue_key:
+            instance.save()
+            self.add_questions_from_catalogue(instance, catalogue_key)
+        return instance
+
+    def add_questions_from_catalogue(self, instance, catalogue_key):
+        '''Add all questions from the given catalogue'''
+        n_questions_in_series = QuestionInSeries.objects.filter(
+            question_series=instance
+        ).count()
+        for index, key in enumerate(PRESET_CATALOGUES.get(catalogue_key)):
+            question_obj = Question.objects.get(key=key)
+            QuestionInSeries.objects.bulk_create(
+                [
+                    QuestionInSeries(
+                        question_series=instance,
+                        question=question_obj,
+                        index=index + n_questions_in_series,
+                    )
+                ],
+                ignore_conflicts=True,
+            )
