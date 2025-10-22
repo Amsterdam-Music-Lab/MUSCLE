@@ -1,9 +1,9 @@
 from django.db import migrations
 
-from question.management.commands.update_questions import (
+from question.management.commands.updatequestions import (
     update_choices,
     update_choice_sets,
-    update_questions
+    update_questions,
 )
 
 

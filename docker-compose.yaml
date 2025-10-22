@@ -34,6 +34,7 @@ services:
       ip2country:
         condition: service_started
     volumes:
+      - translation_data:/unicode-translations/
       - type: bind
         source: ./backend
         target: /server
@@ -110,3 +111,4 @@ services:
 volumes:
   db_data:
   db_backup:
+  translation_data:
