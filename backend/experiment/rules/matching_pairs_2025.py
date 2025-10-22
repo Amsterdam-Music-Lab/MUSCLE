@@ -63,8 +63,9 @@ class MatchingPairs2025(MatchingPairsGame):
             if questions:
                 intro_questions = Explainer(
                     instruction=_(
-                        "Before starting the game, we would like to ask you {} demographic questions."
-                    ).format(len(questions)),
+                        "Before starting the game, we would like to ask you %(n_questions)i demographic questions."
+                    )
+                    % {'n_questions': len(questions)},
                     steps=[],
                 )
                 actions.append(intro_questions)

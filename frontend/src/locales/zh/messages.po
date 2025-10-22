@@ -61,9 +61,9 @@ msgstr "分享二维码,**邀请朋友一起玩！** 。"
 msgid "+{turnScore} points"
 msgstr "+{turnScore}分"
 
-#: src/config/frontend.ts:126
-msgid "⚠️ Note: The first load may take a while due to the amount of content, but later runs will be smoother."
-msgstr "⚠️ 温馨提示：第一次进入游戏时加载内容较多，可能需要稍作等待。加载完成后就会顺畅起来！"
+#: src/config/frontend.ts:123
+#~ msgid "⚠️ Note:"
+#~ msgstr "⚠️ 温馨提示："
 
 #: src/config/frontend.ts:361
 #~ msgid "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
@@ -158,8 +158,8 @@ msgid "Good job!"
 msgstr "出色！"
 
 #: src/config/frontend.ts:123
-msgid "Help us with your feedback!"
-msgstr "请分享您的反馈，以帮助我们改进！"
+#~ msgid "Help us with your feedback!"
+#~ msgstr "请分享您的反馈，以帮助我们改进！"
 
 #: src/components/views/ConsentView/ConsentView.tsx:100
 msgid "Informed consent"
@@ -208,6 +208,10 @@ msgstr "可惜它们不匹配..."
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:90
 msgid "Not quite, try again!"
 msgstr "差一点，再试一次！"
+
+#: src/config/frontend.ts:123
+msgid "Note:"
+msgstr "温馨提示："
 
 #: src/components/application/Experiment/Experiment.tsx:108
 msgid "Page not found"
@@ -286,6 +290,10 @@ msgstr "提交更多反馈"
 #: src/config/frontend.ts:112
 msgid "Test Your Musical Memory!"
 msgstr "测试您的音乐记忆力！"
+
+#: src/config/frontend.ts:126
+msgid "The first load may take a while due to the amount of content, but later runs will be smoother."
+msgstr "第一次进入游戏时加载内容较多，可能需要稍作等待。加载完成后就会顺畅起来！"
 
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:79
 msgid "This is your lucky day!"

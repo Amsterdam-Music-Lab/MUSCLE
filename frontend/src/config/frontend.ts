@@ -120,10 +120,10 @@ Match melodies, clear the board, and minimize mistakes!
             {
               name: "markdown",
               wrapperProps: {
-                title: t`Help us with your feedback!`,
+                title: t`Note:`,
               },
               args: {
-                content: t`⚠️ Note: The first load may take a while due to the amount of content, but later runs will be smoother.`,
+                content: t`The first load may take a while due to the amount of content, but later runs will be smoother.`,
               },
             },
 

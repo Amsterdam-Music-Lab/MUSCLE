@@ -60,9 +60,13 @@ msgstr "**Convide seus amigos para jogar!** Simplesmente peça a eles para escan
 msgid "+{turnScore} points"
 msgstr "+{turnScore} points"
 
+#: src/config/frontend.ts:123
+#~ msgid "⚠️ Note:"
+#~ msgstr ""
+
 #: src/config/frontend.ts:126
-msgid "⚠️ Note: The first load may take a while due to the amount of content, but later runs will be smoother."
-msgstr ""
+#~ msgid "⚠️ Note: The first load may take a while due to the amount of content, but later runs will be smoother."
+#~ msgstr ""
 
 #: src/config/frontend.ts:361
 #~ msgid "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
@@ -161,8 +165,8 @@ msgid "Good job!"
 msgstr "Bom trabalho!"
 
 #: src/config/frontend.ts:123
-msgid "Help us with your feedback!"
-msgstr "Ajude-nos com seu feedback!"
+#~ msgid "Help us with your feedback!"
+#~ msgstr "Ajude-nos com seu feedback!"
 
 #: src/components/views/ConsentView/ConsentView.tsx:100
 msgid "Informed consent"
@@ -211,6 +215,10 @@ msgstr "Não, isso não é uma correspondência..."
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:90
 msgid "Not quite, try again!"
 msgstr "Quase lá, tente novamente!"
+
+#: src/config/frontend.ts:123
+msgid "Note:"
+msgstr ""
 
 #: src/components/application/Experiment/Experiment.tsx:108
 msgid "Page not found"
@@ -289,6 +297,10 @@ msgstr "Enviar mais feedback"
 #: src/config/frontend.ts:112
 msgid "Test Your Musical Memory!"
 msgstr "Teste sua memória musical!"
+
+#: src/config/frontend.ts:126
+msgid "The first load may take a while due to the amount of content, but later runs will be smoother."
+msgstr ""
 
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:79
 msgid "This is your lucky day!"

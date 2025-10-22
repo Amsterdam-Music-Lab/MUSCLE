@@ -61,9 +61,13 @@ msgstr "**Invite your friends to play!** Simply ask them to scan this QR code."
 msgid "+{turnScore} points"
 msgstr "+{turnScore} points"
 
+#: src/config/frontend.ts:123
+#~ msgid "⚠️ Note:"
+#~ msgstr "⚠️ Note:"
+
 #: src/config/frontend.ts:126
-msgid "⚠️ Note: The first load may take a while due to the amount of content, but later runs will be smoother."
-msgstr "⚠️ Note: The first load may take a while due to the amount of content, but later runs will be smoother."
+#~ msgid "⚠️ Note: The first load may take a while due to the amount of content, but later runs will be smoother."
+#~ msgstr "⚠️ Note: The first load may take a while due to the amount of content, but later runs will be smoother."
 
 #: src/config/frontend.ts:361
 #~ msgid "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
@@ -166,8 +170,8 @@ msgid "Good job!"
 msgstr "Good job!"
 
 #: src/config/frontend.ts:123
-msgid "Help us with your feedback!"
-msgstr "Help us with your feedback!"
+#~ msgid "Help us with your feedback!"
+#~ msgstr "Help us with your feedback!"
 
 #: src/components/views/ConsentView/ConsentView.tsx:100
 msgid "Informed consent"
@@ -216,6 +220,10 @@ msgstr "Nope, that's no match..."
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:90
 msgid "Not quite, try again!"
 msgstr "Not quite, try again!"
+
+#: src/config/frontend.ts:123
+msgid "Note:"
+msgstr "Note:"
 
 #: src/components/application/Experiment/Experiment.tsx:108
 msgid "Page not found"
@@ -294,6 +302,10 @@ msgstr "Submit more feedback"
 #: src/config/frontend.ts:112
 msgid "Test Your Musical Memory!"
 msgstr "Test Your Musical Memory!"
+
+#: src/config/frontend.ts:126
+msgid "The first load may take a while due to the amount of content, but later runs will be smoother."
+msgstr "The first load may take a while due to the amount of content, but later runs will be smoother."
 
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:79
 msgid "This is your lucky day!"
