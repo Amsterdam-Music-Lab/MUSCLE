@@ -22,6 +22,7 @@ class QuestionInSeriesInline(admin.TabularInline):
 class QuestionSeriesInline(admin.TabularInline):
     model = QuestionSeries
     inlines = [QuestionInSeriesInline]
+    readonly_fields = ["name"]
     extra = 0
     show_change_link = True
 
