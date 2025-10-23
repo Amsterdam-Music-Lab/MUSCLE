@@ -32,8 +32,26 @@ class ChoiceInline(admin.StackedInline):
     show_change_link = True
 
 
+@admin.action(description=_("Duplicate selected choice sets"))
+def duplicate_choice_set(modeladmin, request, queryset):
+    for choice_set in queryset:
+        n_choice_sets = ChoiceSet.objects.filter(
+            key__regex=rf'^{choice_set.key}(_\d+)*$'
+        ).count()
+        new_choice_set = ChoiceSet.objects.create(
+            key=f"{choice_set.key}_{n_choice_sets}"
+        )
+        choices = choice_set.choices.all()
+        for choice in choices:
+            new_choice = deepcopy(choice)
+            new_choice.pk = None
+            new_choice.set = new_choice_set
+            new_choice.save()
+
+
 class ChoiceSetAdmin(admin.ModelAdmin):
     model = ChoiceSet
+    actions = [duplicate_choice_set]
     inlines = [ChoiceInline]
     change_form_template = 'question_change.html'
 
@@ -45,9 +63,8 @@ def duplicate_question(modeladmin, request, queryset):
         n_questions = Question.objects.filter(
             key__regex=rf'^{question.key}(_\d+)*$'
         ).count()
-        question_copy = deepcopy(question)
-        question_copy.key = f"{question.key}_{n_questions}"
-        question_copy.save()
+        question.key = f"{question.key}_{n_questions}"
+        question.save()
 
 class QuestionAdmin(TabbedTranslationAdmin):
 
