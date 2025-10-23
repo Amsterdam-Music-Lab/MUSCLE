@@ -56,7 +56,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-plugin-chai-friendly", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:0.7.2"],\
           ["eslint-plugin-storybook", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:0.11.1"],\
           ["file-saver", "npm:2.0.5"],\
-          ["happy-dom", "npm:20.0.0"],\
+          ["happy-dom", "npm:20.0.2"],\
           ["history", "npm:5.3.0"],\
           ["msw", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:2.6.6"],\
           ["msw-storybook-addon", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:2.0.4"],\
@@ -6854,7 +6854,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-plugin-chai-friendly", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:0.7.2"],\
           ["eslint-plugin-storybook", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:0.11.1"],\
           ["file-saver", "npm:2.0.5"],\
-          ["happy-dom", "npm:20.0.0"],\
+          ["happy-dom", "npm:20.0.2"],\
           ["history", "npm:5.3.0"],\
           ["msw", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:2.6.6"],\
           ["msw-storybook-addon", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:2.0.4"],\
@@ -9436,10 +9436,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["happy-dom", [\
-      ["npm:20.0.0", {\
-        "packageLocation": "../../../.yarn/berry/cache/happy-dom-npm-20.0.0-6870f053c2-10c0.zip/node_modules/happy-dom/",\
+      ["npm:20.0.2", {\
+        "packageLocation": "../../../.yarn/berry/cache/happy-dom-npm-20.0.2-8bd3c8bf0f-10c0.zip/node_modules/happy-dom/",\
         "packageDependencies": [\
-          ["happy-dom", "npm:20.0.0"],\
+          ["happy-dom", "npm:20.0.2"],\
           ["@types/node", "npm:20.19.20"],\
           ["@types/whatwg-mimetype", "npm:3.0.2"],\
           ["whatwg-mimetype", "npm:3.0.0"]\
@@ -13301,7 +13301,7 @@ const RAW_RUNTIME_STATE =
           ["chai", "npm:5.1.2"],\
           ["debug", "virtual:59c56d20dc78fa06739fe402dcd3e10b487f4b62e03ec62842c963956c3b51c436a01ce7d2e647dff8a3f8b8fa8c54e1e3cb7196e17d6b888ccf87d4d99031cf#npm:4.3.7"],\
           ["expect-type", "npm:1.1.0"],\
-          ["happy-dom", "npm:20.0.0"],\
+          ["happy-dom", "npm:20.0.2"],\
           ["jsdom", null],\
           ["magic-string", "npm:0.30.12"],\
           ["pathe", "npm:1.1.2"],\
