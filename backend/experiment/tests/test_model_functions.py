@@ -1,7 +1,9 @@
 from django.test import TestCase
-from session.models import Session
-from participant.models import Participant
+
 from experiment.models import Block, Experiment, Phase
+from participant.models import Participant
+from question.models import QuestionInSeries, QuestionSeries
+from session.models import Session
 
 
 class TestModelBlock(TestCase):
@@ -22,6 +24,29 @@ class TestModelBlock(TestCase):
             + rules2.question_catalogues[1]["question_keys"]
         )
         assert keys1 == keys2
+
+    def test_add_default_question_catalogues(self):
+        block = Block(
+            name='test catalogue', slug='test_catalogue', rules='RHYTHM_BATTERY_FINAL'
+        )
+        block.save()  # triggers `add_default_question_catalogues` method
+        created_series = QuestionSeries.objects.filter(block=block)
+        n_series = created_series.count()
+        expected_n = len(block.get_rules().question_catalogues)
+        self.assertEqual(
+            n_series,
+            expected_n,
+        )
+        self.assertNotEqual(
+            QuestionInSeries.objects.filter(
+                question_series=created_series.first()
+            ).count(),
+            0,
+        )
+        # test that question series aren't created more than once
+        block.save()
+        created_series = QuestionSeries.objects.filter(block=block)
+        self.assertEqual(created_series.count(), n_series)
 
 
 class TestModelExperiment(TestCase):

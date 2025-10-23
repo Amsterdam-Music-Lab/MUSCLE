@@ -290,13 +290,16 @@ class Block(models.Model):
 
     def create_catalogue(self, catalogue: dict, index: int = 0):
         """create a question catalogue for this block based on a catalogue dict specifying name and question keys"""
-        qs, _created = QuestionSeries.objects.get_or_create(
+        qs, created = QuestionSeries.objects.get_or_create(
             name=catalogue["name"], block=self, index=index
         )
-        if _created:
-            # only set these when the object is created, so we don't overwrite changes by admin user
-            qs.randomize = catalogue.get("randomize", False)
-            qs.save()
+        if not created:
+            "do nothing if the question series already exists"
+            return
+
+        # only set these when the object is created, so we don't overwrite changes by admin user
+        qs.randomize = catalogue.get("randomize", False)
+        qs.save()
 
         for i, question in enumerate(catalogue["question_keys"]):
             try:
