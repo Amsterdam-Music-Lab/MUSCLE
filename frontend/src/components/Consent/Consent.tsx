@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { saveAs } from 'file-saver';
 
+import useBoundStore from "@/util/stores";
 import { URLS } from "@/config";
 import Button from "../Button/Button";
 import Loading from "../Loading/Loading";
@@ -18,10 +19,15 @@ export interface ConsentProps {
     deny: string;
 }
 
+const styleButton = (buttonColor: string) => {
+    return `background-color: buttonColor;`
+}
+
 /** Consent is an experiment view that shows the consent text, and handles agreement/stop actions */
 const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }: ConsentProps) => {
     const [consent, loadingConsent] = useConsent(experiment.slug);
     const urlQueryString = window.location.search;
+    const theme = useBoundStore((state) => state.theme);
 
     // Listen for consent, and auto advance if already given
     useEffect(() => {
@@ -93,14 +99,15 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }
             />
 
             <div className="buttons d-flex justify-content-between">
-                <a href={URLS.AMLHome} className="btn btn-negative btn-lg">
+                <a href={URLS.AMLHome} className="btn btn-negative btn-lg" style={styleButton(theme.colorNegative)}>
                     {deny}
                 </a>
 
                 <Button
-                    className="btn-positive"
+                    buttonColor={theme.colorPositive}
                     onClick={onAgree}
                     title={confirm}
+                    style={styleButton(theme.colorPositive)}
                 />
 
             </div>
