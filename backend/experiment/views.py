@@ -45,7 +45,6 @@ def get_block(request: HttpRequest, slug: str) -> JsonResponse:
     # create data
     block_data = {
         **serialize_block(block),
-        "theme": serialize_theme(block.theme_config) if block.theme_config else None,
         "class_name": class_name,  # can be used to override style
         "rounds": block.rounds,
         "bonus_points": block.bonus_points,

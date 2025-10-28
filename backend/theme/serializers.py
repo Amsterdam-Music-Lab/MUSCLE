@@ -1,9 +1,6 @@
-from os.path import join
-
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
-from django_markup.markup import formatter
 
 from image.serializers import serialize_image
 from theme.models import FooterConfig, HeaderConfig, ThemeConfig
