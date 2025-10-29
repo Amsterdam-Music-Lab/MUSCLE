@@ -241,7 +241,6 @@ const Playback = ({
                         showAnimation={playbackArgs.show_animation}
                         scoreFeedbackDisplay={playbackArgs.score_feedback_display}
                         view={playMethod === 'NOAUDIO' ? 'visual' : ''}
-                        tutorial={playbackArgs.tutorial}
                     />
                 );
             default:

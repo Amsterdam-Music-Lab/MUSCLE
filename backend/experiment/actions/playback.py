@@ -43,7 +43,6 @@ class Playback(BaseAction):
         stop_audio_after (Optional[float]): Seconds after which to stop playback. Defaults to None.
         resume_play (bool): Whether to resume from previous position. Defaults to False.
         style (Optional[list[str]]): CSS class name(s) set in the frontend for styling
-        tutorial (Optional[Dict[str, Any]]): Tutorial configuration dictionary. Defaults to None.
     """
 
     sections: List[PlaybackSection]
@@ -60,7 +59,6 @@ class Playback(BaseAction):
         stop_audio_after: Optional[float] = None,
         resume_play: bool = False,
         style: Optional[list[str]] = None,
-        tutorial: Optional[Dict[str, Any]] = None,
     ) -> None:
         self.sections = [{"id": s.id, "url": s.absolute_url(), "group": s.group} for s in sections]
         self.play_method = determine_play_method(sections[0])
@@ -72,8 +70,7 @@ class Playback(BaseAction):
         self.timeout_after_playback = timeout_after_playback
         self.stop_audio_after = stop_audio_after
         self.resume_play = resume_play
-        self.style = self._apply_style(style)
-        self.tutorial = tutorial
+        self.style = self._apply_style(style) d
 
 
 class Autoplay(Playback):
@@ -213,7 +210,6 @@ class MatchingPairs(Multiplayer):
     Args:
         sections (List[Section]): List of audio sections to play.
         score_feedback_display (ScoreFeedbackDisplay): How to display score feedback. Defaults to "large-top" (pick from "small-bottom-right", "large-top", "hidden").
-        tutorial (Optional[Dict[str, Any]]): Tutorial configuration dictionary. Defaults to None.
         **kwargs: Additional arguments passed to Multiplayer.
 
     Example:
@@ -222,33 +218,18 @@ class MatchingPairs(Multiplayer):
             # You will need an even number of sections (ex. 16)
             [section1, section2, section3, section4, section5, section6, section7, section8, section9, section10, section11, section12, section13, section14, section15, section16],
             score_feedback_display="large-top",
-            tutorial={
-                "no_match": _(
-                    "This was not a match, so you get 0 points. Please try again to see if you can find a matching pair."
-                ),
-                "lucky_match": _(
-                    "You got a matching pair, but you didn't hear both cards before. This is considered a lucky match. You get 10 points."
-                ),
-                "memory_match": _("You got a matching pair. You get 20 points."),
-                "misremembered": _(
-                    "You thought you found a matching pair, but you didn't. This is considered a misremembered pair. You lose 10 points."
-                ),
-            }
-        )
-        ```
+         ```
     """
 
     def __init__(
         self,
         sections: List[Section],
         score_feedback_display: ScoreFeedbackDisplay = "large-top",
-        tutorial: Optional[Dict[str, Any]] = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(sections, **kwargs)
         self.view = TYPE_MATCHINGPAIRS
         self.score_feedback_display = score_feedback_display
-        self.tutorial = tutorial
 
 
 def determine_play_method(section: Section) -> PlayMethods:

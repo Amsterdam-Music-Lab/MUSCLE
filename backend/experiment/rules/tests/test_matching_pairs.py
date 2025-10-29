@@ -83,7 +83,10 @@ class MatchingPairsTest(TestCase):
         self.session.save()
         self.session_data = {"session_id": self.session.id}
         sections = self.playlist.section_set.all()
-        data = {"first_card": {"id": sections[0].id}, "second_card": {"id": sections[1].id}, "overlay_was_shown": False}
+        data = {
+            "first_card": {"id": sections[0].id},
+            "second_card": {"id": sections[1].id},
+        }
         result = self.intermediate_score_request(data)
         assert result.score == 10
         assert result.given_response == "lucky match"
@@ -100,11 +103,3 @@ class MatchingPairsTest(TestCase):
         result = self.intermediate_score_request(data)
         assert result.score == 0
         assert result.given_response == "no match"
-
-        data["overlay_was_shown"] = True
-        result = self.intermediate_score_request(data)
-        assert result.json_data["overlay_was_shown"] is True
-
-        data["overlay_was_shown"] = False
-        result = self.intermediate_score_request(data)
-        assert result.json_data["overlay_was_shown"] is False

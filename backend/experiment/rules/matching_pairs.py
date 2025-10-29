@@ -17,7 +17,6 @@ class MatchingPairsGame(BaseRules):
     num_pairs = 8
     show_animation = True
     score_feedback_display = "large-top"
-    tutorial = None
     contact_email = "aml.tunetwins@gmail.com"
     random_seed = None
 
@@ -122,7 +121,6 @@ class MatchingPairsGame(BaseRules):
             stop_audio_after=5,
             show_animation=self.show_animation,
             score_feedback_display=self.score_feedback_display,
-            tutorial=self.tutorial,
         )
         trial = Trial(title="Tune twins", playback=playback, feedback_form=None, config={"show_continue_button": False})
         return trial
