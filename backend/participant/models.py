@@ -121,10 +121,12 @@ class Participant(models.Model):
             ```
         """
         profile_dict = {}
-        for profile in self.profile():
-            profile_dict[profile.question_key] = profile.given_response
-            if profile.score:
-                profile_dict[f'{profile.question_key}_score'] = profile.score
+        profile_list = self.profile().values('question_key', 'given_response', 'score')
+        for profile in profile_list:
+            profile_dict[profile.get('question_key')] = profile.get('given_response')
+            score = profile.get('score')
+            if score:
+                profile_dict[f'{profile.get('question_key')}_score'] = score
         return profile_dict
 
     def is_dutch(self) -> bool:
