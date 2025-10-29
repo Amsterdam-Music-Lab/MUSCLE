@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { postFeedback } from '../../API';
 import Button from '../Button/Button';
 import HTML from '../HTML/HTML';
-import classNames from '@/util/classNames';
 import { FeedbackInfo } from '@/types/Block';
+import classNames from '@/util/classNames';
+import useBoundStore from "@/util/stores";
 
 interface UserFeedbackProps {
     blockSlug: string;
@@ -16,6 +17,7 @@ interface UserFeedbackProps {
 const UserFeedback = ({ blockSlug, participant, feedbackInfo, inline = true }: UserFeedbackProps) => {
     const [value, setValue] = useState('');
     const [showForm, setShowForm] = useState(true);
+    const theme = useBoundStore((state) => state.theme);
 
     const giveFeedback = async () => {
         const data = {
@@ -47,8 +49,9 @@ const UserFeedback = ({ blockSlug, participant, feedbackInfo, inline = true }: U
                         ></textarea>
                         <Button
                             title={feedbackInfo.button}
-                            className={"user-feedback__button btn-primary anim anim-fade-in anim-speed-500"}
+                            className={"user-feedback__button anim anim-fade-in anim-speed-500"}
                             onClick={giveFeedback}
+                            buttonColor={theme?.colorPrimary!}
                         />
                     </div>
                     <HTML body={feedbackInfo.contact_body}></HTML>

@@ -3,9 +3,11 @@ import classNames from "classnames";
 import Circle from "../Circle/Circle";
 import Button from "../Button/Button";
 import { Score as ScoreAction } from "@/types/Action";
+import Theme from "@/types/Theme";
 
 export interface ScoreProps extends ScoreAction {
     onNext: () => void;
+    theme: Theme
 }
 
 /** Score is an block view that shows an intermediate and total score */
@@ -98,7 +100,7 @@ const Score = ({
                 <div className="d-flex flex-column justify-content-center align-items-center mt-3 mb-4">
                     <Button
                         key={"yes"}
-                        className="btn-primary"
+                        buttonColor={theme.colorPrimary}
                         onClick={onNext}
                         title={texts.next}
                     />

@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 
 import Button from "../Button/Button";
 import { Info as InfoAction } from "@/types/Action";
+import Theme from "@/types/Theme";
+import { styleButton } from "@/util/stylingHelpers";
 
 export interface InfoProps extends InfoAction {
     onNext?: () => void;
+    theme: Theme
 }
 
 /** Info is a block view that shows the Info text, and handles agreement/stop actions */
-const Info = ({ heading, body, button_label, button_link, onNext }: InfoProps) => {
+const Info = ({ heading, body, button_label, button_link, onNext, theme, }: InfoProps) => {
     const [maxHeight, setMaxHeight] = useState(getMaxHeight());
 
     useEffect(() => {
@@ -43,7 +46,8 @@ const Info = ({ heading, body, button_label, button_link, onNext }: InfoProps) =
                 <div className="buttons d-flex justify-content-center pt-3">
                     {button_link ? (
                         <a
-                            className="btn btn-primary"
+                            className="btn"
+                            css={styleButton(theme.colorPrimary)}
                             href={button_link}
                             target={button_link.startsWith("http") ? "_blank" : undefined}
                             rel="noopener noreferrer"
@@ -52,7 +56,7 @@ const Info = ({ heading, body, button_label, button_link, onNext }: InfoProps) =
                         </a>
                     ) : onNext ? (
                         <Button
-                            className="btn-primary"
+                            buttonColor={theme.colorPrimary}
                             onClick={onNext}
                             title={button_label}
                         />

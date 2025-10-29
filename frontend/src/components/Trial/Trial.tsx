@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import classNames from "classnames";
 
-import { getAudioLatency, getCurrentTime, getTimeSince } from "@/util/time";
+import { getCurrentTime, getTimeSince } from "@/util/time";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
@@ -9,10 +9,12 @@ import Button from "../Button/Button";
 import { OnResultType } from "@/hooks/useResultHandler";
 import { TrialConfig } from "@/types/Trial";
 import { Trial as TrialAction } from "@/types/Action";
+import Theme from "@/types/Theme";
 
 export interface TrialProps extends TrialAction {
     onNext: (breakRound?: boolean) => void;
     onResult: OnResultType;
+    theme: Theme;
 }
 
 /**
@@ -30,6 +32,7 @@ const Trial = (props: TrialProps) => {
         config,
         onNext,
         onResult,
+        theme,
     } = props;
 
     // Main component state
@@ -179,7 +182,8 @@ const Trial = (props: TrialProps) => {
                 <div className="text-center">
                     <Button
                         title={config.continue_label}
-                        className={"btn-primary anim anim-fade-in anim-speed-500"}
+                        className={"anim anim-fade-in anim-speed-500"}
+                        buttonColor={theme.colorPrimary}
                         onClick={onNext}
                         disabled={!formActive}
                     />

@@ -1,6 +1,8 @@
 import React, { useRef } from "react";
 import classNames from "classnames";
+
 import { audioInitialized } from "../../util/audio";
+import { styleButton } from "@/util/stylingHelpers";
 
 
 interface ButtonProps {
@@ -9,6 +11,7 @@ interface ButtonProps {
     className?: string;
     padding?: string;
     style?: React.CSSProperties;
+    buttonColor: string;
     disabled?: boolean;
     value?: string;
     clickOnce?: boolean;
@@ -24,6 +27,7 @@ const Button = ({
     disabled = false,
     value = "",
     clickOnce = true,
+    buttonColor,
 }: ButtonProps) => {
     const clicked = useRef(false);
 
@@ -62,6 +66,7 @@ const Button = ({
             }}
             disabled={disabled}
             style={style}
+            css={styleButton(buttonColor)}
             tabIndex={0}
             onKeyPress={(e) => {
                 clickOnceGuard();

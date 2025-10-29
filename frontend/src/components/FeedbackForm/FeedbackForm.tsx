@@ -3,7 +3,7 @@ import { useState } from "react";
 import Question from "../Question/Question";
 import Button from "../Button/Button";
 import IQuestion from "@/types/Question";
-import { submitResultType } from "@/hooks/useResultHandler";
+import useBoundStore from "@/util/stores";
 
 interface FeedbackFormProps {
     formActive: boolean;
@@ -11,7 +11,7 @@ interface FeedbackFormProps {
     buttonLabel: string;
     skipLabel: string;
     isSkippable: boolean;
-    submitResult: submitResultType
+    submitResult: () => void;
 }
 
 /** FeedbackForm */
@@ -27,6 +27,7 @@ const FeedbackForm = ({
         form.filter((formElement) => formElement.submits).length === 0;
 
     const [formValid, setFormValid] = useState(false);
+    const theme = useBoundStore((state) => state.theme);
 
     const onChange = (value: string | number | boolean, question_index: number) => {
         form[question_index].value = value;
@@ -74,9 +75,10 @@ const FeedbackForm = ({
                                 onClick={() => {
                                     submitResult();
                                 }}
-                                className={"btn-gray col-4 align-self-start"
+                                className={"=col-4 align-self-start"
                                 }
                                 title={skipLabel}
+                                buttonColor={theme?.colorGrey!}
                             />)}
                         <Button
                             onClick={() => {
@@ -86,6 +88,7 @@ const FeedbackForm = ({
                                 "submit col-4"
                             }
                             disabled={!formValid}
+                            buttonColor={theme?.colorPrimary!}
                             title={buttonLabel}
                         />
 

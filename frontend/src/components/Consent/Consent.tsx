@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { saveAs } from 'file-saver';
 
-import useBoundStore from "@/util/stores";
+import { styleButton } from "@/util/stylingHelpers";
 import { URLS } from "@/config";
 import Button from "../Button/Button";
 import Loading from "../Loading/Loading";
@@ -19,15 +19,10 @@ export interface ConsentProps {
     deny: string;
 }
 
-const styleButton = (buttonColor: string) => {
-    return `background-color: buttonColor;`
-}
-
 /** Consent is an experiment view that shows the consent text, and handles agreement/stop actions */
 const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }: ConsentProps) => {
     const [consent, loadingConsent] = useConsent(experiment.slug);
     const urlQueryString = window.location.search;
-    const theme = useBoundStore((state) => state.theme);
 
     // Listen for consent, and auto advance if already given
     useEffect(() => {
@@ -83,9 +78,10 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }
                 </div>
                 <div className="flex-end">
                     <button
-                        className="btn btn-download fa-solid fa-download font-weight-bold"
+                        className="btn fa-solid fa-download font-weight-bold"
                         data-testid="download-button"
                         onClick={onDownload}
+                        css={styleButton(experiment.theme.colorGrey)}
                     >
                     </button>
                 </div>
@@ -99,15 +95,14 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }
             />
 
             <div className="buttons d-flex justify-content-between">
-                <a href={URLS.AMLHome} className="btn btn-negative btn-lg" style={styleButton(theme.colorNegative)}>
+                <a href={URLS.AMLHome} className="btn btn-lg border-outside" css={styleButton(experiment.theme.colorNegative)}>
                     {deny}
                 </a>
 
                 <Button
-                    buttonColor={theme.colorPositive}
+                    buttonColor={experiment.theme.colorPositive}
                     onClick={onAgree}
                     title={confirm}
-                    style={styleButton(theme.colorPositive)}
                 />
 
             </div>

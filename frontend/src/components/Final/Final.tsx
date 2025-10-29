@@ -12,9 +12,11 @@ import UserFeedback from "../UserFeedback/UserFeedback";
 import FinalButton from "./FinalButton";
 import { Final as FinalAction } from "@/types/Action";
 import classNames from "@/util/classNames";
+import Theme from "@/types/Theme";
 
 export interface FinalProps extends FinalAction {
     onNext: () => void;
+    theme: Theme
 }
 
 /**
@@ -38,6 +40,7 @@ const Final = ({
     rank,
     logo,
     percentile,
+    theme
 }: FinalProps) => {
 
     const session = useBoundStore((state) => state.session);
@@ -66,6 +69,7 @@ const Final = ({
                 <div className="text-center pt-4">
                     <FinalButton
                         button={button}
+                        buttonColor={theme.colorPrimary}
                         onNext={onNext}
                     />
                 </div>

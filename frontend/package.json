@@ -4,6 +4,7 @@
   "type": "module",
   "license": "MIT",
   "dependencies": {
+    "@emotion/react": "^11.14.0",
     "@sentry/react": "^8.40.0",
     "@vitejs/plugin-react": "^4.2.1",
     "axios": ">=1.12.0",

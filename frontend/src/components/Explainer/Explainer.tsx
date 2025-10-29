@@ -1,9 +1,13 @@
 import { useEffect } from "react";
 import Button from "../Button/Button";
 import { Explainer as ExplainerAction } from "@/types/Action";
+import Theme from "@/types/Theme";
+import { styleButton } from "@/util/stylingHelpers";
+
 
 export interface ExplainerProps extends ExplainerAction {
     onNext: () => void;
+    theme: Theme;
 }
 
 /**
@@ -11,7 +15,7 @@ export interface ExplainerProps extends ExplainerAction {
  * If the button has not been clicked, onNext will be called automatically after the timer expires (in milliseconds).
  * If timer == null, onNext will only be called after the button is clicked.
  */
-const Explainer = ({ instruction, button_label, steps = [], timer = null, onNext }: ExplainerProps) => {
+const Explainer = ({ instruction, button_label, steps = [], timer = null, onNext, theme }: ExplainerProps) => {
 
     useEffect(() => {
         if (timer != null) {
@@ -37,9 +41,10 @@ const Explainer = ({ instruction, button_label, steps = [], timer = null, onNext
 
             <div className="text-center">
                 <Button
-                    className="btn-primary anim anim-fade-in anim-speed-300"
+                    className="anim anim-fade-in anim-speed-300"
                     onClick={onNext}
                     title={button_label}
+                    css={styleButton(theme?.colorPrimary)}
                     style={{ animationDelay: steps.length * 300 + "ms" }}
                 />
             </div>
