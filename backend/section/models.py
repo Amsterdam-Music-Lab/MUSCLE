@@ -61,11 +61,11 @@ class Playlist(models.Model):
 
     def clean_csv(self):
         errors = []
-        sections = Section.objects.filter(playlist=self)
+        sections = Section.objects.filter(playlist=self).values_list(
+            'filename', flat=True
+        )
 
-        for section in sections:
-            filename = str(section.filename)
-
+        for filename in sections:
             try:
                 file_exists_validator(filename)
             except ValidationError as e:
