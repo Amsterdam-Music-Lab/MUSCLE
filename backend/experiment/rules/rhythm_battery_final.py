@@ -3,7 +3,7 @@ from django.template.loader import render_to_string
 
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
-from question.preset_catalogues import get_preset_catalogue
+from question.banks import get_question_bank
 from .base import BaseRules
 
 
@@ -14,10 +14,10 @@ class RhythmBatteryFinal(BaseRules):
     show_participant_final = False
 
     def __init__(self):
-        self.question_catalogues = [
+        self.question_lists = [
             {
                 "name": "MSI_F3_MUSICAL_TRAINING",
-                "question_keys": get_preset_catalogue('MSI_F3_MUSICAL_TRAINING'),
+                "question_keys": get_question_bank('MSI_F3_MUSICAL_TRAINING'),
                 "randomize": True,
             },
             {

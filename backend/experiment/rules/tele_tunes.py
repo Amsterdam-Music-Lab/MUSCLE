@@ -1,6 +1,6 @@
 from .hooked import Hooked
 
-from question.preset_catalogues import get_preset_catalogue
+from question.banks import get_question_bank
 
 class HookedTeleTunes(Hooked):
     """ Hooked experiment rules for the Teletunes dataset
@@ -14,15 +14,15 @@ class HookedTeleTunes(Hooked):
     default_consent_file = 'consent/consent_teletunes.html'
 
     def __init__(self):
-        self.question_catalogues = [
+        self.question_lists = [
             {
                 "name": "DEMOGRAPHICS",
-                "question_keys": get_preset_catalogue('DEMOGRAPHICS'),
+                "question_keys": get_question_bank('DEMOGRAPHICS'),
                 "randomize": True,
             },  # 1. Demographic questions (7 questions)
             {
                 "name": "MUSICGENS_17_W_VARIANTS",
-                "question_keys": get_preset_catalogue('MUSICGENS_17_W_VARIANTS'),
+                "question_keys": get_question_bank('MUSICGENS_17_W_VARIANTS'),
                 "randomize": True,
             },  # 2. Musicgens questions with variants
         ]

@@ -1,7 +1,7 @@
 from django.core.management import call_command
 from django.test import TestCase
 
-from question.models import Choice, ChoiceSet, Question
+from question.models import Choice, ChoiceList, Question
 
 class CreateQuestionsTest(TestCase):
 
@@ -11,17 +11,17 @@ class CreateQuestionsTest(TestCase):
         have been imported due to migration
         """
         n_choices = Choice.objects.count()
-        n_choice_sets = ChoiceSet.objects.count()
+        n_choice_lists = ChoiceList.objects.count()
         n_questions = Question.objects.count()
         Choice.objects.all().delete()
-        ChoiceSet.objects.all().delete()
+        ChoiceList.objects.all().delete()
         Question.objects.all().delete()
         self.assertEqual(Choice.objects.count(), 0)
-        self.assertEqual(ChoiceSet.objects.count(), 0)
+        self.assertEqual(ChoiceList.objects.count(), 0)
         self.assertEqual(Question.objects.count(), 0)
         call_command('updatequestions')
         self.assertEqual(Choice.objects.count(), n_choices)
-        self.assertEqual(ChoiceSet.objects.count(), n_choice_sets)
+        self.assertEqual(ChoiceList.objects.count(), n_choice_lists)
         self.assertEqual(Question.objects.count(), n_questions)
 
     def test_translatequestions(self):

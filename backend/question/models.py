@@ -74,7 +74,7 @@ class Question(models.Model):
 
     # ChoiceQuestion
     choices = models.ForeignKey(
-        'question.ChoiceSet', null=True, on_delete=models.SET_NULL
+        'question.ChoiceList', null=True, on_delete=models.SET_NULL
     )
     # only applicable for CheckBoxQuestion
     min_values = models.IntegerField(blank=True, null=True)
@@ -114,7 +114,7 @@ class Question(models.Model):
         ordering = ["key"]
 
 
-class ChoiceSet(models.Model):
+class ChoiceList(models.Model):
     """A collection of choices for a question"""
 
     key = models.SlugField(max_length=64, primary_key=True)
@@ -138,80 +138,65 @@ class Choice(models.Model):
     key = models.SlugField(max_length=128)
     text = models.CharField()
     index = models.PositiveIntegerField(default=0)
-    set = models.ForeignKey(
-        ChoiceSet,
+    choicelist = models.ForeignKey(
+        ChoiceList,
         on_delete=models.CASCADE,
         related_name='choices',
     )
 
     class Meta:
         ordering = ["index"]
-        unique_together = ["key", "set"]
+        unique_together = ["key", "choicelist"]
 
 
-class QuestionSeries(models.Model):
-    """Series of Questions asked in a Block
+class QuestionList(models.Model):
+    """List of Questions asked in a Block
 
     Attributes:
-        name (str): Name of the QuestionSeries
-        block (Block): Block that contains QuestionSeries
-        index (int):  Index of QuestionSeries within Block
-        questions (Queryset[Question]): ManyToManyField to Questions that the QuestionSeries contains
-        randomize (bool): Randomize questions within QuestionSeries
+        name (str): Name of the QuestionList
+        block (Block): Block that contains QuestionList
+        index (int):  Index of QuestionList within Block
+        questions (Queryset[Question]): ManyToManyField to Questions that the QuestionList contains
+        randomize (bool): Randomize questions within QuestionList
     """
 
     name = models.CharField(default="", max_length=128)
     block = models.ForeignKey('experiment.Block', on_delete=models.CASCADE)
-    index = models.PositiveIntegerField()  # index of QuestionSeries within Block
-    questions = models.ManyToManyField(Question, through="QuestionInSeries")
-    randomize = models.BooleanField(default=False)  # randomize questions within QuestionSeries
+    index = models.PositiveIntegerField()  # index of QuestionList within Block
+    questions = models.ManyToManyField(Question, through="QuestionInList")
+    randomize = models.BooleanField(
+        default=False
+    )  # randomize questions within QuestionList
 
     class Meta:
         ordering = ["index"]
         unique_together = ["name", "block"]
-        verbose_name_plural = "Question Series"
+        verbose_name_plural = "Question Lists"
 
     def __str__(self):
         return _(
-            "QuestionSeries %(qs_name)s of block with slug %(block_slug)s: %(n_questions)i questions"
+            "QuestionList %(qs_name)s of block with slug %(block_slug)s: %(n_questions)i questions"
         ) % {
             'qs_name': self.name,
             'block_slug': self.block.slug,
-            'n_questions': self.questioninseries_set.count() if self.pk else 0,
+            'n_questions': self.questions.count() if self.pk else 0,
         }
 
 
-class QuestionInSeries(models.Model):
-    """Question with its index in QuestionSeries
+class QuestionInList(models.Model):
+    """Question with its index in QuestionList
 
     Attributes:
-        question_series (QuestionSeries): QuestionSeries that contains the Question
-        question (Question): Question linked to question_series
-        index (int): Index of Question within QuestionSeries
+        questionlist (QuestionList): QuestionList that contains the Question
+        question (Question): Question linked to QuestionList
+        index (int): Index of Question within QuestionList
     """
 
-    question_series = models.ForeignKey(QuestionSeries, on_delete=models.CASCADE)
+    questionlist = models.ForeignKey(QuestionList, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     index = models.PositiveIntegerField(default=0)
 
     class Meta:
-        unique_together = ("question_series", "question")
+        unique_together = ("questionlist", "question")
         ordering = ["index"]
-        verbose_name_plural = "Question In Series objects"
-
-
-def _populate_translated_fields(obj: models.Model, field_name: str):
-    """Check if there are Python-defined translations and fill fields of a Question or Choice object
-    Args:
-        obj: the Question / Choice object whose fields to set
-        field_name: the name of the field (registered in `question.translations`)
-    """
-    for lang in reversed(settings.MODELTRANSLATION_LANGUAGES):
-        lang_field = lang.replace("-", "_")
-        activate(lang)
-        input_string = getattr(obj, field_name)
-        setattr(
-            obj,
-            f"{field_name}_{lang_field}",
-            str(input_string),
-        )
+        verbose_name_plural = "Question In List objects"

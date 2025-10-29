@@ -9,7 +9,7 @@ from .trial import Trial
 
 from experiment.actions.utils import randomize_playhead
 from experiment.actions.question import ButtonArrayQuestion
-from question.models import ChoiceSet
+from question.models import ChoiceList
 from result.utils import prepare_result
 from section.models import Section
 from session.models import Session
@@ -80,7 +80,7 @@ def boolean_question(
         key=key,
         text=text,
         result_id=result_id,
-        choices=ChoiceSet.objects.get(pk='BOOLEAN_NEGATIVE_FIRST').to_dict(),
+        choices=ChoiceList.objects.get(pk='BOOLEAN_NEGATIVE_FIRST').to_dict(),
         style=style,
     )
 

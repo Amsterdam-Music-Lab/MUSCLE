@@ -5,8 +5,8 @@ from django.test import Client, TestCase
 from experiment.models import Block
 from participant.models import Participant
 from participant.utils import get_participant, PARTICIPANT_KEY
-from question.models import QuestionSeries
-from question.preset_catalogues import get_preset_catalogue
+from question.models import QuestionList
+from question.banks import get_question_bank
 from result.models import Result
 from session.models import Session
 
@@ -126,24 +126,24 @@ class ParticipantTest(TestCase):
         assert participant.country_code == 'BLA'
 
     def test_score_sum(self):
-        self.block.create_catalogue(
+        self.block.create_question_list(
             {
                 "name": "test_msi1",
-                "question_keys": get_preset_catalogue("MSI_F1_ACTIVE_ENGAGEMENT"),
+                "question_keys": get_question_bank("MSI_F1_ACTIVE_ENGAGEMENT"),
             }
         )
-        self.block.create_catalogue(
+        self.block.create_question_list(
             {
                 "name": "test_msi2",
-                "question_keys": get_preset_catalogue("MSI_F2_PERCEPTUAL_ABILITIES"),
+                "question_keys": get_question_bank("MSI_F2_PERCEPTUAL_ABILITIES"),
             }
         )
         score_sum = self.participant.score_sum(
-            QuestionSeries.objects.get(block=self.block, name="test_msi1")
+            QuestionList.objects.get(block=self.block, name="test_msi1")
         )
         assert score_sum == 8
         score_sum = self.participant.score_sum(
-            QuestionSeries.objects.get(block=self.block, name="test_msi2")
+            QuestionList.objects.get(block=self.block, name="test_msi2")
         )
         assert score_sum is None
 

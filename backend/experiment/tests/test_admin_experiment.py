@@ -7,7 +7,7 @@ from experiment.admin import ExperimentAdmin
 from experiment.models import Block, Experiment, Phase
 from section.models import Playlist
 from theme.models import ThemeConfig
-from question.models import QuestionSeries, QuestionInSeries, Question
+from question.models import Question, QuestionInList, QuestionList
 
 # Expected field count per model
 EXPECTED_BLOCK_FIELDS = 10
@@ -132,16 +132,16 @@ class TestDuplicateExperiment(TestCase):
         cls.block1.playlists.add(cls.playlist1)
         cls.block1.playlists.add(cls.playlist2)
         cls.block1.save()
-        cls.question_series = QuestionSeries.objects.create(block=cls.block2, index=0)
+        cls.question_list = QuestionList.objects.create(block=cls.block2, index=0)
         cls.questions = Question.objects.all()
         index = 0
         for question in cls.questions:
-            QuestionInSeries.objects.create(
-                question_series=cls.question_series, question=question, index=index
+            QuestionInList.objects.create(
+                questionlist=cls.question_list, question=question, index=index
             )
             index += 1
 
-        cls.questions_in_series = QuestionInSeries.objects.all()
+        cls.questions_in_lists = QuestionInList.objects.all()
 
     def setUp(self):
         self.admin = ExperimentAdmin(model=Experiment, admin_site=AdminSite)
@@ -161,7 +161,7 @@ class TestDuplicateExperiment(TestCase):
         last_block = Block.objects.last()
         new_block1 = Block.objects.get(slug="block1-duplitest")
 
-        all_question_series = QuestionSeries.objects.all()
+        all_question_lists = QuestionList.objects.all()
         all_questions = Question.objects.all()
 
         self.assertEqual(all_experiments.count(), 2)
@@ -175,7 +175,7 @@ class TestDuplicateExperiment(TestCase):
 
         self.assertEqual(new_block1.playlists.all().count(), 2)
 
-        self.assertEqual(all_question_series.count(), 2)
+        self.assertEqual(all_question_lists.count(), 2)
         self.assertEqual(self.questions.count(), (all_questions.count()))
 
         self.assertEqual(response.status_code, 302)

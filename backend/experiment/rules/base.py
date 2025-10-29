@@ -70,15 +70,11 @@ class BaseRules(object):
             n_questions: the number of questions to return, set to `None` if all questions in the blocks' question sets should be returned at once
         """
         trials = []
-        catalogues = session.block.questionseries_set.all()
+        question_lists = session.block.questionlist_set.all()
         if n_questions is None:
-            n_questions = sum(catalogue.questions.count() for catalogue in catalogues)
-        for catalogue in catalogues:
-            questions = (
-                catalogue.questions.order_by("?")
-                if catalogue.randomize
-                else catalogue.questions
-            )
+            n_questions = sum(ql.questions.count() for ql in question_lists)
+        for ql in question_lists:
+            questions = ql.questions.order_by("?") if ql.randomize else ql.questions
             question_iterator = get_unanswered_questions(
                 session.participant, questions.all()
             )

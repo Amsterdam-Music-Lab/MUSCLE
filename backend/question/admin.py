@@ -6,22 +6,22 @@ from django.utils.translation import gettext_lazy as _
 from modeltranslation.admin import TabbedTranslationAdmin
 from question.models import (
     Choice,
-    ChoiceSet,
+    ChoiceList,
     Question,
-    QuestionSeries,
-    QuestionInSeries,
+    QuestionList,
+    QuestionInList,
 )
-from question.forms import QuestionForm, QuestionSeriesForm
+from question.forms import QuestionForm, QuestionListForm
 
 
-class QuestionInSeriesInline(admin.TabularInline):
-    model = QuestionInSeries
+class QuestionInListInline(admin.TabularInline):
+    model = QuestionInList
     extra = 0
 
 
-class QuestionSeriesInline(admin.TabularInline):
-    model = QuestionSeries
-    inlines = [QuestionInSeriesInline]
+class QuestionListInline(admin.TabularInline):
+    model = QuestionList
+    inlines = [QuestionInListInline]
     readonly_fields = ["name"]
     extra = 0
     show_change_link = True
@@ -34,25 +34,25 @@ class ChoiceInline(admin.StackedInline):
 
 
 @admin.action(description=_("Duplicate selected choice sets"))
-def duplicate_choice_set(modeladmin, request, queryset):
-    for choice_set in queryset:
-        n_choice_sets = ChoiceSet.objects.filter(
-            key__regex=rf'^{choice_set.key}(_\d+)*$'
+def duplicate_choice_list(modeladmin, request, queryset):
+    for choice_list in queryset:
+        n_choice_lists = ChoiceList.objects.filter(
+            key__regex=rf'^{choice_list.key}(_\d+)*$'
         ).count()
-        new_choice_set = ChoiceSet.objects.create(
-            key=f"{choice_set.key}_{n_choice_sets}"
+        new_choice_list = ChoiceList.objects.create(
+            key=f"{choice_list.key}_{n_choice_lists}"
         )
-        choices = choice_set.choices.all()
+        choices = choice_list.choices.all()
         for choice in choices:
             new_choice = deepcopy(choice)
             new_choice.pk = None
-            new_choice.set = new_choice_set
+            new_choice.choicelist = new_choice_list
             new_choice.save()
 
 
-class ChoiceSetAdmin(admin.ModelAdmin):
-    model = ChoiceSet
-    actions = [duplicate_choice_set]
+class ChoiceListAdmin(admin.ModelAdmin):
+    model = ChoiceList
+    actions = [duplicate_choice_list]
     inlines = [ChoiceInline]
     change_form_template = 'question_change.html'
 
@@ -77,11 +77,11 @@ class QuestionAdmin(TabbedTranslationAdmin):
         js = ["question_admin.js"]
 
 
-class QuestionSeriesAdmin(admin.ModelAdmin):
-    inlines = [QuestionInSeriesInline]
-    form = QuestionSeriesForm
+class QuestionListAdmin(admin.ModelAdmin):
+    inlines = [QuestionInListInline]
+    form = QuestionListForm
 
 
-admin.site.register(ChoiceSet, ChoiceSetAdmin)
+admin.site.register(ChoiceList, ChoiceListAdmin)
 admin.site.register(Question, QuestionAdmin)
-admin.site.register(QuestionSeries, QuestionSeriesAdmin)
+admin.site.register(QuestionList, QuestionListAdmin)

@@ -2,7 +2,7 @@ from django.db import migrations
 
 from question.management.commands.updatequestions import (
     update_choices,
-    update_choice_sets,
+    update_choice_lists,
     update_questions,
 )
 
@@ -17,40 +17,40 @@ def flip_boolean_sign(apps, schema_editor):
         question.save()
 
 
-def choice_to_choice_set(apps, schema_editor):
+def choice_to_choice_list(apps, schema_editor):
     """import the Python defined questions from fixtures, and update all other questions"""
     ChoiceModel = apps.get_model("question.Choice")
-    ChoiceSetModel = apps.get_model("question.ChoiceSet")
+    ChoiceListModel = apps.get_model("question.ChoiceList")
     QuestionModel = apps.get_model("question.Question")
-    update_choice_sets()
+    update_choice_lists()
     update_choices()
     python_defined_questions = update_questions()
     for question in QuestionModel.objects.exclude(key__in=python_defined_questions):
-        if hasattr(question, 'choice_set'):
-            cs, has_created_choice_set = ChoiceSetModel.objects.get_or_create(
+        if hasattr(question, 'choice_list'):
+            cl, has_created_choice_list = ChoiceListModel.objects.get_or_create(
                 key=f"{question.key}_choices"
             )
             for choice in question.choice_set.all():
-                choice.set = cs
-                if has_created_choice_set:
-                    question.choices = cs
+                choice.choicelist = cl
+                if has_created_choice_list:
+                    question.choices = cl
                     question.save()
                 try:
                     choice.save()
                 except:
                     choice.delete()  # we have more choices in the choice->question setup
     ChoiceModel.objects.filter(
-        set__isnull=True
-    ).delete()  # to be safe, delete choices without choice set
+        choicelist__isnull=True
+    ).delete()  # to be safe, delete choices without choice list
 
 
 def choice_to_question(apps, schema_editor):
     ChoiceModel = apps.get_model("question.Choice")
-    ChoiceSetModel = apps.get_model("question.ChoiceSet")
+    ChoiceListModel = apps.get_model("question.ChoiceList")
     QuestionModel = apps.get_model("question.Question")
     for question in QuestionModel.objects.all():
-        choice_set = getattr(question, 'choices', None)
-        if choice_set:
+        choice_list = getattr(question, 'choices', None)
+        if choice_list:
             ChoiceModel.objects.bulk_create(
                 [
                     ChoiceModel(
@@ -59,19 +59,19 @@ def choice_to_question(apps, schema_editor):
                         text=choice.text,
                         index=choice.index,
                     )
-                    for choice in choice_set.choices.all()
+                    for choice in choice_list.choices.all()
                 ]
             )
-    ChoiceSetModel.objects.all().delete()  # to ensure we leave no dangling choices
+    ChoiceListModel.objects.all().delete()  # to ensure we leave no dangling choices
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('question', '0011_rename_question_question_text'),
+        ('question', '0012_rename_question_series'),
     ]
 
     operations = [
-        migrations.RunPython(choice_to_choice_set, reverse_code=choice_to_question),
+        migrations.RunPython(choice_to_choice_list, reverse_code=choice_to_question),
         migrations.RunPython(migrations.RunPython.noop, reverse_code=flip_boolean_sign),
     ]

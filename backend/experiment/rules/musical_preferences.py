@@ -11,7 +11,7 @@ from experiment.actions.playback import Autoplay
 from experiment.actions.question import ButtonArrayQuestion, IconRangeQuestion
 from experiment.actions.redirect import Redirect
 from experiment.actions.trial import Trial
-from question.models import ChoiceSet
+from question.models import ChoiceList
 from result.utils import prepare_result
 from result.models import Result
 from section.models import Section
@@ -39,7 +39,7 @@ class MusicalPreferences(BaseRules):
     know_score = {"yes": 2, "unsure": 1, "no": 0}
 
     def __init__(self):
-        self.question_catalogues = [
+        self.question_lists = [
             {
                 "name": "Musical Preferences",
                 "question_keys": [

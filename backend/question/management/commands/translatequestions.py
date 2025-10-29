@@ -39,7 +39,7 @@ class Command(BaseCommand):
                 set_attributes(question, ['text', 'explainer'])
                 question.save()
             for choice in Choice.objects.exclude(
-                set__key__in=['ISO_COUNTRIES', 'ISO_LANGUAGES']
+                choicelist__key__in=['ISO_COUNTRIES', 'ISO_LANGUAGES']
             ):
                 set_attributes(choice, ['text'])
                 choice.save()
@@ -67,7 +67,7 @@ class Command(BaseCommand):
                 .get("localeDisplayNames")
                 .get("territories")
             )
-        iso_country_choices = Choice.objects.filter(set='ISO_COUNTRIES')
+        iso_country_choices = Choice.objects.filter(choicelist='ISO_COUNTRIES')
         for choice in iso_country_choices:
             country_key = next(
                 (key for key in countries.keys() if key.lower() == choice.key)
@@ -84,7 +84,7 @@ class Command(BaseCommand):
                 .get("localeDisplayNames")
                 .get("languages")
             )
-        iso_language_choices = Choice.objects.filter(set='ISO_LANGUAGES')
+        iso_language_choices = Choice.objects.filter(choicelist='ISO_LANGUAGES')
         for choice in iso_language_choices:
             language_key = next(
                 (key for key in languages.keys() if key.lower() == choice.key), None

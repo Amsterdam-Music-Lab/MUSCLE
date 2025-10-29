@@ -4,268 +4,268 @@
     key: 'yes'
     text: 'Yes'
     index: 0
-    set: BOOLEAN
+    choicelist: BOOLEAN
 - model: question.choice
   fields:
     key: 'no'
     text: 'No'
     index: 1
-    set: BOOLEAN
+    choicelist: BOOLEAN
 - model: question.choice
   fields:
     key: 'no'
     text: 'No'
     index: 0
-    set: BOOLEAN_NEGATIVE_FIRST
+    choicelist: BOOLEAN_NEGATIVE_FIRST
 - model: question.choice
   fields:
     key: 'yes'
     text: 'Yes'
     index: 1
-    set: BOOLEAN_NEGATIVE_FIRST
+    choicelist: BOOLEAN_NEGATIVE_FIRST
 - model: question.choice
   fields:
     key: '1'
     text: 'Yes'
     index: 0
-    set: BOOLEAN_UNDECIDED
+    choicelist: BOOLEAN_UNDECIDED
 - model: question.choice
   fields:
     key: '0'
     text: 'No'
     index: 1
-    set: BOOLEAN_UNDECIDED
+    choicelist: BOOLEAN_UNDECIDED
 - model: question.choice
   fields:
     key: '-1'
     text: I'm not sure
     index: 2
-    set: BOOLEAN_UNDECIDED
+    choicelist: BOOLEAN_UNDECIDED
 - model: question.choice
   fields:
     key: '1'
     text: Strongly Disagree
     index: 0
-    set: LIKERT_AGREE_5
+    choicelist: LIKERT_AGREE_5
 - model: question.choice
   fields:
     key: '2'
     text: Disagree
     index: 1
-    set: LIKERT_AGREE_5
+    choicelist: LIKERT_AGREE_5
 - model: question.choice
   fields:
     key: '3'
     text: Neither Agree nor Disagree
     index: 2
-    set: LIKERT_AGREE_5
+    choicelist: LIKERT_AGREE_5
 - model: question.choice
   fields:
     key: '4'
     text: Agree
     index: 3
-    set: LIKERT_AGREE_5
+    choicelist: LIKERT_AGREE_5
 - model: question.choice
   fields:
     key: '5'
     text: Strongly Agree
     index: 4
-    set: LIKERT_AGREE_5
+    choicelist: LIKERT_AGREE_5
 - model: question.choice
   fields:
     key: '1'
     text: Agree strongly
     index: 0
-    set: LIKERT_AGREE_6
+    choicelist: LIKERT_AGREE_6
 - model: question.choice
   fields:
     key: '2'
     text: Agree moderately
     index: 1
-    set: LIKERT_AGREE_6
+    choicelist: LIKERT_AGREE_6
 - model: question.choice
   fields:
     key: '3'
     text: Agree slightly
     index: 2
-    set: LIKERT_AGREE_6
+    choicelist: LIKERT_AGREE_6
 - model: question.choice
   fields:
     key: '4'
     text: Disagree slightly
     index: 3
-    set: LIKERT_AGREE_6
+    choicelist: LIKERT_AGREE_6
 - model: question.choice
   fields:
     key: '5'
     text: Disagree moderately
     index: 4
-    set: LIKERT_AGREE_6
+    choicelist: LIKERT_AGREE_6
 - model: question.choice
   fields:
     key: '6'
     text: Disagree strongly
     index: 5
-    set: LIKERT_AGREE_6
+    choicelist: LIKERT_AGREE_6
 - model: question.choice
   fields:
     key: '1'
     text: Completely Disagree
     index: 0
-    set: LIKERT_AGREE_7
+    choicelist: LIKERT_AGREE_7
 - model: question.choice
   fields:
     key: '2'
     text: Strongly Disagree
     index: 1
-    set: LIKERT_AGREE_7
+    choicelist: LIKERT_AGREE_7
 - model: question.choice
   fields:
     key: '3'
     text: Disagree
     index: 2
-    set: LIKERT_AGREE_7
+    choicelist: LIKERT_AGREE_7
 - model: question.choice
   fields:
     key: '4'
     text: Neither Agree nor Disagree
     index: 3
-    set: LIKERT_AGREE_7
+    choicelist: LIKERT_AGREE_7
 - model: question.choice
   fields:
     key: '5'
     text: Agree
     index: 4
-    set: LIKERT_AGREE_7
+    choicelist: LIKERT_AGREE_7
 - model: question.choice
   fields:
     key: '6'
     text: Strongly Agree
     index: 5
-    set: LIKERT_AGREE_7
+    choicelist: LIKERT_AGREE_7
 - model: question.choice
   fields:
     key: '7'
     text: Completely Agree
     index: 6
-    set: LIKERT_AGREE_7
+    choicelist: LIKERT_AGREE_7
 - model: question.choice
   fields:
     key: '1'
     text: Never
     index: 0
-    set: LIKERT_FREQUENCY_6
+    choicelist: LIKERT_FREQUENCY_6
 - model: question.choice
   fields:
     key: '2'
     text: Not very often
     index: 1
-    set: LIKERT_FREQUENCY_6
+    choicelist: LIKERT_FREQUENCY_6
 - model: question.choice
   fields:
     key: '3'
     text: Occasionally
     index: 2
-    set: LIKERT_FREQUENCY_6
+    choicelist: LIKERT_FREQUENCY_6
 - model: question.choice
   fields:
     key: '4'
     text: Sometimes
     index: 3
-    set: LIKERT_FREQUENCY_6
+    choicelist: LIKERT_FREQUENCY_6
 - model: question.choice
   fields:
     key: '5'
     text: Very often
     index: 4
-    set: LIKERT_FREQUENCY_6
+    choicelist: LIKERT_FREQUENCY_6
 - model: question.choice
   fields:
     key: '6'
     text: Always
     index: 5
-    set: LIKERT_FREQUENCY_6
+    choicelist: LIKERT_FREQUENCY_6
 - model: question.choice
   fields:
     key: '1'
     text: fa-face-grin-hearts
     index: 0
-    set: LIKERT_ICONS_7
+    choicelist: LIKERT_ICONS_7
 - model: question.choice
   fields:
     key: '2'
     text: fa-face-grin
     index: 1
-    set: LIKERT_ICONS_7
+    choicelist: LIKERT_ICONS_7
 - model: question.choice
   fields:
     key: '3'
     text: fa-face-smile
     index: 2
-    set: LIKERT_ICONS_7
+    choicelist: LIKERT_ICONS_7
 - model: question.choice
   fields:
     key: '4'
     text: fa-face-meh
     index: 3
-    set: LIKERT_ICONS_7
+    choicelist: LIKERT_ICONS_7
 - model: question.choice
   fields:
     key: '5'
     text: fa-face-frown
     index: 4
-    set: LIKERT_ICONS_7
+    choicelist: LIKERT_ICONS_7
 - model: question.choice
   fields:
     key: '6'
     text: fa-face-frown-open
     index: 5
-    set: LIKERT_ICONS_7
+    choicelist: LIKERT_ICONS_7
 - model: question.choice
   fields:
     key: '7'
     text: fa-face-angry
     index: 6
-    set: LIKERT_ICONS_7
+    choicelist: LIKERT_ICONS_7
 - model: question.choice
   fields:
     key: '1'
     text: Dislike Strongly
     index: 0
-    set: LIKERT_PREFERENCE_7
+    choicelist: LIKERT_PREFERENCE_7
 - model: question.choice
   fields:
     key: '2'
     text: Dislike Moderately
     index: 1
-    set: LIKERT_PREFERENCE_7
+    choicelist: LIKERT_PREFERENCE_7
 - model: question.choice
   fields:
     key: '3'
     text: Dislike a Little
     index: 2
-    set: LIKERT_PREFERENCE_7
+    choicelist: LIKERT_PREFERENCE_7
 - model: question.choice
   fields:
     key: '4'
     text: Neither Like nor Dislike
     index: 3
-    set: LIKERT_PREFERENCE_7
+    choicelist: LIKERT_PREFERENCE_7
 - model: question.choice
   fields:
     key: '5'
     text: Like a Little
     index: 4
-    set: LIKERT_PREFERENCE_7
+    choicelist: LIKERT_PREFERENCE_7
 - model: question.choice
   fields:
     key: '6'
     text: Like Moderately
     index: 5
-    set: LIKERT_PREFERENCE_7
+    choicelist: LIKERT_PREFERENCE_7
 - model: question.choice
   fields:
     key: '7'
     text: Like Strongly
     index: 6
-    set: LIKERT_PREFERENCE_7
+    choicelist: LIKERT_PREFERENCE_7

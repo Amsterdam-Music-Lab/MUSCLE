@@ -2,12 +2,12 @@ from django.contrib.admin.sites import AdminSite
 from django.test import RequestFactory, TestCase
 
 from question.admin import (
-    ChoiceSetAdmin,
-    duplicate_choice_set,
+    ChoiceListAdmin,
+    duplicate_choice_list,
     duplicate_question,
     QuestionAdmin,
 )
-from question.models import Choice, ChoiceSet, Question
+from question.models import Choice, ChoiceList, Question
 
 
 class QuestionAdminTestCase(TestCase):
@@ -27,17 +27,17 @@ class QuestionAdminTestCase(TestCase):
         self.assertEqual(country_closed.choices.choices.count(), 249)
 
 
-class ChoiceSetAdminTestCase(TestCase):
+class ChoiceListAdminTestCase(TestCase):
 
-    def test_duplicate_choice_set(self):
-        cs_admin = ChoiceSetAdmin(model=ChoiceSet, admin_site=AdminSite())
+    def test_duplicate_choice_list(self):
+        cs_admin = ChoiceListAdmin(model=ChoiceList, admin_site=AdminSite())
         request = RequestFactory().request()
-        choicesets_to_duplicate = ChoiceSet.objects.filter(key__startswith='LIKERT')
-        duplicate_choice_set(cs_admin, request, choicesets_to_duplicate)
-        new_choicesets = ChoiceSet.objects.filter(
+        choicelists_to_duplicate = ChoiceList.objects.filter(key__startswith='LIKERT')
+        duplicate_choice_list(cs_admin, request, choicelists_to_duplicate)
+        new_choicelists = ChoiceList.objects.filter(
             key__startswith='LIKERT', key__endswith='1'
         )
-        self.assertEqual(choicesets_to_duplicate.count(), new_choicesets.count())
+        self.assertEqual(choicelists_to_duplicate.count(), new_choicelists.count())
         self.assertNotEqual(
-            Choice.objects.filter(set=new_choicesets.first()).count(), 0
+            Choice.objects.filter(choicelist=new_choicelists.first()).count(), 0
         )

@@ -1,7 +1,7 @@
 from django.forms import ChoiceField, ModelForm, TextInput
 
-from question.models import Question, QuestionInSeries, QuestionSeries
-from question.preset_catalogues import PRESET_CATALOGUES
+from question.models import Question, QuestionInList, QuestionList
+from question.banks import PRESET_BANKS
 
 class QuestionForm(ModelForm):
 
@@ -26,43 +26,42 @@ class QuestionForm(ModelForm):
         }
         widgets = {'text': TextInput(attrs={'size': '100%'})}
 
-QUESTION_CATALOGUE_CHOICES = [(None, '-----')] + [
-    (key, key) for key in PRESET_CATALOGUES.keys()
-]
+QUESTION_BANK_CHOICES = [(None, '-----')] + [(key, key) for key in PRESET_BANKS.keys()]
 
-class QuestionSeriesForm(ModelForm):
-    questions_from_catalogue = ChoiceField(
-        choices=QUESTION_CATALOGUE_CHOICES,
+
+class QuestionListForm(ModelForm):
+    questions_from_bank = ChoiceField(
+        choices=QUESTION_BANK_CHOICES,
         initial=None,
         required=False,
-        label="Add all questions from catalogue",
+        label="Add all questions from a question bank",
     )
 
     class Meta:
-        model = QuestionSeries
+        model = QuestionList
         fields = '__all__'
 
     def save(self, commit=True):
         instance = super().save(commit=commit)
-        catalogue_key = self.cleaned_data.get('questions_from_catalogue')
-        if catalogue_key:
+        bank_key = self.cleaned_data.get('questions_from_bank')
+        if bank_key:
             instance.save()
-            self.add_questions_from_catalogue(instance, catalogue_key)
+            self.add_questions_from_bank(instance, bank_key)
         return instance
 
-    def add_questions_from_catalogue(self, instance, catalogue_key):
-        '''Add all questions from the given catalogue'''
-        n_questions_in_series = QuestionInSeries.objects.filter(
-            question_series=instance
+    def add_questions_from_bank(self, instance, bank_key: str):
+        '''Add all questions from the given bank'''
+        n_questions_in_list = QuestionInList.objects.filter(
+            questionlist=instance
         ).count()
-        for index, key in enumerate(PRESET_CATALOGUES.get(catalogue_key)):
+        for index, key in enumerate(PRESET_BANKS.get(bank_key)):
             question_obj = Question.objects.get(key=key)
-            QuestionInSeries.objects.bulk_create(
+            QuestionInList.objects.bulk_create(
                 [
-                    QuestionInSeries(
-                        question_series=instance,
+                    QuestionInList(
+                        questionlist=instance,
                         question=question_obj,
-                        index=index + n_questions_in_series,
+                        index=index + n_questions_in_list,
                     )
                 ],
                 ignore_conflicts=True,

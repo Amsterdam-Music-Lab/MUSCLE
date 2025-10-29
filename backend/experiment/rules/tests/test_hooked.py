@@ -14,7 +14,7 @@ from experiment.models import (
     SocialMediaConfig,
 )
 from participant.models import Participant
-from question.preset_catalogues import get_preset_catalogue
+from question.banks import get_question_bank
 from result.models import Result
 from section.models import Playlist, Section, Song
 from session.models import Session
@@ -266,9 +266,9 @@ class HookedTest(TestCase):
                     self.assertNotIn(heard_before_section, song_sync_sections)
 
     def test_thats_my_song(self):
-        tms_keys = get_preset_catalogue('VANDERBILT_FIXED')
+        tms_keys = get_question_bank('VANDERBILT_FIXED')
         block = Block.objects.get(slug="thats_my_song")
-        block.add_default_question_catalogues()
+        block.add_default_question_lists()
         playlist = Playlist.objects.get(name="ThatsMySong")
         playlist._update_sections()
         session = Session.objects.create(block=block, participant=self.participant, playlist=playlist)
@@ -315,7 +315,7 @@ class HookedTest(TestCase):
 
     def test_hooked_china(self):
         block = Block.objects.get(slug="huang_2022")
-        block.add_default_question_catalogues()
+        block.add_default_question_lists()
         playlist = Playlist.objects.get(name="Cantpop")
         playlist._update_sections()
         session = Session.objects.create(block=block, participant=self.participant, playlist=playlist)
@@ -331,11 +331,11 @@ class HookedTest(TestCase):
 
         # check that question trials are as expected
         question_trials = rules.get_profile_question_trials(session, None)
-        n_total_questions = block.questionseries_set.aggregate(Count("questions"))[
+        n_total_questions = block.questionlist_set.aggregate(Count("questions"))[
             'questions__count'
         ]
         self.assertEqual(len(question_trials), n_total_questions)
         keys = [q.feedback_form.form[0].key for q in question_trials]
-        questions = rules.question_catalogues[0]["question_keys"][0:3]
+        questions = rules.question_lists[0]["question_keys"][0:3]
         for question in questions:
             self.assertIn(question, keys)

@@ -13,7 +13,7 @@ from experiment.actions.question import (
     TextRangeQuestion,
     TextQuestion,
 )
-from question.models import ChoiceSet
+from question.models import ChoiceList
 
 class FormTest(TestCase):
     def setUp(self):
@@ -205,7 +205,7 @@ class TextRangeQuestionTest(TestCase):
     def setUp(self):
         self.likert_question = TextRangeQuestion(
             key='test_key',
-            choices=ChoiceSet.objects.get(pk="LIKERT_AGREE_7").to_dict(),
+            choices=ChoiceList.objects.get(pk="LIKERT_AGREE_7").to_dict(),
         )
 
     def test_initialization(self):
@@ -245,7 +245,8 @@ class IconRangeTest(TestCase):
 
     def setUp(self):
         self.likert_question_icon = IconRangeQuestion(
-            key='test_key', choices=ChoiceSet.objects.get(pk='LIKERT_ICONS_7').to_dict()
+            key='test_key',
+            choices=ChoiceList.objects.get(pk='LIKERT_ICONS_7').to_dict(),
         )
 
     def test_initialization(self):

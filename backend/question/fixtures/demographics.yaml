@@ -1,4 +1,4 @@
-# all demographic questions, choice sets and choices
+# all demographic questions, choice lists and choices
 - model: question.question
   pk: dgf_age
   fields:

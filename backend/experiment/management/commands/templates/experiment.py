@@ -20,7 +20,7 @@ class NewBlockRuleset(BaseRules):
     def __init__(self):
 
         # Add your questions here
-        self.question_catalogues = [
+        self.question_lists = [
             {
                 "name": "Demographics",
                 "question_keys": [

@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from experiment.models import Block, Experiment, Phase
 from participant.models import Participant
-from question.models import QuestionInSeries, QuestionSeries
+from question.models import QuestionInList, QuestionList
 from session.models import Session
 
 
@@ -16,37 +16,37 @@ class TestModelBlock(TestCase):
         rules1 = self.block.get_rules()
         rules2 = self.block.get_rules()
         keys1 = (
-            rules1.question_catalogues[0]["question_keys"]
-            + rules1.question_catalogues[1]["question_keys"]
+            rules1.question_lists[0]["question_keys"]
+            + rules1.question_lists[1]["question_keys"]
         )
         keys2 = (
-            rules2.question_catalogues[0]["question_keys"]
-            + rules2.question_catalogues[1]["question_keys"]
+            rules2.question_lists[0]["question_keys"]
+            + rules2.question_lists[1]["question_keys"]
         )
         assert keys1 == keys2
 
-    def test_add_default_question_catalogues(self):
+    def test_add_default_question_lists(self):
         block = Block(
-            name='test catalogue', slug='test_catalogue', rules='RHYTHM_BATTERY_FINAL'
+            name='test question list',
+            slug='test_question_list',
+            rules='RHYTHM_BATTERY_FINAL',
         )
-        block.save()  # triggers `add_default_question_catalogues` method
-        created_series = QuestionSeries.objects.filter(block=block)
-        n_series = created_series.count()
-        expected_n = len(block.get_rules().question_catalogues)
+        block.save()  # triggers `add_default_question_lists` method
+        created_lists = QuestionList.objects.filter(block=block)
+        n_lists = created_lists.count()
+        expected_n = len(block.get_rules().question_lists)
         self.assertEqual(
-            n_series,
+            n_lists,
             expected_n,
         )
         self.assertNotEqual(
-            QuestionInSeries.objects.filter(
-                question_series=created_series.first()
-            ).count(),
+            QuestionInList.objects.filter(questionlist=created_lists.first()).count(),
             0,
         )
         # test that question series aren't created more than once
         block.save()
-        created_series = QuestionSeries.objects.filter(block=block)
-        self.assertEqual(created_series.count(), n_series)
+        created_series = QuestionList.objects.filter(block=block)
+        self.assertEqual(created_series.count(), n_lists)
 
 
 class TestModelExperiment(TestCase):

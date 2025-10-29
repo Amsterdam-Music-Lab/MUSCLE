@@ -1,4 +1,4 @@
-PRESET_CATALOGUES = {
+PRESET_BANKS = {
     'DEMOGRAPHICS': [
         'dgf_gender_identity',
         'dgf_generation',
@@ -261,5 +261,6 @@ PRESET_CATALOGUES = {
     ],
 }
 
-def get_preset_catalogue(key: str):
-    return PRESET_CATALOGUES.get(key)
+
+def get_question_bank(key: str):
+    return PRESET_BANKS.get(key)

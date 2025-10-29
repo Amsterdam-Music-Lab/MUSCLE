@@ -5,7 +5,7 @@ from experiment.actions.form import Form
 from experiment.actions.question import CheckBoxQuestion
 from experiment.actions.trial import Trial
 from result.utils import prepare_result
-from question.preset_catalogues import get_preset_catalogue
+from question.banks import get_question_bank
 from section.models import Section
 from session.models import Session
 from .hooked import Hooked
@@ -16,15 +16,15 @@ class ThatsMySong(Hooked):
     consent_file = ""
 
     def __init__(self):
-        self.question_catalogues = [
+        self.question_lists = [
             {
                 "name": "VANDERBILT_FIXED",
-                "question_keys": get_preset_catalogue('VANDERBILT_FIXED'),
+                "question_keys": get_question_bank('VANDERBILT_FIXED'),
                 "randomize": False,
             },
             {
                 "name": "VANDERBILT_RANDOM",
-                "question_keys": get_preset_catalogue('VANDERBILT_RANDOM'),
+                "question_keys": get_question_bank('VANDERBILT_RANDOM'),
                 "randomize": True,
             },
         ]

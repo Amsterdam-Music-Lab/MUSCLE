@@ -25,7 +25,7 @@ class MatchingPairsGame(BaseRules):
     random_seed = None
 
     def __init__(self):
-        self.question_catalogues = [
+        self.question_lists = [
             {
                 "name": "Demographics",
                 "question_keys": [

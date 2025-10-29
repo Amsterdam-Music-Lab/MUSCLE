@@ -13,8 +13,7 @@ from experiment.actions.redirect import Redirect
 from experiment.actions.trial import Trial
 from experiment.actions.playback import Autoplay
 from experiment.actions.playlist import PlaylistSelection
-from question.models import Question
-from question.preset_catalogues import get_preset_catalogue
+from question.banks import get_question_bank
 from result.utils import prepare_result
 from session.models import Session
 from theme.styles import ColorScheme
@@ -33,10 +32,10 @@ class Huang2022(Hooked):
     default_consent_file = 'consent/consent_huang2021.html'
 
     def __init__(self):
-        self.question_catalogues = [
+        self.question_lists = [
             {
                 "name": "MSI_ALL",
-                "question_keys": get_preset_catalogue('MSI_ALL'),
+                "question_keys": get_question_bank('MSI_ALL'),
                 "randomize": False,
             },
             {

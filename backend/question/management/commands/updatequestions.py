@@ -10,20 +10,21 @@ class Command(BaseCommand):
     help = 'Use to update the questions and choices defined in Python fixtures'
 
     def handle(self, *args, **options):
-        # first, create choice sets which do not exist yet and set `from_python = True`
-        update_choice_sets()
+        # first, create choice lists which do not exist yet and set `from_python = True`
+        update_choice_lists()
         # then create choices
         update_choices()
         # finally, create & update questions and set `from_python = True`
         update_questions()
 
 
-def update_choice_sets():
-    with open('/server/question/fixtures/choice_sets.yaml', 'r') as f:
-        choice_sets = [obj.object for obj in serializers.deserialize('yaml', f)]
-        for cs in choice_sets:
-            cs.from_python = True
-            cs.save()
+def update_choice_lists():
+    with open('/server/question/fixtures/choice_lists.yaml', 'r') as f:
+        choice_lists = [obj.object for obj in serializers.deserialize('yaml', f)]
+        for cl in choice_lists:
+            cl.from_python = True
+            cl.save()
+
 
 def update_choices():
     for fixture in glob('/server/question/fixtures/choices_*.yaml'):
@@ -33,7 +34,9 @@ def update_choices():
                 try:
                     choice.save()
                 except IntegrityError:
-                    existing = Choice.objects.get(key=choice.key, set=choice.set)
+                    existing = Choice.objects.get(
+                        key=choice.key, choicelist=choice.choicelist
+                    )
                     existing.text = choice.text
                     existing.index = choice.index
                     existing.save()

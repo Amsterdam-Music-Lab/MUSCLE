@@ -24,7 +24,7 @@ class Categorization(BaseRules):
     default_consent_file = "consent/consent_categorization.html"
 
     def __init__(self):
-        self.question_catalogues = [
+        self.question_lists = [
             {
                 "name": "Categorization",
                 "question_keys": [

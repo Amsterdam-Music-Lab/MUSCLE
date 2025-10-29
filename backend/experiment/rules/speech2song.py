@@ -24,7 +24,7 @@ class Speech2Song(BaseRules):
     n_rounds_per_trial = 2
 
     def __init__(self):
-        self.question_catalogues = [
+        self.question_lists = [
             {
                 "name": "Question series Speech2Song",
                 "question_keys": [

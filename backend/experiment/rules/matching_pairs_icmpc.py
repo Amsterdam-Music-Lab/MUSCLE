@@ -9,7 +9,7 @@ class MatchingPairsICMPC(MatchingPairsGame):
 
     def __init__(self):
         super().__init__()
-        self.question_catalogues[0]["question_keys"].append("fame_name")
+        self.question_lists[0]["question_keys"].append("fame_name")
 
 
 ICMPC_HALL_OF_FAME = TextQuestion(

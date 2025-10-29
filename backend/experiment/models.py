@@ -10,7 +10,7 @@ from django.db.models.query import QuerySet
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from theme.models import ThemeConfig
 from image.models import Image
-from question.models import Question, QuestionInSeries, QuestionSeries
+from question.models import Question, QuestionInList, QuestionList
 from session.models import Session
 
 from .validators import markdown_html_validator, block_slug_validator, experiment_slug_validator
@@ -140,7 +140,10 @@ class Phase(models.Model):
     """
 
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="phases")
-    index = models.IntegerField(default=0, help_text="Index of the phase in the series. Lower numbers come first.")
+    index = models.IntegerField(
+        default=0,
+        help_text="Index of the phase in the experiment. Lower numbers come first.",
+    )
     dashboard = models.BooleanField(default=False)
     randomize = models.BooleanField(default=False, help_text="Randomize the order of the blocks in this phase.")
 
@@ -277,46 +280,46 @@ class Block(models.Model):
 
         return 0
 
-    def add_default_question_catalogues(self):
-        """Add default question catalogues to block"""
+    def add_default_question_lists(self):
+        """Add default question lists to block"""
         try:
             rules = self.get_rules()
         except ValueError:
             return
-        question_catalogues = getattr(rules, "question_catalogues", [])
-        if question_catalogues:
-            for i, catalogue in enumerate(question_catalogues):
-                self.create_catalogue(catalogue, i)
+        question_lists = getattr(rules, "question_lists", [])
+        if question_lists:
+            for i, ql in enumerate(question_lists):
+                self.create_question_list(ql, i)
 
-    def create_catalogue(self, catalogue: dict, index: int = 0):
-        """create a question catalogue for this block based on a catalogue dict specifying name and question keys"""
-        qs, created = QuestionSeries.objects.get_or_create(
-            name=catalogue["name"], block=self, index=index
+    def create_question_list(self, question_list: dict, index: int = 0):
+        """create a question list for this block based on a dict specifying name and list of question keys"""
+        ql, created = QuestionList.objects.get_or_create(
+            name=question_list["name"], block=self, index=index
         )
         if not created:
             "do nothing if the question series already exists"
             return
 
         # only set these when the object is created, so we don't overwrite changes by admin user
-        qs.randomize = catalogue.get("randomize", False)
-        qs.save()
+        ql.randomize = question_list.get("randomize", False)
+        ql.save()
 
-        for i, question in enumerate(catalogue["question_keys"]):
+        for i, question in enumerate(question_list["question_keys"]):
             try:
                 question_obj = Question.objects.get(pk=question)
             except Question.DoesNotExist:
                 raise Question.DoesNotExist(
                     f"Question with key {question} does not exist."
                 )
-            QuestionInSeries.objects.create(
-                question_series=qs,
+            QuestionInList.objects.create(
+                questionlist=ql,
                 question=question_obj,
                 index=i + 1,
             )
 
     def save(self, **kwargs):
         super().save(**kwargs)  # Call the "real" save() method.
-        self.add_default_question_catalogues()
+        self.add_default_question_lists()
 
 
 class Feedback(models.Model):

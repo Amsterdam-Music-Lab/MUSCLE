@@ -1,98 +1,98 @@
-# choices associated with choice sets for musicgens questions
+# choices associated with choice lists for musicgens questions
 - model: question.choice
   fields:
     key: '1'
     text: I have no training or recognised talent in this area.
     index: 0
-    set: MUSICGENS_ACHIEVEMENT
+    choicelist: MUSICGENS_ACHIEVEMENT
 - model: question.choice
   fields:
     key: '2'
     text: I play one or more musical instruments proficiently.
     index: 1
-    set: MUSICGENS_ACHIEVEMENT
+    choicelist: MUSICGENS_ACHIEVEMENT
 - model: question.choice
   fields:
     key: '3'
     text: I have played with a recognised orchestra or band.
     index: 2
-    set: MUSICGENS_ACHIEVEMENT
+    choicelist: MUSICGENS_ACHIEVEMENT
 - model: question.choice
   fields:
     key: '4'
     text: I have composed an original piece of music.
     index: 3
-    set: MUSICGENS_ACHIEVEMENT
+    choicelist: MUSICGENS_ACHIEVEMENT
 - model: question.choice
   fields:
     key: '5'
     text: My musical talent has been critiqued in a local publication.
     index: 4
-    set: MUSICGENS_ACHIEVEMENT
+    choicelist: MUSICGENS_ACHIEVEMENT
 - model: question.choice
   fields:
     key: '6'
     text: My composition has been recorded.
     index: 5
-    set: MUSICGENS_ACHIEVEMENT
+    choicelist: MUSICGENS_ACHIEVEMENT
 - model: question.choice
   fields:
     key: '7'
     text: Recordings of my composition have been sold publicly.
     index: 6
-    set: MUSICGENS_ACHIEVEMENT
+    choicelist: MUSICGENS_ACHIEVEMENT
 - model: question.choice
   fields:
     key: '8'
     text: My compositions have been critiqued in a national publication.
     index: 7
-    set: MUSICGENS_ACHIEVEMENT
+    choicelist: MUSICGENS_ACHIEVEMENT
 - model: question.choice
   fields:
     key: '9'
     text: ' My compositions have been critiqued in multiple national publications.'
     index: 8
-    set: MUSICGENS_ACHIEVEMENT
+    choicelist: MUSICGENS_ACHIEVEMENT
 - model: question.choice
   fields:
     key: '1'
     text: I am not engaged in music at all.
     index: 0
-    set: MUSICGENS_ENGAGEMENT
+    choicelist: MUSICGENS_ENGAGEMENT
 - model: question.choice
   fields:
     key: '2'
     text: I am self-taught and play music privately, but I have never played, sung,
       or shown my music to others.
     index: 1
-    set: MUSICGENS_ENGAGEMENT
+    choicelist: MUSICGENS_ENGAGEMENT
 - model: question.choice
   fields:
     key: '3'
     text: I have taken lessons in music, but I have never played, sung, or shown my
       music to others.
     index: 2
-    set: MUSICGENS_ENGAGEMENT
+    choicelist: MUSICGENS_ENGAGEMENT
 - model: question.choice
   fields:
     key: '4'
     text: I have played or sung, or my music has been played in public concerts in
       my home town, but I have not been paid for this.
     index: 3
-    set: MUSICGENS_ENGAGEMENT
+    choicelist: MUSICGENS_ENGAGEMENT
 - model: question.choice
   fields:
     key: '5'
     text: I have played or sung, or my music has been played in public concerts in
       my home town, and I have been paid for this.
     index: 4
-    set: MUSICGENS_ENGAGEMENT
+    choicelist: MUSICGENS_ENGAGEMENT
 - model: question.choice
   fields:
     key: '6'
     text: I am professionally active as a musician.
     index: 5
-    set: MUSICGENS_ENGAGEMENT
+    choicelist: MUSICGENS_ENGAGEMENT
 - model: question.choice
   fields:
     key: '7'
@@ -100,178 +100,178 @@
       in the national or international media and/or have received an award for my
       musical activities.
     index: 6
-    set: MUSICGENS_ENGAGEMENT
+    choicelist: MUSICGENS_ENGAGEMENT
 - model: question.choice
   fields:
     key: '1'
     text: less than 1 hour per week
     index: 0
-    set: MUSICGENS_PLAY_DURATION_CURRENT
+    choicelist: MUSICGENS_PLAY_DURATION_CURRENT
 - model: question.choice
   fields:
     key: '2'
     text: 1 hour per week
     index: 1
-    set: MUSICGENS_PLAY_DURATION_CURRENT
+    choicelist: MUSICGENS_PLAY_DURATION_CURRENT
 - model: question.choice
   fields:
     key: '3'
     text: 2 hours per week
     index: 2
-    set: MUSICGENS_PLAY_DURATION_CURRENT
+    choicelist: MUSICGENS_PLAY_DURATION_CURRENT
 - model: question.choice
   fields:
     key: '4'
     text: 3 hours per week
     index: 3
-    set: MUSICGENS_PLAY_DURATION_CURRENT
+    choicelist: MUSICGENS_PLAY_DURATION_CURRENT
 - model: question.choice
   fields:
     key: '5'
     text: 4–5 hours per week
     index: 4
-    set: MUSICGENS_PLAY_DURATION_CURRENT
+    choicelist: MUSICGENS_PLAY_DURATION_CURRENT
 - model: question.choice
   fields:
     key: '6'
     text: 6–9 hours per week
     index: 5
-    set: MUSICGENS_PLAY_DURATION_CURRENT
+    choicelist: MUSICGENS_PLAY_DURATION_CURRENT
 - model: question.choice
   fields:
     key: '7'
     text: 10–14 hours per week
     index: 6
-    set: MUSICGENS_PLAY_DURATION_CURRENT
+    choicelist: MUSICGENS_PLAY_DURATION_CURRENT
 - model: question.choice
   fields:
     key: '8'
     text: 15–24 hours per week
     index: 7
-    set: MUSICGENS_PLAY_DURATION_CURRENT
+    choicelist: MUSICGENS_PLAY_DURATION_CURRENT
 - model: question.choice
   fields:
     key: '9'
     text: 25–40 hours per week
     index: 8
-    set: MUSICGENS_PLAY_DURATION_CURRENT
+    choicelist: MUSICGENS_PLAY_DURATION_CURRENT
 - model: question.choice
   fields:
     key: '10'
     text: 41 or more hours per week
     index: 9
-    set: MUSICGENS_PLAY_DURATION_CURRENT
+    choicelist: MUSICGENS_PLAY_DURATION_CURRENT
 - model: question.choice
   fields:
     key: '1'
     text: More than 1 hour per week
     index: 0
-    set: MUSICGENS_PLAY_DURATION_PEAK
+    choicelist: MUSICGENS_PLAY_DURATION_PEAK
 - model: question.choice
   fields:
     key: '2'
     text: 1 hour per week
     index: 1
-    set: MUSICGENS_PLAY_DURATION_PEAK
+    choicelist: MUSICGENS_PLAY_DURATION_PEAK
 - model: question.choice
   fields:
     key: '3'
     text: Less than 1 hour per week
     index: 2
-    set: MUSICGENS_PLAY_DURATION_PEAK
+    choicelist: MUSICGENS_PLAY_DURATION_PEAK
 - model: question.choice
   fields:
     key: '1'
     text: None
     index: 0
-    set: MUSICGENS_PLAY_FREQUENCY_CURRENT
+    choicelist: MUSICGENS_PLAY_FREQUENCY_CURRENT
 - model: question.choice
   fields:
     key: '2'
     text: 1 hour or less a week
     index: 1
-    set: MUSICGENS_PLAY_FREQUENCY_CURRENT
+    choicelist: MUSICGENS_PLAY_FREQUENCY_CURRENT
 - model: question.choice
   fields:
     key: '3'
     text: 2–3 hours a week
     index: 2
-    set: MUSICGENS_PLAY_FREQUENCY_CURRENT
+    choicelist: MUSICGENS_PLAY_FREQUENCY_CURRENT
 - model: question.choice
   fields:
     key: '4'
     text: 4–5 hours a week
     index: 3
-    set: MUSICGENS_PLAY_FREQUENCY_CURRENT
+    choicelist: MUSICGENS_PLAY_FREQUENCY_CURRENT
 - model: question.choice
   fields:
     key: '5'
     text: 6–7 hours a week
     index: 4
-    set: MUSICGENS_PLAY_FREQUENCY_CURRENT
+    choicelist: MUSICGENS_PLAY_FREQUENCY_CURRENT
 - model: question.choice
   fields:
     key: '6'
     text: 8 or more hours a week
     index: 5
-    set: MUSICGENS_PLAY_FREQUENCY_CURRENT
+    choicelist: MUSICGENS_PLAY_FREQUENCY_CURRENT
 - model: question.choice
   fields:
     key: '1'
     text: Every day
     index: 0
-    set: MUSICGENS_PLAY_FREQUENCY_PEAK
+    choicelist: MUSICGENS_PLAY_FREQUENCY_PEAK
 - model: question.choice
   fields:
     key: '2'
     text: More than 1x per week
     index: 1
-    set: MUSICGENS_PLAY_FREQUENCY_PEAK
+    choicelist: MUSICGENS_PLAY_FREQUENCY_PEAK
 - model: question.choice
   fields:
     key: '3'
     text: 1x per week
     index: 2
-    set: MUSICGENS_PLAY_FREQUENCY_PEAK
+    choicelist: MUSICGENS_PLAY_FREQUENCY_PEAK
 - model: question.choice
   fields:
     key: '4'
     text: 1x per month
     index: 3
-    set: MUSICGENS_PLAY_FREQUENCY_PEAK
+    choicelist: MUSICGENS_PLAY_FREQUENCY_PEAK
 - model: question.choice
   fields:
     key: '1'
     text: '0'
     index: 0
-    set: MUSICGENS_PRACTICE
+    choicelist: MUSICGENS_PRACTICE
 - model: question.choice
   fields:
     key: '2'
     text: '0.5'
     index: 1
-    set: MUSICGENS_PRACTICE
+    choicelist: MUSICGENS_PRACTICE
 - model: question.choice
   fields:
     key: '3'
     text: '1'
     index: 2
-    set: MUSICGENS_PRACTICE
+    choicelist: MUSICGENS_PRACTICE
 - model: question.choice
   fields:
     key: '4'
     text: '1.5'
     index: 3
-    set: MUSICGENS_PRACTICE
+    choicelist: MUSICGENS_PRACTICE
 - model: question.choice
   fields:
     key: '5'
     text: 3–4
     index: 4
-    set: MUSICGENS_PRACTICE
+    choicelist: MUSICGENS_PRACTICE
 - model: question.choice
   fields:
     key: '6'
     text: 5 or more
     index: 5
-    set: MUSICGENS_PRACTICE
+    choicelist: MUSICGENS_PRACTICE

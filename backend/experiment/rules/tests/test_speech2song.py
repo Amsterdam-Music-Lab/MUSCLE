@@ -75,7 +75,7 @@ class Speech2SongTest(TestCase):
 
     def test_runthrough(self):
         speech2song = self.session.block_rules()
-        self.block.questionseries_set.all().delete()  # delete the questions so we get straight to speech2song trials
+        self.block.questionlist_set.all().delete()  # delete the questions so we get straight to speech2song trials
         speech2song.n_trials_per_block = 2
         for i in range(self.block.rounds - 1):
             actions = speech2song.next_round(self.session)

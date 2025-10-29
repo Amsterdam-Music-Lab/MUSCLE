@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('question', '0012_migrate_choices_to_sets'),
+        ('question', '0013_migrate_choices_to_lists'),
     ]
 
     operations = [
@@ -17,7 +17,11 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='choice',
-            name='set',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='choices', to='question.choiceset'),
+            name='choicelist',
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='choices',
+                to='question.choicelist',
+            ),
         ),
     ]

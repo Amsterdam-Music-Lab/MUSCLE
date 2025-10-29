@@ -1,4 +1,4 @@
-# Questions, choice sets and choices for the Musicality Genomics project
+# Questions for the Musicality Genomics project
 - model: question.question
   pk: P01_1
   fields:
