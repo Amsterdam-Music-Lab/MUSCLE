@@ -1,6 +1,6 @@
 import { render, fireEvent, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import Question, {QuestionProps} from './Question';
+import Question from './Question';
 import { QuestionViews } from '@/types/Question';
 
 describe('Question Component', () => {
@@ -9,7 +9,7 @@ describe('Question Component', () => {
     const defaultProps = {
         question: {
             key: 'test-question',
-            question: 'Test Question',
+            text: 'Test Question',
             view: QuestionViews.STRING,
             value: '',
             choices: {
