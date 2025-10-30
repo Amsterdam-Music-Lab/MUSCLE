@@ -72,6 +72,7 @@ see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)`;
     args: {
       plugins: [
         { name: "ranking" },
+        { name: "overall-ranking" },
         { name: "scores" },
         {
           name: "timeline",

@@ -52,6 +52,7 @@ export const Default = {
   args: {
     score: 100,
     percentile: 66,
+    overallPercentile: 80,
     button: {
       // text: "Button",
       link: "https://www.example.com",
@@ -116,5 +117,14 @@ export const TimelineCompleted = {
   args: {
     ...Default.args,
     timeline: { ...timeline, currentStep: timeline.symbols.length },
+  },
+};
+
+export const CustomPlugins = {
+  args: {
+    ...Default.args,
+    plugins: [
+      { name: "scoreboard", args: { plugins: [{ name: "overall-ranking" }] } },
+    ],
   },
 };

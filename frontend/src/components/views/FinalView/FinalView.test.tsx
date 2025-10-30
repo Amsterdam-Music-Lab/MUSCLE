@@ -187,7 +187,7 @@ describe("FinalView Component", () => {
         score={42}
         totalScore={100}
         percentile={80}
-        timeline={[1, 2, 3]}
+        timeline={{ steps: [1, 2, 3] }}
       />
     );
     const scoreboard = screen.getByTestId("plugin-scoreboard");
@@ -195,7 +195,7 @@ describe("FinalView Component", () => {
     expect(args.turnScore).toBe(42);
     expect(args.totalScore).toBe(100);
     expect(args.percentile).toBe(80);
-    expect(args.timeline).toEqual([1, 2, 3]);
+    expect(args.timeline).toEqual({ steps: [1, 2, 3] });
   });
 
   it("passes correct data to linkButton plugin", () => {
