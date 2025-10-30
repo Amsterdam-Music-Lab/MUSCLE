@@ -26,7 +26,7 @@ def choice_to_choice_list(apps, schema_editor):
     update_choices()
     python_defined_questions = update_questions()
     for question in QuestionModel.objects.exclude(key__in=python_defined_questions):
-        if hasattr(question, 'choice_list'):
+        if hasattr(question, 'choice_set'):
             cl, has_created_choice_list = ChoiceListModel.objects.get_or_create(
                 key=f"{question.key}_choices"
             )
