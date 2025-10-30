@@ -162,8 +162,8 @@ class BaseRules(object):
             {"rank": ranks["PLATINUM"], "min_percentile": 90.0},  # ~ stanine 8
             {"rank": ranks["DIAMOND"], "min_percentile": 95.0},  # ~ stanine 9
         ]
-
-        percentile = session.percentile_rank(exclude_unfinished)
+        filter_condition = {"finished_at__isnull": False} if exclude_unfinished else {}
+        percentile = session.percentile_rank(filter_condition)
 
         # Check the buckets in reverse order
         # If the percentile rank is higher than the min_percentile

@@ -97,6 +97,7 @@ class MatchingPairs2025(MatchingPairsGame):
             final_text=self._final_text(self._get_percentile_rank(session)),
             button={"text": "Next game", "link": self.get_experiment_url(session)},
             percentile=self._get_percentile_rank(session),
+            accumulative_percentile=session.participant.percentile_rank_accumulative_score(),
         )
         return [score]
 
@@ -285,27 +286,14 @@ class MatchingPairs2025(MatchingPairsGame):
         blocks = session.block.phase.experiment.associated_blocks()
         condition = session.json_data.get('condition')
         difficulty = session.json_data.get('difficulty')
-        score = session.final_score
-        relevant_sessions = []
-        for block in blocks:
-            relevant_sessions.extend(
-                block.session_set.filter(
-                    json_data__contains={
-                        'condition': condition,
-                        'difficulty': difficulty,
-                    },
-                )
-            )
-        n_sessions = len(relevant_sessions)
-        if n_sessions == 0:
-            return 0.0  # Should be impossible but avoids x/0
-        n_lte = len(
-            [session for session in relevant_sessions if session.final_score <= score]
-        )
-        n_eq = len(
-            [session for session in relevant_sessions if session.final_score == score]
-        )
-        return round(100.0 * (n_lte - (0.5 * n_eq)) / n_sessions)
+        filter_conditions = {
+            'block__in': blocks,
+            'json_data__contains': {
+                'condition': condition,
+                'difficulty': difficulty,
+            },
+        }
+        return session.percentile_rank(filter_conditions)
 
     def get_info_playlist(self, section_path: str):
         path, filename = split(section_path)
