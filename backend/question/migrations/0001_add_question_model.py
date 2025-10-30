@@ -16,7 +16,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Question',
             fields=[
-                ('key', models.CharField(max_length=128, primary_key=True, serialize=False)),
+                (
+                    'key',
+                    models.CharField(max_length=128, primary_key=True, serialize=False),
+                ),
                 ('question', models.CharField(max_length=1024)),
                 ('editable', models.BooleanField(default=True, editable=False)),
             ],
@@ -27,9 +30,23 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='QuestionInSeries',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('index', models.PositiveIntegerField()),
-                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='question.question')),
+                (
+                    'question',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to='question.question',
+                    ),
+                ),
             ],
             options={
                 'verbose_name_plural': 'Question In Series objects',
@@ -39,12 +56,31 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='QuestionSeries',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('name', models.CharField(default='', max_length=128)),
                 ('index', models.PositiveIntegerField()),
                 ('randomize', models.BooleanField(default=False)),
-                ('experiment', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='experiment.experiment')),
-                ('questions', models.ManyToManyField(through='question.QuestionInSeries', to='question.Question')),
+                (
+                    'experiment',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to='experiment.experiment',
+                    ),
+                ),
+                (
+                    'questions',
+                    models.ManyToManyField(
+                        through='question.QuestionInSeries', to='question.Question'
+                    ),
+                ),
             ],
             options={
                 'verbose_name_plural': 'Question Series',
@@ -54,12 +90,18 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='questioninseries',
             name='question_series',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='question.questionseries'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to='question.questionseries',
+            ),
         ),
         migrations.CreateModel(
             name='QuestionGroup',
             fields=[
-                ('key', models.CharField(max_length=128, primary_key=True, serialize=False)),
+                (
+                    'key',
+                    models.CharField(max_length=128, primary_key=True, serialize=False),
+                ),
                 ('editable', models.BooleanField(default=True, editable=False)),
                 ('questions', models.ManyToManyField(to='question.Question')),
             ],

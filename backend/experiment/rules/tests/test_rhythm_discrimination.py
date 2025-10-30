@@ -1,7 +1,9 @@
 from django.test import TestCase
 
+from experiment.actions.trial import Trial
 from experiment.models import Block
 from participant.models import Participant
+from result.models import Result
 from section.models import Playlist
 from session.models import Session
 
@@ -84,15 +86,24 @@ class RhythmDiscriminationTest(TestCase):
             "practice" in trial_title or "oefenen" in trial_title, f"Round {round_number} title is not practice"
         )
 
+        result_id = self._unpack_result_id(trial_view)
+
         # Submit score for practice round
         self._submit_score(
             session_id=session_id,
-            result_id=trial_view["feedback_form"]["form"][0]["result_id"],
-            expected_response=trial_view["feedback_form"]["form"][0]["expected_response"],
+            result_id=result_id,
+            expected_response=self._infer_expected_response(result_id),
             csrf_token=participant["csrf_token"],
         )
 
         return next_round
+
+    def _unpack_result_id(self, trial_view: Trial) -> int:
+        return trial_view["feedback_form"]["form"][0]["result_id"]
+
+    def _infer_expected_response(self, result_id: int) -> str:
+        result = Result.objects.get(pk=result_id)
+        return result.expected_response
 
     def _validate_real_round(self, session_id, round_number, participant, actions=["TRIAL_VIEW"]):
         next_round = self._get_next_round(session_id)
@@ -113,11 +124,13 @@ class RhythmDiscriminationTest(TestCase):
             f"Round {round_number} title is not {title_round_number} van",
         )
 
+        result_id = self._unpack_result_id(trial_view)
+
         # Submit score for real round
         self._submit_score(
             session_id=session_id,
-            result_id=trial_view["feedback_form"]["form"][0]["result_id"],
-            expected_response=trial_view["feedback_form"]["form"][0]["expected_response"],
+            result_id=result_id,
+            expected_response=self._infer_expected_response(result_id),
             csrf_token=participant["csrf_token"],
         )
 

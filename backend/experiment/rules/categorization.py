@@ -4,11 +4,15 @@ from django.utils import timezone
 from django.template.loader import render_to_string
 from django.db.models import Avg
 
-from experiment.actions.form import Form, ChoiceQuestion
-from experiment.actions.styles import ButtonStyle, ColorScheme
-from experiment.actions import Explainer, Score, Trial, Final
+from experiment.actions.form import Form
+from experiment.actions.explainer import Explainer
+from experiment.actions.final import Final
+from experiment.actions.question import ButtonArrayQuestion
+from experiment.actions.score import Score
+from experiment.actions.trial import Trial
 from experiment.actions.wrappers import two_alternative_forced
 from session.models import Session
+from theme.styles import ButtonStyle, ColorScheme
 
 from .base import BaseRules
 
@@ -20,10 +24,15 @@ class Categorization(BaseRules):
     default_consent_file = "consent/consent_categorization.html"
 
     def __init__(self):
-        self.question_series = [
+        self.question_lists = [
             {
                 "name": "Categorization",
-                "keys": ["dgf_age", "dgf_gender_reduced", "dgf_native_language", "dgf_musical_experience"],
+                "question_keys": [
+                    "dgf_age",
+                    "dgf_gender_reduced",
+                    "dgf_native_language",
+                    "dgf_musical_experience",
+                ],
                 "randomize": False,
             },
         ]
@@ -466,12 +475,9 @@ class Categorization(BaseRules):
         return f"Round {rounds_passed} / {len(json_data['sequence'])}"
 
 
-repeat_training_or_quit = ChoiceQuestion(
+repeat_training_or_quit = ButtonArrayQuestion(
     key="failed_training",
-    view="BUTTON_ARRAY",
-    question="You seem to have difficulties reacting correctly to the sound sequences. Is your audio on? If you want to give it another try, click on Ok.",
+    text="You seem to have difficulties reacting correctly to the sound sequences. Is your audio on? If you want to give it another try, click on Ok.",
     choices={"continued": "OK", "aborted": "Exit"},
-    submits=True,
-    is_skippable=False,
     style=[ButtonStyle.LARGE_GAP, ButtonStyle.LARGE_TEXT, ColorScheme.BOOLEAN],
 )

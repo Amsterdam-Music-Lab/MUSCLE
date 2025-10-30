@@ -1,28 +1,34 @@
-import csv
-from unittest.mock import Mock
-from unittest import skip
-
-from django.core.files.uploadedfile import SimpleUploadedFile
+from django.db.models import Count
 from django.test import TestCase
-from django.utils import timezone
+from django.core.files.uploadedfile import SimpleUploadedFile
+from unittest.mock import Mock
 
-from experiment.actions import Explainer, Final, Score, Trial
-from experiment.models import Experiment, Phase, Block, SocialMediaConfig
-from question.thatsmysong import THATS_MY_SONG_QUESTIONS_FIXED
+from experiment.actions.explainer import Explainer
+from experiment.actions.final import Final
+from experiment.actions.score import Score
+from experiment.actions.trial import Trial
+from experiment.models import (
+    Block,
+    Experiment,
+    Phase,
+    SocialMediaConfig,
+)
 from participant.models import Participant
+from question.banks import get_question_bank
 from result.models import Result
 from section.models import Playlist, Section, Song
 from session.models import Session
-from question.questions import create_default_questions
 
 
 class HookedTest(TestCase):
-    fixtures = ["playlist", "experiment"]
+    fixtures = [
+        "playlist",
+        "experiment",
+    ]
 
     @classmethod
     def setUpTestData(cls):
         """set up data for Hooked base class"""
-        create_default_questions()
         cls.participant = Participant.objects.create()
         cls.playlist = Playlist.objects.create(name="Test Eurovision")
         cls.playlist.csv = (
@@ -82,8 +88,9 @@ class HookedTest(TestCase):
         )
         SocialMediaConfig.objects.create(experiment=experiment, url="https://app.amsterdammusiclab.nl/hooked")
         phase = Phase.objects.create(experiment=experiment)
-        block = Block.objects.create(slug="Hooked", rules="HOOKED", rounds=n_rounds, phase=phase)
-        block.add_default_question_series()
+        block = Block.objects.create(
+            slug="Hooked", rules="HOOKED", rounds=n_rounds, phase=phase
+        )
         session = Session.objects.create(block=block, participant=self.participant, playlist=self.playlist)
         rules = session.block_rules()
         for i in range(n_rounds + 1):
@@ -141,6 +148,7 @@ class HookedTest(TestCase):
     def _run_eurovision(self, session_type):
         n_rounds = 6
         block = Block.objects.create(slug="Test-Eurovision", rules="EUROVISION_2020", rounds=n_rounds)
+
         session = Session.objects.create(block=block, participant=self.participant, playlist=self.playlist)
         rules = session.block_rules()
         rules.question_offset = 3
@@ -184,7 +192,9 @@ class HookedTest(TestCase):
     def _run_kuiper(self, session_type):
         self.assertEqual(Result.objects.count(), 0)
         n_rounds = 6
-        block = Block.objects.create(slug="Test-Christmas", rules="KUIPER_2020", rounds=n_rounds)
+        block = Block.objects.create(
+            slug="Test-Christmas", rules="KUIPER_2020", rounds=n_rounds
+        )
         playlist = Playlist.objects.create(name="Test-Christmas")
         playlist.csv = (
             "Band Aid,1984 - Do They Know It’s Christmas,1.017,45.0,Kerstmuziek/Do They Know It_s Christmas00.01.017.i.s.mp3,0,100000707\n"
@@ -256,9 +266,9 @@ class HookedTest(TestCase):
                     self.assertNotIn(heard_before_section, song_sync_sections)
 
     def test_thats_my_song(self):
-        musicgen_keys = [q.key for q in THATS_MY_SONG_QUESTIONS_FIXED]
+        tms_keys = get_question_bank('VANDERBILT_FIXED')
         block = Block.objects.get(slug="thats_my_song")
-        block.add_default_question_series()
+        block.add_default_question_lists()
         playlist = Playlist.objects.get(name="ThatsMySong")
         playlist._update_sections()
         session = Session.objects.create(block=block, participant=self.participant, playlist=playlist)
@@ -277,7 +287,9 @@ class HookedTest(TestCase):
                 self.assertEqual(
                     actions[1].feedback_form.form[0].key, "playlist_decades"
                 )
-                self.save_playlist_choice(session)
+                result = Result.objects.get(session=session, question_key="playlist_decades")
+                result.given_response = "1960s,1970s,1980s"
+                result.save()
             elif i == 1:
                 assert session.result_set.count() == 3
                 assert session.json_data.get("plan") is not None
@@ -291,50 +303,19 @@ class HookedTest(TestCase):
                     assert actions[1].feedback_form.form[0].key == "recognize"
                 elif i < heard_before_offset + 1:
                     assert len(actions) == 5
-                    assert actions[1].feedback_form.form[0].key in musicgen_keys
+                    assert actions[1].feedback_form.form[0].key in tms_keys
                 elif i == heard_before_offset + 1:
                     assert len(actions) == 3
                     assert actions[1].view == "EXPLAINER"
                     assert actions[2].feedback_form.form[0].key == "heard_before"
                 else:
                     assert len(actions) == 3
-                    assert actions[1].feedback_form.form[0].key in musicgen_keys
+                    assert actions[1].feedback_form.form[0].key in tms_keys
                     assert actions[2].feedback_form.form[0].key == "heard_before"
-
-    def test_second_playthrough(self):
-        block = Block.objects.get(slug="thats_my_song")
-        block.add_default_question_series()
-        playlist = Playlist.objects.get(name="ThatsMySong")
-        playlist._update_sections()
-        Session.objects.create(
-            block=block,
-            participant=self.participant,
-            playlist=playlist,
-            finished_at=timezone.now(),
-        )
-        session = Session.objects.create(
-            block=block, participant=self.participant, playlist=playlist
-        )
-        rules = session.block_rules()
-        # fake first round and populate results
-        rules.next_round(session)
-        self.save_playlist_choice(session)
-        # fake first song sync round
-        rules.next_round(session)
-        # the next round should have score, a demographic question, and three trials
-        next_actions = rules.next_round(session)
-        self.assertEqual(len(next_actions), 5)
-        self.assertIsInstance(next_actions[1], Trial)
-        self.assertEqual(next_actions[1].title, 'Questionnaire')
-
-    def save_playlist_choice(self, session) -> None:
-        result = Result.objects.get(session=session, question_key="playlist_decades")
-        result.given_response = "1960s,1970s,1980s"
-        result.save()
 
     def test_hooked_china(self):
         block = Block.objects.get(slug="huang_2022")
-        block.add_default_question_series()
+        block.add_default_question_lists()
         playlist = Playlist.objects.get(name="Cantpop")
         playlist._update_sections()
         session = Session.objects.create(block=block, participant=self.participant, playlist=playlist)
@@ -350,59 +331,11 @@ class HookedTest(TestCase):
 
         # check that question trials are as expected
         question_trials = rules.get_profile_question_trials(session, None)
+        n_total_questions = block.questionlist_set.aggregate(Count("questions"))[
+            'questions__count'
+        ]
+        self.assertEqual(len(question_trials), n_total_questions)
         keys = [q.feedback_form.form[0].key for q in question_trials]
-        questions = rules.question_series[0]["keys"][0:3]
+        questions = rules.question_lists[0]["question_keys"][0:3]
         for question in questions:
             self.assertIn(question, keys)
-
-
-class SectionSelectionTest(TestCase):
-    fixtures = ["playlist", "experiment"]
-    n_runs = 200
-
-    @skip(
-        "This is not a unit test, but a simulation to check the distribution of selected sections"
-    )
-    def test_section_selection_teletunes(self):
-        playlist = Playlist.objects.get(name='Teletunes')
-        playlist._update_sections()
-        block = Block.objects.get(slug='teletunes')
-        participant = Participant.objects.create()
-        rules = block.get_rules()
-        selected_sections = []
-        for run in range(self.n_runs):
-            session = Session.objects.create(
-                participant=participant, block=block, playlist=playlist
-            )
-            rules.plan_sections(session)
-            plan = session.json_data.get('plan')
-            heard_before_offset = session.json_data.get('heard_before_offset')
-            for round_number in range(heard_before_offset):
-                condition = plan[round_number]
-                section = rules.select_song_sync_section(session, condition)
-                played_sections = session.json_data.get("played_sections", [])
-                played_sections.append(section.id)
-                session.save_json_data({"played_sections": played_sections})
-                selected_sections.append(section.pk)
-        sections = list(Section.objects.all())
-        with open(f"{block.slug}-{self.n_runs}.csv", "w+") as output_file:
-            fc = csv.DictWriter(
-                output_file,
-                fieldnames=["section", "song", "n_times_selected"],
-            )
-            fc.writeheader()
-            for section in sections:
-                n_times_selected = len(
-                    [
-                        selected
-                        for selected in selected_sections
-                        if selected == section.pk
-                    ]
-                )
-                fc.writerow(
-                    {
-                        "section": section.pk,
-                        "song": section.song.artist,
-                        "n_times_selected": n_times_selected,
-                    }
-                )

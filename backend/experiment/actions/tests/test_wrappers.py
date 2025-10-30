@@ -1,7 +1,7 @@
 from django.test import TestCase
 from unittest import mock
 
-from experiment.actions import Trial
+from experiment.actions.trial import Trial
 from experiment.actions.wrappers import song_sync
 from experiment.models import Block
 from participant.models import Participant
@@ -10,6 +10,7 @@ from session.models import Session
 
 
 class ActionWrappersTest(TestCase):
+
     def setUp(self):
         self.playlist = Playlist.objects.create(name='TestPlaylist')
         self.participant = Participant.objects.create()

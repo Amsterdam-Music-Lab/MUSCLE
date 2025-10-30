@@ -10,9 +10,9 @@ Question Groups are sets of questions which are predefined, such as "Demographic
 
 ## Question Series
 Question Series are sets of questions you can attach to a given block in your experiment. If you click "Add", you will see the following form:
-<img alt="Question Series" src="../assets/images/QuestionSeries.png">
+<img alt="Question Series" src="../assets/images/QuestionList.png">
 
-You need to give the Question Series a descriptive name, and choose the block with which it is associated (important: the block will only display questions if its ruleset has a method that presents these questions to the participant), and an index, used for handling order if you have multiple `QuestionSeries` attached to a given block.
+You need to give the Question Series a descriptive name, and choose the block with which it is associated (important: the block will only display questions if its ruleset has a method that presents these questions to the participant), and an index, used for handling order if you have multiple `QuestionList` attached to a given block.
 
 You can also choose whether or not the questions in the Question Series should be presented in randomized order.
 

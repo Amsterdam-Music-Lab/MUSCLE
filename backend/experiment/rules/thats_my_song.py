@@ -1,11 +1,11 @@
-from os.path import basename, splitext
-
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions import Final, Trial
-from experiment.actions.form import Form, ChoiceQuestion
-from question.questions import QUESTION_GROUPS
+from experiment.actions.final import Final
+from experiment.actions.form import Form
+from experiment.actions.question import CheckBoxQuestion
+from experiment.actions.trial import Trial
 from result.utils import prepare_result
+from question.banks import get_question_bank
 from section.models import Section
 from session.models import Session
 from .hooked import Hooked
@@ -16,15 +16,15 @@ class ThatsMySong(Hooked):
     consent_file = ""
 
     def __init__(self):
-        self.question_series = [
+        self.question_lists = [
             {
-                "name": "THATSMYSONG_FIXED",
-                "keys": QUESTION_GROUPS["THATS_MY_SONG_FIXED"],
+                "name": "VANDERBILT_FIXED",
+                "question_keys": get_question_bank('VANDERBILT_FIXED'),
                 "randomize": False,
             },
             {
-                "name": "THATSMYSONG_RANDOM",
-                "keys": QUESTION_GROUPS["THATS_MY_SONG_RANDOM"],
+                "name": "VANDERBILT_RANDOM",
+                "question_keys": get_question_bank('VANDERBILT_RANDOM'),
                 "randomize": True,
             },
         ]
@@ -32,9 +32,8 @@ class ThatsMySong(Hooked):
     def feedback_info(self):
         return None
 
-    def get_info_playlist(self, section_path):
+    def get_info_playlist(self, filename):
         """function used by `manage.py compileplaylist` to compile a csv with metadata"""
-        filename = splitext(basename(section_path))[0]
         parts = filename.split(" - ")
         time_info = int(parts[0])
         if time_info < 1970:
@@ -56,7 +55,7 @@ class ThatsMySong(Hooked):
 
     def next_round(self, session: Session):
         """Get action data for the next round"""
-        round_number = session.get_rounds_passed(self.counted_result_keys)
+        round_number = session.get_rounds_passed()
 
         # If the number of results equals the number of block.rounds,
         # close the session and return data for the final_score view.
@@ -71,7 +70,6 @@ class ThatsMySong(Hooked):
                 Final(
                     session=session,
                     final_text=self.final_score_message(session)
-                    + " Thank you for playing. If you enjoyed the game, tell your doctor!"
                     + " For more information about this experiment, visit the Vanderbilt University Medical Center Music Cognition Lab.",
                     rank=self.rank(session),
                     show_profile_link=True,
@@ -90,11 +88,16 @@ class ThatsMySong(Hooked):
             # get list of trials for demographic questions (first 2 questions)
             if session.result_set.filter(question_key="playlist_decades").count() == 0:
                 actions = [self.get_intro_explainer()]
-                question = ChoiceQuestion(
+                question = CheckBoxQuestion(
                     key="playlist_decades",
-                    view="CHECKBOXES",
-                    question=_("Choose two or more decades of music"),
-                    choices={"1960s": "1960s", "1970s": "1970s", "1980s": "1980s", "1990s": "1990s", "2000s": "2000s"},
+                    text=_("Choose two or more decades of music"),
+                    choices={
+                        "1960s": "1960s",
+                        "1970s": "1970s",
+                        "1980s": "1980s",
+                        "1990s": "1990s",
+                        "2000s": "2000s",
+                    },
                     min_values=2,
                     result_id=prepare_result("playlist_decades", session=session),
                 )
@@ -109,15 +112,11 @@ class ThatsMySong(Hooked):
             # Create a score action.
             actions = [self.get_score(session, round_number)]
             heard_before_offset = session.json_data.get("heard_before_offset")
-            # no rounds without questions if the player has previously played
-            question_offset = (
-                0 if self.has_played_before(session) else self.question_offset
-            )
 
-            # SongSync rounds. Skip questions until round defined in question_offset.
-            if round_number in range(1, question_offset):
+            # SongSync rounds. Skip questions until Round 5 (defined in question_offset).
+            if round_number in range(1, self.question_offset):
                 actions.extend(self.next_song_sync_action(session, round_number))
-            if round_number in range(question_offset, heard_before_offset):
+            if round_number in range(self.question_offset, heard_before_offset):
                 question = self.get_profile_question_trials(session)
                 if question:
                     actions.extend(question)

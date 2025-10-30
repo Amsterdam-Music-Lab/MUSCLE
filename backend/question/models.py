@@ -1,7 +1,9 @@
 from django.db import models
+from django.conf import settings
+from django.utils.translation import activate, gettext_lazy as _
 
-from experiment.models import Block
-
+from experiment.actions import question
+from experiment.actions.question import QuestionAction
 
 class Question(models.Model):
     """Model for question asked during experiment
@@ -23,58 +25,103 @@ class Question(models.Model):
 
     """
 
+    class QuestionTypes(models.TextChoices):
+        AUTOCOMPLETE = "AutoCompleteQuestion", _(
+            "Autocomplete: Present choices as a dropdown with autocomplete function"
+        )
+        BUTTON_ARRAY = "ButtonArrayQuestion", _(
+            "Button Array: Present choices as a row of buttons"
+        )
+        CHECKBOXES = "CheckboxQuestion", _(
+            "Checkboxes: Present choices as checkboxes (multiple options)"
+        )
+        DROPDOWN = "DropdownQuestion", _("Dropdown: Present choices in a dropdown menu")
+        ICON_RANGE = "IconRangeQuestion", _(
+            "Icon Range: Present choices as a range slider with icons"
+        )
+        NUMBER = "NumberQuestion", _(
+            "Number: Present a number field to select a number"
+        )
+        RADIOS = "RadiosQuestion", _("Radios: Present choices as radio buttons")
+        RANGE = "RangeQuestion", _("Range: Present a range slider to select a number")
+        STRING = "TextQuestion", _("Text: Present a text field to enter free text")
+        TEXT_RANGE = "TextRangeQuestion", _(
+            "Text Range: Present choices as a range slider with text"
+        )
+
     key = models.SlugField(primary_key=True, max_length=128)
-    question = models.CharField(max_length=1024)
-    editable = models.BooleanField(default=True, editable=False)
+    text = models.CharField(max_length=1024)
+    explainer = models.TextField(blank=True, default="")
+    from_python = models.BooleanField(default=False, editable=False)
 
-    explainer=models.TextField(blank=True, default="")
-
-    TYPES = [
-        ("", "---------"),
-        ("BooleanQuestion", "BooleanQuestion"),
-        ("ChoiceQuestion", "ChoiceQuestion"),
-        ("NumberQuestion", "NumberQuestion"),
-        ("TextQuestion", "TextQuestion"),
-        ("LikertQuestion", "LikertQuestion"),
-        ("LikertQuestionIcon", "LikertQuestionIcon"),
-        ("AutoCompleteQuestion", "AutoCompleteQuestion"),
-    ]
-    type = models.CharField(max_length=128, default="", choices=TYPES)
-
-    SCALE_STEPS = [(5,5),(7,7)]
-    scale_steps = models.IntegerField(choices=SCALE_STEPS, default=7)
+    type = models.CharField(max_length=32, default="", choices=QuestionTypes.choices)
 
     PROFILE_SCORING_RULES = [
         ("LIKERT", "LIKERT"),
         ("REVERSE_LIKERT", "REVERSE_LIKERT"),
         ("CATEGORIES_TO_LIKERT", "CATEGORIES_TO_LIKERT"),
     ]
-    profile_scoring_rule = models.CharField(blank = True, max_length=128,  default="", choices=PROFILE_SCORING_RULES)
+    profile_scoring_rule = models.CharField(
+        blank=True, max_length=128, default="", choices=PROFILE_SCORING_RULES
+    )
 
-    # NumberQuestion
-    min_value = models.FloatField(default=0)
-    max_value = models.FloatField(default=120)
+    # only applicable for Number/RangeQuestion
+    min_value = models.FloatField(blank=True, null=True)
+    max_value = models.FloatField(blank=True, null=True)
 
-    # TextQuestion
-    max_length = models.IntegerField(default=64)
+    # only applicable for TextQuestion: maximal length of text
+    max_length = models.IntegerField(blank=True, null=True)
 
     # ChoiceQuestion
-    min_values = models.IntegerField(default=1)
-    VIEWS = [
-        ("BUTTON_ARRAY", "BUTTON_ARRAY"),
-        ("CHECKBOXES", "CHECKBOXES"),
-        ("RADIOS", "RADIOS"),
-        ("DROPDOWN", "DROPDOWN"),
-    ]
-    view = models.CharField(max_length=128, default="", choices=VIEWS)
+    choices = models.ForeignKey(
+        'question.ChoiceList', null=True, on_delete=models.SET_NULL
+    )
+    # only applicable for CheckBoxQuestion
+    min_values = models.IntegerField(blank=True, null=True)
 
     is_skippable = models.BooleanField(default=False)
 
     def __str__(self):
-        return "(" + self.key + ") " + self.question
+        return "(" + self.key + ") " + self.text
+
+    def populate_translated_fields(self, field_name: str):
+        _populate_translated_fields(self, field_name)
+
+    def convert_to_action(self) -> QuestionAction:
+        question_type = getattr(question, self.type)
+        if self.choices:
+            choices = self.choices.to_dict()
+            question_action = question_type(
+                key=self.key, text=self.text, choices=choices
+            )
+        else:
+            question_action = question_type(key=self.key, text=self.text)
+        optional_fields = [
+            'min_value',
+            'max_value',
+            'max_length',
+            'min_values',
+            'is_skippable',
+        ]
+        [self.set_optional_fields(field, question_action) for field in optional_fields]
+        return question_action
+
+    def set_optional_fields(self, field, question_action: QuestionAction):
+        if getattr(self, field):
+            setattr(question_action, field, getattr(self, field))
 
     class Meta:
         ordering = ["key"]
+
+
+class ChoiceList(models.Model):
+    """A collection of choices for a question"""
+
+    key = models.SlugField(max_length=64, primary_key=True)
+    from_python = models.BooleanField(default=False, editable=False)
+
+    def to_dict(self):
+        return {choice.key: choice.text for choice in self.choices.all()}
 
 
 class Choice(models.Model):
@@ -91,73 +138,65 @@ class Choice(models.Model):
     key = models.SlugField(max_length=128)
     text = models.CharField()
     index = models.PositiveIntegerField(default=0)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choicelist = models.ForeignKey(
+        ChoiceList,
+        on_delete=models.CASCADE,
+        related_name='choices',
+    )
 
     class Meta:
         ordering = ["index"]
+        unique_together = ["key", "choicelist"]
 
 
-class QuestionGroup(models.Model):
-    """Convenience model for groups of questions to add at once to Block QuestionSeries from admin
-
-    Attributes:
-        key (str): Unique identifier
-        questions (Queryset[Question]): ManyToManyField to Questions that the QuestionGroup contains
-        editable (bool): QuestionGroup can be edited if True
-
-    """
-
-    key = models.CharField(primary_key=True, max_length=128)
-    questions = models.ManyToManyField(Question)
-    editable = models.BooleanField(default=True, editable=False)
-
-    class Meta:
-        ordering = ["key"]
-        verbose_name_plural = "Question Groups"
-
-    def __str__(self):
-        return self.key
-
-
-class QuestionSeries(models.Model):
-    """Series of Questions asked in a Block
+class QuestionList(models.Model):
+    """List of Questions asked in a Block
 
     Attributes:
-        name (str): Name of the QuestionSeries
-        block (Block): Block that contains QuestionSeries
-        index (int):  Index of QuestionSeries within Block
-        questions (Queryset[Question]): ManyToManyField to Questions that the QuestionSeries contains
-        randomize (bool): Randomize questions within QuestionSeries
+        name (str): Name of the QuestionList
+        block (Block): Block that contains QuestionList
+        index (int):  Index of QuestionList within Block
+        questions (Queryset[Question]): ManyToManyField to Questions that the QuestionList contains
+        randomize (bool): Randomize questions within QuestionList
     """
 
     name = models.CharField(default="", max_length=128)
-    block = models.ForeignKey(Block, on_delete=models.CASCADE)
-    index = models.PositiveIntegerField()  # index of QuestionSeries within Block
-    questions = models.ManyToManyField(Question, through="QuestionInSeries")
-    randomize = models.BooleanField(default=False)  # randomize questions within QuestionSeries
+    block = models.ForeignKey('experiment.Block', on_delete=models.CASCADE)
+    index = models.PositiveIntegerField()  # index of QuestionList within Block
+    questions = models.ManyToManyField(Question, through="QuestionInList")
+    randomize = models.BooleanField(
+        default=False
+    )  # randomize questions within QuestionList
 
     class Meta:
         ordering = ["index"]
-        verbose_name_plural = "Question Series"
+        unique_together = ["name", "block"]
+        verbose_name_plural = "Question Lists"
 
     def __str__(self):
-        return "QuestionSeries object ({}): {} questions".format(self.id, self.questioninseries_set.count() if self.pk else 0)
+        return _(
+            "QuestionList %(qs_name)s of block with slug %(block_slug)s: %(n_questions)i questions"
+        ) % {
+            'qs_name': self.name,
+            'block_slug': self.block.slug,
+            'n_questions': self.questions.count() if self.pk else 0,
+        }
 
 
-class QuestionInSeries(models.Model):
-    """Question with its index in QuestionSeries
+class QuestionInList(models.Model):
+    """Question with its index in QuestionList
 
     Attributes:
-        question_series (QuestionSeries): QuestionSeries that contains the Question
-        question (Question): Question linked to question_series
-        index (int): Index of Question within QuestionSeries
+        questionlist (QuestionList): QuestionList that contains the Question
+        question (Question): Question linked to QuestionList
+        index (int): Index of Question within QuestionList
     """
 
-    question_series = models.ForeignKey(QuestionSeries, on_delete=models.CASCADE)
+    questionlist = models.ForeignKey(QuestionList, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     index = models.PositiveIntegerField(default=0)
 
     class Meta:
-        unique_together = ("question_series", "question")
+        unique_together = ("questionlist", "question")
         ordering = ["index"]
-        verbose_name_plural = "Question In Series objects"
+        verbose_name_plural = "Questions"

@@ -1,0 +1,553 @@
+# choices associated with choice lists for demographic questions
+- model: question.choice
+  fields:
+    key: isced-1
+    text: Primary school
+    index: 0
+    choicelist: ATTAINED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-2
+    text: Vocational qualification at about 16 years of age (GCSE)
+    index: 1
+    choicelist: ATTAINED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-3
+    text: Secondary diploma (A-levels/high school)
+    index: 2
+    choicelist: ATTAINED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-4
+    text: Post-16 vocational course
+    index: 3
+    choicelist: ATTAINED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-5
+    text: Associate's degree or 2-year professional diploma
+    index: 4
+    choicelist: ATTAINED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-6
+    text: Bachelor or equivalent
+    index: 5
+    choicelist: ATTAINED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-7
+    text: Master or equivalent
+    index: 6
+    choicelist: ATTAINED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-8
+    text: Doctoral degree or equivalent
+    index: 7
+    choicelist: ATTAINED_EDUCATION
+- model: question.choice
+  fields:
+    key: none
+    text: Have not (yet) completed any school qualification
+    index: 8
+    choicelist: ATTAINED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-1
+    text: Primary school
+    index: 0
+    choicelist: EXPECTED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-2
+    text: Vocational qualification at about 16 years of age (GCSE)
+    index: 1
+    choicelist: EXPECTED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-3
+    text: Secondary diploma (A-levels/high school)
+    index: 2
+    choicelist: EXPECTED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-4
+    text: Post-16 vocational course
+    index: 3
+    choicelist: EXPECTED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-5
+    text: Associate's degree or 2-year professional diploma
+    index: 4
+    choicelist: EXPECTED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-6
+    text: Bachelor or equivalent
+    index: 5
+    choicelist: EXPECTED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-7
+    text: Master or equivalent
+    index: 6
+    choicelist: EXPECTED_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-8
+    text: Doctoral degree or equivalent
+    index: 7
+    choicelist: EXPECTED_EDUCATION
+- model: question.choice
+  fields:
+    key: none
+    text: Not applicable
+    index: 8
+    choicelist: EXPECTED_EDUCATION
+- model: question.choice
+  fields:
+    key: M
+    text: Male
+    index: 0
+    choicelist: GENDER_REDUCED
+- model: question.choice
+  fields:
+    key: F
+    text: Female
+    index: 1
+    choicelist: GENDER_REDUCED
+- model: question.choice
+  fields:
+    key: X
+    text: Other
+    index: 2
+    choicelist: GENDER_REDUCED
+- model: question.choice
+  fields:
+    key: U
+    text: Undisclosed
+    index: 3
+    choicelist: GENDER_REDUCED
+- model: question.choice
+  fields:
+    key: male
+    text: 'Man'
+    index: 0
+    choicelist: GENDER_COMPLETE
+- model: question.choice
+  fields:
+    key: trans_male
+    text: 'Transgender man'
+    index: 1
+    choicelist: GENDER_COMPLETE
+- model: question.choice
+  fields:
+    key: trans_female
+    text: 'Transgender woman'
+    index: 2
+    choicelist: GENDER_COMPLETE
+- model: question.choice
+  fields:
+    key: female
+    text: 'Woman'
+    index: 3
+    choicelist: GENDER_COMPLETE
+- model: question.choice
+  fields:
+    key: non_conforming
+    text: 'Non-conforming or questioning'
+    index: 4
+    choicelist: GENDER_COMPLETE
+- model: question.choice
+  fields:
+    key: intersex
+    text: 'Intersex or two-spirit'
+    index: 5
+    choicelist: GENDER_COMPLETE
+- model: question.choice
+  fields:
+    key: non_answer
+    text: 'Prefer not to answer'
+    index: 6
+    choicelist: GENDER_COMPLETE
+- model: question.choice
+  fields:
+    key: silent
+    text: 1945 or earlier
+    index: 0
+    choicelist: GENERATION
+- model: question.choice
+  fields:
+    key: boomer
+    text: 1946–1964
+    index: 1
+    choicelist: GENERATION
+- model: question.choice
+  fields:
+    key: gen_x
+    text: 1965-1980
+    index: 2
+    choicelist: GENERATION
+- model: question.choice
+  fields:
+    key: millenial
+    text: 1981–1996
+    index: 3
+    choicelist: GENERATION
+- model: question.choice
+  fields:
+    key: gen_z
+    text: 1997 or later
+    index: 4
+    choicelist: GENERATION
+- model: question.choice
+  fields:
+    key: isced-2
+    text: Vocational qualification at about 16 years of age (GCSE)
+    index: 0
+    choicelist: ISCED_EDUCATION_LEVELS_GOLDSMITHS
+- model: question.choice
+  fields:
+    key: isced-3
+    text: Secondary diploma (A-levels/high school)
+    index: 1
+    choicelist: ISCED_EDUCATION_LEVELS_GOLDSMITHS
+- model: question.choice
+  fields:
+    key: isced-4
+    text: Post-16 vocational course
+    index: 2
+    choicelist: ISCED_EDUCATION_LEVELS_GOLDSMITHS
+- model: question.choice
+  fields:
+    key: isced-5
+    text: Associate's degree or 2-year professional diploma
+    index: 3
+    choicelist: ISCED_EDUCATION_LEVELS_GOLDSMITHS
+- model: question.choice
+  fields:
+    key: isced-6
+    text: Bachelor or equivalent
+    index: 4
+    choicelist: ISCED_EDUCATION_LEVELS_GOLDSMITHS
+- model: question.choice
+  fields:
+    key: isced-7
+    text: Master or equivalent
+    index: 5
+    choicelist: ISCED_EDUCATION_LEVELS_GOLDSMITHS
+- model: question.choice
+  fields:
+    key: isced-8
+    text: Doctoral degree or equivalent
+    index: 6
+    choicelist: ISCED_EDUCATION_LEVELS_GOLDSMITHS
+- model: question.choice
+  fields:
+    key: fluent
+    text: fluent
+    index: 0
+    choicelist: LANG_EXPOSURE
+- model: question.choice
+  fields:
+    key: intm
+    text: intermediate
+    index: 1
+    choicelist: LANG_EXPOSURE
+- model: question.choice
+  fields:
+    key: beginner
+    text: beginner
+    index: 2
+    choicelist: LANG_EXPOSURE
+- model: question.choice
+  fields:
+    key: some_exp
+    text: some exposure
+    index: 3
+    choicelist: LANG_EXPOSURE
+- model: question.choice
+  fields:
+    key: no_exp
+    text: no exposure
+    index: 4
+    choicelist: LANG_EXPOSURE
+- model: question.choice
+  fields:
+    key: none
+    text: None
+    index: 0
+    choicelist: MUSICAL_EXPERIENCE
+- model: question.choice
+  fields:
+    key: moderate
+    text: Moderate
+    index: 1
+    choicelist: MUSICAL_EXPERIENCE
+- model: question.choice
+  fields:
+    key: extensive
+    text: Extensive
+    index: 2
+    choicelist: MUSICAL_EXPERIENCE
+- model: question.choice
+  fields:
+    key: professional
+    text: Professional
+    index: 3
+    choicelist: MUSICAL_EXPERIENCE
+- model: question.choice
+  fields:
+    key: mellow
+    text: Dance/Electronic/New Age
+    index: 0
+    choicelist: MUSIC_GENRE
+- model: question.choice
+  fields:
+    key: unpretentious
+    text: Pop/Country/Religious
+    index: 1
+    choicelist: MUSIC_GENRE
+- model: question.choice
+  fields:
+    key: sophisticated
+    text: Jazz/Folk/Classical
+    index: 2
+    choicelist: MUSIC_GENRE
+- model: question.choice
+  fields:
+    key: intense
+    text: Rock/Punk/Metal
+    index: 3
+    choicelist: MUSIC_GENRE
+- model: question.choice
+  fields:
+    key: contemporary
+    text: Hip-hop/R&B/Funk
+    index: 4
+    choicelist: MUSIC_GENRE
+- model: question.choice
+  fields:
+    key: student
+    text: Still at School
+    index: 0
+    choicelist: OCCUPATIONAL_STATUS
+- model: question.choice
+  fields:
+    key: higher education
+    text: At University
+    index: 1
+    choicelist: OCCUPATIONAL_STATUS
+- model: question.choice
+  fields:
+    key: full-time
+    text: In Full-time employment
+    index: 2
+    choicelist: OCCUPATIONAL_STATUS
+- model: question.choice
+  fields:
+    key: part-time
+    text: In Part-time employment
+    index: 3
+    choicelist: OCCUPATIONAL_STATUS
+- model: question.choice
+  fields:
+    key: flexible work
+    text: Self-employed
+    index: 4
+    choicelist: OCCUPATIONAL_STATUS
+- model: question.choice
+  fields:
+    key: family
+    text: Homemaker/full time parent
+    index: 5
+    choicelist: OCCUPATIONAL_STATUS
+- model: question.choice
+  fields:
+    key: unemployment
+    text: Unemployed
+    index: 6
+    choicelist: OCCUPATIONAL_STATUS
+- model: question.choice
+  fields:
+    key: retirement
+    text: Retired
+    index: 7
+    choicelist: OCCUPATIONAL_STATUS
+- model: question.choice
+  fields:
+    key: isced-1
+    text: Primary school
+    index: 0
+    choicelist: ZH_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-2
+    text: Vocational qualification at about 16 years of age (GCSE)
+    index: 1
+    choicelist: ZH_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-3
+    text: Secondary diploma (A-levels/high school)
+    index: 2
+    choicelist: ZH_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-4
+    text: Post-16 vocational course
+    index: 3
+    choicelist: ZH_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-6
+    text: Bachelor or equivalent
+    index: 4
+    choicelist: ZH_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-7
+    text: Master or equivalent
+    index: 5
+    choicelist: ZH_EDUCATION
+- model: question.choice
+  fields:
+    key: isced-8
+    text: Doctoral degree or equivalent
+    index: 6
+    choicelist: ZH_EDUCATION
+- model: question.choice
+  fields:
+    key: none
+    text: Have not (yet) completed any school qualification
+    index: 7
+    choicelist: ZH_EDUCATION
+- model: question.choice
+  fields:
+    key: male
+    text: 男
+    index: 0
+    choicelist: ZH_GENDER
+- model: question.choice
+  fields:
+    key: female
+    text: 女
+    index: 1
+    choicelist: ZH_GENDER
+- model: question.choice
+  fields:
+    key: other
+    text: 其他
+    index: 2
+    choicelist: ZH_GENDER
+- model: question.choice
+  fields:
+    key: no_answer
+    text: 不想回答
+    index: 3
+    choicelist: ZH_GENDER
+- model: question.choice
+  fields:
+    key: unpretentious
+    text: Pop/Country/Religious
+    index: 0
+    choicelist: ZH_GENRE
+- model: question.choice
+  fields:
+    key: Chinese artistic
+    text: Folk/Mountain songs
+    index: 1
+    choicelist: ZH_GENRE
+- model: question.choice
+  fields:
+    key: sophisticated
+    text: Western classical music/Jazz/Opera/Musical
+    index: 2
+    choicelist: ZH_GENRE
+- model: question.choice
+  fields:
+    key: classical
+    text: Chinese opera
+    index: 3
+    choicelist: ZH_GENRE
+- model: question.choice
+  fields:
+    key: intense
+    text: Rock/Punk/Metal
+    index: 4
+    choicelist: ZH_GENRE
+- model: question.choice
+  fields:
+    key: mellow
+    text: Dance/Electronic/New Age
+    index: 5
+    choicelist: ZH_GENRE
+- model: question.choice
+  fields:
+    key: contemporary
+    text: Hip-hop/R&B/Funk
+    index: 6
+    choicelist: ZH_GENRE
+- model: question.choice
+  fields:
+    key: HD
+    text: 华东（山东、江苏、安徽、浙江、福建、江西、上海）
+    index: 0
+    choicelist: ZH_REGIONS
+- model: question.choice
+  fields:
+    key: HN
+    text: 华南（广东、广西、海南）
+    index: 1
+    choicelist: ZH_REGIONS
+- model: question.choice
+  fields:
+    key: HZ
+    text: 华中（湖北、湖南、河南、江西）
+    index: 2
+    choicelist: ZH_REGIONS
+- model: question.choice
+  fields:
+    key: HB
+    text: 华北（北京、天津、河北、山西、内蒙古）
+    index: 3
+    choicelist: ZH_REGIONS
+- model: question.choice
+  fields:
+    key: XB
+    text: 西北（宁夏、新疆、青海、陕西、甘肃）
+    index: 4
+    choicelist: ZH_REGIONS
+- model: question.choice
+  fields:
+    key: XN
+    text: 西南（四川、云南、贵州、西藏、重庆）
+    index: 5
+    choicelist: ZH_REGIONS
+- model: question.choice
+  fields:
+    key: DB
+    text: 东北（辽宁、吉林、黑龙江）
+    index: 6
+    choicelist: ZH_REGIONS
+- model: question.choice
+  fields:
+    key: GAT
+    text: 港澳台（香港、澳门、台湾）
+    index: 7
+    choicelist: ZH_REGIONS
+- model: question.choice
+  fields:
+    key: QT
+    text: 国外
+    index: 8
+    choicelist: ZH_REGIONS
+- model: question.choice
+  fields:
+    key: no_answer
+    text: 不想回答
+    index: 9
+    choicelist: ZH_REGIONS

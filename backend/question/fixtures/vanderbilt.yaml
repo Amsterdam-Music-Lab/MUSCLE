@@ -1,0 +1,49 @@
+- model: question.question
+  pk: VB_01
+  fields:
+    text: I can recognize a piece of music after hearing just a few notes.
+    explainer: Please tell us how often this happens to you
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_FREQUENCY_6
+- model: question.question
+  pk: VB_02
+  fields:
+    text: My musical ability is important to my identity.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: VB_03
+  fields:
+    text: Listening to music makes me feel less alone.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: VB_04
+  fields:
+    text: I can tap in time with a musical beat.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: VB_05
+  fields:
+    text: When I feel anxious, listening to music helps me see things in a more
+      positive light.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: VB_06
+  fields:
+    text: Making music helps me to socially connect with others.
+    explainer: Please tell us how much you agree
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7

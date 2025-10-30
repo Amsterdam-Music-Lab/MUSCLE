@@ -1,10 +1,13 @@
 from django.test import TestCase
-from session.models import Session
-from participant.models import Participant
+
 from experiment.models import Block, Experiment, Phase
+from participant.models import Participant
+from question.models import QuestionInList, QuestionList
+from session.models import Session
 
 
 class TestModelBlock(TestCase):
+
     @classmethod
     def setUpTestData(cls):
         cls.block = Block.objects.create(rules="THATS_MY_SONG", slug="hooked", rounds=42)
@@ -12,12 +15,42 @@ class TestModelBlock(TestCase):
     def test_separate_rules_instance(self):
         rules1 = self.block.get_rules()
         rules2 = self.block.get_rules()
-        keys1 = rules1.question_series[0]["keys"] + rules1.question_series[1]["keys"]
-        keys2 = rules2.question_series[0]["keys"] + rules2.question_series[1]["keys"]
+        keys1 = (
+            rules1.question_lists[0]["question_keys"]
+            + rules1.question_lists[1]["question_keys"]
+        )
+        keys2 = (
+            rules2.question_lists[0]["question_keys"]
+            + rules2.question_lists[1]["question_keys"]
+        )
         assert keys1 == keys2
+
+    def test_add_default_question_lists(self):
+        block = Block(
+            name='test question list',
+            slug='test_question_list',
+            rules='RHYTHM_BATTERY_FINAL',
+        )
+        block.save()  # triggers `add_default_question_lists` method
+        created_lists = QuestionList.objects.filter(block=block)
+        n_lists = created_lists.count()
+        expected_n = len(block.get_rules().question_lists)
+        self.assertEqual(
+            n_lists,
+            expected_n,
+        )
+        self.assertNotEqual(
+            QuestionInList.objects.filter(questionlist=created_lists.first()).count(),
+            0,
+        )
+        # test that question series aren't created more than once
+        block.save()
+        created_series = QuestionList.objects.filter(block=block)
+        self.assertEqual(created_series.count(), n_lists)
 
 
 class TestModelExperiment(TestCase):
+
     @classmethod
     def setUpTestData(cls):
         cls.experiment = Experiment.objects.create(name="test_experiment")

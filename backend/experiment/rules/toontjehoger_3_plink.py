@@ -5,15 +5,20 @@ import re
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
-from experiment.actions import Explainer, Step, Score, Final, Playlist, Info, Trial
+from experiment.actions.explainer import Explainer, Step
 from experiment.actions.playback import PlayButton
-from experiment.actions.form import AutoCompleteQuestion, RadiosQuestion, Form
+from experiment.actions.final import Final
+from experiment.actions.form import Form
+from experiment.actions.info import Info
+from experiment.actions.question import AutoCompleteQuestion, RadiosQuestion
+from experiment.actions.score import Score
+from experiment.actions.trial import Trial
 from experiment.actions.utils import get_current_experiment_url
-from .base import BaseRules
 from experiment.utils import non_breaking_spaces
 from result.utils import prepare_result
 from section.models import Playlist, Section
 from session.models import Session
+from .base import BaseRules
 
 logger = logging.getLogger(__name__)
 
@@ -173,7 +178,7 @@ class ToontjeHoger3Plink(BaseRules):
         question1 = AutoCompleteQuestion(
             key="plink",
             choices=choices,
-            question="Noem de artiest en de titel van het nummer",
+            text="Noem de artiest en de titel van het nummer",
             result_id=prepare_result("plink", session, section=section, expected_response=expected_response),
         )
         plink_trials.append(
@@ -214,7 +219,7 @@ class ToontjeHoger3Plink(BaseRules):
             period_choices[period.replace("'", "")] = period
 
         question = RadiosQuestion(
-            question="Wanneer is het nummer uitgebracht?",
+            text="Wanneer is het nummer uitgebracht?",
             key="time_period",
             choices=period_choices,
             result_id=prepare_result("era", session, section=section, expected_response=section.tag),
@@ -230,7 +235,7 @@ class ToontjeHoger3Plink(BaseRules):
             emotion_choices[emotion] = emotion.capitalize()
 
         question = RadiosQuestion(
-            question="Welke emotie past bij dit nummer?",
+            text="Welke emotie past bij dit nummer?",
             key="emotion",
             choices=emotion_choices,
             result_id=prepare_result("emotion", session, section=section, expected_response=section.group),
