@@ -246,7 +246,6 @@ msgid "Platinum"
 msgstr "Platinum"
 
 #: src/components/views/FinalView/FinalView.tsx:186
-#: src/config/frontend.ts:154
 msgid "Play another game!"
 msgstr "Play another game!"
 
@@ -274,6 +273,10 @@ msgstr "Required dependency \"{varName}\" for view \"{name}\" is not defined"
 msgid "Return to the <0>home page</0>"
 msgstr "Return to the <0>home page</0>"
 
+#: src/components/forms/SelectField/SelectField.tsx:102
+msgid "Select..."
+msgstr "Select..."
+
 #: src/components/plugins/plugins/SharePlugin.tsx:30
 msgid "Share"
 msgstr "Share"
@@ -290,8 +293,8 @@ msgstr "Skip"
 msgid "Start the game!"
 msgstr "Start the game!"
 
-#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
 #: src/components/views/SurveyView/SurveyView.tsx:117
+#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
 msgid "Submit"
 msgstr "Submit"
 
@@ -311,9 +314,9 @@ msgstr "The first load may take a while due to the amount of content, but later 
 msgid "This is your lucky day!"
 msgstr "This is your lucky day!"
 
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
-#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
 #: src/components/plugins/plugins/ScoresPlugin.tsx:43
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
 msgid "Total score"
 msgstr "Total score"
 

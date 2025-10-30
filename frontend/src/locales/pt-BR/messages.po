@@ -241,7 +241,6 @@ msgid "Platinum"
 msgstr "Platina"
 
 #: src/components/views/FinalView/FinalView.tsx:186
-#: src/config/frontend.ts:154
 msgid "Play another game!"
 msgstr "Jogar outro jogo!"
 
@@ -269,6 +268,10 @@ msgstr "Dependência obrigatória \"{varName}\" para a visualização \"{name}\"
 msgid "Return to the <0>home page</0>"
 msgstr "Retornar para a <0>página inicial</0>"
 
+#: src/components/forms/SelectField/SelectField.tsx:102
+msgid "Select..."
+msgstr "Selecione..."
+
 #: src/components/plugins/plugins/SharePlugin.tsx:30
 msgid "Share"
 msgstr "Compartilhar"
@@ -285,8 +288,8 @@ msgstr "Pular"
 msgid "Start the game!"
 msgstr "Começar o jogo!"
 
-#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
 #: src/components/views/SurveyView/SurveyView.tsx:117
+#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
 msgid "Submit"
 msgstr "Enviar"
 
@@ -306,9 +309,9 @@ msgstr ""
 msgid "This is your lucky day!"
 msgstr "Este é o seu dia de sorte!"
 
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
-#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
 #: src/components/plugins/plugins/ScoresPlugin.tsx:43
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
 msgid "Total score"
 msgstr "Pontuação total"
 
