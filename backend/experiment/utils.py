@@ -155,7 +155,7 @@ def block_export_json_results(block_slug: str) -> ZipFile:
         all_profiles |= session.participant.export_profiles()
 
     for playlist in this_block.playlists.all():
-        these_sections = playlist._export_sections()
+        these_sections = playlist.section_set.all()
         all_sections |= these_sections
         for section in these_sections:
             if section.song:

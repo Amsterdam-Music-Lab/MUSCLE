@@ -223,20 +223,17 @@ class Playlist(models.Model):
 
     def _export_admin(self):
         """Export data for admin"""
+        section_data = (
+            self.section_set.values("id", "song__artist", "song__name", "play_count"),
+        )
         return {
             "exportedAt": timezone.now().isoformat(),
             "playlist": {
                 "id": self.id,
                 "name": self.name,
-                "sections": [
-                    section._export_admin() for section in self.section_set.all()
-                ],
+                "sections": section_data,
             },
         }
-
-    def _export_sections(self):
-        # export section objects
-        return self.section_set.all()
 
     def _update_admin_csv(self):
         """Update csv data for admin"""
@@ -415,24 +412,3 @@ class Section(models.Model):
         base_url = getattr(settings, 'BASE_URL', '')
         sections_url = reverse("section:section", args=[self.pk])
         return base_url.rstrip('/') + sections_url
-
-    def _export_admin(self):
-        """Export data for admin"""
-        return {
-            'id': self.id,
-            'artist': self.song.artist,
-            'name': self.song.name,
-            'play_count': self.play_count
-        }
-
-    def _export_admin_csv(self):
-        """Export csv data for admin"""
-        return [
-            self.song.artist,
-            self.song.name,
-            self.start_time,
-            self.duration,
-            self.filename,
-            self.tag,
-            self.group,
-        ]
