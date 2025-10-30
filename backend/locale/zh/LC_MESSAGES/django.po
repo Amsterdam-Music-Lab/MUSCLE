@@ -965,18 +965,15 @@ msgid ""
 msgstr "您以为这两张卡片是一对，但它们不匹配。记忆偏差，减 10 分。"
 
 #: experiment/rules/matching_pairs_2025.py:66
-#, fuzzy, python-format
-#| msgid ""
-#| "Before starting the game, we would like to ask you %i demographic "
-#| "questions."
 msgid ""
 "Before starting the game, we would like to ask you %(n_questions)i "
 "demographic questions."
-msgstr "游戏开始前，请您先回答 %i 个基本信息问题。"
+msgstr ""
+"游戏开始前，请您先回答 %(n_questions)i 个基本信息问题。"
 
 #: experiment/rules/matching_pairs_2025.py:90
 msgid "Click to start!"
-msgstr ""
+msgstr "点击以开始!"
 
 #: experiment/rules/matching_pairs_2025.py:171
 msgid ""
@@ -4210,19 +4207,8 @@ msgid "Points"
 msgstr "分"
 
 #: theme/serializers.py:28
-#, fuzzy
-#| msgid "No points"
 msgid "No points yet!"
 msgstr "零分"
-
-#, fuzzy
-#~| msgid ""
-#~| "Before starting the game, we would like to ask you %i demographic "
-#~| "questions."
-#~ msgid ""
-#~ "Before starting the game, we would like to ask you {} demographic "
-#~ "questions."
-#~ msgstr "游戏开始前，请您先回答 %i 个基本信息问题。"
 
 #~ msgid "Round {} / {}"
 #~ msgstr "{} / {}轮"
