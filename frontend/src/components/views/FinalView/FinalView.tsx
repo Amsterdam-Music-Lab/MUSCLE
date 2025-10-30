@@ -104,7 +104,7 @@ export default function FinalView({
     finalizeSession({ session: session!, participant });
   }, [session, participant]);
 
-  let isFirstStep, isLastStep, iconName;
+  let isFirstStep, isLastStep, iconName, step;
   if (timeline) {
     const steps = processTimelineConfig({ timeline });
     const step = timeline.currentStep ?? 1;

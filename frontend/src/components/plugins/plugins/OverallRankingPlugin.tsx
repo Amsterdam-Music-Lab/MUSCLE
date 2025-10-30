@@ -12,6 +12,8 @@ import { ProgressBar } from "@/components/ui";
 export interface OverallRankingPluginArgs {
   percentile: number;
 
+  totalScore: number;
+
   /**
    * Message shown above when the percentile is above the cutoff. You can use
    * two variables in the template string: percentile and cutoff
@@ -33,9 +35,9 @@ function OverallRankingPlugin({ percentile }: OverallRankingPluginArgs) {
   return <ProgressBar value={percentile} variant="secondary" />;
 }
 
-function getWrapperProps({ percentile }: OverallRankingPluginArgs) {
+function getWrapperProps({ percentile, totalScore }: OverallRankingPluginArgs) {
   percentile = percentile !== undefined ? Math.round(percentile) : "";
-  const title = t`Congrats, game completed! Across all games, you did better than ${percentile}% of players!`;
+  const title = t`Game complete! You earned ${totalScore} points. That's better than ${percentile}% of players.`;
   return { title, variant: "secondary" };
 }
 

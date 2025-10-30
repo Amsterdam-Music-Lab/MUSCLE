@@ -71,7 +71,11 @@ export default function ScoreBoard({
         break;
 
       case "overall-ranking":
-        updated.args = { ...updated.args, percentile: overallPercentile };
+        updated.args = {
+          ...updated.args,
+          percentile: overallPercentile,
+          totalScore,
+        };
         break;
 
       case "scores":
