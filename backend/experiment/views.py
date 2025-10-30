@@ -66,7 +66,8 @@ def get_block(request: HttpRequest, slug: str) -> JsonResponse:
 def create_phase(request):
     experiment_id = request.POST.get('experiment_id')
     experiment = Experiment.objects.get(pk=experiment_id)
-    phase = Phase.objects.create(experiment=experiment)
+    phase_count = Phase.objects.filter(experiment=experiment).count()
+    phase = Phase.objects.create(experiment=experiment, index=phase_count)
     return JsonResponse({"created": phase.id})
 
 

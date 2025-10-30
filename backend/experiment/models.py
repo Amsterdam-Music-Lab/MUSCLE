@@ -181,7 +181,7 @@ class Block(models.Model):
     )
     index = models.IntegerField(default=0, help_text="Index of the block in the phase. Lower numbers come first.")
 
-    name = models.CharField(max_length=64, default="")
+    name = models.CharField(max_length=64, blank=True, default="")
     description = models.TextField(blank=True, default="")
 
     playlists = models.ManyToManyField("section.Playlist", blank=True)
