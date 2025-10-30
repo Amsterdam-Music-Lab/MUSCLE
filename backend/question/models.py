@@ -39,11 +39,11 @@ class Question(models.Model):
         ICON_RANGE = "IconRangeQuestion", _(
             "Icon Range: Present choices as a range slider with icons"
         )
-        RADIOS = "RadiosQuestion", _("Radios: Present choices as radio buttons")
-        RANGE = "RangeQuestion", _("Range: Present a range slider to select a number")
         NUMBER = "NumberQuestion", _(
             "Number: Present a number field to select a number"
         )
+        RADIOS = "RadiosQuestion", _("Radios: Present choices as radio buttons")
+        RANGE = "RangeQuestion", _("Range: Present a range slider to select a number")
         STRING = "TextQuestion", _("Text: Present a text field to enter free text")
         TEXT_RANGE = "TextRangeQuestion", _(
             "Text Range: Present choices as a range slider with text"
@@ -199,4 +199,4 @@ class QuestionInList(models.Model):
     class Meta:
         unique_together = ("questionlist", "question")
         ordering = ["index"]
-        verbose_name_plural = "Question In List objects"
+        verbose_name_plural = "Questions"

@@ -93,14 +93,14 @@ class Migration(migrations.Migration):
                         'IconRangeQuestion',
                         'Icon Range: Present choices as a range slider with icons',
                     ),
+                    (
+                        'NumberQuestion',
+                        'Number: Present a number field to select a number',
+                    ),
                     ('RadiosQuestion', 'Radios: Present choices as radio buttons'),
                     (
                         'RangeQuestion',
                         'Range: Present a range slider to select a number',
-                    ),
-                    (
-                        'NumberQuestion',
-                        'Number: Present a number field to select a number',
                     ),
                     ('TextQuestion', 'Text: Present a text field to enter free text'),
                     (
