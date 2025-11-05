@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 12:14+0200\n"
+"POT-Creation-Date: 2025-11-05 17:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,48 +46,48 @@ msgstr "同意"
 msgid "Stop"
 msgstr "停止"
 
-#: experiment/actions/final.py:96
+#: experiment/actions/final.py:97
 msgid "plastic"
 msgstr "塑料"
 
-#: experiment/actions/final.py:97
+#: experiment/actions/final.py:98
 msgid "bronze"
 msgstr "青铜"
 
-#: experiment/actions/final.py:98
+#: experiment/actions/final.py:99
 msgid "silver"
 msgstr "白银"
 
-#: experiment/actions/final.py:99
+#: experiment/actions/final.py:100
 msgid "gold"
 msgstr "黄金"
 
-#: experiment/actions/final.py:100
+#: experiment/actions/final.py:101
 msgid "platinum"
 msgstr "铂金"
 
-#: experiment/actions/final.py:101
+#: experiment/actions/final.py:102
 msgid "diamond"
 msgstr "钻石"
 
-#: experiment/actions/final.py:107
+#: experiment/actions/final.py:108
 msgid "Final score"
 msgstr "最终得分"
 
-#: experiment/actions/final.py:138 participant/views.py:46
+#: experiment/actions/final.py:141 participant/views.py:46
 msgid "points"
 msgstr "分"
 
-#: experiment/actions/final.py:152 experiment/rules/hooked.py:106
+#: experiment/actions/final.py:156 experiment/rules/hooked.py:106
 #: experiment/rules/thats_my_song.py:79
 msgid "Play again"
 msgstr "再玩一次"
 
-#: experiment/actions/final.py:153 participant/views.py:41
+#: experiment/actions/final.py:157 participant/views.py:41
 msgid "My profile"
 msgstr "我的结果"
 
-#: experiment/actions/final.py:154
+#: experiment/actions/final.py:158
 msgid "All experiments"
 msgstr "实验结束"
 
@@ -932,7 +932,6 @@ msgid "Listen carefully to avoid mistakes and earn more points."
 msgstr ""
 
 #: experiment/rules/matching_pairs.py:69 experiment/rules/matching_pairs.py:174
-#: experiment/rules/questionnaire.py:21
 #, python-format
 msgid ""
 "Before starting the game, we would like to ask you %i demographic questions."
@@ -965,49 +964,48 @@ msgid ""
 msgstr "您以为这两张卡片是一对，但它们不匹配。记忆偏差，减 10 分。"
 
 #: experiment/rules/matching_pairs_2025.py:66
+#: experiment/rules/questionnaire.py:21
+#, python-format
 msgid ""
 "Before starting the game, we would like to ask you %(n_questions)i "
 "demographic questions."
-msgstr ""
-"游戏开始前，请您先回答 %(n_questions)i 个基本信息问题。"
+msgstr "游戏开始前，请您先回答 %(n_questions)i 个基本信息问题。"
 
 #: experiment/rules/matching_pairs_2025.py:90
 msgid "Click to start!"
 msgstr "点击以开始!"
 
-#: experiment/rules/matching_pairs_2025.py:171
+#: experiment/rules/matching_pairs_2025.py:172
 msgid ""
 "You get a board with 16 musical cards. **Pick a card,** and listen to it "
 "carefully..."
 msgstr "您将在游戏中看到16张音乐卡片。**请选择一张卡片**，仔细聆听..."
 
-#: experiment/rules/matching_pairs_2025.py:175
+#: experiment/rules/matching_pairs_2025.py:176
 msgid "Then try to **find a second card that matches it.**"
 msgstr "然后尝试**找到与之匹配的第二张卡片。**"
 
-#: experiment/rules/matching_pairs_2025.py:179
+#: experiment/rules/matching_pairs_2025.py:180
 msgid "**Find the 8 matching pairs** to clear the board and score points:"
 msgstr "**找出全部8对匹配卡片**即可完成游戏，计分规则如下："
 
-#: experiment/rules/matching_pairs_2025.py:184
+#: experiment/rules/matching_pairs_2025.py:185
 msgid ""
 "**+20 points:** Matched first card with one you’ve heard before — memory "
 "wins!"
-msgstr ""
-"**+20分**：将第一张卡片与之前听过的卡片成功配对 —— 出色的记忆！"
+msgstr "**+20分**：将第一张卡片与之前听过的卡片成功配对 —— 出色的记忆！"
 
-#: experiment/rules/matching_pairs_2025.py:189
+#: experiment/rules/matching_pairs_2025.py:190
 msgid ""
 "**-10 points:** Chose a wrong second card that’s heard before? Oops — "
 "penalty..."
-msgstr ""
-"**-10分**：第二张卡片听过但选错了？遗憾扣分。"
+msgstr "**-10分**：第二张卡片听过但选错了？遗憾扣分。"
 
-#: experiment/rules/matching_pairs_2025.py:194
+#: experiment/rules/matching_pairs_2025.py:195
 msgid "Some cards sound **distorted** on purpose. Stay sharp!"
 msgstr "部分卡片的声音经过**失真处理**。但这正是挑战所在，请认真聆听辨别！"
 
-#: experiment/rules/matching_pairs_2025.py:278
+#: experiment/rules/matching_pairs_2025.py:279
 #, fuzzy, python-format
 #| msgid "You outperformed {}% of the players!"
 msgid "You outperformed {}% of the players!"

@@ -18,9 +18,9 @@ class Questionnaire(BaseRules):
         if questions:
             intro_questions = Explainer(
                 instruction=_(
-                    "Before starting the game, we would like to ask you %i demographic questions."
-                    % (len(questions))
-                ),
+                    "Before starting the game, we would like to ask you %(n_questions)i demographic questions."
+                )
+                % {'n_questions': len(questions)},
                 steps=[],
             )
             actions.append(intro_questions)
