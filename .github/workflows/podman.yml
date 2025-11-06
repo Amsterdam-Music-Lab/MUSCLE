@@ -16,7 +16,7 @@ jobs:
   deploy-tunetwins:
     name: Deploy to dedicated TuneTwins server
     environment: TuneTwins
-    runs-on: [tunetwins, tt-hk]
+    runs-on: tunetwins
 
     if: github.ref == 'refs/heads/tunetwins' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/tunetwins')
     concurrency:
