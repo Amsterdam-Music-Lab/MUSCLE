@@ -1,5 +1,5 @@
 from os.path import join
-from typing import List, Optional
+from typing import Optional
 
 from django.db import models
 from django.utils import timezone
@@ -101,16 +101,6 @@ class Experiment(models.Model):
             "-started_at"
         )
 
-    def current_participants(self) -> list["Participant"]:
-        """Get distinct list of participants
-
-        Returns:
-            (participant.models.Participant): Associated participants
-        """
-        from participant.models import Participant
-
-        return Participant.objects.filter(session__in=self.associated_sessions())
-
     def associated_feedback(self) -> QuerySet[Session]:
         """return feedback for the blocks in this experiment
 
@@ -144,6 +134,18 @@ class Phase(models.Model):
 
     class Meta:
         ordering = ["index"]
+
+
+class BlockManager(models.Manager):
+
+    def with_stats(self):
+        return self.annotate(
+            n_sessions=models.Count("session_set"),
+            n_sessions_finished=models.Count(
+                "session_set", filter=models.Q(finished_at__isnull=False)
+            ),
+            n_participants=models.Count("session__participant", unique=True),
+        )
 
 
 class Block(models.Model):
@@ -208,17 +210,14 @@ class Block(models.Model):
 
     playlist_count.short_description = "Playlists"
 
-    def current_participants(self) -> List["participant.models.Participant"]:
-        """Get distinct list of participants
+    def associated_sessions(self) -> QuerySet[Session]:
+        """export sessions for this experiment
 
         Returns:
-            Associated participants
+            Associated sessions
         """
 
-        participants = {}
-        for session in self.session_set.all():
-            participants[session.participant.id] = session.participant
-        return participants.values()
+        return Session.objects.filter(block=self).order_by("-started_at")
 
     def _export_admin(self) -> dict:
         """Export data for admin

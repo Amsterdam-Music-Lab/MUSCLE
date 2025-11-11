@@ -22,7 +22,7 @@ from experiment.forms import (
 from experiment.widgets import MarkdownPreviewTextInput
 from question.admin import QuestionSeriesInline
 from question.models import QuestionSeries, QuestionInSeries
-from .utils import get_block_json_export_as_repsonse
+from .utils import get_block_json_export_as_repsonse, get_participants_of_sessions
 
 
 class BlockAdmin(TabbedTranslationAdmin):
@@ -253,32 +253,25 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
             return get_block_json_export_as_repsonse(block_slug)
 
         all_blocks = obj.associated_blocks()
-        all_participants = obj.current_participants()
         all_sessions = obj.associated_sessions()
+        all_participants = get_participants_of_sessions(all_sessions)
         all_feedback = obj.associated_feedback()
         collect_data = {
-            "participant_count": len(all_participants),
-            "session_count": len(all_sessions),
-            "feedback_count": len(all_feedback),
+            "participant_count": all_participants.count(),
+            "session_count": all_sessions.count(),
+            "feedback_count": all_feedback.count(),
         }
 
-        blocks = [
-            {
-                "id": block.id,
-                "slug": block.slug,
-                "name": block.name,
-                "started": len(all_sessions.filter(block=block)),
-                "finished": len(
-                    all_sessions.filter(
-                        block=block,
-                        finished_at__isnull=False,
-                    )
-                ),
-                "participant_count": len(block.current_participants()),
-                "participants": block.current_participants(),
-            }
-            for block in all_blocks
-        ]
+        blocks = all_blocks.values(
+            [
+                "id",
+                "slug",
+                "name",
+                "n_sessions",
+                "n_sessions_finished",
+                "n_participants",
+            ]
+        )
 
         return render(
             request,
