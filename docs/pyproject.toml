@@ -1,0 +1,11 @@
+[project]
+name = "docs"
+version = "0.1.0"
+description = "Documentation of the MUSCLE infrastructure"
+readme = "index.md"
+requires-python = ">=3.13"
+dependencies = [
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.7.0",
+    "mkdocstrings>=0.30.1",
+]
