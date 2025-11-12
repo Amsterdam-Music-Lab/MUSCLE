@@ -1,3 +1,0 @@
-## participant.models:
-
-::: participant.models

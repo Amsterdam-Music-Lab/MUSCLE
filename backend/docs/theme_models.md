@@ -1,3 +1,0 @@
-## theme.models
-
-::: theme.models

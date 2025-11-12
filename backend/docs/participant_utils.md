@@ -1,3 +1,0 @@
-## participant.utils:
-
-::: participant.utils

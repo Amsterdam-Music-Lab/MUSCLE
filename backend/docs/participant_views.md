@@ -1,3 +1,0 @@
-## participant.views:
-
-::: participant.views

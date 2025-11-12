@@ -9,7 +9,7 @@ COPY requirements/dev.txt /server/
 RUN pip install -r dev.txt
 
 # This graphviz Docker image is derived from the base image
-# and installs extra dependencies for generating database ER diagrams
+# and installs extra dependencies for generating database diagrams
 FROM base AS graphviz
 RUN apt-get -y update && apt-get install -y graphviz graphviz-dev
 
