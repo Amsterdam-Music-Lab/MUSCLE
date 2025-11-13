@@ -1,8 +1,12 @@
-FROM docker.io/python:3.13
+FROM docker.io/python:3.12
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-ADD . /docs
-
-WORKDIR /docs
+WORKDIR /mkdocs
+COPY pyproject.toml .
+RUN uv lock
 RUN uv sync --locked
-CMD mkdocs build -d ./docs-pages-build
+COPY mkdocs.yml .
+RUN mkdir docs
+COPY *.md ./docs
+EXPOSE 8080
+CMD uv run mkdocs serve
