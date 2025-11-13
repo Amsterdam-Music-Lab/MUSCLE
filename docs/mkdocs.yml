@@ -112,7 +112,6 @@ nav:
     - Question app:
       - Question admin: 'question_admin.md'
       - Question utils: 'question_utils.md'
-      - Question views: 'question_views.md'
     - Result app:
       - Result admin: 'result_admin.md'
       - Result score: 'result_score.md'

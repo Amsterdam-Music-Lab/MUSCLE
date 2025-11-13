@@ -8,9 +8,7 @@ def get_unanswered_questions(participant: Model, question_set: QuerySet) -> Gene
 
     Args:
         participant (Participant): participant who will be checked for unanswered questions
-        questions (list[Questions]): list of questions from which to select an unanswered question
-        randomize (bool): optionally, randomize order of questions
-        cutoff_index (int): Maximal index in a questions sequence to consider questions
+        question_set (QuerySet): set of question objects for which status is checked
 
     Yields:
         Next unasked profile question
