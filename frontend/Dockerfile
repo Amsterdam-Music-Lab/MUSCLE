@@ -1,5 +1,5 @@
 # Builder image
-FROM docker.io/node:18-alpine as builder
+FROM docker.io/node:18-alpine
 
 WORKDIR /client
 RUN yarn set version 4.1.1

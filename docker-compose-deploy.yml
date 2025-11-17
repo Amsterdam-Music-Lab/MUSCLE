@@ -1,6 +1,6 @@
 services:
     db:
-        image: docker.io/postgres:16
+        image: postgres:16
         environment:
             - POSTGRES_DB=${SQL_DATABASE}
             - POSTGRES_USER=${SQL_USER}
@@ -21,7 +21,7 @@ services:
             retries: 5
         restart: always
     ip2country:
-        image: docker.io/extrawurst/ip2country:latest
+        image: extrawurst/ip2country:latest
         ports:
             - 8854:5000
         restart: always
@@ -29,7 +29,6 @@ services:
     server:
         build:
             context: ./backend
-            dockerfile: Dockerfile
         depends_on:
             db:
                 condition: service_healthy
@@ -52,8 +51,6 @@ services:
             - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}
             - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
             - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}
-            - SENTRY_DSN=${SENTRY_DSN}
-            - SENTRY_ENVIRONMENT=${SENTRY_ENVIRONMENT}
             - SQL_DATABASE=${SQL_DATABASE}
             - SQL_USER=${SQL_USER}
             - SQL_PASSWORD=${SQL_PASSWORD}
@@ -66,14 +63,10 @@ services:
     client-builder:
         build:
             context: ./frontend
-            dockerfile: Dockerfile
-            target: builder
         # build with the base path set to VITE_STATIC_URL (to pull from CDN) or "/" as fallback
         command: sh -c "yarn build --base ${VITE_STATIC_URL:-/}"
         volumes:
-            - type: bind
-              source: ./frontend/public
-              target: /client/public
+            - ${HOST_DATA}/frontend-build:/client/build
         environment:
             - VITE_API_ROOT=${FRONTEND_API_ROOT}
             - VITE_EXPERIMENT_SLUG=${FRONTEND_EXPERIMENT_SLUG}
@@ -105,7 +98,7 @@ services:
             client-builder:
                 condition: service_completed_successfully
         volumes:
-            - ./frontend/public:/usr/share/nginx/html/
+            - ${HOST_DATA}/frontend-build:/usr/share/nginx/html/
             - ${HOST_DATA}/server-static:/usr/share/nginx/html/django_static
             - ${HOST_DATA}/server-uploads:/usr/share/nginx/html/upload
             - ./nginx/custom-nginx.conf:/etc/nginx/conf.d/default.conf
