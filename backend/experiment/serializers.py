@@ -34,7 +34,7 @@ def serialize_experiment(experiment: Experiment) -> dict:
     serialized = {
         "slug": experiment.slug,
         "name": experiment.name,
-        "description": formatter(experiment.description, filter_name="markdown"),
+        "description": experiment.description,
     }
 
     if experiment.consent:

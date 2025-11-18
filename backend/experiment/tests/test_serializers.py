@@ -15,7 +15,10 @@ from session.models import Session
 
 
 class SerializerTest(TestCase):
-    fixtures = ["playlist", "experiment"]
+    fixtures = [
+        "playlist",
+        "experiment",
+    ]
 
     @classmethod
     def setUpTestData(cls):

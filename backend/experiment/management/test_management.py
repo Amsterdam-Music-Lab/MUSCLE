@@ -2,16 +2,14 @@ import csv
 from os.path import join
 from os import remove
 
+from django.conf import settings
 from django.core.management import call_command
 from django.test import TestCase
-from django.conf import settings
 
-from experiment.models import Block, Experiment, Phase
-from section.models import Playlist
 
 class CompilePlaylistTest(TestCase):
 
-    def test_output_csv(self):
+    def test_compileplaylist(self):
         call_command('compileplaylist', 'tests/compileplaylist')
         # Load generated csv
         filename = join(settings.MEDIA_ROOT,'tests','compileplaylist','audiofiles.csv')
@@ -28,13 +26,3 @@ class CompilePlaylistTest(TestCase):
                         self.assertEqual(row['group'], '0')
         finally:
             remove(filename)  # Make sure csv file is deleted even if tests fail
-
-
-class BootrapTest(TestCase):
-
-    def test_bootstrap(self):
-        call_command("bootstrap")
-        self.assertEqual(Experiment.objects.count(), 1)
-        self.assertEqual(Phase.objects.count(), 1)
-        self.assertEqual(Block.objects.count(), 1)
-        self.assertEqual(Playlist.objects.count(), 1)

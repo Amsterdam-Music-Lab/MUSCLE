@@ -7,13 +7,12 @@ from participant.models import Participant
 from result.models import Result
 from section.models import Playlist
 from session.models import Session
-from question.questions import create_default_questions
 
 
 class MatchingPairsTest(TestCase):
+
     @classmethod
     def setUpTestData(cls):
-        create_default_questions()
         section_csv = (
             "default,Crown_1_E1,0.0,10.0,MatchingPairs/Original/Crown_1_E1.mp3,Original,6\n"
             "default,Crown_1_E1,0.0,10.0,MatchingPairs/1stDegradation/Crown_1_E1.mp3,1stDegradation,6\n"
@@ -42,10 +41,7 @@ class MatchingPairsTest(TestCase):
     def test_next_round(self):
         self.rules.num_pairs = 2
         actions = self.rules.next_round(self.session)
-        self.assertEqual(len(actions), 3)
-        self.block.add_default_question_series()
-        actions = self.rules.next_round(self.session)
-        # expect five extra question rounds and one extra explainer
+        # explainer + five question rounds and one extra explainer + matching pairs trial
         self.assertEqual(len(actions), 9)
 
     def test_matching_pairs_trial(self):

@@ -7,9 +7,11 @@ from experiment.actions.utils import (
     final_action_with_optional_button,
     render_feedback_trivia,
 )
-from experiment.actions import Trial, Explainer, Step
+from experiment.actions.explainer import Explainer, Step
+from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay
-from experiment.actions.form import ChoiceQuestion, Form
+from experiment.actions.question import ButtonArrayQuestion
+from experiment.actions.trial import Trial
 
 from result.utils import prepare_result
 from section.models import Playlist
@@ -132,23 +134,21 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
             self.first_condition if condition["group"] == "0" else self.second_condition
         )
         key = "same_or_different"
-        question = ChoiceQuestion(
+        question = ButtonArrayQuestion(
             key=key,
-            question=_("Is the third rhythm the SAME or DIFFERENT?"),
+            text=_("Is the third rhythm the SAME or DIFFERENT?"),
             choices={
                 self.first_condition: self.first_condition_i18n,
                 self.second_condition: self.second_condition_i18n,
             },
-            view="BUTTON_ARRAY",
             result_id=prepare_result(
                 key,
                 session,
                 expected_response=expected_response,
                 scoring_rule="CORRECTNESS",
             ),
-            submits=True,
         )
-        form = Form([question])
+        form = Form([question], submit_label="")
         playback = Autoplay([section])
 
         return Trial(

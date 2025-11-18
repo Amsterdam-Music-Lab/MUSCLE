@@ -1,0 +1,81 @@
+# Questions for the Ten-Item Personality Inventory (TIPI)
+- model: question.question
+  pk: tipi_an
+  fields:
+    text: I see myself as critical and quarrelsome.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: REVERSE_LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: tipi_ap
+  fields:
+    text: I see myself as sympathetic and warm.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: tipi_cn
+  fields:
+    text: I see myself as disorganised and careless.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: REVERSE_LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: tipi_cp
+  fields:
+    text: I see myself as dependable and self-disciplined.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: tipi_en
+  fields:
+    text: I see myself as reserved and quiet.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: REVERSE_LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: tipi_ep
+  fields:
+    text: I see myself as extraverted and enthusiastic.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: tipi_nn
+  fields:
+    text: I see myself as calm and emotionally stable.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: REVERSE_LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: tipi_np
+  fields:
+    text: I see myself as anxious and easily upset.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: tipi_on
+  fields:
+    text: I see myself as conventional and uncreative.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: REVERSE_LIKERT
+    choices: LIKERT_AGREE_7
+- model: question.question
+  pk: tipi_op
+  fields:
+    text: I see myself as open to new experiences and complex.
+    explainer: ''
+    type: TextRangeQuestion
+    profile_scoring_rule: LIKERT
+    choices: LIKERT_AGREE_7

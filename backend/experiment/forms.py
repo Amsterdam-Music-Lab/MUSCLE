@@ -18,10 +18,9 @@ class BlockForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        choices = tuple()
-        for i in BLOCK_RULES:
-            choices += ((i, BLOCK_RULES[i].__name__),)
-        choices += (("", "---------"),)
+        choices = tuple(
+            (rules, BLOCK_RULES[rules].__name__) for rules in BLOCK_RULES
+        ) + (("", "---------"),)
         self.fields["rules"] = ChoiceField(choices=sorted(choices))
 
     def clean_playlists(self):
@@ -29,24 +28,20 @@ class BlockForm(ModelForm):
         if "rules" not in self.cleaned_data:
             return self.cleaned_data["playlists"]
 
-        # Validat the rules' playlist
+        # Validate the rules' playlist(s)
         rule_id = self.cleaned_data["rules"]
         cl = BLOCK_RULES[rule_id]
         rules = cl()
-
         playlists = self.cleaned_data["playlists"]
-
         if not playlists:
             return self.cleaned_data["playlists"]
-
-        playlist_errors = []
 
         # Validate playlists
         for playlist in playlists:
             errors = rules.validate_playlist(playlist)
-
-            for error in errors:
-                playlist_errors.append(f"Playlist [{playlist.name}]: {error}")
+            playlist_errors = [
+                f"Playlist [{playlist.name}]: {error}" for error in errors
+            ]
 
         if playlist_errors:
             self.add_error("playlists", playlist_errors)

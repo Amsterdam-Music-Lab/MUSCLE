@@ -3,12 +3,8 @@ from experiment.rules import BLOCK_RULES as EXPERIMENT_RULES
 
 
 def add_default_question_series(apps, schema_editor):
+    pass
 
-    Experiment = apps.get_model("experiment", "Experiment")
-
-    for experiment in Experiment.objects.all():
-        if EXPERIMENT_RULES.get(experiment.rules) and not experiment.questionseries_set.all():
-            experiment.add_default_question_series()
 
 
 class Migration(migrations.Migration):
