@@ -16,46 +16,49 @@ In an Experiment form, you can configure three different types of experiment:
 - an experiment in **dashboard mode**, with a single phase and multiple blocks, in which participants can choose the order in which they step through different blocks.
 
 ## Overview of the fields in the Experiment form
-The first field, `Slug`, is a unique slug for your new experiment (required) If you test locally, and put `someslug` in this field, the experiment will be available from `localhost:3000/someslug`. After that, you find a section relating to texts of the experiment, a section of phases and blocks (here, you can set whether or not the experiment will be shown in "dashboard mode"), optionally, questions tied to each block, a section of social media configurations, and a section for theme configuration ("ThemeConfig").
+The first field, `Slug`, is a unique slug for your new experiment (required) If you test locally, and put `someslug` in this field, the experiment will be available from `localhost:3000/someslug`. After that, you find various fields relating to texts of the experiment, a collection of fields for phases and blocks (here, you can set whether or not the experiment will be shown in "dashboard mode"), optionally, questions tied to each block, a section of social media configurations, and a collection of fields for theme configuration ("ThemeConfig").
 
 #### Experiment texts
-The next section, headed by tabs, are the experiment texts that may be shown about the experiment:
+The fields with tabs above them are translatable texts of the experiment. The tabs contain short codes for the languages set in the Django [settings](../backend/aml/base_settings.py) as `LANGUAGES`. This is set to English, Dutch, Portuguese and Simplified Chinese at the time of writing, but can be changed when you fork this repository.
 
-- Language of the content
-- Index: Priority of showing the content in this language (lower is higher priority)
+After clicking the tab for a given language, you can enter text for that language for the following fields:
 - Name of the experiment (only shown to participants in *dashboard mode*)
 - Description of the experiment (only shown to participants in *dashboard mode*)
-- Consent: a consent file to be shown to the user prior to the experiment
+- Consent: a consent file to be shown to the user prior to the experiment (file upload)
 - About content: background of the experiment (only shown to participants in *dashboard mode*)
 - Social media message: message with which participants can post their results to social media. The placeholders `{points}` and `{experiment_name}` will be filled out automatically when a participant clicks the button. Note that not all social media platforms support setting the message from a share button; Facebook for instance doesn't allow this. See `Social Media Config` below for more sharing options.
 - Disclaimer: a notice in the footer about who is behind the experiment (only shown to participants in *dashboard mode* if a `ThemeConfig` is linked)
 - Privacy: privacy notice in the footer about treatment of the data (only shown to participants in *dashboard mode* if a `ThemeConfig` is linked)
 
-Note that you need to *save* the experiment before seeing the changes to this section take effect. After that, if you click "+", you can add texts in another language. If you add a Dutch translation, a participant with browser setting stating preference for Dutch will get to see these Dutch texts. If the participant's preferred language is not available, the text with the lowest index will be shown as a fallback.
+Note that only setting `Slug` (bold face) is required before saving the experiment.
 
-Note that only setting `Slug` and `Name` (bold face) are required before saving the experiment. `Index` is also a required field, but comes with a default (0).
+![Slug and Texts](../assets/images/ExperimentForm1&2.jpg) # TODO
 
-![Slug and Texts](../assets/images/ExperimentForm1&2.jpg)
-
-#### Phases and blocks
+#### Phases
 Phases (required): a phase of your experiment, which may contain one or more blocks. Note that every experiment needs to have at least one phase with one block configured.
 
-![Empty Phase and Block](../assets/images/ExperimentPhaseBlockEmpty.png)
+Index (required, default=0) will control the order of the phase in the experiment in case there are multiple phases.
+
+![Empty Phase and Block](../assets/images/ExperimentPhaseBlockEmpty.png) # TODO
 
 If you select "dashboard", the phase will appear in *dashboard mode*, from which users can select which block to play. If "dashboard" is unchecked, the blocks will be presented in linear order to the participant. If you select "randomize", the blocks will be shuffled, either in the dashboard view, or the linear procedure.
 
-Within a phase, you have the option to add one or more **blocks**. Click "Add a new block". This will show you the following options:
+Within a phase, you have the option to add one or more **blocks**. Click "Add" under the header "Blocks" to add another block to the phase. This will open a pop-up with the following options:
 
-- Index: order in which block should appear in the phase (will be ignored when the phase's `randomize` checkbox is checked)
+#### Block form
+- Index: order in which block should appear in the phase (default=0, will be ignored when the phase's `randomize` checkbox is checked)
 - Slug: unique slug of the block
+The following two fields have tabs above them to allow entering texts in different languages:
+- Name: Name of the block (only shown in **dashboard mode**)
+- Description: Description of the block (only shown in **dashboard mode**)
+Other fields:
 - Rules: the ruleset for the block
 - Rounds (optional): how many rounds should be presented to the participant (*used in some, but not all rulesets!*)
 - Bonus points (optional): bonus points to be awarded to the participant under given conditions (*used by very few rulesets*)
 - Playlists (optional): select one or more playlists to be associated with the block (*note that some rulesets require a very specific format for the playlist, this will be checked when you save the experiment, and may generate warnings*)
 - ThemeConfig (optional): You can change background, fonts and logos used for the block here.
-- Block Texts: a name and description of the block in a given language, will only be shown in the dashboard view. `Name` is prefilled based on the Experiment name and the block slug. The languages of the `Block Texts` section correspond to the languages set for the experiment on top.
 
-![Configuring a Block](../assets/images/ExperimentBlock.png)
+![Configuring a Block](../assets/images/ExperimentBlock.png) # TODO
 
 #### Block questions (optional)
 Within each block, you also see the option to add **Question Series**. This can mainly be used to add default questions (configured in the Python rules file), and to add or remove a given set of questions from them. To create new questions, refer to the [next section](/06_Custom_questions/).

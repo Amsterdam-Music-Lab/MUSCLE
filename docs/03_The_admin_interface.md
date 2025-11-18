@@ -9,7 +9,7 @@ Log in:
 - username: admin
 - password: admin
 
-(This is set through the .env file. Obviously, these passwords are only suitable for local development!)
+(This is set through the .env file. Obviously, these credentials are only suitable for local development!)
 
 You can see an overview of different Django apps:
 <img width="656" alt="adminList" src="../assets/images/AdminInterface.png">

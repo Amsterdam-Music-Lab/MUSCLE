@@ -4,25 +4,25 @@ You can add questions to the MUSCLE infrastructure through the admin interface.
 In the admin overview, you can see the question app with three models:
 <img width="656" alt="The Question App" src="../assets/images/QuestionApp.png">
 
-## Question Groups
-Question Groups are sets of questions which are predefined, such as "Demographics" or question sets from the Goldsmith MSI questionnaire. We recommend not editing these, but you can add your own Question Group if you want to reuse the same set of questions in multiple experiments.
-<img width="500" alt="Question Group" src="../assets/images/QuestionGroup.png">
+## Choice Lists
+Choice lists are collections of answer options for multiple choice questions, for example statements of preference for a Likert scale. The Choice Lists that are available are set through the `question.fixtures.choice_lists.yml` file in `yaml` format. These choice lists cannot be edited in the admin interface. You can add custom choice lists through the admin interface, however.
+<img width="500" alt="Choice List" src="../assets/images/ChoiceList.png"> # TODO
 
-## Question Series
-Question Series are sets of questions you can attach to a given block in your experiment. If you click "Add", you will see the following form:
-<img alt="Question Series" src="../assets/images/QuestionList.png">
+## Question Lists
+Question Lists are sets of questions you can attach to a given block in your experiment. If you click "Add", you will see the following form:
+<img alt="Question List" src="../assets/images/QuestionList.png"> # TODO
 
-You need to give the Question Series a descriptive name, and choose the block with which it is associated (important: the block will only display questions if its ruleset has a method that presents these questions to the participant), and an index, used for handling order if you have multiple `QuestionList` attached to a given block.
+You need to give the Question List a descriptive name, and choose the block with which it is associated (important: the block will only display questions if its ruleset has a method that presents these questions to the participant), and an index, used for handling order if you have multiple `QuestionList`s attached to a given block.
 
-You can also choose whether or not the questions in the Question Series should be presented in randomized order.
+You can also choose whether or not the questions in the Question List should be presented in randomized order.
 
-To add questions to the Question Series, you can either select from a list of questions, or add all questions from a Question Group. You can then remove or add other questions as you wish.
+To add questions to the Question List, you can either select from a list of questions, or add all questions from a question bank, defined in the `question.fixtures` directory in `yaml` format. After creating a Question Link from a bank, you can remove questions or add other questions as you wish without affecting the original question bank.
 
 ## Questions
-Questions are the actual question objects. Many questions are already configured. If you click "Add", you will see the following form:
+Questions are the actual question objects. Many questions are already configured through Python fixtures, and cannot be edited through the admin interface. You can duplicate preconfigured questions by selecting a question and select "Duplicate", or you can click "Add" to create a new question from scratch in the following form:
 <img alt="Question" src="../assets/images/Question.png">
 
-On the top, you can choose the language(s) in which you wish to enter the question. The languages that are shown can be configured through the `MODELTRANSLATION_LANGUAGES` settings in Django. Note that it is not necessary to provide translations, but that a question will be much more reusable if it has translations to multiple languages.
+On the top, you can choose the language(s) in which you wish to enter the question. The languages that are shown can be configured through the `LANGUAGES` settings in Django. Note that it is not necessary to provide translations, but that a question will be much more reusable if it has translations to multiple languages.
 
 Enter a descriptive question key, e.g., `favorite_food_open_question`. Note that the key can only contain letters, numbers, and underscores.
 
@@ -30,31 +30,25 @@ The Question is the actual question text that will be asked to the participant. 
 
 Indicate the *Type* of question, which influences the widget participants will see:
 
-- AutoCompleteQuestion will show a dropdown which will autocomplete if a participant starts typing
+- AutoComplete will show a dropdown which will autocomplete if a participant starts typing
 
-- BooleanQuestion will show yes/no buttons
+- ButtonArray will show answer options as a row of buttons (note that this widget mostly makes sense for few and short answers, as in the "Boolean" Choice List)
 
-- ChoiceQuestion will show a select menu (can be further configured as radio / dropdown etc.)
+- Checkmarks will show a list of options with checkmarks (multiple can be selected, specify if more than one option is required in "Min values")
 
-- LikertQuestion will show a slider with different answer options
+- Dropdown will show a dropdown menu
 
-- LikertQuestionIcon will show icons instead of text for different answer options
+- Icon Range will show a range slider with icons as answer options
 
-- NumberQuestion will show a number selector
+- Number will show a number selector (specify minimum and maximum through `Min value` and `Max value` fields)
 
-- TextQuestion will show a text field - use this for open questions
+- Range will show a range slider with numbers (specify minimum and maximum through `Min value` and `Max value` fields)
+
+- TextRange will show a slider with different answer options
+
+- Text will show a text field - use this for open questions (secify maximum length through `Max length` field)
+
+For all question types which present choices to the participant, you can then choose one of the preset choice lists, or add a new one by clicking the `+` button.
 
 Finally, you can indicate whether your question can be skipped by the participant.
 
-Clicking "Save and continue editing" on all questions but `TextQuestion` will bring up another menu:
-<img alt="adminList" src="../assets/images/QuestionChoice.png">
-
-You can select different widgets:
-- BUTTON_ARRAY: a horizontal array of buttons with the answer options (one answer possible)
-- CHECKBOXES: a vertical array of checkboxes (multiple answers possible)
-- DROPDOWN: a dropdown menu (one answer possible)
-- RADIOS: a vertical array of radio buttons (one answer possible)
-
-For CHECKBOXES, you also need to indicate how many answers need to be minimally checked before the participant can click the "submit" button
-
-Finally, you can add Choices, which are again a combination of a descriptive key (consisting of letters, numbers, and underscores), and a translatable text. The index controls the order in which choices will appear.

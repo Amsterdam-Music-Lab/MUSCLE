@@ -8,5 +8,6 @@ RUN uv sync --locked
 COPY mkdocs.yml .
 RUN mkdir docs
 COPY *.md ./docs
+COPY ./backend ./backend
 EXPOSE 8080
 CMD uv run mkdocs serve
