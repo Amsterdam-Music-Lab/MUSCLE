@@ -1,5 +1,9 @@
 from typing import Optional, TypedDict
 
+from theme.models import ThemeConfig
+
+valid_colors = ThemeConfig().valid_colors()
+
 class ButtonAction(TypedDict):
     label: str
     color: str
@@ -17,8 +21,13 @@ class Button(object):
 
     def __init__(self, label: str, color: str = "colorPrimary", link: str = ''):
         self.label = label
-        self.color = color
+        self.color = self.validate_color(color)
         self.link = link
 
     def action(self) -> ButtonAction:
         return {'label': self.label, 'color': self.color, 'link': self.link or None}
+
+    def validate_color(self, color: str):
+        if not color in valid_colors:
+            raise ValueError(f"{color} is not a valid color value")
+        return color

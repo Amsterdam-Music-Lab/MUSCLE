@@ -9,3 +9,7 @@ class ButtonTest(TestCase):
         self.assertTrue(button)
         action = button.action()
         self.assertEqual(action.get('color'), 'colorPrimary')
+
+    def test_button_raises_exception_invalid_color(self):
+        with self.assertRaises(ValueError):
+            Button('some label', 'colorInvalid')

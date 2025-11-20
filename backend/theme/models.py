@@ -1,4 +1,12 @@
+from re import compile, sub
+
 from django.db import models
+
+
+def camelize(input_str: str) -> str:
+    """convert a snake_case to camelCase string"""
+    snake_case_pattern = compile(r'_([a-z])')
+    return sub(snake_case_pattern, lambda match: match.group(1).upper(), input_str)
 
 
 class ThemeConfig(models.Model):
@@ -42,6 +50,12 @@ class ThemeConfig(models.Model):
 
     def __str__(self):
         return self.name
+
+    def valid_colors(self):
+        return [
+            camelize(color)
+            for color in filter(lambda x: x.startswith('color'), dir(self))
+        ]
 
 
 class SponsorImage(models.Model):
