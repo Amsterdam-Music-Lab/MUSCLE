@@ -4,6 +4,7 @@ from django.utils.translation import gettext as _
 
 from .base import BaseRules
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
@@ -46,10 +47,12 @@ class Speech2Song(BaseRules):
             instruction=_("This is an experiment about an auditory illusion."),
             steps=[
                 Step(
-                    description=_("Please wear headphones (earphones) during the experiment to maximise the experience of the illusion, if possible.")
+                    description=_(
+                        "Please wear headphones (earphones) during the experiment to maximise the experience of the illusion, if possible."
+                    )
                 )
             ],
-            button_label=_('Start')
+            button=Button(_('Start')),
         )
 
     def next_round(self, session: Session):
@@ -69,18 +72,21 @@ class Speech2Song(BaseRules):
             elif session.json_data.get("questionnaire"):
                 explainer = Explainer(
                     instruction=_(
-                        'Thank you for answering these questions about your background!'),
+                        'Thank you for answering these questions about your background!'
+                    ),
                     steps=[
                         Step(
                             description=_(
-                                'Now you will hear a sound repeated multiple times.')
+                                'Now you will hear a sound repeated multiple times.'
+                            )
                         ),
                         Step(
                             description=_(
-                                'Please listen to the following segment carefully, if possible with headphones.')
+                                'Please listen to the following segment carefully, if possible with headphones.'
+                            )
                         ),
                     ],
-                    button_label=_('OK')
+                    button=Button(_('OK')),
                 )
                 return [
                     explainer,
@@ -93,19 +99,27 @@ class Speech2Song(BaseRules):
                 ]
         elif rounds_passed == 1:
             e1 = Explainer(
-                instruction=_('Previous studies have shown that many people perceive the segment you just heard as song-like after repetition, but it is no problem if you do not share that perception because there is a wide range of individual differences.'),
+                instruction=_(
+                    'Previous studies have shown that many people perceive the segment you just heard as song-like after repetition, but it is no problem if you do not share that perception because there is a wide range of individual differences.'
+                ),
                 steps=[],
-                button_label=_('Continue')
+                button=Button(_('Continue')),
             )
             e2 = Explainer(
                 instruction=_('Part 1'),
                 steps=[
                     Step(
-                        description=_('In the first part of the experiment, you will be presented with speech segments like the one just now in different languages which you may or may not speak.')),
+                        description=_(
+                            'In the first part of the experiment, you will be presented with speech segments like the one just now in different languages which you may or may not speak.'
+                        )
+                    ),
                     Step(
-                        description=_('Your task is to rate each segment on a scale from 1 to 5.'))
+                        description=_(
+                            'Your task is to rate each segment on a scale from 1 to 5.'
+                        )
+                    ),
                 ],
-                button_label=_('Continue')
+                button=Button(_('Continue')),
             )
             actions.extend([e1, e2])
             group_id = blocks[0]
@@ -122,16 +136,21 @@ class Speech2Song(BaseRules):
                 steps=[
                     Step(
                         description=_(
-                            'In the following part of the experiment, you will be presented with segments of environmental sounds as opposed to speech sounds.')
+                            'In the following part of the experiment, you will be presented with segments of environmental sounds as opposed to speech sounds.'
+                        )
                     ),
                     Step(
-                        description=_('Environmental sounds are sounds that are not speech nor music.')
+                        description=_(
+                            'Environmental sounds are sounds that are not speech nor music.'
+                        )
                     ),
                     Step(
-                        description=_('Like the speech segments, your task is to rate each segment on a scale from 1 to 5.')
-                    )
+                        description=_(
+                            'Like the speech segments, your task is to rate each segment on a scale from 1 to 5.'
+                        )
+                    ),
                 ],
-                button_label=_('Continue')
+                button=Button(_('Continue')),
             )
             actions.append(e3)
             group_id = 4

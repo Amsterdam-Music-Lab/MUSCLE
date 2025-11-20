@@ -1,6 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from .base import BaseRules
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay
@@ -21,16 +22,21 @@ class RhythmBatteryIntro(BaseRules):
         actions = []
         if round_number == 0:
             explainer = Explainer(
-                instruction=_(
-                    'General listening instructions:'),
+                instruction=_('General listening instructions:'),
                 steps=[
-                    Step(_(
-                        "To make sure that you can do the experiment as well as possible, please do it a quiet room with a stable internet connection."),
+                    Step(
+                        _(
+                            "To make sure that you can do the experiment as well as possible, please do it a quiet room with a stable internet connection."
+                        ),
                     ),
-                    Step(_("Please use headphones, and turn off sound notifications from other devices and applications (e.g., e-mail, phone messages)."),
-                         )],
+                    Step(
+                        _(
+                            "Please use headphones, and turn off sound notifications from other devices and applications (e.g., e-mail, phone messages)."
+                        ),
+                    ),
+                ],
                 step_numbers=True,
-                button_label=_('Ok')
+                button=Button(_('Ok')),
             )
             actions.append(self.get_intro_explainer())
             actions.append(explainer)
@@ -50,7 +56,7 @@ class RhythmBatteryIntro(BaseRules):
                         style=[ColorScheme.BOOLEAN],
                     )
                 ],
-                submit_label="",
+                submit_button=None,
             )
         elif round_number == 1:
             key = 'internet_connection'
@@ -122,20 +128,29 @@ class RhythmBatteryIntro(BaseRules):
     def get_intro_explainer(self):
         return Explainer(
             instruction=_(
-                "You are about to take part in an experiment about rhythm perception."),
+                "You are about to take part in an experiment about rhythm perception."
+            ),
             steps=[
-                Step(_(
-                    "We want to find out what the best way is to test whether someone has a good sense of rhythm!"),
+                Step(
+                    _(
+                        "We want to find out what the best way is to test whether someone has a good sense of rhythm!"
+                    ),
                 ),
-                Step(_(
-                    "You will be doing many little tasks that have something to do with rhythm."),
+                Step(
+                    _(
+                        "You will be doing many little tasks that have something to do with rhythm."
+                    ),
                 ),
-                Step(_(
-                    "You will get a short explanation and a practice trial for each little task."),
+                Step(
+                    _(
+                        "You will get a short explanation and a practice trial for each little task."
+                    ),
                 ),
-                Step(_(
-                    "You can get reimbursed for completing the entire experiment! Either by earning 6 euros, or by getting 1 research credit (for psychology students at UvA only). You will get instructions for how to get paid or how to get your credit at the end of the experiment."),
-                )
+                Step(
+                    _(
+                        "You can get reimbursed for completing the entire experiment! Either by earning 6 euros, or by getting 1 research credit (for psychology students at UvA only). You will get instructions for how to get paid or how to get your credit at the end of the experiment."
+                    ),
+                ),
             ],
-            button_label=_("Continue")
+            button=Button(_("Continue")),
         )

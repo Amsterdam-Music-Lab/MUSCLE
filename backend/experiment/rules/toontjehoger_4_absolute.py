@@ -5,6 +5,7 @@ import random
 
 from django.template.loader import render_to_string
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.info import Info
@@ -38,13 +39,17 @@ class ToontjeHoger4Absolute(BaseRules):
             instruction="Absoluut gehoor",
             steps=[
                 Step(
-                    "Je gaat zo luisteren naar fragmenten muziek die je misschien herkent als de intro van een tv-programma of serie."),
+                    "Je gaat zo luisteren naar fragmenten muziek die je misschien herkent als de intro van een tv-programma of serie."
+                ),
                 Step(
-                    "Van ieder fragment kan je twee versies luisteren. Eén hiervan is het origineel. De andere hebben we een beetje hoger of lager gemaakt."),
-                Step("Kan jij horen welke van de twee versies precies zo hoog of laag is als je 'm kent? Welke is het origineel?"),
+                    "Van ieder fragment kan je twee versies luisteren. Eén hiervan is het origineel. De andere hebben we een beetje hoger of lager gemaakt."
+                ),
+                Step(
+                    "Kan jij horen welke van de twee versies precies zo hoog of laag is als je 'm kent? Welke is het origineel?"
+                ),
             ],
             step_numbers=True,
-            button_label="Start"
+            button=Button("Start"),
         )
 
     def next_round(self, session):
@@ -118,7 +123,7 @@ class ToontjeHoger4Absolute(BaseRules):
             ),
             style=[ColorScheme.NEUTRAL_INVERTED],
         )
-        form = Form([question], submit_label="")
+        form = Form([question], submit_button=None)
 
         trial = Trial(
             playback=playback,
@@ -182,8 +187,10 @@ class ToontjeHoger4Absolute(BaseRules):
         info = Info(
             body=body,
             heading="Absoluut gehoor",
-            button_label="Terug naar ToontjeHoger",
-            button_link=get_current_experiment_url(session)
+            button=Button(
+                "Terug naar ToontjeHoger",
+                link=get_current_experiment_url(session),
+            ),
         )
 
         return [*score, final, info]

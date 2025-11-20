@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from .base import BaseRules
 from .practice import PracticeMixin
 from section.models import Section
+from experiment.actions.button import Button
 from experiment.actions.playback import Autoplay
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.form import Form
@@ -81,11 +82,7 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
         else:
             instruction = _(
                 'The second interval was %(correct_response)s %(preposition)s the first interval. Your answer was INCORRECT.') % {'correct_response': correct_response, 'preposition': preposition}
-        return Explainer(
-            instruction=instruction,
-            steps=[],
-            button_label=button_label
-        )
+        return Explainer(instruction=instruction, steps=[], button=Button(button_label))
 
     def get_next_trial(self, session: Session) -> Trial:
         """
@@ -122,7 +119,7 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
         )
 
         playback = Autoplay([section])
-        form = Form([question], submit_label="")
+        form = Form([question], submit_button=None)
         view = Trial(
             playback=playback,
             feedback_form=form,
@@ -140,16 +137,25 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
             instruction=self.get_introduction(),
             steps=[
                 Step(self.get_task_explanation()),
-                Step(_(
-                    'During the experiment it will become more difficult to hear the difference.')),
-                Step(_(
-                    "Try to answer as accurately as possible, even if you're uncertain.")),
+                Step(
+                    _(
+                        'During the experiment it will become more difficult to hear the difference.'
+                    )
+                ),
+                Step(
+                    _(
+                        "Try to answer as accurately as possible, even if you're uncertain."
+                    )
+                ),
                 Step(_("Remember: try not to move or tap along with the sounds")),
-                Step(_(
-                    'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
+                Step(
+                    _(
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'
+                    )
+                ),
             ],
-            button_label='Ok',
-            step_numbers=True
+            button=Button('Ok'),
+            step_numbers=True,
         )
 
     def get_task_explanation(self):

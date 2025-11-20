@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from django.conf import settings
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
@@ -128,29 +129,45 @@ class Huang2022(Hooked):
                     self.plan_sections(session)
                     # Show explainers and go to SongSync
                     explainer = Explainer(
-                    instruction=_("How to Play"),
-                    steps=[
-                        Step(_(
-                            "Do you recognise the song? Try to sing along. The faster you recognise songs, the more points you can earn.")),
-                        Step(_(
-                            "Do you really know the song? Keep singing or imagining the music while the sound is muted. The music is still playing: you just can’t hear it!")),
-                        Step(_(
-                            "Was the music in the right place when the sound came back? Or did we jump to a different spot during the silence?"))
-                    ],
-                    step_numbers=True,
-                    button_label=_("Let's go!"))
-                    explainer_devices = Explainer(
-                        instruction=_("You can use your smartphone, computer or tablet to participate in this experiment. Please choose the best network in your area to participate in the experiment, such as wireless network (WIFI), mobile data network signal (4G or above) or wired network. If the network is poor, it may cause the music to fail to load or the experiment may fail to run properly. You can access the experiment page through the following channels:"),
+                        instruction=_("How to Play"),
                         steps=[
-                            Step(_(
-                                "Directly click the link on WeChat (smart phone or PC version, or WeChat Web)"),
+                            Step(
+                                _(
+                                    "Do you recognise the song? Try to sing along. The faster you recognise songs, the more points you can earn."
+                                )
                             ),
-                            Step(_(
-                                "If the link to load the experiment page through the WeChat app on your cell phone fails, you can copy and paste the link in the browser of your cell phone or computer to participate in the experiment. You can use any of the currently available browsers, such as Safari, Firefox, 360, Google Chrome, Quark, etc."),
-                            )
+                            Step(
+                                _(
+                                    "Do you really know the song? Keep singing or imagining the music while the sound is muted. The music is still playing: you just can’t hear it!"
+                                )
+                            ),
+                            Step(
+                                _(
+                                    "Was the music in the right place when the sound came back? Or did we jump to a different spot during the silence?"
+                                )
+                            ),
                         ],
                         step_numbers=True,
-                        button_label=_("Continue")
+                        button=Button(_("Let's go!")),
+                    )
+                    explainer_devices = Explainer(
+                        instruction=_(
+                            "You can use your smartphone, computer or tablet to participate in this experiment. Please choose the best network in your area to participate in the experiment, such as wireless network (WIFI), mobile data network signal (4G or above) or wired network. If the network is poor, it may cause the music to fail to load or the experiment may fail to run properly. You can access the experiment page through the following channels:"
+                        ),
+                        steps=[
+                            Step(
+                                _(
+                                    "Directly click the link on WeChat (smart phone or PC version, or WeChat Web)"
+                                ),
+                            ),
+                            Step(
+                                _(
+                                    "If the link to load the experiment page through the WeChat app on your cell phone fails, you can copy and paste the link in the browser of your cell phone or computer to participate in the experiment. You can use any of the currently available browsers, such as Safari, Firefox, 360, Google Chrome, Quark, etc."
+                                ),
+                            ),
+                        ],
+                        step_numbers=True,
+                        button=Button(_("Continue")),
                     )
                     playlist = PlaylistSelection(session.block.playlists.all())
                     actions.extend([explainer, explainer_devices, playlist, *self.next_song_sync_action(session, round_number)])
@@ -179,12 +196,20 @@ class Huang2022(Hooked):
                     session, n_questions=None
                 )
                 if questionnaire:
-                    actions.extend([Explainer(
-                        instruction=_("Please answer some questions \
-                        on your musical (Goldsmiths-MSI) and demographic background"),
-                        steps=[],
-                        step_numbers=True,
-                        button_label=_("Let's go!")), *questionnaire])
+                    actions.extend(
+                        [
+                            Explainer(
+                                instruction=_(
+                                    "Please answer some questions \
+                        on your musical (Goldsmiths-MSI) and demographic background"
+                                ),
+                                steps=[],
+                                step_numbers=True,
+                                button=Button(_("Let's go!")),
+                            ),
+                            *questionnaire,
+                        ]
+                    )
                 else:
                     return [self.finalize(session)]
         return actions

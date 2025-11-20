@@ -3,6 +3,7 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
@@ -11,7 +12,6 @@ from experiment.actions.playback import Autoplay
 from experiment.actions.question import ButtonArrayQuestion, IconRangeQuestion
 from experiment.actions.redirect import Redirect
 from experiment.actions.trial import Trial
-from question.models import ChoiceList
 from result.utils import prepare_result
 from result.models import Result
 from section.models import Section
@@ -58,7 +58,7 @@ class MusicalPreferences(BaseRules):
         return Explainer(
             instruction=_("Welcome to the Musical Preferences experiment!"),
             steps=[Step(_("Please start by checking your connection quality."))],
-            button_label=_("OK"),
+            button=Button(_("OK")),
         )
 
     def next_round(self, session: Session):
@@ -83,20 +83,36 @@ class MusicalPreferences(BaseRules):
                                 ),
                                 Step(_("Have fun!")),
                             ],
-                            button_label=_("Let's go!"),
+                            button=Button(_("Let's go!")),
                         )
                         return [explainer, *question_trials]
                     else:
                         explainer = Explainer(
                             instruction=_("How to play"),
                             steps=[
-                                Step(_("You will hear 64 music clips and have to answer two questions for each clip.")),
-                                Step(_("It will take 20-30 minutes to complete the whole experiment.")),
-                                Step(_("Either wear headphones or use your device's speakers.")),
-                                Step(_("Your final results will be displayed at the end.")),
+                                Step(
+                                    _(
+                                        "You will hear 64 music clips and have to answer two questions for each clip."
+                                    )
+                                ),
+                                Step(
+                                    _(
+                                        "It will take 20-30 minutes to complete the whole experiment."
+                                    )
+                                ),
+                                Step(
+                                    _(
+                                        "Either wear headphones or use your device's speakers."
+                                    )
+                                ),
+                                Step(
+                                    _(
+                                        "Your final results will be displayed at the end."
+                                    )
+                                ),
                                 Step(_("Have fun!")),
                             ],
-                            button_label=_("Start"),
+                            button=Button(_("Start")),
                         )
                         actions = [explainer]
                 else:
@@ -114,7 +130,7 @@ class MusicalPreferences(BaseRules):
                                     style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
                                 )
                             ],
-                            submit_label="",
+                            submit_button=None,
                         )
                         return Trial(
                             playback=playback,

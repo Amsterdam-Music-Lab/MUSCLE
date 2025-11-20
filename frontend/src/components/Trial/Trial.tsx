@@ -32,7 +32,6 @@ const Trial = (props: TrialProps) => {
         config,
         onNext,
         onResult,
-        theme,
     } = props;
 
     // Main component state
@@ -172,8 +171,8 @@ const Trial = (props: TrialProps) => {
                 <FeedbackForm
                     formActive={formActive}
                     form={feedback_form.form}
-                    buttonLabel={feedback_form.submit_label}
-                    skipLabel={feedback_form.skip_label}
+                    submitButton={feedback_form.submit_button}
+                    skipButton={feedback_form.skip_button}
                     isSkippable={feedback_form.is_skippable}
                     submitResult={makeResult}
                 />
@@ -181,9 +180,8 @@ const Trial = (props: TrialProps) => {
             {preloadReady && !feedback_form && config.show_continue_button && (
                 <div className="text-center">
                     <Button
-                        title={config.continue_label}
+                        {...continueButton}
                         className={"anim anim-fade-in anim-speed-500"}
-                        buttonColor={theme.colorPrimary}
                         onClick={onNext}
                         disabled={!formActive}
                     />

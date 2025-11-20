@@ -5,6 +5,7 @@ import re
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.playback import PlayButton
 from experiment.actions.final import Final
@@ -65,12 +66,18 @@ class ToontjeHoger3Plink(BaseRules):
         return Explainer(
             instruction="Muziekherkenning",
             steps=[
-                Step("Je krijgt {} zeer korte muziekfragmenten te horen.".format(n_rounds)),
+                Step(
+                    "Je krijgt {} zeer korte muziekfragmenten te horen.".format(
+                        n_rounds
+                    )
+                ),
                 Step("Ken je het nummer? Noem de juiste artiest en titel!"),
-                Step("Weet je het niet? Beantwoord dan extra vragen over de tijdsperiode en emotie van het nummer."),
+                Step(
+                    "Weet je het niet? Beantwoord dan extra vragen over de tijdsperiode en emotie van het nummer."
+                ),
             ],
             step_numbers=True,
-            button_label="Start",
+            button=Button("Start"),
         )
 
     def next_round(self, session: Session):
@@ -185,7 +192,10 @@ class ToontjeHoger3Plink(BaseRules):
             Trial(
                 playback=PlayButton(sections=[section]),
                 feedback_form=Form(
-                    [question1], is_skippable=True, skip_label="Ik weet het niet", submit_label="Volgende"
+                    [question1],
+                    is_skippable=True,
+                    skip_label="Ik weet het niet",
+                    submit_button=Button("Volgende"),
                 ),
                 config={"break_round_on": {"NOT": [""]}},
             )
@@ -198,9 +208,11 @@ class ToontjeHoger3Plink(BaseRules):
                 instruction="Tussenronde",
                 steps=[
                     Step("Jammer dat je de artiest en titel van dit nummer niet weet!"),
-                    Step("Verdien extra punten door twee extra vragen over het nummer te beantwoorden."),
+                    Step(
+                        "Verdien extra punten door twee extra vragen over het nummer te beantwoorden."
+                    ),
                 ],
-                button_label="Start",
+                button=Button("Start"),
             )
             plink_trials.append(extra_questions_intro)
 
@@ -292,8 +304,10 @@ class ToontjeHoger3Plink(BaseRules):
         info = Info(
             body=body,
             heading="Muziekherkenning",
-            button_label="Terug naar ToontjeHoger",
-            button_link=get_current_experiment_url(session),
+            button=Button(
+                "Terug naar ToontjeHoger",
+                link=get_current_experiment_url(session),
+            ),
         )
 
         return [score, final, info]

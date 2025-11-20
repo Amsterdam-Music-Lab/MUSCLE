@@ -1,6 +1,7 @@
 import logging
 from django.utils.translation import gettext_lazy as _
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.utils import render_feedback_trivia
 from .duration_discrimination import DurationDiscrimination
@@ -35,11 +36,7 @@ class Anisochrony(DurationDiscrimination):
         else:
             instruction = _(
                     'The tones were {}. Your answer was INCORRECT.').format(correct_response)
-        return Explainer(
-            instruction=instruction,
-            steps=[],
-            button_label=button_label
-        )
+        return Explainer(instruction=instruction, steps=[], button=Button(button_label))
 
     def get_intro_explanainer(self):
         return Explainer(
@@ -67,7 +64,7 @@ class Anisochrony(DurationDiscrimination):
                     )
                 ),
             ],
-            button_label=_("Ok"),
+            button=Button(_("Ok")),
         )
 
     def get_final_text(self, difference):

@@ -1,7 +1,9 @@
 import logging
 from django.template.loader import render_to_string
 from os.path import join
+
 from section.models import Playlist
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
@@ -58,7 +60,7 @@ class ToontjeHoger1Mozart(BaseRules):
                 Step("Lukt het om het juiste antwoord te vinden?"),
             ],
             step_numbers=True,
-            button_label="Start",
+            button=Button("Start"),
         )
 
         if rounds_passed == 0:
@@ -113,7 +115,7 @@ class ToontjeHoger1Mozart(BaseRules):
         info = Info(
             body=body,
             heading=heading,
-            button_label="Volgende",
+            button=Button("Volgende"),
         )
         return [info]
 
@@ -173,7 +175,7 @@ class ToontjeHoger1Mozart(BaseRules):
             ),
             style=[ColorScheme.TOONTJEHOGER],
         )
-        form = Form([question], submit_label="")
+        form = Form([question], submit_button=None)
 
         image_trial = Trial(
             html=HTML(body='<img src="{}" style="max-height:326px;max-width: 100%;"/>'.format(image_url)),
@@ -192,7 +194,7 @@ class ToontjeHoger1Mozart(BaseRules):
                 Step("Lukt het nu om de juiste te kiezen?"),
             ],
             step_numbers=True,
-            button_label="Start",
+            button=Button("Start"),
         )
 
         return [explainer]
@@ -230,8 +232,10 @@ class ToontjeHoger1Mozart(BaseRules):
         info = Info(
             body=body,
             heading="Het Mozart effect",
-            button_label="Terug naar ToontjeHoger",
-            button_link=get_current_experiment_url(session),
+            button=Button(
+                "Terug naar ToontjeHoger",
+                link=get_current_experiment_url(session),
+            ),
         )
 
         return [*answer_explainer, *score, final, info]

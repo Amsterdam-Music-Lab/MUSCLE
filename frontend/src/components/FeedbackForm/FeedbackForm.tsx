@@ -2,14 +2,14 @@ import { useState } from "react";
 
 import Question from "../Question/Question";
 import Button from "../Button/Button";
+import IButton from "@/types/Button";
 import IQuestion from "@/types/Question";
-import useBoundStore from "@/util/stores";
 
 interface FeedbackFormProps {
     formActive: boolean;
     form: IQuestion[];
-    buttonLabel: string;
-    skipLabel: string;
+    submitButton: IButton;
+    skipButton: IButton;
     isSkippable: boolean;
     submitResult: () => void;
 }
@@ -18,16 +18,14 @@ interface FeedbackFormProps {
 const FeedbackForm = ({
     formActive,
     form,
-    buttonLabel,
-    skipLabel,
-    isSkippable,
+    submitButton,
+    skipButton,
     submitResult,
 }: FeedbackFormProps) => {
     const showSubmitButtons =
-        form.filter((formElement) => formElement.submits).length === 0;
+        form.filter((formElement) => formElement.submits).length === 0 && submitButton;
 
     const [formValid, setFormValid] = useState(false);
-    const theme = useBoundStore((state) => state.theme);
 
     const onChange = (value: string | number | boolean, question_index: number) => {
         form[question_index].value = value;
@@ -69,18 +67,19 @@ const FeedbackForm = ({
                 {showSubmitButtons && (
 
                     <div className="row justify-content-around">
-                        {isSkippable && (
+                        {skipButton && (
                             // skip button
                             <Button
+                                {...skipButton}
                                 onClick={() => {
                                     submitResult();
                                 }}
                                 className={"=col-4 align-self-start"
                                 }
-                                title={skipLabel}
-                                buttonColor={theme?.colorGrey!}
+                               
                             />)}
                         <Button
+                            {...submitButton}
                             onClick={() => {
                                 submitResult();
                             }}
@@ -88,8 +87,6 @@ const FeedbackForm = ({
                                 "submit col-4"
                             }
                             disabled={!formValid}
-                            buttonColor={theme?.colorPrimary!}
-                            title={buttonLabel}
                         />
 
                     </div>

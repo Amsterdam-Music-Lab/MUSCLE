@@ -3,6 +3,7 @@ from os.path import join
 
 from django.template.loader import render_to_string
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.playback import PlayButton
 from experiment.actions.final import Final
@@ -39,13 +40,17 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         return Explainer(
             instruction="Muziekherkenning",
             steps=[
-                Step("Je hoort zo een heel kort stukje van {} liedjes.".format(n_rounds)),
-                Step("Herken je de liedjes? Kies dan steeds de juiste artiest en titel!"),
+                Step(
+                    "Je hoort zo een heel kort stukje van {} liedjes.".format(n_rounds)
+                ),
+                Step(
+                    "Herken je de liedjes? Kies dan steeds de juiste artiest en titel!"
+                ),
                 Step("Weet je het niet zeker? Doe dan maar een gok."),
                 Step("Herken jij er meer dan 3?"),
             ],
             step_numbers=True,
-            button_label="Start",
+            button=Button("Start"),
         )
 
     def get_last_result(self, session):
@@ -93,7 +98,10 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
             result_id=prepare_result("plink", session, section=section, expected_response=expected_response),
         )
         next_round.append(
-            Trial(playback=PlayButton(sections=[section]), feedback_form=Form([question1], submit_label="Volgende"))
+            Trial(
+                playback=PlayButton(sections=[section]),
+                feedback_form=Form([question1], submit_button=Button("Volgende")),
+            )
         )
         return next_round
 
@@ -136,8 +144,9 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         info = Info(
             body=body,
             heading="Muziekherkenning",
-            button_label="Terug naar ToontjeHogerKids",
-            button_link=get_current_experiment_url(session),
+            button=Button(
+                "Terug naar ToontjeHogerKids", link=get_current_experiment_url(session)
+            ),
         )
 
         return [score, final, info]

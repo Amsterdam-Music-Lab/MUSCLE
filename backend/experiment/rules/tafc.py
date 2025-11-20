@@ -33,6 +33,7 @@ Setup block data in the admin panel
 from django.db.models import Avg
 
 from .base import BaseRules
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer
 from experiment.actions.final import Final
 from experiment.actions.playback import PlayButton
@@ -53,7 +54,7 @@ class TwoAlternativeForced(BaseRules):
         return Explainer(
             instruction="This is a listening experiment in which you have to respond to short sound sequences",
             steps=[],
-            button_label='Ok'
+            button=Button('Ok'),
         )
 
     def next_round(self, session):
@@ -119,7 +120,7 @@ class TwoAlternativeForced(BaseRules):
             style=button_style,
         )
 
-        feedback_form = Form([question], submit_label="")
+        feedback_form = Form([question], submit_button=None)
 
         trial = Trial(
             playback=playback,
@@ -137,10 +138,8 @@ class TwoAlternativeForced(BaseRules):
 
         instruction = 'Your response was CORRECT' if session.last_result().given_response == session.last_result().section.tag else 'Your response was INCORRECT'
         button_label='Next fragment' if not session.rounds_complete() else 'Show final score'
-        feedback =  Explainer(
-            instruction=instruction,
-            steps=[],
-            button_label=button_label
+        feedback = Explainer(
+            instruction=instruction, steps=[], button=Button(button_label)
         )
 
         return feedback

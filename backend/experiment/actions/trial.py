@@ -2,11 +2,12 @@ from django.utils.translation import gettext_lazy as _
 from typing import Optional, TypedDict
 
 from .base_action import BaseAction
+from .button import Button
 from experiment.actions.form import Form
 from experiment.actions.playback import Playback
 
 
-class Config(TypedDict):
+class TrialConfig(TypedDict):
     """
     Configuration for the Trial action.
 
@@ -21,8 +22,7 @@ class Config(TypedDict):
     response_time: int
     auto_advance: bool
     listen_first: bool
-    show_continue_button: bool
-    continue_label: str
+    continue_button: Button
 
 
 class Trial(BaseAction):  # pylint: disable=too-few-public-methods
@@ -71,7 +71,7 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
         html: Optional[str] = None,
         feedback_form: Optional[Form] = None,
         title="",
-        config: Optional[Config] = None,
+        config: Optional[TrialConfig] = None,
     ):
         self.playback = playback
         self.html = html
@@ -81,8 +81,7 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
             "response_time": 5,
             "auto_advance": False,
             "listen_first": False,
-            "show_continue_button": True,
-            "continue_label": _("Continue"),
+            "continue_button": Button(_("Continue"), "colorPrimary"),
         }
         if config:
             self.config.update(config)

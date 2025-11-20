@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.template.loader import render_to_string
 from django.db.models import Avg
 
+from experiment.actions.button import Button
 from experiment.actions.form import Form
 from experiment.actions.explainer import Explainer
 from experiment.actions.final import Final
@@ -41,7 +42,7 @@ class Categorization(BaseRules):
         return Explainer(
             instruction="This is a listening experiment in which you have to respond to short sound sequences.",
             steps=[],
-            button_label="Ok",
+            button=Button("Ok"),
         )
 
     def next_round(self, session: Session):
@@ -88,7 +89,7 @@ class Categorization(BaseRules):
                 explainer2 = Explainer(
                     instruction="The experiment will now begin. Please don't close the browser during the experiment. You can only run it once. Click to start a sound sequence.",
                     steps=[],
-                    button_label="Ok",
+                    button=Button("Ok"),
                 )
                 trial = self.next_trial_action(session)
                 return [explainer2, trial]
@@ -118,7 +119,7 @@ class Categorization(BaseRules):
                 explainer = Explainer(
                     instruction="You are entering the main phase of the experiment. From now on you will only occasionally get feedback on your responses. Simply try to keep responding to the sound sequences as you did before.",
                     steps=[],
-                    button_label="Ok",
+                    button=Button("Ok"),
                 )
             else:
                 # Update passed training rounds for calc round_number
@@ -428,7 +429,7 @@ class Categorization(BaseRules):
         else:
             pass  # throw error
 
-        return Score(session, icon=icon, timer=1, title=" ")
+        return Score(session, icon=icon, timer=1, button=Button(" "))
 
     def get_trial_with_feedback(self, session):
         score = self.get_feedback(session)

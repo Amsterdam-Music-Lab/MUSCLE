@@ -94,7 +94,12 @@ class MatchingPairsGame(BaseRules):
             show_animation=self.show_animation,
             score_feedback_display=self.score_feedback_display,
         )
-        trial = Trial(title="Tune twins", playback=playback, feedback_form=None, config={"show_continue_button": False})
+        trial = Trial(
+            title="Tune twins",
+            playback=playback,
+            feedback_form=None,
+            config={"continue_button": None},
+        )
         return trial
 
     def calculate_score(self, result, data):

@@ -116,7 +116,7 @@ class CongoSameDiff(BaseRules):
             result_id=result_pk,
         )
 
-        form = Form([question], submit_label="")
+        form = Form([question], submit_button=None)
 
         trial = Trial(
             feedback_form=form,

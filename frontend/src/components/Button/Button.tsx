@@ -1,17 +1,20 @@
 import React, { useRef } from "react";
+import { Link } from "react-router-dom";
 import classNames from "classnames";
 
 import { audioInitialized } from "../../util/audio";
 import { styleButton } from "@/util/stylingHelpers";
+import useBoundStore from "@/util/stores";
 
 
 interface ButtonProps {
-    title: string;
+    label: string;
+    color: string;
+    link?: string;
     onClick: (value?: string | boolean) => void;
     className?: string;
     padding?: string;
     style?: React.CSSProperties;
-    buttonColor: string;
     disabled?: boolean;
     value?: string;
     clickOnce?: boolean;
@@ -19,7 +22,7 @@ interface ButtonProps {
 
 // Button is a button that can only be clicked one time by default
 const Button = ({
-    title,
+    label,
     onClick,
     className = "",
     padding = "px-4",
@@ -27,9 +30,12 @@ const Button = ({
     disabled = false,
     value = "",
     clickOnce = true,
-    buttonColor,
+    color,
+    link,
 }: ButtonProps) => {
     const clicked = useRef(false);
+    const theme = useBoundStore((state) => state.theme);
+    const colorValue = theme?[color] : '#fabbacc';
 
     // Only handle the first click
     const clickOnceGuard = () => {
@@ -57,26 +63,53 @@ const Button = ({
             },
         }
         : {};
+    
+    const isRelativeUrl = (url: string) => {
+        return url && url.startsWith("/");
+    }
 
-    return (
-        <button
-            className={classNames({ disabled }, className, padding, "aha__button btn btn-lg")}
-            onClick={(e) => {
-                clickOnceGuard();
-            }}
-            disabled={disabled}
-            style={style}
-            css={styleButton(buttonColor)}
-            tabIndex={0}
-            onKeyPress={(e) => {
-                clickOnceGuard();
-            }}
-            type="button"
-            {...touchEvent}
-        >
-            {title}
-        </button>
-    );
+    const buttonIsLink = !onClick && link;
+
+    if (buttonIsLink) {
+        
+         // If the button has a relative link, it will render a Link component
+        if (isRelativeUrl(link)) {
+            const url = `/redirect${link}`
+
+            return (
+                <Link data-testid="button-link" className='btn btn-lg' css={styleButton(colorValue)} to={url}>
+                    {label}
+                </Link>
+            )
+        }
+
+        // If the button has an absolute link, it will render an anchor tag
+        return (
+            <a data-testid="button-link" className='btn btn-lg' href={link} css={styleButton(colorValue)} target="_blank" rel="noopener noreferrer">
+                {label}
+            </a>
+        )
+    } else {
+        return (
+            <button
+                className={classNames({ disabled }, className, padding, "aha__button btn btn-lg")}
+                onClick={(e) => {
+                    clickOnceGuard();
+                }}
+                disabled={disabled}
+                style={style}
+                css={styleButton(colorValue)}
+                tabIndex={0}
+                onKeyPress={(e) => {
+                    clickOnceGuard();
+                }}
+                type="button"
+                {...touchEvent}
+            >
+                {label}
+            </button>
+        );
+    }
 };
 
 export default Button;

@@ -7,6 +7,7 @@ from experiment.actions.utils import (
     final_action_with_optional_button,
     render_feedback_trivia,
 )
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay
@@ -148,7 +149,7 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
                 scoring_rule="CORRECTNESS",
             ),
         )
-        form = Form([question], submit_label="")
+        form = Form([question], submit_button=None)
         playback = Autoplay([section])
 
         return Trial(
@@ -246,7 +247,7 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
                 ),
             ],
             step_numbers=True,
-            button_label="Ok",
+            button=Button("Ok"),
         )
 
     def get_feedback_explainer(self, session):
@@ -260,7 +261,7 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
                 "The third rhythm is the %(correct_response)s. Your response was INCORRECT."
             ) % {"correct_response": correct_response}
         return Explainer(
-            instruction=instruction, steps=[], button_label=_("Next fragment")
+            instruction=instruction, steps=[], button=Button(_("Next fragment"))
         )
 
     def finalize_block(self, session):

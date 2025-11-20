@@ -3,6 +3,7 @@ from typing import Optional
 
 from django.utils.translation import gettext as _
 
+from .button import Button
 from .form import Form
 from .playback import Autoplay, PlayButton
 from .trial import Trial
@@ -65,7 +66,7 @@ def two_alternative_forced(
         choices=choices,
         style=button_style,
     )
-    feedback_form = Form([question], submit_label="")
+    feedback_form = Form([question], submit_button=None)
     trial = Trial(playback=playback, feedback_form=feedback_form, title=title, config=config)
     return trial
 
@@ -123,7 +124,7 @@ def song_sync(
                     ),
                 )
             ],
-            submit_label="",
+            submit_button=Button(""),
         ),
         playback=Autoplay(
             [section],

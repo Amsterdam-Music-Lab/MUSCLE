@@ -4,6 +4,7 @@ from os.path import join
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
@@ -79,7 +80,7 @@ class ToontjeHoger2Preverbal(BaseRules):
                 ),
             ],
             step_numbers=True,
-            button_label="Start",
+            button=Button("Start"),
         )
 
     def get_spectrogram_info(self):
@@ -92,7 +93,7 @@ class ToontjeHoger2Preverbal(BaseRules):
         info = Info(
             body=body,
             heading="Wat is een spectrogram?",
-            button_label="Volgende",
+            button=Button("Volgende"),
         )
         return info
 
@@ -160,7 +161,7 @@ class ToontjeHoger2Preverbal(BaseRules):
             result_id=prepare_result(key, session, expected_response="C"),
             style=[ColorScheme.NEUTRAL_INVERTED],
         )
-        form = Form([question], submit_label="")
+        form = Form([question], submit_button=None)
 
         image_trial = Trial(
             html=HTML(
@@ -298,8 +299,10 @@ class ToontjeHoger2Preverbal(BaseRules):
         info = Info(
             body=body,
             heading="Het eerste luisteren",
-            button_label="Terug naar ToontjeHoger",
-            button_link=get_current_experiment_url(session)
+            button=Button(
+                "Terug naar ToontjeHoger",
+                link=get_current_experiment_url(session),
+            ),
         )
 
         return [*score, final, info]

@@ -70,7 +70,7 @@ class Playback(BaseAction):
         self.timeout_after_playback = timeout_after_playback
         self.stop_audio_after = stop_audio_after
         self.resume_play = resume_play
-        self.style = self._apply_style(style) d
+        self.style = self._apply_style(style)
 
 
 class Autoplay(Playback):

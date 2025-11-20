@@ -11,7 +11,7 @@ class BaseAction(object):
     inherit from this base class to ensure consistent behavior and structure.
 
     Key Features:
-    - Provides a standardized way to serialize action data for frontend components
+    - Provides a standardized way to serialize actiolinkn data for frontend components
     - Handles frontend styling configuration
     - Ensures each action has a unique identifier through the ID class variable
     - Implements a common interface for action serialization via the action() method

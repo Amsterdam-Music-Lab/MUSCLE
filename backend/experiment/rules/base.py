@@ -86,13 +86,13 @@ class BaseRules(object):
                     )
                     question = question_obj.convert_to_action()
                     question.result_id = profile_result.id
+                    feedback_form = (
+                        Form([question], skip_button=None)
+                        if question_obj.is_skippable
+                        else Form([question])
+                    )
                     trials.append(
-                        Trial(
-                            title=_("Questionnaire"),
-                            feedback_form=Form(
-                                [question], is_skippable=question_obj.is_skippable
-                            ),
-                        )
+                        Trial(title=_("Questionnaire"), feedback_form=feedback_form),
                     )
                 except StopIteration:
                     break

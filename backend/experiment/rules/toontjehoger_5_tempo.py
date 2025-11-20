@@ -5,6 +5,7 @@ import re
 
 from django.template.loader import render_to_string
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
@@ -36,7 +37,9 @@ class ToontjeHoger5Tempo(BaseRules):
         return Explainer(
             instruction="Timing en tempo",
             steps=[
-                Step("Je krijgt dadelijk twee verschillende uitvoeringen van hetzelfde stuk te horen."),
+                Step(
+                    "Je krijgt dadelijk twee verschillende uitvoeringen van hetzelfde stuk te horen."
+                ),
                 Step(
                     "Eén wordt op de originele snelheid (tempo) afgespeeld, terwijl de ander iets is versneld of vertraagd."
                 ),
@@ -44,7 +47,7 @@ class ToontjeHoger5Tempo(BaseRules):
                 Step("Let hierbij vooral op de timing van de muzikanten."),
             ],
             step_numbers=True,
-            button_label="Start",
+            button=Button("Start"),
         )
 
     def next_round(self, session):
@@ -157,7 +160,7 @@ class ToontjeHoger5Tempo(BaseRules):
             ),
             style=[ColorScheme.NEUTRAL_INVERTED],
         )
-        form = Form([question], submit_label="")
+        form = Form([question], submit_button=None)
 
         trial = Trial(
             playback=playback,
@@ -247,8 +250,10 @@ class ToontjeHoger5Tempo(BaseRules):
         info = Info(
             body=body,
             heading="Timing en tempo",
-            button_label="Terug naar ToontjeHoger",
-            button_link=get_current_experiment_url(session),
+            button=Button(
+                "Terug naar ToontjeHoger",
+                link=get_current_experiment_url(session),
+            ),
         )
 
         return [*score, final, info]

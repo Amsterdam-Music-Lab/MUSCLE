@@ -4,19 +4,18 @@ import { useNavigate } from "react-router-dom";
 import Rank from "../Rank/Rank";
 import Social from "@/components/Social/Social";
 
-import { URLS } from "@/config";
-import { finalizeSession } from "../../API";
-import useBoundStore from "../../util/stores";
+
+import Button from "../Button/Button";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 import UserFeedback from "../UserFeedback/UserFeedback";
-import FinalButton from "./FinalButton";
+import { finalizeSession } from "@/API";
+import { URLS } from "@/config";
 import { Final as FinalAction } from "@/types/Action";
 import classNames from "@/util/classNames";
-import Theme from "@/types/Theme";
+import useBoundStore from "@/util/stores";
 
 export interface FinalProps extends FinalAction {
     onNext: () => void;
-    theme: Theme
 }
 
 /**
@@ -40,7 +39,6 @@ const Final = ({
     rank,
     logo,
     percentile,
-    theme
 }: FinalProps) => {
 
     const session = useBoundStore((state) => state.session);
@@ -67,10 +65,9 @@ const Final = ({
             </div>
             {button && (
                 <div className="text-center pt-4">
-                    <FinalButton
-                        button={button}
-                        buttonColor={theme.colorPrimary}
-                        onNext={onNext}
+                    <Button
+                        {...button}
+                        onClick={onNext}
                     />
                 </div>
             )}

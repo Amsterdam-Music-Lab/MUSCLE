@@ -3,6 +3,7 @@ import random
 from django.utils.translation import gettext_lazy as _
 
 from .matching_pairs import MatchingPairsGame
+from experiment.actions.button import Button
 from experiment.actions.playlist import PlaylistSelection
 from experiment.actions.info import Info
 from experiment.actions.utils import final_action_with_optional_button
@@ -17,7 +18,7 @@ class MatchingPairsLite(MatchingPairsGame):
 
     def next_round(self, session):
         playlist = PlaylistSelection(session.block.playlists.all())
-        info = Info("", heading="Press start to enter the game", button_label="Start")
+        info = Info("", heading="Press start to enter the game", button=Button("Start"))
         if session.get_rounds_passed() < 1:
             trial = self.get_matching_pairs_trial(session)
             return [playlist, info, trial]

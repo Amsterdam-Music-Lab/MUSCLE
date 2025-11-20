@@ -1,5 +1,6 @@
 import unittest
 
+from experiment.actions.button import Button
 from experiment.actions.info import Info
 
 
@@ -9,8 +10,7 @@ class TestInfo(unittest.TestCase):
         info = Info(
             body="<p>Test Body</p>",
             heading="Test Heading",
-            button_label="Test Label",
-            button_link="http://example.com"
+            button=Button("Test Label", "colorPrimary", link="http://example.com"),
         )
         self.assertEqual(info.body, "<p>Test Body</p>")
         self.assertEqual(info.heading, "Test Heading")
@@ -30,7 +30,3 @@ class TestInfo(unittest.TestCase):
         self.assertEqual(info.heading, "Heading")
         self.assertIsNone(info.button_label)
         self.assertIsNone(info.button_link)
-
-
-if __name__ == '__main__':
-    unittest.main()

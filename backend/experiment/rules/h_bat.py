@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import BaseRules
 from .practice import PracticeMixin
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay
@@ -110,7 +111,7 @@ class HBat(BaseRules, PracticeMixin):
             ),
         )
         playback = Autoplay([section])
-        form = Form([question], submit_label="")
+        form = Form([question], submit_button=None)
         view = Trial(
             playback=playback,
             feedback_form=form,
@@ -128,22 +129,34 @@ class HBat(BaseRules, PracticeMixin):
     def get_intro_explainer(self):
         return Explainer(
             instruction=_(
-                'In this test you will hear a series of tones for each trial.'),
+                'In this test you will hear a series of tones for each trial.'
+            ),
             steps=[
-                Step(_(
-                    "It's your job to decide if the rhythm goes SLOWER of FASTER.")),
-                Step(_(
-                    'During the experiment it will become more difficult to hear the difference.')),
-                Step(_(
-                    "Try to answer as accurately as possible, even if you're uncertain.")),
+                Step(_("It's your job to decide if the rhythm goes SLOWER of FASTER.")),
+                Step(
+                    _(
+                        'During the experiment it will become more difficult to hear the difference.'
+                    )
+                ),
+                Step(
+                    _(
+                        "Try to answer as accurately as possible, even if you're uncertain."
+                    )
+                ),
                 Step(_("Remember: try not to move or tap along with the sounds")),
-                Step(_(
-                    "In this test, you can answer as soon as you feel you know the answer, but please wait until you are sure or the sound has stopped.")),
-                Step(_(
-                    'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
+                Step(
+                    _(
+                        "In this test, you can answer as soon as you feel you know the answer, but please wait until you are sure or the sound has stopped."
+                    )
+                ),
+                Step(
+                    _(
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'
+                    )
+                ),
             ],
             step_numbers=True,
-            button_label='Ok'
+            button=Button('Ok'),
         )
 
     def get_feedback_explainer(self, session: Session):
@@ -157,7 +170,7 @@ class HBat(BaseRules, PracticeMixin):
                 "The rhythm went %(correct_response)s. Your response was INCORRECT."
             ) % {"correct_response": correct_response}
         return Explainer(
-            instruction=instruction, steps=[], button_label=_("Next fragment")
+            instruction=instruction, steps=[], button=Button(_("Next fragment"))
         )
 
     def finalize_block(self, session):

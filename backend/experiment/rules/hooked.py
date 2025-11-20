@@ -4,6 +4,7 @@ import random
 from django.utils.translation import gettext_lazy as _
 
 from .base import BaseRules
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
@@ -92,7 +93,7 @@ class Hooked(BaseRules):
                 ),
             ],
             step_numbers=True,
-            button_label=_("Let's go!"),
+            button=Button(_("Let's go!")),
         )
 
     def next_round(self, session: Session):
@@ -174,7 +175,7 @@ class Hooked(BaseRules):
                 Step(_("Did you hear the same song during previous rounds?")),
             ],
             step_numbers=True,
-            button_label=_("Continue"),
+            button=Button(_("Continue")),
         )
 
     def final_score_message(self, session: Session):

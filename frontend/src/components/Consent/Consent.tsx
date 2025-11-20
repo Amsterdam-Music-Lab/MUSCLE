@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { saveAs } from 'file-saver';
 
-import { styleButton } from "@/util/stylingHelpers";
 import { URLS } from "@/config";
 import Button from "../Button/Button";
 import Loading from "../Loading/Loading";
-import { createConsent, useConsent } from "../../API";
+import { createConsent, useConsent } from "@/API";
 import classNames from "classnames";
+import IButton from "@/types/Button";
 import Participant from "@/types/Participant";
+import { styleButton } from "@/util/stylingHelpers";
 
 export interface ConsentProps {
     title: string;
@@ -15,12 +16,12 @@ export interface ConsentProps {
     experiment: any;
     participant: Pick<Participant, 'csrf_token'>;
     onNext: () => void;
-    confirm: string;
-    deny: string;
+    confirmButton: IButton;
+    denyButton: IButton;
 }
 
 /** Consent is an experiment view that shows the consent text, and handles agreement/stop actions */
-const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }: ConsentProps) => {
+const Consent = ({ title, text, experiment, participant, onNext, confirmButton, denyButton }: ConsentProps) => {
     const [consent, loadingConsent] = useConsent(experiment.slug);
     const urlQueryString = window.location.search;
 
@@ -96,13 +97,12 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }
 
             <div className="buttons d-flex justify-content-between">
                 <a href={URLS.AMLHome} className="btn btn-lg border-outside" css={styleButton(experiment.theme.colorNegative)}>
-                    {deny}
+                    {denyButton.label}
                 </a>
 
                 <Button
-                    buttonColor={experiment.theme.colorPositive}
+                    {...confirmButton}
                     onClick={onAgree}
-                    title={confirm}
                 />
 
             </div>

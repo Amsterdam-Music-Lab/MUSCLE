@@ -3,6 +3,7 @@ from os.path import join
 
 from django.template.loader import render_to_string
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
@@ -49,15 +50,22 @@ class ToontjeHoger6Relative(BaseRules):
         return Explainer(
             instruction="Relatief Gehoor",
             steps=[
-                Step("In dit experiment kun je testen hoe goed jouw relatieve gehoor is! Relatief gehoor is het vermogen om een melodie te herkennen, ongeacht of deze nu wat hoger of lager in toonhoogte wordt afgespeeld."),
+                Step(
+                    "In dit experiment kun je testen hoe goed jouw relatieve gehoor is! Relatief gehoor is het vermogen om een melodie te herkennen, ongeacht of deze nu wat hoger of lager in toonhoogte wordt afgespeeld."
+                ),
                 # Empty step adds some spacing between steps to improve readability
                 Step(""),
                 Step(
-                    "Je krijgt twee melodieën te horen, verschillend in toonhoogte.", number=1),
+                    "Je krijgt twee melodieën te horen, verschillend in toonhoogte.",
+                    number=1,
+                ),
                 Step("Luister goed, want je kunt ze maar één keer afspelen!", number=2),
-                Step("Aan jou de taak om te ontrafelen of deze melodieën hetzelfde zijn, ongeacht de toonhoogte! ", number=3),
+                Step(
+                    "Aan jou de taak om te ontrafelen of deze melodieën hetzelfde zijn, ongeacht de toonhoogte! ",
+                    number=3,
+                ),
             ],
-            button_label="Start"
+            button=Button("Start"),
         )
 
     def next_round(self, session: Session):
@@ -133,7 +141,7 @@ class ToontjeHoger6Relative(BaseRules):
                 key, session, section=section1, expected_response=expected_response
             ),
         )
-        form = Form([question], submit_label="")
+        form = Form([question], submit_button=None)
 
         # Player
         playback = Multiplayer(
@@ -177,8 +185,10 @@ class ToontjeHoger6Relative(BaseRules):
         info = Info(
             body=body,
             heading="Relatief gehoor",
-            button_label="Terug naar ToontjeHoger",
-            button_link=get_current_experiment_url(session)
+            button=Button(
+                "Terug naar ToontjeHoger",
+                link=get_current_experiment_url(session),
+            ),
         )
 
         return [*score, final, info]
