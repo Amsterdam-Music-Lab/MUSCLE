@@ -11,7 +11,7 @@ from experiment.actions.final import Final
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
-from experiment.actions.wrappers import two_alternative_forced
+from experiment.actions.wrappers import TwoAlternativeForced
 from session.models import Session
 from theme.styles import ButtonStyle, ColorScheme
 
@@ -455,9 +455,8 @@ class Categorization(BaseRules):
             expected_response = "B"
 
         choices = json_data["choices"]
-        config = {"listen_first": True, "auto_advance": True, "auto_advance_timer": 2500, "time_pass_break": False}
         style = [json_data["button_order"]]
-        trial = two_alternative_forced(
+        trial = TwoAlternativeForced(
             session,
             section,
             choices,
@@ -466,7 +465,9 @@ class Categorization(BaseRules):
             comment=json_data["phase"],
             scoring_rule="CORRECTNESS",
             title=self.get_title(session),
-            config=config,
+            auto_advance=True,
+            listen_first=True,
+            response_time=2.5,
         )
         return trial
 

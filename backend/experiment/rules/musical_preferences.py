@@ -136,7 +136,7 @@ class MusicalPreferences(BaseRules):
                             playback=playback,
                             html=html,
                             feedback_form=form,
-                            config={"response_time": 15},
+                            response_time=15,
                             title=_("Tech check"),
                         )
                     else:
@@ -165,7 +165,7 @@ class MusicalPreferences(BaseRules):
                         playback=playback,
                         feedback_form=form,
                         html=html,
-                        config={"response_time": 15},
+                        response_time=15,
                         title=_("Audio check"),
                     ),
                 ]
@@ -255,10 +255,9 @@ class MusicalPreferences(BaseRules):
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_("Song %(round)s/%(total)s") % {"round": round_number + 1, "total": session.block.rounds},
-            config={
-                "response_time": section.duration + 0.1,
-            },
+            title=_("Song %(round)s/%(total)s")
+            % {"round": round_number + 1, "total": session.block.rounds},
+            response_time=section.duration + 0.1,
         )
         actions.append(view)
         return actions

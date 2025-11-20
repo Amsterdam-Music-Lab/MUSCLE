@@ -85,9 +85,7 @@ class NewBlockRuleset(BaseRules):
             playback=playback,
             feedback_form=form,
             title=_('Test block'),
-            config={
-                'response_time': section.duration,
-                'listen_first': True
-            }
+            response_time=section.duration,
+            listen_first=True,
         )
         return view

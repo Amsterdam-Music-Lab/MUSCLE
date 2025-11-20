@@ -95,9 +95,15 @@ class Huang2022(Hooked):
                         )
                     ]
                 )
-                return [Trial(playback=playback, feedback_form=form, html=html,
-                             config={'response_time': 15},
-                             title=_("Audio check"))]
+                return [
+                    Trial(
+                        playback=playback,
+                        feedback_form=form,
+                        html=html,
+                        response_time=15,
+                        title=_("Audio check"),
+                    )
+                ]
             else:
                 if last_result.score == 0:
                     # user indicated they couldn't hear the music
@@ -116,9 +122,15 @@ class Huang2022(Hooked):
                                 )
                             ]
                         )
-                        return [Trial(playback=playback, html=html, feedback_form=form,
-                                     config={'response_time': 15},
-                                     title=_("Ready to experiment"))]
+                        return [
+                            Trial(
+                                playback=playback,
+                                html=html,
+                                feedback_form=form,
+                                response_time=15,
+                                title=_("Ready to experiment"),
+                            )
+                        ]
                     else:
                         # finish and redirect
                         session.finish()

@@ -4,6 +4,7 @@ from typing import Optional
 from django.utils.translation import gettext as _
 
 from .button import Button
+from .final import Final
 from .form import Form
 from .playback import Autoplay, PlayButton
 from .trial import Trial
@@ -16,30 +17,16 @@ from section.models import Section
 from session.models import Session
 from theme.styles import ButtonStyle, ColorScheme, TextStyle
 
-def two_alternative_forced(
-    session: Session,
-    section: Section,
-    choices: dict,
-    expected_response: str = None,
-    style: list[str] = None,
-    comment: str = "",
-    scoring_rule: str = None,
-    title: str = "",
-    config: Optional[dict] = None,
-):
+class TwoAlternativeForced(Trial):
     """
-    Description: Provide data for a two-alternative forced choice (2AFC) view, with an optional comment and scoring.
-
     Args:
-        session (Session): Current user session.
-        section (Section): Section to use in the playback or question.
-        choices (dict): Possible choices presented to the user.
-        expected_response (str, optional): The expected user response.
-        style (dict, optional): Additional style configurations for buttons.
-        comment (str, optional): Comment or additional info about the session.
-        scoring_rule (str, optional): Rule for scoring the user's response.
-        title (str, optional): Title to be displayed in the trial.
-        config (dict, optional): Additional configuration parameters.
+        session (Session): Session for which to generate TwoAlternativeForced Trial
+        section (Section): Section to be played in TwoAlternativeForced Trial
+        choices (dict): choices to be presented to participant
+        expected_response (str): expected response, if applicable
+        comment (str): comment to be logged with the result
+        scoring_rule: scoring rule to score the participant's response
+        **kwargs: additional arguments to initialize the Trial object (e.g., response_time)
 
     Returns:
         (Trial): Configured trial containing a playback, a question, and a feedback form.
@@ -49,26 +36,41 @@ def two_alternative_forced(
         trial = two_alternative_forced(session, section, {"yes": "Yes", "no": "No"}, expected_response="yes", title=_("Two Alternative Forced Choice"))
         ```
     """
-    playback = PlayButton([section], {"listen_once": True})
-    key = "choice"
-    button_style = [TextStyle.INVISIBLE, ButtonStyle.LARGE_GAP, ButtonStyle.LARGE_TEXT]
-    button_style.extend(style)
-    question = ButtonArrayQuestion(
-        key=key,
-        result_id=prepare_result(
-            key,
-            session=session,
-            section=section,
-            expected_response=expected_response,
-            scoring_rule=scoring_rule,
-            comment=comment,
-        ),
-        choices=choices,
-        style=button_style,
-    )
-    feedback_form = Form([question], submit_button=None)
-    trial = Trial(playback=playback, feedback_form=feedback_form, title=title, config=config)
-    return trial
+
+    def __init__(
+        self,
+        session: Session,
+        section: Section,
+        choices: dict,
+        expected_response: Optional[str] = None,
+        comment: str = "",
+        scoring_rule: Optional[str] = None,
+        style: list[str] = [],
+        **kwargs
+    ):
+        playback = PlayButton([section], {"listen_once": True})
+        key = "choice"
+        button_style = [
+            TextStyle.INVISIBLE,
+            ButtonStyle.LARGE_GAP,
+            ButtonStyle.LARGE_TEXT,
+        ]
+        button_style.extend(style)
+        question = ButtonArrayQuestion(
+            key=key,
+            result_id=prepare_result(
+                key,
+                session=session,
+                section=section,
+                expected_response=expected_response,
+                scoring_rule=scoring_rule,
+                comment=comment,
+            ),
+            choices=choices,
+            style=button_style,
+        )
+        feedback_form = Form([question], submit_button=None)
+        super.__init__(playback=playback, feedback_form=feedback_form, **kwargs)
 
 
 def boolean_question(
@@ -132,22 +134,21 @@ def song_sync(
             preload_message=_("Get ready!"),
             instruction=_("Do you recognize the song?"),
         ),
-        config={**trial_config, "break_round_on": {"EQUALS": ["TIMEOUT", "no"]}},
+        response_time=recognition_time,
+        auto_advance=True,
+        break_round_on={"EQUALS": ["TIMEOUT", "no"]},
         title=title,
     )
     silence_time = 4
     silence = Trial(
         playback=Autoplay([section], show_animation=True, instruction=_("Keep imagining the music"), mute=True),
-        config={
-            "response_time": silence_time,
-            "auto_advance": True,
-            "show_continue_button": False,
-        },
+        response_time=silence_time,
+        auto_advance=True,
+        continue_button=None,
         title=title,
     )
     continuation_correctness = random.choice([True, False])
     jitter = randomize_playhead(min_jitter, max_jitter, continuation_correctness)
-    trial_config["response_time"] = sync_time
     correct_place = Trial(
         feedback_form=Form(
             [
@@ -172,7 +173,41 @@ def song_sync(
             play_from=silence_time + jitter,
             resume_play=True,
         ),
-        config=trial_config,
+        response_time=sync_time,
         title=title,
     )
     return [recognize, silence, correct_place]
+
+def final_action_with_optional_button(session, final_text="", title=_("End"), button_text=_("Continue")) -> Final:
+    """
+    Description: Create a final action with an optional button to proceed to the next block, if available.
+
+    Args:
+        session (Session): The current session.
+        final_text (str): The text to display in the final action.
+        title (str): The title for the final action screen.
+        button_text (str): The text displayed on the continuation button.
+
+    Returns:
+        (Final): The final action with an optional button.
+
+    Example:
+        ```python
+        action = final_action_with_optional_button(my_session, final_text="Complete!")
+        ```
+    """
+    redirect_url = get_current_experiment_url(session)
+
+    if redirect_url:
+        return Final(
+            title=title,
+            session=session,
+            final_text=final_text,
+            button=Button(button_text, link=redirect_url),
+        )
+    else:
+        return Final(
+            title=title,
+            session=session,
+            final_text=final_text,
+        )

@@ -2,7 +2,7 @@ import itertools
 import re
 
 from django.utils.translation import gettext_lazy as _
-from experiment.actions.utils import final_action_with_optional_button
+from experiment.actions.wrappers import final_action_with_optional_button
 from section.models import Playlist, Section
 from session.models import Session
 from experiment.actions.explainer import Explainer
@@ -166,10 +166,8 @@ class CongoSameDiff(BaseRules):
             playback=playback,
             feedback_form=form,
             title=_(block_name),
-            config={
-                'response_time': section.duration,
-                'listen_first': False,
-            }
+            response_time=section.duration,
+            listen_first=False,
         )
         return view
 

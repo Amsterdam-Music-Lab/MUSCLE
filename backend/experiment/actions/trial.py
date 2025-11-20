@@ -4,25 +4,13 @@ from typing import Optional, TypedDict
 from .base_action import BaseAction
 from .button import Button
 from experiment.actions.form import Form
+from experiment.actions.html import HTML
 from experiment.actions.playback import Playback
 
 
-class TrialConfig(TypedDict):
-    """
-    Configuration for the Trial action.
-
-    Args:
-      - response_time (int): how long to wait until stopping the player
-      - auto_advance (bool): proceed automatically after stopping
-      - listen_first (bool): block form submission until playback ends
-      - show_continue_button (bool): display a 'Continue' button
-      - continue_label (str): label for the continue button
-    """
-
-    response_time: int
-    auto_advance: bool
-    listen_first: bool
-    continue_button: Button
+class BreakRoundOn(TypedDict):
+    EQUALS: list[str]
+    NOT: list[str]
 
 
 class Trial(BaseAction):  # pylint: disable=too-few-public-methods
@@ -34,7 +22,12 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
         html (Optional[str]): HTML to be displayed in this view
         feedback_form (Optional[Form]): array of form elements
         title (Optional(str)): page title - defaults to empty
-        config (Optional[Config]): configuration for the trial with options for response time, auto advance, listen first, show continue button, and continue label
+        response_time (int): time in seconds for the participant to react
+        auto_advance (bool): whether the view automatically forwards to the next after response_time
+        listen_first (bool): whether the controls are blocked while audio is playing
+        continue_button (Button): optionally configure label and color of button below the Trial. Not shown if form with submit_button is passed. Set to `None` to suppress such a button.
+        break_round_on (dict): conditions under which the current round should be abandoned, to query `session/next_round` for new actions
+
 
     Example:
         ```python
@@ -52,10 +45,6 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
             playback=playback,
             feedback_form=form,
             title=_('Test block'),
-            config={
-                'response_time': section.duration,
-                'listen_first': True
-            }
         )
         ```
 
@@ -68,23 +57,24 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
     def __init__(
         self,
         playback: Optional[Playback] = None,
-        html: Optional[str] = None,
+        html: Optional[HTML] = None,
         feedback_form: Optional[Form] = None,
-        title="",
-        config: Optional[TrialConfig] = None,
+        title: str = "",
+        response_time: float = 5.0,
+        auto_advance: bool = False,
+        listen_first: bool = False,
+        continue_button: Optional[Button] = Button(_("Continue"), "colorPrimary"),
+        break_round_on: Optional[BreakRoundOn] = None,
     ):
         self.playback = playback
         self.html = html
         self.feedback_form = feedback_form
         self.title = title
-        self.config = {
-            "response_time": 5,
-            "auto_advance": False,
-            "listen_first": False,
-            "continue_button": Button(_("Continue"), "colorPrimary"),
-        }
-        if config:
-            self.config.update(config)
+        self.response_time = response_time
+        self.auto_advance = auto_advance
+        self.listen_first = listen_first
+        self.continue_button = continue_button
+        self.break_round_on = break_round_on
 
     def action(self):
         """
@@ -95,13 +85,18 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
         action = {
             "view": self.view,
             "title": self.title,
-            "config": self.config,
+            "responseTime": self.response_time,
+            "autoAdvance": self.auto_advance,
+            "listenFirst": self.listen_first,
+            "breakRoundOn": self.break_round_on,
         }
+        if self.button:
+            action["continueButton"] = self.continue_button.action()
         if self.playback:
             action["playback"] = self.playback.action()
         if self.html:
             action["html"] = self.html.action()
         if self.feedback_form:
-            action["feedback_form"] = self.feedback_form.action()
+            action["feedbackForm"] = self.feedback_form.action()
 
         return action

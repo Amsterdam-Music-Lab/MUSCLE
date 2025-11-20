@@ -330,12 +330,12 @@ class Hooked(BaseRules):
                 )
             ]
         )
-        config = {"auto_advance": True, "response_time": self.heard_before_time}
         trial = Trial(
             title=self.get_trial_title(session, round_number + 1),
             playback=playback,
             feedback_form=form,
-            config=config,
+            response_time=self.heard_before_time,
+            auto_advance=True,
         )
         return trial
 

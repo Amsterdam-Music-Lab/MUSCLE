@@ -7,7 +7,7 @@ from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
-from experiment.actions.utils import final_action_with_optional_button
+from experiment.actions.wrappers import final_action_with_optional_button
 from result.utils import prepare_result
 from theme.styles import ColorScheme
 

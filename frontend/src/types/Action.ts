@@ -4,7 +4,7 @@ import IButton from  "@/types/Button";
 import Participant from "@/types/Participant";
 import { PlaybackArgs } from "./Playback";
 import Question from "./Question";
-import { TrialConfig } from "./Trial";
+import { BreakRoundOn } from "./Trial";
 import { MutableRefObject } from "react";
 
 interface SharedActionProps {
@@ -38,11 +38,15 @@ export interface IFeedbackForm {
   is_skippable: boolean;
 }
 
-export interface Trial {
+export interface ITrial {
   playback: PlaybackArgs;
   html: { body: string | TrustedHTML };
-  feedback_form: IFeedbackForm;
-  config: TrialConfig;
+  feedbackForm: IFeedbackForm;
+  responseTime: number;
+  autoAdvance: boolean;
+  listenFirst: boolean;
+  continueButton?: IButton;
+  breakRoundOn?: BreakRoundOn;
 }
 
 export interface Score {

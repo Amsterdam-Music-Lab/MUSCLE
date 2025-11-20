@@ -2,8 +2,11 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
-from experiment.actions.utils import get_average_difference_level_based
+from experiment.actions.utils import (
+    get_average_difference_level_based,
+    render_feedback_trivia,
+)
+from experiment.actions.wrappers import final_action_with_optional_button
 
 from session.models import Session
 

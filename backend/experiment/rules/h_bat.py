@@ -13,10 +13,10 @@ from experiment.actions.playback import Autoplay
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
 from experiment.actions.utils import (
-    final_action_with_optional_button,
     get_average_difference_level_based,
     render_feedback_trivia,
 )
+from experiment.actions.wrappers import final_action_with_optional_button
 from experiment.rules.util.staircasing import register_turnpoint
 from result.utils import prepare_result
 from section.models import Playlist, Section
@@ -116,7 +116,7 @@ class HBat(BaseRules, PracticeMixin):
             playback=playback,
             feedback_form=form,
             title=self.get_trial_title(),
-            config={"response_time": section.duration + 0.1},
+            response_time=section.duration + 0.1,
         )
         return view
 

@@ -197,7 +197,7 @@ class ToontjeHoger3Plink(BaseRules):
                     skip_label="Ik weet het niet",
                     submit_button=Button("Volgende"),
                 ),
-                config={"break_round_on": {"NOT": [""]}},
+                break_round_on={"NOT": [""]},
             )
         )
         json_data = session.json_data

@@ -11,9 +11,9 @@ from experiment.actions.playback import Autoplay
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
 from experiment.actions.utils import (
-    final_action_with_optional_button,
     render_feedback_trivia,
 )
+from experiment.actions.wrappers import final_action_with_optional_button
 from result.utils import prepare_result
 from section.models import Playlist
 
@@ -126,12 +126,10 @@ class BeatAlignment(BaseRules):
             playback=playback,
             feedback_form=None,
             title=_('Example {}').format(count),
-            config={
-                'response_time': section.duration + 0.1,
-                'listen_first': True,
-                'auto_advance': True,
-                'continue_button': None,
-            },
+            response_time=section.duration + 0.1,
+            listen_first=True,
+            auto_advance=True,
+            continue_button=None,
         )
         return view
 
@@ -163,10 +161,8 @@ class BeatAlignment(BaseRules):
             playback=playback,
             feedback_form=form,
             title=_('Beat alignment'),
-            config={
-                'response_time': section.duration + .1,
-                'listen_first': True
-            }
+            response_time=section.duration + 0.1,
+            listen_first=True,
         )
         return view
 

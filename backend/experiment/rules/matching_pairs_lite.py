@@ -6,7 +6,7 @@ from .matching_pairs import MatchingPairsGame
 from experiment.actions.button import Button
 from experiment.actions.playlist import PlaylistSelection
 from experiment.actions.info import Info
-from experiment.actions.utils import final_action_with_optional_button
+from experiment.actions.wrappers import final_action_with_optional_button
 
 
 class MatchingPairsLite(MatchingPairsGame):

@@ -126,7 +126,8 @@ class TwoAlternativeForced(BaseRules):
             playback=playback,
             feedback_form=feedback_form,
             title=f"Round {session.get_rounds_passed()} / {len(session.playlist.section_set.all())}",
-            config = {'listen_first': True, 'decision_time': section.duration + .1}
+            listen_first=True,
+            response_time=section.duration + 0.1,
         )
 
         return trial

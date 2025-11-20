@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from django.db.models.query import QuerySet
 
+from experiment.actions.button import Button
 from experiment.actions.final import Final
 from session.models import Session, Result
 
@@ -38,38 +39,6 @@ def get_current_experiment_url(session: Session) -> str | None:
         return f"/{experiment_slug}?participant_id={participant_id_url}"
     else:
         return f"/{experiment_slug}"
-
-
-def final_action_with_optional_button(session, final_text="", title=_("End"), button_text=_("Continue")) -> Final:
-    """
-    Description: Create a final action with an optional button to proceed to the next block, if available.
-
-    Args:
-        session (Session): The current session.
-        final_text (str): The text to display in the final action.
-        title (str): The title for the final action screen.
-        button_text (str): The text displayed on the continuation button.
-
-    Returns:
-        (Final): The final action with an optional button.
-
-    Example:
-        ```python
-        action = final_action_with_optional_button(my_session, final_text="Complete!")
-        ```
-    """
-    redirect_url = get_current_experiment_url(session)
-
-    if redirect_url:
-        return Final(
-            title=title, session=session, final_text=final_text, button={"text": button_text, "link": redirect_url}
-        )
-    else:
-        return Final(
-            title=title,
-            session=session,
-            final_text=final_text,
-        )
 
 
 def render_feedback_trivia(feedback, trivia) -> str:

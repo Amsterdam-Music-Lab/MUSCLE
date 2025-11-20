@@ -342,7 +342,8 @@ class PracticeMixin(object):
                     "total_rounds": total_rounds,
                 }
             ),
-            config={"listen_first": True, "response_time": section.duration + 0.1},
+            listen_first=True,
+            response_time=section.duration + 0.1,
         )
 
     def practice_successful(self, session: Session) -> bool:

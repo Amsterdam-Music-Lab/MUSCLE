@@ -243,13 +243,12 @@ def sound(section):
         sections=[section],
     )
     view = Trial(
-            playback=playback,
-            feedback_form=None,
-            title=title,
-            config={
-                'auto_advance': True,
-                'show_continue_button': False,
-                'response_time': section.duration+.5}
+        playback=playback,
+        feedback_form=None,
+        title=title,
+        auto_advance=True,
+        continue_button=None,
+        response_time=section.duration + 0.5,
     )
 
     return view

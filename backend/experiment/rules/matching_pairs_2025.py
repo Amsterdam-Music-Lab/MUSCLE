@@ -90,7 +90,7 @@ class MatchingPairs2025(MatchingPairsGame):
             title="Tune twins",
             playback=playback,
             feedback_form=None,
-            config={"continue_button": None},
+            continue_button=None,
         )
 
         return trial

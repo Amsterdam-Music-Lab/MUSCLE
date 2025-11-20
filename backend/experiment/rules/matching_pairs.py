@@ -98,7 +98,7 @@ class MatchingPairsGame(BaseRules):
             title="Tune twins",
             playback=playback,
             feedback_form=None,
-            config={"continue_button": None},
+            continue_button=None,
         )
         return trial
 

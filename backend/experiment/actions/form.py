@@ -45,6 +45,6 @@ class Form(BaseAction):
         serialized_form = [question.action() for question in self.form]
         return {
             "form": serialized_form,
-            "submitButton": self.submit_button.action(),
+            "submitButton": self.submit_button.action() if self.submit_button else None,
             "skipButton": self.skip_button.action() if self.skip_button else None,
         }

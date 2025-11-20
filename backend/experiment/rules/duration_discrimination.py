@@ -13,11 +13,8 @@ from experiment.actions.explainer import Explainer, Step
 from experiment.actions.form import Form
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
-from experiment.actions.utils import (
-    final_action_with_optional_button,
-    get_average_difference,
-    render_feedback_trivia,
-)
+from experiment.actions.utils import get_average_difference, render_feedback_trivia
+from experiment.actions.wrappers import final_action_with_optional_button
 from experiment.rules.util.staircasing import register_turnpoint
 from result.models import Result
 from result.utils import prepare_result
@@ -125,7 +122,8 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
             feedback_form=form,
             title=_("%(title)s %(task)s")
             % {"title": self.subtask, "task": self.task_description},
-            config={"listen_first": True, "response_time": section.duration + 0.1},
+            listen_first=True,
+            response_time=section.duration + 0.1,
         )
         return view
 
