@@ -90,7 +90,7 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
             "listenFirst": self.listen_first,
             "breakRoundOn": self.break_round_on,
         }
-        if self.button:
+        if self.continue_button:
             action["continueButton"] = self.continue_button.action()
         if self.playback:
             action["playback"] = self.playback.action()

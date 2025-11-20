@@ -22,17 +22,15 @@ class FormTest(TestCase):
 
     def test_initialization(self):
         self.assertEqual(len(self.form.form), 1)
-        self.assertEqual(self.form.submit_button.get('label'), 'Submit')
-        self.assertEqual(self.form.skip_button.get('label'), 'Skip')
-        self.assertTrue(self.form.is_skippable)
+        self.assertEqual(self.form.submit_button.label, 'Submit')
+        self.assertEqual(self.form.skip_button.label, 'Skip')
 
     def test_action_method(self):
         action_result = self.form.action()
         self.assertIn('form', action_result)
         self.assertEqual(len(action_result['form']), 1)
-        self.assertIn('submit_button', action_result)
-        self.assertIn('skip_button', action_result)
-        self.assertIn('is_skippable', action_result)
+        self.assertIn('submitButton', action_result)
+        self.assertIn('skipButton', action_result)
 
 
 class NumberQuestionTest(TestCase):

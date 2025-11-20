@@ -1,11 +1,9 @@
 from django.test import TestCase
-from experiment.models import Block, Experiment, Phase
-from section.models import Playlist, Section, Song
+from experiment.models import Block
+from section.models import Playlist
 from participant.models import Participant
 from session.models import Session
 from experiment.rules.categorization import Categorization
-from result.models import Result
-
 
 class CategorizationRuleTest(TestCase):
 
@@ -78,7 +76,7 @@ class CategorizationRuleTest(TestCase):
         explainer = categorization.get_intro_explainer().action()
         self.assertEqual(explainer['instruction'],
                          'This is a listening experiment in which you have to respond to short sound sequences.')
-        self.assertEqual(explainer['button_label'], 'Ok')
+        self.assertEqual(explainer['button']['label'], 'Ok')
 
     def test_plan_experiment_and_phase(self):
         categorization = Categorization()

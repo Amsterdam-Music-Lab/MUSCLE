@@ -1,5 +1,7 @@
-from .base_action import BaseAction
+from typing import Optional
 
+from .base_action import BaseAction
+from .button import Button
 
 class Info(BaseAction):
     """
@@ -25,7 +27,7 @@ class Info(BaseAction):
 
     view = "INFO"
 
-    def __init__(self, body, heading="", button=None):
+    def __init__(self, body, heading="", button: Optional[Button] = None):
         self.body = body
         self.heading = heading
         self.button = button

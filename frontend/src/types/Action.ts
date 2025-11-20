@@ -35,7 +35,6 @@ export interface IFeedbackForm {
   form: Question[];
   submitButton: IButton;
   skipButton: IButton;
-  is_skippable: boolean;
 }
 
 export interface ITrial {

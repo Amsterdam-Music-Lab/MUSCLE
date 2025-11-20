@@ -41,7 +41,7 @@ class TestScore(unittest.TestCase):
                 'listen_explainer': 'You listened to:',
             },
         )
-        self.assertEqual(score.button.get('label'), 'Custom label')
+        self.assertEqual(score.button.label, 'Custom label')
         self.assertEqual(score.timer, 5)
 
     def test_initialization_minimal_parameters(self):
@@ -60,7 +60,7 @@ class TestScore(unittest.TestCase):
                 'listen_explainer': 'You listened to:',
             },
         )
-        self.assertEqual(score.button.get('label'), 'Next')
+        self.assertEqual(score.button.label, 'Next')
         self.assertIsNone(score.timer)
 
     def test_action_serialization(self):
@@ -76,6 +76,7 @@ class TestScore(unittest.TestCase):
         self.assertIn('feedback', action)
         self.assertIn('icon', action)
         self.assertIn('timer', action)
+        self.assertIn('button', action)
 
     def test_default_score_message(self):
         score = Score(session=self.mock_session)
@@ -84,7 +85,3 @@ class TestScore(unittest.TestCase):
         self.assertIn(score.default_score_message(-5),
                       ["Incorrect"])  # Negative
         self.assertIn(score.default_score_message(None), ["No points"])  # None
-
-
-if __name__ == '__main__':
-    unittest.main()

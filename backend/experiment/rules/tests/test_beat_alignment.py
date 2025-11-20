@@ -108,8 +108,9 @@ class BeatAlignmentRuleTest(TestCase):
             response = self.client.post(
                 f'/session/{session_id}/next_round/')
             response_json = self.load_json(response)
-            result_id = response_json.get(
-                'next_round')[0]['feedback_form']['form'][0]['result_id']
+            result_id = response_json.get('next_round')[0]['feedbackForm']['form'][0][
+                'result_id'
+            ]
             result = Result.objects.get(pk=result_id)
             result.score = 1
             result.save()

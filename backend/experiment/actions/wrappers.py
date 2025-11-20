@@ -8,6 +8,7 @@ from .final import Final
 from .form import Form
 from .playback import Autoplay, PlayButton
 from .trial import Trial
+from .utils import get_current_experiment_url
 
 from experiment.actions.utils import randomize_playhead
 from experiment.actions.question import ButtonArrayQuestion
@@ -70,7 +71,7 @@ class TwoAlternativeForced(Trial):
             style=button_style,
         )
         feedback_form = Form([question], submit_button=None)
-        super.__init__(playback=playback, feedback_form=feedback_form, **kwargs)
+        super().__init__(playback=playback, feedback_form=feedback_form, **kwargs)
 
 
 def boolean_question(
@@ -111,7 +112,6 @@ def song_sync(
         trials = song_sync(session, section, _("Song Sync"), recognition_time=10)
         ```
     """
-    trial_config = {"response_time": recognition_time, "auto_advance": True}
     recognize = Trial(
         feedback_form=Form(
             [

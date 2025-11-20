@@ -12,7 +12,6 @@ class Form(BaseAction):
         form (List[Question]): List of question components
         submit_button (Button): Button object specifying label and color of submit button
         skip_button (Button): Button object specifying label and color of skip button
-        is_skippable (bool): Whether form can be skipped
 
     Example:
         ```python
@@ -34,7 +33,7 @@ class Form(BaseAction):
     def __init__(
         self,
         form: List[Any],
-        submit_button: Optional[Button] = Button(_("Continue"), 'colorPrimary'),
+        submit_button: Optional[Button] = Button(_("Submit"), 'colorPrimary'),
         skip_button: Optional[Button] = Button(_("Skip"), 'colorGrey'),
     ) -> None:
         self.form = form

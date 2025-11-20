@@ -73,7 +73,7 @@ const Trial = (props: TrialProps) => {
                 form.map((formElement) => (formElement.value = "TIMEOUT"));
             }
 
-            if (feedbackForm.is_skippable) {
+            if (feedbackForm.skipButton) {
                 form.map((formElement => (formElement.value = formElement.value || '')))
             }
 

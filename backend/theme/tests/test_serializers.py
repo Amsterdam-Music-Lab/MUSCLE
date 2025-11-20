@@ -103,6 +103,20 @@ class ThemeConfigSerializerTest(TestCase):
         }
         self.assertEqual(serialize_header(self.header), expected_json)
 
+    def default_colors(self):
+        return {
+            'colorPrimary': '#d843e2',
+            'colorSecondary': '#39d7b8',
+            'colorPositive': '#00b612',
+            'colorNegative': '#fa5577',
+            'colorNeutral1': '#ffb14c',
+            'colorNeutral2': '#0cc7f1',
+            'colorNeutral3': '#2b2bee',
+            'colorGrey': '#bdbebf',
+            'colorText': '#ffffff',
+            'colorBackground': '#212529',
+        }
+
     def test_theme_config_serializer(self):
         expected_json = {
             'name': 'Default',
@@ -119,6 +133,7 @@ class ThemeConfigSerializerTest(TestCase):
                 'tags': [],
                 'target': '_self',
             },
+            **self.default_colors(),
             'backgroundUrl': f'{settings.BASE_URL}{settings.MEDIA_URL}anotherimage.png',
             'footer': serialize_footer(self.footer),
             'header': serialize_header(self.header),
@@ -135,6 +150,7 @@ class ThemeConfigSerializerTest(TestCase):
             'description': 'Default theme configuration',
             'headingFontUrl': 'https://example.com/heading_font',
             'bodyFontUrl': 'https://example.com/body_font',
+            **self.default_colors(),
             'logo': None,
             'backgroundUrl': None,
             'footer': serialize_footer(self.footer),
@@ -159,6 +175,7 @@ class ThemeConfigSerializerTest(TestCase):
                 'target': '_self',
                 'tags': [],
             },
+            **self.default_colors(),
             'backgroundUrl': f'{settings.BASE_URL}{settings.MEDIA_URL}anotherimage.png',
             'header': serialize_header(self.header),
             'footer': None,
@@ -182,6 +199,7 @@ class ThemeConfigSerializerTest(TestCase):
                 'target': '_self',
                 'tags': [],
             },
+            **self.default_colors(),
             'backgroundUrl': f'{settings.BASE_URL}{settings.MEDIA_URL}anotherimage.png',
             'header': None,
             'footer': serialize_footer(self.footer),

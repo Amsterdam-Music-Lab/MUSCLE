@@ -193,8 +193,7 @@ class ToontjeHoger3Plink(BaseRules):
                 playback=PlayButton(sections=[section]),
                 feedback_form=Form(
                     [question1],
-                    is_skippable=True,
-                    skip_label="Ik weet het niet",
+                    skip_button=Button("Ik weet het niet"),
                     submit_button=Button("Volgende"),
                 ),
                 break_round_on={"NOT": [""]},
