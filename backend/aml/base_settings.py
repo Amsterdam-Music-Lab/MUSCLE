@@ -182,7 +182,7 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     "baggage",
 ]
 
-CSRF_TRUSTED_ORIGINS = [os.getenv("CSRF_TRUSTED_ORIGINS")]
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS").split(",")
 
 SESSION_SAVE_EVERY_REQUEST = False  # Do not set to True, because it will break session-based participant_id
 
