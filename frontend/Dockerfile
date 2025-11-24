@@ -14,5 +14,6 @@ COPY vite.config.ts /client/
 COPY lingui.config.js /client/
 COPY index.html /client/
 COPY src /client/src
+COPY public /client/public
 # copy locale files to public folder
 RUN cp -r src/locales /client/public/locales/
