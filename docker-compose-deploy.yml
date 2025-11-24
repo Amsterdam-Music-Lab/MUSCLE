@@ -91,7 +91,7 @@ services:
         image: docker.io/nginx:alpine
         command: nginx -g 'daemon off;'
         ports:
-            - 8080:80
+            - 80:80
         depends_on:
             server:
                 condition: service_started
