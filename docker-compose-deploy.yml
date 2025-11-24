@@ -98,7 +98,9 @@ services:
             client-builder:
                 condition: service_completed_successfully
         volumes:
-            - ${HOST_DATA}/frontend-build:/usr/share/nginx/html/
+            - ${HOST_DATA}/frontend-build/index.html:/usr/share/nginx/html/index.html
+            - ${HOST_DATA}/frontend-build/assets:/usr/share/nginx/html/assets
+            - ${HOST_DATA}/frontend-build/locales:/usr/share/nginx/html/locales
             - ${HOST_DATA}/server-static:/usr/share/nginx/html/django_static
             - ${HOST_DATA}/server-uploads:/usr/share/nginx/html/upload
             - ./nginx/custom-nginx.conf:/etc/nginx/conf.d/default.conf
