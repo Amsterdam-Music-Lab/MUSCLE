@@ -7,7 +7,7 @@ describe('Button component', () => {
 
     it('renders correctly', () => {
         const mockOnClick = vi.fn();
-        const { getByText } = render(<Button label="Test Button" onClick={mockOnClick} color="#fabacc" />);
+        const { getByText } = render(<Button label="Test Button" onClick={mockOnClick} color="colorPrimary" />);
         const buttonElement = getByText('Test Button');
 
         expect(document.body.contains(buttonElement)).toBe(true);

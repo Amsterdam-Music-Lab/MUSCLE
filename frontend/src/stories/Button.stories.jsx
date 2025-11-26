@@ -10,8 +10,9 @@ export default {
 
 export const Default = {
     args: {
-        title: "Click me",
+        label: "Click me",
         onClick: () => {},
+        color: "colorPrimary"
     },
     decorators: [
         (Story) => (
@@ -26,9 +27,9 @@ export const Default = {
 
 export const Inactive = {
     args: {
-        title: "Click me",
+        label: "Click me",
         onClick: () => {},
-        active: false,
+        disabled: true,
     },
     decorators: [
         (Story) => (
@@ -43,7 +44,7 @@ export const Inactive = {
 
 export const WithValue = {
     args: {
-        title: "Click me",
+        label: "Click me",
         onClick: () => {},
         value: "value",
     },
@@ -60,7 +61,7 @@ export const WithValue = {
 
 export const Primary = {
     args: {
-        title: "Click me",
+        label: "Click me",
         onClick: () => {},
         className: "btn-primary",
     },
@@ -77,7 +78,7 @@ export const Primary = {
 
 export const Secondary = {
     args: {
-        title: "Click me",
+        label: "Click me",
         onClick: () => {},
         className: "btn-secondary",
     },
@@ -94,7 +95,7 @@ export const Secondary = {
 
 export const Success = {
     args: {
-        title: "Click me",
+        label: "Click me",
         onClick: () => {},
         className: "btn-success",
     },
@@ -111,7 +112,7 @@ export const Success = {
 
 export const Danger = {
     args: {
-        title: "Click me",
+        label: "Click me",
         onClick: () => {},
         className: "btn-danger",
     },
@@ -128,7 +129,7 @@ export const Danger = {
 
 export const Warning = {
     args: {
-        title: "Click me",
+        label: "Click me",
         onClick: () => {},
         className: "btn-warning",
     },
@@ -147,7 +148,7 @@ export const Warning = {
 
 export const Info = {
     args: {
-        title: "Click me",
+        label: "Click me",
         onClick: () => {},
         className: "btn-info",
     },
@@ -164,7 +165,7 @@ export const Info = {
 
 export const WithAlternativePadding = {
     args: {
-        title: "Click me",
+        label: "Click me",
         onClick: () => {},
         padding: "px-2",
     },
@@ -181,7 +182,7 @@ export const WithAlternativePadding = {
 
 export const WithOnClick = {
     args: {
-        title: "Click me",
+        label: "Click me",
         onClick: () => alert("Clicked!"),
     },
     decorators: [
