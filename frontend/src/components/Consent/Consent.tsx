@@ -69,7 +69,6 @@ const Consent = ({ title, text, experiment, participant, onNext, confirmButton, 
 
     const correction = width > 720 ? 300 : 250;
 
-
     // Show consent
     return (
         <div className={classNames("aha__consent")}>
@@ -96,9 +95,9 @@ const Consent = ({ title, text, experiment, participant, onNext, confirmButton, 
             />
 
             <div className="buttons d-flex justify-content-between">
-                <a href={URLS.AMLHome} className="btn btn-lg border-outside" css={styleButton(experiment.theme.colorNegative)}>
-                    {denyButton.label}
-                </a>
+                <Button
+                    {...denyButton}
+                />
 
                 <Button
                     {...confirmButton}

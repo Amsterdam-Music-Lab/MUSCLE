@@ -23,7 +23,7 @@ const blockObj = {
     loadingText: 'Patience!'
 };
 
-const nextRoundObj = { next_round: [{ view: 'EXPLAINER', instruction: 'Instruction', title: 'Some title' }] };
+const nextRoundObj = { next_round: [{ view: 'EXPLAINER', instruction: 'Instruction', title: 'Some title', button: {label: 'Next', color: '#fabacc'} }] };
 
 const mockSessionStore = { id: 1 };
 const mockParticipantStore = {

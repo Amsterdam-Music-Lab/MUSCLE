@@ -15,7 +15,7 @@ export interface ExplainerProps extends ExplainerAction {
  * If the button has not been clicked, onNext will be called automatically after the timer expires (in milliseconds).
  * If timer == null, onNext will only be called after the button is clicked.
  */
-const Explainer = ({ instruction, button_label, steps = [], timer = null, onNext, theme }: ExplainerProps) => {
+const Explainer = ({ instruction, button, steps = [], timer = null, onNext, theme }: ExplainerProps) => {
 
     useEffect(() => {
         if (timer != null) {
@@ -43,8 +43,8 @@ const Explainer = ({ instruction, button_label, steps = [], timer = null, onNext
                 <Button
                     className="anim anim-fade-in anim-speed-300"
                     onClick={onNext}
-                    title={button_label}
-                    css={styleButton(theme?.colorPrimary)}
+                    label={button.label}
+                    color={button.color}
                     style={{ animationDelay: steps.length * 300 + "ms" }}
                 />
             </div>

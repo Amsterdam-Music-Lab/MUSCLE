@@ -13,7 +13,10 @@ describe('UserFeedback', () => {
     const mockParticipant = { id: 1 };
     const mockFeedbackInfo = {
         header: 'Your Feedback',
-        button: 'Submit',
+        button: {
+            label: 'submit',
+            color: '#fabacc'
+        },
         contact_body: 'Contact us at test@example.com',
         thank_you: 'Thank you for your feedback!',
         show_float_button: true,
@@ -30,7 +33,7 @@ describe('UserFeedback', () => {
 
         expect(getByText(mockFeedbackInfo.header)).toBeTruthy();
         expect(getByRole('textbox')).toBeTruthy();
-        expect(getByText(mockFeedbackInfo.button)).toBeTruthy();
+        expect(getByText(mockFeedbackInfo.button.label)).toBeTruthy();
     });
 
     it('allows input to be entered', () => {
@@ -60,7 +63,7 @@ describe('UserFeedback', () => {
         );
 
         fireEvent.change(getByRole('textbox'), { target: { value: 'Great experience!' } });
-        fireEvent.click(getByText(mockFeedbackInfo.button));
+        fireEvent.click(getByText(mockFeedbackInfo.button.label));
 
         await waitFor(() => {
             expect(postFeedback).toHaveBeenCalledWith({

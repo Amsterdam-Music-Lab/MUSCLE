@@ -22,7 +22,8 @@ vi.mock('../../API', () => ({
 
 const mockExperiment = {
     slug: 'test-experiment',
-    name: 'Test'
+    name: 'Test',
+    theme: {colorGrey: '#abacab'},
 };
 
 const getConsentProps: (overrides?: Partial<ConsentProps>) => ConsentProps = (overrides) => ({
@@ -31,8 +32,8 @@ const getConsentProps: (overrides?: Partial<ConsentProps>) => ConsentProps = (ov
     experiment: mockExperiment,
     participant: { csrf_token: '42' },
     onNext: vi.fn(),
-    confirm: 'Agree',
-    deny: 'Disagree',
+    confirmButton: {label: 'Agree', color: '#fabacc'},
+    denyButton: {label: 'Disagree', color: '#abacab'},
     ...overrides,
 });
 

@@ -48,10 +48,10 @@ const UserFeedback = ({ blockSlug, participant, feedbackInfo, inline = true }: U
                             value={value}
                         ></textarea>
                         <Button
-                            title={feedbackInfo.button}
+                            label={feedbackInfo.button.label}
                             className={"user-feedback__button anim anim-fade-in anim-speed-500"}
                             onClick={giveFeedback}
-                            buttonColor={theme?.colorPrimary!}
+                            color={feedbackInfo.button.color}
                         />
                     </div>
                     <HTML body={feedbackInfo.contact_body}></HTML>

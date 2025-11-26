@@ -151,7 +151,7 @@ const Trial = (props: TrialProps) => {
     }, [autoAdvance, responseTime, playback, makeResult]);
 
     return (
-        <div role="presentation" className={classNames("aha__trial", style)}>
+        <div role="presentation" className={classNames("aha__trial")}>
             {playback && (
                 <Playback
                     playbackArgs={playback}
