@@ -1,4 +1,18 @@
 import Button from "../components/Button/Button";
+import useBoundStore from "@/util/stores";
+
+const StoreDecorator = (Story) => {
+    const setTheme = useBoundStore((state) => state.setTheme);
+    setTheme({ colorPrimary: '#d843e2', colorSecondary: '#39d7b8', colorPositive: '#00b612', colorNegative: '#fa5577', colorNeutral1: '#ffb14c'});
+
+    return (
+        <div
+            style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+        >
+            <Story />
+        </div>
+    );
+};
 
 export default {
     title: "Button/Button",
@@ -14,15 +28,7 @@ export const Default = {
         onClick: () => {},
         color: "colorPrimary"
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [StoreDecorator]
 };
 
 export const Inactive = {
@@ -31,15 +37,7 @@ export const Inactive = {
         onClick: () => {},
         disabled: true,
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [StoreDecorator],
 };
 
 export const WithValue = {
@@ -48,119 +46,52 @@ export const WithValue = {
         onClick: () => {},
         value: "value",
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [StoreDecorator],
 };
 
 export const Primary = {
     args: {
         label: "Click me",
         onClick: () => {},
-        className: "btn-primary",
+        color: 'colorPrimary'
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [StoreDecorator]
 };
 
 export const Secondary = {
     args: {
         label: "Click me",
         onClick: () => {},
-        className: "btn-secondary",
+        color: 'colorSecondary'
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [StoreDecorator],
 };
 
-export const Success = {
+export const Positive = {
     args: {
         label: "Click me",
         onClick: () => {},
-        className: "btn-success",
+        color: 'colorPositive'
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [StoreDecorator]
 };
 
-export const Danger = {
+export const Negative = {
     args: {
         label: "Click me",
         onClick: () => {},
-        className: "btn-danger",
+        color: 'colorNegative',
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [StoreDecorator],
 };
 
-export const Warning = {
+export const Neutral = {
     args: {
         label: "Click me",
         onClick: () => {},
-        className: "btn-warning",
+        color: 'colorNeutral1',
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <div className="btn-group">
-                    <Story />
-                </div>
-            </div>
-        ),
-    ],
-};
-
-export const Info = {
-    args: {
-        label: "Click me",
-        onClick: () => {},
-        className: "btn-info",
-    },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [StoreDecorator],
 };
 
 export const WithAlternativePadding = {
@@ -169,15 +100,7 @@ export const WithAlternativePadding = {
         onClick: () => {},
         padding: "px-2",
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [StoreDecorator],
 };
 
 export const WithOnClick = {
@@ -185,11 +108,13 @@ export const WithOnClick = {
         label: "Click me",
         onClick: () => alert("Clicked!"),
     },
-    decorators: [
-        (Story) => (
-            <div style={{ width: "100%", height: "100%", backgroundColor: "#ddd" }}>
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [StoreDecorator],
 };
+
+export const Link = {
+    args: {
+        label: "Click me",
+        link: "https://www.example.com"
+    },
+    decorators: [StoreDecorator]
+}

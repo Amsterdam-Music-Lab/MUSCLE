@@ -30,12 +30,12 @@ const Button = ({
     disabled = false,
     value = "",
     clickOnce = true,
-    color,
+    color = 'colorPrimary',
     link,
 }: ButtonProps) => {
     const clicked = useRef(false);
     const theme = useBoundStore((state) => state.theme);
-    const colorValue = theme?[color] : '#fabbacc';
+    const colorValue = theme? theme[color] : '#fabbacc';
 
     // Only handle the first click
     const clickOnceGuard = () => {
