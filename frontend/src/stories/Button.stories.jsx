@@ -1,10 +1,8 @@
 import Button from "../components/Button/Button";
 import useBoundStore from "@/util/stores";
 
-const StoreDecorator = (Story) => {
-    const setTheme = useBoundStore((state) => state.setTheme);
-    setTheme({ colorPrimary: '#d843e2', colorSecondary: '#39d7b8', colorPositive: '#00b612', colorNegative: '#fa5577', colorNeutral1: '#ffb14c'});
-
+const ButtonDecorator = (Story) => {
+    StoreDecorator();
     return (
         <div
             style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
@@ -12,6 +10,11 @@ const StoreDecorator = (Story) => {
             <Story />
         </div>
     );
+}
+
+const StoreDecorator = (Story) => {
+    const setTheme = useBoundStore((state) => state.setTheme);
+    setTheme({ colorPrimary: '#d843e2', colorSecondary: '#39d7b8', colorPositive: '#00b612', colorNegative: '#fa5577', colorNeutral1: '#ffb14c'});
 };
 
 export default {
@@ -28,7 +31,7 @@ export const Default = {
         onClick: () => {},
         color: "colorPrimary"
     },
-    decorators: [StoreDecorator]
+    decorators: [ButtonDecorator]
 };
 
 export const Inactive = {
@@ -37,7 +40,7 @@ export const Inactive = {
         onClick: () => {},
         disabled: true,
     },
-    decorators: [StoreDecorator],
+    decorators: [ButtonDecorator],
 };
 
 export const WithValue = {
@@ -46,7 +49,7 @@ export const WithValue = {
         onClick: () => {},
         value: "value",
     },
-    decorators: [StoreDecorator],
+    decorators: [ButtonDecorator],
 };
 
 export const Primary = {
@@ -55,7 +58,7 @@ export const Primary = {
         onClick: () => {},
         color: 'colorPrimary'
     },
-    decorators: [StoreDecorator]
+    decorators: [ButtonDecorator]
 };
 
 export const Secondary = {
@@ -64,7 +67,7 @@ export const Secondary = {
         onClick: () => {},
         color: 'colorSecondary'
     },
-    decorators: [StoreDecorator],
+    decorators: [ButtonDecorator],
 };
 
 export const Positive = {
@@ -73,7 +76,7 @@ export const Positive = {
         onClick: () => {},
         color: 'colorPositive'
     },
-    decorators: [StoreDecorator]
+    decorators: [ButtonDecorator]
 };
 
 export const Negative = {
@@ -82,7 +85,7 @@ export const Negative = {
         onClick: () => {},
         color: 'colorNegative',
     },
-    decorators: [StoreDecorator],
+    decorators: [ButtonDecorator],
 };
 
 export const Neutral = {
@@ -91,7 +94,7 @@ export const Neutral = {
         onClick: () => {},
         color: 'colorNeutral1',
     },
-    decorators: [StoreDecorator],
+    decorators: [ButtonDecorator],
 };
 
 export const WithAlternativePadding = {
@@ -100,7 +103,7 @@ export const WithAlternativePadding = {
         onClick: () => {},
         padding: "px-2",
     },
-    decorators: [StoreDecorator],
+    decorators: [ButtonDecorator],
 };
 
 export const WithOnClick = {
@@ -108,7 +111,7 @@ export const WithOnClick = {
         label: "Click me",
         onClick: () => alert("Clicked!"),
     },
-    decorators: [StoreDecorator],
+    decorators: [ButtonDecorator],
 };
 
 export const Link = {
@@ -116,5 +119,5 @@ export const Link = {
         label: "Click me",
         link: "https://www.example.com"
     },
-    decorators: [StoreDecorator]
+    decorators: [ButtonDecorator]
 }

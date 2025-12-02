@@ -44,12 +44,10 @@ const Info = ({ heading, body, button, onNext }: InfoProps) => {
 
             {button && (
                 <div className="buttons d-flex justify-content-center pt-3">
-                    { onNext? (
-                        <Button
-                            {...button}
-                            onClick={onNext}
-                        />
-                    ) : null};
+                    <Button
+                        {...button}
+                        onClick={onNext}
+                    />
                 </div>
             )}
         </div>
