@@ -148,7 +148,7 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
             ),
         )
         form = Form([question], submit_button=None)
-        playback = Autoplay([PlaybackSection(section)], show_animation=False)
+        playback = Autoplay(sections=[PlaybackSection(section)], show_animation=False)
 
         return Trial(
             playback=playback,

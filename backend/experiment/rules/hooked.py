@@ -307,7 +307,9 @@ class Hooked(BaseRules):
         # Get section.
         condition = plan[round_number]
         section = self.select_heard_before_section(session, condition)
-        playback = Autoplay([section], show_animation=True, preload_message=_("Get ready!"))
+        playback = Autoplay(
+            sections=[section], show_animation=True, preload_message=_("Get ready!")
+        )
         # create Result object and save expected result to database
         key = "heard_before"
         form = Form(

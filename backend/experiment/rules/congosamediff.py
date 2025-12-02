@@ -160,7 +160,7 @@ class CongoSameDiff(BaseRules):
             ),
         )
         form = Form([question])
-        playback = PlayButtons([PlaybackSection(section)], play_once=False)
+        playback = PlayButtons(sections=[PlaybackSection(section)], play_once=False)
         block_name = session.block.slug if session.block else "Musicality Battery Block"
         view = Trial(
             playback=playback,

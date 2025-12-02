@@ -9,8 +9,6 @@ from section.models import Section
 # player types
 TYPE_AUTOPLAY = "AUTOPLAY"
 TYPE_BUTTON = "BUTTON"
-TYPE_IMAGE = "IMAGE"
-TYPE_MULTIPLAYER = "MULTIPLAYER"
 TYPE_MATCHINGPAIRS = "MATCHINGPAIRS"
 
 # playback methods
@@ -46,8 +44,8 @@ class PlaybackSection(Button):
     Currently there is no support for mixed playback methods.
     '''
 
-    def __init__(self, section: Section, play_from=0, mute=False, **kwargs):
-        super().__init(**kwargs)
+    def __init__(self, section: Section, label="", play_from=0, mute=False, **kwargs):
+        super().__init__(label, **kwargs)
         self.play_from = play_from
         self.link = section.absolute_url()
         self.play_method = get_play_method(section)
@@ -88,6 +86,7 @@ class Playback(BaseAction):
         timeout_after_playback (Optional[float]): Seconds to wait after playback before proceeding. Defaults to None.
         stop_audio_after (Optional[float]): Seconds after which to stop playback. Defaults to None.
         resume_play (bool): Whether to resume from previous position. Defaults to False.
+        show_animation (bool): Whether to show an animated histogram during playback (applies for AutoPlay & MatchingPairs)
         style (Optional[list[str]]): CSS class name(s) set in the frontend for styling
     """
 
@@ -97,17 +96,20 @@ class Playback(BaseAction):
         preload_message: str = "",
         instruction: str = "",
         resume_play: bool = False,
+        show_animation: bool = True,
         style: Optional[list[str]] = None,
     ) -> None:
         self.sections = sections
         self.preload_message = preload_message
         self.instruction = instruction
         self.resume_play = resume_play
+        self.show_animation = show_animation
         self.style = self._apply_style(style)
 
     def action(self):
         serialized = super().action()
         serialized['sections'] = [section.action() for section in self.sections]
+        return serialized
 
 
 class Autoplay(Playback):
@@ -120,7 +122,7 @@ class Autoplay(Playback):
     Example:
         ```python
         Autoplay(
-            [section1],
+            sections=[PlaybackSection(section1)],
             show_animation=True,
         )
         ```
@@ -129,9 +131,8 @@ class Autoplay(Playback):
         If show_animation is True, displays a countdown and moving histogram.
     """
 
-    def __init__(self, show_animation: bool = True, **kwargs) -> None:
+    def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.show_animation = show_animation
         self.view = TYPE_AUTOPLAY
 
 
@@ -145,15 +146,15 @@ class PlayButtons(Playback):
 
     Example:
         ```python
-        PlayButton(
-            [section1, section2],
+        PlayButtons(
+            sections=[PlaybackSection(section1), PlaybackSection(section2)],
             play_once=False,
         )
         ```
     """
 
-    def __init__(self, sections: List[Section], play_once: bool = False, **kwargs: Any) -> None:
-        super().__init__(sections, **kwargs)
+    def __init__(self, play_once: bool = False, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
         self.view = TYPE_BUTTON
         self.play_once = play_once
 

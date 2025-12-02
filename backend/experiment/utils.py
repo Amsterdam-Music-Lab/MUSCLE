@@ -82,11 +82,11 @@ def external_url(text: str, url) -> str:
 
 
 def format_label(number: int, label_style: str) -> str:
-    """Generate player_label for create_player_label()
+    """Generate a label based on an index and a label style
 
     Args:
         number: index
-        label_style: 'number', 'alphabetic', 'roman'
+        label_style: 'alphabetic', 'roman'
 
     Returns:
         Player label

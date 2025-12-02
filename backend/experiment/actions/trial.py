@@ -40,7 +40,7 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
             result_id=prepare_result(key, session, section=section),
         )
         form = Form([question])
-        playback = Autoplay([PlaybackSection(section)])
+        playback = Autoplay(sections=[PlaybackSection(section)])
         view = Trial(
             playback=playback,
             feedback_form=form,

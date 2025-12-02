@@ -141,7 +141,7 @@ class ToontjeHoger1Mozart(BaseRules):
         # --------------------
 
         # Listen
-        playback = Autoplay([PlaybackSection(section)], show_animation=True)
+        playback = Autoplay(sections=[PlaybackSection(section)], show_animation=True)
 
         listen_config = {
             "auto_advance": True,

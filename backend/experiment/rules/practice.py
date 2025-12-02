@@ -329,7 +329,7 @@ class PracticeMixin(object):
                 scoring_rule="CORRECTNESS",
             ),
         )
-        playback = Autoplay([PlaybackSection(section)])
+        playback = Autoplay(sections=[PlaybackSection(section)])
         form = Form([question], submit_button=None)
         return Trial(
             playback=playback,

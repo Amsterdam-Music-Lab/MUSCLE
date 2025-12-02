@@ -115,7 +115,7 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
             ),
         )
 
-        playback = Autoplay([PlaybackSection(section)], show_animation=False)
+        playback = Autoplay(sections=[PlaybackSection(section)], show_animation=False)
         form = Form([question], submit_button=None)
         view = Trial(
             playback=playback,

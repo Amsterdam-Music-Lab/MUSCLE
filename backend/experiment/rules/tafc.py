@@ -97,7 +97,7 @@ class TwoAlternativeForced(BaseRules):
 
         # Build Trial action, configure through config argument. Trial has Playback and Form with ButtonArrayQuestion to submit response.
 
-        playback = PlayButtons([PlaybackSection(section)])
+        playback = PlayButtons(sections=[PlaybackSection(section)])
 
         key = 'choice'
         button_style = [

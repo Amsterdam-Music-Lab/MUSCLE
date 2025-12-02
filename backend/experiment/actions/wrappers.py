@@ -49,7 +49,7 @@ class TwoAlternativeForced(Trial):
         style: list[str] = [],
         **kwargs
     ):
-        playback = PlayButtons([PlaybackSection(section)], play_once=True)
+        playback = PlayButtons(sections=[PlaybackSection(section)], play_once=True)
         key = "choice"
         button_style = [
             TextStyle.INVISIBLE,
@@ -129,7 +129,7 @@ def song_sync(
             submit_button=Button(""),
         ),
         playback=Autoplay(
-            [PlaybackSection(section)],
+            sections=[PlaybackSection(section)],
             show_animation=True,
             preload_message=_("Get ready!"),
             instruction=_("Do you recognize the song?"),
@@ -141,7 +141,11 @@ def song_sync(
     )
     silence_time = 4
     silence = Trial(
-        playback=Autoplay([PlaybackSection(section)], show_animation=True, instruction=_("Keep imagining the music"), mute=True),
+        playback=Autoplay(
+            sections=[PlaybackSection(section, mute=True)],
+            show_animation=True,
+            instruction=_("Keep imagining the music"),
+        ),
         response_time=silence_time,
         auto_advance=True,
         continue_button=None,
@@ -167,10 +171,9 @@ def song_sync(
             ]
         ),
         playback=Autoplay(
-            [PlaybackSection(section)],
+            sections=[PlaybackSection(section, play_from=silence_time + jitter)],
             instruction=_("Did the track come back in the right place?"),
             show_animation=True,
-            play_from=silence_time + jitter,
             resume_play=True,
         ),
         response_time=sync_time,

@@ -250,7 +250,7 @@ class MusicalPreferences(BaseRules):
             result_id=prepare_result(know_key, session, section=section),
             style=[ColorScheme.BOOLEAN],
         )
-        playback = Autoplay([PlaybackSection(section)])
+        playback = Autoplay(sections=[PlaybackSection(section)])
         form = Form([know, likert])
         view = Trial(
             playback=playback,

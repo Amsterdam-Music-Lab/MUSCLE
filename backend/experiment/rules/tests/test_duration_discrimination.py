@@ -74,16 +74,16 @@ class DDITest(TestCase):
             }
         )
         catch_trial = self.rules.get_next_trial(self.session)
-        assert catch_trial
-        assert catch_trial.feedback_form
+        self.assertIsNotNone(catch_trial)
+        self.assertIsNotNone(catch_trial.feedback_form)
         section = catch_trial.playback.sections[0]
-        assert section['id'] == catch_section.id
+        self.assertEqual(section.link, catch_section.absolute_url())
         self.session.save_json_data({"current_trials": ["longer"]})
         regular_trial = self.rules.get_next_trial(self.session)
-        assert regular_trial
-        assert regular_trial.feedback_form
+        self.assertIsNotNone(regular_trial)
+        self.assertIsNotNone(regular_trial.feedback_form)
         section = regular_trial.playback.sections[0]
-        assert section['id'] == diff_section.id
+        self.assertEqual(section.link, diff_section.absolute_url())
 
 
 class AnisochronyTest(TestCase):
@@ -109,10 +109,10 @@ class AnisochronyTest(TestCase):
             {"current_trials": ["regular"], "practice_done": True}
         )
         catch_trial = self.rules.get_next_trial(self.session)
-        assert catch_trial
-        assert catch_trial.feedback_form
+        self.assertIsNotNone(catch_trial)
+        self.assertIsNotNone(catch_trial.feedback_form)
         section = catch_trial.playback.sections[0]
-        assert section["id"] == catch_section.id
+        self.assertEqual(section.link, catch_section.absolute_url())
         difficulty = 1001
         self.session.save_json_data(
             {"current_trials": ["irregular"], "difficulty": difficulty}
@@ -121,7 +121,7 @@ class AnisochronyTest(TestCase):
             playlist=self.playlist.id, song__name=difficulty
         )
         regular_trial = self.rules.get_next_trial(self.session)
-        assert regular_trial
-        assert regular_trial.feedback_form
+        self.assertIsNotNone(regular_trial)
+        self.assertIsNotNone(regular_trial.feedback_form)
         section = regular_trial.playback.sections[0]
-        assert section['id'] == diff_section.id
+        self.assertEqual(section.link, diff_section.absolute_url())

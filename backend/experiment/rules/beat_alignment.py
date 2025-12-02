@@ -119,7 +119,7 @@ class BeatAlignment(BaseRules):
             presentation_text = _(
                 "In this example the beeps are NOT ALIGNED TO THE BEAT of the music.")
         playback = Autoplay(
-            [PlaybackSection(section)],
+            sections=[PlaybackSection(section)],
             show_animation=False,
             instruction=presentation_text,
             preload_message=presentation_text,
@@ -158,7 +158,7 @@ class BeatAlignment(BaseRules):
             ),
         )
         form = Form([question])
-        playback = Autoplay([PlaybackSection(section)])
+        playback = Autoplay(sections=[PlaybackSection(section)])
         view = Trial(
             playback=playback,
             feedback_form=form,
