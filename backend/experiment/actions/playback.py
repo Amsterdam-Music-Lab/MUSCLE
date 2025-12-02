@@ -1,6 +1,7 @@
-from typing import List, Dict, Optional, Any, Literal, TypedDict
+from typing import List, Optional, Any, Literal, TypedDict
 
 from .base_action import BaseAction
+from .button import Button
 from section.validators import audio_extensions
 
 from section.models import Section
@@ -21,22 +22,67 @@ PLAY_NOAUDIO = "NOAUDIO"
 PlayMethods = Literal["EXTERNAL", "HTML", "BUFFER", "NOAUDIO"]
 
 
-class PlaybackSection(TypedDict):
-    id: int
-    url: str
+class PlaybackSectionAction(TypedDict):
+    """This type is similar to the ButtonAction type, but here link is the only required argument."""
 
-    # TODO: Remove group from PlaybackSection and from the Playback class itself and make sure everything still works (see also https://github.com/Amsterdam-Music-Lab/MUSCLE/pull/1448#discussion_r1903978068)
-    group: str
+    link: str
+    label: Optional[str]
+    color: str
+    play_from: float
+    mute: bool
+    play_method: PlayMethods
+
+
+class PlaybackSection(Button):
+    '''An object to represent a section to be played
+    Args:
+        link (str): Link to audio file
+        label (Optional[str]): Label of play button (not shown in autoplay mode)
+        color (Optional[str]): Color of play button (not shown in autoplay mode)
+        play_from (float): Start position of the audio file in seconds
+        mute (bool): Whether to mute this section
+
+    Infers a playback method for this section, i.e., whether the frontend will use webAudio and whether it will buffer.
+    Currently there is no support for mixed playback methods.
+    '''
+
+    def __init__(self, section: Section, play_from=0, mute=False, **kwargs):
+        super().__init(**kwargs)
+        self.play_from = play_from
+        self.link = section.absolute_url()
+        self.play_method = get_play_method(section)
+        self.mute = mute
+
+
+class SectionImage(TypedDict):
+    link: str
+    label: Optional[str]
+
+
+class ImagePlaybackSectionAction(PlaybackSectionAction):
+    image: SectionImage
+
+
+class ImagePlaybackSection(PlaybackSection):
+    """A special type of PlaybackSection that shows an image along a play button"""
+
+    def __init__(self, image: SectionImage, **kwargs):
+        super().__init__(**kwargs)
+        self.image = image
+
+    def action(self) -> ImagePlaybackSectionAction:
+        serialized = super().action()
+        serialized['image'] = self.image.__dict__
+        return serialized
 
 
 class Playback(BaseAction):
     """Base class for different kinds of audio players.
 
     Args:
-        sections (List[Section]): List of audio sections to play.
+        sections (List[PlaySection]): List of audio sections to play.
         preload_message (str): Text to display during preload. Defaults to "".
         instruction (str): Text to display during presentation. Defaults to "".
-        play_from (float): Start position in seconds. Defaults to 0.
         show_animation (bool): Whether to show playback animation. Defaults to False.
         mute (bool): Whether to mute audio. Defaults to False.
         timeout_after_playback (Optional[float]): Seconds to wait after playback before proceeding. Defaults to None.
@@ -45,45 +91,36 @@ class Playback(BaseAction):
         style (Optional[list[str]]): CSS class name(s) set in the frontend for styling
     """
 
-    sections: List[PlaybackSection]
-
     def __init__(
         self,
-        sections: List[Section],
+        sections: List[PlaybackSection],
         preload_message: str = "",
         instruction: str = "",
-        play_from: float = 0,
-        show_animation: bool = False,
-        mute: bool = False,
-        timeout_after_playback: Optional[float] = None,
-        stop_audio_after: Optional[float] = None,
         resume_play: bool = False,
         style: Optional[list[str]] = None,
     ) -> None:
-        self.sections = [{"id": s.id, "url": s.absolute_url(), "group": s.group} for s in sections]
-        self.play_method = determine_play_method(sections[0])
-        self.show_animation = show_animation
+        self.sections = sections
         self.preload_message = preload_message
         self.instruction = instruction
-        self.play_from = play_from
-        self.mute = mute
-        self.timeout_after_playback = timeout_after_playback
-        self.stop_audio_after = stop_audio_after
         self.resume_play = resume_play
         self.style = self._apply_style(style)
+
+    def action(self):
+        serialized = super().action()
+        serialized['sections'] = [section.action() for section in self.sections]
 
 
 class Autoplay(Playback):
     """Player that starts playing automatically.
 
     Args:
-        sections List[Section]: List of audio sections to play.
+        sections List[AudioSection]: List of audio sections to play. Currently does not support more than one section.
         **kwargs: Additional arguments passed to `Playback`.
 
     Example:
         ```python
         Autoplay(
-            [section1, section2],
+            [section1],
             show_animation=True,
         )
         ```
@@ -92,13 +129,14 @@ class Autoplay(Playback):
         If show_animation is True, displays a countdown and moving histogram.
     """
 
-    def __init__(self, sections: List[Section], **kwargs: Any) -> None:
-        super().__init__(sections, **kwargs)
+    def __init__(self, show_animation: bool = True, **kwargs) -> None:
+        super().__init__(**kwargs)
+        self.show_animation = show_animation
         self.view = TYPE_AUTOPLAY
 
 
-class PlayButton(Playback):
-    """Player that shows a button to trigger playback.
+class PlayButtons(Playback):
+    """Player that shows buttons for each to trigger playback.
 
     Args:
         sections (List[Section]): List of audio sections to play.
@@ -120,95 +158,15 @@ class PlayButton(Playback):
         self.play_once = play_once
 
 
-class Multiplayer(PlayButton):
-    """Player with multiple play buttons.
-
-    Args:
-        sections (List[Section]): List of audio sections to play.
-        stop_audio_after (float): Seconds after which to stop audio. Defaults to 5.
-        labels (List[str]): Custom labels for players. Defaults to empty list.
-        style (FrontendStyle): Frontend styling options.
-        **kwargs: Additional arguments passed to PlayButton.
-
-    Example:
-        ```python
-        Multiplayer(
-            [section1, section2],
-            stop_audio_after=3,
-            labels=["Play 1", "Play 2"],
-        )
-        ```
-
-    Raises:
-        UserWarning: If `labels` is defined, and number of labels doesn't match number of sections.
-    """
-
-    def __init__(
-        self,
-        sections: List[Section],
-        stop_audio_after: float = 5,
-        labels: List[str] = [],
-        style: Optional[list[str]] = None,
-        **kwargs: Any,
-    ) -> None:
-        super().__init__(sections, **kwargs)
-        self.view = TYPE_MULTIPLAYER
-        self.stop_audio_after = stop_audio_after
-        self.style = self._apply_style(style)
-        if labels:
-            if len(labels) != len(self.sections):
-                raise UserWarning("Number of labels and sections for the play buttons do not match")
-            self.labels = labels
-
-
-class ImagePlayer(Multiplayer):
-    """Multiplayer that shows an image next to each play button.
-
-    Args:
-        sections (List[Section]): List of audio sections to play.
-        images (List[str]): List of image paths/urls to display.
-        image_labels (List[str]): Optional labels for images. Defaults to empty list.
-        **kwargs: Additional arguments passed to Multiplayer.
-
-    Example:
-        ```python
-        ImagePlayer(
-            [section1, section2],
-            images=["image1.jpg", "image2.jpg"],
-            image_labels=["Image 1", "Image 2"],
-        )
-        ```
-
-    Raises:
-        UserWarning: If number of images or labels doesn't match sections.
-    """
-
-    def __init__(
-        self,
-        sections: List[Section],
-        images: List[str],
-        image_labels: List[str] = [],
-        **kwargs: Any,
-    ) -> None:
-        super().__init__(sections, **kwargs)
-        self.view = TYPE_IMAGE
-        if len(images) != len(self.sections):
-            raise UserWarning("Number of images and sections for the ImagePlayer do not match")
-        self.images = images
-        if image_labels:
-            if len(image_labels) != len(self.sections):
-                raise UserWarning("Number of image labels and sections do not match")
-            self.image_labels = image_labels
-
-
 ScoreFeedbackDisplay = Literal["small-bottom-right", "large-top", "hidden"]
 
 
-class MatchingPairs(Multiplayer):
+class MatchingPairs(Playback):
     """Multiplayer where buttons are represented as cards and where the cards need to be matched based on audio.
 
     Args:
         sections (List[Section]): List of audio sections to play.
+        show_animation (bool): Whether to show an animated histogram during playback of a card.
         score_feedback_display (ScoreFeedbackDisplay): How to display score feedback. Defaults to "large-top" (pick from "small-bottom-right", "large-top", "hidden").
         **kwargs: Additional arguments passed to Multiplayer.
 
@@ -224,15 +182,17 @@ class MatchingPairs(Multiplayer):
     def __init__(
         self,
         sections: List[Section],
+        show_animation: bool = True,
         score_feedback_display: ScoreFeedbackDisplay = "large-top",
         **kwargs: Any,
     ) -> None:
         super().__init__(sections, **kwargs)
         self.view = TYPE_MATCHINGPAIRS
+        self.show_animation = show_animation
         self.score_feedback_display = score_feedback_display
 
 
-def determine_play_method(section: Section) -> PlayMethods:
+def get_play_method(section: Section) -> PlayMethods:
     """Determine which play method to use based on section properties.
 
     Args:

@@ -25,7 +25,7 @@ class Button(object):
         self.link = link
 
     def action(self) -> ButtonAction:
-        return {'label': self.label, 'color': self.color, 'link': self.link or None}
+        return self.__dict__
 
     def validate_color(self, color: str):
         if not color in valid_colors:

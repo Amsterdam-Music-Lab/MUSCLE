@@ -33,7 +33,5 @@ export interface PlaybackArgs {
     mute?: boolean;
     play_once?: boolean;
     resume_play?: boolean;
-    stop_audio_after?: number;
-    timeout_after_playback?: number;
     score_feedback_display?: ScoreFeedbackDisplay;
 }
