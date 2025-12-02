@@ -8,7 +8,7 @@ from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.html import HTML
-from experiment.actions.playback import Autoplay
+from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion, IconRangeQuestion
 from experiment.actions.redirect import Redirect
 from experiment.actions.trial import Trial
@@ -250,7 +250,7 @@ class MusicalPreferences(BaseRules):
             result_id=prepare_result(know_key, session, section=section),
             style=[ColorScheme.BOOLEAN],
         )
-        playback = Autoplay([section], show_animation=True)
+        playback = Autoplay([PlaybackSection(section)])
         form = Form([know, likert])
         view = Trial(
             playback=playback,

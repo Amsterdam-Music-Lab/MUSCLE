@@ -263,7 +263,6 @@ export const ToontjeHoger4Absolute = {
             play_from: 0,
             mute: false,
             timeout_after_playback: null,
-            stop_audio_after: 5,
             resume_play: false,
             style: {"neutral-inverted": true},
             ID: "MULTIPLAYER",

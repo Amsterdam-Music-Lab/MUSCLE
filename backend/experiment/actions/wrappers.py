@@ -6,7 +6,7 @@ from django.utils.translation import gettext as _
 from .button import Button
 from .final import Final
 from .form import Form
-from .playback import Autoplay, PlayButton
+from .playback import Autoplay, PlayButtons, PlaybackSection
 from .trial import Trial
 from .utils import get_current_experiment_url
 
@@ -49,7 +49,7 @@ class TwoAlternativeForced(Trial):
         style: list[str] = [],
         **kwargs
     ):
-        playback = PlayButton([section], {"listen_once": True})
+        playback = PlayButtons([PlaybackSection(section)], play_once=True)
         key = "choice"
         button_style = [
             TextStyle.INVISIBLE,
@@ -129,7 +129,7 @@ def song_sync(
             submit_button=Button(""),
         ),
         playback=Autoplay(
-            [section],
+            [PlaybackSection(section)],
             show_animation=True,
             preload_message=_("Get ready!"),
             instruction=_("Do you recognize the song?"),
@@ -141,7 +141,7 @@ def song_sync(
     )
     silence_time = 4
     silence = Trial(
-        playback=Autoplay([section], show_animation=True, instruction=_("Keep imagining the music"), mute=True),
+        playback=Autoplay([PlaybackSection(section)], show_animation=True, instruction=_("Keep imagining the music"), mute=True),
         response_time=silence_time,
         auto_advance=True,
         continue_button=None,
@@ -167,7 +167,7 @@ def song_sync(
             ]
         ),
         playback=Autoplay(
-            [section],
+            [PlaybackSection(section)],
             instruction=_("Did the track come back in the right place?"),
             show_animation=True,
             play_from=silence_time + jitter,

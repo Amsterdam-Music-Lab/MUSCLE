@@ -9,7 +9,7 @@ from session.models import Session
 
 from experiment.actions.explainer import Explainer
 from experiment.actions.final import Final
-from experiment.actions.playback import MatchingPairs
+from experiment.actions.playback import MatchingPairs, PlaybackSection
 from experiment.actions.playlist import PlaylistSelection
 from experiment.actions.trial import Trial
 from .matching_pairs import MatchingPairsGame
@@ -81,8 +81,7 @@ class MatchingPairs2025(MatchingPairsGame):
         random.shuffle(player_sections)
 
         playback = MatchingPairs(
-            sections=player_sections,
-            stop_audio_after=5,
+            sections=[PlaybackSection(section) for section in player_sections],
             show_animation=self.show_animation,
             score_feedback_display=self.score_feedback_display,
         )

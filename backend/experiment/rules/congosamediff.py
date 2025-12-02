@@ -7,7 +7,7 @@ from section.models import Playlist, Section
 from session.models import Session
 from experiment.actions.explainer import Explainer
 from experiment.actions.form import Form
-from experiment.actions.playback import PlayButton
+from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
 from .base import BaseRules
@@ -160,7 +160,7 @@ class CongoSameDiff(BaseRules):
             ),
         )
         form = Form([question])
-        playback = PlayButton([section], play_once=False)
+        playback = PlayButtons([PlaybackSection(section)], play_once=False)
         block_name = session.block.slug if session.block else "Musicality Battery Block"
         view = Trial(
             playback=playback,

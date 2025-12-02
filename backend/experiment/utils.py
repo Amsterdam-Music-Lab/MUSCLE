@@ -81,20 +81,6 @@ def external_url(text: str, url) -> str:
     return '<a href="{}" target="_blank" rel="noopener noreferrer" >{}</a>'.format(url, text)
 
 
-def create_player_labels(num_labels: int, label_style: str = "number") -> list[str]:
-    """Create player labels
-
-    Args:
-        num_labels: Number of labels
-        label_style: 'number', 'alphabetic', 'roman'
-
-    Returns:
-        Player label
-    """
-
-    return [format_label(i, label_style) for i in range(num_labels)]
-
-
 def format_label(number: int, label_style: str) -> str:
     """Generate player_label for create_player_label()
 

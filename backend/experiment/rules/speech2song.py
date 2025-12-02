@@ -8,7 +8,7 @@ from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
-from experiment.actions.playback import Autoplay
+from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import RadiosQuestion
 from experiment.actions.trial import Trial
 from result.utils import prepare_result
@@ -239,9 +239,7 @@ def question_sound(session, section):
 
 def sound(section):
     title = _('Listen carefully')
-    playback = Autoplay(
-        sections=[section],
-    )
+    playback = Autoplay(sections=[PlaybackSection(section)], show_animation=False)
     view = Trial(
         playback=playback,
         feedback_form=None,

@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.playback import PlayButton
+from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.info import Info
@@ -99,7 +99,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         )
         next_round.append(
             Trial(
-                playback=PlayButton(sections=[section]),
+                playback=PlayButtons(sections=[PlaybackSection(section)]),
                 feedback_form=Form([question1], submit_button=Button("Volgende")),
             )
         )

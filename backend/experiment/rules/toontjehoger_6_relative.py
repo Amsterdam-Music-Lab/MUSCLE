@@ -8,7 +8,7 @@ from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.info import Info
-from experiment.actions.playback import Multiplayer
+from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
@@ -144,10 +144,13 @@ class ToontjeHoger6Relative(BaseRules):
         form = Form([question], submit_button=None)
 
         # Player
-        playback = Multiplayer(
-            [section1, section2],
+        second_label = "B" if round == 0 else "C"
+        playback = PlayButtons(
+            [
+                PlaybackSection(section1, label="A"),
+                PlaybackSection(section2, second_label),
+            ],
             play_once=True,
-            labels=['A', 'B' if round == 0 else 'C'],
         )
 
         trial = Trial(

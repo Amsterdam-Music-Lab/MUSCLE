@@ -12,7 +12,7 @@ from experiment.actions.html import HTML
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.redirect import Redirect
 from experiment.actions.trial import Trial
-from experiment.actions.playback import Autoplay
+from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.playlist import PlaylistSelection
 from question.banks import get_question_bank
 from result.utils import prepare_result
@@ -283,8 +283,5 @@ class Huang2022(Hooked):
 def get_test_playback():
     from section.models import Section
     test_section = Section.objects.get(song__name='audiocheck')
-    playback = Autoplay(
-        sections=[test_section],
-        show_animation=True
-    )
+    playback = Autoplay(sections=[PlaybackSection(test_section)], show_animation=True)
     return playback

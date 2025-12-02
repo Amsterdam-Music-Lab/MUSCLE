@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from .base import BaseRules
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
-from experiment.actions.playback import MatchingPairs
+from experiment.actions.playback import MatchingPairs, PlaybackSection
 from experiment.actions.playlist import PlaylistSelection
 from experiment.actions.trial import Trial
 from result.utils import prepare_result
@@ -89,8 +89,7 @@ class MatchingPairsGame(BaseRules):
         random.shuffle(player_sections)
 
         playback = MatchingPairs(
-            sections=player_sections,
-            stop_audio_after=5,
+            sections=[PlaybackSection(section) for section in player_sections],
             show_animation=self.show_animation,
             score_feedback_display=self.score_feedback_display,
         )

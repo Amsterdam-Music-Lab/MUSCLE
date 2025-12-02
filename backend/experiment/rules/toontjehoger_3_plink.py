@@ -7,7 +7,7 @@ from django.template.loader import render_to_string
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.playback import PlayButton
+from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.info import Info
@@ -190,7 +190,7 @@ class ToontjeHoger3Plink(BaseRules):
         )
         plink_trials.append(
             Trial(
-                playback=PlayButton(sections=[section]),
+                playback=PlayButtons(PlaybackSection[section]),
                 feedback_form=Form(
                     [question1],
                     skip_button=Button("Ik weet het niet"),

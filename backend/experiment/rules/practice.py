@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.form import Form
-from experiment.actions.playback import Autoplay
+from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
 from result.utils import prepare_result
@@ -329,7 +329,7 @@ class PracticeMixin(object):
                 scoring_rule="CORRECTNESS",
             ),
         )
-        playback = Autoplay([section])
+        playback = Autoplay([PlaybackSection(section)])
         form = Form([question], submit_button=None)
         return Trial(
             playback=playback,

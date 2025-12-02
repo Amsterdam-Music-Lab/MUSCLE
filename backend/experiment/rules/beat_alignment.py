@@ -7,7 +7,7 @@ from .base import BaseRules
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.form import Form
-from experiment.actions.playback import Autoplay
+from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
 from experiment.actions.utils import (
@@ -118,10 +118,12 @@ class BeatAlignment(BaseRules):
         else:
             presentation_text = _(
                 "In this example the beeps are NOT ALIGNED TO THE BEAT of the music.")
-        playback = Autoplay([section],
-                            instruction=presentation_text,
-                            preload_message=presentation_text,
-                            )
+        playback = Autoplay(
+            [PlaybackSection(section)],
+            show_animation=False,
+            instruction=presentation_text,
+            preload_message=presentation_text,
+        )
         view = Trial(
             playback=playback,
             feedback_form=None,
@@ -156,7 +158,7 @@ class BeatAlignment(BaseRules):
             ),
         )
         form = Form([question])
-        playback = Autoplay([section])
+        playback = Autoplay([PlaybackSection(section)])
         view = Trial(
             playback=playback,
             feedback_form=form,

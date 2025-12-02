@@ -36,7 +36,7 @@ from .base import BaseRules
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer
 from experiment.actions.final import Final
-from experiment.actions.playback import PlayButton
+from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
 from experiment.actions.form import Form
@@ -97,7 +97,7 @@ class TwoAlternativeForced(BaseRules):
 
         # Build Trial action, configure through config argument. Trial has Playback and Form with ButtonArrayQuestion to submit response.
 
-        playback = PlayButton([section])
+        playback = PlayButtons([PlaybackSection(section)])
 
         key = 'choice'
         button_style = [

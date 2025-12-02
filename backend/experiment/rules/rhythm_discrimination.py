@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.form import Form
-from experiment.actions.playback import Autoplay
+from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
 from experiment.actions.utils import render_feedback_trivia
@@ -148,7 +148,7 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
             ),
         )
         form = Form([question], submit_button=None)
-        playback = Autoplay([section])
+        playback = Autoplay([PlaybackSection(section)], show_animation=False)
 
         return Trial(
             playback=playback,

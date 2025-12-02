@@ -9,7 +9,7 @@ from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.html import HTML
 from experiment.actions.info import Info
-from experiment.actions.playback import Autoplay
+from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
@@ -141,7 +141,7 @@ class ToontjeHoger1Mozart(BaseRules):
         # --------------------
 
         # Listen
-        playback = Autoplay([section], show_animation=True)
+        playback = Autoplay([PlaybackSection(section)], show_animation=True)
 
         listen_config = {
             "auto_advance": True,

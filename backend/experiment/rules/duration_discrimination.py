@@ -8,7 +8,7 @@ from .base import BaseRules
 from .practice import PracticeMixin
 from section.models import Section
 from experiment.actions.button import Button
-from experiment.actions.playback import Autoplay
+from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.form import Form
 from experiment.actions.question import ButtonArrayQuestion
@@ -115,7 +115,7 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
             ),
         )
 
-        playback = Autoplay([section])
+        playback = Autoplay([PlaybackSection(section)], show_animation=False)
         form = Form([question], submit_button=None)
         view = Trial(
             playback=playback,

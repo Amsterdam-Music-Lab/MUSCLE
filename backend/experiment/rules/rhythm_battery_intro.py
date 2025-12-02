@@ -4,7 +4,7 @@ from .base import BaseRules
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.form import Form
-from experiment.actions.playback import Autoplay
+from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
 from experiment.actions.wrappers import final_action_with_optional_button
@@ -111,7 +111,7 @@ class RhythmBatteryIntro(BaseRules):
             instruction = _("You can now set the sound to a comfortable level. \
                     You can then adjust the volume to as high a level as possible without it being uncomfortable. \
                     When you are satisfied with the sound level, click Continue")
-            playback = Autoplay([section], instruction=instruction)
+            playback = Autoplay([PlaybackSection(section)], instruction=instruction)
             message = _(
                 "Please keep the eventual sound level the same over the course of the experiment.")
             actions = [

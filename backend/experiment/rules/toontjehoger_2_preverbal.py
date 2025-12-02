@@ -10,12 +10,12 @@ from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.html import HTML
 from experiment.actions.info import Info
-from experiment.actions.playback import ImagePlayer
+from experiment.actions.playback import PlayButtons, ImagePlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
 from experiment.actions.utils import get_current_experiment_url
-from experiment.utils import create_player_labels
+from experiment.utils import format_label
 from result.utils import prepare_result
 from section.models import Playlist
 from theme.styles import ColorScheme
@@ -202,17 +202,37 @@ class ToontjeHoger2Preverbal(BaseRules):
                 "Error: could not find section C for round 1")
 
         # Player
-        sections = [sectionA, sectionB, sectionC]
-        playback = ImagePlayer(
+        sections = [
+            ImagePlaybackSection(
+                sectionA,
+                label=format_label(0, "alphabetic"),
+                color="colorNeutral2",
+                image={
+                    "link": "/images/experiments/toontjehoger/spectrogram-trumpet.webp",
+                    "label": "Trompet",
+                },
+            ),
+            ImagePlaybackSection(
+                sectionB,
+                label=format_label(1, "alphabetic"),
+                color="colorNeutral1",
+                image={
+                    "link": "/images/experiments/toontjehoger/spectrogram-whale.webp",
+                    "label": "Walvis",
+                },
+            ),
+            ImagePlaybackSection(
+                sectionC,
+                label=format_label(2, "alphabetic"),
+                color="colorNeutral3",
+                image={
+                    "link": "/images/experiments/toontjehoger/spectrogram-human.webp",
+                    "label": "Mens",
+                },
+            ),
+        ]
+        playback = PlayButtons(
             sections,
-            labels=create_player_labels(len(sections), 'alphabetic'),
-            images=[
-                "/images/experiments/toontjehoger/spectrogram-trumpet.webp",
-                "/images/experiments/toontjehoger/spectrogram-whale.webp",
-                "/images/experiments/toontjehoger/spectrogram-human.webp",
-            ],
-            image_labels=['Trompet', 'Walvis', 'Mens'],
-            style=[ColorScheme.NEUTRAL_INVERTED],
         )
 
         trial = Trial(
@@ -239,15 +259,26 @@ class ToontjeHoger2Preverbal(BaseRules):
                 "Error: could not find section B for round 2")
 
         # Player
-        sections = [sectionA, sectionB]
-        playback = ImagePlayer(
+        sections = [
+            ImagePlaybackSection(
+                sectionA,
+                label=format_label(0, 'alphabetic'),
+                image={
+                    "link": "/images/experiments/toontjehoger/spectrogram-baby-french.webp"
+                },
+                color='colorNeutral2',
+            ),
+            ImagePlaybackSection(
+                sectionA,
+                label=format_label(1, 'alphabetic'),
+                image={
+                    "link": "/images/experiments/toontjehoger/spectrogram-baby-german.webp"
+                },
+                color='colorNeutral1',
+            ),
+        ]
+        playback = PlayButtons(
             sections,
-            labels=create_player_labels(len(sections), 'alphabetic'),
-            images=[
-                "/images/experiments/toontjehoger/spectrogram-baby-french.webp",
-                "/images/experiments/toontjehoger/spectrogram-baby-german.webp",
-            ],
-            style=[ColorScheme.NEUTRAL_INVERTED],
         )
 
         # Question

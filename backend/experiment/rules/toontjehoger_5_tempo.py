@@ -10,12 +10,12 @@ from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.info import Info
-from experiment.actions.playback import Multiplayer
+from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
 from experiment.actions.utils import get_current_experiment_url
-from experiment.utils import create_player_labels, non_breaking_spaces
+from experiment.utils import format_label, non_breaking_spaces
 from result.utils import prepare_result
 from section.models import Playlist
 from session.models import Session
@@ -137,10 +137,15 @@ class ToontjeHoger5Tempo(BaseRules):
         section_original = sections[0] if sections[0].group == "or" else sections[1]
 
         # Player
-        playback = Multiplayer(
-            sections,
-            labels=create_player_labels(len(sections), "alphabetic"),
-            style=[ColorScheme.NEUTRAL_INVERTED],
+        playback = PlayButtons(
+            sections=[
+                PlaybackSection(
+                    section,
+                    label=format_label(i, "alphabetic"),
+                    color=f"colorNeutral{2-i}",
+                )
+                for i, section in enumerate(sections)
+            ],
         )
 
         # Question
