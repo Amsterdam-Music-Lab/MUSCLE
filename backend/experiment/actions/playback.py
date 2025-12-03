@@ -27,7 +27,6 @@ class PlaybackSectionAction(TypedDict):
     label: Optional[str]
     color: str
     play_from: float
-    mute: bool
     play_method: PlayMethods
 
 
@@ -38,18 +37,16 @@ class PlaybackSection(Button):
         label (Optional[str]): Label of play button (not shown in autoplay mode)
         color (Optional[str]): Color of play button (not shown in autoplay mode)
         play_from (float): Start position of the audio file in seconds
-        mute (bool): Whether to mute this section
 
     Infers a playback method for this section, i.e., whether the frontend will use webAudio and whether it will buffer.
     Currently there is no support for mixed playback methods.
     '''
 
-    def __init__(self, section: Section, label="", play_from=0, mute=False, **kwargs):
+    def __init__(self, section: Section, label="", play_from=0, **kwargs):
         super().__init__(label, **kwargs)
         self.play_from = play_from
         self.link = section.absolute_url()
         self.play_method = get_play_method(section)
-        self.mute = mute
 
 
 class SectionImage(TypedDict):
@@ -93,6 +90,7 @@ class Playback(BaseAction):
         sections: List[PlaybackSection],
         preload_message: str = "",
         instruction: str = "",
+        mute: bool = False,
         resume_play: bool = False,
         show_animation: bool = True,
         style: Optional[list[str]] = None,
@@ -100,6 +98,7 @@ class Playback(BaseAction):
         self.sections = sections
         self.preload_message = preload_message
         self.instruction = instruction
+        self.mute = mute
         self.resume_play = resume_play
         self.show_animation = show_animation
         self.style = self._apply_style(style)

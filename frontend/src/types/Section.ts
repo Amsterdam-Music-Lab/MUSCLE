@@ -3,13 +3,18 @@ interface PlaybackImage {
     label: string
 }
 
+type PlaybackMethod = "EXTERNAL" | "HTML" | "BUFFER" | "NOAUDIO";
+
 export interface PlaybackSection {
     link: string,
     label: string,
     color?: string,
     image: PlaybackImage,
-    play_from: number,
-    mute: boolean
+    playFrom: number,
+    playMethod: PlaybackMethod,
+    mute: boolean,
+    playing: boolean,
+    hasPlayed: boolean
 }
 
 export interface Card extends PlaybackSection {
@@ -25,4 +30,4 @@ export interface Card extends PlaybackSection {
     audio_latency_ms?: number;
 }
 
-export default Section;
+export default PlaybackSection;

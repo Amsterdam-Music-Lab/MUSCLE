@@ -9,17 +9,17 @@ export const PRELOAD = "PRELOAD";
 
 export type PlaybackView = typeof AUTOPLAY | typeof BUTTON | typeof MULTIPLAYER | typeof IMAGE | typeof MATCHINGPAIRS | typeof PRELOAD;
 
-type PlaybackMethod = "EXTERNAL" | "HTML" | "BUFFER" | "NOAUDIO";
-
 export type ScoreFeedbackDisplay = "large-top" | "small-bottom-right" | "hidden";
 
-export interface PlaybackArgs {
+// the information received from the backend
+export interface PlaybackAction {
     view: PlaybackView;
-    play_method: PlaybackMethod;
-    show_animation: boolean;
-    preload_message: string;
+    showAnimation: boolean;
+    preloadMessage: string;
     instruction: string;
     sections: PlaybackSection[];
-    resume_play?: boolean;
-    score_feedback_display?: ScoreFeedbackDisplay;
+    mute: boolean;
+    resumePlay?: boolean;
+    playOnce?: boolean;
+    scoreFeedbackDisplay?: ScoreFeedbackDisplay;
 }

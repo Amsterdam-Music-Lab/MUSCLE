@@ -87,21 +87,21 @@ export const changeGain = (level: number) => {
 };
 
 // load sound data and store in buffers object
-export const loadBuffer = async (id: number, src: string, canPlay: () => void) => {
-    await fetch(src, {})
+export const loadBuffer = async (link: string, canPlay: () => void) => {
+    await fetch(link, {})
         // Return the data as an ArrayBuffer
         .then(response => response.arrayBuffer())
         // Decode the audio data
         .then(buffer => audioContext.decodeAudioData(buffer))
         // store buffer in buffers object
         .then(decodedData => {
-            buffers[id] = decodedData;
+            buffers[link] = decodedData;
             canPlay();
         });
 };
 
 export const checkSectionLoaded = (section: Section) => {
-    if (buffers.hasOwnProperty(section.id)) {
+    if (buffers.hasOwnProperty(section.link)) {
         return true;
     };
 };

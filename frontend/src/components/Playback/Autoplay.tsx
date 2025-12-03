@@ -3,24 +3,26 @@ import { useEffect, useState } from "react";
 import Circle from "../Circle/Circle";
 import CountDown from "../CountDown/CountDown";
 import Histogram from "../Histogram/Histogram";
+import PlaybackSection from "@/types/Section";
 
 interface AutoPlayProps {
     instruction?: string;
+    sections: PlaybackSection[];
     showAnimation: boolean;
-    playSection: (section: number) => void;
+    playSection: (section: PlaybackSection) => void;
     startedPlaying: boolean;
     finishedPlaying: () => void;
     responseTime: number;
     className?: string;
 }
 
-const AutoPlay = ({ instruction, showAnimation, playSection, startedPlaying, finishedPlaying, responseTime, className = '' }: AutoPlayProps) => {
+const AutoPlay = ({ instruction, sections, showAnimation, playSection, startedPlaying, finishedPlaying, responseTime, className = '' }: AutoPlayProps) => {
 
     const [running, setRunning] = useState(true);
 
     // Handle view logic
     useEffect(() => {
-        playSection(0)
+        playSection(sections[0])
     }, [playSection, startedPlaying]);
 
     return (

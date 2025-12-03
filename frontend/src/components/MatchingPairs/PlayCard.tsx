@@ -13,7 +13,7 @@ interface PlayCardProps {
     showAnimation: boolean;
 }
 
-const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAnimation }: PlayCardProps) => {
+const PlayCard = ({ onClick, registerUserClicks, section, view, showAnimation }: PlayCardProps) => {
     const getImgSrc = (url: string) => {
         if (url.startsWith("http")) {
             return url;
@@ -48,11 +48,11 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAni
                         data-testid="front"
                         className="front front--visual"
                     >
-                        <img src={getImgSrc(section.url)} alt={section.name} />
+                        <img src={getImgSrc(section.link)} alt={section.label} />
                     </div>
                     :
                     <Histogram
-                        running={playing}
+                        running={section.playing}
                         bars={histogramBars}
                         backgroundColor="purple"
                         borderRadius=".5rem"

@@ -1,9 +1,8 @@
 import Section from "@/types/Section";
 import * as audio from "./audio";
 import * as webAudio from "./webAudio";
-import { PlaybackArgs } from "@/types/Playback";
 
-export const playAudio = (section: Section, playMethod: PlaybackArgs['play_method'], playheadShift = 0) => {
+export const playAudio = (section: Section, playMethod: string, playheadShift = 0) => {
     let latency = 0;
 
     if (playMethod === 'BUFFER') {
@@ -37,7 +36,7 @@ export const playAudio = (section: Section, playMethod: PlaybackArgs['play_metho
     }
 }
 
-export const pauseAudio = (playMethod: PlaybackArgs['play_method']) => {
+export const pauseAudio = (playMethod: string) => {
     if (playMethod === 'BUFFER') {
         webAudio.stopBuffer();
     } else {

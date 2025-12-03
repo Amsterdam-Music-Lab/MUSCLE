@@ -142,9 +142,10 @@ def song_sync(
     silence_time = 4
     silence = Trial(
         playback=Autoplay(
-            sections=[PlaybackSection(section, mute=True)],
+            sections=[PlaybackSection(section)],
             show_animation=True,
             instruction=_("Keep imagining the music"),
+            mute=True,
         ),
         response_time=silence_time,
         auto_advance=True,

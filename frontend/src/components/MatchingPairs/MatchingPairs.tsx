@@ -18,9 +18,8 @@ export const SCORE_FEEDBACK_DISPLAY: { [key: string]: ScoreFeedbackDisplay } = {
 }
 
 interface MatchingPairsProps {
-    playSection: (index: number) => void;
+    playSection: (section: Card) => void;
     sections: Card[];
-    playerIndex: number;
     showAnimation: boolean;
     finishedPlaying: () => void;
     scoreFeedbackDisplay?: ScoreFeedbackDisplay;
@@ -28,12 +27,9 @@ interface MatchingPairsProps {
     view: string;
 }
 
-type ScoreType = 'lucky_match' | 'memory_match' | 'no_match' | 'misremembered';
-
 const MatchingPairs = ({
     playSection,
     sections: initialSections, // renamed to make it clear these are initial values
-    playerIndex,
     showAnimation,
     finishedPlaying,
     scoreFeedbackDisplay = SCORE_FEEDBACK_DISPLAY.LARGE_TOP,
@@ -217,16 +213,15 @@ const MatchingPairs = ({
                     />}
 
                 <div className={classNames("playing-board", columnCount === 3 && "playing-board--three-columns")}>
-                    {sections.map((_section, index) => (
+                    {sections.map((section, index) => (
                         <PlayCard
                             key={index}
                             onClick={() => {
-                                playSection(index);
+                                playSection(section);
                                 checkMatchingPairs(index);
                             }}
                             registerUserClicks={registerUserClicks}
-                            playing={playerIndex === index}
-                            section={sections[index]}
+                            section={section}
                             showAnimation={showAnimation}
                             view={view}
                         />

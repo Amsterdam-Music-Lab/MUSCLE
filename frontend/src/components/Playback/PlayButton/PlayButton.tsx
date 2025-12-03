@@ -5,12 +5,17 @@ interface PlayButtonProps {
     isPlaying: boolean;
     className?: string;
     disabled?: boolean;
+    label?: string;
 }
 
-const PlayButton = ({ playSection, isPlaying, className = "", disabled }: PlayButtonProps) => {
+const PlayButton = ({ playSection, isPlaying, className = "", disabled, label }: PlayButtonProps) => {
 
     return (
         <>
+            {label && <>
+                <div className="banner"></div>
+                <h3 className="label">{label}</h3>
+            </>}
             <div
                 className={classNames("aha__play-button btn-blue border-outside", "btn", {
                     stop: isPlaying, disabled: disabled || isPlaying
