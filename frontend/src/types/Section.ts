@@ -1,9 +1,18 @@
-export interface Section {
-    id: number;
-    url: string;
+interface PlaybackImage {
+    link: string,
+    label: string
 }
 
-export interface Card extends Section {
+export interface PlaybackSection {
+    link: string,
+    label: string,
+    color?: string,
+    image: PlaybackImage,
+    play_from: number,
+    mute: boolean
+}
+
+export interface Card extends PlaybackSection {
     name: string;
     turned: boolean;
     inactive: boolean;

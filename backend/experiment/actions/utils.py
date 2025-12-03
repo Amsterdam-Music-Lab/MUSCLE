@@ -1,15 +1,20 @@
 from os.path import join
 import random
+from re import compile, sub
 
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from django.db.models.query import QuerySet
 
-from experiment.actions.button import Button
-from experiment.actions.final import Final
 from session.models import Session, Result
 
 EXPERIMENT_KEY = "experiment"
+
+
+def camelize(input_str: str) -> str:
+    """convert a snake_case to camelCase string"""
+    snake_case_pattern = compile(r'_([a-z])')
+    return sub(snake_case_pattern, lambda match: match.group(1).upper(), input_str)
 
 
 def get_current_experiment_url(session: Session) -> str | None:

@@ -5,7 +5,7 @@ import * as webAudio from "../../util/webAudio";
 import { playAudio, pauseAudio } from "../../util/audioControl";
 
 import AutoPlay from "./Autoplay";
-import PlayButton from "../PlayButton/PlayButton";
+import PlayButton from "./PlayButton/PlayButton";
 import MultiPlayer from "./MultiPlayer";
 import ImagePlayer from "./ImagePlayer";
 import MatchingPairs from "../MatchingPairs/MatchingPairs";
@@ -78,17 +78,12 @@ const Playback = ({
 
     // Audio ended playing
     const onAudioEnded = useCallback((index: number) => {
-
         // If the player index is not the last player index, return
         if (lastPlayerIndex.current === index) {
             setPlayerIndex(-1);
         }
 
-        if (playbackArgs.timeout_after_playback) {
-            setTimeout(finishedPlaying, playbackArgs.timeout_after_playback);
-        } else {
-            finishedPlaying();
-        }
+        finishedPlaying();
     }, [playbackArgs, finishedPlaying]);
 
     // Keep track of last player index

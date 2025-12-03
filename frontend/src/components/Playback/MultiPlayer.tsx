@@ -1,5 +1,5 @@
 import React from "react";
-import PlayerSmall from "../PlayButton/PlayerSmall";
+import PlayerSmall from "./PlayButton/PlayerSmall";
 import classNames from "classnames";
 import { PlaybackArgs } from "@/types/Playback";
 import Section from "@/types/Section";

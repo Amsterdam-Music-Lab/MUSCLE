@@ -57,7 +57,7 @@ export const CategorizationWithHiddenText = {
             view: "BUTTON_ARRAY",
             explainer: "",
             question: "",
-            result_id: 16549,
+            resultId: 16549,
             is_skippable: false,
             submits: true,
             style: {
@@ -70,8 +70,8 @@ export const CategorizationWithHiddenText = {
                 A: "___",
                 B: "___",
             },
-            min_values: 1,
-            expected_response: "A",
+            minValues: 1,
+            expectedResponse: "A",
         },
     }),
     decorators: [
@@ -93,7 +93,7 @@ export const CategorizationWithHiddenTextDisabled = {
             view: "BUTTON_ARRAY",
             explainer: "",
             question: "",
-            is_skippable: false,
+            isSkippable: false,
             submits: true,
             style: {
                 "invisible-text": true,
@@ -105,8 +105,8 @@ export const CategorizationWithHiddenTextDisabled = {
                 A: "___",
                 B: "___",
             },
-            min_values: 1,
-            expected_response: "A",
+            minValues: 1,
+            expectedResponse: "A",
         },
     }),
     decorators: [

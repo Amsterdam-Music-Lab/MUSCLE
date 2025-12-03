@@ -10,7 +10,7 @@ const getProps = (overrides = {}) => ({
         "view": QuestionViews.BUTTON_ARRAY,
         "explainer": "",
         "question": "1. Do you know this song?",
-        "is_skippable": false,
+        "isSkippable": false,
         "submits": false,
         "style": "boolean",
         "choices": {
@@ -18,7 +18,7 @@ const getProps = (overrides = {}) => ({
             "unsure": "Unsure",
             "no": "No"
         },
-        "min_values": 1,
+        "minValues": 1,
     },
     disabled: false,
     onChange: vi.fn(),

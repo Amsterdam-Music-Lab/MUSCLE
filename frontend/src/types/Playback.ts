@@ -1,4 +1,4 @@
-import Section from "./Section";
+import PlaybackSection from "./Section";
 
 export const AUTOPLAY = "AUTOPLAY";
 export const BUTTON = "BUTTON";
@@ -11,10 +11,6 @@ export type PlaybackView = typeof AUTOPLAY | typeof BUTTON | typeof MULTIPLAYER 
 
 type PlaybackMethod = "EXTERNAL" | "HTML" | "BUFFER" | "NOAUDIO";
 
-interface FrontendStyle {
-    [key: string]: boolean;
-}
-
 export type ScoreFeedbackDisplay = "large-top" | "small-bottom-right" | "hidden";
 
 export interface PlaybackArgs {
@@ -23,15 +19,7 @@ export interface PlaybackArgs {
     show_animation: boolean;
     preload_message: string;
     instruction: string;
-    sections: Section[];
-    play_from: number;
-
-    labels?: string[];
-    image_labels?: string[];
-    images?: string[];
-    style?: FrontendStyle;
-    mute?: boolean;
-    play_once?: boolean;
+    sections: PlaybackSection[];
     resume_play?: boolean;
     score_feedback_display?: ScoreFeedbackDisplay;
 }

@@ -1,13 +1,6 @@
-from re import compile, sub
-
 from django.db import models
 
-
-def camelize(input_str: str) -> str:
-    """convert a snake_case to camelCase string"""
-    snake_case_pattern = compile(r'_([a-z])')
-    return sub(snake_case_pattern, lambda match: match.group(1).upper(), input_str)
-
+from experiment.actions.utils import camelize
 
 class ThemeConfig(models.Model):
     """A model defining the theme of an experiment or block

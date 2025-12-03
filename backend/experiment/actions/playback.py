@@ -83,8 +83,6 @@ class Playback(BaseAction):
         instruction (str): Text to display during presentation. Defaults to "".
         show_animation (bool): Whether to show playback animation. Defaults to False.
         mute (bool): Whether to mute audio. Defaults to False.
-        timeout_after_playback (Optional[float]): Seconds to wait after playback before proceeding. Defaults to None.
-        stop_audio_after (Optional[float]): Seconds after which to stop playback. Defaults to None.
         resume_play (bool): Whether to resume from previous position. Defaults to False.
         show_animation (bool): Whether to show an animated histogram during playback (applies for AutoPlay & MatchingPairs)
         style (Optional[list[str]]): CSS class name(s) set in the frontend for styling

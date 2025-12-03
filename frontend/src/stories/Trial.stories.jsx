@@ -14,7 +14,7 @@ const getDefaultFeedbackForm = (overrides = {}) => ({
         view: "BUTTON_ARRAY",
         explainer: "",
         question: "1. Do you know this song?",
-        is_skippable: false,
+        isSkippable: false,
         submits: false,
         style: {"boolean": true},
         choices: {
@@ -22,7 +22,7 @@ const getDefaultFeedbackForm = (overrides = {}) => ({
             unsure: "fa-question",
             no: "fa-xmark",
         },
-        min_values: 1,
+        minValues: 1,
     },
     {
         key: "like_song",
@@ -42,10 +42,14 @@ const getDefaultFeedbackForm = (overrides = {}) => ({
             7: "fa-face-angry",
         },
     }],
-    submit_label: "Submit",
-    skip_label: "Skip",
-    is_skippable: true,
-    is_profile: true,
+    submitButton: {
+        label: "Submit",
+    },
+    skipButton: {
+        label: "Skip",
+    },
+    isSkippable: true,
+    isProfile: true,
     ...overrides,
 });
 
@@ -145,7 +149,7 @@ export const NeutralColorScheme = {
                     view: "BUTTON_ARRAY",
                     explainer: "",
                     question: "1. Do you know this song?",
-                    is_skippable: false,
+                    isSkippable: false,
                     submits: false,
                     style: {"neutral": true},
                     choices: {
@@ -153,7 +157,7 @@ export const NeutralColorScheme = {
                         unsure: "fa-question",
                         no: "fa-xmark",
                     },
-                    min_values: 1,
+                    minValues: 1,
                 },
                 {
                     key: "like_song",
@@ -198,7 +202,7 @@ export const NeutralInvertedColorScheme = {
                     view: "BUTTON_ARRAY",
                     explainer: "",
                     question: "1. Do you know this song?",
-                    is_skippable: false,
+                    isSkippable: false,
                     submits: false,
                     style: {"neutral-inverted": true},
                     choices: {
@@ -206,14 +210,14 @@ export const NeutralInvertedColorScheme = {
                         unsure: "fa-question",
                         no: "fa-xmark",
                     },
-                    min_values: 1,
+                    minValues: 1,
                 },
                 {
                     key: "like_song",
                     view: "ICON_RANGE",
                     explainer: "",
                     question: "2. How much do you like this song?",
-                    is_skippable: false,
+                    isSkippable: false,
                     submits: false,
                     style: {"gradient-7": true},
                     choices: {
@@ -227,10 +231,14 @@ export const NeutralInvertedColorScheme = {
                     },
                 }
             ],
-            submit_label: "Submit",
-            skip_label: "Skip",
-            is_skippable: true,
-            is_profile: true,
+            submitButton: {
+                label: "Submit"
+            },
+            skipButton: {
+                label: "Skip"
+            },
+            isSkippable: true,
+            isProfile: true,
         },
     }),
     decorators: [getDecorator,],
@@ -262,7 +270,6 @@ export const ToontjeHoger4Absolute = {
             instruction: "",
             play_from: 0,
             mute: false,
-            timeout_after_playback: null,
             resume_play: false,
             style: {"neutral-inverted": true},
             ID: "MULTIPLAYER",

@@ -99,7 +99,7 @@ class RhythmDiscriminationTest(TestCase):
         return next_round
 
     def _unpack_result_id(self, trial_view: Trial) -> int:
-        return trial_view["feedbackForm"]["form"][0]["result_id"]
+        return trial_view["feedbackForm"]["form"][0]["resultId"]
 
     def _infer_expected_response(self, result_id: int) -> str:
         result = Result.objects.get(pk=result_id)

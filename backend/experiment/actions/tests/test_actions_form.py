@@ -49,10 +49,10 @@ class NumberQuestionTest(TestCase):
     def test_action_method(self):
         action_result = self.number_question.action()
         self.assertIn('key', action_result)
-        self.assertIn('min_value', action_result)
-        self.assertIn('max_value', action_result)
-        self.assertEqual(action_result['min_value'], 1)
-        self.assertEqual(action_result['max_value'], 10)
+        self.assertIn('minValue', action_result)
+        self.assertIn('maxValue', action_result)
+        self.assertEqual(action_result['minValue'], 1)
+        self.assertEqual(action_result['maxValue'], 10)
 
 
 class TextQuestionTest(TestCase):
@@ -69,8 +69,8 @@ class TextQuestionTest(TestCase):
     def test_action_method(self):
         action_result = self.text_question.action()
         self.assertIn('key', action_result)
-        self.assertIn('max_length', action_result)
-        self.assertEqual(action_result['max_length'], 100)
+        self.assertIn('maxLength', action_result)
+        self.assertEqual(action_result['maxLength'], 100)
 
 class MultipleChoiceQuestionTest(TestCase):
     def setUp(self):
@@ -88,8 +88,8 @@ class MultipleChoiceQuestionTest(TestCase):
         self.assertIn('key', action_result)
         self.assertIn('choices', action_result)
         self.assertEqual(action_result['choices'], {'no': 'No', 'yes': 'Yes'})
-        self.assertIn('min_values', action_result)
-        self.assertEqual(action_result['min_values'], 1)
+        self.assertIn('minValues', action_result)
+        self.assertEqual(action_result['minValues'], 1)
 
 
 class DropdownQuestionTest(TestCase):
@@ -192,10 +192,10 @@ class RangeQuestionTest(TestCase):
     def test_action_method(self):
         action_result = self.range_question.action()
         self.assertIn('key', action_result)
-        self.assertIn('min_value', action_result)
-        self.assertIn('max_value', action_result)
-        self.assertEqual(action_result['min_value'], 1)
-        self.assertEqual(action_result['max_value'], 10)
+        self.assertIn('minValue', action_result)
+        self.assertIn('maxValue', action_result)
+        self.assertEqual(action_result['minValue'], 1)
+        self.assertEqual(action_result['maxValue'], 10)
 
 
 class TextRangeQuestionTest(TestCase):

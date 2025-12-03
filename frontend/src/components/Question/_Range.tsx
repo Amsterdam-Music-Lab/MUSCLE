@@ -12,12 +12,12 @@ interface RangeProps {
 const Range = ({ question, value, onChange }: RangeProps) => {
     const emptyValue = !value;
 
-    if ((!question.min_value && question.min_value !== 0) || (!question.max_value && question.max_value !== 0)) {
-        throw new Error('min_value and max_value are required for the Range component');
+    if ((!question.minValue && question.minValue !== 0) || (!question.maxValue && question.maxValue !== 0)) {
+        throw new Error('minValue and maxValue are required for the Range component');
     }
 
     if (emptyValue) {
-        value = (question.min_value + question.max_value) / 2;
+        value = (question.minValue + question.maxValue) / 2;
     }
     return (
         <div className={classNames("aha__range", { empty: emptyValue })}>
@@ -26,14 +26,14 @@ const Range = ({ question, value, onChange }: RangeProps) => {
             <Slider
                 value={value}
                 onChange={onChange}
-                min={question.min_value}
-                max={question.max_value}
+                min={question.minValue}
+                max={question.maxValue}
                 tooltip={false}
             />
 
             <div className="limits">
-                <span className="min">{question.min_value}</span>
-                <span className="max">{question.max_value}</span>
+                <span className="min">{question.minValue}</span>
+                <span className="max">{question.maxValue}</span>
             </div>
         </div>
     );

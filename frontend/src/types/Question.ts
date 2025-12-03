@@ -21,11 +21,10 @@ export default interface Question {
     expected_response?: string;
     choices?: { [key: string]: string };
     submits?: boolean;
-    is_skippable?: boolean;
-    min_values?: number;
-    min_value?: number;
-    max_value?: number;
-    max_length?: number;
-    input_type?: 'number' | 'text';
-    result_id?: number;
+    isSkippable?: boolean;
+    minValues?: number;
+    minValue?: number;
+    maxValue?: number;
+    maxLength?: number;
+    resultId?: number;
 }

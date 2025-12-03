@@ -45,7 +45,7 @@ const FeedbackForm = ({
 
     function validateFormElement(formElement: IQuestion) {
         // For multiple choices in CHECKBOXES view, formElement.value is a string of comma-separated values
-        if (formElement.view === "CHECKBOXES" && formElement.min_values && (formElement.value.split(",").length < formElement.min_values)) {
+        if (formElement.view === "CHECKBOXES" && formElement.minValues && (formElement.value.split(",").length < formElement.minValues)) {
             return false;
         }
         return true;

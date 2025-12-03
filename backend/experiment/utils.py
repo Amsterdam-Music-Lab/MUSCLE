@@ -1,17 +1,18 @@
-from typing import List, Tuple
-import roman
+from io import BytesIO
 from os.path import join
 from zipfile import ZipFile
-from io import BytesIO
 
 from django.http import HttpResponse
 from django.core import serializers
 from django.utils import timezone
+import roman
+
 
 from experiment.models import Experiment, Block, Feedback
 from result.models import Result
 from participant.models import Participant
 from section.models import Song, Section
+
 
 def slugify(text: str) -> str:
     """Create a slug from given string
