@@ -14,8 +14,6 @@ const getDefaultFeedbackForm = (overrides = {}) => ({
         view: "BUTTON_ARRAY",
         explainer: "",
         question: "1. Do you know this song?",
-        isSkippable: false,
-        submits: false,
         style: {"boolean": true},
         choices: {
             yes: "fa-check",
@@ -29,8 +27,6 @@ const getDefaultFeedbackForm = (overrides = {}) => ({
         view: "ICON_RANGE",
         explainer: "",
         question: "2. How much do you like this song?",
-        is_skippable: false,
-        submits: false,
         style: {"gradient-7": true},
         choices: {
             1: "fa-face-grin-hearts",
@@ -48,8 +44,6 @@ const getDefaultFeedbackForm = (overrides = {}) => ({
     skipButton: {
         label: "Skip",
     },
-    isSkippable: true,
-    isProfile: true,
     ...overrides,
 });
 
@@ -149,8 +143,6 @@ export const NeutralColorScheme = {
                     view: "BUTTON_ARRAY",
                     explainer: "",
                     question: "1. Do you know this song?",
-                    isSkippable: false,
-                    submits: false,
                     style: {"neutral": true},
                     choices: {
                         yes: "fa-check",
@@ -164,8 +156,6 @@ export const NeutralColorScheme = {
                     view: "ICON_RANGE",
                     explainer: "",
                     question: "2. How much do you like this song?",
-                    is_skippable: false,
-                    submits: false,
                     style: {"gradient-7": true},
                     choices: {
                         1: "fa-face-grin-hearts",
@@ -202,8 +192,6 @@ export const NeutralInvertedColorScheme = {
                     view: "BUTTON_ARRAY",
                     explainer: "",
                     question: "1. Do you know this song?",
-                    isSkippable: false,
-                    submits: false,
                     style: {"neutral-inverted": true},
                     choices: {
                         yes: "fa-check",
@@ -217,8 +205,6 @@ export const NeutralInvertedColorScheme = {
                     view: "ICON_RANGE",
                     explainer: "",
                     question: "2. How much do you like this song?",
-                    isSkippable: false,
-                    submits: false,
                     style: {"gradient-7": true},
                     choices: {
                         1: "fa-face-grin-hearts",
@@ -237,8 +223,6 @@ export const NeutralInvertedColorScheme = {
             skipButton: {
                 label: "Skip"
             },
-            isSkippable: true,
-            isProfile: true,
         },
     }),
     decorators: [getDecorator,],
@@ -287,8 +271,6 @@ export const ToontjeHoger4Absolute = {
                     view: "BUTTON_ARRAY",
                     explainer: "",
                     question: "Welk fragment heeft de juiste toonhoogte?",
-                    is_skippable: false,
-                    submits: true,
                     style: {"neutral-inverted": true},
                     choices: {
                         A: "A",

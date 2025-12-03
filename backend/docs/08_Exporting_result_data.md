@@ -157,7 +157,6 @@ A list of `Result` objects containing the participant's anwers to the profile qu
                     "silent": "1945 or earlier",
                     "millenial": "1981–1996"
                 },
-                "submits": false,
                 "question": "When were you born?",
                 "explainer": "",
                 "result_id": 7983,
@@ -229,7 +228,6 @@ A list of session `Result` objects containing the participant's responses to the
                     "A": "___",
                     "B": "___"
                 },
-                "submits": true,
                 "question": "",
                 "explainer": "",
                 "result_id": 8051,

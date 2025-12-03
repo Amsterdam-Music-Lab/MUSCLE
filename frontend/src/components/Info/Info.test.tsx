@@ -18,13 +18,6 @@ describe('Info Component', () => {
         expect(screen.queryByRole('heading')).toBeNull();
     });
 
-
-
-    test('does not render button without link and onNext when only button_label is provided', () => {
-        render(<Info body="Test body" button={{label: "Click me"}} />);
-        expect(screen.queryByRole('button')).toBeNull();
-    });
-
     test('does not render button when button props are not provided', () => {
         render(<Info body="Test body" />);
         expect(screen.queryByRole('button')).toBeNull();

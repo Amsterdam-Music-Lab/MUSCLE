@@ -46,14 +46,16 @@ const Question = ({
         };
 
         switch (view) {
+            case QuestionViews.AUTOCOMPLETE:
+                return <AutoComplete {...attrs} />;
             case QuestionViews.BUTTON_ARRAY:
                 return <ButtonArray {...attrs} />;
             case QuestionViews.CHECKBOXES:
                 return <Checkboxes {...attrs} />;
             case QuestionViews.DROPDOWN:
                 return <DropDown {...attrs} />;
-            case QuestionViews.AUTOCOMPLETE:
-                return <AutoComplete {...attrs} />;
+            case QuestionViews.NUMBER:
+                return <Number {...attrs} />;
             case QuestionViews.RADIOS:
                 return <Radios {...attrs} />;
             case QuestionViews.RANGE:
@@ -64,9 +66,6 @@ const Question = ({
                 return <IconRange {...attrs} />;
             case QuestionViews.STRING:
                 return <String {...attrs} />;
-            case QuestionViews.NUMBER:
-                return <Number {...attrs} />;
-
             default:
                 return <div>Unknown question view {view}</div>;
         }

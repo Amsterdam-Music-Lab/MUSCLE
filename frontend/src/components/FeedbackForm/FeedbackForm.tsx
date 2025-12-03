@@ -22,19 +22,16 @@ const FeedbackForm = ({
     skipButton,
     submitResult,
 }: FeedbackFormProps) => {
-    const showSubmitButtons =
-        form.filter((formElement) => formElement.submits).length === 0 && submitButton;
-
     const [formValid, setFormValid] = useState(false);
 
     const onChange = (value: string | number | boolean, question_index: number) => {
         form[question_index].value = value;
-        if (form[question_index].submits) {
+        if (!submitButton) {
             submitResult();
         }
         // for every non-skippable question, check that we have a value
         const validFormElements = form.filter(formElement => {
-            if (formElement.is_skippable || (formElement.value && validateFormElement(formElement))) {
+            if (formElement.value && validateFormElement(formElement)) {
                 return true;
             }
             return false;
@@ -64,7 +61,7 @@ const FeedbackForm = ({
                     />
                 ))}
                 {/* Continue button */}
-                {showSubmitButtons && (
+                {submitButton && (
 
                     <div className="row justify-content-around">
                         {skipButton && (
