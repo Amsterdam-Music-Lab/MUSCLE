@@ -5,7 +5,6 @@ import String from './_String';
 describe('String component', () => {
     const defaultProps = {
         question: {
-            input_type: 'text',
             max_length: 100,
         },
         onChange: vi.fn(),
@@ -37,46 +36,11 @@ describe('String component', () => {
         expect(preventDefaultMock).toHaveBeenCalled();
     });
 
-    it('handles number input type correctly', () => {
-        const onChange = vi.fn();
-        const props = {
-            ...defaultProps,
-            question: {
-                input_type: 'number',
-                min_value: 0,
-                max_value: 100,
-            },
-            onChange,
-        };
-        render(<String {...props} />);
-        const input = screen.getByRole('spinbutton');
-        fireEvent.change(input, { target: { value: '50' } });
-        expect(onChange).toHaveBeenCalledWith('50');
-    });
-
-    it('respects min and max values for number input', () => {
-        const onChange = vi.fn();
-        const props = {
-            ...defaultProps,
-            question: {
-                input_type: 'number',
-                min_value: 0,
-                max_value: 100,
-            },
-            onChange,
-        };
-        render(<String {...props} />);
-        const input = screen.getByRole('spinbutton');
-        fireEvent.change(input, { target: { value: '150' } });
-        expect(onChange).not.toHaveBeenCalled();
-    });
-
     it('respects max_length for text input', () => {
         const onChange = vi.fn();
         const props = {
             ...defaultProps,
             question: {
-                input_type: 'text',
                 max_length: 5,
             },
             onChange,
@@ -96,55 +60,5 @@ describe('String component', () => {
         }
 
         expect(input.value).toBe('initial');
-    });
-
-    it('throws an error when min_value or max_value is not provided for number input', () => {
-        const props = {
-            ...defaultProps,
-            question: {
-                input_type: 'number',
-                min_value: 0,
-            },
-        };
-        expect(() => render(<String {...props} />)).toThrow('min_value and max_value are required for the String component with input type is "number"');
-
-        const props2 = {
-            ...defaultProps,
-            question: {
-                input_type: 'number',
-                max_value: 100,
-            },
-        };
-        expect(() => render(<String {...props2} />)).toThrow('min_value and max_value are required for the String component with input type is "number"');
-
-        const props3 = {
-            ...defaultProps,
-            question: {
-                input_type: 'number',
-                min_value: 0,
-                max_value: null,
-            },
-        };
-        expect(() => render(<String {...props3} />)).toThrow('min_value and max_value are required for the String component with input type is "number"');
-
-        const props4 = {
-            ...defaultProps,
-            question: {
-                input_type: 'number',
-                min_value: 0,
-                max_value: undefined,
-            },
-        };
-        expect(() => render(<String {...props4} />)).toThrow('min_value and max_value are required for the String component with input type is "number"');
-
-        const props5 = {
-            ...defaultProps,
-            question: {
-                input_type: 'number',
-                min_value: 0,
-                max_value: 100,
-            },
-        };
-        expect(() => render(<String {...props5} />)).not.toThrow();
     });
 });

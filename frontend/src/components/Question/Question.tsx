@@ -2,15 +2,16 @@ import { useState } from "react";
 
 import classNames from "classnames";
 
+import AutoComplete from "./_AutoComplete";
 import ButtonArray from "./_ButtonArray";
-import Radios from "./_Radios";
-import Range from "./_Range";
-import TextRange from "./_TextRange";
-import IconRange from "./_IconRange";
-import String from "./_String";
 import Checkboxes from "./_Checkboxes";
 import DropDown from "./_DropDown";
-import AutoComplete from "./_AutoComplete";
+import IconRange from "./_IconRange";
+import Number from "./_Number";
+import Radios from "./_Radios";
+import Range from "./_Range";
+import String from "./_String";
+import TextRange from "./_TextRange";
 
 import IQuestion, { QuestionViews } from "@/types/Question";
 
@@ -63,6 +64,8 @@ const Question = ({
                 return <IconRange {...attrs} />;
             case QuestionViews.STRING:
                 return <String {...attrs} />;
+            case QuestionViews.NUMBER:
+                return <Number {...attrs} />;
 
             default:
                 return <div>Unknown question view {view}</div>;
@@ -76,10 +79,6 @@ const Question = ({
             )}
             <h3 className={classNames(question.style)}>{question.text}</h3>
             <div className="question">{render(question.view)}</div>
-            {question.expected_response &&
-                /* Will only be visible when the backend settings has TESTING=True */
-                <p className="expected-response">{question.expected_response}</p>
-            }
         </div>
     );
 };

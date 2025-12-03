@@ -11,6 +11,7 @@ describe('Question Component', () => {
             key: 'test-question',
             text: 'Test Question',
             view: QuestionViews.STRING,
+            max_length: 200,
             value: '',
             choices: {
                 '1': 'One',
@@ -39,21 +40,6 @@ describe('Question Component', () => {
         };
         render(<Question {...props} />);
         expect(screen.getByText('This is an explainer')).toBeTruthy();
-    });
-
-    it('renders the expected response when provided and TESTING is true', () => {
-        const props = {
-            ...defaultProps,
-            question: {
-                ...defaultProps.question,
-                expected_response: 'Expected response',
-            },
-        };
-        // Mock the TESTING environment variable
-        vi.stubGlobal('process', { env: { TESTING: 'true' } });
-        render(<Question {...props} />);
-        expect(screen.getByText('Expected response')).toBeTruthy();
-        vi.unstubAllGlobals();
     });
 
     it('calls onChange when the value changes', () => {
