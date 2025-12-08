@@ -74,7 +74,8 @@ class RhythmBatteryIntro(BaseRules):
                         result_id=result_pk,
                         style=[ColorScheme.BOOLEAN],
                     )
-                ]
+                ],
+                submit_button=None,
             )
         elif round_number == 2:
             key = 'headphones'
@@ -88,7 +89,8 @@ class RhythmBatteryIntro(BaseRules):
                         result_id=result_pk,
                         style=[ColorScheme.BOOLEAN],
                     )
-                ]
+                ],
+                submit_button=None,
             )
         elif round_number == 3:
             key = 'notifications_off'
@@ -104,7 +106,8 @@ class RhythmBatteryIntro(BaseRules):
                         result_id=result_pk,
                         style=[ColorScheme.BOOLEAN],
                     ),
-                ]
+                ],
+                submit_button=None,
             )
         elif round_number == 4:
             section = session.playlist.section_set.first()

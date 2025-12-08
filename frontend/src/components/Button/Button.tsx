@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 
@@ -36,6 +36,11 @@ const Button = ({
     const clicked = useRef(false);
     const theme = useBoundStore((state) => state.theme);
     const colorValue = theme? theme[color] : '#fabbacc';
+
+    useEffect(() => {
+        // reset clicked ref on rerender
+        clicked.current = false;
+    }, [value, label, link, clickOnce, disabled, color]);
 
     // Only handle the first click
     const clickOnceGuard = () => {
@@ -100,7 +105,7 @@ const Button = ({
                 style={style}
                 css={styleButton(colorValue)}
                 tabIndex={0}
-                onKeyPress={(e) => {
+                onKeyUp={(e) => {
                     clickOnceGuard();
                 }}
                 type="button"

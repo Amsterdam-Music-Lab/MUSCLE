@@ -13,14 +13,12 @@ class QuestionAction(BaseAction):
         text: str = '',
         explainer: str = '',
         style: list[str] = [],
-        scoring_rule: str = '',
         view: str = '',
     ):
         self.key = key
         self.text = text
         self.result_id = result_id
         self.explainer = explainer
-        self.scoring_rule = scoring_rule
         self.style = self._apply_style(style)
         self.view = view
 

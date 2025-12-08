@@ -39,7 +39,7 @@ const Trial = (props: TrialProps) => {
     } = props;
 
     // Main component state
-    const [formActive, setFormActive] = useState(listenFirst);
+    const [formActive, setFormActive] = useState(playback? !listenFirst: true);
     // Preload is immediately set to ready if we don't have a playback object
     const [preloadReady, setPreloadReady] = useState(!playback);
 
@@ -54,7 +54,7 @@ const Trial = (props: TrialProps) => {
 
     // Create result data
     const makeResult = useCallback(
-        async (hasTimedOut: boolean) => {
+        async (hasTimedOut?: boolean) => {
 
             // Prevent multiple submissions
             if (submitted.current) {
@@ -87,7 +87,7 @@ const Trial = (props: TrialProps) => {
                     form,
                 },
             );
-
+            submitted.current = false;
             return onNext(shouldBreakRound);
 
         },
@@ -154,7 +154,7 @@ const Trial = (props: TrialProps) => {
         <div role="presentation" className={classNames("aha__trial")}>
             {playback && (
                 <Playback
-                    playbackArgs={playback}
+                    {...playback}
                     onPreloadReady={() => {
                         setPreloadReady(true);
                     }}

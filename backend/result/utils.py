@@ -25,7 +25,7 @@ def get_result(
     Raises:
         Result.DoesNotExist: if there is no `result_id` in the data, or a result with that id does not exist
     """
-    result_id = data.get("result_id")
+    result_id = data.get("resultId")
     try:
         result = Result.objects.get(pk=result_id, session=session)
     except Result.DoesNotExist:

@@ -26,9 +26,6 @@ const FeedbackForm = ({
 
     const onChange = (value: string | number | boolean, question_index: number) => {
         form[question_index].value = value;
-        if (!submitButton) {
-            submitResult();
-        }
         // for every non-skippable question, check that we have a value
         const validFormElements = form.filter(formElement => {
             if (formElement.value && validateFormElement(formElement)) {
@@ -36,8 +33,16 @@ const FeedbackForm = ({
             }
             return false;
         });
-        if (validFormElements.length === form.length) setFormValid(true);
-        else setFormValid(false);
+        if (validFormElements.length === form.length) {
+            if (!submitButton) {
+                submitResult();
+            }
+            setFormValid(true);
+        }
+        else {
+            setFormValid(false);
+            return;
+        }
     };
 
     function validateFormElement(formElement: IQuestion) {

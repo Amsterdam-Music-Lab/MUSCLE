@@ -3,7 +3,6 @@ import { scoreResult } from "@/API";
 import Session from "@/types/Session";
 import Participant from "@/types/Participant";
 import Question from "@/types/Question";
-import { TrialConfig } from "@/types/Trial";
 
 interface UseResultHandlerParams {
     session: Session;
@@ -15,7 +14,6 @@ interface OnResultParams {
     form: Question[];
     decision_time?: number;
     audio_latency_ms?: number;
-    config?: TrialConfig
 }
 
 /**

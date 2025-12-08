@@ -70,6 +70,7 @@ const ToggleButton = ({ label, value, index, name, disabled, onChange, checked }
         >
             <input className={value}
                 type="radio"
+                role="button"
                 name={name}
                 id={indexString}
                 value={value}
@@ -77,7 +78,7 @@ const ToggleButton = ({ label, value, index, name, disabled, onChange, checked }
                 aria-checked={checked}
                 disabled={disabled}
                 onChange={() => onChange(value)}
-                onKeyPress={() => onChange(value)}
+                onKeyUp={() => onChange(value)}
                 data-testid={`toggle-button-${value}`}
             />
             {renderLabel(label)}

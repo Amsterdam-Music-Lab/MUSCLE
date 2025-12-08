@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import Button from "../Button/Button";
 import { Explainer as ExplainerAction } from "@/types/Action";
 import Theme from "@/types/Theme";
-import { styleButton } from "@/util/stylingHelpers";
 
 
 export interface ExplainerProps extends ExplainerAction {
@@ -15,7 +14,7 @@ export interface ExplainerProps extends ExplainerAction {
  * If the button has not been clicked, onNext will be called automatically after the timer expires (in milliseconds).
  * If timer == null, onNext will only be called after the button is clicked.
  */
-const Explainer = ({ instruction, button, steps = [], timer = null, onNext, theme }: ExplainerProps) => {
+const Explainer = ({ instruction, button, steps = [], timer = null, onNext }: ExplainerProps) => {
 
     useEffect(() => {
         if (timer != null) {

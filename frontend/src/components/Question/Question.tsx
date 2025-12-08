@@ -31,9 +31,9 @@ const Question = ({
 }: QuestionProps) => {
     const [value, setValue] = useState(question.value || "");
 
-    const registerChange = (value: string | number | boolean) => {
-        onChange(value, id);
-        setValue(value);
+    const registerChange = (newValue: string | number | boolean) => {
+        onChange(newValue, id);
+        setValue(newValue);
     };
 
     // render view
