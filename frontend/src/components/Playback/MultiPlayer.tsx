@@ -3,16 +3,19 @@ import classNames from "classnames";
 import PlaybackSection from "@/types/Section";
 
 interface MultiPlayerProps {
-    playSection: (section: PlaybackSection) => void;
+    playSection: (index: number) => void;
+    hasPlayed: number[];
     sections: PlaybackSection[];
-    playOnce: boolean;
-    extraContent?: (index: number) => JSX.Element;
+    playOnce?: boolean;
+    playing: number;
 }
 
 const MultiPlayer = ({
     playSection,
     sections,
-    playOnce,
+    playOnce=false,
+    hasPlayed=[],
+    playing
 }: MultiPlayerProps) => {
     return (
         <div
@@ -25,27 +28,21 @@ const MultiPlayer = ({
             {sections.map((section, index) => (
                 <div className="player-wrapper" key={index}>
                     <PlayButton
-                        onClick={() => {
-                            playSection(section);
-                        }}
+                        playSection={playSection}
                         disabled={
-                            playOnce ? section.hasPlayed : false
+                            playOnce ? hasPlayed.includes(index) : false
                         }
-                        label={
-                            section.label
-                        }
-                        color={
-                            section.color
-                        }
-                        playing={section.playing}
+                        playIndex={index}
+                        section={section}
+                        isPlaying={playing===index}
                     />
                     {section.image && (
                     <div className="image">
                         <img
                             src={section.image.link}
-                            alt="PlayerImage"
+                            alt={section.image.label}
                             onClick={() => {
-                                playSection(section);
+                                playSection(index);
                             }}
                         />
                         {section.image.label && (

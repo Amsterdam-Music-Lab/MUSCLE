@@ -9,7 +9,6 @@ import MultiPlayer from "./MultiPlayer";
 import MatchingPairs from "../MatchingPairs/MatchingPairs";
 import Preload from "../Preload/Preload";
 import { AUTOPLAY, BUTTON, MATCHINGPAIRS, PRELOAD, PlaybackAction, PlaybackView } from "@/types/Playback";
-import PlaybackSection from "@/types/Section";
 
 export interface PlaybackProps extends PlaybackAction {
     onPreloadReady: () => void;
@@ -25,14 +24,14 @@ interface PlaybackState {
 }
 
 const Playback = ({
-    sections: initialSections,
-    showAnimation,
-    preloadMessage,
-    instruction,
+    sections,
     view,
-    mute,
-    resumePlay,
-    playOnce=false,
+    instruction,
+    preloadMessage,
+    playOnce,
+    showAnimation,
+    resumePlay=false,
+    mute=false,
     scoreFeedbackDisplay,
     onPreloadReady,
     autoAdvance,
@@ -41,6 +40,8 @@ const Playback = ({
     startedPlaying,
     finishedPlaying,
 }: PlaybackProps) => {
+    const [playerIndex, setPlayerIndex] = useState(-1);
+    const [hasPlayed, setHasPlayed] = useState<number[]>([]);
     const activeAudioEndedListener = useRef<() => void>();
     const [state, setState] = useState<PlaybackState>({ view: PRELOAD });
 
@@ -49,14 +50,13 @@ const Playback = ({
     }
 
     // check if the users device is webaudio compatible
-    const playMethod = webAudio.compatibleDevice() ? initialSections[0].playMethod : 'EXTERNAL';
+    const playMethod = webAudio.compatibleDevice() ? sections[0].playMethod : 'EXTERNAL';
 
-    // Keep track of which section has played
-    const [sections, setSections] = useState(() => initialSections.map(section => ({
-        ...section,
-        hasPlayed: false,
-        playing: false
-    })));
+    useEffect(() => {
+        if (playerIndex !== -1 && !hasPlayed.includes(playerIndex)) {
+            setHasPlayed((prev) => [...prev, playerIndex]);
+        }
+    }, [playerIndex, hasPlayed]);
 
     // Cancel events
     const cancelAudioListeners = useCallback(() => {
@@ -72,16 +72,13 @@ const Playback = ({
     }, [cancelAudioListeners]);
 
     // Audio ended playing
-    const onAudioEnded = useCallback((section: PlaybackSection) => {
+    const onAudioEnded = useCallback((index: number) => {
+
         // If the player index is not the last player index, return
-        setSections(currentSections => currentSections.map(currentSection => {
-            section.playing = false;
-            if (currentSection.link === section.link) {
-                return {...section, hasPlayed:true};
-            } else {
-                return section
-            }
-        }))
+        if (playerIndex === index) {
+            setPlayerIndex(-1);
+        }
+
         finishedPlaying();
     }, [finishedPlaying]);
 
@@ -89,45 +86,47 @@ const Playback = ({
         webAudio.closeWebAudio();
     }
 
-    const getPlayheadShift = () => {
-        return resumePlay ? parseFloat(window.sessionStorage.getItem('decisionTime')) : 0
-    }
+    const getPlayheadShift = useCallback(() => {
+        /* if the current Playback view has resume_play set to true,
+        retrieve previous Playback view's decisionTime from sessionStorage
+        */
+        return resumePlay ?
+            parseFloat(window.sessionStorage.getItem('decisionTime')) : 0;
+    }, [resumePlay]
+    )
 
     // Play section with given index
-    const playSection = useCallback((section: PlaybackSection) => {
-        if (section.playMethod === 'NOAUDIO') {
+    const playSection = useCallback((index = 0) => {
+        if (playMethod === 'NOAUDIO') {
             return;
         }
-        if (!section.playing) {
+        if (index !== playerIndex) {
             // Load different audio
-            pauseAudio(playMethod);
+            if (playerIndex !== -1) {
+                pauseAudio(playMethod);
+            }
 
-            // Change the playing state
-            setSections(currentSections => currentSections.map(currentSection => {
-                if (currentSection.link === section.link) {
-                    return {...currentSection, playing: true}
-                } else {
-                    return {...currentSection, playing: false}
-                }
-            }))
+            // Store player index
+            setPlayerIndex(index);
 
             // Determine if audio should be played
             if (mute) {
+                setPlayerIndex(-1);
                 pauseAudio(playMethod);
                 return;
             }
+            const section = sections[index]
 
-            const playheadShift = getPlayheadShift() + section.playFrom | 0;
-            let latency = playAudio(section, playMethod, playheadShift);
+            let latency = playAudio(section, playMethod, getPlayheadShift() + section.playFrom);
 
             // Cancel active events
             cancelAudioListeners();
 
             // listen for active audio events
             if (playMethod === 'BUFFER') {
-                activeAudioEndedListener.current = webAudio.listenOnce("ended", () => onAudioEnded(section));
+                activeAudioEndedListener.current = webAudio.listenOnce("ended", () => onAudioEnded(index));
             } else {
-                activeAudioEndedListener.current = audio.listenOnce("ended", () => onAudioEnded(section));
+                activeAudioEndedListener.current = audio.listenOnce("ended", () => onAudioEnded(index));
             }
 
             // Compensate for audio latency and set state to playing
@@ -138,15 +137,17 @@ const Playback = ({
             return;
         }
         // Stop playback
-        if (section.playing) {
+        if (playerIndex === index) {
             pauseAudio(playMethod);
+            setPlayerIndex(-1);
             return;
         }
-    }, [sections, activeAudioEndedListener, cancelAudioListeners, getPlayheadShift, startedPlaying, onAudioEnded]
+    }, [sections, activeAudioEndedListener, cancelAudioListeners, getPlayheadShift, playMethod, startedPlaying, onAudioEnded, mute, resumePlay]
     );
 
     // Local logic for onfinished playing
     const onFinishedPlaying = useCallback(() => {
+        setPlayerIndex(-1);
         pauseAudio(playMethod);
         finishedPlaying && finishedPlaying();
     }, [finishedPlaying, playMethod]);
@@ -164,7 +165,13 @@ const Playback = ({
             autoAdvance,
             finishedPlaying: onFinishedPlaying,
             playSection,
+            playing:playerIndex,
+            hasPlayed,
+            preloadMessage,
+            instruction,
+            playOnce,
             responseTime,
+            scoreFeedbackDisplay,
             sections,
             setView,
             showAnimation,
@@ -193,7 +200,6 @@ const Playback = ({
                 return (
                     <MultiPlayer
                         {...attrs}
-                        playOnce={playOnce}
                     />
                 );
             case MATCHINGPAIRS:
@@ -211,7 +217,7 @@ const Playback = ({
 
     return (
         <div className="aha__playback">
-            <div className="playback"> {render(playbackArgs.view)} </div>{" "}
+            <div className="playback"> {render(view)} </div>{" "}
         </div>
     );
 };

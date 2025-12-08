@@ -9,12 +9,11 @@ export interface PlaybackSection {
     link: string,
     label: string,
     color?: string,
-    image: PlaybackImage,
-    playFrom: number,
-    playMethod: PlaybackMethod,
-    mute: boolean,
-    playing: boolean,
-    hasPlayed: boolean
+    image?: PlaybackImage,
+    playFrom?: number,
+    playMethod?: PlaybackMethod,
+    mute?: boolean,
+    hasPlayed?: boolean
 }
 
 export interface Card extends PlaybackSection {

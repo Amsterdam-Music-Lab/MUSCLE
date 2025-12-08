@@ -41,10 +41,10 @@ describe('MatchingPairs Component', () => {
     })
 
     let mockSections = [
-        { id: 1, content: 'Card 1', url: '/cat-01.jpg', inactive: false, turned: false, noevents: false, seen: false },
-        { id: 2, content: 'Card 2', url: '/cat-02.jpg', inactive: false, turned: false, noevents: false, seen: false },
-        { id: 3, content: 'Card 1', url: '/cat-01.jpg', inactive: false, turned: false, noevents: false, seen: false },
-        { id: 4, content: 'Card 2', url: '/cat-02.jpg', inactive: false, turned: false, noevents: false, seen: false },
+        { label: 'Card 1', link: '/cat-01.jpg', inactive: false, turned: false, noevents: false, seen: false },
+        { label: 'Card 2', link: '/cat-02.jpg', inactive: false, turned: false, noevents: false, seen: false },
+        { label: 'Card 1', link: '/cat-01.jpg', inactive: false, turned: false, noevents: false, seen: false },
+        { label: 'Card 2', link: '/cat-02.jpg', inactive: false, turned: false, noevents: false, seen: false },
     ];
 
     const baseProps = {
@@ -57,12 +57,12 @@ describe('MatchingPairs Component', () => {
     };
 
     test('renders correctly', () => {
-        const { getByText } = render(<MatchingPairs sections={mockSections} setPlayerIndex={vi.fn()} />);
+        const { getByText } = render(<MatchingPairs sections={mockSections} />);
         expect(getByText('Pick a card')).not.toBeNull();
     });
 
     test('flips a card when clicked', async () => {
-        render(<MatchingPairs {...baseProps} sections={mockSections} setPlayerIndex={vi.fn()} />);
+        render(<MatchingPairs {...baseProps} sections={mockSections} />);
         const cards = screen.getAllByRole('button');
 
         fireEvent.click(cards[0]);
@@ -72,7 +72,7 @@ describe('MatchingPairs Component', () => {
 
     test('updates score after a match', async () => {
         mock.onPost().replyOnce(200, { score: 10 });
-        const { getByText } = render(<MatchingPairs {...baseProps} sections={mockSections} setPlayerIndex={vi.fn()} />);
+        const { getByText } = render(<MatchingPairs {...baseProps} sections={mockSections} />);
         const cards = screen.getAllByRole('button');
 
         fireEvent.click(cards[0]);
@@ -98,7 +98,7 @@ describe('MatchingPairs Component', () => {
     test('calls scoreIntermediateResult after each turn', async () => {
         mock.onPost().reply(200, { score: 10 });
         const spy = vi.spyOn(API, 'scoreIntermediateResult');
-        render(<MatchingPairs {...baseProps} sections={mockSections} setPlayerIndex={vi.fn()} />);
+        render(<MatchingPairs {...baseProps} sections={mockSections} />);
         const cards = screen.getAllByTestId('play-card');
 
         mock.onPost().reply(200, { score: 10 });
@@ -125,7 +125,7 @@ describe('MatchingPairs Component', () => {
         mock.onPost().reply(200, { score: 10 });
         const submitResult = vi.fn();
         render(
-            <MatchingPairs {...baseProps} sections={mockSections} setPlayerIndex={vi.fn()} submitResult={submitResult} />
+            <MatchingPairs {...baseProps} sections={mockSections} submitResult={submitResult} />
         );
         const cards = screen.getAllByTestId('play-card');
 

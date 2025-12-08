@@ -9,20 +9,20 @@ interface AutoPlayProps {
     instruction?: string;
     sections: PlaybackSection[];
     showAnimation: boolean;
-    playSection: (section: PlaybackSection) => void;
+    playSection: (index: number) => void;
     startedPlaying: boolean;
     finishedPlaying: () => void;
     responseTime: number;
     className?: string;
 }
 
-const AutoPlay = ({ instruction, sections, showAnimation, playSection, startedPlaying, finishedPlaying, responseTime, className = '' }: AutoPlayProps) => {
+const AutoPlay = ({ instruction, showAnimation, playSection, startedPlaying, finishedPlaying, responseTime, className = '' }: AutoPlayProps) => {
 
     const [running, setRunning] = useState(true);
 
     // Handle view logic
     useEffect(() => {
-        playSection(sections[0])
+        playSection(0);
     }, [playSection, startedPlaying]);
 
     return (

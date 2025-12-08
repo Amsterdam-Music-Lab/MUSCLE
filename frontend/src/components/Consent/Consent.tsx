@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { saveAs } from 'file-saver';
 
-import { URLS } from "@/config";
 import Button from "../Button/Button";
 import Loading from "../Loading/Loading";
 import { createConsent, useConsent } from "@/API";

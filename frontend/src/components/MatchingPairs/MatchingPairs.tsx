@@ -18,7 +18,7 @@ export const SCORE_FEEDBACK_DISPLAY: { [key: string]: ScoreFeedbackDisplay } = {
 }
 
 interface MatchingPairsProps {
-    playSection: (section: Card) => void;
+    playSection: (index: number) => void;
     sections: Card[];
     showAnimation: boolean;
     finishedPlaying: () => void;
@@ -171,7 +171,7 @@ const MatchingPairs = ({
 
         const updatedSections = sections.map(section => {
             if (score === 10 || score === 20) {
-                if (section.id === firstCard?.id || section.id === secondCard?.id) {
+                if (section.link === firstCard?.link|| section.link === secondCard?.link) {
                     section.inactive = true;
                 }
             }
@@ -217,7 +217,7 @@ const MatchingPairs = ({
                         <PlayCard
                             key={index}
                             onClick={() => {
-                                playSection(section);
+                                playSection(index);
                                 checkMatchingPairs(index);
                             }}
                             registerUserClicks={registerUserClicks}
