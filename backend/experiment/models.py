@@ -88,7 +88,7 @@ class Experiment(models.Model):
             Associated blocks
         """
 
-        return list(Block.objects.filter(phase__experiment=self))
+        return Block.objects.filter(phase__experiment=self)
 
     def associated_sessions(self) -> QuerySet[Session]:
         """export sessions for this experiment
@@ -217,7 +217,7 @@ class Block(models.Model):
             Associated sessions
         """
 
-        return Session.objects.filter(block=self).order_by("-started_at")
+        return self.associated_sessions().order_by("-started_at")
 
     def _export_admin(self) -> dict:
         """Export data for admin
@@ -231,14 +231,28 @@ class Block(models.Model):
             "block": {
                 "id": self.id,
                 "name": self.name,
-                "sessions": [session._export_admin() for session in self.session_set.all()],
-                "participants": [participant._export_admin() for participant in self.current_participants()],
+                "sessions": [
+                    session._export_admin() for session in self.session_set.all()
+                ],
+                "participants": self.associated_participants().values(
+                    "id",
+                    "unique_hash",
+                    "country_code",
+                    "access_info",
+                    "participant_id_url",
+                    "profile",
+                ),
             },
         }
 
     def associated_sessions(self):
         """return all sessions associated with this block"""
         return self.session_set.all()
+
+    def associated_participants(self):
+        from participant.models import Participant
+
+        return Participant.objects.filter(session__in=self.associated_sessions())
 
     def get_rules(self) -> "experiment.rules.base.Base":
         """Get instance of rules class to be used for this session

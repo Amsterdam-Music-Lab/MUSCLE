@@ -43,11 +43,6 @@ class TestExperimentViews(TestCase):
         cls.final_phase = Phase.objects.create(experiment=experiment, index=3)
         cls.block4 = Block.objects.create(slug="block4", phase=cls.final_phase)
 
-    @classmethod
-    def tearDownClass(cls):
-        rmtree(join(here, 'consent'))
-        return super().tearDownClass()
-
     def setUp(self):
         session = self.client.session
         session["participant_id"] = self.participant.id
@@ -219,7 +214,6 @@ class TestExperimentViews(TestCase):
             response.json().get("description"), "<p>Eens kijken of vertaling werkt.</p>"
         )
 
-    @override_settings(MEDIA_ROOT=here)
     def test_get_block(self):
         # Create a block
         experiment = Experiment.objects.create(

@@ -7,7 +7,9 @@ from experiment.models import Block, Experiment, Phase
 class TestModelBlock(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.block = Block.objects.create(rules="THATS_MY_SONG", slug="hooked", rounds=42)
+        cls.block = Block.objects.create(
+            rules="THATS_MY_SONG", slug="hooked", rounds=42
+        )
 
     def test_separate_rules_instance(self):
         rules1 = self.block.get_rules()
@@ -35,16 +37,21 @@ class TestModelExperiment(TestCase):
         experiment = self.experiment
         phase1 = Phase.objects.create(experiment=experiment)
         phase2 = Phase.objects.create(experiment=experiment)
-        block = Block.objects.create(rules="THATS_MY_SONG", slug="hooked", rounds=42, phase=phase1)
-        block2 = Block.objects.create(rules="THATS_MY_SONG", slug="unhinged", rounds=42, phase=phase2)
-        block3 = Block.objects.create(rules="THATS_MY_SONG", slug="derailed", rounds=42, phase=phase2)
-
-        self.assertEqual(experiment.associated_blocks(), [block, block2, block3])
+        Block.objects.bulk_create(
+            [
+                Block(rules="THATS_MY_SONG", slug="hooked", rounds=42, phase=phase1),
+                Block(rules="THATS_MY_SONG", slug="unhinged", rounds=42, phase=phase2),
+                Block(rules="THATS_MY_SONG", slug="derailed", rounds=42, phase=phase2),
+            ]
+        )
+        self.assertEqual(experiment.associated_blocks().count(), 3)
 
     def test_associated_sessions(self):
         experiment = self.experiment
         phase = Phase.objects.create(experiment=experiment)
-        block = Block.objects.create(rules="THATS_MY_SONG", slug="hooked", rounds=42, phase=phase)
+        block = Block.objects.create(
+            rules="THATS_MY_SONG", slug="hooked", rounds=42, phase=phase
+        )
         Session.objects.bulk_create(
             [
                 Session(block=block, participant=self.participant1),
@@ -54,17 +61,3 @@ class TestModelExperiment(TestCase):
         )
         sessions = experiment.associated_sessions()
         self.assertEqual(len(sessions), 3)
-
-    def test_current_participants(self):
-        experiment = self.experiment
-        phase = Phase.objects.create(experiment=experiment)
-        block = Block.objects.create(rules="THATS_MY_SONG", slug="hooked", rounds=42, phase=phase)
-        Session.objects.bulk_create(
-            [
-                Session(block=block, participant=self.participant1),
-                Session(block=block, participant=self.participant2),
-                Session(block=block, participant=self.participant3),
-            ]
-        )
-        participants = experiment.current_participants()
-        self.assertEqual(len(participants), 3)

@@ -107,11 +107,11 @@ class ParticipantTest(TestCase):
         assert int(response.get('hash')) == self.participant.unique_hash
         assert response.get('csrf_token') is not None
 
-    def test_profile(self):
-        assert len(self.participant.profile()) == 1
+    def test_profile_results(self):
+        self.assertEqual(self.participant.profile_results().count(), 1)
 
-    def test_profile_dict(self):
-        po = self.participant.profile_dict()
+    def test_profile(self):
+        po = self.participant.profile
         assert len(po.keys()) == 2
         assert po.get('test1_score') == 2.5
 
@@ -167,33 +167,7 @@ class ParticipantTest(TestCase):
         )
         self.assertEqual(self.participant.result_count(), 6)
 
-    def test_export_admin(self):
-        new_participant = Participant.objects.create(unique_hash="84",
-                                                     country_code="nl",
-                                                     access_info="Mozilla/5.0 (X11; Linux x86_64)",
-                                                     participant_id_url = "this_participant",
-                                                     )
-        Result.objects.bulk_create(
-            [
-                Result(participant=new_participant,
-                       question_key='msi_01_music_activities',
-                       given_response="response"),
-                Result(participant=new_participant,
-                       question_key='msi_24_music_addiction',
-                       given_response="response"),
-                Result(participant=new_participant,
-                       question_key='msi_08_intrigued_styles',
-                       given_response="response"),
-            ]
-        )
-        this_admin = new_participant._export_admin()
-        self.assertEqual(this_admin['id'], new_participant.id)
-        self.assertEqual(this_admin['unique_hash'], "84")
-        self.assertEqual(this_admin['access_info'], "Mozilla/5.0 (X11; Linux x86_64)")
-        self.assertEqual(this_admin['participant_id_url'], "this_participant")
-        self.assertEqual(len(this_admin['profile']), 3)
-
-    def test_profile(self):
+    def test_profile_results(self):
         Result.objects.bulk_create(
             [
                 Result(participant=self.participant,
@@ -207,7 +181,7 @@ class ParticipantTest(TestCase):
                        given_response="response"),
             ]
         )
-        this_profile = self.participant.profile()
+        this_profile = self.participant.profile_results()
         self.assertEqual(this_profile.count(), 4)
 
     def test_is_dutch(self):

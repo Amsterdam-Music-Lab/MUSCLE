@@ -56,7 +56,7 @@ class Categorization(BaseRules):
 
         if rounds_passed == 0:
             # Check if participants wants to exit after failed traning
-            profiles = session.participant.profile()
+            profiles = session.participant.profile_results()
             for profile in profiles:
                 # Delete results and json from session and exit
                 if profile.given_response == "aborted":
@@ -130,7 +130,7 @@ class Categorization(BaseRules):
                     session.save_json_data(end_data)
                     session.final_score = 0
                     session.save()
-                    profiles = session.participant.profile()
+                    profiles = session.participant.profile_results()
                     for profile in profiles:
                         # Delete failed_training tag from profile
                         if profile.question_key == "failed_training":
@@ -195,7 +195,7 @@ class Categorization(BaseRules):
             session.finish()
             session.final_score = final_score
             session.save()
-            profiles = session.participant.profile()
+            profiles = session.participant.profile_results()
             for profile in profiles:
                 # Delete failed_training tag from profile
                 if profile.question_key == "failed_training":

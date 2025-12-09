@@ -58,39 +58,7 @@ class Participant(models.Model):
 
     result_count.short_description = 'Results'
 
-    def _export_admin(self)  -> dict:
-        """Export data to admin
-
-        Returns:
-            Participant data for admin
-        """
-        return {
-            "id": self.id,
-            "unique_hash": self.unique_hash,
-            "country_code": self.country_code,
-            "access_info": self.access_info,
-            "participant_id_url": self.participant_id_url,
-            "profile": self.profile_dict(),
-        }
-
-    def export_profiles(self) -> QuerySet[Result]:
-        """Export participant profile result objects
-
-        Returns:
-            All profile results from a participant
-
-        Example:
-            Print all the questions and answers from a participant's profile results
-            ```python
-            all_profile_results = participant.export_profiles()
-            for profile in all_profile_results:
-                print(f"{profile.question_key} - {profile.given_response}")
-            ```
-        """
-
-        return self.result_set.all()
-
-    def profile(self) -> QuerySet[Result]:
+    def profile_results(self) -> QuerySet[Result]:
         """Get all the answered profile results of this participant
 
         Returns:
@@ -99,29 +67,32 @@ class Participant(models.Model):
         Example:
             Print all the questions and answers from a participant's profile results
             ```python
-            all_profile_results = participant.profile()
+            all_profile_results = participant.profile_results()
             for profile in all_profile_results:
                 print(f"{profile.question_key} - {profile.given_response}")
             ```
         """
         return self.result_set.all().filter(given_response__isnull=False)
 
-    def profile_dict(self) -> dict:
-        """Get full profile data in one object
+    @property
+    def profile(self) -> dict:
+        """Get full profile data in one dictionary
 
         Returns:
-            All profile data from a Participant in one object
+            All profile data from a Participant in one dictionary
 
         Example:
             Print all the questions, answers and scores from a participant's profile results
             ```python
-            all_profile_results = participant.profile_dict()
+            all_profile_results = participant.profile()
             for key, value in all_profile_results:
                 print(f"{key} - {value}")
             ```
         """
         profile_dict = {}
-        profile_list = self.profile().values('question_key', 'given_response', 'score')
+        profile_list = self.profile_results().values(
+            'question_key', 'given_response', 'score'
+        )
         for profile in profile_list:
             profile_dict[profile.get('question_key')] = profile.get('given_response')
             score = profile.get('score')

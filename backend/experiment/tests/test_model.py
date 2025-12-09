@@ -58,10 +58,10 @@ class BlockModelTest(TestCase):
         block = Block.objects.get(slug="test-block")
         self.assertEqual(block.playlist_count(), 0)
 
-    def test_block_current_participants(self):
+    def test_block_associated_participants(self):
         block = Block.objects.get(slug="test-block")
-        participants = block.current_participants()
-        self.assertEqual(len(participants), 0)
+        participants = block.associated_participants()
+        self.assertEqual(participants.count(), 0)
 
     def test_block_export_admin(self):
         block = Block.objects.get(slug="test-block")
