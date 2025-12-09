@@ -262,7 +262,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
             "feedback_count": all_feedback.count(),
         }
 
-        blocks = all_blocks.values(
+        blocks = all_blocks.with_stats.values(
             [
                 "id",
                 "slug",

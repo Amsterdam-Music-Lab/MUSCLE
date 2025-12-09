@@ -184,6 +184,7 @@ class Block(models.Model):
     rules = models.CharField(default="", max_length=64)
 
     theme_config = models.ForeignKey(ThemeConfig, on_delete=models.SET_NULL, blank=True, null=True)
+    objects = BlockManager()
 
     def __str__(self):
         return self.name if self.name else self.slug
