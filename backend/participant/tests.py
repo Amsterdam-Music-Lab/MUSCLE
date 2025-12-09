@@ -111,7 +111,7 @@ class ParticipantTest(TestCase):
         self.assertEqual(self.participant.profile_results().count(), 1)
 
     def test_profile(self):
-        po = self.participant.profile
+        po = self.participant.profile()
         assert len(po.keys()) == 2
         assert po.get('test1_score') == 2.5
 

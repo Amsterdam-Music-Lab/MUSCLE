@@ -7,6 +7,16 @@ from question.models import QuestionGroup
 from django.db.models import Sum
 from result.models import Result
 
+
+class PartipantManager(models.Manager):
+
+    def with_accumulative_score(self):
+        return self.annotate(accumulative_score=Sum("session__final_score"))
+
+    def with_profile(self):
+        return self.annotate(profile=self.profile())
+
+
 class Participant(models.Model):
     """Main participant, base for profile and sessions
 
@@ -22,6 +32,7 @@ class Participant(models.Model):
     country_code = models.CharField(max_length=3, default="")
     access_info = models.CharField(max_length=512, default="", null=True)
     participant_id_url = models.CharField(max_length=128, null=True, unique=True)
+    objects = PartipantManager()
 
     def __str__(self):
         return "Participant {}".format(self.id)
@@ -74,7 +85,6 @@ class Participant(models.Model):
         """
         return self.result_set.all().filter(given_response__isnull=False)
 
-    @property
     def profile(self) -> dict:
         """Get full profile data in one dictionary
 

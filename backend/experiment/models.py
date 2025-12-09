@@ -235,7 +235,7 @@ class Block(models.Model):
                 "sessions": [
                     session._export_admin() for session in self.session_set.all()
                 ],
-                "participants": self.associated_participants().values(
+                "participants": self.associated_participants().with_profile.values(
                     "id",
                     "unique_hash",
                     "country_code",

@@ -101,7 +101,7 @@ def current_profile(request: HttpRequest) -> JsonResponse:
         JsonResponse with serialized result objects
     """
     participant = get_participant(request)
-    return JsonResponse(participant.profile, json_dumps_params={'indent': 4})
+    return JsonResponse(participant.profile(), json_dumps_params={'indent': 4})
 
 
 def get_result(
