@@ -221,20 +221,6 @@ class Playlist(models.Model):
                     'messages': csv_messages,
                 }
 
-    def _export_admin(self):
-        """Export data for admin"""
-        section_data = (
-            self.section_set.values("id", "song__artist", "song__name", "play_count"),
-        )
-        return {
-            "exportedAt": timezone.now().isoformat(),
-            "playlist": {
-                "id": self.id,
-                "name": self.name,
-                "sections": section_data,
-            },
-        }
-
     def _update_admin_csv(self):
         """Update csv data for admin"""
         csvfile = CsvStringBuilder()

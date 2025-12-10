@@ -253,8 +253,10 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
             return get_block_json_export_as_repsonse(block_slug)
 
         all_blocks = obj.associated_blocks()
-        all_sessions = obj.associated_sessions()
-        all_participants = get_participants_of_sessions(all_sessions)
+        all_sessions = obj.associated_sessions().select_related('participant')
+        all_participants = all_sessions.values_list(
+            'participant__unique_hash', 'participant__id'
+        ).distinct()
         all_feedback = obj.associated_feedback()
         collect_data = {
             "participant_count": all_participants.count(),
@@ -262,7 +264,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
             "feedback_count": all_feedback.count(),
         }
 
-        blocks = all_blocks.with_stats.values(
+        blocks = all_blocks.with_stats().values(
             [
                 "id",
                 "slug",

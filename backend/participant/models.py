@@ -49,9 +49,17 @@ class Participant(models.Model):
             session_count = participant.session_count()
             ```
         """
-        return self.session_set.count()
+        return self.sessions.count()
 
     session_count.short_description = 'Sessions'
+
+    def percentile_rank_accumulative_score(self) -> float:
+        all_participants = Participant.objects.with_accumulative_score()
+        this_score = all_participants.get(pk=self.pk).accumulative_score
+        n_participants = all_participants.count()
+        n_lte = all_participants.filter(accumulative_score__lte=this_score).count()
+        n_eq = all_participants.filter(accumulative_score=this_score).count()
+        return 100.0 * (n_lte - (0.5 * n_eq)) / n_participants
 
     def result_count(self) -> int:
         """Get the total number of results
@@ -143,7 +151,7 @@ class Participant(models.Model):
         scores = []
 
         # Get all finished sessions
-        sessions = self.session_set.exclude(
+        sessions = self.sessions.exclude(
             finished_at=None).order_by('-final_score')
 
         hits = {}

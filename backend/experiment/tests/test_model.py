@@ -39,6 +39,7 @@ class BlockModelTest(TestCase):
             name="Test Block",
             description="Test block description",
         )
+        Session.objects.create(block=block, participant=Participant.objects.create())
 
     def test_block_str(self):
         block = Block.objects.get(slug="test-block")
@@ -52,7 +53,7 @@ class BlockModelTest(TestCase):
 
     def test_block_session_count(self):
         block = Block.objects.get(slug="test-block")
-        self.assertEqual(block.session_count(), 0)
+        self.assertEqual(block.session_count(), 1)
 
     def test_block_playlist_count(self):
         block = Block.objects.get(slug="test-block")
@@ -61,17 +62,12 @@ class BlockModelTest(TestCase):
     def test_block_associated_participants(self):
         block = Block.objects.get(slug="test-block")
         participants = block.associated_participants()
-        self.assertEqual(participants.count(), 0)
-
-    def test_block_export_admin(self):
-        block = Block.objects.get(slug="test-block")
-        exported_data = block._export_admin()
-        self.assertEqual(exported_data["block"]["name"], "Test Block")
+        self.assertEqual(participants.count(), 1)
 
     def test_block_associated_sessions(self):
         block = Block.objects.get(slug="test-block")
         sessions = block.associated_sessions()
-        self.assertEqual(len(sessions), 0)
+        self.assertEqual(len(sessions), 1)
 
     def test_block_get_rules(self):
         block = Block.objects.get(slug="test-block")
@@ -87,14 +83,18 @@ class BlockModelTest(TestCase):
         session = Session.objects.create(
             block=block, participant=Participant.objects.create()
         )
-        for j in range(amount_of_results):
-            Result.objects.create(
-                session=session,
-                expected_response=1,
-                given_response=1,
-                score=question_score,
-                question_key=f"test_question_{j + 1}",
-            )
+        Result.objects.bulk_create(
+            [
+                Result(
+                    session=session,
+                    expected_response=1,
+                    given_response=1,
+                    score=question_score,
+                    question_key=f"test_question_{j + 1}",
+                )
+                for n in amount_of_results
+            ]
+        )
         session.finish()
         session.save()
 

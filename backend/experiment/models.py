@@ -136,18 +136,6 @@ class Phase(models.Model):
         ordering = ["index"]
 
 
-class BlockManager(models.Manager):
-
-    def with_stats(self):
-        return self.annotate(
-            n_sessions=models.Count("session_set"),
-            n_sessions_finished=models.Count(
-                "session_set", filter=models.Q(finished_at__isnull=False)
-            ),
-            n_participants=models.Count("session__participant", unique=True),
-        )
-
-
 class Block(models.Model):
     """Root entity for configuring experiment blocks
 
@@ -183,8 +171,9 @@ class Block(models.Model):
     bonus_points = models.PositiveIntegerField(default=0)
     rules = models.CharField(default="", max_length=64)
 
-    theme_config = models.ForeignKey(ThemeConfig, on_delete=models.SET_NULL, blank=True, null=True)
-    objects = BlockManager()
+    theme_config = models.ForeignKey(
+        ThemeConfig, on_delete=models.SET_NULL, blank=True, null=True
+    )
 
     def __str__(self):
         return self.name if self.name else self.slug
@@ -196,7 +185,7 @@ class Block(models.Model):
             Number of sessions
         """
 
-        return self.session_set.count()
+        return self.sessions.count()
 
     session_count.short_description = "Sessions"
 
@@ -220,40 +209,9 @@ class Block(models.Model):
 
         return self.associated_sessions().order_by("-started_at")
 
-    def _export_admin(self) -> dict:
-        """Export data for admin
-
-        Returns:
-            Export data for admin
-
-        """
-        return {
-            "exportedAt": timezone.now().isoformat(),
-            "block": {
-                "id": self.id,
-                "name": self.name,
-                "sessions": [
-                    session._export_admin() for session in self.session_set.all()
-                ],
-                "participants": self.associated_participants().with_profile.values(
-                    "id",
-                    "unique_hash",
-                    "country_code",
-                    "access_info",
-                    "participant_id_url",
-                    "profile",
-                ),
-            },
-        }
-
     def associated_sessions(self):
         """return all sessions associated with this block"""
-        return self.session_set.all()
-
-    def associated_participants(self):
-        from participant.models import Participant
-
-        return Participant.objects.filter(session__in=self.associated_sessions())
+        return self.sessions.all()
 
     def get_rules(self) -> "experiment.rules.base.Base":
         """Get instance of rules class to be used for this session
@@ -277,7 +235,9 @@ class Block(models.Model):
             max score from all sessions with a positive score
         """
 
-        score = self.session_set.filter(final_score__gte=0).aggregate(models.Max("final_score"))
+        score = self.sessions.filter(final_score__gte=0).aggregate(
+            models.Max("final_score")
+        )
         if "final_score__max" in score:
             return score["final_score__max"]
 
