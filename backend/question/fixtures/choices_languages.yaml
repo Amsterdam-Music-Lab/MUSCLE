@@ -1,0 +1,1106 @@
+# choices associated with `ISO_LANGUAGES` choice list
+- model: question.choice
+  fields:
+    key: ab
+    text: Abkhazian
+    index: 0
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: aa
+    text: Afar
+    index: 1
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: af
+    text: Afrikaans
+    index: 2
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ak
+    text: Akan
+    index: 3
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sq
+    text: Albanian
+    index: 4
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: am
+    text: Amharic
+    index: 5
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ar
+    text: Arabic
+    index: 6
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: an
+    text: Aragonese
+    index: 7
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: hy
+    text: Armenian
+    index: 8
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: as
+    text: Assamese
+    index: 9
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: av
+    text: Avaric
+    index: 10
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ae
+    text: Avestan
+    index: 11
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ay
+    text: Aymara
+    index: 12
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: az
+    text: Azerbaijani
+    index: 13
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: bm
+    text: Bambara
+    index: 14
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ba
+    text: Bashkir
+    index: 15
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: eu
+    text: Basque
+    index: 16
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: be
+    text: Belarusian
+    index: 17
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: bn
+    text: Bengali
+    index: 18
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: bh
+    text: Bihari languages
+    index: 19
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: bi
+    text: Bislama
+    index: 20
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: nb
+    text: Bokmål), Norwegian; Norwegian Bokmål
+    index: 21
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: bs
+    text: Bosnian
+    index: 22
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: br
+    text: Breton
+    index: 23
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: bg
+    text: Bulgarian
+    index: 24
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: my
+    text: Burmese
+    index: 25
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ca
+    text: Catalan; Valencian
+    index: 26
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: km
+    text: Central Khmer
+    index: 27
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ch
+    text: Chamorro
+    index: 28
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ce
+    text: Chechen
+    index: 29
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ny
+    text: Chichewa; Chewa; Nyanja
+    index: 30
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: zh
+    text: Chinese
+    index: 31
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: cu
+    text: Church Slavic; Old Slavonic; Church Slavonic; Old Bulgarian; Old Church
+      Slavonic
+    index: 32
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: cv
+    text: Chuvash
+    index: 33
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: kw
+    text: Cornish
+    index: 34
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: co
+    text: Corsican
+    index: 35
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: cr
+    text: Cree
+    index: 36
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: hr
+    text: Croatian
+    index: 37
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: cs
+    text: Czech
+    index: 38
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: da
+    text: Danish
+    index: 39
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: dv
+    text: Divehi; Dhivehi; Maldivian
+    index: 40
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: nl
+    text: Dutch; Flemish
+    index: 41
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: dz
+    text: Dzongkha
+    index: 42
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: en
+    text: English
+    index: 43
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: eo
+    text: Esperanto
+    index: 44
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: et
+    text: Estonian
+    index: 45
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ee
+    text: Ewe
+    index: 46
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: fo
+    text: Faroese
+    index: 47
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: fj
+    text: Fijian
+    index: 48
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: fi
+    text: Finnish
+    index: 49
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: fr
+    text: French
+    index: 50
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ff
+    text: Fulah
+    index: 51
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: gd
+    text: Gaelic; Scottish Gaelic
+    index: 52
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: gl
+    text: Galician
+    index: 53
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: lg
+    text: Ganda
+    index: 54
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ka
+    text: Georgian
+    index: 55
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: de
+    text: German
+    index: 56
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: el
+    text: Greek), Modern (1453-)
+    index: 57
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: gn
+    text: Guarani
+    index: 58
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: gu
+    text: Gujarati
+    index: 59
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ht
+    text: Haitian; Haitian Creole
+    index: 60
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ha
+    text: Hausa
+    index: 61
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: he
+    text: Hebrew
+    index: 62
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: hz
+    text: Herero
+    index: 63
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: hi
+    text: Hindi
+    index: 64
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ho
+    text: Hiri Motu
+    index: 65
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: hu
+    text: Hungarian
+    index: 66
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: is
+    text: Icelandic
+    index: 67
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: io
+    text: Ido
+    index: 68
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ig
+    text: Igbo
+    index: 69
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: id
+    text: Indonesian
+    index: 70
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ia
+    text: Interlingua (International Auxiliary Language Association)
+    index: 71
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ie
+    text: Interlingue; Occidental
+    index: 72
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: iu
+    text: Inuktitut
+    index: 73
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ik
+    text: Inupiaq
+    index: 74
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ga
+    text: Irish
+    index: 75
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: it
+    text: Italian
+    index: 76
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ja
+    text: Japanese
+    index: 77
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: jv
+    text: Javanese
+    index: 78
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: kl
+    text: Kalaallisut; Greenlandic
+    index: 79
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: kn
+    text: Kannada
+    index: 80
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: kr
+    text: Kanuri
+    index: 81
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ks
+    text: Kashmiri
+    index: 82
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: kk
+    text: Kazakh
+    index: 83
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ki
+    text: Kikuyu; Gikuyu
+    index: 84
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: rw
+    text: Kinyarwanda
+    index: 85
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ky
+    text: Kirghiz; Kyrgyz
+    index: 86
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: kv
+    text: Komi
+    index: 87
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: kg
+    text: Kongo
+    index: 88
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ko
+    text: Korean
+    index: 89
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: kj
+    text: Kuanyama; Kwanyama
+    index: 90
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ku
+    text: Kurdish
+    index: 91
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: lo
+    text: Lao
+    index: 92
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: la
+    text: Latin
+    index: 93
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: lv
+    text: Latvian
+    index: 94
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: li
+    text: Limburgan; Limburger; Limburgish
+    index: 95
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ln
+    text: Lingala
+    index: 96
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: lt
+    text: Lithuanian
+    index: 97
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: lu
+    text: Luba-Katanga
+    index: 98
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: lb
+    text: Luxembourgish; Letzeburgesch
+    index: 99
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: mk
+    text: Macedonian
+    index: 100
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: mg
+    text: Malagasy
+    index: 101
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ms
+    text: Malay
+    index: 102
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ml
+    text: Malayalam
+    index: 103
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: mt
+    text: Maltese
+    index: 104
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: gv
+    text: Manx
+    index: 105
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: mi
+    text: Maori
+    index: 106
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: mr
+    text: Marathi
+    index: 107
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: mh
+    text: Marshallese
+    index: 108
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: mn
+    text: Mongolian
+    index: 109
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: na
+    text: Nauru
+    index: 110
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: nv
+    text: Navajo; Navaho
+    index: 111
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: nd
+    text: Ndebele), North; North Ndebele
+    index: 112
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: nr
+    text: Ndebele), South; South Ndebele
+    index: 113
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ng
+    text: Ndonga
+    index: 114
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ne
+    text: Nepali
+    index: 115
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: se
+    text: Northern Sami
+    index: 116
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: 'no'
+    text: Norwegian
+    index: 117
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: nn
+    text: Norwegian Nynorsk; Nynorsk), Norwegian
+    index: 118
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: oc
+    text: Occitan (post 1500)
+    index: 119
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: oj
+    text: Ojibwa
+    index: 120
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: or
+    text: Oriya
+    index: 121
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: om
+    text: Oromo
+    index: 122
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: os
+    text: Ossetian; Ossetic
+    index: 123
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: pi
+    text: Pali
+    index: 124
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: pa
+    text: Panjabi; Punjabi
+    index: 125
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: fa
+    text: Persian
+    index: 126
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: pl
+    text: Polish
+    index: 127
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: pt
+    text: Portuguese
+    index: 128
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ps
+    text: Pushto; Pashto
+    index: 129
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: qu
+    text: Quechua
+    index: 130
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ro
+    text: Romanian; Moldavian; Moldovan
+    index: 131
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: rm
+    text: Romansh
+    index: 132
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: rn
+    text: Rundi
+    index: 133
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ru
+    text: Russian
+    index: 134
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sm
+    text: Samoan
+    index: 135
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sg
+    text: Sango
+    index: 136
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sa
+    text: Sanskrit
+    index: 137
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sc
+    text: Sardinian
+    index: 138
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sr
+    text: Serbian
+    index: 139
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sn
+    text: Shona
+    index: 140
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ii
+    text: Sichuan Yi; Nuosu
+    index: 141
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sd
+    text: Sindhi
+    index: 142
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: si
+    text: Sinhala; Sinhalese
+    index: 143
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sk
+    text: Slovak
+    index: 144
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sl
+    text: Slovenian
+    index: 145
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: so
+    text: Somali
+    index: 146
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: st
+    text: Sotho), Southern
+    index: 147
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: es
+    text: Spanish; Castilian
+    index: 148
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: su
+    text: Sundanese
+    index: 149
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sw
+    text: Swahili
+    index: 150
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ss
+    text: Swati
+    index: 151
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: sv
+    text: Swedish
+    index: 152
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: tl
+    text: Tagalog
+    index: 153
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ty
+    text: Tahitian
+    index: 154
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: tg
+    text: Tajik
+    index: 155
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ta
+    text: Tamil
+    index: 156
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: tt
+    text: Tatar
+    index: 157
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: te
+    text: Telugu
+    index: 158
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: th
+    text: Thai
+    index: 159
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: bo
+    text: Tibetan
+    index: 160
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ti
+    text: Tigrinya
+    index: 161
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: to
+    text: Tonga (Tonga Islands)
+    index: 162
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ts
+    text: Tsonga
+    index: 163
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: tn
+    text: Tswana
+    index: 164
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: tr
+    text: Turkish
+    index: 165
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: tk
+    text: Turkmen
+    index: 166
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: tw
+    text: Twi
+    index: 167
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ug
+    text: Uighur; Uyghur
+    index: 168
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: uk
+    text: Ukrainian
+    index: 169
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ur
+    text: Urdu
+    index: 170
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: uz
+    text: Uzbek
+    index: 171
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: ve
+    text: Venda
+    index: 172
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: vi
+    text: Vietnamese
+    index: 173
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: vo
+    text: Volapük
+    index: 174
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: wa
+    text: Walloon
+    index: 175
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: cy
+    text: Welsh
+    index: 176
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: fy
+    text: Western Frisian
+    index: 177
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: wo
+    text: Wolof
+    index: 178
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: xh
+    text: Xhosa
+    index: 179
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: yi
+    text: Yiddish
+    index: 180
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: yo
+    text: Yoruba
+    index: 181
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: za
+    text: Zhuang; Chuang
+    index: 182
+    choicelist: ISO_LANGUAGES
+- model: question.choice
+  fields:
+    key: zu
+    text: Zulu
+    index: 183
+    choicelist: ISO_LANGUAGES

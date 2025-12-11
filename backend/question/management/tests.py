@@ -1,20 +1,33 @@
+from django.core.management import call_command
 from django.test import TestCase
-from question.questions import create_default_questions
 
+from question.models import Choice, ChoiceList, Question
 
 class CreateQuestionsTest(TestCase):
 
-    @classmethod
-    def setUpTestData(cls):
-        create_default_questions()
+    def test_updatequestions(self):
+        """at the beginning of this test,
+        all question models from fixtures
+        have been imported due to migration
+        """
+        n_choices = Choice.objects.count()
+        n_choice_lists = ChoiceList.objects.count()
+        n_questions = Question.objects.count()
+        Choice.objects.all().delete()
+        ChoiceList.objects.all().delete()
+        Question.objects.all().delete()
+        self.assertEqual(Choice.objects.count(), 0)
+        self.assertEqual(ChoiceList.objects.count(), 0)
+        self.assertEqual(Question.objects.count(), 0)
+        call_command('updatequestions')
+        self.assertEqual(Choice.objects.count(), n_choices)
+        self.assertEqual(ChoiceList.objects.count(), n_choice_lists)
+        self.assertEqual(Question.objects.count(), n_questions)
 
-    def test_createquestions(self):
-        from question.models import Question, QuestionGroup
-        self.assertEqual(
-            len(Question.objects.all()), 176
-        )  # Only built-in questions in test database
-        self.assertEqual(
-            len(QuestionGroup.objects.all()), 20
-        )  # Only built-in question groups in test database
-        self.assertEqual(len(Question.objects.filter(key='dgf_country_of_origin')), 1)
-        self.assertEqual(len(QuestionGroup.objects.filter(key='DEMOGRAPHICS')), 1)
+    def test_translatequestions(self):
+        msi_24 = Question.objects.get(pk='msi_24_music_addiction')
+        self.assertIsNone(msi_24.text_nl)
+        with self.settings(TESTING=True):
+            call_command('translatequestions')
+        msi_24 = Question.objects.get(pk='msi_24_music_addiction')
+        self.assertIn('verslaving', msi_24.text_nl)

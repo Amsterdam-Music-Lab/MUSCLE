@@ -16,7 +16,7 @@ You can see an overview of different Django apps:
 
 - **Admin_Interface** to customize how this admin interface appears to you
 - **Authentication and Authorization** to give other researchers access to this admin interface
-- **Experiment** to add experiments and experiment series
+- **Experiment** to add experiments
 - **Image** to add images to be shown as logos or in experiments
 - **Participant** with information of participants of experiments (automatically created)
 - **Question** to add or edit profile type questions for participants

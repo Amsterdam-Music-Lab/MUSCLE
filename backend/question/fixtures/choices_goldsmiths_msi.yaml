@@ -1,0 +1,307 @@
+# choices associated with choice lists for goldsmiths_msi questions
+- model: question.choice
+  fields:
+    key: 2 - 19
+    text: 2 - 19
+    index: 0
+    choicelist: GMSI_AGE_STARTED_INSTRUMENT
+- model: question.choice
+  fields:
+    key: I don’t play any instrument.
+    text: I don’t play any instrument.
+    index: 1
+    choicelist: GMSI_AGE_STARTED_INSTRUMENT
+- model: question.choice
+  fields:
+    key: '0.0'
+    text: '0'
+    index: 0
+    choicelist: GMSI_ATTENDED_EVENTS
+- model: question.choice
+  fields:
+    key: '1.0'
+    text: '1'
+    index: 1
+    choicelist: GMSI_ATTENDED_EVENTS
+- model: question.choice
+  fields:
+    key: '2.0'
+    text: '2'
+    index: 2
+    choicelist: GMSI_ATTENDED_EVENTS
+- model: question.choice
+  fields:
+    key: '3.0'
+    text: '3'
+    index: 3
+    choicelist: GMSI_ATTENDED_EVENTS
+- model: question.choice
+  fields:
+    key: 4-6
+    text: 4-6
+    index: 4
+    choicelist: GMSI_ATTENDED_EVENTS
+- model: question.choice
+  fields:
+    key: 7-10
+    text: 7-10
+    index: 5
+    choicelist: GMSI_ATTENDED_EVENTS
+- model: question.choice
+  fields:
+    key: 11+
+    text: 11 or more
+    index: 6
+    choicelist: GMSI_ATTENDED_EVENTS
+- model: question.choice
+  fields:
+    key: 0-15
+    text: 0-15 min
+    index: 0
+    choicelist: GMSI_DAILY_MUSIC_LISTENING
+- model: question.choice
+  fields:
+    key: 15-30
+    text: 15-30 min
+    index: 1
+    choicelist: GMSI_DAILY_MUSIC_LISTENING
+- model: question.choice
+  fields:
+    key: 30-60
+    text: 30-60 min
+    index: 2
+    choicelist: GMSI_DAILY_MUSIC_LISTENING
+- model: question.choice
+  fields:
+    key: 60-90
+    text: 60-90 min
+    index: 3
+    choicelist: GMSI_DAILY_MUSIC_LISTENING
+- model: question.choice
+  fields:
+    key: 2h
+    text: 2 hrs
+    index: 4
+    choicelist: GMSI_DAILY_MUSIC_LISTENING
+- model: question.choice
+  fields:
+    key: 2-3h
+    text: 2-3 hrs
+    index: 5
+    choicelist: GMSI_DAILY_MUSIC_LISTENING
+- model: question.choice
+  fields:
+    key: 4h+
+    text: 4 hrs or more
+    index: 6
+    choicelist: GMSI_DAILY_MUSIC_LISTENING
+- model: question.choice
+  fields:
+    key: '0'
+    text: 0 hours
+    index: 0
+    choicelist: GMSI_HOURS_DAILY_PRACTICE
+- model: question.choice
+  fields:
+    key: '0.5'
+    text: 0.5 hours
+    index: 1
+    choicelist: GMSI_HOURS_DAILY_PRACTICE
+- model: question.choice
+  fields:
+    key: '1'
+    text: 1 hour
+    index: 2
+    choicelist: GMSI_HOURS_DAILY_PRACTICE
+- model: question.choice
+  fields:
+    key: '1.5'
+    text: 1.5 hours
+    index: 3
+    choicelist: GMSI_HOURS_DAILY_PRACTICE
+- model: question.choice
+  fields:
+    key: '2'
+    text: 2 hours
+    index: 4
+    choicelist: GMSI_HOURS_DAILY_PRACTICE
+- model: question.choice
+  fields:
+    key: 3-4
+    text: 3-4 hours
+    index: 5
+    choicelist: GMSI_HOURS_DAILY_PRACTICE
+- model: question.choice
+  fields:
+    key: 5+
+    text: 5 or more hours
+    index: 6
+    choicelist: GMSI_HOURS_DAILY_PRACTICE
+- model: question.choice
+  fields:
+    key: '0'
+    text: '0'
+    index: 0
+    choicelist: GMSI_N_INSTRUMENTS
+- model: question.choice
+  fields:
+    key: '1'
+    text: '1'
+    index: 1
+    choicelist: GMSI_N_INSTRUMENTS
+- model: question.choice
+  fields:
+    key: '2'
+    text: '2'
+    index: 2
+    choicelist: GMSI_N_INSTRUMENTS
+- model: question.choice
+  fields:
+    key: '3'
+    text: '3'
+    index: 3
+    choicelist: GMSI_N_INSTRUMENTS
+- model: question.choice
+  fields:
+    key: '4'
+    text: '4'
+    index: 4
+    choicelist: GMSI_N_INSTRUMENTS
+- model: question.choice
+  fields:
+    key: '5'
+    text: '5'
+    index: 5
+    choicelist: GMSI_N_INSTRUMENTS
+- model: question.choice
+  fields:
+    key: 6+
+    text: 6 or more
+    index: 6
+    choicelist: GMSI_N_INSTRUMENTS
+- model: question.choice
+  fields:
+    key: '0'
+    text: '0'
+    index: 0
+    choicelist: GMSI_YEARS_INSTRUMENTAL_TRAINING
+- model: question.choice
+  fields:
+    key: '0.5'
+    text: '0.5'
+    index: 1
+    choicelist: GMSI_YEARS_INSTRUMENTAL_TRAINING
+- model: question.choice
+  fields:
+    key: '1'
+    text: '1'
+    index: 2
+    choicelist: GMSI_YEARS_INSTRUMENTAL_TRAINING
+- model: question.choice
+  fields:
+    key: '2'
+    text: '2'
+    index: 3
+    choicelist: GMSI_YEARS_INSTRUMENTAL_TRAINING
+- model: question.choice
+  fields:
+    key: 3-5
+    text: 3-5
+    index: 4
+    choicelist: GMSI_YEARS_INSTRUMENTAL_TRAINING
+- model: question.choice
+  fields:
+    key: 6-9
+    text: 6-9
+    index: 5
+    choicelist: GMSI_YEARS_INSTRUMENTAL_TRAINING
+- model: question.choice
+  fields:
+    key: 10+
+    text: 10 or more
+    index: 6
+    choicelist: GMSI_YEARS_INSTRUMENTAL_TRAINING
+- model: question.choice
+  fields:
+    key: '0'
+    text: 0 years
+    index: 0
+    choicelist: GMSI_YEARS_PRACTICED
+- model: question.choice
+  fields:
+    key: '1'
+    text: 1 year
+    index: 1
+    choicelist: GMSI_YEARS_PRACTICED
+- model: question.choice
+  fields:
+    key: '2'
+    text: 2 years
+    index: 2
+    choicelist: GMSI_YEARS_PRACTICED
+- model: question.choice
+  fields:
+    key: '3'
+    text: 3 years
+    index: 3
+    choicelist: GMSI_YEARS_PRACTICED
+- model: question.choice
+  fields:
+    key: 4-5
+    text: 4–5 years
+    index: 4
+    choicelist: GMSI_YEARS_PRACTICED
+- model: question.choice
+  fields:
+    key: 6-9
+    text: 6–9 years
+    index: 5
+    choicelist: GMSI_YEARS_PRACTICED
+- model: question.choice
+  fields:
+    key: 10+
+    text: 10 or more years
+    index: 6
+    choicelist: GMSI_YEARS_PRACTICED
+- model: question.choice
+  fields:
+    key: '0'
+    text: '0'
+    index: 0
+    choicelist: GMSI_YEARS_THEORY_TRAINING
+- model: question.choice
+  fields:
+    key: '0.5'
+    text: '0.5'
+    index: 1
+    choicelist: GMSI_YEARS_THEORY_TRAINING
+- model: question.choice
+  fields:
+    key: '1'
+    text: '1'
+    index: 2
+    choicelist: GMSI_YEARS_THEORY_TRAINING
+- model: question.choice
+  fields:
+    key: '2'
+    text: '2'
+    index: 3
+    choicelist: GMSI_YEARS_THEORY_TRAINING
+- model: question.choice
+  fields:
+    key: '3'
+    text: '3'
+    index: 4
+    choicelist: GMSI_YEARS_THEORY_TRAINING
+- model: question.choice
+  fields:
+    key: 4-6
+    text: 4-6
+    index: 5
+    choicelist: GMSI_YEARS_THEORY_TRAINING
+- model: question.choice
+  fields:
+    key: 7+
+    text: 7 or more
+    index: 6
+    choicelist: GMSI_YEARS_THEORY_TRAINING

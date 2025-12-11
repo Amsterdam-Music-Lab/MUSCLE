@@ -4,9 +4,11 @@ from participant.models import Participant
 from session.models import Session
 from experiment.models import Block
 from experiment.rules.rhythm_battery_intro import RhythmBatteryIntro
-from experiment.actions import Explainer, Final, Playback, Trial, Form
+from experiment.actions.explainer import Explainer
+from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.playback import Playback
+from experiment.actions.trial import Trial
 
 
 class RhythmBatteryIntroTest(TestCase):

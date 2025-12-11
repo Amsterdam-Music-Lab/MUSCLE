@@ -1,0 +1,14 @@
+{% extends "admin/change_form.html" %}
+{% block content %}
+{% if adminform.form.instance.from_python %}
+  <h4 class="alert alert-info">
+    This {{ opts.model_name }} was imported from Python and cannot be edited.
+  </h4>
+  <style>
+    fieldset {
+        opacity: .6;
+    }
+  </style>
+{% endif %}
+{{ block.super }}
+{% endblock %}

@@ -34,6 +34,7 @@ services:
       ip2country:
         condition: service_started
     volumes:
+      - translation_data:/unicode-translations/
       - type: bind
         source: ./backend
         target: /server
@@ -55,7 +56,7 @@ services:
       - SQL_HOST=${SQL_HOST}
     ports:
       - 8000:8000
-    command: bash -c "python manage.py migrate && python manage.py bootstrap && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
   client:
     build:
       context: ./frontend
@@ -110,3 +111,4 @@ services:
 volumes:
   db_data:
   db_backup:
+  translation_data:

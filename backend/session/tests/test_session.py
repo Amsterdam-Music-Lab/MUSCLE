@@ -125,17 +125,18 @@ class SessionTest(TestCase):
     def test_get_rounds_passed(self):
         Result.objects.create(session=self.session, question_key='some random key')
         self.assertEqual(self.session.get_rounds_passed(), 1)
-        self.assertEqual(self.session.get_rounds_passed(self.block.get_rules().counted_result_keys), 1)
-        new_block = Block.objects.create(rules='HOOKED', slug='hooked_test')
+        new_block = Block.objects.create(
+            rules='CONGOSAMEDIFF', slug='rounds_passed_test'
+        )
         new_playlist = Playlist.objects.create(name='another_test')
         new_session = Session.objects.create(block=new_block, playlist=new_playlist, participant=self.participant)
-        self.assertEqual(new_session.get_rounds_passed(new_block.get_rules().counted_result_keys), 0)
-        Result.objects.create(session=new_session, question_key='recognize')
-        self.assertEqual(new_session.get_rounds_passed(new_block.get_rules().counted_result_keys), 1)
+        self.assertEqual(new_session.get_rounds_passed(), 0)
+        Result.objects.create(session=new_session, question_key='samediff_NORMAL')
+        self.assertEqual(new_session.get_rounds_passed(), 1)
         Result.objects.create(session=new_session, question_key='another random key')
-        self.assertEqual(new_session.get_rounds_passed(new_block.get_rules().counted_result_keys), 1)
-        Result.objects.create(session=new_session, question_key='heard_before')
-        self.assertEqual(new_session.get_rounds_passed(new_block.get_rules().counted_result_keys), 2)
+        self.assertEqual(new_session.get_rounds_passed(), 1)
+        Result.objects.create(session=new_session, question_key='samediff_NORMAL')
+        self.assertEqual(new_session.get_rounds_passed(), 2)
 
     def test_json_data(self):
         self.session.save_json_data({'test': 'tested'})

@@ -4,10 +4,9 @@ from .models import Question, Choice
 
 @register(Question)
 class QuestionTranslationOptions(TranslationOptions):
-    fields = ('question', 'explainer')
+    fields = ('text', 'explainer')
 
 
 @register(Choice)
 class ChoiceTranslationOptions(TranslationOptions):
     fields = ('text',)
-

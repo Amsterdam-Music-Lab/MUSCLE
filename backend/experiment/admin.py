@@ -20,14 +20,14 @@ from experiment.forms import (
     SocialMediaConfigForm,
 )
 from experiment.widgets import MarkdownPreviewTextInput
-from question.admin import QuestionSeriesInline
-from question.models import QuestionSeries, QuestionInSeries
-from .utils import get_block_json_export_as_repsonse, get_participants_of_sessions
+from question.admin import QuestionListInline
+from question.models import QuestionList, QuestionInList
+from .utils import get_block_json_export_as_repsonse
 
 
 class BlockAdmin(TabbedTranslationAdmin):
     model = Block
-    inlines = [QuestionSeriesInline]
+    inlines = [QuestionListInline]
     autocomplete_fields = ["playlists"]
     form = BlockForm
 
@@ -138,7 +138,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
             extension = request.POST.get("slug-extension")
             if extension == "":
                 extension = "copy"
-            slug_extension = f"-{extension}"
 
             # Validate slug
             if not extension.isalnum():
@@ -154,21 +153,21 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
                     f"{extension} is nog a valid slug extension. Only lowercase characters are allowed.",
                 )
             # Check for duplicate slugs
-            for exp in Experiment.objects.all():
-                if exp.slug == f"{obj.slug}{slug_extension}":
-                    messages.add_message(
-                        request,
-                        messages.ERROR,
-                        f"An experiment with slug: {obj.slug}{slug_extension} already exists. Please choose a different slug extension.",
-                    )
-            for as_block in obj.associated_blocks():
-                for block in Block.objects.all():
-                    if f"{as_block.slug}{slug_extension}" == block.slug:
-                        messages.add_message(
-                            request,
-                            messages.ERROR,
-                            f"A block with slug: {block.slug}{slug_extension} already exists. Please choose a different slug extension.",
-                        )
+            if Experiment.objects.filter(slug=f"{obj.slug}-{extension}").exists():
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    f"An experiment with slug: {obj.slug}-{extension} already exists. Please choose a different slug extension.",
+                )
+            extended_blog_slugs = [
+                f"{block.slug}-{extension}" for block in obj.associated_blocks()
+            ]
+            if Block.objects.filter(slug__in=extended_blog_slugs).exists():
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    f"A block with slug: {block.slug}-{extension} already exists. Please choose a different slug extension.",
+                )
             # Return to form with error messages
             if len(messages.get_messages(request)) != 0:
                 return render(
@@ -184,7 +183,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
             exp_copy = obj
             exp_copy.pk = None
             exp_copy._state.adding = True
-            exp_copy.slug = f"{obj.slug}{slug_extension}"
+            exp_copy.slug = f"{obj.slug}-{extension}"
             exp_copy.save()
 
             # Duplicate phases
@@ -200,37 +199,37 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
                 for block in these_blocks:
                     # order_by is inserted here to prevent a query error
                     these_playlists = block.playlists.all()
-                    question_series = QuestionSeries.objects.filter(block=block)
+                    question_lists = QuestionList.objects.filter(block=block)
 
                     block_copy = block
                     block_copy.pk = None
                     block_copy._state.adding = True
-                    block_copy.slug = f"{block.slug}{slug_extension}"
+                    block_copy.slug = f"{block.slug}-{extension}"
                     block_copy.phase = phase_copy
                     block_copy.save()
                     block_copy.playlists.set(these_playlists)
 
-                    # Duplicate the Block QuestionSeries
-                    for series in question_series:
-                        all_in_series = QuestionInSeries.objects.filter(
-                            question_series=series
+                    # Duplicate the Block QuestionList
+                    for ql in question_lists:
+                        all_in_question_list = QuestionInList.objects.filter(
+                            questionlist=ql
                         )
-                        these_questions = series.questions.all()
-                        series_copy = series
-                        series_copy.pk = None
-                        series_copy._state.adding = True
-                        series_copy.block = block_copy
-                        series_copy.index = block.index
-                        series_copy.save()
+                        these_questions = ql.questions.all()
+                        ql_copy = ql
+                        ql_copy.pk = None
+                        ql_copy._state.adding = True
+                        ql_copy.block = block_copy
+                        ql_copy.index = block.index
+                        ql_copy.save()
 
-                        # Duplicate the QuestionSeries QuestionInSeries
-                        for in_series in all_in_series:
-                            in_series_copy = in_series
-                            in_series_copy.pk = None
-                            in_series_copy._state.adding = True
-                            in_series_copy.question_series = series
-                            in_series_copy.save()
-                        series_copy.questions.set(these_questions)
+                        # Duplicate the QuestionList QuestionInList
+                        for in_ql in all_in_question_list:
+                            in_ql_copy = in_ql
+                            in_ql_copy.pk = None
+                            in_ql_copy._state.adding = True
+                            in_ql_copy.questionlist = ql
+                            in_ql_copy.save()
+                        ql_copy.questions.set(these_questions)
 
             return self.redirect_to_overview()
 

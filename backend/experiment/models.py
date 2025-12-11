@@ -10,6 +10,7 @@ from django.db.models.query import QuerySet
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from theme.models import ThemeConfig
 from image.models import Image
+from question.models import Question, QuestionInList, QuestionList
 from session.models import Session
 
 from .validators import markdown_html_validator, block_slug_validator, experiment_slug_validator
@@ -122,7 +123,10 @@ class Phase(models.Model):
     """
 
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="phases")
-    index = models.IntegerField(default=0, help_text="Index of the phase in the series. Lower numbers come first.")
+    index = models.IntegerField(
+        default=0,
+        help_text="Index of the phase in the experiment. Lower numbers come first.",
+    )
     dashboard = models.BooleanField(default=False)
     randomize = models.BooleanField(default=False, help_text="Randomize the order of the blocks in this phase.")
 
@@ -243,22 +247,46 @@ class Block(models.Model):
 
         return 0
 
-    def add_default_question_series(self):
-        """Add default question_series to block"""
+    def add_default_question_lists(self):
+        """Add default question lists to block"""
+        try:
+            rules = self.get_rules()
+        except ValueError:
+            return
+        question_lists = getattr(rules, "question_lists", [])
+        if question_lists:
+            for i, ql in enumerate(question_lists):
+                self.create_question_list(ql, i)
 
-        from experiment.rules import BLOCK_RULES
-        from question.models import Question, QuestionSeries, QuestionInSeries
+    def create_question_list(self, question_list: dict, index: int = 0):
+        """create a question list for this block based on a dict specifying name and list of question keys"""
+        ql, created = QuestionList.objects.get_or_create(
+            name=question_list["name"], block=self, index=index
+        )
+        if not created:
+            "do nothing if the question series already exists"
+            return
 
-        question_series = getattr(BLOCK_RULES[self.rules](), "question_series", None)
-        if question_series:
-            for i, question_series in enumerate(question_series):
-                qs = QuestionSeries.objects.create(
-                    name=question_series["name"], block=self, index=i + 1, randomize=question_series["randomize"]
+        # only set these when the object is created, so we don't overwrite changes by admin user
+        ql.randomize = question_list.get("randomize", False)
+        ql.save()
+
+        for i, question in enumerate(question_list["question_keys"]):
+            try:
+                question_obj = Question.objects.get(pk=question)
+            except Question.DoesNotExist:
+                raise Question.DoesNotExist(
+                    f"Question with key {question} does not exist."
                 )
-                for i, question in enumerate(question_series["keys"]):
-                    QuestionInSeries.objects.create(
-                        question_series=qs, question=Question.objects.get(pk=question), index=i + 1
-                    )
+            QuestionInList.objects.create(
+                questionlist=ql,
+                question=question_obj,
+                index=i + 1,
+            )
+
+    def save(self, **kwargs):
+        super().save(**kwargs)  # Call the "real" save() method.
+        self.add_default_question_lists()
 
 
 class Feedback(models.Model):

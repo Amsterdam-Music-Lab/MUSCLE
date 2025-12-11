@@ -5,8 +5,11 @@ from django.utils.translation import gettext_lazy as _
 from experiment.actions.utils import final_action_with_optional_button
 from section.models import Playlist, Section
 from session.models import Session
-from experiment.actions import ChoiceQuestion, Explainer, Form, Trial
+from experiment.actions.explainer import Explainer
+from experiment.actions.form import Form
 from experiment.actions.playback import PlayButton
+from experiment.actions.question import ButtonArrayQuestion
+from experiment.actions.trial import Trial
 from .base import BaseRules
 from result.utils import prepare_result
 
@@ -24,7 +27,7 @@ class CongoSameDiff(BaseRules):
         ).exists()
 
         if practice_done:
-            round_number = session.get_rounds_passed(self.counted_result_keys)
+            round_number = session.get_rounds_passed()
             total_trials_count = self.get_total_trials_count(session)
 
             # if the participant has completed all trials, return the final round
@@ -62,8 +65,9 @@ class CongoSameDiff(BaseRules):
 
         else:
             # practice is not done yet;
-            # load the practice trials
-            round_number = session.get_rounds_passed()
+            # load the practice trials, count all results
+            self.counted_result_keys = []
+            round_number = session.get_rounds_passed(apply_results_filter=False)
             practice_trials_subset = session.playlist.section_set.filter(
                 tag__contains='practice'
             )
@@ -102,19 +106,17 @@ class CongoSameDiff(BaseRules):
         key = 'practice_done'
         result_pk = prepare_result(key, session, expected_response=key)
 
-        question = ChoiceQuestion(
-            question="Did the participant complete the practice round correctly?",
+        question = ButtonArrayQuestion(
+            text="Did the participant complete the practice round correctly?",
             key=key,
             choices={
                 "YES": "Yes, continue",
                 "NO": "No, restart the practice trials",
             },
-            view='BUTTON_ARRAY',
             result_id=result_pk,
-            submits=True,
         )
 
-        form = Form([question])
+        form = Form([question], submit_label="")
 
         trial = Trial(
             feedback_form=form,
@@ -142,12 +144,9 @@ class CongoSameDiff(BaseRules):
         # set artist field as expected_response in the results
         expected_response = section.filename
 
-        question = ChoiceQuestion(
+        question = ButtonArrayQuestion(
             explainer=f'{practice_label} ({trial_index}/{trials_count}) | {section_name} | {section_tag} | {section_group}',
-            question=_(
-                'Is the third sound the SAME or DIFFERENT as the first two sounds?'
-            ),
-            view='BUTTON_ARRAY',
+            text=_('Is the third sound the SAME or DIFFERENT as the first two sounds?'),
             choices={
                 'DEFINITELY_SAME': _('DEFINITELY SAME'),
                 'PROBABLY_SAME': _('PROBABLY SAME'),
@@ -159,7 +158,6 @@ class CongoSameDiff(BaseRules):
             result_id=prepare_result(
                 key, session, section=section, expected_response=expected_response
             ),
-            submits=True,
         )
         form = Form([question])
         playback = PlayButton([section], play_once=False)

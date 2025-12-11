@@ -65,7 +65,7 @@ class Session(models.Model):
         self.finished_at = timezone.now()
         self.final_score = self.total_score()
 
-    def get_rounds_passed(self, counted_result_keys: list = []) -> int:
+    def get_rounds_passed(self, apply_results_filter: bool = True) -> int:
         """Get number of rounds passed, measured by the number of results on this session,
         taking into account the `counted_result_keys` array that may be defined per rules file
 
@@ -76,8 +76,11 @@ class Session(models.Model):
             number of results, filtered by `counted_result_keys`, if supplied
         """
         results = self.result_set
-        if counted_result_keys:
-            results = results.filter(question_key__in=counted_result_keys)
+        filter_keys = (
+            self.block_rules().counted_result_keys if apply_results_filter else None
+        )
+        if filter_keys:
+            results = results.filter(question_key__in=filter_keys)
         return results.count()
 
     def get_used_song_ids(self, exclude: dict = {}) -> Iterable[int]:
@@ -220,7 +223,7 @@ class Session(models.Model):
             .count()
         )
 
-    def rounds_complete(self, counted_result_keys: list[str] = []) -> bool:
+    def rounds_complete(self) -> bool:
         """
         Attributes:
             counted_result_keys: array of the Result.question_key strings which should be taken into account for counting rounds; if empty, all results will be counted.
@@ -228,7 +231,7 @@ class Session(models.Model):
         Returns:
             True if there are results for each experiment round
         """
-        return self.get_rounds_passed(counted_result_keys) >= self.block.rounds
+        return self.get_rounds_passed() >= self.block.rounds
 
     def total_score(self) -> float:
         """

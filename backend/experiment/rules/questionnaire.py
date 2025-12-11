@@ -2,8 +2,9 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 from .base import BaseRules
+from experiment.actions.explainer import Explainer
+from experiment.actions.redirect import Redirect
 from session.models import Session
-from experiment.actions import Explainer, Redirect
 
 class Questionnaire(BaseRules):
     """ a rules file which does not do anything but show a questionnaire """

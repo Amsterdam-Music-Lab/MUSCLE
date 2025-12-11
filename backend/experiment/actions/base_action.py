@@ -1,6 +1,6 @@
 from typing import Optional
 
-from .styles import FrontendStyle
+from theme.styles import FrontendStyle
 
 
 class BaseAction(object):

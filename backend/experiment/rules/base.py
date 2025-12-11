@@ -11,6 +11,7 @@ from experiment.actions.form import Form
 from experiment.actions.trial import Trial
 from question.utils import get_unanswered_questions
 from result.score import SCORING_RULES
+from result.utils import prepare_profile_result
 from session.models import Session
 
 logger = logging.getLogger(__name__)
@@ -21,9 +22,6 @@ class BaseRules(object):
 
     contact_email = settings.CONTACT_MAIL
     counted_result_keys = []
-
-    def __init__(self):
-        self.question_series = []
 
     def feedback_info(self) -> FeedbackInfo:
         feedback_body = render_to_string("feedback/user_feedback.html", {"email": self.contact_email})
@@ -72,27 +70,28 @@ class BaseRules(object):
             n_questions: the number of questions to return, set to `None` if all questions in the blocks' question sets should be returned at once
         """
         trials = []
-        question_sets = session.block.questionseries_set.all()
+        question_lists = session.block.questionlist_set.all()
         if n_questions is None:
-            n_questions = sum(
-                question_set.questions.count() for question_set in question_sets
-            )
-        for question_set in question_sets:
-            questions = (
-                question_set.questions.order_by("?")
-                if question_set.randomize
-                else question_set.questions
-            )
+            n_questions = sum(ql.questions.count() for ql in question_lists)
+        for ql in question_lists:
+            questions = ql.questions.order_by("?") if ql.randomize else ql.questions
             question_iterator = get_unanswered_questions(
                 session.participant, questions.all()
             )
             while len(trials) < n_questions:
                 try:
-                    question = next(question_iterator)
+                    question_obj = next(question_iterator)
+                    profile_result = prepare_profile_result(
+                        question_obj.key, session.participant
+                    )
+                    question = question_obj.convert_to_action()
+                    question.result_id = profile_result.id
                     trials.append(
                         Trial(
                             title=_("Questionnaire"),
-                            feedback_form=Form([question]),
+                            feedback_form=Form(
+                                [question], is_skippable=question_obj.is_skippable
+                            ),
                         )
                     )
                 except StopIteration:
