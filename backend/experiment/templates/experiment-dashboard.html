@@ -140,8 +140,7 @@
     <thead>
         <tr>
             <th>Block</th>
-            <th>Times started</th>
-            <th>Times finished</th>
+            <th>Finished / Started</th>
             <th>Participant count</th>
             <th>Participants *</th>
             <th>Sessions</th>
@@ -161,11 +160,7 @@
             </td>
 
             <td>
-                <p>{{ block.n_sessions }}</p>
-            </td>
-
-            <td>
-                <p>{{ block.n_sessions_finished }}</p>
+                <p>{{ block.n_sessions_finished }} / {{block.n_sessions}} </p>
             </td>
 
             <td>
@@ -187,16 +182,14 @@
             </td>
 
             <td class="table-sessions">
-                <input type="button" value="Sessions" id="show-sessions-{{ block.id }}" />
-                <script>
-                    // Show all session for this block in popup
-                    showBlockSessions({ block.id })
-                </script>
+                <a role="button" href="{% url 'admin:session_session_changelist' %}?block__id__exact={{ block.id }}" target="_blank" value="Sessions" id="show-session-{{ block.id }}">
+                    Sessions ({{block.n_sessions}})
+                </a>
             </td>
 
             <td class="table-feedback">
-                <a role="button" href="{% url 'experiment:feedback_list' block.id %}" value="Feedback" id="show-feedback-{{ block.id }}">
-                    Feedback
+                <a role="button" href="{% url 'admin:experiment_feedback_changelist' %}?block__id__exact={{ block.id }}" target="_blank" value="Feedback" id="show-feedback-{{ block.id }}">
+                    Feedback ({{block.n_feedback}})
                 </a>
             </td>
 
@@ -213,8 +206,6 @@
     </tbody>
 </table>
 <p class="help-text">* Click to edit in a new window</p>
-
-{% include "experiment-dashboard-sessions.html" %}
 
 <script src="{% static 'experiment_dashboard.js' %}"></script>
 {% endblock %}

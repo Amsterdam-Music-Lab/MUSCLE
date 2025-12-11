@@ -12,6 +12,7 @@ from modeltranslation.admin import TabbedTranslationAdmin
 from experiment.models import (
     Block,
     Experiment,
+    Feedback,
     Phase,
     SocialMediaConfig,
 )
@@ -23,6 +24,25 @@ from experiment.widgets import MarkdownPreviewTextInput
 from question.admin import QuestionListInline
 from question.models import QuestionList, QuestionInList
 from .utils import get_block_json_export_as_repsonse
+
+
+class FeedbackAdmin(admin.ModelAdmin):
+    model = Feedback
+
+    list_display = ("block", "text")
+    list_filter = [
+        ('block', admin.RelatedOnlyFieldListFilter),
+    ]
+
+    def has_module_permission(self, request):
+        '''Prevents the admin from being shown in the sidebar.'''
+        return False
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=...):
+        return False
 
 
 class BlockAdmin(TabbedTranslationAdmin):
@@ -251,6 +271,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
             block_slug = request.POST.get("export-block")
             return get_block_json_export_as_repsonse(block_slug)
         all_blocks = obj.associated_blocks().annotate(
+            n_feedback=models.Count("feedback", distinct=True),
             n_sessions=models.Count("sessions"),
             n_sessions_finished=models.Count(
                 "sessions", filter=models.Q(sessions__finished_at__isnull=False)
@@ -276,6 +297,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
             "id",
             "slug",
             "name",
+            "n_feedback",
             "n_sessions",
             "n_sessions_finished",
             "n_participants",
@@ -331,6 +353,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
             )
         )
 
-
-admin.site.register(Experiment, ExperimentAdmin)
 admin.site.register(Block, BlockAdmin)
+admin.site.register(Experiment, ExperimentAdmin)
+admin.site.register(Feedback, FeedbackAdmin)
