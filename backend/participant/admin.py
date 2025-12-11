@@ -20,7 +20,13 @@ class ParticipantAdmin(admin.ModelAdmin):
         "country_code",
         "session_count",
     )
-    list_filter = [("session__block", admin.RelatedOnlyFieldListFilter)]
+    list_filter = [("sessions__block", admin.RelatedOnlyFieldListFilter)]
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=...):
+        return False
 
 
 admin.site.register(Participant, ParticipantAdmin)

@@ -9,13 +9,19 @@ class ResultInline(admin.TabularInline):
     model = Result
     extra = 0
 
-    # Field section is excluded from 'fields'
-    # If it is added in the future, only show the raw_id
-    # To not load a huge list of sections
+    # Only show the raw_id because section __str__ is too wordy here
     raw_id_fields = ("section",)
 
-    fields = ['section', 'created_at', 'score', 'json_data',
-              'expected_response', 'given_response', 'comment']
+    fields = [
+        'question_key',
+        'created_at',
+        'section',
+        'expected_response',
+        'given_response',
+        'score',
+        'json_data',
+        'comment',
+    ]
 
 
 class SessionAdmin(admin.ModelAdmin):
@@ -35,6 +41,12 @@ class SessionAdmin(admin.ModelAdmin):
         'started_at',
         'finished_at',
     ]
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=...):
+        return False
 
 
 admin.site.register(Session, SessionAdmin)
