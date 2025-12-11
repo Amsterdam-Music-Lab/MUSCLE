@@ -156,12 +156,12 @@ def block_export_json_results(block_slug: str) -> ZipFile:
     all_feedback = Feedback.objects.filter(block=this_block)
 
     # Collect data
-    all_sessions = this_block.associated_sessions().order_by("pk")
+    all_sessions = this_block.sessions.order_by("pk")
     all_results = get_results_of_sessions(all_sessions)
     all_participants = get_participants_of_sessions(all_sessions)
     all_profiles = get_profiles_of_participants(all_participants)
     all_sections = Section.objects.filter(playlist__in=this_block.playlists.all())
-    all_songs = Song.objects.filter(section__in=all_sections)
+    all_songs = Song.objects.filter(section__in=all_sections).distinct()
 
     # create empty zip file in memory
     zip_buffer = BytesIO()

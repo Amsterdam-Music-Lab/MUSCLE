@@ -123,15 +123,15 @@
 </h1>
 <p class="experiment-stats">
 <!-- Show stats on participants, sessions and feedback -->
-<div>
+<h3>
     Total participants: {{ stats.participant_count }} 
-</div>
-<div>
+</h3>
+<h3>
     Total sessions: {{ stats.session_count }}
-</div>
-<div>
+</h3>
+<h3>
     Total feedback: {{ stats.feedback_count }}
-</div>
+</h3>
 </p>
 
 <!-- Blocks table -->
@@ -140,7 +140,8 @@
     <thead>
         <tr>
             <th>Block</th>
-            <th>Finished / Started</th>
+            <th>Times finished
+            <th>Times started</th>
             <th>Participant count</th>
             <th>Participants *</th>
             <th>Sessions</th>
@@ -160,7 +161,11 @@
             </td>
 
             <td>
-                <p>{{ block.n_sessions_finished }} / {{block.n_sessions}} </p>
+                <p>{{ block.n_sessions_finished }} </p>
+            </td>
+
+            <td>
+                <p>{{ block.n_sessions }} </p>
             </td>
 
             <td>
@@ -170,26 +175,28 @@
             <td class="participants-overview">
                 <p>
                     <!-- List participants for this block -->
-                    {% for participant in participants %}
-                        {% if participant %}
-                            <a href="{% url 'admin:participant_participant_change' participant.1 %}" target="_blank" title="Participant URL id">
-                                {% firstof participant.0 participant.1 %}
+                    {% for participant_id in block.participants %}
+                        {% if participant_id %}
+                            <a href="{% url 'admin:participant_participant_change' participant_id %}" target="_blank" title="Participant URL id">
+                                {{participant_id}}
                             </a>
                         {% endif %}
-                    <span>, </span>
+                    {% if block.participants|last != participant_id %}
+                        <span>, </span>
+                    {% endif %}
                     {% endfor %}
                 </p>
             </td>
 
             <td class="table-sessions">
                 <a role="button" href="{% url 'admin:session_session_changelist' %}?block__id__exact={{ block.id }}" target="_blank" value="Sessions" id="show-session-{{ block.id }}">
-                    Sessions ({{block.n_sessions}})
+                    Sessions ({{block.n_sessions}}) *
                 </a>
             </td>
 
             <td class="table-feedback">
                 <a role="button" href="{% url 'admin:experiment_feedback_changelist' %}?block__id__exact={{ block.id }}" target="_blank" value="Feedback" id="show-feedback-{{ block.id }}">
-                    Feedback ({{block.n_feedback}})
+                    Feedback ({{block.n_feedback}}) *
                 </a>
             </td>
 
@@ -205,7 +212,7 @@
         {% endfor %}
     </tbody>
 </table>
-<p class="help-text">* Click to edit in a new window</p>
+<p class="help-text">* Click to view in a new window</p>
 
 <script src="{% static 'experiment_dashboard.js' %}"></script>
 {% endblock %}

@@ -78,19 +78,3 @@ class TestModelExperiment(TestCase):
             ]
         )
         self.assertEqual(experiment.associated_blocks().count(), 3)
-
-    def test_associated_sessions(self):
-        experiment = self.experiment
-        phase = Phase.objects.create(experiment=experiment)
-        block = Block.objects.create(
-            rules="THATS_MY_SONG", slug="hooked", rounds=42, phase=phase
-        )
-        Session.objects.bulk_create(
-            [
-                Session(block=block, participant=self.participant1),
-                Session(block=block, participant=self.participant2),
-                Session(block=block, participant=self.participant3),
-            ]
-        )
-        sessions = experiment.associated_sessions()
-        self.assertEqual(len(sessions), 3)

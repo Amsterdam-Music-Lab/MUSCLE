@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from experiment.admin import ExperimentAdmin
-from experiment.models import Block, Experiment, Phase
+from experiment.models import Block, Experiment, Feedback, Phase
 from participant.models import Participant
 from section.models import Playlist
 from session.models import Session
@@ -35,19 +35,31 @@ class TestExperimentAdmin(TestCase):
         )
         phase = Phase.objects.create(experiment=self.experiment)
         participant = Participant.objects.create()
-        block = Block.objects.create(phase=phase, slug='testslug')
+        block1 = Block.objects.create(phase=phase, slug='testslug')
+        block2 = Block.objects.create(phase=phase, slug='testslug2')
+        # create 6 sessions, 3 for each block
         Session.objects.bulk_create(
             [
                 Session(
-                    block=block, participant=participant, finished_at=timezone.now()
+                    block=block1, participant=participant, finished_at=timezone.now()
                 ),
-                Session(block=block, participant=participant),
-                Session(block=block, participant=participant),
-            ]
+                Session(block=block1, participant=participant),
+                Session(block=block1, participant=Participant.objects.create()),
+                Session(
+                    block=block2, participant=participant, finished_at=timezone.now()
+                ),
+                Session(
+                    block=block2,
+                    participant=Participant.objects.create(),
+                    finished_at=timezone.now(),
+                ),
+                Session(block=block2, participant=Participant.objects.create()),
+            ],
         )
+        Feedback.objects.create(block=block1, text="What an awesome block!")
 
     def setUp(self):
-        self.admin = ExperimentAdmin(model=Experiment, admin_site=AdminSite)
+        self.admin = ExperimentAdmin(model=Experiment, admin_site=AdminSite())
 
     def test_experiment_admin_list_display(self):
         self.assertEqual(
@@ -64,6 +76,18 @@ class TestExperimentAdmin(TestCase):
         request = RequestFactory().request()
         response = self.admin.experimenter_dashboard(request, self.experiment)
         self.assertEqual(response.status_code, 200)
+
+    def test_annotate_blocks(self):
+        blocks = self.experiment.associated_blocks()
+        self.assertEqual(blocks.count(), 2)
+        annotated = self.admin._annotate_blocks(blocks)
+        values = annotated.values(
+            "n_feedback", "n_sessions", "n_sessions_finished", "n_participants"
+        )
+        self.assertEqual([v['n_feedback'] for v in values], [1, 0])
+        self.assertEqual([v['n_sessions'] for v in values], [3, 3])
+        self.assertEqual([v['n_sessions_finished'] for v in values], [1, 2])
+        self.assertEqual([v['n_participants'] for v in values], [2, 3])
 
 
 class PhaseInlineTemplateTest(TestCase):
@@ -159,7 +183,7 @@ class TestDuplicateExperiment(TestCase):
         cls.questions_in_lists = QuestionInList.objects.all()
 
     def setUp(self):
-        self.admin = ExperimentAdmin(model=Experiment, admin_site=AdminSite)
+        self.admin = ExperimentAdmin(model=Experiment, admin_site=AdminSite())
 
     def test_duplicate_experiment(self):
         request = MockRequest()

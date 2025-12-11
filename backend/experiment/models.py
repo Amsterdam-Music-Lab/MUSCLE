@@ -91,26 +91,6 @@ class Experiment(models.Model):
 
         return Block.objects.filter(phase__experiment=self)
 
-    def associated_sessions(self) -> QuerySet[Session]:
-        """export sessions for this experiment
-
-        Returns:
-            Associated sessions
-        """
-
-        return Session.objects.filter(block__phase__experiment=self).order_by(
-            "-started_at"
-        )
-
-    def associated_feedback(self) -> QuerySet[Session]:
-        """return feedback for the blocks in this experiment
-
-        Returns:
-            Associated block feedback
-        """
-
-        return Feedback.objects.filter(block__in=self.associated_blocks())
-
 
 class Phase(models.Model):
     """Root entity for configuring experiment phases
@@ -203,19 +183,6 @@ class Block(models.Model):
         return self.playlists.count()
 
     playlist_count.short_description = "Playlists"
-
-    def associated_sessions(self) -> QuerySet[Session]:
-        """export sessions for this experiment
-
-        Returns:
-            Associated sessions
-        """
-
-        return self.associated_sessions().order_by("-started_at")
-
-    def associated_sessions(self):
-        """return all sessions associated with this block"""
-        return self.sessions.all()
 
     def get_rules(self) -> "experiment.rules.base.Base":
         """Get instance of rules class to be used for this session

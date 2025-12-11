@@ -3,15 +3,13 @@ from django.test import TestCase
 
 from image.models import Image
 from theme.admin import ThemeConfigAdmin
-from theme.models import FooterConfig, ThemeConfig, SponsorImage
+from theme.models import FooterConfig, ThemeConfig
 
 
 class ThemeConfigAdminTest(TestCase):
 
     def setUp(self):
-        self.admin = ThemeConfigAdmin(model=ThemeConfig,
-                                      admin_site=AdminSite
-                                      )
+        self.admin = ThemeConfigAdmin(model=ThemeConfig, admin_site=AdminSite())
 
     def test_heading_font_preview_with_url(self):
         theme = ThemeConfig.objects.create(heading_font_url='https://example.com/font.css')

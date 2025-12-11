@@ -39,7 +39,9 @@ class BlockModelTest(TestCase):
             name="Test Block",
             description="Test block description",
         )
-        Session.objects.create(block=block, participant=Participant.objects.create())
+        Session.objects.create(
+            block=cls.block, participant=Participant.objects.create()
+        )
 
     def test_block_str(self):
         self.assertEqual(str(self.block), "Test Block")
@@ -51,18 +53,10 @@ class BlockModelTest(TestCase):
         self.assertEqual(str(block_no_content), "test-block-no-content")
 
     def test_block_session_count(self):
-        self.assertEqual(self.block.session_count(), 0)
+        self.assertEqual(self.block.session_count(), 1)
 
     def test_block_playlist_count(self):
         self.assertEqual(self.block.playlist_count(), 0)
-
-    def test_block_associated_participants(self):
-        participants = self.block.associated_participants()
-        self.assertEqual(participants.count(), 1)
-
-    def test_block_associated_sessions(self):
-        sessions = self.block.associated_sessions()
-        self.assertEqual(len(sessions), 1)
 
     def test_block_get_rules(self):
         rules = self.block.get_rules()
@@ -84,7 +78,7 @@ class BlockModelTest(TestCase):
                     score=question_score,
                     question_key=f"test_question_{j + 1}",
                 )
-                for n in amount_of_results
+                for j in range(amount_of_results)
             ]
         )
         session.finish()
