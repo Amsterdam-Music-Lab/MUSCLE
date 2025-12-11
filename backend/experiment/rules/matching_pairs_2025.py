@@ -288,7 +288,7 @@ class MatchingPairs2025(MatchingPairsGame):
         relevant_sessions = []
         for block in blocks:
             relevant_sessions.extend(
-                block.session_set.filter(
+                block.sessions.filter(
                     json_data__contains={
                         'condition': condition,
                         'difficulty': difficulty,

@@ -4,6 +4,7 @@ import logging
 from django.http import Http404, HttpRequest, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _, get_language
+from django.views.generic.list import ListView
 from django_markup.markup import formatter
 
 from .models import Block, Experiment, Feedback, Phase, Session
@@ -20,6 +21,13 @@ from participant.utils import get_or_create_participant
 from theme.serializers import serialize_theme
 
 logger = logging.getLogger(__name__)
+
+
+class FeedbackListView(ListView):
+    model = Feedback
+
+    def get_queryset(self):
+        return super().get_queryset().filter(block__id=self.kwargs.get('block_id'))
 
 
 def get_block(request: HttpRequest, slug: str) -> JsonResponse:

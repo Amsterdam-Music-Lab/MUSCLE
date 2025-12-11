@@ -1,0 +1,12 @@
+
+<!-- List all feedback for this block -->
+<div class="feedback-list">
+    <h3>
+        Block: {{ item.block }}
+    </h3>
+    {% for item in object_list %}
+        <div class="feedback-row">
+            <p>{{ item.text }}</p>
+        </div>
+    {% endfor %}
+</div>

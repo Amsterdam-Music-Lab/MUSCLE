@@ -1,12 +1,14 @@
 from django.contrib.admin.sites import AdminSite
 from django.contrib.auth import get_user_model
-from django.http import HttpResponseBadRequest
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
+from django.utils import timezone
 
-from experiment.admin import BlockAdmin, ExperimentAdmin
+from experiment.admin import ExperimentAdmin
 from experiment.models import Block, Experiment, Phase
+from participant.models import Participant
 from section.models import Playlist
+from session.models import Session
 from theme.models import ThemeConfig
 from question.models import QuestionSeries, QuestionInSeries, Question
 from question.questions import create_default_questions
@@ -31,6 +33,18 @@ class TestExperimentAdmin(TestCase):
             slug="TEST",
             name="test",
             description="test description very long like the tea of oolong and the song of the bird in the morning",
+        )
+        phase = Phase.objects.create(experiment=self.experiment)
+        participant = Participant.objects.create()
+        block = Block.objects.create(phase=phase, slug='testslug')
+        Session.objects.bulk_create(
+            [
+                Session(
+                    block=block, participant=participant, finished_at=timezone.now()
+                ),
+                Session(block=block, participant=participant),
+                Session(block=block, participant=participant),
+            ]
         )
 
     def setUp(self):

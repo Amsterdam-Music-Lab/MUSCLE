@@ -222,7 +222,7 @@ class Categorization(BaseRules):
 
         # Check for unfinished sessions older then 24 hours caused by closed browser
         all_sessions = (
-            session.block.session_set.filter(finished_at=None)
+            session.block.sessions.filter(finished_at=None)
             .filter(started_at__lte=timezone.now() - timezone.timedelta(hours=24))
             .exclude(json_data__contains="ABORTED")
             .exclude(json_data__contains="FAILED_TRAINING")
@@ -238,10 +238,10 @@ class Categorization(BaseRules):
 
         # Count sessions per assigned group
         used_groups = [
-            session.block.session_set.filter(json_data__contains="S1").count(),
-            session.block.session_set.filter(json_data__contains="S2").count(),
-            session.block.session_set.filter(json_data__contains="C1").count(),
-            session.block.session_set.filter(json_data__contains="C2").count(),
+            session.block.sessions.filter(json_data__contains="S1").count(),
+            session.block.sessions.filter(json_data__contains="S2").count(),
+            session.block.sessions.filter(json_data__contains="C1").count(),
+            session.block.sessions.filter(json_data__contains="C2").count(),
         ]
 
         # Check wether a group falls behind in the count

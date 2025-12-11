@@ -251,28 +251,35 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
         if "_export" in request.POST:
             block_slug = request.POST.get("export-block")
             return get_block_json_export_as_repsonse(block_slug)
-
-        all_blocks = obj.associated_blocks()
+        all_blocks = obj.associated_blocks().annotate(
+            n_sessions=models.Count("sessions"),
+            n_sessions_finished=models.Count(
+                "sessions", filter=models.Q(sessions__finished_at__isnull=False)
+            ),
+            n_participants=models.Count("sessions__participant", distinct=True),
+        )
         all_sessions = obj.associated_sessions().select_related('participant')
-        all_participants = all_sessions.values_list(
-            'participant__unique_hash', 'participant__id'
-        ).distinct()
+        all_participants = (
+            all_sessions.values_list(
+                'participant__participant_id_url', 'participant__id'
+            )
+            .order_by()
+            .distinct()
+        )
         all_feedback = obj.associated_feedback()
-        collect_data = {
+        stats = {
             "participant_count": all_participants.count(),
             "session_count": all_sessions.count(),
             "feedback_count": all_feedback.count(),
         }
 
-        blocks = all_blocks.with_stats().values(
-            [
-                "id",
-                "slug",
-                "name",
-                "n_sessions",
-                "n_sessions_finished",
-                "n_participants",
-            ]
+        blocks = all_blocks.values(
+            "id",
+            "slug",
+            "name",
+            "n_sessions",
+            "n_sessions_finished",
+            "n_participants",
         )
 
         return render(
@@ -281,10 +288,8 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
             context={
                 "experiment": obj,
                 "blocks": blocks,
-                "sessions": all_sessions,
                 "participants": all_participants,
-                "feedback": all_feedback,
-                "collect_data": collect_data,
+                "stats": stats,
             },
         )
 

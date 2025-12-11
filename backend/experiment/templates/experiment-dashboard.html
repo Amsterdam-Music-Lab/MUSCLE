@@ -121,11 +121,17 @@
 <h1>
     Blocks in Experiment: <a href="{% url 'admin:experiment_experiment_change' experiment.id %}" target="_blank">{{ experiment }}</a>
 </h1>
-<p>
-<!-- Show all participants and sessions -->
-<input type="button" value="{{ collect_data.participant_count }} participants" id="show-participants" />
-<input type="button" value="{{ collect_data.session_count }} sessions" id="show-sessions" />
-<input type="button" value="{{ collect_data.feedback_count }} feedback" id="show-feedback" />
+<p class="experiment-stats">
+<!-- Show stats on participants, sessions and feedback -->
+<div>
+    Total participants: {{ stats.participant_count }} 
+</div>
+<div>
+    Total sessions: {{ stats.session_count }}
+</div>
+<div>
+    Total feedback: {{ stats.feedback_count }}
+</div>
 </p>
 
 <!-- Blocks table -->
@@ -133,7 +139,7 @@
     <caption class="dashboard-caption">Blocks</caption>
     <thead>
         <tr>
-            <th>Block *</th>
+            <th>Block</th>
             <th>Times started</th>
             <th>Times finished</th>
             <th>Participant count</th>
@@ -155,29 +161,24 @@
             </td>
 
             <td>
-                <p>{{ block.started }}</p>
+                <p>{{ block.n_sessions }}</p>
             </td>
 
             <td>
-                <p>{{ block.finished }}</p>
+                <p>{{ block.n_sessions_finished }}</p>
             </td>
 
             <td>
-                <p>{{ block.participant_count }}</p>
+                <p>{{ block.n_participants }}</p>
             </td>
 
             <td class="participants-overview">
                 <p>
                     <!-- List participants for this block -->
-                    {% for participant in block.participants %}
-
-                        {% if participant.participant_id_url %}
-                            <a href="{% url 'admin:participant_participant_change' participant.id %}" target="_blank" title="Participant URL id">
-                                {{ participant.participant_id_url }}
-                            </a>
-                        {% else %}
-                            <a href="{% url 'admin:participant_participant_change' participant.id %}" target="_blank" title="Participant object id">
-                                {{ participant.id }}
+                    {% for participant in participants %}
+                        {% if participant %}
+                            <a href="{% url 'admin:participant_participant_change' participant.1 %}" target="_blank" title="Participant URL id">
+                                {% firstof participant.0 participant.1 %}
                             </a>
                         {% endif %}
                     <span>, </span>
@@ -194,11 +195,9 @@
             </td>
 
             <td class="table-feedback">
-                <input type="button" value="Feedback" id="show-feedback-{{ block.id }}" />
-                <script>
-                    // Show all session for this block in popup
-                    showBlockFeedback({ block.id })
-                </script>
+                <a role="button" href="{% url 'experiment:feedback_list' block.id %}" value="Feedback" id="show-feedback-{{ block.id }}">
+                    Feedback
+                </a>
             </td>
 
             <td class="table-export">
@@ -213,13 +212,9 @@
         {% endfor %}
     </tbody>
 </table>
-<p class="help-text mini">* Click to edit in a new window</p>
+<p class="help-text">* Click to edit in a new window</p>
 
 {% include "experiment-dashboard-sessions.html" %}
-
-{% include "experiment-dashboard-participants.html" %}
-
-{% include "experiment-dashboard-feedback.html" %}
 
 <script src="{% static 'experiment_dashboard.js' %}"></script>
 {% endblock %}

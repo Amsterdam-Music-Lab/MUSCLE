@@ -136,7 +136,7 @@ def consent_upload_path(instance: Experiment, filename: str) -> str:
 
 
 def get_participants_of_sessions(sessions: QuerySet[Session]) -> QuerySet[Participant]:
-    return Participant.objects.filter(session__in=sessions)
+    return Participant.objects.filter(sessions__in=sessions)
 
 
 def get_results_of_sessions(sessions: QuerySet[Session]) -> QuerySet[Result]:

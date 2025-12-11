@@ -13,9 +13,6 @@ class PartipantManager(models.Manager):
     def with_accumulative_score(self):
         return self.annotate(accumulative_score=Sum("session__final_score"))
 
-    def with_profile(self):
-        return self.annotate(profile=self.profile())
-
 
 class Participant(models.Model):
     """Main participant, base for profile and sessions
