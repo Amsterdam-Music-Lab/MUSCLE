@@ -4,13 +4,13 @@ import Question from "../Question/Question";
 import Button from "../Button/Button";
 import IButton from "@/types/Button";
 import IQuestion from "@/types/Question";
+import { QuestionViews } from "@/types/Question";
 
 interface FeedbackFormProps {
     formActive: boolean;
     form: IQuestion[];
     submitButton: IButton;
     skipButton: IButton;
-    isSkippable: boolean;
     submitResult: () => void;
 }
 
@@ -23,6 +23,8 @@ const FeedbackForm = ({
     submitResult,
 }: FeedbackFormProps) => {
     const [formValid, setFormValid] = useState(false);
+    // only show submit buttons if there are several questions in the form, or if the question does not show buttons
+    const showSubmitButtons = form.length > 1 ? true : form[0].view !== QuestionViews.BUTTON_ARRAY ? true : false;
 
     const onChange = (value: string | number | boolean, question_index: number) => {
         form[question_index].value = value;
@@ -34,7 +36,7 @@ const FeedbackForm = ({
             return false;
         });
         if (validFormElements.length === form.length) {
-            if (!submitButton) {
+            if (!showSubmitButtons) {
                 submitResult();
             }
             setFormValid(true);
@@ -55,7 +57,7 @@ const FeedbackForm = ({
 
     return (
         <div className="aha__feedback justify-content-center">
-            <form>
+            <form role="form">
                 {form.map((_question, index) => (
                     <Question
                         key={index}
@@ -66,7 +68,7 @@ const FeedbackForm = ({
                     />
                 ))}
                 {/* Continue button */}
-                {submitButton && (
+                {showSubmitButtons && (
 
                     <div className="row justify-content-around">
                         {skipButton && (
