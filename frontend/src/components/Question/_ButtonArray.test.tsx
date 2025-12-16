@@ -11,7 +11,6 @@ const getProps = (overrides = {}) => ({
         "explainer": "",
         "question": "1. Do you know this song?",
         "skippable": false,
-        "submits": false,
         "style": "boolean",
         "choices": {
             "yes": "Yes",

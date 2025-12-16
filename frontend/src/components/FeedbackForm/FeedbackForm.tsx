@@ -29,9 +29,6 @@ const FeedbackForm = ({
 
     const onChange = (value: string | number | boolean, question_index: number) => {
         form[question_index].value = value;
-        if (form[question_index].submits) {
-            submitResult();
-        }
         // for every non-skippable question, check that we have a value
         const validFormElements = form.filter(formElement => {
             if (formElement.is_skippable || (formElement.value && validateFormElement(formElement))) {
