@@ -72,9 +72,9 @@ class MatchingPairs2025(MatchingPairsGame):
         return self._get_final_actions(session)
 
     def _get_final_actions(self, session: Session):
-        accumulated_score = session.participant.session_set.aggregate(total_score=models.Sum("final_score"))[
-            "total_score"
-        ]
+        accumulated_score = session.participant.sessions.aggregate(
+            total_score=models.Sum("final_score")
+        )["total_score"]
         score = Final(
             session,
             title="Score",
@@ -170,7 +170,9 @@ class MatchingPairs2025(MatchingPairsGame):
     def _select_least_played_session_condition_types(self, session: Session, participant_specific=False) -> list[str]:
         playlist = session.playlist
         participant_sessions = (
-            participant_specific and session.participant.session_set.all() or playlist.session_set.all()
+            participant_specific
+            and session.participant.sessions.all()
+            or playlist.session_set.all()
         )
         all_tags = playlist.section_set.values_list("tag", flat=True).distinct()
         # Extract the first character as the 'condition_type'
@@ -212,7 +214,9 @@ class MatchingPairs2025(MatchingPairsGame):
     ) -> list[str]:
         playlist = session.playlist
         participant_sessions = (
-            participant_specific and session.participant.session_set.all() or playlist.session_set.all()
+            participant_specific
+            and session.participant.sessions.all()
+            or playlist.session_set.all()
         )
         # All tags starting with condition_type
         relevant_tags = playlist.section_set.filter(tag__startswith=condition_type).values_list("tag", flat=True)
@@ -253,12 +257,14 @@ class MatchingPairs2025(MatchingPairsGame):
         return least_played_sections
 
     def _final_text(self, session: Session):
-        total_sessions = session.participant.session_set.count()
-        total_score = session.participant.session_set.aggregate(total_score=models.Sum("final_score"))["total_score"]
+        total_sessions = session.participant.sessions.count()
+        total_score = session.participant.sessions.aggregate(
+            total_score=models.Sum("final_score")
+        )["total_score"]
         average_score = total_score / total_sessions if total_sessions > 0 else 0
-        highest_score = session.participant.session_set.aggregate(highest_score=models.Max("final_score"))[
-            "highest_score"
-        ]
+        highest_score = session.participant.sessions.aggregate(
+            highest_score=models.Max("final_score")
+        )["highest_score"]
         game_score = int(session.total_score())
         percentile = session.percentile_rank(exclude_unfinished=False)
         percentile_rounded = round(percentile)

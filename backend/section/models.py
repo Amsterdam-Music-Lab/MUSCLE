@@ -61,11 +61,11 @@ class Playlist(models.Model):
 
     def clean_csv(self):
         errors = []
-        sections = Section.objects.filter(playlist=self)
+        sections = Section.objects.filter(playlist=self).values_list(
+            'filename', flat=True
+        )
 
-        for section in sections:
-            filename = str(section.filename)
-
+        for filename in sections:
             try:
                 file_exists_validator(filename)
             except ValidationError as e:
@@ -221,41 +221,21 @@ class Playlist(models.Model):
                     'messages': csv_messages,
                 }
 
-    def _export_admin(self):
-        """Export data for admin"""
-        return {
-            "exportedAt": timezone.now().isoformat(),
-            "playlist": {
-                "id": self.id,
-                "name": self.name,
-                "sections": [
-                    section._export_admin() for section in self.section_set.all()
-                ],
-            },
-        }
-
-    def _export_sections(self):
-        # export section objects
-        return self.section_set.all()
-
     def _update_admin_csv(self):
         """Update csv data for admin"""
         csvfile = CsvStringBuilder()
         writer = csv.writer(csvfile)
-        for section in self.section_set.all():
-            if section.song:
-                this_artist = section.artist_name()
-                this_name = section.song_name()
-            else:
-                this_artist = ''
-                this_name = ''
-            writer.writerow([this_artist,
-                            this_name,
-                            section.start_time,
-                            section.duration,
-                            section.filename,
-                            section.tag,
-                            section.group])
+        values = self.section_set.values_list(
+            "song__artist",
+            "song__name",
+            "start_time",
+            "duration",
+            "filename",
+            "tag",
+            "group",
+        )
+        for row in values:
+            writer.writerow(row)
         csv_string = csvfile.csv_string
         return ''.join(csv_string)
 
@@ -418,24 +398,3 @@ class Section(models.Model):
         base_url = getattr(settings, 'BASE_URL', '')
         sections_url = reverse("section:section", args=[self.pk])
         return base_url.rstrip('/') + sections_url
-
-    def _export_admin(self):
-        """Export data for admin"""
-        return {
-            'id': self.id,
-            'artist': self.song.artist,
-            'name': self.song.name,
-            'play_count': self.play_count
-        }
-
-    def _export_admin_csv(self):
-        """Export csv data for admin"""
-        return [
-            self.song.artist,
-            self.song.name,
-            self.start_time,
-            self.duration,
-            self.filename,
-            self.tag,
-            self.group,
-        ]

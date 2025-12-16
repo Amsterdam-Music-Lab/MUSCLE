@@ -190,8 +190,16 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
         response = HttpResponse(content_type="text/csv")
 
         writer = csv.writer(response)
-        for section in obj.section_set.all():
-            writer.writerow(section._export_admin_csv())
+        for section in obj.section_set.values_list(
+            "song__artist",
+            "song__name",
+            "start_time",
+            "duration",
+            "filename",
+            "tag",
+            "group",
+        ):
+            writer.writerow(section)
 
         # force download attachment
         response["Content-Disposition"] = (

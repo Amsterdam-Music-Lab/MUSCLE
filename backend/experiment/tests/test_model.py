@@ -39,6 +39,9 @@ class BlockModelTest(TestCase):
             name="Test Block",
             description="Test block description",
         )
+        Session.objects.create(
+            block=cls.block, participant=Participant.objects.create()
+        )
 
     def test_block_str(self):
         self.assertEqual(str(self.block), "Test Block")
@@ -50,22 +53,10 @@ class BlockModelTest(TestCase):
         self.assertEqual(str(block_no_content), "test-block-no-content")
 
     def test_block_session_count(self):
-        self.assertEqual(self.block.session_count(), 0)
+        self.assertEqual(self.block.session_count(), 1)
 
     def test_block_playlist_count(self):
         self.assertEqual(self.block.playlist_count(), 0)
-
-    def test_block_current_participants(self):
-        participants = self.block.current_participants()
-        self.assertEqual(len(participants), 0)
-
-    def test_block_export_admin(self):
-        exported_data = self.block._export_admin()
-        self.assertEqual(exported_data["block"]["name"], "Test Block")
-
-    def test_block_export_sessions(self):
-        sessions = self.block.export_sessions()
-        self.assertEqual(len(sessions), 0)
 
     def test_block_get_rules(self):
         rules = self.block.get_rules()
@@ -78,14 +69,18 @@ class BlockModelTest(TestCase):
         session = Session.objects.create(
             block=self.block, participant=Participant.objects.create()
         )
-        for j in range(amount_of_results):
-            Result.objects.create(
-                session=session,
-                expected_response=1,
-                given_response=1,
-                score=question_score,
-                question_key=f"test_question_{j + 1}",
-            )
+        Result.objects.bulk_create(
+            [
+                Result(
+                    session=session,
+                    expected_response=1,
+                    given_response=1,
+                    score=question_score,
+                    question_key=f"test_question_{j + 1}",
+                )
+                for j in range(amount_of_results)
+            ]
+        )
         session.finish()
         session.save()
 

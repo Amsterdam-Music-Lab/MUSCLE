@@ -65,7 +65,7 @@ class Categorization(BaseRules):
 
         if rounds_passed == 0:
             # Check if participants wants to exit after failed traning
-            profiles = session.participant.profile()
+            profiles = session.participant.profile_results()
             for profile in profiles:
                 # Delete results and json from session and exit
                 if profile.given_response == "aborted":
@@ -139,7 +139,7 @@ class Categorization(BaseRules):
                     session.save_json_data(end_data)
                     session.final_score = 0
                     session.save()
-                    profiles = session.participant.profile()
+                    profiles = session.participant.profile_results()
                     for profile in profiles:
                         # Delete failed_training tag from profile
                         if profile.question_key == "failed_training":
@@ -204,7 +204,7 @@ class Categorization(BaseRules):
             session.finish()
             session.final_score = final_score
             session.save()
-            profiles = session.participant.profile()
+            profiles = session.participant.profile_results()
             for profile in profiles:
                 # Delete failed_training tag from profile
                 if profile.question_key == "failed_training":
@@ -231,7 +231,7 @@ class Categorization(BaseRules):
 
         # Check for unfinished sessions older then 24 hours caused by closed browser
         all_sessions = (
-            session.block.session_set.filter(finished_at=None)
+            session.block.sessions.filter(finished_at=None)
             .filter(started_at__lte=timezone.now() - timezone.timedelta(hours=24))
             .exclude(json_data__contains="ABORTED")
             .exclude(json_data__contains="FAILED_TRAINING")
@@ -247,10 +247,10 @@ class Categorization(BaseRules):
 
         # Count sessions per assigned group
         used_groups = [
-            session.block.session_set.filter(json_data__contains="S1").count(),
-            session.block.session_set.filter(json_data__contains="S2").count(),
-            session.block.session_set.filter(json_data__contains="C1").count(),
-            session.block.session_set.filter(json_data__contains="C2").count(),
+            session.block.sessions.filter(json_data__contains="S1").count(),
+            session.block.sessions.filter(json_data__contains="S2").count(),
+            session.block.sessions.filter(json_data__contains="C1").count(),
+            session.block.sessions.filter(json_data__contains="C2").count(),
         ]
 
         # Check wether a group falls behind in the count
