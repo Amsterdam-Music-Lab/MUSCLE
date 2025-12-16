@@ -43,3 +43,18 @@ class UtilsTestCase(TestCase):
         self.assertEqual(question.key, 'dgf_generation')
         with self.assertRaises(StopIteration):
             question = next(question_iterator)
+        Result.objects.create(
+            participant=self.participant,
+            question_key='dgf_country_of_origin',
+            given_response="Christmas Island",
+        )
+        Result.objects.create(
+            participant=self.participant,
+            question_key='dgf_generation',
+            given_response="Golden Age",
+        )
+        question_iterator = get_unanswered_questions(
+            self.participant, self.question_list.questions.all()
+        )
+        with self.assertRaises(StopIteration):
+            question = next(question_iterator)
