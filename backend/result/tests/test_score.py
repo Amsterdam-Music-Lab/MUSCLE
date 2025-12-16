@@ -26,19 +26,27 @@ class ScoreTest(TestCase):
         )
 
     def likert_request(self, rule, value, profile=False):
-        result = Result.objects.create(
-            question_key="test",
-            session=self.session,
-            section=self.section,
-            scoring_rule=rule,
-        )
+        if profile:
+            result = Result.objects.create(
+                question_key="test",
+                participant=self.participant,
+                section=self.section,
+                scoring_rule=rule,
+            )
+        else:
+            result = Result.objects.create(
+                question_key="test",
+                session=self.session,
+                section=self.section,
+                scoring_rule=rule,
+            )
         action = {
             "form": [
                 {
                     "key": "likert_test",
                     "result_id": result.pk,
                     "view": "TEXT_RANGE",
-                    "scale_steps": 7,
+                    "choices": {1: "1", 2: "2", 3: "3", 4: "4", 5: "5", 6: "6", 7: "7"},
                     "value": value,
                 }
             ]
@@ -49,7 +57,7 @@ class ScoreTest(TestCase):
         result = Result.objects.create(
             session=self.session,
             section=self.section,
-            scoring_rule='CATEGORIES_TO_LIKERT',
+            scoring_rule='LIKERT',
             question_key='test',
         )
         view = {
@@ -151,8 +159,8 @@ class ScoreTest(TestCase):
         client_request = self.likert_request('LIKERT', 6, True)
         response = self.client.post('/result/score/', client_request)
         assert response.status_code == 200
-        assert self.session.result_set.count() == 1
-        assert self.session.result_set.last().score == 6
+        assert self.participant.result_set.count() == 1
+        assert self.participant.result_set.last().score == 6
 
     def test_categories_to_likert(self):
         client_request = self.choice_request()
