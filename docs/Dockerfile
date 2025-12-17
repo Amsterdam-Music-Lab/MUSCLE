@@ -6,5 +6,3 @@ COPY pyproject.toml .
 RUN uv lock
 RUN uv sync --locked
 COPY mkdocs.yml .
-RUN mkdir docs
-COPY *.md ./docs

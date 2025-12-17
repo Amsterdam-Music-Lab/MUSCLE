@@ -13,9 +13,7 @@ The default folder is `site`
 
 ## serve the documentation with mkdocs
 
-`mkdocs serve`
-
-For this to work you either have to install mkdocs and its requirements locally or connect the  workspace in your IDE to the `server` docker/podman container.
+`docker compose run --rm  -p 8080:8080 docs`
 
 ## Add a new python file to the documentation:
 

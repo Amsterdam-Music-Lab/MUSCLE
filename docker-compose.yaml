@@ -30,6 +30,7 @@ services:
       - docs
     volumes:
       - ./backend:/mkdocs/backend
+      - ./docs/docs:/mkdocs/docs
     ports:
       - 8080:8080
     command: bash -c "uv run mkdocs serve"
@@ -66,7 +67,7 @@ services:
       - SQL_HOST=${SQL_HOST}
     ports:
       - 8000:8000
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py migrate && python manage.py collectstatic && python manage.py runserver 0.0.0.0:8000"
   client:
     build:
       context: ./frontend
