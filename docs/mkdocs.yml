@@ -3,7 +3,7 @@ site_description: MUSic-related Citizen Science Listening Experiments
 repo_url: https://github.com/Amsterdam-Music-Lab/MUSCLE
 repo_name: MUSCLE
 copyright: 2024 Amsterdam Music Lab — All Rights Reserved
-dev_addr: '127.0.0.1:8080'
+dev_addr: '0.0.0.0:8080'
 
 markdown_extensions:
   - smarty

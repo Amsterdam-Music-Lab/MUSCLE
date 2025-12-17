@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # This script builds the MkDocs documentation site.
-docker compose run --rm server mkdocs build -d ./docs-pages-build $@
+docker compose run --rm docs uv run mkdocs build -d ./docs-pages-build $@

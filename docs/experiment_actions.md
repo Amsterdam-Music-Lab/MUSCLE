@@ -42,10 +42,6 @@
 
 ::: backend.experiment.actions.score
 
-## backend.experiment.actions.styles
-
-::: backend.experiment.actions.styles
-
 ## backend.experiment.actions.trial
 
 ::: backend.experiment.actions.trial
