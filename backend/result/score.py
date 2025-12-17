@@ -36,20 +36,22 @@ def boolean_score(result: Result, data: ScoringData) -> int:
         return 0
 
 
+def _score_likert(data: LikertData) -> tuple[list[str], int]:
+    """Return the choices of the Likert question as a list, return index of selected value in that list"""
+    choices = list(data.get('choices').keys())
+    return choices, choices.index(str(data.get('value')))
+
+
 def likert_score(result: Result, data: LikertData) -> int:
     """Translate the `n`th category of a Likert scale into `n`"""
-    return int(data['value'])
+    _choices, score = _score_likert(data)
+    return score + 1
 
 
 def reverse_likert_score(result: Result, data: LikertData) -> int:
     """Translate the `n`th category of a Likert scale into `n_steps - n`"""
-    return int(data['scale_steps']) + 1 - int(data['value'])
-
-
-def categories_likert_score(result: Result, data: ChoiceData) -> int:
-    """Translate the `n`th category of a dictionary of choices into `n`"""
-    choices = list(data['choices'].keys())
-    return choices.index(data['value']) + 1
+    choices, score = _score_likert(data)
+    return len(choices) - score
 
 
 def reaction_time_score(result: Result, data: ScoringData) -> float:
@@ -113,5 +115,4 @@ SCORING_RULES = {
     'REACTION_TIME': reaction_time_score,
     'SONG_SYNC_RECOGNITION': song_sync_recognition_score,
     'SONG_SYNC_VERIFICATION': song_sync_verification_score,
-    'CATEGORIES_TO_LIKERT': categories_likert_score,
 }
