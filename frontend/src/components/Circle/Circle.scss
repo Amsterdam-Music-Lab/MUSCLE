@@ -3,13 +3,6 @@
     margin-bottom: 15px;
     margin-top: 15px;
 
-    >svg,
-    .content {
-        position: absolute;
-        left: 0;
-        top: 0;
-    }
-
     >svg {
         @extend .circleIntro;
 
