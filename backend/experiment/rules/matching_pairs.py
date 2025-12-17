@@ -7,7 +7,6 @@ from .base import BaseRules
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.playback import MatchingPairs
-from experiment.actions.playlist import PlaylistSelection
 from experiment.actions.trial import Trial
 from result.utils import prepare_result
 
@@ -25,15 +24,15 @@ class MatchingPairsGame(BaseRules):
     random_seed = None
 
     def __init__(self):
-        self.question_lists = [
+        self.question_series = [
             {
                 "name": "Demographics",
-                "question_keys": [
+                "keys": [
                     "dgf_gender_identity",
                     "dgf_generation",
                     "dgf_musical_experience",
                     "dgf_country_of_origin",
-                    "dgf_education",  # edited: dropped isced-2 and isced-5 from choice set
+                    "dgf_education_matching_pairs",
                 ],
                 "randomize": False,
             },
@@ -59,6 +58,37 @@ class MatchingPairsGame(BaseRules):
             ],
             step_numbers=True,
         )
+
+    def next_round(self, session):
+        if session.get_rounds_passed() < 1:
+            intro_explainer = self.get_intro_explainer()
+            playlist = Playlist(session.block.playlists.all())
+            actions = [intro_explainer, playlist]
+            questions = self.get_profile_question_trials(session, None)
+            if questions:
+                intro_questions = Explainer(
+                    instruction=_(
+                        "Before starting the game, we would like to ask you %i demographic questions."
+                        % (len(questions))
+                    ),
+                    steps=[],
+                )
+                actions.append(intro_questions)
+                actions.extend(questions)
+            trial = self.get_matching_pairs_trial(session)
+            actions.append(trial)
+            return actions
+        else:
+            # final score saves the result from the cleared board into account
+            score = Final(
+                session,
+                title="Score",
+                final_text="Can you score higher than your friends and family? Share and let them try!",
+                button={"text": "Play again", "link": self.get_play_again_url(session)},
+                rank=self.rank(session, exclude_unfinished=False),
+                feedback_info=self.feedback_info(),
+            )
+            return [score]
 
     def select_sections(self, session):
         json_data = session.json_data
@@ -112,7 +142,7 @@ class MatchingPairsGame(BaseRules):
         second_card = result_data["second_card"]
         second_section = Section.objects.get(pk=second_card["id"])
         second_card["filename"] = str(second_section.filename)
-        if first_section.group == second_section.group:
+        if self.evaluate_sections_equal(first_section, second_section):
             if second_card.get("seen"):
                 score = 20
                 given_response = "match"
@@ -129,10 +159,15 @@ class MatchingPairsGame(BaseRules):
         prepare_result("move", session, json_data=result_data, score=score, given_response=given_response)
         return score
 
+    def evaluate_sections_equal(
+        self, first_section: Section, second_section: Section
+    ) -> bool:
+        return first_section.group == second_section.group
+
     def next_round(self, session):
         if session.get_rounds_passed() < 1:
             intro_explainer = self.get_intro_explainer()
-            playlist = PlaylistSelection(session.block.playlists.all())
+            playlist = Playlist(session.block.playlists.all())
             actions = [intro_explainer, playlist]
             questions = self.get_profile_question_trials(session, None)
             if questions:
