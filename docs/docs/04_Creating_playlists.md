@@ -22,8 +22,9 @@ Each time the playlist is saved with `Process csv` checked, the sections are upd
 - Click `Add sections` next to your playlist.
 ![AddSection](../assets/images/addSections.png)
 -  You can add some attributes for your sections now, or leave these blank.
-  -  When either the `artist` or the `name` field is filled a `Song` object will be created for these sections.
-  -  The `Tag` and `group` attributes can be used as identifiers in your rules file.
+  -  When either the `Artist` or the `Name` field is filled a `Song` object will be created for these sections.
+  -  The `Tag` and `Group` attributes can be used as identifiers in your rules file.
+  -  Click `Choose files` to select which audio files (.mp3, .wav, .aiff, .flac and .ogg currently supported) should be uploaded and associated with this metadata.
 ![Add sections](../assets/images/addSections2.png)
 - Click `Add sections` to upload your files to the server and add the sections to the database.
 
@@ -40,11 +41,8 @@ Running a production server you can use SSH or FTP to upload your sound files to
 
 #### Generate a CSV file:
 
-- Run the `compileplaylist` command on your server container: `docker-compose run --rm server ./manage.py compileplaylist <path-relative-to-upload-folder>`.
-This will create a file named `audiofiles.csv` in the folder of your sound files.
-
+- Run the `compileplaylist` command on your server container: `docker-compose run --rm server ./manage.py compileplaylist <path-relative-to-upload-folder>`. Optionally, you can pass arguments to set fields in the csv, pass the flag `--help` to see the options. The command will create a file named `audiofiles.csv` in the folder of your sound files.
 - Click `Add playlist` at `localhost:8000/admin/section/playlist/`
-![AdminOverview](../assets/images/generateCsv.png)
 - Give your playlist a name
 - Paste the (edited) content of `audiofiles.csv` into the csv field.
 - Check `Process Csv` and click `SAVE`

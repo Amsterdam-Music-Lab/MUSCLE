@@ -30,6 +30,7 @@ class SectionAdmin(admin.ModelAdmin):
     list_filter = [("playlist", admin.RelatedOnlyFieldListFilter)]
     search_fields = ["song__artist", "song__name", "playlist__name"]
     readonly_fields = ["play_count"]
+    autocomplete_fields = ["song"]
 
     # Prevent large inner join
     list_select_related = ()
