@@ -1,6 +1,10 @@
+from itertools import chain
+
 from django.conf import settings
 from django.contrib import admin, messages
+from django.contrib.postgres.aggregates import ArrayAgg
 from django.db import models
+from django.db.models.query import QuerySet
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -12,6 +16,7 @@ from modeltranslation.admin import TabbedTranslationAdmin
 from experiment.models import (
     Block,
     Experiment,
+    Feedback,
     Phase,
     SocialMediaConfig,
 )
@@ -23,6 +28,25 @@ from experiment.widgets import MarkdownPreviewTextInput
 from question.admin import QuestionListInline
 from question.models import QuestionList, QuestionInList
 from .utils import get_block_json_export_as_repsonse
+
+
+class FeedbackAdmin(admin.ModelAdmin):
+    model = Feedback
+
+    list_display = ("block", "text")
+    list_filter = [
+        ('block', admin.RelatedOnlyFieldListFilter),
+    ]
+
+    def has_module_permission(self, request):
+        '''Prevents the admin from being shown in the sidebar.'''
+        return False
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=...):
+        return False
 
 
 class BlockAdmin(TabbedTranslationAdmin):
@@ -251,33 +275,19 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
             block_slug = request.POST.get("export-block")
             return get_block_json_export_as_repsonse(block_slug)
 
-        all_blocks = obj.associated_blocks()
-        all_participants = obj.current_participants()
-        all_sessions = obj.export_sessions()
-        all_feedback = obj.export_feedback()
-        collect_data = {
-            "participant_count": len(all_participants),
-            "session_count": len(all_sessions),
-            "feedback_count": len(all_feedback),
-        }
+        annotated_blocks = self._annotate_blocks(obj.associated_blocks())
+        stats = self._generate_stats(annotated_blocks)
 
-        blocks = [
-            {
-                "id": block.id,
-                "slug": block.slug,
-                "name": block.name,
-                "started": len(all_sessions.filter(block=block)),
-                "finished": len(
-                    all_sessions.filter(
-                        block=block,
-                        finished_at__isnull=False,
-                    )
-                ),
-                "participant_count": len(block.current_participants()),
-                "participants": block.current_participants(),
-            }
-            for block in all_blocks
-        ]
+        blocks = annotated_blocks.values(
+            "id",
+            "slug",
+            "name",
+            "participants",
+            "n_feedback",
+            "n_sessions",
+            "n_sessions_finished",
+            "n_participants",
+        )
 
         return render(
             request,
@@ -285,12 +295,54 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
             context={
                 "experiment": obj,
                 "blocks": blocks,
-                "sessions": all_sessions,
-                "participants": all_participants,
-                "feedback": all_feedback,
-                "collect_data": collect_data,
+                "stats": stats,
             },
         )
+
+    def _annotate_blocks(self, blocks: QuerySet[Block]) -> QuerySet[Block]:
+        """add annotations to QuerySet of experiment blocks indicating the number of sessions and feedback per block
+
+        Args:
+            blocks: QuerySet of blocks
+
+        Returns:
+            Queryset of blocks with annotations of `n_feedback`, `n_sessions`, `n_sessions_finished`, `n_participants`
+        """
+        all_blocks = blocks.annotate(
+            participants=ArrayAgg(
+                "sessions__participant__id",
+                distinct=True,
+            ),
+            n_feedback=models.Count("feedback", distinct=True),
+            n_sessions=models.Count("sessions"),
+            n_sessions_finished=models.Count(
+                "sessions", filter=models.Q(sessions__finished_at__isnull=False)
+            ),
+            n_participants=models.Count("sessions__participant", distinct=True),
+        )
+        return all_blocks
+
+    def _generate_stats(self, annotated_blocks: QuerySet[Block]) -> dict:
+        """Calculate the total number of participants, feedback and sessionsfor the experiment"""
+        participant_count = len(
+            set(
+                chain.from_iterable(
+                    [
+                        stat.get('participants')
+                        for stat in annotated_blocks.values('participants')
+                    ]
+                )
+            )
+        )
+        return {
+            "participant_count": participant_count,
+            "session_count": annotated_blocks.aggregate(models.Sum('n_sessions')).get(
+                'n_sessions__sum'
+            ),
+            "feedback_count": annotated_blocks.aggregate(models.Sum('n_feedback')).get(
+                'n_feedback__sum'
+            ),
+        }
 
     def remarks(self, obj):
         remarks_array = []
@@ -331,6 +383,6 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
             )
         )
 
-
-admin.site.register(Experiment, ExperimentAdmin)
 admin.site.register(Block, BlockAdmin)
+admin.site.register(Experiment, ExperimentAdmin)
+admin.site.register(Feedback, FeedbackAdmin)

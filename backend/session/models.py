@@ -19,8 +19,16 @@ class Session(models.Model):
         json_data (json): a field to keep track of progress through a blocks' rules in a session
         final_score (float): the final score of the session, usually the sum of all `Result` objects on the session
     """
-    block = models.ForeignKey("experiment.Block", on_delete=models.CASCADE, blank=True, null=True)
-    participant = models.ForeignKey("participant.Participant", on_delete=models.CASCADE)
+    block = models.ForeignKey(
+        "experiment.Block",
+        related_name='sessions',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    participant = models.ForeignKey(
+        "participant.Participant", related_name='sessions', on_delete=models.CASCADE
+    )
     playlist = models.ForeignKey("section.Playlist", on_delete=models.SET_NULL, blank=True, null=True)
 
     started_at = models.DateTimeField(db_index=True, default=timezone.now)
@@ -188,19 +196,17 @@ class Session(models.Model):
             return section.song_label()
         return ""
 
-    def percentile_rank(self, exclude_unfinished: bool) -> float:
+    def percentile_rank(self, filter_conditions) -> float:
         """
         Returns:
             Percentile rank of this session for the associated block, based on `final_score`
         """
-        session_set = self.block.session_set
-        if exclude_unfinished:
-            session_set = session_set.filter(finished_at__isnull=False)
-        n_session = session_set.count()
+        sessions = Session.objects.filter(**filter_conditions)
+        n_session = sessions.count()
         if n_session == 0:
             return 0.0  # Should be impossible but avoids x/0
-        n_lte = session_set.filter(final_score__lte=self.final_score).count()
-        n_eq = session_set.filter(final_score=self.final_score).count()
+        n_lte = sessions.filter(final_score__lte=self.final_score).count()
+        n_eq = sessions.filter(final_score=self.final_score).count()
         return 100.0 * (n_lte - (0.5 * n_eq)) / n_session
 
     def rank(self) -> int:
@@ -209,7 +215,7 @@ class Session(models.Model):
             rank of the current session for the associated block, based on `final_score`
         """
         return (
-            self.block.session_set.filter(final_score__gte=self.final_score)
+            self.block.sessions.filter(final_score__gte=self.final_score)
             .values("final_score")
             .annotate(total=models.Count("final_score"))
             .count()
@@ -243,17 +249,6 @@ class Session(models.Model):
         """
         self.json_data.update(data)
         self.save()
-
-    def _export_admin(self):
-        """Export data for admin"""
-        return {
-            "session_id": self.id,
-            "participant": self.participant.id,
-            "started_at": self.started_at.isoformat(),
-            "finished_at": self.finished_at.isoformat() if self.finished_at else None,
-            "json_data": self.json_data,
-            "results": [result._export_admin() for result in self.result_set.all()],
-        }
 
     def _is_finished(self) -> bool:
         """

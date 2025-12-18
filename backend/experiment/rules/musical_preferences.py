@@ -11,7 +11,6 @@ from experiment.actions.playback import Autoplay
 from experiment.actions.question import ButtonArrayQuestion, IconRangeQuestion
 from experiment.actions.redirect import Redirect
 from experiment.actions.trial import Trial
-from question.models import ChoiceList
 from result.utils import prepare_result
 from result.models import Result
 from section.models import Section
@@ -68,7 +67,7 @@ class MusicalPreferences(BaseRules):
             last_result = session.last_result()
             if last_result:
                 if last_result.score == 1:
-                    question_trials = self.get_profile_question_trials(session)
+                    question_trials = self.get_profile_question_trials(session, None)
                     if question_trials:
                         n_questions = len(question_trials)
                         explainer = Explainer(

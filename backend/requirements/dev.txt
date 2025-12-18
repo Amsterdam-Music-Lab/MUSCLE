@@ -38,7 +38,7 @@ defusedxml==0.7.1
     # via genbadge
 dill==0.3.8
     # via pylint
-django==4.2.25
+django==4.2.27
     # via
     #   -r /server/requirements.in/base.txt
     #   django-cors-headers
@@ -209,7 +209,7 @@ tqdm==4.66.3
     # via -r /server/requirements.in/base.txt
 typing-extensions==4.10.0
     # via psycopg
-urllib3==2.5.0
+urllib3==2.6.0
     # via
     #   requests
     #   sentry-sdk

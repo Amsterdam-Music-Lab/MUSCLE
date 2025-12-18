@@ -1,5 +1,5 @@
 from modeltranslation.translator import register, TranslationOptions
-from .models import Question, Choice
+from .models import Choice, ChoiceList, Question
 
 
 @register(Question)
@@ -10,3 +10,8 @@ class QuestionTranslationOptions(TranslationOptions):
 @register(Choice)
 class ChoiceTranslationOptions(TranslationOptions):
     fields = ('text',)
+
+# register ChoiceList so we can display choices as TranslationTabularInline
+@register(ChoiceList)
+class ChoiceListTranslationOptions(TranslationOptions):
+    fields = ()

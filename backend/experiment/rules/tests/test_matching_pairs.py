@@ -10,7 +10,6 @@ from session.models import Session
 
 
 class MatchingPairsTest(TestCase):
-
     @classmethod
     def setUpTestData(cls):
         section_csv = (
@@ -39,9 +38,8 @@ class MatchingPairsTest(TestCase):
         cls.rules = cls.session.block_rules()
 
     def test_next_round(self):
-        self.rules.num_pairs = 2
         actions = self.rules.next_round(self.session)
-        # explainer + five question rounds and one extra explainer + matching pairs trial
+        # expect five extra question rounds and one extra explainer
         self.assertEqual(len(actions), 9)
 
     def test_matching_pairs_trial(self):

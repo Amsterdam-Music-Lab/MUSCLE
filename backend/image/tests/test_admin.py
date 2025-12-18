@@ -10,9 +10,7 @@ from image.models import Image
 class ImageAdminTest(TestCase):
 
     def setUp(self):
-        self.admin = ImageAdmin(model=Image,
-                                admin_site=AdminSite
-                                )
+        self.admin = ImageAdmin(model=Image, admin_site=AdminSite())
 
     def test_image_preview_with_file(self):
         image = Image.objects.create(file='path/to/image.jpg')

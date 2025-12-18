@@ -40,6 +40,7 @@ class FinalActionResponse(TypedDict):
     view: str
     score: float
     percentile: Optional[float]
+    accumulative_percentile: Optional[float]
     rank: Optional[str]
     final_text: Optional[str]
     button: Optional[ButtonConfiguration]
@@ -116,6 +117,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         total_score: Optional[float] = None,
         logo: Optional[LogoConfiguration] = None,
         percentile: Optional[float] = None,
+        accumulative_percentile: Optional[float] = None,
     ):
         self.session = session
         self.title = title
@@ -128,6 +130,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         self.feedback_info = feedback_info
         self.logo = logo
         self.percentile = percentile
+        self.accumulative_percentile = accumulative_percentile
 
         if total_score is None:
             self.total_score = self.session.total_score()
@@ -144,6 +147,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
             "view": self.view,
             "score": self.total_score,
             "percentile": self.percentile,
+            "accumulative_percentile": self.accumulative_percentile,
             "rank": self.rank,
             "final_text": self.wrap_plain_final_text(),
             "button": self.button,

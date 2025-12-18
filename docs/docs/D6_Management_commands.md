@@ -1,22 +1,18 @@
 # Management commands
 
 ## Compiling a playlist and other management commands
-You can run management commands, such as dump the database or compile the playlist, by using the management script located in `scripts/manage`.
+You can run management commands, such as dump the database or compile the playlist, by using the management scripts located in `scripts/manage`. These can be useful to run some MUSCLE-specific tasks as the following:
 
-For instance, to compile a playlist:
+- to compile a playlist:
 
 `scripts/manage compileplaylist path_to_sound_folder`
 
-## Other important management commands:
+- to export block data to json:
 
-- Export experiment data to json: `scripts/manage exportexperiment your_slug`
+`scripts/manage exportblock block_slug`
 
-- Export how often sections have been played: `scripts/manage exportplaycount playlist_id`
-
+## Important Django management commands:
+- Update translation strings in .po file: - `scripts/manage makemessages -l nl` or `python manage.py makemessages --all`
 - Compile translations into binary .mo file: `scripts/manage compilemessages`
+- Create a superuser: `scripts/manage createsuperuser` (You will be prompted to enter username, email and password.)
 
-- Create a superuser `scripts/manage createsuperuser` (You will be prompted to enter username, email and password.)
-
-## Update translation strings in .po file:
-- `scripts/manage makemessages -l nl` or
-- `scripts/manage makemessages --all`

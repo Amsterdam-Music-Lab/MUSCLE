@@ -3,7 +3,7 @@ import { useState } from "react";
 import Question from "../Question/Question";
 import Button from "../Button/Button";
 import IQuestion from "@/types/Question";
-import { submitResultType } from "@/hooks/useResultHandler";
+import { QuestionViews } from "@/types/Question";
 
 interface FeedbackFormProps {
     formActive: boolean;
@@ -11,7 +11,7 @@ interface FeedbackFormProps {
     buttonLabel: string;
     skipLabel: string;
     isSkippable: boolean;
-    submitResult: submitResultType
+    submitResult: any;
 }
 
 /** FeedbackForm */
@@ -23,16 +23,12 @@ const FeedbackForm = ({
     isSkippable,
     submitResult,
 }: FeedbackFormProps) => {
-    const showSubmitButtons =
-        form.filter((formElement) => formElement.submits).length === 0;
-
     const [formValid, setFormValid] = useState(false);
+    // only show submit buttons if there are several questions in the form, or if the question does not show buttons
+    const showSubmitButtons = form.length > 1 ? true : form[0].view !== QuestionViews.BUTTON_ARRAY ? true : false;
 
     const onChange = (value: string | number | boolean, question_index: number) => {
         form[question_index].value = value;
-        if (form[question_index].submits) {
-            submitResult();
-        }
         // for every non-skippable question, check that we have a value
         const validFormElements = form.filter(formElement => {
             if (formElement.is_skippable || (formElement.value && validateFormElement(formElement))) {
@@ -40,8 +36,16 @@ const FeedbackForm = ({
             }
             return false;
         });
-        if (validFormElements.length === form.length) setFormValid(true);
-        else setFormValid(false);
+        if (validFormElements.length === form.length) {
+            if (!showSubmitButtons) {
+                submitResult();
+            }
+            setFormValid(true);
+        }
+        else {
+            setFormValid(false);
+            return;
+        }
     };
 
     function validateFormElement(formElement: IQuestion) {
@@ -54,7 +58,7 @@ const FeedbackForm = ({
 
     return (
         <div className="aha__feedback justify-content-center">
-            <form>
+            <form role="form">
                 {form.map((_question, index) => (
                     <Question
                         key={index}

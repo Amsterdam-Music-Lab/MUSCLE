@@ -15,7 +15,6 @@ const getDefaultFeedbackForm = (overrides = {}) => ({
         explainer: "",
         question: "1. Do you know this song?",
         is_skippable: false,
-        submits: false,
         style: {"boolean": true},
         choices: {
             yes: "fa-check",
@@ -30,7 +29,6 @@ const getDefaultFeedbackForm = (overrides = {}) => ({
         explainer: "",
         question: "2. How much do you like this song?",
         is_skippable: false,
-        submits: false,
         style: {"gradient-7": true},
         choices: {
             1: "fa-face-grin-hearts",
@@ -146,7 +144,6 @@ export const NeutralColorScheme = {
                     explainer: "",
                     question: "1. Do you know this song?",
                     is_skippable: false,
-                    submits: false,
                     style: {"neutral": true},
                     choices: {
                         yes: "fa-check",
@@ -161,7 +158,6 @@ export const NeutralColorScheme = {
                     explainer: "",
                     question: "2. How much do you like this song?",
                     is_skippable: false,
-                    submits: false,
                     style: {"gradient-7": true},
                     choices: {
                         1: "fa-face-grin-hearts",
@@ -199,7 +195,6 @@ export const NeutralInvertedColorScheme = {
                     explainer: "",
                     question: "1. Do you know this song?",
                     is_skippable: false,
-                    submits: false,
                     style: {"neutral-inverted": true},
                     choices: {
                         yes: "fa-check",
@@ -214,7 +209,6 @@ export const NeutralInvertedColorScheme = {
                     explainer: "",
                     question: "2. How much do you like this song?",
                     is_skippable: false,
-                    submits: false,
                     style: {"gradient-7": true},
                     choices: {
                         1: "fa-face-grin-hearts",
@@ -282,7 +276,6 @@ export const ToontjeHoger4Absolute = {
                     explainer: "",
                     question: "Welk fragment heeft de juiste toonhoogte?",
                     is_skippable: false,
-                    submits: true,
                     style: {"neutral-inverted": true},
                     choices: {
                         A: "A",

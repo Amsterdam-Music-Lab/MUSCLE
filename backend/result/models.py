@@ -25,6 +25,7 @@ class Result(models.Model):
         json_data (dict): a field to log additional information to help analysis
 
     """
+
     session = models.ForeignKey(
         'session.Session', on_delete=models.CASCADE, blank=True, null=True
     )
@@ -63,16 +64,3 @@ class Result(models.Model):
         """
         self.json_data.update(data)
         self.save()
-
-    def _export_admin(self) -> dict:
-        """Export data for admin"""
-        return {
-            "created_at": self.created_at.isoformat(),
-            "section_id": self.section.id if self.section else None,
-            "section_name": (self.section.song_name() if self.section else None),
-            "score": self.score,
-            "expected_response": self.expected_response,
-            "given_response": self.given_response,
-            "comment": self.comment,
-            "details": self.json_data,
-        }
