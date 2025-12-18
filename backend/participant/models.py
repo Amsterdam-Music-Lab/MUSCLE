@@ -12,7 +12,7 @@ from result.models import Result
 class PartipantManager(models.Manager):
 
     def with_accumulative_score(self):
-        return self.annotate(accumulative_score=Sum("session__final_score"))
+        return self.annotate(accumulative_score=Sum("sessions__final_score"))
 
 
 class Participant(models.Model):

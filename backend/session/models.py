@@ -196,14 +196,12 @@ class Session(models.Model):
             return section.song_label()
         return ""
 
-    def percentile_rank(self, exclude_unfinished: bool) -> float:
+    def percentile_rank(self, filter_conditions) -> float:
         """
         Returns:
             Percentile rank of this session for the associated block, based on `final_score`
         """
-        sessions = self.block.sessions
-        if exclude_unfinished:
-            sessions = sessions.filter(finished_at__isnull=False)
+        sessions = Session.objects.filter(**filter_conditions)
         n_session = sessions.count()
         if n_session == 0:
             return 0.0  # Should be impossible but avoids x/0

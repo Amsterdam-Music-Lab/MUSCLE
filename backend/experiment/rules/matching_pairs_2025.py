@@ -280,7 +280,7 @@ class MatchingPairs2025(MatchingPairsGame):
     def _final_text(self, percentile):
         return _("You outperformed {}% of the players!").format(percentile)
 
-    def _get_percentile_rank(self, session):
+    def _get_percentile_rank(self, session: Session):
         """
         Returns:
             Percentile rank of all sessions with same difficulty, based on `final_score`

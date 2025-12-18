@@ -7,10 +7,11 @@ from .base import BaseRules
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.playback import MatchingPairs
+from experiment.actions.playlist import PlaylistSelection
 from experiment.actions.trial import Trial
 from result.utils import prepare_result
-
 from section.models import Section
+from session.models import Session
 
 
 class MatchingPairsGame(BaseRules):
@@ -24,15 +25,15 @@ class MatchingPairsGame(BaseRules):
     random_seed = None
 
     def __init__(self):
-        self.question_series = [
+        self.question_lists = [
             {
                 "name": "Demographics",
-                "keys": [
+                "question_keys": [
                     "dgf_gender_identity",
                     "dgf_generation",
                     "dgf_musical_experience",
                     "dgf_country_of_origin",
-                    "dgf_education_matching_pairs",
+                    "dgf_education",
                 ],
                 "randomize": False,
             },
@@ -59,10 +60,10 @@ class MatchingPairsGame(BaseRules):
             step_numbers=True,
         )
 
-    def next_round(self, session):
+    def next_round(self, session: Session):
         if session.get_rounds_passed() < 1:
             intro_explainer = self.get_intro_explainer()
-            playlist = Playlist(session.block.playlists.all())
+            playlist = PlaylistSelection(session.block.playlists.all())
             actions = [intro_explainer, playlist]
             questions = self.get_profile_question_trials(session, None)
             if questions:
@@ -163,34 +164,3 @@ class MatchingPairsGame(BaseRules):
         self, first_section: Section, second_section: Section
     ) -> bool:
         return first_section.group == second_section.group
-
-    def next_round(self, session):
-        if session.get_rounds_passed() < 1:
-            intro_explainer = self.get_intro_explainer()
-            playlist = Playlist(session.block.playlists.all())
-            actions = [intro_explainer, playlist]
-            questions = self.get_profile_question_trials(session, None)
-            if questions:
-                intro_questions = Explainer(
-                    instruction=_(
-                        "Before starting the game, we would like to ask you %i demographic questions."
-                        % (len(questions))
-                    ),
-                    steps=[],
-                )
-                actions.append(intro_questions)
-                actions.extend(questions)
-            trial = self.get_matching_pairs_trial(session)
-            actions.append(trial)
-            return actions
-        else:
-            feedback_info = self.feedback_info()
-            score = Final(
-                session,
-                title="Score",
-                final_text="Can you score higher than your friends and family? Share and let them try!",
-                button={"text": "Play again", "link": self.get_play_again_url(session)},
-                rank=self.rank(session, exclude_unfinished=False),
-                feedback_info=feedback_info,
-            )
-            return [score]
