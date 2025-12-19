@@ -117,6 +117,8 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
         SocialMediaConfigInline,
     ]
 
+    save_on_top = True
+
     def get_formsets_with_inlines(self, request, obj=None):
         """only show inlines if the experiment has already been saved"""
         if obj:
