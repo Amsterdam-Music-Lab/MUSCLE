@@ -295,8 +295,8 @@ msgid "Test Your Musical Memory!"
 msgstr "测试您的音乐记忆力！"
 
 #: src/config/frontend.ts:126
-msgid "The first load may take a while due to the amount of content, but later runs will be smoother."
-msgstr "第一次进入游戏时加载内容较多，可能需要稍作等待。加载完成后就会顺畅起来！"
+msgid "The first load may take a while due to the amount of content, but later runs will be smoother. The difficulty of game levels is randomized. After collecting all the stars, you will receive a total score and see how you rank among players worldwide."
+msgstr "第一次进入游戏时加载内容较多，可能需要稍作等待。加载完成后就会顺畅起来！游戏关卡难度随机，收集全部星星通关后即可查看您的总分，以及您在全球玩家中的表现水平。"
 
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:79
 msgid "This is your lucky day!"

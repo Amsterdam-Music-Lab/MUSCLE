@@ -82,6 +82,7 @@ jobs:
           echo "VITE_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
           echo "VITE_PLAUSIBLE_DOMAIN=$FRONTEND_PLAUSIBLE_DOMAIN" >> .env
           echo "VITE_STATIC_URL=$FRONTEND_STATIC_URL" >> .env
+          echo "HOST_DATA=/home/github-runner/podman-volumes" >> .env
           cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
@@ -178,6 +179,7 @@ jobs:
           echo "VITE_HTML_BODY_CLASS=$FRONTEND_HTML_BODY_CLASS" >> .env
           echo "VITE_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
           echo "VITE_STATIC_URL=$FRONTEND_STATIC_URL" >> .env
+          echo "HOST_DATA=/home/github-runner/podman-volumes" >> .env
           cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
@@ -279,6 +281,7 @@ jobs:
           echo "VITE_HTML_OG_URL=$FRONTEND_HTML_OG_URL" >> .env
           echo "VITE_HTML_BODY_CLASS=$FRONTEND_HTML_BODY_CLASS" >> .env
           echo "VITE_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
+          echo "HOST_DATA=/home/github-runner/podman-volumes" >> .env
           cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
@@ -380,6 +383,7 @@ jobs:
           echo "VITE_HTML_BODY_CLASS=$FRONTEND_HTML_BODY_CLASS" >> .env
           echo "VITE_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
           echo "VITE_PLAUSIBLE_DOMAIN=$FRONTEND_PLAUSIBLE_DOMAIN" >> .env
+          echo "HOST_DATA=/home/github-runner/podman-volumes" >> .env
           cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
