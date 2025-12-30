@@ -11,6 +11,7 @@ import type { BaseFieldProps } from "../FieldWrapper";
 
 import classNames from "classnames";
 import { default as ReactSelect } from "react-select";
+import { useLingui } from "@lingui/react/macro";
 import { useFieldWrapper } from "../FieldWrapper";
 import styles from "./SelectField.module.scss";
 
@@ -51,10 +52,13 @@ export default function SelectField<Value>({
   value,
   options,
   onChange,
+  placeholder,
   clearable = false,
   searchable = true,
   ...selectProps
 }: SelectFieldProps<Value>) {
+  const { t } = useLingui();
+
   // Field wrapper and properties for input element
   const { FieldWrapper, hasError, fieldProps } = useFieldWrapper({
     error,
@@ -95,6 +99,7 @@ export default function SelectField<Value>({
               state.isDisabled && styles.disabled
             ),
         }}
+        placeholder={placeholder ?? t`Select...`}
         onChange={handleChange}
         theme={makeTheme}
         {...fieldProps} // These props don't end up at the right place yet

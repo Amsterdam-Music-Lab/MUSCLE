@@ -72,3 +72,12 @@ export const Error: Story = {
     showError: true,
   },
 };
+
+export const Placeholder: Story = {
+  render: SelectFieldControlled,
+  args: {
+    ...Default.args,
+    value: "",
+    placeholder: "My placeholder...",
+  },
+};

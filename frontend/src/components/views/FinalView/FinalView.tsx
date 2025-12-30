@@ -82,6 +82,7 @@ export default function FinalView({
   social: shareConfig,
   feedback_info,
   percentile,
+  overallPercentile,
   score: turnScore,
   totalScore,
   timeline,
@@ -103,6 +104,25 @@ export default function FinalView({
     finalizeSession({ session: session!, participant });
   }, [session, participant]);
 
+  let isFirstStep, isLastStep, iconName, step;
+  if (timeline) {
+    const steps = processTimelineConfig({ timeline });
+    const step = timeline.currentStep ?? 1;
+    const symbol = steps[step - 1]?.symbol ?? "dot";
+    if (symbol !== "dot") {
+      iconName = symbol;
+      isFirstStep = step === steps.findIndex((s) => s.symbol !== "dot") + 1;
+      isLastStep =
+        step === steps.map((s) => s.symbol !== "dot").lastIndexOf(true) + 1;
+    }
+  }
+
+  if (!isLastStep) {
+    overallPercentile = undefined;
+  } else {
+    percentile = undefined;
+  }
+
   // Pass data to plugins
   plugins = plugins?.map((plugin) => {
     const updated: AllPluginSpec = { args: {}, ...plugin };
@@ -114,6 +134,7 @@ export default function FinalView({
           turnScore,
           totalScore,
           percentile,
+          overallPercentile,
           timeline,
           shareConfig,
         };
@@ -123,28 +144,19 @@ export default function FinalView({
         if (!timeline) return null;
 
         // If the current step has a trophy, enable the trophy plugin
-        const steps = processTimelineConfig({ timeline });
-        const step = timeline.currentStep ?? 1;
-        const symbol = steps[step - 1]?.symbol ?? "dot";
-        const iconName = symbol !== "dot" ? symbol : undefined;
-        if (iconName) {
-          // Find the right content: first/last or by step number.
-          let content;
-          const firstTrophyStep =
-            steps.findIndex((s) => s.symbol !== "dot") + 1;
-          const lastTrophyStep =
-            steps.map((s) => s.symbol !== "dot").lastIndexOf(true) + 1;
-          if (step === firstTrophyStep) content = trophyContent?.first;
-          if (step === lastTrophyStep) content = trophyContent?.last;
-
-          // Otherwise...
-          content =
-            content ?? trophyContent[step] ?? trophyContent?.default ?? {};
-          updated.args = { ...updated.args, iconName, ...content };
-        } else {
+        if (iconName === undefined) {
           return null;
+        } else if (isFirstStep) {
+          updated.args = { ...updated.args, iconName, ...trophyContent?.first };
+          break;
+        } else if (isLastStep) {
+          updated.args = { ...updated.args, iconName, ...trophyContent?.last };
+          break;
+        } else {
+          const content = trophyContent[step] ?? trophyContent?.default ?? {};
+          updated.args = { ...updated.args, iconName, ...content };
+          break;
         }
-        break;
       }
 
       case "userPages":

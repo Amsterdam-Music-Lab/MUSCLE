@@ -133,6 +133,7 @@ views.final = {
         social: action.social,
         feedback_info: action.feedback_info,
         percentile: action.percentile,
+        overallPercentile: action.accumulative_percentile,
         score: action.score,
         totalScore: experiment.accumulatedScore + action.score,
         timeline: { ...timeline, currentStep: timelineStep },

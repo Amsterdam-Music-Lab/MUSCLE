@@ -63,7 +63,7 @@ msgstr "+{turnScore} punten"
 
 #: src/config/frontend.ts:123
 #~ msgid "⚠️ Note:"
-#~ msgstr ""
+#~ msgstr "⚠️ NB:"
 
 #: src/config/frontend.ts:126
 #~ msgid "⚠️ Note: The first load may take a while due to the amount of content, but later runs will be smoother."
@@ -238,7 +238,6 @@ msgid "Platinum"
 msgstr "Platina"
 
 #: src/components/views/FinalView/FinalView.tsx:186
-#: src/config/frontend.ts:154
 msgid "Play another game!"
 msgstr "Speel nog een spel!"
 
@@ -266,6 +265,10 @@ msgstr "Vereiste variabele \"{varName}\" voor pagina (view) \"{name}\" bestaat n
 msgid "Return to the <0>home page</0>"
 msgstr "Ga terug naar de <0>homepage</0>"
 
+#: src/components/forms/SelectField/SelectField.tsx:102
+msgid "Select..."
+msgstr "Selecteer..."
+
 #: src/components/plugins/plugins/SharePlugin.tsx:30
 msgid "Share"
 msgstr "Delen"
@@ -282,8 +285,8 @@ msgstr "Overslaan"
 msgid "Start the game!"
 msgstr "Begin het spel!"
 
-#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
 #: src/components/views/SurveyView/SurveyView.tsx:117
+#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
 msgid "Submit"
 msgstr "Verzenden"
 
@@ -303,9 +306,9 @@ msgstr "De eerste keer dat je speelt, kan het laden even duren, maar daarna zal 
 msgid "This is your lucky day!"
 msgstr "Dit is je geluksdag!"
 
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
-#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
 #: src/components/plugins/plugins/ScoresPlugin.tsx:43
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
 msgid "Total score"
 msgstr "Totaalscore"
 

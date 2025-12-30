@@ -234,7 +234,6 @@ msgid "Platinum"
 msgstr "白金"
 
 #: src/components/views/FinalView/FinalView.tsx:186
-#: src/config/frontend.ts:154
 msgid "Play another game!"
 msgstr "再玩一局！"
 
@@ -262,6 +261,10 @@ msgstr "页面\"{name}\"所需的依赖项\"{varName}\"未定义"
 msgid "Return to the <0>home page</0>"
 msgstr "返回<0>主页</0>"
 
+#: src/components/forms/SelectField/SelectField.tsx:102
+msgid "Select..."
+msgstr "选择..."
+
 #: src/components/plugins/plugins/SharePlugin.tsx:30
 msgid "Share"
 msgstr "分享"
@@ -278,8 +281,8 @@ msgstr "跳过"
 msgid "Start the game!"
 msgstr "开始游戏！"
 
-#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
 #: src/components/views/SurveyView/SurveyView.tsx:117
+#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
 msgid "Submit"
 msgstr "提交"
 
@@ -299,9 +302,9 @@ msgstr "第一次进入游戏时加载内容较多，可能需要稍作等待。
 msgid "This is your lucky day!"
 msgstr "今天您很幸运哦！"
 
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
-#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
 #: src/components/plugins/plugins/ScoresPlugin.tsx:43
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
 msgid "Total score"
 msgstr "总分"
 

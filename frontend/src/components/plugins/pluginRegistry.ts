@@ -35,6 +35,13 @@ import type {
 } from "./plugins/RankingPlugin";
 import { rankingPlugin } from "./plugins/RankingPlugin";
 
+// Overall ranking
+import type {
+  OverallRankingPluginMeta,
+  OverallRankingPluginSpec,
+} from "./plugins/OverallRankingPlugin";
+import { overallRankingPlugin } from "./plugins/OverallRankingPlugin";
+
 import type {
   ScoreboardPluginMeta,
   ScoreboardPluginSpec,
@@ -105,6 +112,7 @@ export type AllPluginMeta =
   | SharePluginMeta
   | TimelinePluginMeta
   | RankingPluginMeta
+  | OverallRankingPluginMeta
   | ScoreboardPluginMeta
   | UserPagesPluginMeta
   | UserFeedbackPluginMeta
@@ -123,6 +131,7 @@ export type AllPluginSpec =
   | SharePluginSpec
   | TimelinePluginSpec
   | RankingPluginSpec
+  | OverallRankingPluginSpec
   | ScoreboardPluginSpec
   | UserPagesPluginSpec
   | UserFeedbackPluginSpec
@@ -144,6 +153,7 @@ export const pluginMetaRegistry: PluginRegistry = {
   [sharePlugin.name]: sharePlugin,
   [timelinePlugin.name]: timelinePlugin,
   [rankingPlugin.name]: rankingPlugin,
+  [overallRankingPlugin.name]: overallRankingPlugin,
   [scoreboardPlugin.name]: scoreboardPlugin,
   [userPagesPlugin.name]: userPagesPlugin,
   [userFeedbackPlugin.name]: userFeedbackPlugin,
