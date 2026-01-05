@@ -13,14 +13,13 @@ class Question(models.Model):
         text (str): Question text
         from_python (bool): whether this Question was added through a Python fixture (not editable)
         explainer (str): Question explainer text
+        is_skippable (bool): If question can be skipped during experiment
         type (str): Question type {"AutoCompleteQuestion", "ButtonArrayQuestion", "CheckboxQuestion", "DropdownQuestion", "IconRangeQuestion", "NumberQuestion", "RadiosQuestion", "RangeQuestion", "TextQuestion", "TextRangeQuestion"}
         profile_scoring_rule (str): Profile scoring rule {"", "LIKERT", "REVERSE_LIKERT", "CATEGORIES_TO_LIKERT"} (ChoiceQuestion, LikertQuestion)
         min_value (float): Minimal value (NumberQuestion)
         max_value (float): Maximal value (NumberQuestion)
         max_length (int): Maximal length (TextQuestion)
         min_values (int): Minimum number of values to choose (ChoiceQuestion)
-        is_skippable (bool): If question can be skipped during experiment
-
     """
 
     class QuestionTypes(models.TextChoices):
@@ -51,6 +50,7 @@ class Question(models.Model):
     text = models.CharField(max_length=1024)
     explainer = models.TextField(blank=True, default="")
     from_python = models.BooleanField(default=False, editable=False)
+    is_skippable = models.BooleanField(default=False)
 
     type = models.CharField(max_length=32, default="", choices=QuestionTypes.choices)
 
@@ -76,8 +76,6 @@ class Question(models.Model):
     )
     # only applicable for CheckBoxQuestion
     min_values = models.IntegerField(blank=True, null=True)
-
-    is_skippable = models.BooleanField(default=False)
 
     def __str__(self):
         return "(" + self.key + ") " + self.text
