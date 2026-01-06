@@ -33,7 +33,7 @@ services:
       - ./docs/docs:/mkdocs/docs
     ports:
       - 8080:8080
-    command: bash -c "uv run mkdocs serve"
+    command: bash -c "uv run mkdocs serve --livereload"
   server:
     build:
       context: ./backend
