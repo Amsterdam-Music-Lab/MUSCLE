@@ -65,7 +65,9 @@ class BaseRules(object):
         )
         return f"/{session.block.phase.experiment.slug}{participant_id_url_param}"
 
-    def get_profile_question_trials(self, session, n_questions: int = 1) -> list[Trial]:
+    def get_profile_question_trials(
+        self, session: Session, n_questions: int = 1
+    ) -> list[Trial]:
         """Get a list of trials for questions not yet answered by the user
 
         Args:
@@ -110,7 +112,7 @@ class BaseRules(object):
                 }
         return trials
 
-    def has_played_before(self, session):
+    def has_played_before(self, session) -> bool:
         """Check if the current participant has completed this game previously.
 
         Args:

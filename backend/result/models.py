@@ -21,7 +21,7 @@ class Result(models.Model):
         given_response (str): set as a result of the participant's response
         comment (str): optional comment to help analysis
         score (float): numerical value to reflect the participant's success
-        scoring_rule (str): a key by which scores can be induced from expected and given response from [scoring_rules](result_score.md)
+        scoring_rule (str): a key by which scores can be induced from expected and given response from [scoring_rules](../technical/result_score.md)
         json_data (dict): a field to log additional information to help analysis
 
     """

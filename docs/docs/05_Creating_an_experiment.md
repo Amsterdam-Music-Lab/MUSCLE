@@ -6,14 +6,14 @@ Experiments come in different "flavours":
 
 ## Admin interface
 To create any type of experiment, open the admin interface and click "Add" next to "Experiments".
-<img alt="Add Experiment" style="height:400px" src="../assets/images/addExperiment.png">
+<img alt="Add Experiment" style="height:400px" src="assets/images/addExperiment.png">
 
 ## The Experiment form
 You will see an empty form:
-![Empty Experiment form](../assets/images/ExperimentEmptyForm.png). First of all, enter a short name in the `slug` field. This will be the link under which the experiment can be accessed. The `slug` can only contain alphanumeric characters and underscores. After that, press "Save and continue editing".
+![Empty Experiment form](assets/images/ExperimentEmptyForm.png). First of all, enter a short name in the `slug` field. This will be the link under which the experiment can be accessed. The `slug` can only contain alphanumeric characters and underscores. After that, press "Save and continue editing".
 
 After that, you will see all options for the experiment:
-![Experiment form](../assets/images/ExperimentForm.png).
+![Experiment form](assets/images/ExperimentForm.png).
 
 ### Field overview
 The top fields in the experiment form allow you to enter various texts in different language. These will be shown to users when they participate in an experiment.
@@ -28,7 +28,7 @@ The top fields in the experiment form allow you to enter various texts in differ
 You can switch between different languages by clicking on the tabs above the text fields, or switch all tabs simultaneously by selecting a language from the drop down menu at the top of the form. The available languages can be configured through the `LANGUAGES` setting in Django.
 
 #### Theme Configuration (optional)
-You can change the background, fonts and logos used for the experiment here. For detailed information on this, see the [Custom Theme](/07_Custom_theme/) documentation.
+You can change the background, fonts and logos used for the experiment here. For detailed information on this, see the [Custom Theme](07_Custom_theme.md) documentation.
 
 #### Active field
 This field of the Experiment form is a checkbox indicating whether the experiment is active. This will always be checked by default. If you uncheck it, a request to `localhost:3000/{myslug}` will give you a blank screen stating `Experiment not found`. That way, you can close an experiment from further responses.
@@ -37,7 +37,7 @@ This field of the Experiment form is a checkbox indicating whether the experimen
 Phases (required): a phase of your experiment, which may contain one or more blocks. Note that every experiment needs to have at least one phase with one block configured.
 
 Click "Add Phase" to show the phase form.
-![Empty Phase](../assets/images/ExperimentEmptyPhase.png)
+![Empty Phase](assets/images/ExperimentEmptyPhase.png)
 
 This will show the following fields:
 - Index (default=0): will control the order of the phase in the experiment in case there are multiple phases.
@@ -62,10 +62,10 @@ Other fields:
 - Playlists (optional): select one or more playlists to be associated with the block (*note that some rulesets require a very specific format for the playlist, this will be checked when you save the experiment, and may generate warnings*)
 - ThemeConfig (optional): You can change background, fonts and logos used for the block here, which will override the ThemeConfig of the experiment while this block is being played.
 
-![Configuring a Block](../assets/images/ExperimentBlock.png)
+![Configuring a Block](assets/images/ExperimentBlock.png)
 
 #### Block questions
-Within each block, you also see a field with **Question Lists**. Question lists are created through the Question app, see the [next section](/06_Custom_questions/). The order of the question lists can be controlled through changing the index: lower numbers appear earlier in the block. Note that you need to have chosen block rules which show questions, such as the `Questionnaire` rules, in order for the question lists to appear.
+Within each block, you also see a field with **Question Lists**. Question lists are created through the Question app, see the [next section](06_Custom_questions.md). The order of the question lists can be controlled through changing the index: lower numbers appear earlier in the block. Note that you need to have chosen block rules which show questions, such as the `Questionnaire` rules, in order for the question lists to appear.
 
 #### Social Media Config (optional)
 A Social Media Config can be used to customize the folowing information when participants share the experiment social media:
@@ -76,6 +76,6 @@ A Social Media Config can be used to customize the folowing information when par
 
 Note that the *text* that will be used when participants share the experiment is configured on the top of the Experiment form.
 
-![Social media configuration](../assets/images/ExperimentSocialMedia.png)
+![Social media configuration](assets/images/ExperimentSocialMedia.png)
 
 

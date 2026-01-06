@@ -15,22 +15,22 @@ Each time the playlist is saved with `Process csv` checked, the sections are upd
 ### Uploading Sound files through the admin interface:
 
 - Click `Add playlist` at `localhost:8000/admin/section/playlist/` 
-![AdminOverview](../assets/images/addPlaylist.png)
+![AdminOverview](assets/images/addPlaylist.png)
 - Give your playlist a name. Note that this name will also be used to name the folder where the sound files will be stored on the server, so make sure this name is unique.
 - Leave the `Csv` field empty, `Process Csv` unchecked and click `SAVE`. Your playlist will now appear in the list when you click on "Playlists" on the left.
-![PlaylistEmpty](../assets/images/csvPlaylist.png)
+![PlaylistEmpty](assets/images/csvPlaylist.png)
 - Click `Add sections` next to your playlist.
-![AddSection](../assets/images/addSections.png)
+![AddSection](assets/images/addSections.png)
 -  You can add some attributes for your sections now, or leave these blank.
   -  When either the `Artist` or the `Name` field is filled a `Song` object will be created for these sections.
   -  The `Tag` and `Group` attributes can be used as identifiers in your rules file.
   -  Click `Choose files` to select which audio files (.mp3, .wav, .aiff, .flac and .ogg currently supported) should be uploaded and associated with this metadata.
-![Add sections](../assets/images/addSections2.png)
+![Add sections](assets/images/addSections2.png)
 - Click `Add sections` to upload your files to the server and add the sections to the database.
 
 Click on the name of your new playlist and notice that the `Csv` field is now filled with the attributes of the sections and the metadata of its sounds.
 
-![View playlist](../assets/images/changePlaylist.png)
+![View playlist](assets/images/changePlaylist.png)
 
 
 ### Manually uploading sound files
@@ -53,10 +53,10 @@ This will create `section` objects for your sound files with the attributes from
 
 ### Through the admin interface
 - Click `Edit sections` at `http://localhost:8000/admin/section/playlist/`
-![ClickEditSections](../assets/images/editSections.png)
+![ClickEditSections](assets/images/editSections.png)
 - Now you can alter the information of the sections in a table:
 
-![Edit sections](../assets/images/editSections2.png)
+![Edit sections](assets/images/editSections2.png)
 ### Through the `Csv` field:
 - Copy the `Csv` field of your playlist in your CSV editor and make the necessary changes.
 - Paste the content of your CSV file back into the `Csv` field of your playlist.

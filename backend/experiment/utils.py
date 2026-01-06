@@ -68,7 +68,7 @@ def non_breaking_spaces(input_string: str) -> str:
     return input_string.replace(" ", non_breaking_space)
 
 
-def external_url(text: str, url) -> str:
+def external_url(text: str, url: str) -> str:
     """Create a HTML element for an external url
 
     Args:
