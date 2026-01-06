@@ -1,4 +1,5 @@
 import logging
+from typing import Optional, Union
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -26,6 +27,9 @@ class BaseRules(object):
     counted_result_keys = []
 
     def feedback_info(self) -> FeedbackInfo:
+        """
+        Return info to shown to the user if they are invited to give feedback
+        """
         feedback_body = render_to_string("feedback/user_feedback.html", {"email": self.contact_email})
         return {
             # Header above the feedback form
@@ -40,16 +44,29 @@ class BaseRules(object):
             "show_float_button": False,
         }
 
-    def calculate_score(self, result, data):
-        """use scoring rule to calculate score
-        If no scoring rule is defined, return None
-        Override in rules file for other scoring schemes"""
+    def calculate_score(
+        self, result: Result, data: dict
+    ) -> Optional[Union[int, float]]:
+        """Use scoring rule to calculate score.
+
+        The function uses the result's scoring rule, if configured, otherwise, returns `None`.
+
+        Args:
+            result: the Result object for which to calculate the score
+            data: the data of the participant's response
+
+        """
         scoring_rule = SCORING_RULES.get(result.scoring_rule)
         if scoring_rule:
             return scoring_rule(result, data)
         return None
 
-    def get_play_again_url(self, session: Session):
+    def get_play_again_url(self, session: Session) -> str:
+        """Get the url to play the experiment again
+
+        Args:
+            session: current session
+        """
         participant_id_url_param = (
             f"?participant_id={session.participant.participant_id_url}"
             if session.participant.participant_id_url
@@ -58,6 +75,12 @@ class BaseRules(object):
         return f"/block/{session.block.slug}{participant_id_url_param}"
 
     def get_experiment_url(self, session: Session) -> str:
+        """
+        return the experiment url. Defaults to experiment.slug
+
+        Args:
+            session: current session
+        """
         participant_id_url_param = (
             f"?participant_id={session.participant.participant_id_url}"
             if session.participant.participant_id_url
@@ -112,11 +135,11 @@ class BaseRules(object):
                 }
         return trials
 
-    def has_played_before(self, session) -> bool:
+    def has_played_before(self, session: Session) -> bool:
         """Check if the current participant has completed this game previously.
 
         Args:
-            session (Sesssion): current session
+            session: current session
 
         Returns:
             boolean indicating whether the current participant has finished a session of this game
