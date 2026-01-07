@@ -146,8 +146,8 @@ msgid "Explanation"
 msgstr "说明"
 
 #: src/components/plugins/plugins/OverallRankingPlugin.tsx:40
-msgid "Game complete! You earned {totalScore} points. That's better than {percentile}% of players."
-msgstr ""
+msgid "Game complete! Your final score is {totalScore}, that's better than {percentile}% of players!"
+msgstr "本轮游戏结束！您的总得分为 {totalScore}，超过了 {percentile}% 的玩家！"
 
 #: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:31
 msgid "Go back to the homepage"
