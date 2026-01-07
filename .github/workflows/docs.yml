@@ -26,18 +26,15 @@ jobs:
 
       - name: Build mkdocs site
         run: |
-          mkdir -p docs-pages
-          sudo docker compose --env-file .env-github-actions run  -v docs-pages:/mkdocs/docs-pages-build docs bash -c "uv run mkdocs build -d ./docs-pages-build"
+          mkdir -p /docs-pages
+          sudo docker compose --env-file .env-github-actions run  -v /docs-pages:/mkdocs/docs-pages-build docs bash -c "uv run mkdocs build -d ./docs-pages-build"
           
-      - name: Show content docs-pages
-        run: ls ./docs-pages
-
       - name: Install dependencies
         run: yarn
         working-directory: ./frontend
 
       - name: Build Storybook
-        run: yarn storybook:build --output-dir ../docs-pages/storybook
+        run: yarn storybook:build --output-dir /docs-pages/storybook
         working-directory: ./frontend
 
       - name: Setup Github Pages
@@ -46,13 +43,13 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./docs-pages
+          path: /docs-pages
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: ./docs-pages
+          path: /docs-pages
 
   deploy-gh-pages:
     # only deploy on develop branch
