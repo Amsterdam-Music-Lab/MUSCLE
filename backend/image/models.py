@@ -39,7 +39,7 @@ class Image(models.Model):
     """
     Model representing an image with various attributes.
 
-    Args:
+    Attributes:
         file (SVGAndImageField): The uploaded image file.
         title (str): The title of the image.
         description (str): A description of the image.

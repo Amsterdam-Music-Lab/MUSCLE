@@ -1,0 +1,124 @@
+site_name: MUSic-related Citizen Science Listening Experiments (MUSCLE)
+site_description: MUSic-related Citizen Science Listening Experiments
+repo_url: https://github.com/Amsterdam-Music-Lab/MUSCLE
+repo_name: MUSCLE
+copyright: 2024 Amsterdam Music Lab — All Rights Reserved
+dev_addr: '0.0.0.0:8080'
+
+markdown_extensions:
+  - smarty
+  - toc:
+      permalink: '#'
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+theme:
+  name: "material"
+  logo: "assets/images/aml-logo-small.png"
+  features:
+    - navigation.sections
+    - navigation.path
+    - navigation.footer
+  font:
+    text: Fira Sans
+    code: Fira Code
+    palette:
+      primary: custom
+
+extra:
+  social:
+    - icon: fontawesome/brands/facebook
+      link: https://www.facebook.com/AmsterdamMusicLab
+      name: Amsterdam Music Lab (AML)
+
+exclude_docs: _*
+
+plugins:
+- search
+- mkdocstrings:
+    default_handler: python
+    handlers:
+      python:
+        options:
+          heading_level: 3
+          docstring_style: google
+          show_if_no_docstring: false
+          show_docstring_raises: true
+          show_docstring_returns: true
+
+extra_css:
+    - assets/css/style.css
+
+nav:
+  - Getting started:
+    - 1. Overview of the application: 'index.md'
+    - 2. Start the application: '02_Start_the_application.md'
+    - 3. The admin interface: '03_The_admin_interface.md'
+    - 4. Creating playlists: '04_Creating_playlists.md'
+    - 5. Creating an experiment: '05_Creating_an_experiment.md'
+    - 6. Custom questions: '06_Custom_questions.md'
+    - 7. Customizing the look of an experiment: '07_Custom_theme.md'
+    - 8. Exporting result data: '08_Exporting_result_data.md'
+    - 9. Actions overview: '09_Actions_overview.md'
+    - 10. Forms and question widgets: '10_Forms_and_question_widgets.md'
+    - 11. Playback and player widgets: '11_Playback_and_player_widgets.md'
+    - 12. Create a custom ruleset: '12_Create_custom_ruleset.md'
+    - 13. Running an experiment: '13_Running_an_experiment.md'
+  - Preview frontend components:
+      - 'Storybook': 'https://amsterdam-music-lab.github.io/MUSCLE/storybook'
+  - Ruleset documentation:
+    - Data models:
+      - Experiment: 'user/experiment_models.md'
+      - Image: 'user/image_models.md'
+      - Participant: 'user/participant_models.md'
+      - Question: 'user/question_models.md'
+      - Result: 'user/result_models.md'
+      - Section: 'user/section_models.md'
+      - Session: 'user/session_models.md'
+      - Theme: 'user/theme_models.md'
+    - Rules, actions & utils:
+      - Experiment rules: 'user/experiment_rules.md'
+      - Participant utils: 'user/participant_utils.md'
+      - Question utils: 'user/question_utils.md'
+      - Experiment actions: 'user/experiment_actions.md'
+  - Developer documentation:
+    - 1. Running commands in the docker containers: 'D1_Running_commands_in_the_docker_containers.md'
+    - 2. Compile and watch scss files: 'D2_Compile_and_watch_scss_files.md'
+    - 3. Managing the database: 'D3_Managing_the_database.md'
+    - 4. Debugging: 'D4_Debugging.md'
+    - 5. Installing python packages: 'D5_Installing_python_packages.md'
+    - 6. Management commands: 'D6_Management_commands.md'
+    - 7. Running tests: 'D7_Running_tests.md'
+    - 8. Storybook: 'D8_Storybook.md'
+    - 9. Troubleshooting: 'D9_Troubleshooting.md'
+  - Technical documentation:
+    - Experiment app:
+      - Experiment serializers: 'technical/experiment_serializers.md'
+      - Experiment utils: 'user/experiment_utils.md'
+      - Experiment views: 'technical/experiment_views.md'
+    - Image app:
+      - Image serializers: 'technical/image_serializers.md'
+      - Image validators: 'technical/image_validators.md'
+    - Participant app:
+      - Participant views: 'technical/participant_views.md'
+    - Question app:
+      - Question utils: 'user/question_utils.md'
+    - Result app:
+      - Result score: 'technical/result_score.md'
+      - Result utils: 'technical/result_utils.md'
+      - Result views: 'technical/result_views.md'
+    - Section app:
+      - Section views: 'technical/section_views.md'
+      - Section utils: 'technical/section_utils.md'
+      - Section validators: 'technical/section_validators.md'
+      - Section views: 'technical/section_views.md'
+    - Session app:
+      - Session views: 'technical/session_views.md'
+    - Theme app:
+      - Theme views: 'technical/theme_views.md'
+    - About this document: 'this_doc.md'

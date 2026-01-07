@@ -30,14 +30,10 @@ class SectionAdmin(admin.ModelAdmin):
     list_filter = [("playlist", admin.RelatedOnlyFieldListFilter)]
     search_fields = ["song__artist", "song__name", "playlist__name"]
     readonly_fields = ["play_count"]
+    autocomplete_fields = ["song"]
 
     # Prevent large inner join
     list_select_related = ()
-
-
-admin.site.register(Section, SectionAdmin)
-
-# @admin.register(Playlist)
 
 
 class SongAdmin(admin.ModelAdmin):
@@ -48,8 +44,9 @@ class SongAdmin(admin.ModelAdmin):
     # Prevent large inner join
     list_select_related = ()
 
-
-admin.site.register(Song, SongAdmin)
+    def has_module_permission(self, request):
+        '''Prevents the admin from being shown in the sidebar.'''
+        return False
 
 
 class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
@@ -226,3 +223,5 @@ class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
 
 
 admin.site.register(Playlist, PlaylistAdmin)
+admin.site.register(Section, SectionAdmin)
+admin.site.register(Song, SongAdmin)

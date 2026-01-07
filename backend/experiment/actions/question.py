@@ -1,10 +1,22 @@
 """ Types of questions to be presented to participants """
-from typing import Optional
+from typing import Any, Optional
 
 from experiment.actions.base_action import BaseAction
 from theme.styles import ColorScheme
 
 class QuestionAction(BaseAction):
+    """
+    A base object for question actions. Do not use direcly, use subtypes instead.
+
+    Args:
+        key: a unique key with which the question is logged to the database
+        result_id: the identifier of the `Result` object associated with this question
+        text: the text shown to the user
+        explainer: optionally, an instruction for the user of how to use the shown widget
+        style: list of style classes for display in the frontend
+        scoring_rule: the scoring rule with which to score the user's response
+        view: the view (widget) shown to the user, set in the subclasses
+    """
 
     def __init__(
         self,
@@ -28,14 +40,16 @@ class QuestionAction(BaseAction):
 class ChoiceQuestionAction(QuestionAction):
     """An action class with choices
 
-    Do not use this class directly, use the subclasses to select specific views
+    Args:
+        choices (dict): a dictionary of answer options
+        min_values: the minimal number of options to be selected by user
     """
 
     def __init__(
         self,
         choices: dict,
         min_values: Optional[int] = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         super().__init__(**kwargs)
         self.choices = choices
@@ -43,13 +57,20 @@ class ChoiceQuestionAction(QuestionAction):
 
 
 class OpenQuestionAction(QuestionAction):
+    """A question class showing a text / number or range field
+
+    Args:
+        min_value: minimum value (for number / range questions)
+        max_value: maximum value (for number / range questions)
+        max_length: maximum number of characters (for text questions)
+    """
 
     def __init__(
         self,
         min_value: Optional[int] = None,
         max_value: Optional[int] = None,
         max_length: Optional[int] = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         super().__init__(**kwargs)
         self.min_value = min_value
@@ -59,6 +80,10 @@ class OpenQuestionAction(QuestionAction):
 
 class AutoCompleteQuestion(ChoiceQuestionAction):
     """A question with an autocomplete input.
+
+    Args:
+        choices (dict): dictionary of answer options
+        **kwargs: additional Question arguments
 
     Example:
         ```python
@@ -74,17 +99,17 @@ class AutoCompleteQuestion(ChoiceQuestionAction):
         ```
     """
 
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs: Any) -> None:
         super().__init__(view='AUTOCOMPLETE', **kwargs)
 
 
 class ButtonArrayQuestion(ChoiceQuestionAction):
     """A question showing buttons for each choice.
-    Do not use with more than 5 choices.
+    Not practical to use with more than 5 choices.
 
     Args:
-        choices (Optional[Dict[str, str]]): Custom yes/no labels
-        **kwargs: Additional Question arguments
+        choices (dict): dictionary of answer options
+        **kwargs: additional Question arguments
 
     Example:
         ```python
@@ -99,7 +124,7 @@ class ButtonArrayQuestion(ChoiceQuestionAction):
         ```
     """
 
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs: Any) -> None:
         super().__init__(view="BUTTON_ARRAY", **kwargs)
 
 
@@ -107,8 +132,8 @@ class CheckBoxQuestion(ChoiceQuestionAction):
     """A question with (multiple) choice options represented as check boxes
 
     Args:
-        choices (Dict[str, str]): Available options
-        min_values (int): Minimum number of selections required
+        choices (dict): dictionary of answer options
+        min_values: Minimum number of selections required
         **kwargs: Additional Question arguments
 
     Example:
@@ -129,7 +154,7 @@ class CheckBoxQuestion(ChoiceQuestionAction):
         - To have multiple choices (participant can select more than one answer), set `view` to 'CHECKBOXES'
     """
 
-    def __init__(self, min_values: int = 1, **kwargs) -> None:
+    def __init__(self, min_values: int = 1, **kwargs: Any) -> None:
         if min_values < 1:
             raise ValueError("min_values should be at least 1")
         super().__init__(view="CHECKBOXES", min_values=min_values, **kwargs)
@@ -142,7 +167,7 @@ class DropdownQuestion(ChoiceQuestionAction):
     """A question with a dropdown menu.
 
     Args:
-        choices (Dict[str, str]): Available options
+        choices (dict): dictionary of answer options
         **kwargs: Additional Question arguments
 
     Example:
@@ -159,12 +184,15 @@ class DropdownQuestion(ChoiceQuestionAction):
         ```
     """
 
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs: Any) -> None:
         super().__init__(view="DROPDOWN", **kwargs)
 
 
 class IconRangeQuestion(ChoiceQuestionAction):
     """A question showing a range slider with icons.
+
+    Args:
+        choices (dict): dictionary of answer options, the values identify icons
 
     Example:
         ```python
@@ -180,7 +208,7 @@ class IconRangeQuestion(ChoiceQuestionAction):
         ```
     """
 
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs: Any) -> None:
         super().__init__(view="ICON_RANGE", **kwargs)
         self.style = self._apply_style([ColorScheme.GRADIENT_7])
 
@@ -189,8 +217,8 @@ class NumberQuestion(OpenQuestionAction):
     """A question showing numeric input.
 
     Args:
-        min_value (int): Minimum allowed value
-        max_value (int): Maximum allowed value
+        min_value: Minimum allowed value
+        max_value: Maximum allowed value
         **kwargs: Additional Question arguments
     """
 
@@ -198,7 +226,7 @@ class NumberQuestion(OpenQuestionAction):
         self,
         min_value: int = 0,
         max_value: int = 120,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         super().__init__(
             min_value=min_value, max_value=max_value, view="NUMBER", **kwargs
@@ -209,8 +237,8 @@ class RadiosQuestion(ChoiceQuestionAction):
     """A question with radio buttons.
 
     Args:
-        choices (Dict[str, str]): Available options
-        **kwargs: Additional Question arguments
+        choices (dict): dictionary of answer options
+        **kwargs: additional Question arguments
 
     Example:
         ```python
@@ -226,7 +254,7 @@ class RadiosQuestion(ChoiceQuestionAction):
         ```
     """
 
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs: Any) -> None:
         super().__init__(view = "RADIOS", **kwargs)
 
 
@@ -234,8 +262,8 @@ class RangeQuestion(OpenQuestionAction):
     """A question with a range slider.
 
     Args:
-        min_value (int): Minimum value
-        max_value (int): Maximum value
+        min_value: Minimum value
+        max_value: Maximum value
         **kwargs: Additional Question arguments
 
     Example:
@@ -249,7 +277,7 @@ class RangeQuestion(OpenQuestionAction):
         ```
     """
 
-    def __init__(self, min_value: int = 0, max_value: int = 0, **kwargs) -> None:
+    def __init__(self, min_value: int = 0, max_value: int = 0, **kwargs: Any) -> None:
         super().__init__(
             min_value=min_value, max_value=max_value, view='RANGE', **kwargs
         )
@@ -259,7 +287,8 @@ class TextRangeQuestion(ChoiceQuestionAction):
     """A question with a Likert scale.
 
     Args:
-        **kwargs: Additional Question arguments
+        choices (dict): dictionary of answer options
+        **kwargs: additional Question arguments
 
     Example:
         ```python
@@ -278,7 +307,7 @@ class TextRangeQuestion(ChoiceQuestionAction):
         ```
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs: Any):
         super().__init__(view='TEXT_RANGE', **kwargs)
 
 
@@ -286,11 +315,9 @@ class TextQuestion(OpenQuestionAction):
     """A question that accepts text input.
 
     Args:
-        max_length (int): Maximum character length
+        max_length: Maximum character length
         **kwargs: Additional Question arguments
     """
 
-    def __init__(
-        self, max_length: int = 64, **kwargs
-    ) -> None:
+    def __init__(self, max_length: int = 64, **kwargs: Any) -> None:
         super().__init__(max_length=max_length, view="STRING", **kwargs)

@@ -177,7 +177,7 @@ class Participant(models.Model):
         """Sums scores of all profile results with questions in a question list
 
         Args:
-            quesion_list: Question.QuestionList
+            question_list: a QuestionList object for which to return the summed score
 
         Returns:
             Total score of all profile results from a Participant

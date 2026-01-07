@@ -24,11 +24,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build ER/MKDOCS site
+      - name: Build mkdocs site
         run: |
           mkdir -p docs-pages
-          sudo docker compose --env-file .env-github-actions run server bash -c "mkdocs build -d ./docs-pages-build"
-          cp -r ./backend/docs-pages-build/* ./docs-pages
+          sudo docker compose --env-file .env-github-actions run docs bash -c "mkdocs build -d ./docs-pages-build"
+          cp -r ./mkdocs/docs-pages-build/* ./docs-pages
 
       - name: Install dependencies
         run: yarn

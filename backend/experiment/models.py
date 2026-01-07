@@ -308,7 +308,6 @@ class SocialMediaConfig(models.Model):
 
         Args:
             score: Score
-            experiment_name: Experiment name
 
         Returns:
             Social media shared text

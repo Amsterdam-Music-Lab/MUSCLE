@@ -1,3 +1,0 @@
-## image.models
-
-::: image.models

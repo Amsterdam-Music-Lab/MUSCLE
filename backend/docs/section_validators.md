@@ -1,3 +1,0 @@
-## section.validators
-
-::: section.validators

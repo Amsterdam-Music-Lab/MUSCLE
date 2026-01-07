@@ -290,6 +290,9 @@ class Song(models.Model):
     class Meta:
         unique_together = ("artist", "name")
 
+    def __str__(self):
+        return f"{self.artist} - {self.name}"
+
 
 def _audio_upload_path(instance, filename: str) -> str:
     """Generate path to save audio based on playlist.name"""

@@ -1,3 +1,0 @@
-## theme.admin
-
-::: theme.admin

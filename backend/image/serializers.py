@@ -6,6 +6,11 @@ from .models import Image
 
 
 def serialize_image(image: Image) -> dict:
+    """serialize an Image object
+
+    Args:
+        image: the image to serialize
+    """
     return {
         'file': f'{settings.BASE_URL.strip("/")}/{settings.MEDIA_URL.strip("/")}/{image.file}',
         'href': image.href,

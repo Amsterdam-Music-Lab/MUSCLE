@@ -23,6 +23,17 @@ services:
     image: extrawurst/ip2country:latest
     ports:
       - 8854:5000
+  docs:
+    build:
+      context: ./docs
+    profiles:
+      - docs
+    volumes:
+      - ./backend:/mkdocs/backend
+      - ./docs/docs:/mkdocs/docs
+    ports:
+      - 8080:8080
+    command: bash -c "uv run mkdocs serve --livereload"
   server:
     build:
       context: ./backend

@@ -25,32 +25,26 @@ class PlaybackSection(TypedDict):
     id: int
     url: str
 
-    # TODO: Remove group from PlaybackSection and from the Playback class itself and make sure everything still works (see also https://github.com/Amsterdam-Music-Lab/MUSCLE/pull/1448#discussion_r1903978068)
-    group: str
-
-
 class Playback(BaseAction):
     """Base class for different kinds of audio players.
 
     Args:
-        sections (List[Section]): List of audio sections to play.
-        preload_message (str): Text to display during preload. Defaults to "".
-        instruction (str): Text to display during presentation. Defaults to "".
-        play_from (float): Start position in seconds. Defaults to 0.
-        show_animation (bool): Whether to show playback animation. Defaults to False.
-        mute (bool): Whether to mute audio. Defaults to False.
-        timeout_after_playback (Optional[float]): Seconds to wait after playback before proceeding. Defaults to None.
-        stop_audio_after (Optional[float]): Seconds after which to stop playback. Defaults to None.
-        resume_play (bool): Whether to resume from previous position. Defaults to False.
-        style (Optional[list[str]]): CSS class name(s) set in the frontend for styling
-        tutorial (Optional[Dict[str, Any]]): Tutorial configuration dictionary. Defaults to None.
+        sections: List of audio sections to play.
+        preload_message: Text to display during preload. Defaults to "".
+        instruction: Text to display during presentation. Defaults to "".
+        play_from: Start position in seconds. Defaults to 0.
+        show_animation: Whether to show playback animation. Defaults to False.
+        mute: Whether to mute audio. Defaults to False.
+        timeout_after_playback: Seconds to wait after playback before proceeding. Defaults to None.
+        stop_audio_after: Seconds after which to stop playback. Defaults to None.
+        resume_play: Whether to resume from previous position. Defaults to False.
+        style: CSS class name(s) set in the frontend for styling
+        tutorial: Tutorial configuration dictionary. Defaults to None.
     """
-
-    sections: List[PlaybackSection]
 
     def __init__(
         self,
-        sections: List[Section],
+        sections: List[PlaybackSection],
         preload_message: str = "",
         instruction: str = "",
         play_from: float = 0,
@@ -80,7 +74,7 @@ class Autoplay(Playback):
     """Player that starts playing automatically.
 
     Args:
-        sections List[Section]: List of audio sections to play.
+        sections: List of audio sections to play.
         **kwargs: Additional arguments passed to `Playback`.
 
     Example:
@@ -95,7 +89,7 @@ class Autoplay(Playback):
         If show_animation is True, displays a countdown and moving histogram.
     """
 
-    def __init__(self, sections: List[Section], **kwargs: Any) -> None:
+    def __init__(self, sections: List[PlaybackSection], **kwargs: Any) -> None:
         super().__init__(sections, **kwargs)
         self.view = TYPE_AUTOPLAY
 
@@ -104,7 +98,7 @@ class PlayButton(Playback):
     """Player that shows a button to trigger playback.
 
     Args:
-        sections (List[Section]): List of audio sections to play.
+        sections: List of audio sections to play.
         play_once: Whether button should be disabled after one play. Defaults to False.
         **kwargs: Additional arguments passed to Playback.
 
@@ -117,7 +111,9 @@ class PlayButton(Playback):
         ```
     """
 
-    def __init__(self, sections: List[Section], play_once: bool = False, **kwargs: Any) -> None:
+    def __init__(
+        self, sections: List[PlaybackSection], play_once: bool = False, **kwargs: Any
+    ) -> None:
         super().__init__(sections, **kwargs)
         self.view = TYPE_BUTTON
         self.play_once = play_once
@@ -127,10 +123,10 @@ class Multiplayer(PlayButton):
     """Player with multiple play buttons.
 
     Args:
-        sections (List[Section]): List of audio sections to play.
-        stop_audio_after (float): Seconds after which to stop audio. Defaults to 5.
-        labels (List[str]): Custom labels for players. Defaults to empty list.
-        style (FrontendStyle): Frontend styling options.
+        sections: List of audio sections to play.
+        stop_audio_after: Seconds after which to stop audio. Defaults to 5.
+        labels: Custom labels for players. Defaults to empty list.
+        style: Frontend styling options.
         **kwargs: Additional arguments passed to PlayButton.
 
     Example:
@@ -148,7 +144,7 @@ class Multiplayer(PlayButton):
 
     def __init__(
         self,
-        sections: List[Section],
+        sections: List[PlaybackSection],
         stop_audio_after: float = 5,
         labels: List[str] = [],
         style: Optional[list[str]] = None,
@@ -168,9 +164,9 @@ class ImagePlayer(Multiplayer):
     """Multiplayer that shows an image next to each play button.
 
     Args:
-        sections (List[Section]): List of audio sections to play.
-        images (List[str]): List of image paths/urls to display.
-        image_labels (List[str]): Optional labels for images. Defaults to empty list.
+        sections: List of audio sections to play.
+        images: List of image paths/urls to display.
+        image_labels: Optional labels for images. Defaults to empty list.
         **kwargs: Additional arguments passed to Multiplayer.
 
     Example:
@@ -188,7 +184,7 @@ class ImagePlayer(Multiplayer):
 
     def __init__(
         self,
-        sections: List[Section],
+        sections: List[PlaybackSection],
         images: List[str],
         image_labels: List[str] = [],
         **kwargs: Any,
@@ -211,9 +207,9 @@ class MatchingPairs(Multiplayer):
     """Multiplayer where buttons are represented as cards and where the cards need to be matched based on audio.
 
     Args:
-        sections (List[Section]): List of audio sections to play.
-        score_feedback_display (ScoreFeedbackDisplay): How to display score feedback. Defaults to "large-top" (pick from "small-bottom-right", "large-top", "hidden").
-        tutorial (Optional[Dict[str, Any]]): Tutorial configuration dictionary. Defaults to None.
+        sections: List of audio sections to play.
+        score_feedback_display: How to display score feedback. Defaults to "large-top" (pick from "small-bottom-right", "large-top", "hidden").
+        tutorial: Tutorial configuration dictionary. Defaults to None.
         **kwargs: Additional arguments passed to Multiplayer.
 
     Example:
@@ -240,7 +236,7 @@ class MatchingPairs(Multiplayer):
 
     def __init__(
         self,
-        sections: List[Section],
+        sections: List[PlaybackSection],
         score_feedback_display: ScoreFeedbackDisplay = "large-top",
         tutorial: Optional[Dict[str, Any]] = None,
         **kwargs: Any,
@@ -251,11 +247,11 @@ class MatchingPairs(Multiplayer):
         self.tutorial = tutorial
 
 
-def determine_play_method(section: Section) -> PlayMethods:
+def determine_play_method(section: PlaybackSection) -> PlayMethods:
     """Determine which play method to use based on section properties.
 
     Args:
-        section (Section): Audio section object.
+        section: Audio section object.
 
     Returns:
         str: Play method constant (PLAY_NOAUDIO, PLAY_EXTERNAL, PLAY_HTML, or PLAY_BUFFER).
