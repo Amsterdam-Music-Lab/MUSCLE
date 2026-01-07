@@ -158,8 +158,8 @@ msgid "Explanation"
 msgstr "Explanation"
 
 #: src/components/plugins/plugins/OverallRankingPlugin.tsx:40
-msgid "Game complete! Your final score is {totalScore} points. That's better than {percentile}% of players."
-msgstr "Game complete! Your final score is {totalScore} points. That's better than {percentile}% of players."
+msgid "Game complete! Your final score is {totalScore}. That's better than {percentile}% of players."
+msgstr "Game complete! Your final score is {totalScore}. That's better than {percentile}% of players."
 
 #: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:31
 msgid "Go back to the homepage"
