@@ -34,7 +34,7 @@ jobs:
         working-directory: ./frontend
 
       - name: Build Storybook
-        run: yarn storybook:build --output-dir /docs-pages/storybook
+        run: sudo yarn storybook:build --output-dir /docs-pages/storybook
         working-directory: ./frontend
 
       - name: Setup Github Pages
