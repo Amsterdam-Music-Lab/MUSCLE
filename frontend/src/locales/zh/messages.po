@@ -146,7 +146,7 @@ msgid "Explanation"
 msgstr "说明"
 
 #: src/components/plugins/plugins/OverallRankingPlugin.tsx:40
-msgid "Game complete! Your final score is {totalScore}, that's better than {percentile}% of players!"
+msgid "Game complete! Your final score is {totalScore}. That's better than {percentile}% of players."
 msgstr "本轮游戏结束！您的总得分为 {totalScore}，超过了 {percentile}% 的玩家！"
 
 #: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:31
@@ -238,7 +238,6 @@ msgid "Platinum"
 msgstr "白金"
 
 #: src/components/views/FinalView/FinalView.tsx:198
-#: src/config/frontend.ts:155
 msgid "Play another game!"
 msgstr "再玩一局！"
 
@@ -286,8 +285,8 @@ msgstr "跳过"
 msgid "Start the game!"
 msgstr "开始游戏！"
 
-#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
 #: src/components/views/SurveyView/SurveyView.tsx:117
+#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
 msgid "Submit"
 msgstr "提交"
 
@@ -299,10 +298,6 @@ msgstr "提交更多反馈"
 msgid "Test Your Musical Memory!"
 msgstr "测试您的音乐记忆力！"
 
-#: src/config/frontend.ts:127
-msgid "The first load may take a while due to the amount of content, but later runs will be smoother."
-msgstr ""
-
 #: src/config/frontend.ts:126
 #~ msgid "The first load may take a while due to the amount of content, but later runs will be smoother. The difficulty of game levels is randomized. After collecting all the stars, you will receive a total score and see how you rank among players worldwide."
 #~ msgstr "第一次进入游戏时加载内容较多，可能需要稍作等待。加载完成后就会顺畅起来！游戏关卡难度随机，收集全部星星通关后即可查看您的总分，以及您在全部玩家中的表现水平。"
@@ -311,9 +306,9 @@ msgstr ""
 msgid "This is your lucky day!"
 msgstr "今天您很幸运哦！"
 
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
-#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
 #: src/components/plugins/plugins/ScoresPlugin.tsx:43
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
 msgid "Total score"
 msgstr "总分"
 
