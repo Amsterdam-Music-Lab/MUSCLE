@@ -37,7 +37,7 @@ function OverallRankingPlugin({ percentile }: OverallRankingPluginArgs) {
 
 function getWrapperProps({ percentile, totalScore }: OverallRankingPluginArgs) {
   percentile = percentile !== undefined ? Math.round(percentile) : "";
-  const title = t`Game complete! You earned ${totalScore} points. That's better than ${percentile}% of players.`;
+  const title = t`Game complete! Your final score is ${totalScore}. That's better than ${percentile}% of players.`;
   return { title, variant: "secondary" };
 }
 

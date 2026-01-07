@@ -80,7 +80,10 @@ see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)`;
           wrapperProps: { title: t`Your progress...` },
         },
         qrPluginSpec,
-        { name: "share" },
+        {
+          name: "share",
+          wrapperProps: { title: t`Take a screenshot or share your score!` },
+        },
       ],
     },
   };
@@ -124,7 +127,7 @@ Match melodies, clear the board, and minimize mistakes!
                 title: t`Note:`,
               },
               args: {
-                content: t`The first load may take a while due to the amount of content, but later runs will be smoother.`,
+                content: t`The first load may take a while due to the amount of content, but later runs will be smoother. The difficulty of game levels is randomized. After collecting all the stars, you will receive a total score and see how you rank among players worldwide.`,
               },
             },
 
