@@ -36,8 +36,9 @@ jobs:
 
       - name: Build Storybook
         run: |
+          ls ../docs-pages
           yarn storybook:build --output-dir ../docs-pages/storybook
-          ls ./docs-pages
+          ls ../docs-pages
         working-directory: ./frontend
 
       - name: Setup Github Pages
