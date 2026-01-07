@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/config/frontend.ts:88
+#: src/config/frontend.ts:91
 msgid ""
 "\n"
 "How good are you in memorizing music? \n"
@@ -69,7 +69,7 @@ msgstr "+{turnScore}分"
 #~ msgid "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
 #~ msgstr "⚠️ 游戏仍在开发中：我们正在进行测试。如果您遇到任何问题或有建议，**请使用即将出现在右下角的反馈按钮**分享您的反馈。"
 
-#: src/config/frontend.ts:171
+#: src/config/frontend.ts:174
 msgid "🎉 Amazing! You've finished the game!"
 msgstr "🎉 太棒了！您完成了此局游戏！"
 
@@ -101,7 +101,7 @@ msgstr "返回"
 msgid "Bronze"
 msgstr "青铜"
 
-#: src/config/frontend.ts:168
+#: src/config/frontend.ts:171
 msgid "Can you collect them all?"
 msgstr "您能集齐所有星星吗？"
 
@@ -146,7 +146,7 @@ msgid "Explanation"
 msgstr "说明"
 
 #: src/components/plugins/plugins/OverallRankingPlugin.tsx:40
-msgid "Game complete! Your final score is {totalScore}, that's better than {percentile}% of players!"
+msgid "Game complete! Your final score is {totalScore}. That's better than {percentile}% of players."
 msgstr "本轮游戏结束！您的总得分为 {totalScore}，超过了 {percentile}% 的玩家！"
 
 #: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:31
@@ -213,7 +213,7 @@ msgstr "可惜它们不匹配..."
 msgid "Not quite, try again!"
 msgstr "差一点，再试一次！"
 
-#: src/config/frontend.ts:124
+#: src/config/frontend.ts:127
 msgid "Note:"
 msgstr "温馨提示："
 
@@ -238,15 +238,14 @@ msgid "Platinum"
 msgstr "白金"
 
 #: src/components/views/FinalView/FinalView.tsx:198
-#: src/config/frontend.ts:155
 msgid "Play another game!"
 msgstr "再玩一局！"
 
-#: src/config/frontend.ts:164
+#: src/config/frontend.ts:167
 msgid "Play on and collect 'm all..."
 msgstr "继续游戏，收集全部..."
 
-#: src/config/frontend.ts:172
+#: src/config/frontend.ts:175
 msgid "Play on? Let's start another round of games..."
 msgstr "继续游戏？让我们开始新的一轮..."
 
@@ -282,12 +281,12 @@ msgstr "白银"
 msgid "Skip"
 msgstr "跳过"
 
-#: src/config/frontend.ts:139
+#: src/config/frontend.ts:142
 msgid "Start the game!"
 msgstr "开始游戏！"
 
-#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
 #: src/components/views/SurveyView/SurveyView.tsx:117
+#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
 msgid "Submit"
 msgstr "提交"
 
@@ -295,25 +294,25 @@ msgstr "提交"
 msgid "Submit more feedback"
 msgstr "提交更多反馈"
 
-#: src/config/frontend.ts:113
+#: src/config/frontend.ts:85
+msgid "Take a screenshot or share your score!"
+msgstr "截个图或分享你的分数吧！"
+
+#: src/config/frontend.ts:116
 msgid "Test Your Musical Memory!"
 msgstr "测试您的音乐记忆力！"
 
-#: src/config/frontend.ts:127
-msgid "The first load may take a while due to the amount of content, but later runs will be smoother."
-msgstr ""
-
-#: src/config/frontend.ts:126
-#~ msgid "The first load may take a while due to the amount of content, but later runs will be smoother. The difficulty of game levels is randomized. After collecting all the stars, you will receive a total score and see how you rank among players worldwide."
-#~ msgstr "第一次进入游戏时加载内容较多，可能需要稍作等待。加载完成后就会顺畅起来！游戏关卡难度随机，收集全部星星通关后即可查看您的总分，以及您在全部玩家中的表现水平。"
+#: src/config/frontend.ts:130
+msgid "The first load may take a while due to the amount of content, but later runs will be smoother. The difficulty of game levels is randomized. After collecting all the stars, you will receive a total score and see how you rank among players worldwide."
+msgstr "第一次进入游戏时加载内容较多，可能需要稍作等待。加载完成后就会顺畅起来！游戏关卡难度随机，收集全部星星通关后即可查看您的总分，以及您在全部玩家中的表现水平。"
 
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:79
 msgid "This is your lucky day!"
 msgstr "今天您很幸运哦！"
 
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
-#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
 #: src/components/plugins/plugins/ScoresPlugin.tsx:43
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
 msgid "Total score"
 msgstr "总分"
 
@@ -331,11 +330,11 @@ msgstr "很遗憾，如果您不愿意提供同意，就无法参与此实验。
 msgid "Well done!"
 msgstr "做得好！"
 
-#: src/config/frontend.ts:167
+#: src/config/frontend.ts:170
 msgid "Woohoo! You've earned your first star! 💫"
 msgstr "太棒了！您获得了第一颗星星！💫"
 
-#: src/config/frontend.ts:163
+#: src/config/frontend.ts:166
 msgid "Yay, you've earned a star! 💫"
 msgstr "耶，您赢得了一颗星星！💫"
 
