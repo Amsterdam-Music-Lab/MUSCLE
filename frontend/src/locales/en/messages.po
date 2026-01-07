@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/config/frontend.ts:87
+#: src/config/frontend.ts:88
 msgid ""
 "\n"
 "How good are you in memorizing music? \n"
@@ -73,7 +73,7 @@ msgstr "+{turnScore} points"
 #~ msgid "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
 #~ msgstr "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
 
-#: src/config/frontend.ts:170
+#: src/config/frontend.ts:171
 msgid "🎉 Amazing! You've finished the game!"
 msgstr "🎉 Amazing! You've finished the game!"
 
@@ -105,7 +105,7 @@ msgstr "Back"
 msgid "Bronze"
 msgstr "Bronze"
 
-#: src/config/frontend.ts:167
+#: src/config/frontend.ts:168
 msgid "Can you collect them all?"
 msgstr "Can you collect them all?"
 
@@ -156,6 +156,10 @@ msgstr "Experiment \"{expSlug}\" could not be found."
 #: src/components/modules/TutorialMessage/TutorialMessage.tsx:46
 msgid "Explanation"
 msgstr "Explanation"
+
+#: src/components/plugins/plugins/OverallRankingPlugin.tsx:40
+msgid "Game complete! You earned {totalScore} points. That's better than {percentile}% of players."
+msgstr "Game complete! You earned {totalScore} points. That's better than {percentile}% of players."
 
 #: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:31
 msgid "Go back to the homepage"
@@ -221,7 +225,7 @@ msgstr "Nope, that's no match..."
 msgid "Not quite, try again!"
 msgstr "Not quite, try again!"
 
-#: src/config/frontend.ts:123
+#: src/config/frontend.ts:124
 msgid "Note:"
 msgstr "Note:"
 
@@ -245,15 +249,16 @@ msgstr "Plastic"
 msgid "Platinum"
 msgstr "Platinum"
 
-#: src/components/views/FinalView/FinalView.tsx:186
+#: src/components/views/FinalView/FinalView.tsx:198
+#: src/config/frontend.ts:155
 msgid "Play another game!"
 msgstr "Play another game!"
 
-#: src/config/frontend.ts:163
+#: src/config/frontend.ts:164
 msgid "Play on and collect 'm all..."
 msgstr "Play on and collect 'm all..."
 
-#: src/config/frontend.ts:171
+#: src/config/frontend.ts:172
 msgid "Play on? Let's start another round of games..."
 msgstr "Play on? Let's start another round of games..."
 
@@ -289,12 +294,12 @@ msgstr "Silver"
 msgid "Skip"
 msgstr "Skip"
 
-#: src/config/frontend.ts:138
+#: src/config/frontend.ts:139
 msgid "Start the game!"
 msgstr "Start the game!"
 
-#: src/components/views/SurveyView/SurveyView.tsx:117
 #: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
+#: src/components/views/SurveyView/SurveyView.tsx:117
 msgid "Submit"
 msgstr "Submit"
 
@@ -302,11 +307,11 @@ msgstr "Submit"
 msgid "Submit more feedback"
 msgstr "Submit more feedback"
 
-#: src/config/frontend.ts:112
+#: src/config/frontend.ts:113
 msgid "Test Your Musical Memory!"
 msgstr "Test Your Musical Memory!"
 
-#: src/config/frontend.ts:126
+#: src/config/frontend.ts:127
 msgid "The first load may take a while due to the amount of content, but later runs will be smoother."
 msgstr "The first load may take a while due to the amount of content, but later runs will be smoother."
 
@@ -314,9 +319,9 @@ msgstr "The first load may take a while due to the amount of content, but later 
 msgid "This is your lucky day!"
 msgstr "This is your lucky day!"
 
-#: src/components/plugins/plugins/ScoresPlugin.tsx:43
-#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
+#: src/components/plugins/plugins/ScoresPlugin.tsx:43
 msgid "Total score"
 msgstr "Total score"
 
@@ -348,11 +353,11 @@ msgstr ""
 msgid "Well done!"
 msgstr "Well done!"
 
-#: src/config/frontend.ts:166
+#: src/config/frontend.ts:167
 msgid "Woohoo! You've earned your first star! 💫"
 msgstr "Woohoo! You've earned your first star! 💫"
 
-#: src/config/frontend.ts:162
+#: src/config/frontend.ts:163
 msgid "Yay, you've earned a star! 💫"
 msgstr "Yay, you've earned a star! 💫"
 
@@ -368,6 +373,6 @@ msgstr "Your feedback"
 msgid "Your feedback was submitted."
 msgstr "Your feedback was submitted."
 
-#: src/config/frontend.ts:79
+#: src/config/frontend.ts:80
 msgid "Your progress..."
 msgstr "Your progress..."

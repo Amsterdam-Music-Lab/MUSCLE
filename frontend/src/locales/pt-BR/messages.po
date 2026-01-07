@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/config/frontend.ts:87
+#: src/config/frontend.ts:88
 msgid ""
 "\n"
 "How good are you in memorizing music? \n"
@@ -76,7 +76,7 @@ msgstr "+{turnScore} points"
 #~ "\n"
 #~ "⚠️ Observe também que este aplicativo usa traduções automáticas para o português. Informe-nos caso encontre problemas."
 
-#: src/config/frontend.ts:170
+#: src/config/frontend.ts:171
 msgid "🎉 Amazing! You've finished the game!"
 msgstr "🎉 Incrível! Você terminou o jogo!"
 
@@ -108,7 +108,7 @@ msgstr "Voltar"
 msgid "Bronze"
 msgstr "Bronze"
 
-#: src/config/frontend.ts:167
+#: src/config/frontend.ts:168
 msgid "Can you collect them all?"
 msgstr "Você consegue coletar todos?"
 
@@ -151,6 +151,10 @@ msgstr "Experimento \"{expSlug}\" não pôde ser encontrado."
 #: src/components/modules/TutorialMessage/TutorialMessage.tsx:46
 msgid "Explanation"
 msgstr "Explicação"
+
+#: src/components/plugins/plugins/OverallRankingPlugin.tsx:40
+msgid "Game complete! You earned {totalScore} points. That's better than {percentile}% of players."
+msgstr ""
 
 #: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:31
 msgid "Go back to the homepage"
@@ -216,7 +220,7 @@ msgstr "Não, isso não é uma correspondência..."
 msgid "Not quite, try again!"
 msgstr "Quase lá, tente novamente!"
 
-#: src/config/frontend.ts:123
+#: src/config/frontend.ts:124
 msgid "Note:"
 msgstr ""
 
@@ -240,15 +244,16 @@ msgstr "Plástico"
 msgid "Platinum"
 msgstr "Platina"
 
-#: src/components/views/FinalView/FinalView.tsx:186
+#: src/components/views/FinalView/FinalView.tsx:198
+#: src/config/frontend.ts:155
 msgid "Play another game!"
 msgstr "Jogar outro jogo!"
 
-#: src/config/frontend.ts:163
+#: src/config/frontend.ts:164
 msgid "Play on and collect 'm all..."
 msgstr "Continue jogando e colete todos..."
 
-#: src/config/frontend.ts:171
+#: src/config/frontend.ts:172
 msgid "Play on? Let's start another round of games..."
 msgstr "Continuar jogando? Vamos começar outra rodada de jogos..."
 
@@ -284,12 +289,12 @@ msgstr "Prata"
 msgid "Skip"
 msgstr "Pular"
 
-#: src/config/frontend.ts:138
+#: src/config/frontend.ts:139
 msgid "Start the game!"
 msgstr "Começar o jogo!"
 
-#: src/components/views/SurveyView/SurveyView.tsx:117
 #: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
+#: src/components/views/SurveyView/SurveyView.tsx:117
 msgid "Submit"
 msgstr "Enviar"
 
@@ -297,11 +302,11 @@ msgstr "Enviar"
 msgid "Submit more feedback"
 msgstr "Enviar mais feedback"
 
-#: src/config/frontend.ts:112
+#: src/config/frontend.ts:113
 msgid "Test Your Musical Memory!"
 msgstr "Teste sua memória musical!"
 
-#: src/config/frontend.ts:126
+#: src/config/frontend.ts:127
 msgid "The first load may take a while due to the amount of content, but later runs will be smoother."
 msgstr ""
 
@@ -309,9 +314,9 @@ msgstr ""
 msgid "This is your lucky day!"
 msgstr "Este é o seu dia de sorte!"
 
-#: src/components/plugins/plugins/ScoresPlugin.tsx:43
-#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
+#: src/components/plugins/plugins/ScoresPlugin.tsx:43
 msgid "Total score"
 msgstr "Pontuação total"
 
@@ -331,11 +336,11 @@ msgstr ""
 msgid "Well done!"
 msgstr "Muito bem!"
 
-#: src/config/frontend.ts:166
+#: src/config/frontend.ts:167
 msgid "Woohoo! You've earned your first star! 💫"
 msgstr "Woohoo! Você ganhou sua primeira estrela! 💫"
 
-#: src/config/frontend.ts:162
+#: src/config/frontend.ts:163
 msgid "Yay, you've earned a star! 💫"
 msgstr "Yay, você ganhou uma estrela! 💫"
 
@@ -351,6 +356,6 @@ msgstr "Seu feedback"
 msgid "Your feedback was submitted."
 msgstr "Seu feedback foi enviado."
 
-#: src/config/frontend.ts:79
+#: src/config/frontend.ts:80
 msgid "Your progress..."
 msgstr "Seu progresso..."
