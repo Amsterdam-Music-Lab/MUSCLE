@@ -28,17 +28,16 @@ jobs:
         run: |
           mkdir -p docs-pages
           sudo docker compose --env-file .env-github-actions run  -v docs-pages:/mkdocs/docs-pages-build docs bash -c "uv run mkdocs build -d ./docs-pages-build"
-          ls ./docs-pages
+          
+      - name: Show content docs-pages
+        run: ls ./docs-pages
 
       - name: Install dependencies
         run: yarn
         working-directory: ./frontend
 
       - name: Build Storybook
-        run: |
-          ls ../docs-pages
-          yarn storybook:build --output-dir ../docs-pages/storybook
-          ls ../docs-pages
+        run: yarn storybook:build --output-dir ../docs-pages/storybook
         working-directory: ./frontend
 
       - name: Setup Github Pages
