@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/config/frontend.ts:88
+#: src/config/frontend.ts:91
 msgid ""
 "\n"
 "How good are you in memorizing music? \n"
@@ -76,7 +76,7 @@ msgstr "+{turnScore} points"
 #~ "\n"
 #~ "⚠️ Observe também que este aplicativo usa traduções automáticas para o português. Informe-nos caso encontre problemas."
 
-#: src/config/frontend.ts:171
+#: src/config/frontend.ts:174
 msgid "🎉 Amazing! You've finished the game!"
 msgstr "🎉 Incrível! Você terminou o jogo!"
 
@@ -108,7 +108,7 @@ msgstr "Voltar"
 msgid "Bronze"
 msgstr "Bronze"
 
-#: src/config/frontend.ts:168
+#: src/config/frontend.ts:171
 msgid "Can you collect them all?"
 msgstr "Você consegue coletar todos?"
 
@@ -153,12 +153,12 @@ msgid "Explanation"
 msgstr "Explicação"
 
 #: src/components/plugins/plugins/OverallRankingPlugin.tsx:40
-msgid "Game complete! You earned {totalScore} points. That's better than {percentile}% of players."
-msgstr ""
+#~ msgid "Game complete! You earned {totalScore} points. That's better than {percentile}% of players."
+#~ msgstr ""
 
 #: src/components/plugins/plugins/OverallRankingPlugin.tsx:40
-msgid "Game complete! Your final score is {totalScore} points. That's better than {percentile}% of players."
-msgstr ""
+#~ msgid "Game complete! Your final score is {totalScore} points. That's better than {percentile}% of players."
+#~ msgstr ""
 
 #: src/components/plugins/plugins/OverallRankingPlugin.tsx:40
 msgid "Game complete! Your final score is {totalScore}. That's better than {percentile}% of players."
@@ -228,7 +228,7 @@ msgstr "Não, isso não é uma correspondência..."
 msgid "Not quite, try again!"
 msgstr "Quase lá, tente novamente!"
 
-#: src/config/frontend.ts:124
+#: src/config/frontend.ts:127
 msgid "Note:"
 msgstr ""
 
@@ -256,11 +256,11 @@ msgstr "Platina"
 msgid "Play another game!"
 msgstr "Jogar outro jogo!"
 
-#: src/config/frontend.ts:164
+#: src/config/frontend.ts:167
 msgid "Play on and collect 'm all..."
 msgstr "Continue jogando e colete todos..."
 
-#: src/config/frontend.ts:172
+#: src/config/frontend.ts:175
 msgid "Play on? Let's start another round of games..."
 msgstr "Continuar jogando? Vamos começar outra rodada de jogos..."
 
@@ -296,7 +296,7 @@ msgstr "Prata"
 msgid "Skip"
 msgstr "Pular"
 
-#: src/config/frontend.ts:139
+#: src/config/frontend.ts:142
 msgid "Start the game!"
 msgstr "Começar o jogo!"
 
@@ -309,12 +309,20 @@ msgstr "Enviar"
 msgid "Submit more feedback"
 msgstr "Enviar mais feedback"
 
-#: src/config/frontend.ts:113
+#: src/config/frontend.ts:85
+msgid "Take a screenshot or share your score!"
+msgstr ""
+
+#: src/config/frontend.ts:116
 msgid "Test Your Musical Memory!"
 msgstr "Teste sua memória musical!"
 
 #: src/config/frontend.ts:127
-msgid "The first load may take a while due to the amount of content, but later runs will be smoother."
+#~ msgid "The first load may take a while due to the amount of content, but later runs will be smoother."
+#~ msgstr ""
+
+#: src/config/frontend.ts:130
+msgid "The first load may take a while due to the amount of content, but later runs will be smoother. The difficulty of game levels is randomized. After collecting all the stars, you will receive a total score and see how you rank among players worldwide."
 msgstr ""
 
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:79
@@ -343,11 +351,11 @@ msgstr ""
 msgid "Well done!"
 msgstr "Muito bem!"
 
-#: src/config/frontend.ts:167
+#: src/config/frontend.ts:170
 msgid "Woohoo! You've earned your first star! 💫"
 msgstr "Woohoo! Você ganhou sua primeira estrela! 💫"
 
-#: src/config/frontend.ts:163
+#: src/config/frontend.ts:166
 msgid "Yay, you've earned a star! 💫"
 msgstr "Yay, você ganhou uma estrela! 💫"
 
