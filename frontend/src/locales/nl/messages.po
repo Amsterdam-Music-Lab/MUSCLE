@@ -250,6 +250,7 @@ msgid "Platinum"
 msgstr "Platina"
 
 #: src/components/views/FinalView/FinalView.tsx:198
+#: src/config/frontend.ts:158
 msgid "Play another game!"
 msgstr "Speel nog een spel!"
 
