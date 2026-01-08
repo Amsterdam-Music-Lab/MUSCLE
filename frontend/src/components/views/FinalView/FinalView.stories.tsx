@@ -51,7 +51,9 @@ const timeline = {
 export const Default = {
   args: {
     score: 100,
+    totalScore: 1234,
     percentile: 66,
+    overallPercentile: 12,
     button: {
       // text: "Button",
       link: "https://www.example.com",
@@ -90,7 +92,7 @@ export const Default = {
         body: "Can you collect them all?",
       },
       last: {
-        header: "🎉 Woohoo! You've finished the game!",
+        header: "🎉 Woohoo! You've collected all stars!",
         body: "Play on? Let's start another round of games...",
       },
     },
@@ -116,5 +118,14 @@ export const TimelineCompleted = {
   args: {
     ...Default.args,
     timeline: { ...timeline, currentStep: timeline.symbols.length },
+  },
+};
+
+export const CustomPlugins = {
+  args: {
+    ...Default.args,
+    plugins: [
+      { name: "scoreboard", args: { plugins: [{ name: "overall-ranking" }] } },
+    ],
   },
 };

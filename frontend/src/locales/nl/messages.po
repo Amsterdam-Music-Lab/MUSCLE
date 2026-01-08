@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/config/frontend.ts:87
+#: src/config/frontend.ts:91
 msgid ""
 "\n"
 "How good are you in memorizing music? \n"
@@ -63,7 +63,7 @@ msgstr "+{turnScore} punten"
 
 #: src/config/frontend.ts:123
 #~ msgid "⚠️ Note:"
-#~ msgstr ""
+#~ msgstr "⚠️ NB:"
 
 #: src/config/frontend.ts:126
 #~ msgid "⚠️ Note: The first load may take a while due to the amount of content, but later runs will be smoother."
@@ -73,7 +73,7 @@ msgstr "+{turnScore} punten"
 #~ msgid "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
 #~ msgstr "⚠️ Dit spel is nog in ontwikkeling: we zijn momenteel aan het testen. Loop je tegen problemen aan of heb je suggesties? **Deel je feedback via de feedbackknop** die binnenkort rechtsonder verschijnt."
 
-#: src/config/frontend.ts:170
+#: src/config/frontend.ts:174
 msgid "🎉 Amazing! You've finished the game!"
 msgstr "🎉 Geweldig! Je hebt het spel uitgespeeld!"
 
@@ -105,7 +105,7 @@ msgstr "Terug"
 msgid "Bronze"
 msgstr "Brons"
 
-#: src/config/frontend.ts:167
+#: src/config/frontend.ts:171
 msgid "Can you collect them all?"
 msgstr "Kan je ze allemaal verzamelen?"
 
@@ -148,6 +148,18 @@ msgstr "Experiment \"{expSlug}\" kon niet worden gevonden."
 #: src/components/modules/TutorialMessage/TutorialMessage.tsx:46
 msgid "Explanation"
 msgstr "Toelichting"
+
+#: src/components/plugins/plugins/OverallRankingPlugin.tsx:40
+#~ msgid "Game complete! You earned {totalScore} points. That's better than {percentile}% of players."
+#~ msgstr ""
+
+#: src/components/plugins/plugins/OverallRankingPlugin.tsx:40
+#~ msgid "Game complete! Your final score is {totalScore} points. That's better than {percentile}% of players."
+#~ msgstr ""
+
+#: src/components/plugins/plugins/OverallRankingPlugin.tsx:40
+msgid "Game complete! Your final score is {totalScore}. That's better than {percentile}% of players."
+msgstr ""
 
 #: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:31
 msgid "Go back to the homepage"
@@ -213,7 +225,7 @@ msgstr "Nee, dat is geen match... "
 msgid "Not quite, try again!"
 msgstr "Bijna, probeer het opnieuw!"
 
-#: src/config/frontend.ts:123
+#: src/config/frontend.ts:127
 msgid "Note:"
 msgstr "NB:"
 
@@ -237,16 +249,15 @@ msgstr "Plastic"
 msgid "Platinum"
 msgstr "Platina"
 
-#: src/components/views/FinalView/FinalView.tsx:186
-#: src/config/frontend.ts:154
+#: src/components/views/FinalView/FinalView.tsx:198
 msgid "Play another game!"
 msgstr "Speel nog een spel!"
 
-#: src/config/frontend.ts:163
+#: src/config/frontend.ts:167
 msgid "Play on and collect 'm all..."
 msgstr "Speel verder en verzamel ze allemaal..."
 
-#: src/config/frontend.ts:171
+#: src/config/frontend.ts:175
 msgid "Play on? Let's start another round of games..."
 msgstr "Verder spelen? Begin met een nieuwe ronde..."
 
@@ -266,6 +277,10 @@ msgstr "Vereiste variabele \"{varName}\" voor pagina (view) \"{name}\" bestaat n
 msgid "Return to the <0>home page</0>"
 msgstr "Ga terug naar de <0>homepage</0>"
 
+#: src/components/forms/SelectField/SelectField.tsx:102
+msgid "Select..."
+msgstr "Selecteer..."
+
 #: src/components/plugins/plugins/SharePlugin.tsx:30
 msgid "Share"
 msgstr "Delen"
@@ -278,12 +293,12 @@ msgstr "Zilver"
 msgid "Skip"
 msgstr "Overslaan"
 
-#: src/config/frontend.ts:138
+#: src/config/frontend.ts:142
 msgid "Start the game!"
 msgstr "Begin het spel!"
 
-#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
 #: src/components/views/SurveyView/SurveyView.tsx:117
+#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
 msgid "Submit"
 msgstr "Verzenden"
 
@@ -291,21 +306,29 @@ msgstr "Verzenden"
 msgid "Submit more feedback"
 msgstr "Verstuur meer feedback"
 
-#: src/config/frontend.ts:112
+#: src/config/frontend.ts:85
+msgid "Take a screenshot or share your score!"
+msgstr ""
+
+#: src/config/frontend.ts:116
 msgid "Test Your Musical Memory!"
 msgstr "Test je muzikale geheugen!"
 
-#: src/config/frontend.ts:126
-msgid "The first load may take a while due to the amount of content, but later runs will be smoother."
-msgstr "De eerste keer dat je speelt, kan het laden even duren, maar daarna zal het spel soepeler verlopen."
+#: src/config/frontend.ts:127
+#~ msgid "The first load may take a while due to the amount of content, but later runs will be smoother."
+#~ msgstr "De eerste keer dat je speelt, kan het laden even duren, maar daarna zal het spel soepeler verlopen."
+
+#: src/config/frontend.ts:130
+msgid "The first load may take a while due to the amount of content, but later runs will be smoother. The difficulty of game levels is randomized. After collecting all the stars, you will receive a total score and see how you rank among players worldwide."
+msgstr ""
 
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:79
 msgid "This is your lucky day!"
 msgstr "Dit is je geluksdag!"
 
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
-#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
 #: src/components/plugins/plugins/ScoresPlugin.tsx:43
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
 msgid "Total score"
 msgstr "Totaalscore"
 
@@ -323,11 +346,11 @@ msgstr "Helaas kun je niet deelnemen aan dit experiment als je geen toestemming 
 msgid "Well done!"
 msgstr "Goed gedaan!"
 
-#: src/config/frontend.ts:166
+#: src/config/frontend.ts:170
 msgid "Woohoo! You've earned your first star! 💫"
 msgstr "Wohoo! Je hebt je eerste ster verdiend! 💫"
 
-#: src/config/frontend.ts:162
+#: src/config/frontend.ts:166
 msgid "Yay, you've earned a star! 💫"
 msgstr "Yay, je hebt een ster verdiend! 💫"
 
@@ -343,6 +366,6 @@ msgstr "Deel je feedback"
 msgid "Your feedback was submitted."
 msgstr "Je feedback is verstuurd."
 
-#: src/config/frontend.ts:79
+#: src/config/frontend.ts:80
 msgid "Your progress..."
 msgstr "Je voortgang..."

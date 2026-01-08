@@ -55,6 +55,7 @@ export default function ScoreBoard({
   turnScore,
   totalScore,
   percentile,
+  overallPercentile,
   timeline,
   shareConfig,
   plugins = DEFAULT_PLUGINS,
@@ -67,6 +68,14 @@ export default function ScoreBoard({
     switch (plugin.name) {
       case "ranking":
         updated.args = { ...updated.args, percentile };
+        break;
+
+      case "overall-ranking":
+        updated.args = {
+          ...updated.args,
+          percentile: overallPercentile,
+          totalScore,
+        };
         break;
 
       case "scores":

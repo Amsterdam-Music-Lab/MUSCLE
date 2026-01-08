@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/config/frontend.ts:87
+#: src/config/frontend.ts:91
 msgid ""
 "\n"
 "How good are you in memorizing music? \n"
@@ -42,6 +42,10 @@ msgstr ""
 "and supported by the Dutch Research Council and Faculty of Humanities at the University \n"
 "of Amsterdam. This website processes only anonymized data. For more information, \n"
 "see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)"
+
+#: src/config/frontend.ts:127
+#~ msgid "\"The first load may take a while due to the amount of content, but later runs will be smoother. The difficulty of game levels is randomized. After collecting all the stars, you will receive a total score and see how you rank among players worldwide."
+#~ msgstr "\"The first load may take a while due to the amount of content, but later runs will be smoother. The difficulty of game levels is randomized. After collecting all the stars, you will receive a total score and see how you rank among players worldwide."
 
 #. placeholder {0}: config?.content
 #. placeholder {1}: config?.url
@@ -73,7 +77,7 @@ msgstr "+{turnScore} points"
 #~ msgid "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
 #~ msgstr "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
 
-#: src/config/frontend.ts:170
+#: src/config/frontend.ts:174
 msgid "🎉 Amazing! You've finished the game!"
 msgstr "🎉 Amazing! You've finished the game!"
 
@@ -105,7 +109,7 @@ msgstr "Back"
 msgid "Bronze"
 msgstr "Bronze"
 
-#: src/config/frontend.ts:167
+#: src/config/frontend.ts:171
 msgid "Can you collect them all?"
 msgstr "Can you collect them all?"
 
@@ -156,6 +160,18 @@ msgstr "Experiment \"{expSlug}\" could not be found."
 #: src/components/modules/TutorialMessage/TutorialMessage.tsx:46
 msgid "Explanation"
 msgstr "Explanation"
+
+#: src/components/plugins/plugins/OverallRankingPlugin.tsx:40
+#~ msgid "Game complete! You earned {totalScore} points. That's better than {percentile}% of players."
+#~ msgstr "Game complete! You earned {totalScore} points. That's better than {percentile}% of players."
+
+#: src/components/plugins/plugins/OverallRankingPlugin.tsx:40
+#~ msgid "Game complete! Your final score is {totalScore} points. That's better than {percentile}% of players."
+#~ msgstr "Game complete! Your final score is {totalScore} points. That's better than {percentile}% of players."
+
+#: src/components/plugins/plugins/OverallRankingPlugin.tsx:40
+msgid "Game complete! Your final score is {totalScore}. That's better than {percentile}% of players."
+msgstr "Game complete! Your final score is {totalScore}. That's better than {percentile}% of players."
 
 #: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:31
 msgid "Go back to the homepage"
@@ -221,7 +237,7 @@ msgstr "Nope, that's no match..."
 msgid "Not quite, try again!"
 msgstr "Not quite, try again!"
 
-#: src/config/frontend.ts:123
+#: src/config/frontend.ts:127
 msgid "Note:"
 msgstr "Note:"
 
@@ -245,16 +261,15 @@ msgstr "Plastic"
 msgid "Platinum"
 msgstr "Platinum"
 
-#: src/components/views/FinalView/FinalView.tsx:186
-#: src/config/frontend.ts:154
+#: src/components/views/FinalView/FinalView.tsx:198
 msgid "Play another game!"
 msgstr "Play another game!"
 
-#: src/config/frontend.ts:163
+#: src/config/frontend.ts:167
 msgid "Play on and collect 'm all..."
 msgstr "Play on and collect 'm all..."
 
-#: src/config/frontend.ts:171
+#: src/config/frontend.ts:175
 msgid "Play on? Let's start another round of games..."
 msgstr "Play on? Let's start another round of games..."
 
@@ -274,6 +289,10 @@ msgstr "Required dependency \"{varName}\" for view \"{name}\" is not defined"
 msgid "Return to the <0>home page</0>"
 msgstr "Return to the <0>home page</0>"
 
+#: src/components/forms/SelectField/SelectField.tsx:102
+msgid "Select..."
+msgstr "Select..."
+
 #: src/components/plugins/plugins/SharePlugin.tsx:30
 msgid "Share"
 msgstr "Share"
@@ -286,12 +305,12 @@ msgstr "Silver"
 msgid "Skip"
 msgstr "Skip"
 
-#: src/config/frontend.ts:138
+#: src/config/frontend.ts:142
 msgid "Start the game!"
 msgstr "Start the game!"
 
-#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
 #: src/components/views/SurveyView/SurveyView.tsx:117
+#: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
 msgid "Submit"
 msgstr "Submit"
 
@@ -299,21 +318,25 @@ msgstr "Submit"
 msgid "Submit more feedback"
 msgstr "Submit more feedback"
 
-#: src/config/frontend.ts:112
+#: src/config/frontend.ts:85
+msgid "Take a screenshot or share your score!"
+msgstr "Take a screenshot or share your score!"
+
+#: src/config/frontend.ts:116
 msgid "Test Your Musical Memory!"
 msgstr "Test Your Musical Memory!"
 
-#: src/config/frontend.ts:126
-msgid "The first load may take a while due to the amount of content, but later runs will be smoother."
-msgstr "The first load may take a while due to the amount of content, but later runs will be smoother."
+#: src/config/frontend.ts:130
+msgid "The first load may take a while due to the amount of content, but later runs will be smoother. The difficulty of game levels is randomized. After collecting all the stars, you will receive a total score and see how you rank among players worldwide."
+msgstr "The first load may take a while due to the amount of content, but later runs will be smoother. The difficulty of game levels is randomized. After collecting all the stars, you will receive a total score and see how you rank among players worldwide."
 
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:79
 msgid "This is your lucky day!"
 msgstr "This is your lucky day!"
 
-#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
-#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
 #: src/components/plugins/plugins/ScoresPlugin.tsx:43
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
+#: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
 msgid "Total score"
 msgstr "Total score"
 
@@ -345,11 +368,11 @@ msgstr ""
 msgid "Well done!"
 msgstr "Well done!"
 
-#: src/config/frontend.ts:166
+#: src/config/frontend.ts:170
 msgid "Woohoo! You've earned your first star! 💫"
 msgstr "Woohoo! You've earned your first star! 💫"
 
-#: src/config/frontend.ts:162
+#: src/config/frontend.ts:166
 msgid "Yay, you've earned a star! 💫"
 msgstr "Yay, you've earned a star! 💫"
 
@@ -365,6 +388,6 @@ msgstr "Your feedback"
 msgid "Your feedback was submitted."
 msgstr "Your feedback was submitted."
 
-#: src/config/frontend.ts:79
+#: src/config/frontend.ts:80
 msgid "Your progress..."
 msgstr "Your progress..."
