@@ -55,15 +55,11 @@ msgstr "{turnScore}分"
 
 #: src/config/frontend.ts:63
 msgid "**Invite your friends to play!** Simply ask them to scan this QR code."
-msgstr "分享二维码,**邀请朋友一起玩！** 。"
+msgstr "分享二维码,**邀请朋友来挑战！** 看看谁的分数更高？"
 
 #: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:54
 msgid "+{turnScore} points"
 msgstr "+{turnScore}分"
-
-#: src/config/frontend.ts:123
-#~ msgid "⚠️ Note:"
-#~ msgstr "⚠️ 温馨提示："
 
 #: src/config/frontend.ts:361
 #~ msgid "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
@@ -71,7 +67,7 @@ msgstr "+{turnScore}分"
 
 #: src/config/frontend.ts:174
 msgid "🎉 Amazing! You've finished the game!"
-msgstr "🎉 太棒了！您完成了此局游戏！"
+msgstr "🎉 太棒了！您完成了本轮游戏！"
 
 #: src/components/views/AboutView/AboutView.tsx:33
 msgid "About"
@@ -238,6 +234,7 @@ msgid "Platinum"
 msgstr "白金"
 
 #: src/components/views/FinalView/FinalView.tsx:198
+#: src/config/frontend.ts:158
 msgid "Play another game!"
 msgstr "再玩一局！"
 
@@ -296,7 +293,7 @@ msgstr "提交更多反馈"
 
 #: src/config/frontend.ts:85
 msgid "Take a screenshot or share your score!"
-msgstr "截个图或分享你的分数吧！"
+msgstr "别忘了截图保存，或使用分享按钮来分享你的分数！"
 
 #: src/config/frontend.ts:116
 msgid "Test Your Musical Memory!"
@@ -304,7 +301,7 @@ msgstr "测试您的音乐记忆力！"
 
 #: src/config/frontend.ts:130
 msgid "The first load may take a while due to the amount of content, but later runs will be smoother. The difficulty of game levels is randomized. After collecting all the stars, you will receive a total score and see how you rank among players worldwide."
-msgstr "第一次进入游戏时加载内容较多，可能需要稍作等待。加载完成后就会顺畅起来！游戏关卡难度随机，收集全部星星通关后即可查看您的总分，以及您在全部玩家中的表现水平。"
+msgstr "首次加载可能稍慢，之后将更加流畅。关卡难度随机，集齐所有星星完成游戏，来看看你的总分超过了多少玩家！"
 
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:79
 msgid "This is your lucky day!"
@@ -352,4 +349,4 @@ msgstr "您的反馈已提交。"
 
 #: src/config/frontend.ts:80
 msgid "Your progress..."
-msgstr "您的进度..."
+msgstr "当前进度"
