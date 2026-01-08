@@ -1,0 +1,21 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "The MUSCLE backend"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "audioread>=3.1.0",
+    "django>=6.0.1",
+    "django-cors-headers>=4.9.0",
+    "django-inline-actions>=2.4.0",
+    "django-markup>=1.10",
+    "django-modeltranslation>=0.19.19",
+    "django-nested-admin>=4.1.6",
+    "pillow>=12.1.0",
+    "psycopg>=3.3.2",
+    "python-dotenv>=1.2.1",
+    "roman>=5.2",
+    "sentry-sdk>=2.49.0",
+    "tqdm>=4.67.1",
+]
