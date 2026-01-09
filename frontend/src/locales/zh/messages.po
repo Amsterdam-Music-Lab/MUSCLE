@@ -55,7 +55,7 @@ msgstr "{turnScore}分"
 
 #: src/config/frontend.ts:63
 msgid "**Invite your friends to play!** Simply ask them to scan this QR code."
-msgstr "分享二维码，**邀请朋友来挑战！**看看谁的分数更高？"
+msgstr "分享二维码，**邀请朋友来挑战**，看看谁的分数更高！"
 
 #: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:54
 msgid "+{turnScore} points"
