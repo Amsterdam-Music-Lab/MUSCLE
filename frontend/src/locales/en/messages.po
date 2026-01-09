@@ -252,7 +252,7 @@ msgstr "Platinum"
 #: src/components/views/FinalView/FinalView.tsx:198
 #: src/config/frontend.ts:158
 msgid "Play another game!"
-msgstr "Play another game!"
+msgstr "Keep playing!"
 
 #: src/config/frontend.ts:167
 msgid "Play on and collect 'm all..."
@@ -309,7 +309,7 @@ msgstr "Submit more feedback"
 
 #: src/config/frontend.ts:85
 msgid "Take a screenshot or share your score!"
-msgstr "Take a screenshot and share your score!"
+msgstr "Save your score with a screenshot, or click the share button!"
 
 #: src/config/frontend.ts:116
 msgid "Test Your Musical Memory!"
@@ -317,7 +317,7 @@ msgstr "Test Your Musical Memory!"
 
 #: src/config/frontend.ts:130
 msgid "The first load may take a while due to the amount of content, but later runs will be smoother. The difficulty of game levels is randomized. After collecting all the stars, you will receive a total score and see how you rank among players worldwide."
-msgstr "The first load may take a moment, but later runs will be smoother. Level difficulty is randomized. Collect all the stars to see your total score and how many players you outperform across the world!"
+msgstr "The first load may take a moment, but later runs will be smoother. Each game takes about 3–5 minutes. **Level difficulty is randomized.** Collect all the stars to see how many players worldwide your total score outperforms!"
 
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:79
 msgid "This is your lucky day!"

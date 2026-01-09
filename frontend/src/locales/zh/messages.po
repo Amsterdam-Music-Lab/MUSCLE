@@ -55,7 +55,7 @@ msgstr "{turnScore}分"
 
 #: src/config/frontend.ts:63
 msgid "**Invite your friends to play!** Simply ask them to scan this QR code."
-msgstr "分享二维码,**邀请朋友来挑战！** 看看谁的分数更高？"
+msgstr "分享二维码，**邀请朋友来挑战！**看看谁的分数更高？"
 
 #: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:54
 msgid "+{turnScore} points"
@@ -191,7 +191,7 @@ msgstr "下一步"
 
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:84
 msgid "Nice!"
-msgstr "不错！"
+msgstr "非常棒！"
 
 #: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:19
 msgid "No consent was given"
@@ -236,7 +236,7 @@ msgstr "白金"
 #: src/components/views/FinalView/FinalView.tsx:198
 #: src/config/frontend.ts:158
 msgid "Play another game!"
-msgstr "再玩一局！"
+msgstr "继续游戏！"
 
 #: src/config/frontend.ts:167
 msgid "Play on and collect 'm all..."
@@ -293,7 +293,7 @@ msgstr "提交更多反馈"
 
 #: src/config/frontend.ts:85
 msgid "Take a screenshot or share your score!"
-msgstr "别忘了截图保存，或使用分享按钮来分享你的分数！"
+msgstr "别忘了截图保存及分享您的分数！"
 
 #: src/config/frontend.ts:116
 msgid "Test Your Musical Memory!"
@@ -301,7 +301,7 @@ msgstr "测试您的音乐记忆力！"
 
 #: src/config/frontend.ts:130
 msgid "The first load may take a while due to the amount of content, but later runs will be smoother. The difficulty of game levels is randomized. After collecting all the stars, you will receive a total score and see how you rank among players worldwide."
-msgstr "首次加载可能稍慢，之后将更加流畅。关卡难度随机，集齐所有星星完成游戏，来看看你的总分超过了多少玩家！"
+msgstr "首次加载可能稍慢，之后将更加流畅。\n关卡难度随机，每局游戏约 3–5 分钟。集齐所有星星完成游戏，看看您的总分超过了多少玩家！"
 
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:79
 msgid "This is your lucky day!"
@@ -337,7 +337,7 @@ msgstr "耶，您赢得了一颗星星！💫"
 
 #: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:52
 msgid "You got 0 points."
-msgstr "您得到了0分。"
+msgstr " "
 
 #: src/components/application/View/View.tsx:127
 msgid "Your feedback"
