@@ -73,15 +73,16 @@ const DEFAULT_COMPARE_CARDS = async (
       first_card: {
         ...card1.data,
         seen: card1.hasBeenSelected,
-        audio_latency_ms: latency,
+        timestamp: card1.lastSelectedAt,
       },
       second_card: {
         ...card2.data,
         seen: card2.hasBeenSelected,
-        audio_latency_ms: latency,
+        timestamp: card2.lastSelectedAt
       },
       // What was this used for?
       overlay_was_shown: false,
+      audio_latency_ms: latency
     },
   });
   if (!response) throw new Error();
