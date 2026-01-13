@@ -30,16 +30,16 @@ class ThemeConfig(models.Model):
         on_delete=models.SET_NULL,
         related_name='theme_background')
 
-    color_primary = models.CharField(max_length=255, blank=True, default='#d843e2')
-    color_secondary = models.CharField(max_length=255, blank=True, default='#39d7b8')
-    color_positive = models.CharField(max_length=255, blank=True, default='#00b612')
-    color_negative = models.CharField(max_length=255, blank=True, default='#fa5577')
-    color_neutral1 = models.CharField(max_length=255, blank=True, default='#ffb14c')
-    color_neutral2 = models.CharField(max_length=255, blank=True, default='#0cc7f1')
-    color_neutral3 = models.CharField(max_length=255, blank=True, default='#2b2bee')
-    color_grey = models.CharField(max_length=255, blank=True, default='#bdbebf')
-    color_text = models.CharField(max_length=255, blank=True, default='#ffffff')
-    color_background = models.CharField(max_length=255, blank=True, default='#212529')
+    color_primary = models.CharField(max_length=8, blank=True, default='#d843e2')
+    color_secondary = models.CharField(max_length=8, blank=True, default='#39d7b8')
+    color_positive = models.CharField(max_length=8, blank=True, default='#00b612')
+    color_negative = models.CharField(max_length=8, blank=True, default='#fa5577')
+    color_neutral1 = models.CharField(max_length=8, blank=True, default='#ffb14c')
+    color_neutral2 = models.CharField(max_length=8, blank=True, default='#0cc7f1')
+    color_neutral3 = models.CharField(max_length=8, blank=True, default='#2b2bee')
+    color_grey = models.CharField(max_length=8, blank=True, default='#bdbebf')
+    color_text = models.CharField(max_length=8, blank=True, default='#ffffff')
+    color_background = models.CharField(max_length=8, blank=True, default='#212529')
 
     def __str__(self):
         return self.name

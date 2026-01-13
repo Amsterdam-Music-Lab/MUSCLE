@@ -13,51 +13,51 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='themeconfig',
             name='color_background',
-            field=models.CharField(blank=True, default=' #212529', max_length=255),
+            field=models.CharField(blank=True, default=' #212529', max_length=8),
         ),
         migrations.AddField(
             model_name='themeconfig',
             name='color_grey',
-            field=models.CharField(blank=True, default='#bdbebf', max_length=255),
+            field=models.CharField(blank=True, default='#bdbebf', max_length=8),
         ),
         migrations.AddField(
             model_name='themeconfig',
             name='color_negative',
-            field=models.CharField(blank=True, default='#fa5577', max_length=255),
+            field=models.CharField(blank=True, default='#fa5577', max_length=8),
         ),
         migrations.AddField(
             model_name='themeconfig',
             name='color_neutral1',
-            field=models.CharField(blank=True, default='#ffb14c', max_length=255),
+            field=models.CharField(blank=True, default='#ffb14c', max_length=8),
         ),
         migrations.AddField(
             model_name='themeconfig',
             name='color_neutral2',
-            field=models.CharField(blank=True, default='#0cc7f1', max_length=255),
+            field=models.CharField(blank=True, default='#0cc7f1', max_length=8),
         ),
         migrations.AddField(
             model_name='themeconfig',
             name='color_neutral3',
-            field=models.CharField(blank=True, default='#2b2bee', max_length=255),
+            field=models.CharField(blank=True, default='#2b2bee', max_length=8),
         ),
         migrations.AddField(
             model_name='themeconfig',
             name='color_positive',
-            field=models.CharField(blank=True, default='#00b612', max_length=255),
+            field=models.CharField(blank=True, default='#00b612', max_length=8),
         ),
         migrations.AddField(
             model_name='themeconfig',
             name='color_primary',
-            field=models.CharField(blank=True, default='#d843e2', max_length=255),
+            field=models.CharField(blank=True, default='#d843e2', max_length=8),
         ),
         migrations.AddField(
             model_name='themeconfig',
             name='color_secondary',
-            field=models.CharField(blank=True, default='#39d7b8', max_length=255),
+            field=models.CharField(blank=True, default='#39d7b8', max_length=8),
         ),
         migrations.AddField(
             model_name='themeconfig',
             name='color_text',
-            field=models.CharField(blank=True, default='#ffffff', max_length=255),
+            field=models.CharField(blank=True, default='#ffffff', max_length=8),
         ),
     ]
