@@ -38,7 +38,7 @@ services:
     build:
       context: ./backend
       dockerfile: DockerfileDevelop
-      target: base
+      target: dev
     depends_on:
       db:
         condition: service_healthy

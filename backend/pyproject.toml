@@ -27,7 +27,12 @@ coverage = [
 dev = [
     "django-debug-toolbar>=6.1.0",
     "requests>=2.32.5",
+    {include-group = "coverage"},
+    {include-group = "lint"},
 ]
 lint = [
     "ruff>=0.14.10",
+]
+prod = [
+    "gunicorn>=23.0.0",
 ]

@@ -10,6 +10,13 @@ COPY pyproject.toml .
 RUN uv lock
 RUN uv sync --locked
 
+FROM base AS dev
+RUN uv sync --locked --group dev
+
+FROM base AS prod
+RUN uv sync --locked --group prod
+COPY . /server/
+
 # This graphviz Docker image is derived from the base image
 # and installs extra dependencies for generating database diagrams
 FROM base AS graphviz
