@@ -1,9 +1,10 @@
 from django.db import models
-from django.conf import settings
-from django.utils.translation import activate, gettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from experiment.actions import question
 from experiment.actions.question import QuestionAction
+from theme.models import ThemeConfig
+
 
 class Question(models.Model):
     """Model for question asked during experiment
@@ -124,6 +125,10 @@ class ChoiceList(models.Model):
         return {choice.key: choice.text for choice in self.choices.all()}
 
 
+def validate_color(value: str):
+    return value in ThemeConfig.valid_colors()
+
+
 class Choice(models.Model):
     """ Choice model for Question with choices
 
@@ -141,7 +146,14 @@ class Choice(models.Model):
     choicelist = models.ForeignKey(
         ChoiceList,
         on_delete=models.CASCADE,
-        related_name='choices',
+        related_name="choices",
+    )
+    color = models.CharField(
+        max_length=32,
+        blank=True,
+        default="",
+        help_text="Description of color in current theme, e.g. `colorPositive`",
+        validators=[validate_color],
     )
 
     class Meta:
