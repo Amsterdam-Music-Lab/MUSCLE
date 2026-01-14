@@ -5,8 +5,8 @@ import Number from './_Number';
 describe('Number component', () => {
     const defaultProps = {
         question: {
-            min_value: 0,
-            max_value: 100,
+            minValue: 0,
+            maxValue: 100,
         },
         onChange: vi.fn(),
     };
@@ -16,8 +16,8 @@ describe('Number component', () => {
         const props = {
             ...defaultProps,
             question: {
-                min_value: 0,
-                max_value: 100,
+                minValue: 0,
+                maxValue: 100,
             },
             onChange,
         };
@@ -32,9 +32,8 @@ describe('Number component', () => {
         const props = {
             ...defaultProps,
             question: {
-                input_type: 'number',
-                min_value: 0,
-                max_value: 100,
+                minValue: 0,
+                maxValue: 100,
             },
             onChange,
         };
@@ -48,7 +47,7 @@ describe('Number component', () => {
         const props = {
             ...defaultProps,
             question: {
-                min_value: 0,
+                minValue: 0,
             },
         };
         expect(() => render(<Number {...props} />)).toThrow('min_value and max_value are required for the Number component');
@@ -56,7 +55,7 @@ describe('Number component', () => {
         const props2 = {
             ...defaultProps,
             question: {
-                max_value: 100,
+                maxValue: 100,
             },
         };
         expect(() => render(<Number {...props2} />)).toThrow('min_value and max_value are required for the Number component');
@@ -64,8 +63,8 @@ describe('Number component', () => {
         const props3 = {
             ...defaultProps,
             question: {
-                min_value: 0,
-                max_value: null,
+                minValue: 0,
+                maxValue: null,
             },
         };
         expect(() => render(<Number {...props3} />)).toThrow('min_value and max_value are required for the Number component');
@@ -73,8 +72,8 @@ describe('Number component', () => {
         const props4 = {
             ...defaultProps,
             question: {
-                min_value: 0,
-                max_value: undefined,
+                minValue: 0,
+                maxValue: undefined,
             },
         };
         expect(() => render(<Number {...props4} />)).toThrow('min_value and max_value are required for the Number component');
@@ -82,8 +81,8 @@ describe('Number component', () => {
         const props5 = {
             ...defaultProps,
             question: {
-                min_value: 0,
-                max_value: 100,
+                minValue: 0,
+                maxValue: 100,
             },
         };
         expect(() => render(<Number {...props5} />)).not.toThrow();

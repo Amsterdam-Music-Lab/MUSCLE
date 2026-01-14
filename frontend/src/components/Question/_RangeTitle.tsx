@@ -11,11 +11,13 @@ interface RangeTitleProps {
 
 const RangeTitle = ({ question, value, sliderValue, emptyValue, changePosition = false }: RangeTitleProps) => {
 
-    if (!question.choices || Object.keys(question.choices).length === 0) {
+    const choices = question.choices;
+
+    if (!choices || choices.length === 0) {
         throw new Error("RangeTitle question must have choices");
     }
 
-    const nChoices = Object.keys(question.choices).length - 1;
+    const nChoices = choices.length - 1;
     const position = - (nChoices - sliderValue * 2) / nChoices * 44;
     return (
         <div>
@@ -23,7 +25,7 @@ const RangeTitle = ({ question, value, sliderValue, emptyValue, changePosition =
                 {emptyValue ? (
                     renderLabel("fa-arrows-left-right", "fa-2x")
                 ) : (
-                    <span className={`is-${value}`}> {renderLabel(question.choices[value], "fa-2x")}</span>
+                    <span className={`is-${value}`}> {renderLabel(choices.pick(choice => choice.value === value), "fa-2x")}</span>
                 )
                 }
             </h4>

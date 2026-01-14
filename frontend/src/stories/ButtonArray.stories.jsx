@@ -14,7 +14,7 @@ const defaultArgs = {
         explainer: "This is the explainer",
         view: "BUTTON_ARRAY",
         value: "",
-        choices: ["Choice 1", "Choice 2", "Choice 3"],
+        choices: [{value: 1, label: "Choice 1", color: "colorNeutral1"}, {value: 2, label: "Choice 2", color: "colorNeutral2"}, {value: 3, label: "Choice 3", color: "colorNeutral3"}],
     },
     onChange: () => { },
     id: 0,

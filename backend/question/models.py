@@ -122,7 +122,10 @@ class ChoiceList(models.Model):
     from_python = models.BooleanField(default=False, editable=False)
 
     def to_dict(self):
-        return {choice.key: choice.text for choice in self.choices.all()}
+        return [
+            {'value': choice.key, 'label': choice.text, 'color': choice.color}
+            for choice in self.choices.all()
+        ]
 
 
 def validate_color(value: str):

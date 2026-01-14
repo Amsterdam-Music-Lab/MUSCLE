@@ -12,12 +12,11 @@ interface IconRangeProps {
 const IconRange = ({ question, value, onChange}: IconRangeProps) => {
     const emptyValue = !value;
 
-    if (!question.choices || Object.keys(question.choices).length <= 0) {
+    const choices = question.choices;
+
+    if (!choices || choices.length <= 0) {
         throw new Error("IconRange question must have choices");
     }
-
-    const keys = Object.keys(question.choices);
-    const choices = Object.values(question.choices);
 
     const onSliderChange = (index: number) => {
         onChange(keys[index]);

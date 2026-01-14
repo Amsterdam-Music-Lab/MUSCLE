@@ -145,10 +145,18 @@ class BeatAlignment(BaseRules):
         question = ButtonArrayQuestion(
             text=_("Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?"),
             key=key,
-            choices={
-                'ON': _('ALIGNED TO THE BEAT'),
-                'OFF': _('NOT ALIGNED TO THE BEAT'),
-            },
+            choices=[
+                {
+                    'value': 'ON',
+                    'label': _('ALIGNED TO THE BEAT'),
+                    'color': 'colorNeutral1',
+                },
+                {
+                    'value': 'OFF',
+                    'label': _('NOT ALIGNED TO THE BEAT'),
+                    'color': 'colorNeutral2',
+                },
+            ],
             result_id=prepare_result(
                 key,
                 session,

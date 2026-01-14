@@ -1,4 +1,4 @@
-import PlayButton from "../components/PlayButton/PlayButton";
+import PlayButton from "../components/PlayBack/PlayButton";
 
 export default {
     title: "Playback/PlayButton",

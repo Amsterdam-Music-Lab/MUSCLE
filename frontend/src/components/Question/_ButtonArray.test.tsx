@@ -11,12 +11,11 @@ const getProps = (overrides = {}) => ({
         "explainer": "",
         "question": "1. Do you know this song?",
         "style": "boolean",
-        "choices": {
-            "yes": "Yes",
-            "unsure": "Unsure",
-            "no": "No"
-        },
-        "minValues": 1,
+        "choices": [
+            {value: "yes", label: "Yes"},
+            {value: "unsure", label: "Unsure"},
+            {value: "no", label: "No"}
+        ],
     },
     disabled: false,
     onChange: vi.fn(),

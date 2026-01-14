@@ -8,11 +8,11 @@ describe('TextRange Component', () => {
         question: 'Test Question',
         explainer: 'Test Explainer',
         view: QuestionViews.TEXT_RANGE,
-        choices: {
-            '1': 'Choice 1',
-            '2': 'Choice 2',
-            '3': 'Choice 3',
-        },
+        choices: [
+            {value: '1', label: 'Choice 1'},
+            {value: '2', label: 'Choice 2'},
+            {value: '3', label: 'Choice 3'},
+        ],
         value: '2',
     };
 

@@ -1,5 +1,6 @@
-import PlayButton from "./PlayButton/PlayButton";
 import classNames from "classnames";
+
+import PlayButton from "./PlayButton";
 import PlaybackSection from "@/types/Section";
 
 interface MultiPlayerProps {

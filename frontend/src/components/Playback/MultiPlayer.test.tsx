@@ -34,7 +34,7 @@ describe('MultiPlayer Component', () => {
         vi.clearAllMocks();
     });
 
-    test('renders correct number of PlayerSmall components', () => {
+    test('renders correct number of PlayButton components', () => {
         render(<MultiPlayer {...defaultProps} />);
         const players = screen.queryAllByRole('button');
         expect(players.length).toBe(mockSections.length);

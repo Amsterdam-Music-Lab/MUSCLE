@@ -28,8 +28,6 @@ const config = {
 
     docs: {},
 
-    staticDirs: ['../public']
-
     viteFinal: (config) => {
         return mergeConfig(config, {
             base: "/MUSCLE/storybook/",

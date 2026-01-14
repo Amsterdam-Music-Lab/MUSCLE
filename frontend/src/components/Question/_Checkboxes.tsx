@@ -12,7 +12,7 @@ const Checkboxes = ({ question, value, onChange }: CheckboxesProps) => {
 
     const choices = question.choices;
 
-    if (!choices || Object.keys(choices).length <= 0) {
+    if (!choices || choices.length <= 0) {
         throw new Error("Checkboxes question must have choices");
     }
 
@@ -31,14 +31,14 @@ const Checkboxes = ({ question, value, onChange }: CheckboxesProps) => {
 
     return (
         <div className="aha__checkboxes">
-            {Object.keys(choices).map((val, index) => (
+            {choices.map((choice, index) => (
                 <Checkbox
                     key={index}
                     // This prop does not exist on Checkbox
                     name={question.key}
-                    label={choices[val]}
-                    value={val}
-                    checked={values.includes(val)}
+                    label={choice.label}
+                    value={choice.value}
+                    checked={values.includes(choice.value)}
                     onChange={onToggle}
                 />
             ))}

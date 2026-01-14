@@ -98,10 +98,18 @@ class HBat(BaseRules, PracticeMixin):
         question = ButtonArrayQuestion(
             key=key,
             text=self.get_trial_question(),
-            choices={
-                self.first_condition: self.first_condition_i18n,
-                self.second_condition: self.second_condition_i18n,
-            },
+            choices=[
+                {
+                    'value': self.first_condition,
+                    'label': self.first_condition_i18n,
+                    'color': 'colorNeutral1',
+                },
+                {
+                    'value': self.second_condition,
+                    'label': self.second_condition_i18n,
+                    'color': 'colorNeutral2',
+                },
+            ],
             result_id=prepare_result(
                 key,
                 session,

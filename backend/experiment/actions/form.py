@@ -24,7 +24,7 @@ class Form(BaseAction):
             ButtonArrayQuestion(
                 key="is_student",
                 text="Are you a student?",
-                choices={'YES': _('YES'), 'NO': _('NO')},
+                choices=[{'value': 'YES', 'text': _('YES'), {'value': 'NO', 'label': _('NO')}],
             ),
         ])
         ```

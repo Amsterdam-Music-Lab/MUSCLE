@@ -316,10 +316,10 @@ class Hooked(BaseRules):
             [
                 ButtonArrayQuestion(
                     key=key,
-                    choices={
-                        "new": _("No"),
-                        "old": _("Yes"),
-                    },
+                    choices=[
+                        {"value": "new", "label": _("No"), "color": "colorNegative"},
+                        {"value": "old", "label": _("Yes"), "color": "colorPositive"},
+                    ],
                     text=_("Did you hear this song in previous rounds?"),
                     result_id=prepare_result(
                         key,

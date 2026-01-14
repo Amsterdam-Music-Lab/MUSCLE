@@ -10,14 +10,14 @@ interface NumberProps {
 /** Number is a question view that lets you input a number */
 const Number = ({ question, value = undefined, onChange }: NumberProps) => {
 
-    if ((!question.min_value && question.min_value !== 0) || (!question.max_value && question.max_value !== 0)) {
-        throw new Error('min_value and max_value are required for the Number component');
+    if ((!question.minValue && question.maxValue !== 0) || (!question.maxValue && question.maxValue !== 0)) {
+        throw new Error('minValue and maxValue are required for the Number component');
     }
 
     // Input validation
     const validateChange = (currentValue: number) => {
 
-        if (currentValue >= question.min_value && currentValue <= question.max_value) {
+        if (currentValue >= question.minValue && currentValue <= question.maxValue) {
             onChange(currentValue);
         }
     };

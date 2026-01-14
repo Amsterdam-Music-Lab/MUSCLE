@@ -6,11 +6,11 @@ import Question from '@/types/Question';
 
 const mockQuestion: Question = {
     key: 'test-radios',
-    choices: {
-        '1': 'First Option',
-        '2': 'Second Option',
-        '3': 'Third Option'
-    }
+    choices: [
+        {value: '1', label: 'First Option'},
+        {value: '2', label: 'Second Option'},
+        {value: '3', label: 'Third Option'}
+    ]
 };
 
 describe('Radios', () => {

@@ -19,20 +19,20 @@ const Radios = ({ question, value, onChange }: RadiosProps) => {
 
     const choices = question.choices;
 
-    if (!choices || Object.keys(choices).length <= 0) {
+    if (!choices || choices.length <= 0) {
         throw new Error("Radios question must have choices");
     }
 
     return (
         <div className="aha__radios">
-            {Object.keys(choices).sort((a, b) => a - b).map((val, index) => (
+            {choices.sort((a, b) => a - b).map((choice, index) => (
                 <Radio
                     key={index}
                     // This prop does not exist on Radio
                     name={question.key}
-                    label={choices[val]}
-                    value={val}
-                    checked={value === val}
+                    label={choice.label}
+                    value={choice.value}
+                    checked={value === choice.value}
                     onChange={onChange}
                     role="radio"
                 />

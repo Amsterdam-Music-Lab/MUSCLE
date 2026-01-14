@@ -26,13 +26,13 @@ const mockQuestion: Question = {
     key: 'test-icon-range',
     view: QuestionViews.ICON_RANGE,
     question: "What is the question?",
-    choices: {
-        '1': 'fa-face-grin-hearts',
-        '2': 'fa-face-grin',
-        '3': 'fa-face-smile',
-        '4': 'fa-face-meh',
-        '5': 'fa-face-frown',
-    }
+    choices: [
+        {value: '1', label: 'fa-face-grin-hearts'},
+        {value: '2', label: 'fa-face-grin'},
+        {value: '3', label: 'fa-face-smile'},
+        {value: '4', label: 'fa-face-meh'},
+        {value: '5', label: 'fa-face-frown'},
+    ]
 };
 
 describe('IconRange', () => {

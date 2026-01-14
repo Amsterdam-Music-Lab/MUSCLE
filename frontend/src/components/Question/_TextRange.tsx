@@ -19,12 +19,13 @@ interface TextRangeProps {
 const TextRange = ({ question, value, onChange }: TextRangeProps) => {
     const emptyValue = !value;
 
-    if (!question.choices || Object.keys(question.choices).length === 0) {
+    const choices = question.choices;
+
+    if (!choices || choices.length === 0) {
         throw new Error("TextRange question must have choices");
     }
 
-    const keys = Object.keys(question.choices);
-    const choices = Object.values(question.choices);
+    const keys = choices.map(choice => choice.value);
 
     const onSliderChange = (index: number) => onChange(keys[Math.round(index / 10)]);
 
