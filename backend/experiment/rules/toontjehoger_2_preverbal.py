@@ -153,11 +153,11 @@ class ToontjeHoger2Preverbal(BaseRules):
         question = ButtonArrayQuestion(
             text=self.get_round1_question(),
             key=key,
-            choices={
-                'A': 'A',
-                'B': 'B',
-                'C': 'C',
-            },
+            choices=[
+                {"value": "A", "label": "A", "color": "colorNeutral2"},
+                {"value": "B", "label": "B", "color": "colorNeutral1"},
+                {"value": "C", "label": "C", "color": "colorSecondary"},
+            ],
             result_id=prepare_result(key, session, expected_response="C"),
             style=[ColorScheme.NEUTRAL_INVERTED],
         )
@@ -286,10 +286,10 @@ class ToontjeHoger2Preverbal(BaseRules):
         question = ButtonArrayQuestion(
             text=self.get_round_2_question(),
             key=key,
-            choices={
-                "A": "A",
-                "B": "B",
-            },
+            choices=[
+                {"value": "A", "label": "A", "color": "colorNeutral2"},
+                {"value": "B", "label": "B", "color": "colorNeutral1"},
+            ],
             result_id=prepare_result(key, session, expected_response="A"),
             style=[ColorScheme.NEUTRAL_INVERTED],
         )

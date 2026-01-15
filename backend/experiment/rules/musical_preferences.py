@@ -12,6 +12,8 @@ from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion, IconRangeQuestion
 from experiment.actions.redirect import Redirect
 from experiment.actions.trial import Trial
+from experiment.actions.wrappers import boolean_question
+from question.models import ChoiceList
 from result.utils import prepare_result
 from result.models import Result
 from section.models import Section
@@ -123,7 +125,18 @@ class MusicalPreferences(BaseRules):
                             form=[
                                 ButtonArrayQuestion(
                                     key="audio_check2",
-                                    choices={"no": _("Quit"), "yes": _("Next")},
+                                    choices=[
+                                        {
+                                            "value": "no",
+                                            "label": _("Quit"),
+                                            "color": "colorNegative",
+                                        },
+                                        {
+                                            "value": "yes",
+                                            "label": _("Next"),
+                                            "color": "colorPositive",
+                                        },
+                                    ],
                                     result_id=prepare_result(
                                         "audio_check2", session, scoring_rule="BOOLEAN"
                                     ),
@@ -149,13 +162,11 @@ class MusicalPreferences(BaseRules):
                 html = HTML(body="<h4>{}</h4>".format(_("Do you hear the music?")))
                 form = Form(
                     form=[
-                        ButtonArrayQuestion(
+                        boolean_question(
                             key="audio_check1",
-                            choices={"no": _("No"), "yes": _("Yes")},
                             result_id=prepare_result(
                                 "audio_check1", session, scoring_rule="BOOLEAN"
                             ),
-                            style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
                         )
                     ]
                 )
@@ -229,15 +240,7 @@ class MusicalPreferences(BaseRules):
         likert = IconRangeQuestion(
             text=_("2. How much do you like this song?"),
             key=like_key,
-            choices={
-                1: 'fa-face-grin-hearts',
-                2: 'fa-face-grin',
-                3: 'fa-face-smile',
-                4: 'fa-face-meh',
-                5: 'fa-face-frown',
-                6: 'fa-face-frown-open',
-                7: 'fa-face-angry',
-            },
+            choices=ChoiceList.objects.get(pk='LIKERT_ICONS_7').to_dict(),
             result_id=prepare_result(
                 like_key, session, section=section, scoring_rule="LIKERT"
             ),
@@ -246,7 +249,11 @@ class MusicalPreferences(BaseRules):
         know = ButtonArrayQuestion(
             text=_("1. Do you know this song?"),
             key=know_key,
-            choices={"yes": "fa-check", "unsure": "fa-question", "no": "fa-xmark"},
+            choices=[
+                {"value": "yes", "label": "fa-check", "color": "colorPositive"},
+                {"value": "unsure", "label": "fa-question", "color": "colorNeutral1"},
+                {"value": "no", "label": "fa-xmark", "color": "colorNegative"},
+            ],
             result_id=prepare_result(know_key, session, section=section),
             style=[ColorScheme.BOOLEAN],
         )

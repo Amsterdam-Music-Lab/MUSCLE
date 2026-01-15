@@ -153,10 +153,10 @@ class ToontjeHoger5Tempo(BaseRules):
         question = ButtonArrayQuestion(
             text=self.get_trial_question(),
             key=key,
-            choices={
-                "A": "A",
-                "B": "B",
-            },
+            choices=[
+                {"value": "A", "label": "A", "color": "colorNegative2"},
+                {"value": "B", "label": "B", "color": "colorNegative1"},
+            ],
             result_id=prepare_result(
                 key,
                 session,

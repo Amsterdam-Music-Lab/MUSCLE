@@ -163,13 +163,13 @@ class ToontjeHoger1Mozart(BaseRules):
         question = ButtonArrayQuestion(
             text=question,
             key=key,
-            choices={
-                "A": "A",
-                "B": "B",
-                "C": "C",
-                "D": "D",
-                "E": "E",
-            },
+            choices=[
+                {"value": "A", "label": "A", "color": "colorNeutral2"},
+                {"value": "B", "label": "B", "color": "colorNeutral1"},
+                {"value": "C", "label": "C", "color": "colorSecondary"},
+                {"value": "D", "label": "D", "color": "colorPrimary"},
+                {"value": "E", "label": "E", "color": "colorNeutral3"},
+            ],
             result_id=prepare_result(
                 key, session, section=section, expected_response=expected_response
             ),

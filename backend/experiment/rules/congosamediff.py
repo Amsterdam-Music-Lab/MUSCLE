@@ -109,10 +109,14 @@ class CongoSameDiff(BaseRules):
         question = ButtonArrayQuestion(
             text="Did the participant complete the practice round correctly?",
             key=key,
-            choices={
-                "YES": "Yes, continue",
-                "NO": "No, restart the practice trials",
-            },
+            choices=[
+                {"value": "YES", "label": "Yes, continue", "color": "colorPositive"},
+                {
+                    "value": "NO",
+                    "label": "No, restart the practice trials",
+                    "color": "colorNegative",
+                },
+            ],
             result_id=result_pk,
         )
 
@@ -147,13 +151,13 @@ class CongoSameDiff(BaseRules):
         question = ButtonArrayQuestion(
             explainer=f'{practice_label} ({trial_index}/{trials_count}) | {section_name} | {section_tag} | {section_group}',
             text=_('Is the third sound the SAME or DIFFERENT as the first two sounds?'),
-            choices={
-                'DEFINITELY_SAME': _('DEFINITELY SAME'),
-                'PROBABLY_SAME': _('PROBABLY SAME'),
-                'PROBABLY_DIFFERENT': _('PROBABLY DIFFERENT'),
-                'DEFINITELY_DIFFERENT': _('DEFINITELY DIFFERENT'),
-                'I_DONT_KNOW': _('I DON’T KNOW'),
-            },
+            choices=[
+                {"value": 'DEFINITELY_SAME', "label": _('DEFINITELY SAME')},
+                {"value": 'PROBABLY_SAME', "label": _('PROBABLY SAME')},
+                {"value": 'PROBABLY_DIFFERENT', "label": _('PROBABLY DIFFERENT')},
+                {"value": 'DEFINITELY_DIFFERENT', "label": _('DEFINITELY DIFFERENT')},
+                {"value": 'I_DONT_KNOW', "value": _('I DON’T KNOW')},
+            ],
             key=key,
             result_id=prepare_result(
                 key, session, section=section, expected_response=expected_response

@@ -79,14 +79,12 @@ def boolean_question(
     key: str,
     text: str,
     result_id: int,
-    style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST, ButtonStyle.LARGE_GAP],
 ):
     return ButtonArrayQuestion(
         key=key,
         text=text,
         result_id=result_id,
         choices=ChoiceList.objects.get(pk='BOOLEAN_NEGATIVE_FIRST').to_dict(),
-        style=style,
     )
 
 

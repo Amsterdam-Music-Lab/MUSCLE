@@ -14,6 +14,7 @@ from experiment.actions.redirect import Redirect
 from experiment.actions.trial import Trial
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.playlist import PlaylistSelection
+from experiment.actions.wrappers import boolean_question
 from question.banks import get_question_bank
 from result.utils import prepare_result
 from session.models import Session
@@ -85,13 +86,11 @@ class Huang2022(Hooked):
                 html = HTML(body='<h4>{}</h4>'.format(_('Do you hear the music?')))
                 form = Form(
                     form=[
-                        ButtonArrayQuestion(
+                        boolean_question(
                             key='audio_check1',
-                            choices={'no': _('No'), 'yes': _('Yes')},
                             result_id=prepare_result(
                                 'audio_check1', session, scoring_rule='BOOLEAN'
                             ),
-                            style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
                         )
                     ]
                 )
@@ -114,11 +113,21 @@ class Huang2022(Hooked):
                             form=[
                                 ButtonArrayQuestion(
                                     key='audio_check2',
-                                    choices={'no': _('Quit'), 'yes': _('Try')},
+                                    choices=[
+                                        {
+                                            "value": "no",
+                                            "label": _('Quit'),
+                                            "color": "colorNegative",
+                                        },
+                                        {
+                                            "value": "yes",
+                                            "label": _('Try'),
+                                            "color": "colorPositive",
+                                        },
+                                    ],
                                     result_id=prepare_result(
                                         'audio_check2', session, scoring_rule='BOOLEAN'
                                     ),
-                                    style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
                                 )
                             ]
                         )

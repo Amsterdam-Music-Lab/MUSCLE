@@ -277,14 +277,15 @@ class Categorization(BaseRules):
         )
         # Set expected resonse accordingly
         ph = "___"  # placeholder
+        choices = [{"value": "A", "label": ph}, {"value": "B", "label": ph}]
         if button_order == "neutral" and stimuli_a == "BLUE":
-            choices = {"A": ph, "B": ph}
+            pass
         elif (
             button_order == ColorScheme.NEUTRAL_INVERTED.value and stimuli_a == "ORANGE"
         ):
-            choices = {"A": ph, "B": ph}
+            pass
         else:
-            choices = {"B": ph, "A": ph}
+            choices.reverse()
         if group == "S1":
             assigned_group = "Same direction, Pair 1"
         elif group == "S2":
@@ -480,6 +481,9 @@ class Categorization(BaseRules):
 repeat_training_or_quit = ButtonArrayQuestion(
     key="failed_training",
     text="You seem to have difficulties reacting correctly to the sound sequences. Is your audio on? If you want to give it another try, click on Ok.",
-    choices={"continued": "OK", "aborted": "Exit"},
+    choices=[
+        {"value": "continued", "label": "OK", "color": "colorPositive"},
+        {"value": "aborted", "label": "Exit", "color": "colorNegative"},
+    ],
     style=[ButtonStyle.LARGE_GAP, ButtonStyle.LARGE_TEXT, ColorScheme.BOOLEAN],
 )

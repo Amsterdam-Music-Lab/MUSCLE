@@ -101,8 +101,6 @@ class TwoAlternativeForced(BaseRules):
 
         key = 'choice'
         button_style = [
-            ColorScheme.NEUTRAL,
-            TextStyle.INVISIBLE,
             ButtonStyle.LARGE_GAP,
             ButtonStyle.LARGE_TEXT,
         ]
@@ -116,7 +114,10 @@ class TwoAlternativeForced(BaseRules):
                 scoring_rule='CORRECTNESS',
             ),
             text="A or B?",
-            choices={'A': 'Answer A', 'B': 'Answer B'},
+            choices=[
+                {"value": "A", "label": "Answer A", "color": "colorNeutral1"},
+                {"value": "B", "label": "Answer B", "color": "colorNeutral2"},
+            ],
             style=button_style,
         )
 

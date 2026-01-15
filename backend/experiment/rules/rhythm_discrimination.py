@@ -136,10 +136,18 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
         question = ButtonArrayQuestion(
             key=key,
             text=_("Is the third rhythm the SAME or DIFFERENT?"),
-            choices={
-                self.first_condition: self.first_condition_i18n,
-                self.second_condition: self.second_condition_i18n,
-            },
+            choices=[
+                {
+                    "value": self.first_condition,
+                    "label": self.first_condition_i18n,
+                    "color": "colorNeutral1",
+                },
+                {
+                    "value": self.second_condition,
+                    "label": self.second_condition_i18n,
+                    "color": "colorNeutral2",
+                },
+            ],
             result_id=prepare_result(
                 key,
                 session,

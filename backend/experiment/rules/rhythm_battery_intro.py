@@ -8,9 +8,23 @@ from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
 from experiment.actions.wrappers import final_action_with_optional_button
+from question.models import ChoiceList
 from result.utils import prepare_result
 from theme.styles import ColorScheme
 
+boolean_and_middle_choices = [
+    {
+        "value": "YES",
+        "label": _('YES'),
+        "color": "colorPositive",
+    },
+    {
+        "value": "MODERATELY",
+        "label": _('MODERATELY'),
+        "color": "colorNeutral1",
+    },
+    {"value": "NO", "label": _('NO'), "color": "colorNegative"},
+]
 
 class RhythmBatteryIntro(BaseRules):
     ID = 'RHYTHM_BATTERY_INTRO'
@@ -47,11 +61,7 @@ class RhythmBatteryIntro(BaseRules):
                     ButtonArrayQuestion(
                         key=key,
                         text=_("Are you in a quiet room?"),
-                        choices={
-                            'YES': _('YES'),
-                            'MODERATELY': _('MODERATELY'),
-                            'NO': _('NO'),
-                        },
+                        choices=boolean_and_middle_choices,
                         result_id=result_pk,
                         style=[ColorScheme.BOOLEAN],
                     )
@@ -66,11 +76,7 @@ class RhythmBatteryIntro(BaseRules):
                     ButtonArrayQuestion(
                         key='internet_connection',
                         text=_("Do you have a stable internet connection?"),
-                        choices={
-                            'YES': _('YES'),
-                            'MODERATELY': _('MODERATELY'),
-                            'NO': _('NO'),
-                        },
+                        choices=boolean_and_middle_choices,
                         result_id=result_pk,
                         style=[ColorScheme.BOOLEAN],
                     )
@@ -85,7 +91,7 @@ class RhythmBatteryIntro(BaseRules):
                     ButtonArrayQuestion(
                         key=key,
                         text=_("Are you wearing headphones?"),
-                        choices={'YES': _('YES'), 'NO': _('NO')},
+                        choices=ChoiceList.objects.get(pk="BOOLEAN"),
                         result_id=result_pk,
                         style=[ColorScheme.BOOLEAN],
                     )
@@ -102,7 +108,14 @@ class RhythmBatteryIntro(BaseRules):
                         text=_(
                             "Do you have sound notifications from other devices turned off?"
                         ),
-                        choices={'YES': _('YES'), 'NO': _('NO')},
+                        choices=[
+                            {
+                                "value": "YES",
+                                "label": _('YES'),
+                                "color": "colorPositive",
+                            },
+                            {"value": "NO", "label": _('NO'), "color": "colorNegative"},
+                        ],
                         result_id=result_pk,
                         style=[ColorScheme.BOOLEAN],
                     ),

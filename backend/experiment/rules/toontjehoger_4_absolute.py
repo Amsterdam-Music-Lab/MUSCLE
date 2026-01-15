@@ -116,10 +116,10 @@ class ToontjeHoger4Absolute(BaseRules):
         question = ButtonArrayQuestion(
             text=self.get_trial_question(),
             key=key,
-            choices={
-                "A": "A",
-                "B": "B",
-            },
+            choices=[
+                {"value": "A", "label": "A", "color": "colorNeutral2"},
+                {"value": "B", "label": "B", "color": "colorNeutral1"},
+            ],
             result_id=prepare_result(
                 key,
                 session,

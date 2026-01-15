@@ -132,11 +132,10 @@ class ToontjeHoger6Relative(BaseRules):
         question = ButtonArrayQuestion(
             text="Zijn deze twee melodieën hetzelfde?",
             key=key,
-            choices={
-                "YES": "Ja",
-                "NO": "Nee",
-            },
-            style=[ColorScheme.BOOLEAN],
+            choices=[
+                {"value": "YES", "label": "Ja", "color": "colorPositive"},
+                {"value": "NO", "label": "Nee", "color": "colorNegative"},
+            ],
             result_id=prepare_result(
                 key, session, section=section1, expected_response=expected_response
             ),

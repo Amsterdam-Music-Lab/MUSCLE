@@ -167,10 +167,10 @@ class ToontjeHoger3Plink(BaseRules):
             next_round.append(self.get_score_view(session))
         # Get all song sections
         all_sections = session.playlist.section_set.all()
-        choices = {}
+        choices = []
         for section in all_sections:
             label = section.song_label()
-            choices[section.pk] = label
+            choices.append({"value": section.pk, "label": label})
 
         # Get section to recognize
         section = session.playlist.get_section(song_ids=session.get_unused_song_ids())
@@ -225,9 +225,10 @@ class ToontjeHoger3Plink(BaseRules):
 
         # Question
         periods = ["60's", "70's", "80's", "90's", "00's", "10's", "20's"]
-        period_choices = {}
+        period_choices = []
         for period in periods:
-            period_choices[period.replace("'", "")] = period
+            value = period.replace("'", "")
+            period_choices.append({"value": value, "label": period})
 
         question = RadiosQuestion(
             text="Wanneer is het nummer uitgebracht?",
@@ -241,9 +242,9 @@ class ToontjeHoger3Plink(BaseRules):
     def get_emotion_question(self, session, section):
         # Question
         emotions = ["vrolijk", "droevig", "boosheid", "angst", "tederheid"]
-        emotion_choices = {}
+        emotion_choices = []
         for emotion in emotions:
-            emotion_choices[emotion] = emotion.capitalize()
+            emotion_choices.append({"value": emotion, "label": emotion.capitalize()})
 
         question = RadiosQuestion(
             text="Welke emotie past bij dit nummer?",
