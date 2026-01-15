@@ -13,6 +13,10 @@ const IconRange = ({ question, value, onChange}: IconRangeProps) => {
     const emptyValue = !value;
 
     const choices = question.choices;
+<<<<<<< HEAD
+    const keys = choices.map(choice => choice.value);
+=======
+>>>>>>> a27a92b23d3b8de2e6a60b899614c6233d1a187c
 
     if (!choices || choices.length <= 0) {
         throw new Error("IconRange question must have choices");

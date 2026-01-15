@@ -57,6 +57,7 @@ const TextRange = ({ question, value, onChange }: TextRangeProps) => {
             <RangeLimits
                 minVal={choices[0]}
                 maxVal={choices[choices.length - 1]}
+                labels={choices.map(choice => choice.label)}
             />
         </div>
     );

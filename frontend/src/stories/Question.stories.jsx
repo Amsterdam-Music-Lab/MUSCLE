@@ -16,6 +16,7 @@ export const Default = {
             view: "STRING",
             value: "",
             style: {},
+            maxLength: 42,
         },
         onChange: () => { },
         id: 0,
@@ -40,6 +41,7 @@ export const WithOnChange = {
             view: "STRING",
             value: "",
             style: {},
+            maxLength: 42
         },
         onChange: (value, id) => alert(`Question ${id} changed to ${value}`),
         id: 0,
@@ -64,6 +66,7 @@ export const WithDisabledTrue = {
             view: "STRING",
             value: "",
             style: {},
+            maxLength: 42
         },
         onChange: () => { },
         id: 0,
@@ -88,6 +91,7 @@ export const WithEmphasizeTitle = {
             view: "STRING",
             value: "",
             style: {"emphasize-title": true},
+            maxLength: 42
         },
         onChange: () => { },
         id: 0,
@@ -328,13 +332,12 @@ export const IconRange = {
     ],
 };
 
-export const StringNumberRange = {
+export const Number = {
     args: {
         question: {
             question: "This is the question",
             explainer: "This is the explainer",
-            view: "STRING",
-            input_type: "number",
+            view: "NUMBER",
             minValue: 1,
             maxValue: 42,
         },
@@ -360,14 +363,13 @@ export const StringNumberRange = {
     ],
 };
 
-export const StringTextRange = {
+export const String = {
     args: {
         question: {
             question: "This is the question",
             explainer: "This is the explainer",
             view: "STRING",
-            input_type: "text",
-            max_length: 9,
+            maxLength: 9,
         },
         onChange: () => { },
         value: "",
