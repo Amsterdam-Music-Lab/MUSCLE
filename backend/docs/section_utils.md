@@ -1,3 +1,0 @@
-## section.utils
-
-::: section.utils

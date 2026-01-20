@@ -1,5 +1,5 @@
 from os.path import join
-from typing import List, Optional
+from typing import Optional
 
 from django.db import models
 from django.utils import timezone
@@ -89,44 +89,7 @@ class Experiment(models.Model):
             Associated blocks
         """
 
-        phases = self.phases.all()
-        return [block for phase in phases for block in list(phase.blocks.all())]
-
-    def export_sessions(self) -> QuerySet[Session]:
-        """export sessions for this experiment
-
-        Returns:
-            Associated sessions
-        """
-
-        all_sessions = Session.objects.none()
-        for block in self.associated_blocks():
-            all_sessions |= Session.objects.filter(block=block).order_by("-started_at")
-        return all_sessions
-
-    def current_participants(self) -> list["Participant"]:
-        """Get distinct list of participants
-
-        Returns:
-            (participant.models.Participant): Associated participants
-        """
-
-        participants = {}
-        for session in self.export_sessions():
-            participants[session.participant.id] = session.participant
-        return participants.values()
-
-    def export_feedback(self) -> QuerySet[Session]:
-        """export feedback for the blocks in this experiment
-
-        Returns:
-            Associated block feedback
-        """
-
-        all_feedback = Feedback.objects.none()
-        for block in self.associated_blocks():
-            all_feedback |= Feedback.objects.filter(block=block)
-        return all_feedback
+        return Block.objects.filter(phase__experiment=self)
 
 
 class Phase(models.Model):
@@ -192,7 +155,9 @@ class Block(models.Model):
     bonus_points = models.PositiveIntegerField(default=0)
     rules = models.CharField(default="", max_length=64)
 
-    theme_config = models.ForeignKey(ThemeConfig, on_delete=models.SET_NULL, blank=True, null=True)
+    theme_config = models.ForeignKey(
+        ThemeConfig, on_delete=models.SET_NULL, blank=True, null=True
+    )
 
     def __str__(self):
         return self.name if self.name else self.slug
@@ -204,7 +169,7 @@ class Block(models.Model):
             Number of sessions
         """
 
-        return self.session_set.count()
+        return self.sessions.count()
 
     session_count.short_description = "Sessions"
 
@@ -218,39 +183,6 @@ class Block(models.Model):
         return self.playlists.count()
 
     playlist_count.short_description = "Playlists"
-
-    def current_participants(self) -> List["participant.models.Participant"]:
-        """Get distinct list of participants
-
-        Returns:
-            Associated participants
-        """
-
-        participants = {}
-        for session in self.session_set.all():
-            participants[session.participant.id] = session.participant
-        return participants.values()
-
-    def _export_admin(self) -> dict:
-        """Export data for admin
-
-        Returns:
-            Export data for admin
-
-        """
-        return {
-            "exportedAt": timezone.now().isoformat(),
-            "block": {
-                "id": self.id,
-                "name": self.name,
-                "sessions": [session._export_admin() for session in self.session_set.all()],
-                "participants": [participant._export_admin() for participant in self.current_participants()],
-            },
-        }
-
-    def export_sessions(self):
-        # export session objects
-        return self.session_set.all()
 
     def get_rules(self) -> "experiment.rules.base.Base":
         """Get instance of rules class to be used for this session
@@ -274,7 +206,9 @@ class Block(models.Model):
             max score from all sessions with a positive score
         """
 
-        score = self.session_set.filter(final_score__gte=0).aggregate(models.Max("final_score"))
+        score = self.sessions.filter(final_score__gte=0).aggregate(
+            models.Max("final_score")
+        )
         if "final_score__max" in score:
             return score["final_score__max"]
 
@@ -374,7 +308,6 @@ class SocialMediaConfig(models.Model):
 
         Args:
             score: Score
-            experiment_name: Experiment name
 
         Returns:
             Social media shared text

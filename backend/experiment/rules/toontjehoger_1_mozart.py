@@ -68,7 +68,7 @@ class ToontjeHoger1Mozart(BaseRules):
                 session,
                 section_group="1",
                 image_url=self.QUESTION_URL1,
-                text=self.get_task_explainer(),
+                question=self.get_task_explainer(),
                 expected_response="B",
             )
             # No combine_actions because of inconsistent next_round array wrapping in first round
@@ -82,7 +82,7 @@ class ToontjeHoger1Mozart(BaseRules):
                 session,
                 section_group="2",
                 image_url=self.QUESTION_URL2,
-                text=self.get_task_explainer(),
+                question=self.get_task_explainer(),
                 expected_response="B",
             )
             return [*answer_explainer, *score, *round]
@@ -130,7 +130,14 @@ class ToontjeHoger1Mozart(BaseRules):
         score = Score(session, config=config, feedback=feedback)
         return [score]
 
-    def get_image_trial(self, session, section_group, image_url, question, expected_response):
+    def get_image_trial(
+        self,
+        session: Session,
+        section_group: str,
+        image_url: str,
+        question: str,
+        expected_response: str,
+    ):
         # Config
         # -----------------
         section = session.playlist.get_section(filter_by={"group": section_group})

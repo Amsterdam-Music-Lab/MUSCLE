@@ -3,7 +3,7 @@ from copy import deepcopy
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from modeltranslation.admin import TabbedTranslationAdmin
+from modeltranslation.admin import TabbedTranslationAdmin, TranslationTabularInline
 from question.models import (
     Choice,
     ChoiceList,
@@ -27,7 +27,7 @@ class QuestionListInline(admin.TabularInline):
     show_change_link = True
 
 
-class ChoiceInline(admin.StackedInline):
+class ChoiceInline(TranslationTabularInline):
     model = Choice
     extra = 0
     show_change_link = True
@@ -50,7 +50,7 @@ def duplicate_choice_list(modeladmin, request, queryset):
             new_choice.save()
 
 
-class ChoiceListAdmin(admin.ModelAdmin):
+class ChoiceListAdmin(TabbedTranslationAdmin):
     model = ChoiceList
     actions = [duplicate_choice_list]
     inlines = [ChoiceInline]

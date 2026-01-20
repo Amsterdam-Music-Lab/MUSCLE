@@ -1,4 +1,5 @@
 import logging
+from typing import Optional, Union
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -10,8 +11,10 @@ from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.trial import Trial
 from question.utils import get_unanswered_questions
+from result.models import Result
 from result.score import SCORING_RULES
 from result.utils import prepare_profile_result
+from section.models import Playlist
 from session.models import Session
 
 logger = logging.getLogger(__name__)
@@ -24,6 +27,9 @@ class BaseRules(object):
     counted_result_keys = []
 
     def feedback_info(self) -> FeedbackInfo:
+        """
+        Return info to shown to the user if they are invited to give feedback
+        """
         feedback_body = render_to_string("feedback/user_feedback.html", {"email": self.contact_email})
         return {
             # Header above the feedback form
@@ -38,16 +44,29 @@ class BaseRules(object):
             "show_float_button": False,
         }
 
-    def calculate_score(self, result, data):
-        """use scoring rule to calculate score
-        If not scoring rule is defined, return None
-        Override in rules file for other scoring schemes"""
+    def calculate_score(
+        self, result: Result, data: dict
+    ) -> Optional[Union[int, float]]:
+        """Use scoring rule to calculate score.
+
+        The function uses the result's scoring rule, if configured, otherwise, returns `None`.
+
+        Args:
+            result: the Result object for which to calculate the score
+            data: the data of the participant's response
+
+        """
         scoring_rule = SCORING_RULES.get(result.scoring_rule)
         if scoring_rule:
             return scoring_rule(result, data)
         return None
 
-    def get_play_again_url(self, session: Session):
+    def get_play_again_url(self, session: Session) -> str:
+        """Get the url to play the experiment again
+
+        Args:
+            session: current session
+        """
         participant_id_url_param = (
             f"?participant_id={session.participant.participant_id_url}"
             if session.participant.participant_id_url
@@ -55,7 +74,13 @@ class BaseRules(object):
         )
         return f"/block/{session.block.slug}{participant_id_url_param}"
 
-    def get_experiment_url(self, session: Session):
+    def get_experiment_url(self, session: Session) -> str:
+        """
+        return the experiment url. Defaults to experiment.slug
+
+        Args:
+            session: current session
+        """
         participant_id_url_param = (
             f"?participant_id={session.participant.participant_id_url}"
             if session.participant.participant_id_url
@@ -63,11 +88,17 @@ class BaseRules(object):
         )
         return f"/{session.block.phase.experiment.slug}{participant_id_url_param}"
 
-    def get_profile_question_trials(self, session, n_questions: int = 1) -> list[Trial]:
+    def get_profile_question_trials(
+        self, session: Session, n_questions: int = 1
+    ) -> list[Trial]:
         """Get a list of trials for questions not yet answered by the user
+
         Args:
             session: the current session
-            n_questions: the number of questions to return, set to `None` if all questions in the blocks' question sets should be returned at once
+            n_questions: the number of questions to return, set to `None` if all questions in the blocks' question lists should be returned at once
+
+        Returns:
+            list of `Trial` actions with unanswered questions
         """
         trials = []
         question_lists = session.block.questionlist_set.all()
@@ -104,8 +135,15 @@ class BaseRules(object):
                 }
         return trials
 
-    def has_played_before(self, session):
-        """Check if the current participant has completed this game previously."""
+    def has_played_before(self, session: Session) -> bool:
+        """Check if the current participant has completed this game previously.
+
+        Args:
+            session: current session
+
+        Returns:
+            boolean indicating whether the current participant has finished a session of this game
+        """
         previous_games = Session.objects.filter(
             participant=session.participant,
             block=session.block,
@@ -115,14 +153,29 @@ class BaseRules(object):
             return True
         return False
 
-    def calculate_intermediate_score(self, session, result):
-        """process result data during a trial (i.e., between next_round calls)
-        return score
+    def calculate_intermediate_score(self, session: Session, result: Result) -> int:
+        """process result data during a trial (i.e., between next_round calls). This is only used in the matching_pairs rules files so far.
+        Override this in your rules file to control what value should be returned when frontend calls `session/intermediate_score` endpoint.
+
+        Args:
+            session: current session
+            result: result to be evaluated
+
+        Returns:
+            the score of the result
         """
         return 0
 
-    def final_score_message(self, session):
-        """Create final score message for given session, base on score per result"""
+    def final_score_message(self, session: Session) -> str:
+        """Create final score message for given session, base on score per result
+        Override this to display different text on the final screen.
+
+        Args:
+            session: the current session
+
+        Returns:
+            a string with feedback for the participant based on their score
+        """
 
         correct = 0
         total = 0
@@ -140,8 +193,17 @@ class BaseRules(object):
         message = "You correctly identified {} out of {} recognized songs!".format(correct, total)
         return score_message + " " + message
 
-    def rank(self, session, exclude_unfinished=True):
-        """Get rank based on session score"""
+    def rank(self, session: Session, exclude_unfinished: bool = True) -> str:
+        """Get rank based on session score, based on the participant's percentile rank
+        Override this function in your rules file to change rank calculation
+
+        Args:
+            session: the current session
+            exclude_unfinished: whether unfinished sessions should be excluded when calculating rank
+
+        Returns:
+            a string indicating the rank of the participant (e.g., "bronze")
+        """
         score = session.final_score
         ranks = Final.RANKS
 
@@ -161,8 +223,8 @@ class BaseRules(object):
             {"rank": ranks["PLATINUM"], "min_percentile": 90.0},  # ~ stanine 8
             {"rank": ranks["DIAMOND"], "min_percentile": 95.0},  # ~ stanine 9
         ]
-
-        percentile = session.percentile_rank(exclude_unfinished)
+        filter_condition = {"finished_at__isnull": False} if exclude_unfinished else {}
+        percentile = session.percentile_rank(filter_condition)
 
         # Check the buckets in reverse order
         # If the percentile rank is higher than the min_percentile
@@ -174,7 +236,15 @@ class BaseRules(object):
         # Default return, in case score isn't in the buckets
         return ranks["PLASTIC"]
 
-    def validate_playlist(self, playlist: None):
+    def validate_playlist(self, playlist: Playlist = None) -> list[str]:
+        """Validate a playlist associated with this rules file, e.g., ensure that files have a specific name format
+
+        Args:
+            playlist: playlist to be checked
+
+        Returns:
+            an array of error messages. If return value is an empty list, validation succeeded.
+        """
         errors = []
         # Common validations across blocks
         if not playlist:

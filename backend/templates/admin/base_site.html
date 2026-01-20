@@ -1,0 +1,15 @@
+{% extends "admin/base_site.html" %} {% block extrahead %}
+{{ block.super }}
+<style>
+  /*   restyle admin interface in AML colors  */
+
+  :root {
+    --primary: rgb(157, 43, 165);
+    --secondary: #2c1376;
+    --link-fg: rgb(157, 43, 165);
+    --link-hover_color: #2c1376;
+    --button-hover-bg: #2c1376;
+  }
+
+</style>
+{% endblock %}

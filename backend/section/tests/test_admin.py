@@ -12,7 +12,7 @@ class MockRequest:
     pass
 
 
-this_playlist_admin = PlaylistAdmin(model=Playlist, admin_site=AdminSite)
+this_playlist_admin = PlaylistAdmin(model=Playlist, admin_site=AdminSite())
 
 
 class TestAdminEditSection(TestCase):

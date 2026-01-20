@@ -1,3 +1,0 @@
-## result.admin
-
-::: result.admin

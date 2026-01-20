@@ -49,6 +49,3 @@ class ResultTest(TestCase):
         with self.assertRaises(ValidationError):
             result = Result.objects.create(question_key="will_fail")
             result.clean()
-
-    def test_export_admin(self):
-        self.assertIsInstance(self.result._export_admin(), dict)

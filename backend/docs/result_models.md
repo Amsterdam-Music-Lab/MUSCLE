@@ -1,3 +1,0 @@
-## result.models
-
-::: result.models

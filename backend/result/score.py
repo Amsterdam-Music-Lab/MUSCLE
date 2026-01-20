@@ -19,7 +19,12 @@ class ChoiceData(ScoringData):
     choices: dict
 
 def correctness_score(result: Result, data: ScoringData) -> int:
-    """Binary score: return 1 if the participant's response is equal to the expected response, 0 otherwise"""
+    """Binary score: return 1 if the participant's response is equal to the expected response, 0 otherwise
+
+    Args:
+        result: the result to be scored
+        data: the participant's response
+    """
     if (
         result.expected_response == result.given_response
     ):  # TODO: raise exception if expected_response or given_response are `None`
@@ -29,33 +34,55 @@ def correctness_score(result: Result, data: ScoringData) -> int:
 
 
 def boolean_score(result: Result, data: ScoringData) -> int:
-    """Binary score: return 1 if participant answered `yes`, 0 otherwise"""
+    """Binary score: return 1 if participant answered `yes`, 0 otherwise
+
+    Args:
+        result: the result to be scored
+        data: the participant's response
+    """
     if result.given_response == 'yes':
         return 1
     else:
         return 0
 
 
+def _score_likert(data: LikertData) -> tuple[list[str], int]:
+    """Return the choices of the Likert question as a list, return index of selected value in that list"""
+    choices = list(data.get('choices').keys())
+    return choices, choices.index(str(data.get('value')))
+
+
 def likert_score(result: Result, data: LikertData) -> int:
-    """Translate the `n`th category of a Likert scale into `n`"""
-    return int(data['value'])
+    """Translate the `n`th category of a Likert scale into `n`
+
+    Args:
+        result: the result to be scored
+        data: the participant's response
+    """
+    _choices, score = _score_likert(data)
+    return score + 1
 
 
 def reverse_likert_score(result: Result, data: LikertData) -> int:
-    """Translate the `n`th category of a Likert scale into `n_steps - n`"""
-    return int(data['scale_steps']) + 1 - int(data['value'])
+    """Translate the `n`th category of a Likert scale into `n_steps - n`
 
-
-def categories_likert_score(result: Result, data: ChoiceData) -> int:
-    """Translate the `n`th category of a dictionary of choices into `n`"""
-    choices = [choice.get("value") for choice in data['choices']]
-    return choices.index(data['value']) + 1
+    Args:
+        result: the result to be scored
+        data: the participant's response
+    """
+    choices, score = _score_likert(data)
+    return len(choices) - score
 
 
 def reaction_time_score(result: Result, data: ScoringData) -> float:
     """Return the difference between the configured maximal `response_time`
     and the participant's reaction time (`decision_time`)
+
     If the answer of the participant is incorrect, return the negative reaction time
+
+    Args:
+        result: the result to be scored
+        data: the participant's response
     """
     expected_response = result.expected_response
     json_data = (
@@ -76,8 +103,13 @@ def reaction_time_score(result: Result, data: ScoringData) -> float:
 
 def song_sync_recognition_score(result: Result, data: ScoringData) -> float:
     """First step of SongSync scoring (used in experiment.rules.hooked and derivatives):
-    if the participant gives no (timeout) or a negative response to 'Do you know this song?', return 0
+
+    If the participant gives no response or negative response to 'Do you know this song?', return 0
     otherwise, return the decision time
+
+    Args:
+        result: the result to be scored
+        data: the participant's response
     """
     if result.given_response == 'TIMEOUT' or result.given_response == 'no':
         return 0
@@ -90,11 +122,16 @@ def song_sync_recognition_score(result: Result, data: ScoringData) -> float:
         return math.ceil(timeout - time)
 
 
-def song_sync_verification_score(result: Result, data: dict):
+def song_sync_verification_score(result: Result, data: ScoringData):
     """Second step of the SongSync scoring, only happens if participant stated they know the song,
     used to verify that the statement was truthful.
+
     After continuation of audio, participants need to decide whether it was continued in the correct place.
     If answered incorrectly, this function modifies the reaction time score of the previous step.
+
+    Args:
+        result: the result to be scored
+        data: the participant's response
     """
     previous_result = result.session.last_result(["recognize"])
     if result.expected_response != result.given_response:
@@ -113,5 +150,4 @@ SCORING_RULES = {
     'REACTION_TIME': reaction_time_score,
     'SONG_SYNC_RECOGNITION': song_sync_recognition_score,
     'SONG_SYNC_VERIFICATION': song_sync_verification_score,
-    'CATEGORIES_TO_LIKERT': categories_likert_score,
 }

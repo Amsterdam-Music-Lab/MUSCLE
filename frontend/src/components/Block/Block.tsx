@@ -182,25 +182,25 @@ const Block = () => {
             // Block views
             // -------------------------
             case "TRIAL_VIEW":
-                return <Trial {...attrs} />;
+                return <Trial key={key} {...attrs} />;
 
             // Information & Scoring
             // -------------------------
             case "EXPLAINER":
-                return <Explainer {...attrs} />;
+                return <Explainer key={key} {...attrs} />;
             case "SCORE":
-                return <Score {...attrs} />;
+                return <Score key={key} {...attrs} />;
             case "FINAL":
-                return <Final {...attrs} />;
+                return <Final key={key} {...attrs} />;
 
             // Generic / helpers
             // -------------------------
             case "PLAYLIST":
-                return <Playlist {...attrs} />;
+                return <Playlist key={key} {...attrs} />;
             case "LOADING":
                 return <Loading key={key} {...attrs} />;
             case "INFO":
-                return <Info {...attrs} />;
+                return <Info key={key} {...attrs} />;
             case "REDIRECT":
                 window.location.replace(state.url);
                 return null;

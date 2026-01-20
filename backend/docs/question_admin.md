@@ -1,3 +1,0 @@
-## question.admin:
-
-::: question.admin

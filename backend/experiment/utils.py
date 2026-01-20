@@ -2,8 +2,9 @@ from io import BytesIO
 from os.path import join
 from zipfile import ZipFile
 
-from django.http import HttpResponse
+from django.db.models.query import QuerySet
 from django.core import serializers
+from django.http import HttpResponse
 from django.utils import timezone
 import roman
 
@@ -12,6 +13,7 @@ from experiment.models import Experiment, Block, Feedback
 from result.models import Result
 from participant.models import Participant
 from section.models import Song, Section
+from session.models import Session
 
 
 def slugify(text: str) -> str:
@@ -68,7 +70,7 @@ def non_breaking_spaces(input_string: str) -> str:
     return input_string.replace(" ", non_breaking_space)
 
 
-def external_url(text: str, url) -> str:
+def external_url(text: str, url: str) -> str:
     """Create a HTML element for an external url
 
     Args:
@@ -121,32 +123,33 @@ def consent_upload_path(instance: Experiment, filename: str) -> str:
     join("consent", folder_name, f"{language}-{filename}")
 
 
+def get_participants_of_sessions(sessions: QuerySet[Session]) -> QuerySet[Participant]:
+    return Participant.objects.filter(sessions__in=sessions)
+
+
+def get_results_of_sessions(sessions: QuerySet[Session]) -> QuerySet[Result]:
+    return Result.objects.filter(session__in=sessions)
+
+
+def get_profiles_of_participants(
+    participants: QuerySet[Participant],
+) -> QuerySet[Result]:
+    return Result.objects.filter(participant__in=participants)
+
+
 def block_export_json_results(block_slug: str) -> ZipFile:
     """Export block JSON data as zip archive"""
 
     this_block = Block.objects.get(slug=block_slug)
-    # Init empty querysets
-    all_results = Result.objects.none()
-    all_songs = Song.objects.none()
-    all_sections = Section.objects.none()
-    all_participants = Participant.objects.none()
-    all_profiles = Result.objects.none()
     all_feedback = Feedback.objects.filter(block=this_block)
 
     # Collect data
-    all_sessions = this_block.export_sessions().order_by("pk")
-
-    for session in all_sessions:
-        all_results |= session.result_set.all()
-        all_participants |= Participant.objects.filter(pk=session.participant.pk)
-        all_profiles |= session.participant.export_profiles()
-
-    for playlist in this_block.playlists.all():
-        these_sections = playlist._export_sections()
-        all_sections |= these_sections
-        for section in these_sections:
-            if section.song:
-                all_songs |= Song.objects.filter(pk=section.song.pk)
+    all_sessions = this_block.sessions.order_by("pk")
+    all_results = get_results_of_sessions(all_sessions)
+    all_participants = get_participants_of_sessions(all_sessions)
+    all_profiles = get_profiles_of_participants(all_participants)
+    all_sections = Section.objects.filter(playlist__in=this_block.playlists.all())
+    all_songs = Song.objects.filter(section__in=all_sections).distinct()
 
     # create empty zip file in memory
     zip_buffer = BytesIO()
@@ -157,7 +160,7 @@ def block_export_json_results(block_slug: str) -> ZipFile:
         )
         new_zip.writestr(
             "participants.json",
-            data=str(serializers.serialize("json", all_participants.order_by("pk"))),
+            data=str(serializers.serialize("json", all_participants)),
         )
         new_zip.writestr(
             "profiles.json",

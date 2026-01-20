@@ -137,7 +137,7 @@ class PlayButtons(Playback):
     """Player that shows buttons for each to trigger playback.
 
     Args:
-        sections (List[Section]): List of audio sections to play.
+        sections: List of audio sections to play.
         play_once: Whether button should be disabled after one play. Defaults to False.
         **kwargs: Additional arguments passed to Playback.
 
@@ -179,22 +179,20 @@ class MatchingPairs(Playback):
 
     def __init__(
         self,
-        sections: List[Section],
-        show_animation: bool = True,
+        sections: List[PlaybackSection],
         score_feedback_display: ScoreFeedbackDisplay = "large-top",
         **kwargs: Any,
     ) -> None:
         super().__init__(sections, **kwargs)
         self.view = TYPE_MATCHINGPAIRS
-        self.show_animation = show_animation
         self.score_feedback_display = score_feedback_display
 
 
-def get_play_method(section: Section) -> PlayMethods:
+def get_play_method(section: PlaybackSection) -> PlayMethods:
     """Determine which play method to use based on section properties.
 
     Args:
-        section (Section): Audio section object.
+        section: Audio section object.
 
     Returns:
         str: Play method constant (PLAY_NOAUDIO, PLAY_EXTERNAL, PLAY_HTML, or PLAY_BUFFER).

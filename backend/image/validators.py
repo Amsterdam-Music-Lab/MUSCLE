@@ -5,7 +5,17 @@ from django.utils.deconstruct import deconstructible
 
 @deconstructible
 class FileValidator(object):
-    def __init__(self, allowed_extensions=None, allowed_mimetypes=None):
+    """
+    Validate an Image file
+
+    Attributes:
+        allowed_extensions: allowed image extensions
+        allowed_mimetypes: allowed image mimetypes (TODO)
+    """
+
+    def __init__(
+        self, allowed_extensions: list[str] = None, allowed_mimetypes: list[str] = None
+    ):
         self.allowed_extensions = allowed_extensions
         self.allowed_mimetypes = allowed_mimetypes
 

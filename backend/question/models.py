@@ -11,19 +11,16 @@ class Question(models.Model):
 
     Attributes:
         key (slug): Unique identifier
-        question (str): Question text
-        editable (bool): False for built-in questions. Key and type of a built-in question cannot be changed.
+        text (str): Question text
+        from_python (bool): whether this Question was added through a Python fixture (not editable)
         explainer (str): Question explainer text
-        type (str): Question type {"BooleanQuestion", "ChoiceQuestion", "NumberQuestion", "TextQuestion", "LikertQuestion", "LikertQuestionIcon", "AutoCompleteQuestion"}
-        scale_steps (int): Number of scale steps {5, 7} (applies to LikertQuestion, LikertQuestionIcon)
+        is_skippable (bool): If question can be skipped during experiment
+        type (str): Question type {"AutoCompleteQuestion", "ButtonArrayQuestion", "CheckboxQuestion", "DropdownQuestion", "IconRangeQuestion", "NumberQuestion", "RadiosQuestion", "RangeQuestion", "TextQuestion", "TextRangeQuestion"}
         profile_scoring_rule (str): Profile scoring rule {"", "LIKERT", "REVERSE_LIKERT", "CATEGORIES_TO_LIKERT"} (ChoiceQuestion, LikertQuestion)
         min_value (float): Minimal value (NumberQuestion)
         max_value (float): Maximal value (NumberQuestion)
         max_length (int): Maximal length (TextQuestion)
         min_values (int): Minimum number of values to choose (ChoiceQuestion)
-        view (int): Question view {"BUTTON_ARRAY", "CHECKBOXES", "RADIOS", "DROPDOWN"} (ChoiceQuestion)
-        is_skippable (bool): If question can be skipped during experiment
-
     """
 
     class QuestionTypes(models.TextChoices):
@@ -54,6 +51,7 @@ class Question(models.Model):
     text = models.CharField(max_length=1024)
     explainer = models.TextField(blank=True, default="")
     from_python = models.BooleanField(default=False, editable=False)
+    is_skippable = models.BooleanField(default=False)
 
     type = models.CharField(max_length=32, default="", choices=QuestionTypes.choices)
 
@@ -80,15 +78,11 @@ class Question(models.Model):
     # only applicable for CheckBoxQuestion
     min_values = models.IntegerField(blank=True, null=True)
 
-    is_skippable = models.BooleanField(default=False)
-
     def __str__(self):
         return "(" + self.key + ") " + self.text
 
-    def populate_translated_fields(self, field_name: str):
-        _populate_translated_fields(self, field_name)
-
     def convert_to_action(self) -> QuestionAction:
+        """convert this Question instance to a serializable `experiment.question.action`"""
         question_type = getattr(question, self.type)
         if self.choices:
             choices = self.choices.to_dict()
@@ -104,10 +98,16 @@ class Question(models.Model):
             'min_values',
             'is_skippable',
         ]
-        [self.set_optional_fields(field, question_action) for field in optional_fields]
+        [self.set_optional_field(field, question_action) for field in optional_fields]
         return question_action
 
-    def set_optional_fields(self, field, question_action: QuestionAction):
+    def set_optional_field(self, field: str, question_action: QuestionAction):
+        """set optional field of the QuestionAction
+
+        Attributes:
+            field(str): field to set
+            question_action(QuestionAction): the experiment.question.action object to modify
+        """
         if getattr(self, field):
             setattr(question_action, field, getattr(self, field))
 
@@ -116,7 +116,12 @@ class Question(models.Model):
 
 
 class ChoiceList(models.Model):
-    """A collection of choices for a question"""
+    """A resusable list of choices for a question
+
+    Attributes:
+        key (str): the key by which this choice list can be identified
+        from_python (bool): whether this ChoiceList was added through a Python fixture (not editable)
+    """
 
     key = models.SlugField(max_length=64, primary_key=True)
     from_python = models.BooleanField(default=False, editable=False)
@@ -133,14 +138,13 @@ def validate_color(value: str):
 
 
 class Choice(models.Model):
-    """ Choice model for Question with choices
+    """Choice objects are tied to Questions via ChoiceLists.
 
     Attributes:
         key (slug): Unique identifier
         text (str): Choice text
         index (int): Index of choice within Question
-        question (Question): Question that contains the Choice
-
+        choicelist (ChoiceList): ChoiceList that the Choice is associated with
     """
 
     key = models.SlugField(max_length=128)
@@ -179,9 +183,7 @@ class QuestionList(models.Model):
     block = models.ForeignKey('experiment.Block', on_delete=models.CASCADE)
     index = models.PositiveIntegerField()  # index of QuestionList within Block
     questions = models.ManyToManyField(Question, through="QuestionInList")
-    randomize = models.BooleanField(
-        default=False
-    )  # randomize questions within QuestionList
+    randomize = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["index"]

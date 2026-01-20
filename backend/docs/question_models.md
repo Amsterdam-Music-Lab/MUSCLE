@@ -1,3 +1,0 @@
-## question.models:
-
-::: question.models

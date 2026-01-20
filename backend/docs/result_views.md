@@ -1,3 +1,0 @@
-## result.views
-
-::: result.views

@@ -27,7 +27,7 @@ class PracticeMixin(object):
 
     This practice class is now written towards 2 alternative forced choice rulesets, but may be extended in the future.
 
-    Arguments:
+    Attributes:
         task_description (str): will appear in the title of the experiment
         first_condition (str): the first condition that trials may have (e.g., lower pitch)
         first_condition_i18n (str): the way the condition will appear to participants, can be translated if you use _() around the string

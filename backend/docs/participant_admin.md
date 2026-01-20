@@ -1,3 +1,0 @@
-## participant.admin:
-
-::: participant.admin
