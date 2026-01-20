@@ -48,7 +48,7 @@ def reverse_likert_score(result: Result, data: LikertData) -> int:
 
 def categories_likert_score(result: Result, data: ChoiceData) -> int:
     """Translate the `n`th category of a dictionary of choices into `n`"""
-    choices = list(data['choices'].keys())
+    choices = [choice.get("value") for choice in data['choices']]
     return choices.index(data['value']) + 1
 
 
