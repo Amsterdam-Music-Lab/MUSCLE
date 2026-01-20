@@ -2,7 +2,6 @@ from glob import glob
 
 from django.core import serializers
 from django.core.management.base import BaseCommand
-from django.db import transaction
 from django.db.utils import IntegrityError
 
 from question.models import Choice, Question

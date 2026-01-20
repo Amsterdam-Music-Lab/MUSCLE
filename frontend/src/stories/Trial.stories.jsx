@@ -48,18 +48,11 @@ const getDefaultFeedbackForm = (overrides = {}) => ({
 });
 
 const getDefaultPlayback = (overrides = {}) => ({
-    play_method: "NOAUDIO",
+    playMethod: "NOAUDIO",
     view: "BUTTON",
     instruction: "This is the instruction",
-    preload_message: "This is the preload message",
-    play_config: {
-        autoplay: true,
-        controls: true,
-        loop: true,
-        muted: true,
-        playback_rate: 1,
-        preload: "auto",
-    },
+    preloadMessage: "This is the preload message",
+    mute: false,
     sections: [
         {
             start: 0,
@@ -79,15 +72,11 @@ const getDefaultArgs = (overrides = {}) => ({
     html: {
         body: "<p>This is <u>the</u> <b>HTML</b> <i>body</i></p>",
     },
-    config: {
-        style: "PRELOAD",
-        auto_advance: true,
-        response_time: 1000,
-        continue_label: "Continue",
-        show_continue_button: true,
-    },
+    autoAdvance: true,
+    responseTime: 100,
+    continueButton: {label: "Continue"},
     playback: getDefaultPlayback(),
-    feedback_form: getDefaultFeedbackForm(),
+    feedbackForm: getDefaultFeedbackForm(),
     onNext: () => { },
     onResult: () => { },
     ...overrides,
@@ -105,38 +94,18 @@ export const Default = {
 };
 
 export const BooleanColorScheme = {
-    args: getDefaultArgs({
-        config: {
-            auto_advance: true,
-            response_time: 1000,
-            continue_label: "Continue",
-            show_continue_button: true,
-        },
-    }),
+    args: getDefaultArgs(),
     decorators: [getDecorator,],
 };
 
 export const BooleanNegativeFirstColorScheme = {
-    args: getDefaultArgs({
-        config: {
-            auto_advance: true,
-            response_time: 1000,
-            continue_label: "Continue",
-            show_continue_button: true,
-        },
-    }),
+    args: getDefaultArgs(),
     decorators: [getDecorator,],
 };
 
 export const NeutralColorScheme = {
     args: getDefaultArgs({
-        config: {
-            auto_advance: true,
-            response_time: 1000,
-            continue_label: "Continue",
-            show_continue_button: true,
-        },
-        feedback_form: {
+        feedbackForm: {
             form: [
                 {
                     key: "know_song",
@@ -168,10 +137,8 @@ export const NeutralColorScheme = {
                     },
                 }
             ],
-            submit_label: "Submit",
-            skip_label: "Skip",
-            is_skippable: true,
-            is_profile: true,
+            submitButton: {label: "Submit"},
+            skipButton: {label: "Skip"},
         },
     }),
     decorators: [getDecorator,],

@@ -75,14 +75,14 @@ class Playback(BaseAction):
     """Base class for different kinds of audio players.
 
     Args:
-        sections (List[PlaySection]): List of audio sections to play.
-        preload_message (str): Text to display during preload. Defaults to "".
-        instruction (str): Text to display during presentation. Defaults to "".
-        show_animation (bool): Whether to show playback animation. Defaults to False.
-        mute (bool): Whether to mute audio. Defaults to False.
-        resume_play (bool): Whether to resume from previous position. Defaults to False.
-        show_animation (bool): Whether to show an animated histogram during playback (applies for AutoPlay & MatchingPairs)
-        style (Optional[list[str]]): CSS class name(s) set in the frontend for styling
+        sections: List of audio sections to play.
+        preload_message: Text to display during preload.
+        instruction: Text to display during presentation.
+        show_animation: Whether to show playback animation.
+        mute: Whether to mute audio.
+        resume_play: Whether to resume from previous position.
+        show_animation: Whether to show an animated histogram during playback (applies for AutoPlay & MatchingPairs)
+        style: CSS class name(s) set in the frontend for styling
     """
 
     def __init__(

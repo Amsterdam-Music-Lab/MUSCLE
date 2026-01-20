@@ -121,6 +121,7 @@ def song_sync(
                         "recognize",
                         session,
                         section=section,
+                        json_data={'response_time': recognition_time},
                         scoring_rule="SONG_SYNC_RECOGNITION",
                     ),
                 )

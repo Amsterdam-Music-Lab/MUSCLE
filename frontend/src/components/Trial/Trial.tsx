@@ -130,18 +130,17 @@ const Trial = (props: TrialProps) => {
     }
 
     const finishedPlaying = useCallback(() => {
-        const autoAdvanceTimer = responseTime * 1000;
         if (autoAdvance) {
 
             // Create a time_passed result
-            if (autoAdvanceTimer != null) {
-                if (playback.view === 'BUTTON') {
-                    startTime.current = getCurrentTime();
+            if (playback.view === 'BUTTON') {
+                startTime.current = getCurrentTime();
+                if (responseTime) {
+                    // create timeout result after responseTime
+                    setTimeout(() => {
+                        makeResult(true);
+                    }, responseTime * 1000);
                 }
-
-                setTimeout(() => {
-                    makeResult(true);
-                }, autoAdvanceTimer);
             } else {
                 makeResult(true);
             }

@@ -168,5 +168,8 @@ def apply_scoring_rule(
     """
     scoring_rule = SCORING_RULES.get(result.scoring_rule)
     if scoring_rule:
-        return scoring_rule(result, data)
+        try:
+            return scoring_rule(result, data)
+        except Exception as e:
+            raise (e)
     return None
