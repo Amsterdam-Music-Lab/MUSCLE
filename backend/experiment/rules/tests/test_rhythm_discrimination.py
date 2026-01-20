@@ -166,7 +166,7 @@ class RhythmDiscriminationTest(TestCase):
             "/result/score/",
             {
                 "session_id": session_id,
-                "json_data": '{"decision_time":2,"form":[{"key":"same","value":"%s","result_id":%s}]}'
+                "json_data": '{"decision_time":2,"form":[{"key":"same","value":"%s","resultId":%s}]}'
                 % (expected_response, result_id),
                 "csrfmiddlewaretoken": csrf_token,
             },

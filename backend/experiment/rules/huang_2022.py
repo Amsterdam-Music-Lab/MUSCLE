@@ -18,7 +18,6 @@ from experiment.actions.wrappers import boolean_question
 from question.banks import get_question_bank
 from result.utils import prepare_result
 from session.models import Session
-from theme.styles import ColorScheme
 from .hooked import Hooked
 
 logger = logging.getLogger(__name__)
@@ -88,6 +87,7 @@ class Huang2022(Hooked):
                     form=[
                         boolean_question(
                             key='audio_check1',
+                            text="",
                             result_id=prepare_result(
                                 'audio_check1', session, scoring_rule='BOOLEAN'
                             ),

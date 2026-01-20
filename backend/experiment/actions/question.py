@@ -1,5 +1,5 @@
 """ Types of questions to be presented to participants """
-from typing import List, Optional, TypedDict
+from typing import Any, List, Optional, TypedDict
 
 from experiment.actions.base_action import BaseAction
 from theme.styles import ColorScheme

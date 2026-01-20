@@ -164,6 +164,7 @@ class MusicalPreferences(BaseRules):
                     form=[
                         boolean_question(
                             key="audio_check1",
+                            text="",
                             result_id=prepare_result(
                                 "audio_check1", session, scoring_rule="BOOLEAN"
                             ),

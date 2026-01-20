@@ -1,5 +1,6 @@
 from typing import Optional, TypedDict
 
+from .base_action import BaseAction
 from theme.models import ThemeConfig
 
 valid_colors = ThemeConfig().valid_colors()
@@ -9,7 +10,8 @@ class ButtonAction(TypedDict):
     color: str
     link: Optional[str]
 
-class Button(object):
+
+class Button(BaseAction):
     """A button object to be used for ButtonArrayQuestions, as PlayButton, or a skip / submit buttons
 
     Args:
@@ -23,9 +25,6 @@ class Button(object):
         self.label = label
         self.color = self.validate_color(color)
         self.link = link
-
-    def action(self) -> ButtonAction:
-        return self.__dict__
 
     def validate_color(self, color: str):
         if not color in valid_colors:

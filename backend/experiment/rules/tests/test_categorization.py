@@ -110,16 +110,28 @@ class CategorizationRuleTest(TestCase):
         if self.session.json_data.get('button_order') == 'neutral':
             self.assertEqual(self.session.json_data.get('button_colors'), 'Blue left, Orange right')
             if self.session.json_data.get('stimuli_a') == "BLUE":
-                self.assertEqual(self.session.json_data.get('choices'), {"A": ph, "B": ph})
+                self.assertEqual(
+                    self.session.json_data.get('choices'),
+                    [{"value": "A", "label": ph}, {"value": "B", "label": ph}],
+                )
             if self.session.json_data.get('stimuli_a') == "ORANGE":
-                self.assertEqual(self.session.json_data.get('choices'), {"B": ph, "A": ph})
+                self.assertEqual(
+                    self.session.json_data.get('choices'),
+                    [{"value": "B", "label": ph}, {"value": "A", "label": ph}],
+                )
 
         if self.session.json_data.get('button_order') == 'neutral-inverted':
             self.assertEqual(self.session.json_data.get('button_colors'), 'Orange left, Blue right')
             if self.session.json_data.get('stimuli_a') == "BLUE":
-                self.assertEqual(self.session.json_data.get('choices'), {"B": ph, "A": ph})
+                self.assertEqual(
+                    self.session.json_data.get('choices'),
+                    [{"value": "B", "label": ph}, {"value": "A", "label": ph}],
+                )
             if self.session.json_data.get('stimuli_a') == "ORANGE":
-                self.assertEqual(self.session.json_data.get('choices'), {"A": ph, "B": ph})
+                self.assertEqual(
+                    self.session.json_data.get('choices'),
+                    [{"value": "A", "label": ph}, {"value": "B", "label": ph}],
+                )
 
         # Test explainer
         self.assertEqual(categorization.get_intro_explainer().action()['instruction'], first_next_round[0].instruction)

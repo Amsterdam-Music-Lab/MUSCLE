@@ -25,7 +25,7 @@ class PlaybackSectionAction(TypedDict):
 
     link: str
     label: Optional[str]
-    color: str
+    color: Optional[str]
     play_from: float
     play_method: PlayMethods
 

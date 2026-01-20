@@ -33,8 +33,7 @@ def update_choices():
             choices = [obj.object for obj in serializers.deserialize('yaml', f)]
             for choice in choices:
                 try:
-                    with transaction.atomic():
-                        choice.save()
+                    choice.save()
                 except IntegrityError:
                     existing = Choice.objects.get(
                         key=choice.key, choicelist=choice.choicelist

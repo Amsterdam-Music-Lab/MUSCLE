@@ -48,7 +48,7 @@ def boolean_score(result: Result, data: ScoringData) -> int:
 
 def _score_likert(data: LikertData) -> tuple[list[str], int]:
     """Return the choices of the Likert question as a list, return index of selected value in that list"""
-    choices = list(data.get('choices').keys())
+    choices = [choice.get('value') for choice in data.get('choices')]
     return choices, choices.index(str(data.get('value')))
 
 
