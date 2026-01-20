@@ -2,6 +2,7 @@ from glob import glob
 
 from django.core import serializers
 from django.core.management.base import BaseCommand
+from django.db import transaction
 from django.db.utils import IntegrityError
 
 from question.models import Choice, Question
@@ -32,14 +33,17 @@ def update_choices():
             choices = [obj.object for obj in serializers.deserialize('yaml', f)]
             for choice in choices:
                 try:
-                    choice.save()
+                    with transaction.atomic():
+                        choice.save()
                 except IntegrityError:
                     existing = Choice.objects.get(
                         key=choice.key, choicelist=choice.choicelist
                     )
                     existing.text = choice.text
                     existing.index = choice.index
+                    existing.color = choice.color
                     existing.save()
+
 
 def update_questions():
     question_keys = []
