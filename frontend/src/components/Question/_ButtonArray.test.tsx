@@ -64,7 +64,7 @@ describe('ButtonArray', () => {
     });
 
     it('throws an error if the question has no choices', () => {
-        const props = getProps({ question: { ...getProps().question, choices: {} } });
+        const props = getProps({ question: { ...getProps().question, choices: [] } });
 
         expect(() => render(<ButtonArray {...props} />)).toThrowError('ButtonArray question must have choices');
 

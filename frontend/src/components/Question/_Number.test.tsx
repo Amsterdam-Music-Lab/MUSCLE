@@ -5,6 +5,8 @@ import Number from './_Number';
 describe('Number component', () => {
     const defaultProps = {
         question: {
+            key: 'numberTest',
+            text: 'Testing Number component',
             minValue: 0,
             maxValue: 100,
         },
@@ -43,14 +45,14 @@ describe('Number component', () => {
         expect(onChange).not.toHaveBeenCalled();
     });
 
-    it('throws an error when min_value or max_value is not provided for number input', () => {
+    it('throws an error when minValue or maxValue is not provided for number input', () => {
         const props = {
             ...defaultProps,
             question: {
                 minValue: 0,
             },
         };
-        expect(() => render(<Number {...props} />)).toThrow('min_value and max_value are required for the Number component');
+        expect(() => render(<Number {...props} />)).toThrow('minValue and maxValue are required for the Number component');
 
         const props2 = {
             ...defaultProps,
@@ -58,7 +60,7 @@ describe('Number component', () => {
                 maxValue: 100,
             },
         };
-        expect(() => render(<Number {...props2} />)).toThrow('min_value and max_value are required for the Number component');
+        expect(() => render(<Number {...props2} />)).toThrow('minValue and maxValue are required for the Number component');
 
         const props3 = {
             ...defaultProps,
@@ -67,7 +69,7 @@ describe('Number component', () => {
                 maxValue: null,
             },
         };
-        expect(() => render(<Number {...props3} />)).toThrow('min_value and max_value are required for the Number component');
+        expect(() => render(<Number {...props3} />)).toThrow('minValue and maxValue are required for the Number component');
 
         const props4 = {
             ...defaultProps,
@@ -76,7 +78,7 @@ describe('Number component', () => {
                 maxValue: undefined,
             },
         };
-        expect(() => render(<Number {...props4} />)).toThrow('min_value and max_value are required for the Number component');
+        expect(() => render(<Number {...props4} />)).toThrow('minValue and maxValue are required for the Number component');
 
         const props5 = {
             ...defaultProps,

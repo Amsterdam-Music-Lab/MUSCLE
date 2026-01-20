@@ -57,7 +57,7 @@ describe('DropDown', () => {
     it('throws an error when no choices are provided', () => {
         const invalidQuestion: Question = {
             key: 'invalid-dropdown',
-            choices: {}
+            choices: []
         };
 
         expect(() => render(<DropDown question={invalidQuestion} value="" onChange={() => { }} />))

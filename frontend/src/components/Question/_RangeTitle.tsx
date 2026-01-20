@@ -25,11 +25,7 @@ const RangeTitle = ({ question, value, sliderValue, emptyValue, changePosition =
                 {emptyValue ? (
                     renderLabel("fa-arrows-left-right", "fa-2x")
                 ) : (
-<<<<<<< HEAD
                     <span className={`is-${value}`}> {renderLabel(choices.find(choice => choice.value === value).label, "fa-2x")}</span>
-=======
-                    <span className={`is-${value}`}> {renderLabel(choices.pick(choice => choice.value === value), "fa-2x")}</span>
->>>>>>> a27a92b23d3b8de2e6a60b899614c6233d1a187c
                 )
                 }
             </h4>

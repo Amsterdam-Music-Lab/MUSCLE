@@ -10,13 +10,13 @@ const radiosQuestion = {
     key: 'test_question',
     view: QuestionViews.RADIOS,
     text: 'What is the average speed of a Swallow?',
-    choices: { 'slow': '1 km/h', 'fast': '42 km/h' }
+    choices: [{ value: 'slow', label: '1 km/h' }, { value: 'fast', label: '42 km/h' }]
 }
 const buttonsQuestion = {
     key: 'test_question2',
     view: QuestionViews.BUTTON_ARRAY,
     text: 'An African or European swallow?',
-    choices: { 'undecided': 'uh', 'counter': 'what?' }
+    choices: [{ value: 'undecided', label: 'uh'}, { value: 'torn', label: 'what?' }]
 }
 
 const defaultProps = {

@@ -22,6 +22,7 @@ interface ToggleButtonProps {
     onChange: (value: string) => void;
     checked: boolean;
     theme: ITheme;
+    color?: string;
 }
 
 /** ButtonArray is a question view for selecting a single option from a list of buttons */
@@ -67,11 +68,7 @@ const ButtonArray = ({ question, disabled, onChange, value }: ButtonArrayProps) 
 }
 
 /** ToggleButton is a single button in a ButtonArray */
-<<<<<<< HEAD
 const ToggleButton = ({ label, value, index, name, disabled, onChange, checked, theme, color }: ToggleButtonProps) => {
-=======
-const ToggleButton = ({ label, value, index, name, disabled, onChange, checked, theme }: ToggleButtonProps) => {
->>>>>>> a27a92b23d3b8de2e6a60b899614c6233d1a187c
     const disabledClasses = disabled ? 'disabled' : '';
     const checkedClasses = checked ? 'checked' : '';
     const indexString = index.toString();

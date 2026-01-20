@@ -22,7 +22,7 @@ describe('Radios', () => {
     });
 
     it('throws an error when no choices are provided', () => {
-        const invalidQuestion = { ...mockQuestion, choices: {} };
+        const invalidQuestion = { ...mockQuestion, choices: [] };
         expect(() => render(<Radios question={invalidQuestion} value="" onChange={() => { }} />))
             .toThrow('Radios question must have choices');
     });

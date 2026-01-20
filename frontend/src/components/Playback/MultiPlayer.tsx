@@ -18,6 +18,9 @@ const MultiPlayer = ({
     hasPlayed=[],
     playing
 }: MultiPlayerProps) => {
+    const checkPlaySection = (index: number) => {
+        playSection(index);
+    }
     return (
         <div
             data-testid="multiplayer"
@@ -29,7 +32,7 @@ const MultiPlayer = ({
             {sections.map((section, index) => (
                 <div className="player-wrapper" key={index}>
                     <PlayButton
-                        playSection={playSection}
+                        playSection={checkPlaySection}
                         disabled={
                             playOnce ? hasPlayed.includes(index) : false
                         }

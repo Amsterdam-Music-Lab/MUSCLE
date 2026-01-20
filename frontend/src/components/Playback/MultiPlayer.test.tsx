@@ -25,7 +25,7 @@ describe('MultiPlayer Component', () => {
     ];
 
     const defaultProps = {
-        playSection: vi.fn(),
+        playSection: mockPlaySection,
         sections: mockSections,
         playing: 0,
     };
@@ -57,7 +57,6 @@ describe('MultiPlayer Component', () => {
     test('calls playSection with correct index when PlayButton is clicked', () => {
         render(<MultiPlayer {...defaultProps} />);
         const players = screen.queryAllByRole('button');
-        console.log(players.length)
         fireEvent.click(players[1]);
         expect(mockPlaySection).toHaveBeenCalledWith(1);
     });

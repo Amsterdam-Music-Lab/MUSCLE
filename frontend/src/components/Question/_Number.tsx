@@ -10,8 +10,8 @@ interface NumberProps {
 /** Number is a question view that lets you input a number */
 const Number = ({ question, value = undefined, onChange }: NumberProps) => {
 
-    if ((!question.minValue && question.maxValue !== 0) || (!question.maxValue && question.maxValue !== 0)) {
-        throw new Error('minValue and maxValue are required for the Number component');
+    if (question.minValue == null || question.maxValue == null || question.maxValue <= question.minValue) {
+        throw new Error('valid minValue and maxValue are required for the Number component');
     }
 
     // Input validation

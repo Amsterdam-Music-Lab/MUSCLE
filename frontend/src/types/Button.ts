@@ -1,4 +1,4 @@
-enum buttonColorOptions {
+export enum buttonColorOptions {
     PRIMARY = 'colorPrimary',
     SECONDARY = 'colorSecondary',
     POSITIVE = 'colorPositive',

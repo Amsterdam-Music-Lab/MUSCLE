@@ -6,6 +6,7 @@ import Question from '@/types/Question';
 
 const mockQuestion: Question = {
     key: 'test-checkboxes',
+    text: 'Testing Checkboxes',
     choices: [
         {value: 'option1', label: 'First Option'},
         {value: 'option2', label: 'Second Option'},
@@ -23,8 +24,8 @@ describe('Checkboxes', () => {
 
     it('displays all choices', () => {
         render(<Checkboxes question={mockQuestion} value="" onChange={() => { }} />);
-        Object.values(mockQuestion.choices).forEach(choice => {
-            expect(screen.getByText(choice)).toBeDefined();
+        mockQuestion.choices.forEach(choice => {
+            expect(screen.getByText(choice.label)).toBeDefined();
         });
     });
 
@@ -73,7 +74,7 @@ describe('Checkboxes', () => {
     it('throws an error when no choices are provided', () => {
         const invalidQuestion: Question = {
             key: 'invalid-checkboxes',
-            choices: {}
+            choices: []
         };
 
         expect(() => render(<Checkboxes question={invalidQuestion} value="" onChange={() => { }} />))

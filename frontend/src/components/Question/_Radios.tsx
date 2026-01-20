@@ -25,7 +25,7 @@ const Radios = ({ question, value, onChange }: RadiosProps) => {
 
     return (
         <div className="aha__radios">
-            {choices.sort((a, b) => a - b).map((choice, index) => (
+            {choices.sort((a, b) => a.label - b.label).map((choice, index) => (
                 <Radio
                     key={index}
                     // This prop does not exist on Radio

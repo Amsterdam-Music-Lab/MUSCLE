@@ -14,7 +14,7 @@ export enum QuestionViews {
 interface Choice {
     value: string;
     label: string;
-    color: string;
+    color?: string;
 }
 
 export default interface Question {

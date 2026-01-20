@@ -5,7 +5,8 @@ import Question, { QuestionViews } from '@/types/Question';
 
 describe('TextRange Component', () => {
     const mockQuestion: Question = {
-        question: 'Test Question',
+        key: 'test',
+        text: 'Test Question',
         explainer: 'Test Explainer',
         view: QuestionViews.TEXT_RANGE,
         choices: [

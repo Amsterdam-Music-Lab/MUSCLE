@@ -9,9 +9,9 @@ export const playAudio = (section: Section, playMethod: string, playheadShift = 
 
         // Determine latency for current audio device
         latency = webAudio.getTotalLatency();
-        window.sessionStorage.setItem('audioLatency', latency);
+        window.sessionStorage.setItem('audioLatency', latency.toString());
         // Play audio
-        webAudio.playBufferFrom(section.id.toString(), playheadShift);
+        webAudio.playBufferFrom(section.link, playheadShift);
 
         return latency
     } else {
@@ -20,7 +20,7 @@ export const playAudio = (section: Section, playMethod: string, playheadShift = 
         if (playMethod !== 'EXTERNAL') {
             // Determine latency for current audio device
             latency = webAudio.getTotalLatency();
-            window.sessionStorage.setItem('audioLatency', latency);
+            window.sessionStorage.setItem('audioLatency', latency.toString());
             webAudio.initWebAudio();
         }
 
@@ -28,7 +28,7 @@ export const playAudio = (section: Section, playMethod: string, playheadShift = 
         audio.setVolume(1);
 
         // Play audio
-        audio.loadUntilAvailable(section.url, () => {
+        audio.loadUntilAvailable(section.link, () => {
             audio.playFrom(Math.max(0, playheadShift));
         });
 

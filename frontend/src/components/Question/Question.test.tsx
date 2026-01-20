@@ -11,7 +11,7 @@ describe('Question Component', () => {
             key: 'test-question',
             text: 'Test Question',
             view: QuestionViews.STRING,
-            max_length: 200,
+            maxLength: 200,
             value: '',
             choices: [
                 {value: '1', label: 'One'},

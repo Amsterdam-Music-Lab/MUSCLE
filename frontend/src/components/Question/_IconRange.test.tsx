@@ -43,7 +43,7 @@ describe('IconRange', () => {
     });
 
     it('throws an error when no choices are provided', () => {
-        const invalidQuestion = { ...mockQuestion, choices: {} };
+        const invalidQuestion = { ...mockQuestion, choices: [] };
         expect(() => render(<IconRange question={invalidQuestion} value="" onChange={() => { }} />))
             .toThrow('IconRange question must have choices');
     });

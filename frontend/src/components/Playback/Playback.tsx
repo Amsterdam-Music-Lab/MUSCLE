@@ -87,7 +87,7 @@ const Playback = ({
     }
 
     const getPlayheadShift = useCallback(() => {
-        /* if the current Playback view has resume_play set to true,
+        /* if the current Playback view has resumePlay set to true,
         retrieve previous Playback view's decisionTime from sessionStorage
         */
         return resumePlay ?
