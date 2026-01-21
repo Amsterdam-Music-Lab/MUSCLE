@@ -91,7 +91,7 @@ class RhythmBatteryIntro(BaseRules):
                     ButtonArrayQuestion(
                         key=key,
                         text=_("Are you wearing headphones?"),
-                        choices=ChoiceList.objects.get(pk="BOOLEAN"),
+                        choices=ChoiceList.objects.get(pk="BOOLEAN").to_dict(),
                         result_id=result_pk,
                         style=[ColorScheme.BOOLEAN],
                     )
@@ -137,6 +137,8 @@ class RhythmBatteryIntro(BaseRules):
                 final_action_with_optional_button(
                     session, message)
             ]
+            session.finish()
+            session.save()
             return actions
 
         view = Trial(playback, feedback_form=feedback_form)

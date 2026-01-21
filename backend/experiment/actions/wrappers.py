@@ -17,7 +17,7 @@ from question.models import ChoiceList
 from result.utils import prepare_result
 from section.models import Section
 from session.models import Session
-from theme.styles import ButtonStyle, ColorScheme, TextStyle
+from theme.styles import ButtonStyle, TextStyle
 
 class TwoAlternativeForced(Trial):
     """
@@ -28,7 +28,7 @@ class TwoAlternativeForced(Trial):
         expected_response (str): expected response, if applicable
         comment (str): comment to be logged with the result
         scoring_rule: scoring rule to score the participant's response
-        **kwargs: additional arguments to initialize the Trial object (e.g., response_time)
+        **kwargs: additional arguments to initialize the Trial object (e.g., title or response_time)
 
     Returns:
         (Trial): Configured trial containing a playback, a question, and a feedback form.
@@ -50,7 +50,9 @@ class TwoAlternativeForced(Trial):
         style: list[str] = [],
         **kwargs
     ):
-        playback = PlayButtons(sections=[PlaybackSection(section)], play_once=True)
+        playback = PlayButtons(
+            sections=[PlaybackSection(section, color='colorNeutral2')], play_once=True
+        )
         key = "choice"
         button_style = [
             TextStyle.INVISIBLE,

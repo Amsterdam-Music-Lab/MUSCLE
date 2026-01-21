@@ -11,7 +11,7 @@ from session.models import Session
 
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
-from experiment.actions.playback import MatchingPairs
+from experiment.actions.playback import MatchingPairs, PlaybackSection
 from experiment.actions.trial import Trial
 from experiment.actions.types import FeedbackInfo
 from .matching_pairs import MatchingPairsGame

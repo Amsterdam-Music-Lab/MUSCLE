@@ -87,7 +87,6 @@ const Trial = (props: TrialProps) => {
                     form,
                 },
             );
-            submitted.current = false;
             return onNext(shouldBreakRound);
 
         },

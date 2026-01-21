@@ -13,7 +13,7 @@ from experiment.actions.score import Score
 from experiment.actions.trial import Trial
 from experiment.actions.wrappers import TwoAlternativeForced
 from session.models import Session
-from theme.styles import ButtonStyle, ColorScheme
+from theme.styles import ButtonStyle
 
 from .base import BaseRules
 
@@ -270,22 +270,15 @@ class Categorization(BaseRules):
             # Assign a random group
             group = random.choice(["S1", "S2", "C1", "C2"])
         # Assign a random correct response color for 1A, 2A
-        stimuli_a = random.choice(["BLUE", "ORANGE"])
-        # Determine which button is orange and which is blue
-        button_order = random.choice(
-            [ColorScheme.NEUTRAL.value, ColorScheme.NEUTRAL_INVERTED.value]
-        )
         # Set expected resonse accordingly
         ph = "___"  # placeholder
-        choices = [{"value": "A", "label": ph}, {"value": "B", "label": ph}]
-        if button_order == "neutral" and stimuli_a == "BLUE":
-            pass
-        elif (
-            button_order == ColorScheme.NEUTRAL_INVERTED.value and stimuli_a == "ORANGE"
-        ):
-            pass
-        else:
-            choices.reverse()
+        colors = ['colorNeutral1', 'colorNeutral2']
+        random.shuffle(colors)
+        choices = [
+            {"value": "A", "label": ph, "color": colors[0]},
+            {"value": "B", "label": ph, "color": colors[1]},
+        ]
+        random.shuffle(choices)
         if group == "S1":
             assigned_group = "Same direction, Pair 1"
         elif group == "S2":
@@ -294,23 +287,12 @@ class Categorization(BaseRules):
             assigned_group = "Crossed direction, Pair 1"
         else:
             assigned_group = "Crossed direction, Pair 2"
-        if button_order == ColorScheme.NEUTRAL.value:
-            button_colors = "Blue left, Orange right"
-        else:
-            button_colors = "Orange left, Blue right"
-        if stimuli_a == "BLUE":
-            pair_colors = "A = Blue, B = Orange"
-        else:
-            pair_colors = "A = Orange, B = Blue"
+
         json_data = {
             "phase": "training",
             "training_rounds": "0",
             "assigned_group": assigned_group,
-            "button_colors": button_colors,
-            "pair_colors": pair_colors,
             "group": group,
-            "stimuli_a": stimuli_a,
-            "button_order": button_order,
             "choices": choices,
         }
         session.save_json_data(json_data)
@@ -428,9 +410,15 @@ class Categorization(BaseRules):
         elif last_score == 0:
             icon = "fa-face-frown"
         else:
-            pass  # throw error
+            raise ValueError(f"invalid last score: {last_score}")
 
-        return Score(session, icon=icon, timer=1, button=Button(" "))
+        return Score(
+            session,
+            icon=icon,
+            timer=1,
+            button=Button(" "),
+            title=self.get_title(session),
+        )
 
     def get_trial_with_feedback(self, session):
         score = self.get_feedback(session)
@@ -456,13 +444,11 @@ class Categorization(BaseRules):
             expected_response = "B"
 
         choices = json_data["choices"]
-        style = [json_data["button_order"]]
         trial = TwoAlternativeForced(
             session,
             section,
             choices,
             expected_response,
-            style=style,
             comment=json_data["phase"],
             scoring_rule="CORRECTNESS",
             title=self.get_title(session),
@@ -485,5 +471,5 @@ repeat_training_or_quit = ButtonArrayQuestion(
         {"value": "continued", "label": "OK", "color": "colorPositive"},
         {"value": "aborted", "label": "Exit", "color": "colorNegative"},
     ],
-    style=[ButtonStyle.LARGE_GAP, ButtonStyle.LARGE_TEXT, ColorScheme.BOOLEAN],
+    style=[ButtonStyle.LARGE_GAP, ButtonStyle.LARGE_TEXT],
 )

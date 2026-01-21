@@ -140,10 +140,10 @@ class MatchingPairsGame(BaseRules):
         """will be called every time two cards have been turned"""
         result_data = json.loads(result)
         first_card = result_data["first_card"]
-        first_section = Section.objects.get(pk=first_card["id"])
+        first_section = Section.objects.get(pk=first_card["link"].split("/")[-2])
         first_card["filename"] = str(first_section.filename)
         second_card = result_data["second_card"]
-        second_section = Section.objects.get(pk=second_card["id"])
+        second_section = Section.objects.get(pk=second_card["link"].split("/")[-2])
         second_card["filename"] = str(second_section.filename)
         if self.evaluate_sections_equal(first_section, second_section):
             if second_card.get("seen"):
