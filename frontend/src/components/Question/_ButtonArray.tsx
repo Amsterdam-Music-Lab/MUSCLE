@@ -76,7 +76,7 @@ const ToggleButton = ({ label, value, index, name, disabled, onChange, checked, 
     
     return (
         <label
-            className={classNames("btn btn-secondary btn-lg", disabledClasses, checkedClasses)}
+            className={classNames("btn btn-lg", disabledClasses, checkedClasses)}
             tabIndex={0}
             css={styleButton(colorValue)}
         >
