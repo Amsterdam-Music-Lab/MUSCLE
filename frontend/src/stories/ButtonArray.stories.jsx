@@ -38,7 +38,7 @@ const ButtonArrayDecorator = (Story) => {
 
 const StoreDecorator = (Story) => {
     const setTheme = useBoundStore((state) => state.setTheme);
-    setTheme({ colorPositive: '#00b612', colorNegative: '#fa5577', colorNeutral1: '#ffb14c', colorNeutral2: "#0cc7f1", colorNeutral3: "#2b2bee"});
+    setTheme({ colorPositive: '#39d7b8', colorNegative: '#fa5577', colorNeutral1: '#ffb14c', colorNeutral2: "#0cc7f1", colorNeutral3: "#2b2bee"});
 };
 
 export const Default = {
