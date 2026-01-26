@@ -1,5 +1,8 @@
-import Question from "@/types/Question";
 import classNames from "classnames";
+import { css } from '@emotion/react'
+
+import Question from "@/types/Question";
+import useBoundStore from "@/util/stores";
 
 interface RadiosProps {
     question: Question;
@@ -12,11 +15,11 @@ interface RadioProps {
     value: string;
     checked: boolean;
     onChange: (value: string) => void;
+    color: string;
 }
 
 /** Radios is a question view for selecting a single option from a list */
 const Radios = ({ question, value, onChange }: RadiosProps) => {
-
     const choices = question.choices;
 
     if (!choices || choices.length <= 0) {
@@ -35,6 +38,7 @@ const Radios = ({ question, value, onChange }: RadiosProps) => {
                     checked={value === choice.value}
                     onChange={onChange}
                     role="radio"
+                    color={choice.color || 'colorPositive'}
                 />
             ))}
         </div>
@@ -42,7 +46,33 @@ const Radios = ({ question, value, onChange }: RadiosProps) => {
 };
 
 /** Radio is a single option in a Radios question */
-const Radio = ({ label, value, checked, onChange }: RadioProps) => {
+const Radio = ({ label, value, checked, onChange, color }: RadioProps) => {
+        const theme = useBoundStore((state) => state.theme);
+        const radioColor = theme[color] || "#39d7b8";
+        const styleRadio = (radioColor: string) => {
+            return css`
+                &:hover {
+                    i {
+                        background-color: hsl(from ${radioColor} h s 40%);
+                    }
+                    &.checked {
+                        i {
+                            background-color: hsl(from ${radioColor} h s 40%);
+                        }
+                    }
+                }
+                &.checked {
+                    i {
+                        background-color: ${radioColor};
+                        border: 2px solid ${radioColor};
+                    }
+                }
+                &:focus {
+                    outline: ${radioColor} auto 2px;
+                }
+            `
+        }
+
     return (
         <div
             className={classNames("radio", { checked })}
@@ -51,6 +81,7 @@ const Radio = ({ label, value, checked, onChange }: RadioProps) => {
             role="radio"
             aria-checked={checked}
             onKeyDown={() => onChange(value)}
+            css={styleRadio(radioColor)}
         >
             <i></i>
             <span>{label}</span>

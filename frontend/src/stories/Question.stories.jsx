@@ -1,4 +1,5 @@
 import Question from "../components/Question/Question";
+import useBoundStore from "@/util/stores";
 
 export default {
     title: "Question/Question",
@@ -8,10 +9,22 @@ export default {
     },
 };
 
+const getDecorator = (Story) => {
+    const setTheme = useBoundStore((state) => state.setTheme);
+    setTheme({ colorPositive: '#39d7b8', colorNegative: '#fa5577', colorNeutral1: '#ffb14c', colorNeutral2: "#0cc7f1", colorNeutral3: "#2b2bee"});
+    return (
+        <div
+            style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+        >
+            <Story />
+        </div>
+    )
+}
+
 export const Default = {
     args: {
         question: {
-            question: "This is the question",
+            text: "This is the question",
             explainer: "This is the explainer",
             view: "STRING",
             value: "",
@@ -22,21 +35,13 @@ export const Default = {
         id: 0,
         active: true,
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [getDecorator],
 };
 
 export const WithOnChange = {
     args: {
         question: {
-            question: "This is the question",
+            text: "This is the question",
             explainer: "This is the explainer",
             view: "STRING",
             value: "",
@@ -47,21 +52,13 @@ export const WithOnChange = {
         id: 0,
         active: true,
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [getDecorator],
 };
 
 export const WithDisabledTrue = {
     args: {
         question: {
-            question: "This is the question",
+            text: "This is the question",
             explainer: "This is the explainer",
             view: "STRING",
             value: "",
@@ -72,21 +69,13 @@ export const WithDisabledTrue = {
         id: 0,
         disabled: true,
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [getDecorator],
 };
 
 export const WithEmphasizeTitle = {
     args: {
         question: {
-            question: "This is the question",
+            text: "This is the question",
             explainer: "This is the explainer",
             view: "STRING",
             value: "",
@@ -97,21 +86,13 @@ export const WithEmphasizeTitle = {
         id: 0,
         active: true,
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [getDecorator],
 };
 
 export const Checkboxes = {
     args: {
         question: {
-            question: "This is the question",
+            text: "This is the question",
             explainer: "This is the explainer",
             view: "CHECKBOXES",
             value: "",
@@ -122,21 +103,13 @@ export const Checkboxes = {
         id: 0,
         active: true,
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [getDecorator],
 };
 
 export const Dropdown = {
     args: {
         question: {
-            question: "This is the question",
+            text: "This is the question",
             explainer: "This is the explainer",
             view: "DROPDOWN",
             value: "",
@@ -147,21 +120,13 @@ export const Dropdown = {
         id: 0,
         active: true,
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [getDecorator],
 };
 
 export const Autocomplete = {
     args: {
         question: {
-            question: "This is the question",
+            text: "This is the question",
             explainer: "This is the explainer",
             view: "AUTOCOMPLETE",
             value: "",
@@ -200,38 +165,24 @@ export const Autocomplete = {
 export const Radios = {
     args: {
         question: {
-            question: "This is the question",
+            text: "This is the question",
             explainer: "This is the explainer",
             view: "RADIOS",
             value: "",
-            choices: [{value: 1, label: "Choice 1"}, {value: 2, label: "Choice 2"}, {value: 3, label: "Choice 3"}],
+            choices: [{value: 1, label: "Choice 1", color: "colorPositive"}, {value: 2, label: "Choice 2", color: "colorNeutral1"}, {value: 3, label: "Choice 3", color: "colorNeutral2"}],
             style: {},
         },
         onChange: () => { },
         id: 0,
         active: true,
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{
-                    width: "100%",
-                    height: "100%",
-                    backgroundColor: "#ddd",
-                    padding: "1rem",
-                    position: "relative",
-                }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [getDecorator],
 };
 
 export const Range = {
     args: {
         question: {
-            question: "This is the question",
+            text: "This is the question",
             explainer: "This is the explainer",
             view: "RANGE",
             value: "",
@@ -244,29 +195,13 @@ export const Range = {
         id: 0,
         active: true,
     },
-    decorators: [
-        (Story) => {
-            return (
-                <div
-                    style={{
-                        width: "100%",
-                        height: "100%",
-                        backgroundColor: "#ddd",
-                        padding: "3rem",
-                        position: "relative",
-                    }}
-                >
-                    <Story />
-                </div>
-            );
-        },
-    ],
+    decorators: [getDecorator],
 };
 
 export const TextRange = {
     args: {
         question: {
-            question: "This is the question",
+            text: "This is the question",
             explainer: "This is the explainer",
             view: "TEXT_RANGE",
             value: "",
@@ -277,29 +212,13 @@ export const TextRange = {
         id: 0,
         active: true,
     },
-    decorators: [
-        (Story) => {
-            return (
-                <div
-                    style={{
-                        width: "100%",
-                        height: "100%",
-                        backgroundColor: "#ddd",
-                        padding: "3rem",
-                        position: "relative",
-                    }}
-                >
-                    <Story />
-                </div>
-            );
-        },
-    ],
+    decorators: [getDecorator],
 };
 
 export const IconRange = {
     args: {
         question: {
-            question: "This is the question",
+            text: "This is the question",
             explainer: "This is the explainer",
             icon: "🌎",
             view: "ICON_RANGE",
@@ -313,29 +232,13 @@ export const IconRange = {
         id: 0,
         active: true,
     },
-    decorators: [
-        (Story) => {
-            return (
-                <div
-                    style={{
-                        width: "100%",
-                        height: "100%",
-                        backgroundColor: "#ddd",
-                        padding: "3rem",
-                        position: "relative",
-                    }}
-                >
-                    <Story />
-                </div>
-            );
-        },
-    ],
+    decorators: [getDecorator],
 };
 
 export const Number = {
     args: {
         question: {
-            question: "This is the question",
+            text: "This is the question",
             explainer: "This is the explainer",
             view: "NUMBER",
             minValue: 1,
@@ -344,29 +247,13 @@ export const Number = {
         onChange: () => { },
         value: "",
     },
-    decorators: [
-        (Story) => {
-            return (
-                <div
-                    style={{
-                        width: "100%",
-                        height: "100%",
-                        backgroundColor: "#ddd",
-                        padding: "3rem",
-                        position: "relative",
-                    }}
-                >
-                    <Story />
-                </div>
-            );
-        },
-    ],
+    decorators: [getDecorator],
 };
 
 export const String = {
     args: {
         question: {
-            question: "This is the question",
+            text: "This is the question",
             explainer: "This is the explainer",
             view: "STRING",
             maxLength: 9,
@@ -374,21 +261,5 @@ export const String = {
         onChange: () => { },
         value: "",
     },
-    decorators: [
-        (Story) => {
-            return (
-                <div
-                    style={{
-                        width: "100%",
-                        height: "100%",
-                        backgroundColor: "#ddd",
-                        padding: "3rem",
-                        position: "relative",
-                    }}
-                >
-                    <Story />
-                </div>
-            );
-        },
-    ],
+    decorators: [getDecorator],
 };

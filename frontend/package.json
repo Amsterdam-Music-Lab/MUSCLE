@@ -38,7 +38,6 @@
     "storybook:build": "storybook build",
     "lint": "eslint src/**/*.{js,jsx,ts,tsx}",
     "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx}",
-    "build-storybook": "storybook build"
   },
   "eslintConfig": {
     "plugins": [
