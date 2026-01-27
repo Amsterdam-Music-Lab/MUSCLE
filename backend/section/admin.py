@@ -55,17 +55,19 @@ class SongAdmin(admin.ModelAdmin):
 @admin.action(description="Export selected playlists")
 def playlist_export(modeladmin, request, queryset: QuerySet[Playlist]):
     response = HttpResponse(content_type='application/zip')
-    zip_file = ZipFile(response, 'w')
-    for playlist in queryset:
-        # write csv data
-        zip_file.writestr(f"{playlist.name}.csv", data=playlist.csv)
-        uploads = join(settings.MEDIA_ROOT, playlist.get_upload_path())
-        if not isdir(uploads):
-            continue
-        for audio_file in listdir(uploads):
-            zip_file.write(join(uploads, audio_file))
-    response['Content-Disposition'] = 'attachment; filename=playlists.zip'
-    return response
+    with ZipFile(response, 'w') as zip_file:
+        for playlist in queryset:
+            # write csv data
+            zip_file.writestr(f"{playlist.name}.csv", data=playlist.csv)
+            if playlist.url_prefix:
+                continue
+            uploads = join(settings.MEDIA_ROOT, playlist.get_upload_path())
+            if not isdir(uploads):
+                continue
+            for audio_file in listdir(uploads):
+                zip_file.write(join(uploads, audio_file))
+        response['Content-Disposition'] = 'attachment; filename=playlists.zip'
+        return response
 
 
 class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
