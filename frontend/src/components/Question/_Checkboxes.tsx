@@ -1,5 +1,8 @@
-import Question from "@/types/Question";
 import classNames from "classnames";
+import { css } from '@emotion/react'
+
+import Question from "@/types/Question";
+import useBoundStore from "@/util/stores";
 
 interface CheckboxesProps {
     question: Question;
@@ -40,6 +43,7 @@ const Checkboxes = ({ question, value, onChange }: CheckboxesProps) => {
                     value={choice.value}
                     checked={values.includes(choice.value)}
                     onChange={onToggle}
+                    color={choice.color || 'colorNeutral2'}
                 />
             ))}
         </div>
@@ -49,12 +53,39 @@ const Checkboxes = ({ question, value, onChange }: CheckboxesProps) => {
 interface CheckboxProps {
     label: string;
     value: string;
+    color?: string;
     checked: boolean;
     onChange: (value: string) => void;
 }
 
 /** Checkbox is a single checkbox */
-const Checkbox = ({ label, value, checked, onChange }: CheckboxProps) => {
+const Checkbox = ({ label, value, checked, onChange, color}: CheckboxProps) => {
+    const theme = useBoundStore((state) => state.theme);
+    const checkBoxColor = theme[color] || '';
+
+    const styleCheckBox = (checkBoxColor: string) => {
+            return css`
+                &:hover {
+                    i {
+                        background-color: hsl(from ${checkBoxColor} h s 40%);
+                    }
+                    &.checked {
+                        i {
+                            background-color: hsl(from ${checkBoxColor} h s 40%);
+                        }
+                    }
+                }
+                &.checked {
+                    i {
+                        background-color: ${checkBoxColor};
+                        border: 2px solid ${checkBoxColor};
+                    }
+                }
+                &:focus {
+                    outline: ${checkBoxColor} auto 2px;
+                }
+            `
+        }
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>) => {
         // Enter or space
@@ -69,6 +100,7 @@ const Checkbox = ({ label, value, checked, onChange }: CheckboxProps) => {
             onClick={() => onChange(value)}
             tabIndex={0}
             onKeyDown={handleKeyPress}
+            css={styleCheckBox(checkBoxColor)}
         >
             <i></i>
             <span>{label}</span>

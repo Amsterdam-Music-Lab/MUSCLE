@@ -15,7 +15,7 @@ interface RadioProps {
     value: string;
     checked: boolean;
     onChange: (value: string) => void;
-    color: string;
+    color?: string;
 }
 
 /** Radios is a question view for selecting a single option from a list */
@@ -48,7 +48,7 @@ const Radios = ({ question, value, onChange }: RadiosProps) => {
 /** Radio is a single option in a Radios question */
 const Radio = ({ label, value, checked, onChange, color }: RadioProps) => {
         const theme = useBoundStore((state) => state.theme);
-        const radioColor = theme[color] || "#39d7b8";
+        const radioColor = theme[color] || "";
         const styleRadio = (radioColor: string) => {
             return css`
                 &:hover {
