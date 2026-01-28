@@ -37,7 +37,7 @@ services:
   server:
     build:
       context: ./backend
-      dockerfile: DockerfileDevelop
+      dockerfile: Dockerfile
       target: dev
     depends_on:
       db:
