@@ -20,9 +20,7 @@
         }
     }
 
-    &.empty .rangeslider .rangeslider__handle {
-        background: $pink;
-    }
+    
 
     // Range slider
     // based on https://unpkg.com/react-rangeslider@2.2.0/umd/rangeslider.min.css
@@ -40,7 +38,6 @@
     }
 
     .rangeslider .rangeslider__handle {
-        background: $teal;
         border: 1px solid darken($gray, 30%);
         cursor: pointer;
         display: inline-block;
@@ -127,7 +124,6 @@
     }
     .rangeslider-vertical .rangeslider__fill {
         width: 100%;
-        background-color: $teal;
         box-shadow: none;
         bottom: 0;
     }
