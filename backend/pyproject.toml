@@ -12,6 +12,7 @@ dependencies = [
     "django-markup>=1.10",
     "django-modeltranslation>=0.19.19",
     "django-nested-admin>=4.1.6",
+    "markdown>=3.10.1",
     "pillow>=12.1.0",
     "psycopg>=3.3.2",
     "pyyaml>=6.0.3",
