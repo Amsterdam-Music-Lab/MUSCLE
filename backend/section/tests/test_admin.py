@@ -1,8 +1,16 @@
-from typing import Any
-from django.test import Client, TestCase
+from io import BytesIO
+from os import mkdir
+from shutil import copy
+from tempfile import TemporaryDirectory
+from zipfile import ZipFile
+
+from django.conf import settings
 from django.contrib.admin.sites import AdminSite
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.contrib.auth import get_user_model
+from django.test import Client, TestCase
 from django.urls import reverse
+
 from section.admin import PlaylistAdmin
 from section.models import Playlist, Section, Song
 from section.forms import PlaylistAdminForm
@@ -114,9 +122,14 @@ class TestAdminEditSection(TestCase):
 
 
 class PlaylistAdminTest(TestCase):
+
     def setUp(self):
-        self.playlist = Playlist.objects.create(name="Test Playlist")
+        self.playlist = Playlist.objects.create(name="Test Playlist Admin")
         self.client = Client()
+        self.user = get_user_model().objects.create_superuser(
+            username='admin', password='pass', email='admin@example.com'
+        )
+        self.client.login(username='admin', password='pass')
         self.playlist_admin = PlaylistAdmin(model=Playlist, admin_site=AdminSite())
 
     def test_export_csv(self):
@@ -124,6 +137,40 @@ class PlaylistAdminTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response["Content-Type"], "text/csv")
+
+    def test_playlist_export(self):
+        self.playlist.csv = (
+            "Example,Piece,0.0,10.0,TestPlaylistAdmin/example.mp3,tag1,0\n"
+        )
+        self.playlist.save()
+        url = reverse("admin:section_playlist_changelist")
+        with TemporaryDirectory() as dir_name:
+            mkdir(f'{dir_name}/{self.playlist.get_upload_path()}')
+            copy(
+                f'{settings.MEDIA_ROOT}/example.mp3',
+                f'{dir_name}/{self.playlist.get_upload_path()}/example.mp3',
+            )
+            with self.settings(MEDIA_ROOT=dir_name):
+                response = self.client.post(
+                    url,
+                    {
+                        "action": "playlist_export",
+                        "_selected_action": [self.playlist.pk],
+                    },
+                )
+                self.assertEqual(response.status_code, 200)
+                self.assertIsNotNone(response.content)
+                self.assertEqual(
+                    response['Content-Disposition'],
+                    'attachment; filename=playlists.zip',
+                )
+                with ZipFile(BytesIO(response.content)) as test_zip:
+                    namelist = test_zip.namelist()
+                    self.assertIn('Test Playlist Admin.csv', namelist)
+                    self.assertIn(
+                        f'{dir_name.strip('/')}/{self.playlist.get_upload_path()}/example.mp3',
+                        namelist,
+                    )
 
 
 class PlaylistAdminFormTest(TestCase):

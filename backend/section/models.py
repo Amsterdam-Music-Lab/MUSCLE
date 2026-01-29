@@ -90,6 +90,10 @@ class Playlist(models.Model):
     def __str__(self):
         return self.name
 
+    def get_upload_path(self):
+        """return the upload path of sections added through the admin interface"""
+        return self.name.replace(" ", "")
+
     def _section_count(self):
         """Number of sections, as displayed in the admin interface"""
         return self.section_set.count()
@@ -296,7 +300,7 @@ class Song(models.Model):
 
 def _audio_upload_path(instance, filename: str) -> str:
     """Generate path to save audio based on playlist.name"""
-    folder_name = instance.playlist.name.replace(" ", "")
+    folder_name = instance.playlist.get_upload_path()
     return join(folder_name, filename)
 
 
