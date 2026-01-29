@@ -61,7 +61,7 @@ services:
             - SQL_HOST=${SQL_HOST}
         ports:
             - 8000:8000
-        command: bash -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn aml.wsgi:application --bind 0.0.0.0:8000"
+        command: bash -c "uv run python manage.py migrate && uv run python manage.py collectstatic --noinput && uv run gunicorn aml.wsgi:application --bind 0.0.0.0:8000"
         restart: always
 
     client-builder:
