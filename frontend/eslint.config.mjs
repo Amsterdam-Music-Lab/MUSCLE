@@ -5,4 +5,17 @@ import tseslint from 'typescript-eslint';
 export default defineConfig(
 	eslint.configs.recommended,
 	tseslint.configs.recommended,
+	{
+		languageOptions: {
+			parserOptions: {
+				ecmaVersion: 2021,
+				sourceType: 'module',
+			},
+			globals: {
+				window: 'readonly',
+				document: 'readonly',
+				console: 'readonly',
+			},
+		},
+	}
 );
