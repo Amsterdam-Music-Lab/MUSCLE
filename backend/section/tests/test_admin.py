@@ -167,8 +167,9 @@ class PlaylistAdminTest(TestCase):
                 with ZipFile(BytesIO(response.content)) as test_zip:
                     namelist = test_zip.namelist()
                     self.assertIn('Test Playlist Admin.csv', namelist)
+                    stripped_dir_name = dir_name.strip('/')
                     self.assertIn(
-                        f'{dir_name.strip('/')}/{self.playlist.get_upload_path()}/example.mp3',
+                        f'{stripped_dir_name}/{self.playlist.get_upload_path()}/example.mp3',
                         namelist,
                     )
 
