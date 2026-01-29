@@ -1,19 +1,14 @@
 import { useState, useRef, useCallback } from "react";
 import classNames from "classnames";
 
-import { getAudioLatency, getCurrentTime, getTimeSince } from "@/util/time";
+import { getCurrentTime, getTimeSince } from "@/util/time";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
-import { OnResultType } from "@/hooks/useResultHandler";
 import { TrialConfig } from "@/types/Trial";
-import { Trial as TrialAction } from "@/types/Action";
+import { SharedActionProps, TrialAction } from "@/types/Action";
 
-export interface TrialProps extends TrialAction {
-    onNext: (breakRound?: boolean) => void;
-    onResult: OnResultType;
-}
 
 /**
  * Trial is a block view to present information to the user and/or collect user feedback
@@ -21,7 +16,7 @@ export interface TrialProps extends TrialAction {
  * If "html" is provided, it will show html content
  * If "feedback_form" is provided, it will present a form of questions to the user
  */
-const Trial = (props: TrialProps) => {
+const Trial = (props: TrialAction & SharedActionProps) => {
 
     const {
         playback,

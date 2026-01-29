@@ -6,10 +6,14 @@ import Question from "./Question";
 import { TrialConfig } from "./Trial";
 import { MutableRefObject } from "react";
 
-interface SharedActionProps {
+export interface SharedActionProps {
+  block: Block;
+  participant: Participant;
   title?: string;
   config?: object;
   style?: object;
+  onNext: (doBreak?: boolean) => void;
+  onResult?: () => void;
 }
 
 interface ExplainerStep {
@@ -17,35 +21,39 @@ interface ExplainerStep {
   description: string;
 }
 
-export interface Explainer {
+export interface ExplainerAction {
+  view: "EXPLAINER";
   instruction: string;
   button_label: string;
   steps?: Array<ExplainerStep>;
   timer: number | null;
 }
 
-export interface Info {
+export interface InfoAction {
+  view: "INFO";
   heading?: string;
   body: string | TrustedHTML;
   button_label?: string;
   button_link?: string;
 }
 
-export interface IFeedbackForm {
+export interface FeedbackForm {
   form: Question[];
   submit_label: string;
   skip_label: string;
   is_skippable: boolean;
 }
 
-export interface Trial {
+export interface TrialAction {
+  view: "TRIAL";
   playback: PlaybackArgs;
   html: { body: string | TrustedHTML };
-  feedback_form: IFeedbackForm;
+  feedback_form: FeedbackForm;
   config: TrialConfig;
 }
 
-export interface Score {
+export interface ScoreAction {
+  view: "SCORE";
   last_song?: string;
   score: number;
   score_message: string;
@@ -60,9 +68,7 @@ export interface Score {
   timer?: number;
 }
 
-export interface Final {
-  block: Block;
-  participant: Participant;
+export interface FinalAction {
   score: number;
   percentile?: number;
   final_text: string | TrustedHTML;
@@ -91,30 +97,32 @@ export interface Final {
   };
 }
 
-export interface Playlist {
+export interface PlaylistAction {
+  view: "PLAYLIST";
   instruction: string;
   playlist: MutableRefObject<string>;
 }
 
-export interface Redirect {
+export interface RedirectAction {
+  view: "REDIRECT";
   url: string;
 }
 
-export interface Loading {
+export interface LoadingAction {
+  view: "LOADING";
   duration?: number;
   loadingText?: string;
 }
 
-export type Action = SharedActionProps &
-  (
-    | { view: "EXPLAINER" } & Explainer
-    | { view: "INFO" } & Info
-    | { view: "TRIAL_VIEW" } & Trial
-    | { view: 'SCORE' } & Score
-    | { view: 'FINAL' } & Final
-    | { view: 'PLAYLIST' } & Playlist
-    | { view: 'REDIRECT' } & Redirect
-    | { view: "LOADING" } & Loading
+export type Action = ( 
+  ExplainerAction
+    | InfoAction
+    | TrialAction
+    | ScoreAction
+    | FinalAction
+    | PlaylistAction
+    | RedirectAction
+    | LoadingAction
   )
 
 export default Action;

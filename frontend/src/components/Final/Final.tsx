@@ -10,12 +10,8 @@ import useBoundStore from "../../util/stores";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 import UserFeedback from "../UserFeedback/UserFeedback";
 import FinalButton from "./FinalButton";
-import { Final as FinalAction } from "@/types/Action";
+import { FinalAction, SharedActionProps } from "@/types/Action";
 import classNames from "@/util/classNames";
-
-export interface FinalProps extends FinalAction {
-    onNext: () => void;
-}
 
 /**
  * Final is a block view that shows the final scores of the block
@@ -38,7 +34,7 @@ const Final = ({
     rank,
     logo,
     percentile,
-}: FinalProps) => {
+}: FinalAction & SharedActionProps) => {
 
     const session = useBoundStore((state) => state.session);
     const navigate = useNavigate();

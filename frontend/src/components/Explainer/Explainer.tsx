@@ -1,17 +1,14 @@
 import { useEffect } from "react";
 import Button from "../Button/Button";
-import { Explainer as ExplainerAction } from "@/types/Action";
+import { ExplainerAction, SharedActionProps } from "@/types/Action";
 
-export interface ExplainerProps extends ExplainerAction {
-    onNext: () => void;
-}
 
 /**
  * Explainer is a block view that shows a list of steps
  * If the button has not been clicked, onNext will be called automatically after the timer expires (in milliseconds).
  * If timer == null, onNext will only be called after the button is clicked.
  */
-const Explainer = ({ instruction, button_label, steps = [], timer = null, onNext }: ExplainerProps) => {
+const Explainer = ({ instruction, button_label, steps = [], timer = null, onNext }: ExplainerAction & SharedActionProps) => {
 
     useEffect(() => {
         if (timer != null) {
