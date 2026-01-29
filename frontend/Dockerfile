@@ -14,6 +14,7 @@ COPY tsconfig.node.json /client/
 COPY vite.config.ts /client/
 COPY vite-env.d.ts /client/
 COPY vitest.config.ts /client/
+COPY eslint.config.mjs /client
 COPY index.html /client/
 
 FROM base as prod
