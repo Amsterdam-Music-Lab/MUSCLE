@@ -8,7 +8,7 @@ from django.db.models.query import QuerySet
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.utils.html import format_html
+from django.utils.html import format_html, format_html_join
 
 from inline_actions.admin import InlineActionsModelAdminMixin
 from modeltranslation.admin import TabbedTranslationAdmin
@@ -151,7 +151,10 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
         url = f"http://localhost:3000/{obj.slug}" if dev_mode else f"/{obj.slug}"
 
         return format_html(
-            f'<a href="{url}" target="_blank" rel="noopener noreferrer" title="Open {obj.slug} experiment group in new tab" >{obj.slug}&nbsp;<small>&#8599;</small></a>'
+            '<a href="{}" target="_blank" rel="noopener noreferrer" title="Open {} experiment group in new tab" >{}</a>',
+            url,
+            obj.slug,
+            obj.slug,
         )
 
     slug_link.short_description = "Slug"
@@ -376,13 +379,17 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
                 }
             )
 
-        return format_html(
-            "\n".join(
-                [
-                    f'<span class="badge badge-{remark["level"]} whitespace-nowrap text-xs mt-1" title="{remark.get("title") if remark.get("title") else remark["message"]}">{remark["message"]}</span><br>'
-                    for remark in remarks_array
-                ]
-            )
+        return format_html_join(
+            '\n',
+            '<span class="badge badge-{} whitespace-nowrap text-xs mt-1" title="{}" >{}</span><br>',
+            (
+                (
+                    remark["level"],
+                    remark["title"],
+                    remark["message"],
+                )
+                for remark in remarks_array
+            ),
         )
 
 admin.site.register(Block, BlockAdmin)

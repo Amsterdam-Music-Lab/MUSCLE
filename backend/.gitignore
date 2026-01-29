@@ -9,6 +9,7 @@ db.sqlite3
 .env
 .env.prod
 .env.dev
+.venv
 static/*
 upload/*
 !upload/example.mp3

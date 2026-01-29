@@ -37,8 +37,8 @@ services:
   server:
     build:
       context: ./backend
-      dockerfile: DockerfileDevelop
-      target: base
+      dockerfile: Dockerfile
+      target: dev
     depends_on:
       db:
         condition: service_healthy
@@ -46,6 +46,7 @@ services:
         condition: service_started
     volumes:
       - translation_data:/unicode-translations/
+      - uv_backend_env:/.venv
       - type: bind
         source: ./backend
         target: /server
@@ -65,9 +66,10 @@ services:
       - SQL_USER=${SQL_USER}
       - SQL_PASSWORD=${SQL_PASSWORD}
       - SQL_HOST=${SQL_HOST}
+      - UV_PROJECT_ENVIRONMENT=/.venv
     ports:
       - 8000:8000
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "uv run python manage.py migrate && uv run python manage.py runserver 0.0.0.0:8000"
   client:
     build:
       context: ./frontend
@@ -123,3 +125,4 @@ volumes:
   db_data:
   db_backup:
   translation_data:
+  uv_backend_env:
