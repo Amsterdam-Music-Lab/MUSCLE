@@ -4,6 +4,7 @@ import Question from "../Question/Question";
 import Button from "../Button/Button";
 import IQuestion from "@/types/Question";
 import { QuestionViews } from "@/types/Question";
+import { OnResultParams } from "@/hooks/useResultHandler";
 
 interface FeedbackFormProps {
     formActive: boolean;
@@ -11,7 +12,7 @@ interface FeedbackFormProps {
     buttonLabel: string;
     skipLabel: string;
     isSkippable: boolean;
-    submitResult: any;
+    submitResult: (result: OnResultParams) => void;
 }
 
 /** FeedbackForm */

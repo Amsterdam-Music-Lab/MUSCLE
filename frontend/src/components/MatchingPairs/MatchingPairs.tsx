@@ -11,6 +11,7 @@ import Session from "@/types/Session";
 import Participant from "@/types/Participant";
 import Overlay from "../Overlay/Overlay";
 import { ScoreFeedbackDisplay } from "@/types/Playback";
+import { OnResultParams } from "@/hooks/useResultHandler";
 
 export const SCORE_FEEDBACK_DISPLAY: { [key: string]: ScoreFeedbackDisplay } = {
     SMALL_BOTTOM_RIGHT: 'small-bottom-right',
@@ -25,7 +26,7 @@ interface MatchingPairsProps {
     showAnimation: boolean;
     finishedPlaying: () => void;
     scoreFeedbackDisplay?: ScoreFeedbackDisplay;
-    submitResult: (result: any) => void;
+    submitResult: (result: OnResultParams) => void;
     tutorial?: { [key: string]: string };
     view: string;
 }

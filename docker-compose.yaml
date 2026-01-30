@@ -73,7 +73,8 @@ services:
   client:
     build:
       context: ./frontend
-      dockerfile: DockerfileDevelop
+      dockerfile: Dockerfile
+      target: dev
     volumes:
       - type: bind
         source: ./frontend/src
@@ -84,24 +85,6 @@ services:
       - type: bind
         source: ./frontend/.storybook
         target: /client/.storybook
-      - type: bind
-        source: ./frontend/tsconfig.json
-        target: /client/tsconfig.json
-      - type: bind
-        source: ./frontend/tsconfig.node.json
-        target: /client/tsconfig.node.json
-      - type: bind
-        source: ./frontend/vite-env.d.ts
-        target: /client/vite-env.d.ts
-      - type: bind
-        source: ./frontend/vite.config.ts
-        target: /client/vite.config.ts
-      - type: bind
-        source: ./frontend/vitest.config.ts
-        target: /client/vitest.config.ts
-      - type: bind
-        source: ./frontend/index.html
-        target: /client/index.html
     environment:
       - VITE_API_ROOT=${FRONTEND_API_ROOT}
       - VITE_EXPERIMENT_SLUG=${FRONTEND_EXPERIMENT_SLUG}

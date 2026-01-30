@@ -94,7 +94,7 @@ describe("CountDown", () => {
 
     it("should apply the correct classes based on the state", async () => {
         const firstContainer = render(<CountDown duration={3} running={true} />);
-        let firstHeading = firstContainer.getByText("3");
+        const firstHeading = firstContainer.getByText("3");
 
         MockedTimer.mockImplementation(({ onFinish }) => {
             onFinish();
