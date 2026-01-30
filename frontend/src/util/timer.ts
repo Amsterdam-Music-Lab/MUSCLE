@@ -43,7 +43,7 @@ export const Timer = ({
             lastTime = time;
 
             // tick
-            return onTick && onTick(time, delta);
+            onTick?.(time, delta);
         }
 
         lastTimestamp = timestamp;

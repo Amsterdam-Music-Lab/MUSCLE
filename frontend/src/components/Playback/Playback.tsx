@@ -11,13 +11,14 @@ import ImagePlayer from "./ImagePlayer";
 import MatchingPairs from "../MatchingPairs/MatchingPairs";
 import Preload from "../Preload/Preload";
 import { AUTOPLAY, BUTTON, IMAGE, MATCHINGPAIRS, MULTIPLAYER, PRELOAD, PlaybackArgs, PlaybackView } from "@/types/Playback";
+import { OnResultParams } from "@/hooks/useResultHandler";
 
 export interface PlaybackProps {
     playbackArgs: PlaybackArgs;
     onPreloadReady: () => void;
     autoAdvance: boolean;
     responseTime: number;
-    submitResult: (result: any) => void;
+    submitResult: (result: OnResultParams) => void;
     startedPlaying?: () => void;
     finishedPlaying: () => void;
 }
@@ -65,8 +66,7 @@ const Playback = ({
 
     // Cancel events
     const cancelAudioListeners = useCallback(() => {
-        activeAudioEndedListener.current
-            && activeAudioEndedListener.current();
+        activeAudioEndedListener.current?.();
     }, []);
 
     // Cancel all events when component unmounts
@@ -163,7 +163,7 @@ const Playback = ({
     const onFinishedPlaying = useCallback(() => {
         setPlayerIndex(-1);
         pauseAudio(playMethod);
-        finishedPlaying && finishedPlaying();
+        finishedPlaying();
     }, [finishedPlaying, playMethod]);
 
     // Stop audio on unmount
