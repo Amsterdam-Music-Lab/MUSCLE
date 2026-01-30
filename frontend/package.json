@@ -39,24 +39,6 @@
     "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx}",
     "build-storybook": "storybook build"
   },
-  "eslintConfig": {
-    "plugins": [
-      "chai-friendly"
-    ],
-    "extends": [
-      "react-app",
-      "plugin:storybook/recommended"
-    ],
-    "rules": {
-      "no-unused-expressions": 0,
-      "chai-friendly/no-unused-expressions": [
-        "error",
-        {
-          "allowShortCircuit": true
-        }
-      ]
-    }
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -92,9 +74,6 @@
     "axios-mock-adapter": "^2.1.0",
     "coverage-badges-cli": "^2.2.0",
     "eslint": "^9.39.2",
-    "eslint-config-react-app": "^7.0.1",
-    "eslint-plugin-chai-friendly": "^1.1.0",
-    "eslint-plugin-storybook": "^10.2.1",
     "happy-dom": "^20.0.2",
     "history": "^5.3.0",
     "msw": "^2.6.6",

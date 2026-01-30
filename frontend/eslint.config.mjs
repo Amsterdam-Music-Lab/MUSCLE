@@ -1,5 +1,5 @@
 import eslint from '@eslint/js';
-import { defineConfig } from 'eslint/config';
+import { defineConfig, globalIgnores } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig(
@@ -12,10 +12,17 @@ export default defineConfig(
 				sourceType: 'module',
 			},
 			globals: {
-				window: 'readonly',
-				document: 'readonly',
 				console: 'readonly',
+				document: 'readonly',
+				fetch: 'readonly',
+				module: 'readonly',
+				navigator: 'readonly',
+				process: 'readonly',
+				require: 'readonly',
+				URL: 'readonly',
+				window: 'readonly',
 			},
 		},
-	}
+	},
+	globalIgnores(["src/**/*.test.tsx", "src/stories/*"])
 );
