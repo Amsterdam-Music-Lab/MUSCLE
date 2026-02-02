@@ -37,7 +37,7 @@
     "storybook": "storybook dev -p 6006 --no-open",
     "storybook:build": "storybook build",
     "lint": "eslint src/**/*.{js,jsx,ts,tsx}",
-    "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx}",
+    "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx}"
   },
   "eslintConfig": {
     "plugins": [
