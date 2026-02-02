@@ -90,7 +90,7 @@
     "@vitest/coverage-v8": "^2.1.4",
     "axios-mock-adapter": "^1.22.0",
     "coverage-badges-cli": "^1.2.5",
-    "eslint": "^8.54.0",
+    "eslint": "^9.26.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-chai-friendly": "^0.7.2",
     "eslint-plugin-storybook": "^0.11.1",
