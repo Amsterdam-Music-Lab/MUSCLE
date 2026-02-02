@@ -11,7 +11,7 @@ export default {
 
 const getDecorator = (Story) => {
     const setTheme = useBoundStore((state) => state.setTheme);
-    setTheme({ colorPositive: '#39d7b8', colorNegative: '#fa5577', colorNeutral1: '#ffb14c', colorNeutral2: "#0cc7f1", colorNeutral3: "#2b2bee"});
+    setTheme({ colorPrimary: "#d843e2", colorSecondary: "#39d7b8", colorPositive: "#39d7b8", colorNegative: "#fa5577", colorNeutral1: "#ffb14c", colorNeutral2: "#0cc7f1", colorNeutral3: "#2b2bee", colorGrey: "#bdbebf"});
     return (
         <div
             style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}

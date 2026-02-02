@@ -1,4 +1,3 @@
-import Slider from "react-rangeslider";
 import classNames from "classnames";
 import { css } from '@emotion/react'
 
@@ -16,12 +15,17 @@ const Range = ({ question, value, onChange }: RangeProps) => {
     const emptyValue = !value;
     const theme = useBoundStore((state) => state.theme);
     const sliderEmptyColor = theme["colorPrimary"];
-    const sliderActiveColor = theme["colorSecondary"]
+    const sliderActiveColor = theme["colorSecondary"];
+    const sliderBackground = theme["colorGrey"];
     
     const sliderStyle = () => {
         return css`
-            .rangeslider__handle {
-                backgound: red;
+            input.aha__slider {
+                background: ${sliderBackground}
+            }
+
+            input.aha__slider::-webkit-slider-thumb {
+                background: ${sliderEmptyColor}
             }
         `
     }
@@ -35,18 +39,14 @@ const Range = ({ question, value, onChange }: RangeProps) => {
         value = (question.minValue + question.maxValue) / 2;
     }
     return (
-        <div className={classNames("aha__range", { empty: emptyValue })}>
+        <div className={classNames("aha__range", { empty: emptyValue })} css={sliderStyle()}>
             <h1 className="current-value">{emptyValue ? "↔" : value}</h1>
-            <div css={sliderStyle()}>
-            <Slider
-                value={value}
-                onChange={onChange}
+            <input className="aha__slider" type="range"
+                // value={value}
+                // onChange={onChange}
                 min={question.minValue}
                 max={question.maxValue}
-                
-                tooltip={false}
             />
-            </div>
             <div className="limits">
                 <span className="min">{question.minValue}</span>
                 <span className="max">{question.maxValue}</span>
