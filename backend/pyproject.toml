@@ -1,0 +1,40 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "The MUSCLE backend"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "audioread>=3.1.0",
+    "django>=6.0.1",
+    "django-cors-headers>=4.9.0",
+    "django-inline-actions>=2.4.0",
+    "django-markup>=1.10",
+    "django-modeltranslation>=0.19.19",
+    "django-nested-admin>=4.1.6",
+    "markdown>=3.10.1",
+    "pillow>=12.1.0",
+    "psycopg>=3.3.2",
+    "pyyaml>=6.0.3",
+    "roman>=5.2",
+    "sentry-sdk>=2.49.0",
+    "tqdm>=4.67.1",
+]
+
+[dependency-groups]
+coverage = [
+    "coverage>=7.13.1",
+    "genbadge>=1.1.3",
+]
+dev = [
+    "django-debug-toolbar>=6.1.0",
+    "requests>=2.32.5",
+    {include-group = "coverage"},
+    {include-group = "lint"},
+]
+lint = [
+    "ruff>=0.14.10",
+]
+prod = [
+    "gunicorn>=23.0.0",
+]

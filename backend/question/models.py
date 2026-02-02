@@ -20,7 +20,7 @@ class Question(models.Model):
         min_value (float): Minimal value (NumberQuestion)
         max_value (float): Maximal value (NumberQuestion)
         max_length (int): Maximal length (TextQuestion)
-        min_values (int): Minimum number of values to choose (ChoiceQuestion)
+        min_values (int): Minimum number of values to choose (CheckboxQuestion)
     """
 
     class QuestionTypes(models.TextChoices):
@@ -71,11 +71,11 @@ class Question(models.Model):
     # only applicable for TextQuestion: maximal length of text
     max_length = models.IntegerField(blank=True, null=True)
 
-    # ChoiceQuestion
+    # applicable for AUTOCOMPLETE, BUTTON_ARRAY, CHECKBOXES, DROPDOWN, ICON_RANGE, RADIOS, TEXT_RANGE
     choices = models.ForeignKey(
         'question.ChoiceList', null=True, on_delete=models.SET_NULL
     )
-    # only applicable for CheckBoxQuestion
+    # only applicable for CHECKBOXES
     min_values = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
