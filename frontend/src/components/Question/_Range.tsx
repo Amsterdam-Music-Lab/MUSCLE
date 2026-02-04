@@ -1,9 +1,5 @@
-import Slider from "react-rangeslider";
-import classNames from "classnames";
-import { css } from '@emotion/react'
-
 import Question from "@/types/Question";
-import useBoundStore from "@/util/stores";
+import RangeSlider from "./_RangeSlider";
 
 interface RangeProps {
     question: Question;
@@ -13,44 +9,24 @@ interface RangeProps {
 
 /** Range is a question view that makes you select a value within the given range, using a slider */
 const Range = ({ question, value, onChange }: RangeProps) => {
-    const emptyValue = !value;
-    const theme = useBoundStore((state) => state.theme);
-    const sliderEmptyColor = theme["colorPrimary"];
-    const sliderActiveColor = theme["colorSecondary"]
-    
-    const sliderStyle = () => {
-        return css`
-            .rangeslider__handle {
-                backgound: red;
-            }
-        `
+    if (question.minValue == null || question.maxValue == null || question.maxValue <= question.minValue) {
+        throw new Error('valid minValue and maxValue are required for the Range component');
     }
 
+    const onSliderChange = (value: number) => onChange(value + question.minValue!);
 
-    if ((!question.minValue && question.minValue !== 0) || (!question.maxValue && question.maxValue !== 0)) {
-        throw new Error('minValue and maxValue are required for the Range component');
-    }
+    const keys = Array.from(new Array(question.maxValue), (_, i) => i + question.minValue!);
+    const labels = keys.map( value => value.toString());
 
-    if (emptyValue) {
-        value = (question.minValue + question.maxValue) / 2;
-    }
     return (
-        <div className={classNames("aha__range", { empty: emptyValue })}>
-            <h1 className="current-value">{emptyValue ? "↔" : value}</h1>
-            <div css={sliderStyle()}>
-            <Slider
+        <div className="aha__range">
+            <RangeSlider 
+                keys={keys}
+                labels={labels}
                 value={value}
-                onChange={onChange}
-                min={question.minValue}
-                max={question.maxValue}
-                
-                tooltip={false}
+                onSliderChange={onSliderChange}
             />
-            </div>
-            <div className="limits">
-                <span className="min">{question.minValue}</span>
-                <span className="max">{question.maxValue}</span>
-            </div>
+            
         </div>
     );
 };

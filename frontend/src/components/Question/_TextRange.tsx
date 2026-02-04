@@ -1,8 +1,4 @@
-import Slider from "react-rangeslider";
-import classNames from "classnames";
-
-import RangeLimits from "./_RangeLimits";
-import RangeTitle from "./_RangeTitle";
+import RangeSlider from "./_RangeSlider";
 import Question from "@/types/Question";
 
 interface TextRangeProps {
@@ -17,8 +13,6 @@ interface TextRangeProps {
  * This to ensure that the slider is centered initially, even if we don't have a center value
  *  */
 const TextRange = ({ question, value, onChange }: TextRangeProps) => {
-    const emptyValue = !value;
-
     const choices = question.choices;
 
     if (!choices || choices.length === 0) {
@@ -26,40 +20,20 @@ const TextRange = ({ question, value, onChange }: TextRangeProps) => {
     }
 
     const keys = choices.map(choice => choice.value);
+    const labels = choices.map(choice => choice.label);
 
-    const onSliderChange = (index: number) => onChange(keys[Math.round(index / 10)]);
-
-    let sliderValue = 0;
-    if (emptyValue) {
-        sliderValue = Math.round(keys.length * 5) - 5;
-    } else {
-        sliderValue = keys.indexOf(value) * 10;
-    }
+    const onSliderChange = (index: number) => onChange(keys[index]);
 
     return (
-        <div className={classNames("aha__text-range", { empty: emptyValue })}>
-
-            <RangeTitle
-                question={question}
+        <div className="aha__text_range">
+            <RangeSlider 
+                keys={keys}
+                labels={labels}
                 value={value}
-                sliderValue={sliderValue}
-                emptyValue={emptyValue}
-            />
-
-            <Slider
-                value={sliderValue}
-                onChange={onSliderChange}
-                min={0}
-                max={(choices.length * 10) - 10}
-                tooltip={false}
-            />
-
-            <RangeLimits
-                minVal={choices[0].label}
-                maxVal={choices[choices.length - 1].label}
+                onSliderChange={onSliderChange}
             />
         </div>
-    );
+    )
 };
 
 export default TextRange;

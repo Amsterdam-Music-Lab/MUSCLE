@@ -1,31 +1,21 @@
 import { renderLabel } from "../../util/label";
-import Question from "@/types/Question";
 
 interface RangeTitleProps {
-    question: Question;
-    value: string;
+    labels: string[];
     sliderValue: number;
     emptyValue: boolean;
     changePosition?: boolean;
 }
 
-const RangeTitle = ({ question, value, sliderValue, emptyValue, changePosition = false }: RangeTitleProps) => {
-
-    const choices = question.choices;
-
-    if (!choices || choices.length === 0) {
-        throw new Error("RangeTitle question must have choices");
-    }
-
-    const nChoices = choices.length - 1;
-    const position = - (nChoices - sliderValue * 2) / nChoices * 44;
+const RangeTitle = ({ labels, sliderValue, emptyValue, changePosition = false }: RangeTitleProps) => {
+    const position = (sliderValue  - 1) * 90 / (labels.length - 1);
     return (
         <div>
             <h4 className="current-value" style={{ position: 'relative', left: changePosition ? `${position}%` : '0%' }}>
                 {emptyValue ? (
-                    renderLabel("fa-arrows-left-right", "fa-2x")
+                    renderLabel("↔", "fa-2x")
                 ) : (
-                    <span className={`is-${value}`}> {renderLabel(choices.find(choice => choice.value === value).label, "fa-2x")}</span>
+                    <span> {renderLabel(labels[sliderValue], "fa-2x")}</span>
                 )
                 }
             </h4>
