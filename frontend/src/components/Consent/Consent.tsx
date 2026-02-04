@@ -70,7 +70,7 @@ const Consent = ({ title, text, experiment, participant, onNext, confirmButton, 
 
     // Show consent
     return (
-        <div className={classNames("aha__consent")}>
+        <div className={classNames("aha__consent")} style={{background: experiment.theme.colorText, color: experiment.theme.colorBackground}}>
             <div className="aha__consent-header d-flex">
                 <div className="flex-fill">
                     <h3>{title}</h3>
