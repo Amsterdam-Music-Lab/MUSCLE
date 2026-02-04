@@ -9,7 +9,7 @@ import useBoundStore from "@/util/stores";
 
 interface ButtonProps {
     label: string;
-    color: string;
+    color?: string;
     link?: string;
     onClick: (value?: string | boolean) => void;
     className?: string;
