@@ -17,7 +17,6 @@ interface UserFeedbackProps {
 const UserFeedback = ({ blockSlug, participant, feedbackInfo, inline = true }: UserFeedbackProps) => {
     const [value, setValue] = useState('');
     const [showForm, setShowForm] = useState(true);
-    const theme = useBoundStore((state) => state.theme);
 
     const giveFeedback = async () => {
         const data = {

@@ -5,7 +5,7 @@ import useBoundStore from "@/util/stores";
 
 const StoreDecorator = (Story) => {
     const setTheme = useBoundStore((state) => state.setTheme);
-    setTheme({ colorPrimary: '#d843e2'});
+    setTheme({ colorPrimary: "#d843e2", colorSecondary: "#39d7b8" });
 };
 
 export default {
@@ -57,10 +57,12 @@ function getFinalData(overrides = {}) {
         participant_id_only: false,
         feedback_info: {
             header: "Feedback",
-            button: "Submit",
+            button: {
+                label: "Submit",
+            },
             thank_you: "Thank you for your feedback!",
             contact_body:
-                '<p>Please contact us at <a href="mailto:info@example.com">',
+                '<p>Please contact us at <a href="mailto:info@example.com">info@example.com</a></p>',
         },
         block: {
             slug: "test",
