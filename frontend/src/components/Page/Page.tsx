@@ -12,8 +12,7 @@ const Page = ({ className, children }: PageProps) => {
 
     const theme = useBoundStore((state) => state.theme);
     const backgroundImageUrl = theme?.backgroundUrl;
-    const backgroundColor = theme?.colorBackground;
-    var style = {};
+    let style = {};
 
     if (backgroundImageUrl) {
         style = {
@@ -21,12 +20,21 @@ const Page = ({ className, children }: PageProps) => {
         }
     } else {
         style = {
-            backgroundColor: backgroundColor
+            backgroundColor: theme?.colorBackground
         }
     }
 
+    const stylePage = () => { 
+        return css`
+            color: ${theme?.colorText};
+            h3.title:after {
+                background-color: ${theme?.colorPrimary}
+            }
+        `
+    }
+
     return (
-        <div className={"aha__page " + (className ? className : "")} style={style} css={css`color: ${theme?.colorText}`}>
+        <div className={"aha__page " + (className ? className : "")} style={style} css={stylePage()}>
             {children}
         </div>
     );
