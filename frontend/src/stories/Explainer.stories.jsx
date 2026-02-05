@@ -1,4 +1,5 @@
 import Explainer from "../components/Explainer/Explainer";
+import useBoundStore from "@/util/stores";
 
 export default {
     title: "Explainer/Explainer",
@@ -8,73 +9,51 @@ export default {
     },
 };
 
-export const Default = {
-    args: {
+const getExplainerArgs = (overrides = {}) => {
+    const defaultArgs = {
         instruction: "This is the instruction",
-        button_label: "Next",
+        button: {
+            label: "Next",
+            color: "colorPrimary"
+        },
         steps: [
             { number: 1, description: "This is the first step" },
             { number: 2, description: "This is the second step" },
             { number: 3, description: "This is the third step" },
         ],
-        onNext: () => {
-            console.log("Next button clicked");
-        },
+        onNext: () => {},
         timer: null,
-    },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    }
+    return { ...defaultArgs, ...overrides}
+}
+
+const explainerDecorator = (Story) => {
+    const setTheme = useBoundStore((state) => state.setTheme);
+    setTheme({ colorBackground: 'black', colorText: 'white', colorPrimary: '#d843e2'});
+    return (
+        <div
+            style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+        >
+            <Story />
+        </div>
+    )
+}
+
+export const Default = {
+    args: getExplainerArgs(),
+    decorators: [explainerDecorator],
 };
 
 export const WithOnClick = {
-    args: {
-        instruction: "This is the instruction",
-        button_label: "Next",
-        steps: [
-            { number: 1, description: "This is the first step" },
-            { number: 2, description: "This is the second step" },
-            { number: 3, description: "This is the third step" },
-        ],
-        onNext: () => alert("Next button clicked"),
-        timer: null,
-    },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    args: getExplainerArgs({onNext: () => {
+        alert("Next button clicked");
+    }}),
+    decorators: [explainerDecorator],
 };
 
 export const WithThreeSecondTimer = {
-    args: {
-        instruction: "This is the instruction",
-        button_label: "Next",
-        steps: [
-            { number: 1, description: "This is the first step" },
-            { number: 2, description: "This is the second step" },
-            { number: 3, description: "This is the third step" },
-        ],
-        onNext: () => alert("Next button clicked / timer expired after 3 seconds"),
+    args: getExplainerArgs({
         timer: 3000,
-    },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    }),
+    decorators: [explainerDecorator],
 };
