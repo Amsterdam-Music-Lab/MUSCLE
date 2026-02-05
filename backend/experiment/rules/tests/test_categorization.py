@@ -89,13 +89,11 @@ class CategorizationRuleTest(TestCase):
         self.assertEqual(self.session.json_data.get('training_rounds'), '0')
 
         self.assertIn(self.session.json_data.get('group'), ['C1', 'C2', 'S1', 'S2'])
-        self.assertIn(self.session.json_data.get('button_order'), ['neutral', 'neutral-inverted'])
-        self.assertIn(self.session.json_data.get('stimuli_a'), ['BLUE', 'ORANGE'])
-
-        if self.session.json_data.get('stimuli_a') == "BLUE":
-            self.assertEqual(self.session.json_data.get('pair_colors'), "A = Blue, B = Orange")
-        if self.session.json_data.get('stimuli_a') == "ORANGE":
-            self.assertEqual(self.session.json_data.get('pair_colors'), "A = Orange, B = Blue")
+        self.assertIn(
+            self.session.json_data.get('choices')[0]['color'],
+            ['colorNeutral1', 'colorNeutral2'],
+        )
+        self.assertIn(self.session.json_data.get('choices')[0]['value'], ["A", "B"])
 
         if self.session.json_data.get('group') == 'C1':
             self.assertEqual(self.session.json_data.get('assigned_group'), 'Crossed direction, Pair 1')

@@ -107,7 +107,7 @@ class ThemeConfigSerializerTest(TestCase):
         return {
             'colorPrimary': '#d843e2',
             'colorSecondary': '#39d7b8',
-            'colorPositive': '#00b612',
+            'colorPositive': '#39d7b8',
             'colorNegative': '#fa5577',
             'colorNeutral1': '#ffb14c',
             'colorNeutral2': '#0cc7f1',

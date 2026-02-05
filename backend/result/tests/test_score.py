@@ -109,10 +109,10 @@ class ScoreTest(TestCase):
             session=self.session,
             section=self.section,
             scoring_rule='SONG_SYNC_RECOGNITION',
+            json_data={"response_time": 15},
         )
         view = {
             "decision_time": 10,
-            "config": {"response_time": 15},
             "form": [{"key": "recognize", "resultId": result.pk, "value": result_type}],
         }
         return self.make_request(view)
@@ -124,10 +124,9 @@ class ScoreTest(TestCase):
             section=self.section,
             scoring_rule='SONG_SYNC_VERIFICATION',
             expected_response='yes',
+            json_data={"response_time": 15, "decision_time": 10},
         )
         view = {
-            "decision_time": 10,
-            "config": {"response_time": 15},
             "form": [{"key": "recognize", "resultId": result.pk, "value": result_type}],
         }
         return self.make_request(view)
@@ -214,7 +213,7 @@ class ScoreTest(TestCase):
             session=self.session,
             question_key='reaction_test',
             expected_response='yes',
-            json_data={'decision_time': 5, 'config': {'response_time': 10}},
+            json_data={'decision_time': 5, 'response_time': 10},
         )
         score = reaction_time_score(result, {'value': 'yes'})
         self.assertEqual(score, 5)

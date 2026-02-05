@@ -132,10 +132,6 @@ class Categorization(BaseRules):
                     # Clear group from session for reuse
                     end_data = {
                         "phase": "FAILED_TRAINING",
-                        "training_rounds": json_data["training_rounds"],
-                        "assigned_group": json_data["assigned_group"],
-                        "button_colors": json_data["button_colors"],
-                        "pair_colors": json_data["pair_colors"],
                     }
                     session.save_json_data(end_data)
                     session.final_score = 0
@@ -195,11 +191,6 @@ class Categorization(BaseRules):
             # final_score = sum([result.score for result in training_results])
             end_data = {
                 "phase": "FINISHED",
-                "training_rounds": json_data["training_rounds"],
-                "assigned_group": json_data["assigned_group"],
-                "button_colors": json_data["button_colors"],
-                "pair_colors": json_data["pair_colors"],
-                "group": json_data["group"],
             }
             session.save_json_data(end_data)
             session.finish()
