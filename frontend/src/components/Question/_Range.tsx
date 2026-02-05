@@ -15,7 +15,7 @@ const Range = ({ question, value, onChange }: RangeProps) => {
 
     const onSliderChange = (value: number) => onChange(value + question.minValue!);
 
-    const keys = Array.from(new Array(question.maxValue), (_, i) => i + question.minValue!);
+    const keys = Array.from(new Array(question.maxValue + 1 - (question.minValue || 0)), (_, i) => i + (question.minValue || 0));
     const labels = keys.map( value => value.toString());
 
     return (
@@ -26,7 +26,6 @@ const Range = ({ question, value, onChange }: RangeProps) => {
                 value={value}
                 onSliderChange={onSliderChange}
             />
-            
         </div>
     );
 };

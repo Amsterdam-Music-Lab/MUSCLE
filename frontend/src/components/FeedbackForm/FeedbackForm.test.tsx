@@ -5,6 +5,20 @@ import { QuestionViews } from "@/types/Question";
 
 import FeedbackForm from "./FeedbackForm";
 
+vi.mock('../../util/stores', () => ({
+    __esModule: true,
+    default: (fn: (state: any) => any) => {
+        const state = {
+            theme: {
+                colorPrimary: "#d843e2", colorSecondary: "#39d7b8"
+            }
+        };
+
+        return fn(state);
+    },
+    useBoundStore: vi.fn()
+}));
+
 
 const radiosQuestion = {
     key: 'test_question',

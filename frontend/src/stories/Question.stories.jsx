@@ -185,7 +185,6 @@ export const Range = {
             text: "This is the question",
             explainer: "This is the explainer",
             view: "RANGE",
-            choices: [{value: 1, label: "Choice 1"}, {value: 2, label: "Choice 2"}, {value: 3, label: "Choice 3"}],
             minValue: 1,
             maxValue: 42,
             style: {},

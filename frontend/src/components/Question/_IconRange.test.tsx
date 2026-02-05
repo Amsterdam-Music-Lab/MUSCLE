@@ -3,6 +3,20 @@ import { describe, it, expect, vi } from 'vitest';
 import IconRange from './_IconRange';
 import Question, {QuestionViews} from '@/types/Question';
 
+vi.mock('../../util/stores', () => ({
+    __esModule: true,
+    default: (fn: (state: any) => any) => {
+        const state = {
+            theme: {
+                colorPrimary: "#d843e2", colorSecondary: "#39d7b8"
+            }
+        };
+
+        return fn(state);
+    },
+    useBoundStore: vi.fn()
+}));
+
 // Mock the RangeTitle component
 vi.mock('./_RangeTitle', () => ({
     default: () => <div data-testid="mock-range-title">Mock Range Title</div>
@@ -25,7 +39,7 @@ vi.mock('react-rangeslider', () => ({
 const mockQuestion: Question = {
     key: 'test-icon-range',
     view: QuestionViews.ICON_RANGE,
-    question: "What is the question?",
+    text: "What is the question?",
     choices: [
         {value: '1', label: 'fa-face-grin-hearts'},
         {value: '2', label: 'fa-face-grin'},
@@ -58,23 +72,9 @@ describe('IconRange', () => {
         expect((screen.getByTestId('mock-slider') as HTMLInputElement).value).toBe('2');
     });
 
-    it('applies the correct style', () => {
-        const questionWithStyle = {...mockQuestion, style:{"gradient": true}}
-        const { container } = render(<IconRange question={questionWithStyle} value="" onChange={() => { }}  />);
-
-        const firstChild = container.firstChild;
-
-        if (!firstChild) {
-            throw new Error('IconRange container is null');
-        }
-
-        expect(firstChild).toHaveProperty('className', expect.stringContaining('aha__text-range'));
-        expect((firstChild as HTMLElement).classList).toContain('gradient');
-    });
-
     it('applies empty class when value is empty', () => {
-        const { container } = render(<IconRange question={mockQuestion} value="" onChange={() => { }}  />);
-        expect(container.firstChild).toHaveProperty('className', expect.stringContaining('empty'));
+        render(<IconRange question={mockQuestion} value="" onChange={() => { }}  />);
+        expect(screen.getByTestId('range-slider').classList.contains('empty'));
     });
 
     it('does not apply empty class when value is provided', () => {

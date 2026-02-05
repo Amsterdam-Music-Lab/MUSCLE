@@ -15,8 +15,8 @@ interface RangeProps {
 }
 
 const RangeSlider = ({ keys, labels, value, onSliderChange, changePosition=false }: RangeProps) => {
-    const emptyValue = !value;
-    let sliderValue = value ? keys.indexOf(value) : Math.round((keys.length - 1)/2);
+    const emptyValue = value === "";
+    let sliderValue = !emptyValue ? keys.indexOf(value) : Math.round((keys.length - 1)/2);
 
     const theme = useBoundStore((state) => state.theme);
     const sliderEmptyColor = theme["colorPrimary"];
@@ -43,15 +43,15 @@ const RangeSlider = ({ keys, labels, value, onSliderChange, changePosition=false
                 emptyValue={emptyValue}
                 changePosition={changePosition}
             />
-
+            <div className={classNames({ empty: emptyValue })} data-testid="range-slider" role="slider">
             <Slider
-                className={classNames({ empty: emptyValue })}
                 value={sliderValue}
                 onChange={onSliderChange}
                 min={0}
-                max={keys.length - 1}
+                max={keys.length-1}
                 tooltip={false}
             />
+            </div>
 
             <RangeLimits
                 minVal={labels[0]}

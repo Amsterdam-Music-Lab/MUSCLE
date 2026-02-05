@@ -105,7 +105,7 @@ const Button = ({
                 style={style}
                 css={styleButton(colorValue)}
                 tabIndex={0}
-                onKeyUp={(e) => {
+                onKeyDown={(e) => {
                     clickOnceGuard();
                 }}
                 type="button"

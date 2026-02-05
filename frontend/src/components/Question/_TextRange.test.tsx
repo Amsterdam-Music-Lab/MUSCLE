@@ -1,7 +1,21 @@
-import { describe, it, expect } from 'vitest';
-import { render } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
 import TextRange from './_TextRange'; // Adjust the import path as necessary
 import Question, { QuestionViews } from '@/types/Question';
+
+vi.mock('../../util/stores', () => ({
+    __esModule: true,
+    default: (fn: (state: any) => any) => {
+        const state = {
+            theme: {
+                colorPrimary: "#d843e2", colorSecondary: "#39d7b8"
+            }
+        };
+
+        return fn(state);
+    },
+    useBoundStore: vi.fn()
+}));
 
 describe('TextRange Component', () => {
     const mockQuestion: Question = {
@@ -25,8 +39,8 @@ describe('TextRange Component', () => {
         const slider = document.querySelector('.rangeslider');
         expect(slider).toBeTruthy();
         expect(slider?.getAttribute('aria-valuemin')).toBe('0');
-        expect(slider?.getAttribute('aria-valuenow')).toBe('10'); // Index 1 * 10 = 10
-        expect(slider?.getAttribute('aria-valuemax')).toBe('20'); // (3 choices * 10) - 10 = 20
+        expect(slider?.getAttribute('aria-valuenow')).toBe('1');
+        expect(slider?.getAttribute('aria-valuemax')).toBe('2');
     });
 
     it('renders correctly with a min, max and current value', () => {
@@ -37,8 +51,8 @@ describe('TextRange Component', () => {
         let slider = document.querySelector('.rangeslider');
         expect(slider).toBeTruthy();
         expect(slider?.getAttribute('aria-valuemin')).toBe('0');
-        expect(slider?.getAttribute('aria-valuenow')).toBe('20');
-        expect(slider?.getAttribute('aria-valuemax')).toBe('20'); // (3 choices * 10) - 10 = 20
+        expect(slider?.getAttribute('aria-valuenow')).toBe('2');
+        expect(slider?.getAttribute('aria-valuemax')).toBe('2');
 
         render(
             <TextRange question={mockQuestion} value="3" onChange={() => { }} />
@@ -56,17 +70,10 @@ describe('TextRange Component', () => {
     });
 
     it('applies empty class when value is empty', () => {
-        const { container } = render(
+        render(
             <TextRange question={mockQuestion} value="" onChange={() => { }} />
         );
-
-        expect(container.firstChild).toBeTruthy();
-
-        if (!container.firstChild) {
-            throw new Error('First child is null');
-        }
-
-        expect(container.firstChild.classList.contains('empty')).toBe(true);
+        expect(screen.getByTestId("range-slider").classList.contains("empty")).toBe(true);
     });
 
     it('does not apply empty class when value is set', () => {
