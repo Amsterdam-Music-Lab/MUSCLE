@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from .base import BaseRules
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
-from experiment.actions.playback import MatchingPairs
+from experiment.actions.playback import MatchingPairs, PlaybackSection
 from experiment.actions.playlist import PlaylistSelection
 from experiment.actions.trial import Trial
 from result.utils import prepare_result
@@ -20,7 +20,6 @@ class MatchingPairsGame(BaseRules):
     num_pairs = 8
     show_animation = True
     score_feedback_display = "large-top"
-    tutorial = None
     contact_email = "aml.tunetwins@gmail.com"
     random_seed = None
 
@@ -121,13 +120,16 @@ class MatchingPairsGame(BaseRules):
         random.shuffle(player_sections)
 
         playback = MatchingPairs(
-            sections=player_sections,
-            stop_audio_after=5,
+            sections=[PlaybackSection(section) for section in player_sections],
             show_animation=self.show_animation,
             score_feedback_display=self.score_feedback_display,
-            tutorial=self.tutorial,
         )
-        trial = Trial(title="Tune twins", playback=playback, feedback_form=None, config={"show_continue_button": False})
+        trial = Trial(
+            title="Tune twins",
+            playback=playback,
+            feedback_form=None,
+            continue_button=None,
+        )
         return trial
 
     def calculate_score(self, result, data):
@@ -138,10 +140,10 @@ class MatchingPairsGame(BaseRules):
         """will be called every time two cards have been turned"""
         result_data = json.loads(result)
         first_card = result_data["first_card"]
-        first_section = Section.objects.get(pk=first_card["id"])
+        first_section = Section.objects.get(pk=first_card["link"].split("/")[-2])
         first_card["filename"] = str(first_section.filename)
         second_card = result_data["second_card"]
-        second_section = Section.objects.get(pk=second_card["id"])
+        second_section = Section.objects.get(pk=second_card["link"].split("/")[-2])
         second_card["filename"] = str(second_section.filename)
         if self.evaluate_sections_equal(first_section, second_section):
             if second_card.get("seen"):

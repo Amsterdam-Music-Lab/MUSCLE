@@ -11,7 +11,7 @@ from session.models import Session
 
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
-from experiment.actions.playback import MatchingPairs
+from experiment.actions.playback import MatchingPairs, PlaybackSection
 from experiment.actions.trial import Trial
 from experiment.actions.types import FeedbackInfo
 from .matching_pairs import MatchingPairsGame
@@ -27,18 +27,6 @@ class MatchingPairs2025(MatchingPairsGame):
 
     ID = "MATCHING_PAIRS_2025"
     num_pairs = 8
-    tutorial = {
-        "no_match": _(
-            "This was not a match, so you get 0 points. Please try again to see if you can find a matching pair."
-        ),
-        "lucky_match": _(
-            "You got a matching pair, but you didn't hear both cards before. This is considered a lucky match. You get 10 points."
-        ),
-        "memory_match": _("You got a matching pair. You get 20 points."),
-        "misremembered": _(
-            "You thought you found a matching pair, but you didn't. This is considered a misremembered pair. You lose 10 points."
-        ),
-    }
 
     def feedback_info(self) -> FeedbackInfo:
         feedback_body = render_to_string(
@@ -107,18 +95,17 @@ class MatchingPairs2025(MatchingPairsGame):
         player_sections = self._select_sections(session)
         random.shuffle(player_sections)
 
-        # Only show tutorial if participant has never played this game before
-        has_played_before = self._has_played_before(session)
-        tutorial = self.tutorial if not has_played_before else None
-
         playback = MatchingPairs(
-            sections=player_sections,
-            stop_audio_after=5,
+            sections=[PlaybackSection(section) for section in player_sections],
             show_animation=self.show_animation,
             score_feedback_display=self.score_feedback_display,
-            tutorial=tutorial,
         )
-        trial = Trial(title="Tune twins", playback=playback, feedback_form=None, config={"show_continue_button": False})
+        trial = Trial(
+            title="Tune twins",
+            playback=playback,
+            feedback_form=None,
+            continue_button=None,
+        )
 
         return trial
 

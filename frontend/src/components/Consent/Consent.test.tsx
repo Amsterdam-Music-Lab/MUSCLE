@@ -3,6 +3,7 @@ import Consent, { ConsentProps } from './Consent';
 import { useConsent } from '../../API'
 import { saveAs } from 'file-saver';
 import { vi, Mock, expect, it, describe, } from 'vitest';
+import { buttonColorOptions } from "@/types/Button";
 
 global.Blob = vi.fn().mockImplementation((content, options) => ({
     content,
@@ -22,7 +23,8 @@ vi.mock('../../API', () => ({
 
 const mockExperiment = {
     slug: 'test-experiment',
-    name: 'Test'
+    name: 'Test',
+    theme: {colorGrey: '#abacab', colorNeutral1: '#fabacc', colorNegative: '#fa5577'},
 };
 
 const getConsentProps: (overrides?: Partial<ConsentProps>) => ConsentProps = (overrides) => ({
@@ -31,8 +33,8 @@ const getConsentProps: (overrides?: Partial<ConsentProps>) => ConsentProps = (ov
     experiment: mockExperiment,
     participant: { csrf_token: '42' },
     onNext: vi.fn(),
-    confirm: 'Agree',
-    deny: 'Disagree',
+    confirmButton: {label: 'Agree', color: buttonColorOptions.GREY},
+    denyButton: {label: 'Disagree', color: buttonColorOptions.NEUTRAL1},
     ...overrides,
 });
 
@@ -54,9 +56,8 @@ describe('Consent', () => {
     it('calls onNext when Agree button is clicked', async () => {
         (useConsent as Mock).mockReturnValue([null, false]);
         const onNext = vi.fn();
-        const { getByText } = render(<Consent {...getConsentProps({ confirm: 'Agree', experiment: mockExperiment, onNext })} />);
+        const { getByText } = render(<Consent {...getConsentProps({ confirmButton: {label: 'Agree', color: buttonColorOptions.NEGATIVE}, experiment: mockExperiment, onNext })} />);
         fireEvent.click(getByText('Agree'));
-
         await waitFor(() => expect(onNext).toHaveBeenCalled());
     });
 

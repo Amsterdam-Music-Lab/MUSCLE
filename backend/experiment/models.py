@@ -8,10 +8,10 @@ from django.contrib.postgres.fields import ArrayField
 from django.db.models.query import QuerySet
 
 from experiment.standards.iso_languages import ISO_LANGUAGES
-from theme.models import ThemeConfig
 from image.models import Image
 from question.models import Question, QuestionInList, QuestionList
 from session.models import Session
+from theme.models import ThemeConfig
 
 from .validators import markdown_html_validator, block_slug_validator, experiment_slug_validator
 

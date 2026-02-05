@@ -15,6 +15,7 @@ const Score = ({
     score_message,
     total_score,
     texts,
+    button,
     icon,
     feedback,
     timer,
@@ -97,10 +98,9 @@ const Score = ({
             {!timer && (
                 <div className="d-flex flex-column justify-content-center align-items-center mt-3 mb-4">
                     <Button
+                        {...button}
                         key={"yes"}
-                        className="btn-primary"
                         onClick={onNext}
-                        title={texts.next}
                     />
                 </div>
             )}

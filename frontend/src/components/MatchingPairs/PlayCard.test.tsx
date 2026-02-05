@@ -13,8 +13,12 @@ describe("PlayCard Component Tests", () => {
         noevents: false,
         inactive: false,
         seen: false,
-        url: "test.jpg",
-        name: "Test"
+        link: "test.jpg",
+        label: "Test",
+        image: {
+            link: '/some/image.png',
+            label: 'Alt text'
+        }
     };
 
     it("should render without crashing", () => {

@@ -1,5 +1,5 @@
 """ Types of questions to be presented to participants """
-from typing import Any, Optional
+from typing import Any, List, Optional, TypedDict
 
 from experiment.actions.base_action import BaseAction
 from theme.styles import ColorScheme
@@ -25,16 +25,24 @@ class QuestionAction(BaseAction):
         text: str = '',
         explainer: str = '',
         style: list[str] = [],
-        scoring_rule: str = '',
         view: str = '',
     ):
         self.key = key
         self.text = text
         self.result_id = result_id
         self.explainer = explainer
-        self.scoring_rule = scoring_rule
         self.style = self._apply_style(style)
         self.view = view
+
+
+class Choice(TypedDict):
+    """The structure of the dictionary for a question choice
+    Note that color (optional) is only shown in ButtonArrayQuestion and IconRangeQuestion
+    """
+
+    value: str
+    label: str
+    color: Optional[str]
 
 
 class ChoiceQuestionAction(QuestionAction):
@@ -47,7 +55,7 @@ class ChoiceQuestionAction(QuestionAction):
 
     def __init__(
         self,
-        choices: dict,
+        choices: List[Choice],
         min_values: Optional[int] = None,
         **kwargs: Any,
     ):
@@ -90,11 +98,11 @@ class AutoCompleteQuestion(ChoiceQuestionAction):
         question = AutoCompleteQuestion(
             key="color",
             text="What's your favorite color?",
-            choices={
-                "red": "Red", # or _("Red") for translation
-                "green": "Green",
-                "blue": "Blue",
-            },
+            choices=[
+                {"value": "red", "label": "Red"},
+                {"value": "green", "label": "Green"},
+                {"value": "blue", "label": "Blue"},
+            ],
         )
         ```
     """
@@ -105,21 +113,22 @@ class AutoCompleteQuestion(ChoiceQuestionAction):
 
 class ButtonArrayQuestion(ChoiceQuestionAction):
     """A question showing buttons for each choice.
-    Not practical to use with more than 5 choices.
+    If choices specify color values from the theme, buttons will be colored.
+    Not practical to use for more than 5 choices.
 
     Args:
-        choices (dict): dictionary of answer options
-        **kwargs: additional Question arguments
+        choices (List[Choice]): list of dictionaries with value, label and optional color for choice
+        **kwargs: Additional Question arguments
 
     Example:
         ```python
         question = ButtonArrayQuestion(
             key="is_student",
             text="Are you a student?",
-            choices={
-                "no": "Nope", # Use _("No") for translation (default)
-                "yes": "Yep"
-            },
+            choices=[
+                {"value": "no", "label": _("Nope"), "color": "colorNegative"},
+                {"value": "yes", "label": _("Yep"), "color": "colorPositive"}
+            ],
         )
         ```
     """
@@ -132,8 +141,8 @@ class CheckBoxQuestion(ChoiceQuestionAction):
     """A question with (multiple) choice options represented as check boxes
 
     Args:
-        choices (dict): dictionary of answer options
-        min_values: Minimum number of selections required
+        choices (List[Choice]): Available options
+        min_values (int): Minimum number of selections required
         **kwargs: Additional Question arguments
 
     Example:
@@ -141,17 +150,14 @@ class CheckBoxQuestion(ChoiceQuestionAction):
         question = MultipleChoiceQuestion(
             key="color",
             text="What's your favorite color?",
-            choices={
-                "red": "Red", # or _("Red") for translation
-                "green": "Green",
-                "blue": "Blue",
-            },
+            choices=[
+                {"value": "red", "label": "Red"},
+                {"value": "green", "label": "Green"},
+                {"value": "blue": "label": "Blue"}
+            ],
             min_values=1,
         )
         ```
-
-    Note:
-        - To have multiple choices (participant can select more than one answer), set `view` to 'CHECKBOXES'
     """
 
     def __init__(self, min_values: int = 1, **kwargs: Any) -> None:
@@ -167,7 +173,7 @@ class DropdownQuestion(ChoiceQuestionAction):
     """A question with a dropdown menu.
 
     Args:
-        choices (dict): dictionary of answer options
+        choices (List[Choice]): Available options
         **kwargs: Additional Question arguments
 
     Example:
@@ -175,11 +181,11 @@ class DropdownQuestion(ChoiceQuestionAction):
         question = DropdownQuestion(
             key="color",
             text="What's your favorite color?",
-            choices={
-                "red": "Red", # or _("Red") for translation
-                "green": "Green",
-                "blue": "Blue",
-            },
+            choices=[
+                {"value": "red", "label": "Red"},
+                {"value": "green", "label": "Green"},
+                {"value": "blue", "label": "Blue"},
+            ],
         )
         ```
     """
@@ -199,11 +205,11 @@ class IconRangeQuestion(ChoiceQuestionAction):
         question = IconRangeQuestion(
             key="satisfaction",
             text="How satisfied are you with the service?",
-            choices={
-                1: "fa-face-smile",
-                2: "fa-face-meh",  # Undecided
-                3: "fa-face-frown"
-            }
+            choices=[
+                {"value": 1, "label": "fa-face-smile"},
+                {"value": 2, "label": "fa-face-meh"},
+                {"value": 3, "label": "fa-face-frown"}
+            [
         )
         ```
     """
@@ -237,19 +243,19 @@ class RadiosQuestion(ChoiceQuestionAction):
     """A question with radio buttons.
 
     Args:
-        choices (dict): dictionary of answer options
-        **kwargs: additional Question arguments
+        choices (List[Choice]): Available options
+        **kwargs: Additional Question arguments
 
     Example:
         ```python
         question = RadiosQuestion(
             key="color",
             text="What's your favorite color?",
-            choices={
-                "red": "Red", # or _("Red") for translation
-                "green": "Green",
-                "blue": "Blue",
-            },
+            choices=[
+                {"value": "red", "label": "Red"},
+                {"value": "green", "label": "Green"},
+                {"value": "blue", "label": "Blue"},
+            ],
         )
         ```
     """
@@ -284,25 +290,25 @@ class RangeQuestion(OpenQuestionAction):
 
 
 class TextRangeQuestion(ChoiceQuestionAction):
-    """A question with a Likert scale.
+    """A question with a slider, usually used for a Likert scale.
 
     Args:
-        choices (dict): dictionary of answer options
-        **kwargs: additional Question arguments
+        choices (List[Choice]): list of answer options
+        **kwargs: Additional Question arguments
 
     Example:
         ```python
         question = TextRangeQuestion(
             key="satisfaction",
-            text="How satisfied are you with the service?",
+            text="How satisfied are you with MUSCLE?",
             explainer="Please rate your satisfaction.",
-            choices={
-                1: _("Very satisfied"),
-                2: _("Satisfied"),
-                3: _("Neutral"),
-                4: _("Disappointed"),
-                5: _("Very disappointed)
-            }
+            choices=[
+                {"value": 1, "label": _("Very satisfied")},
+                {"value": 2, "label": _("Satisfied")},
+                {"value": 3, "label": _("Neutral")},
+                {"value": 4, "label": _("Disappointed")},
+                {"value": 5, "label": _("Very disappointed)}
+            ]
         )
         ```
     """

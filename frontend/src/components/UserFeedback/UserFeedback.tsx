@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { postFeedback } from '../../API';
 import Button from '../Button/Button';
 import HTML from '../HTML/HTML';
-import classNames from '@/util/classNames';
 import { FeedbackInfo } from '@/types/Block';
+import classNames from '@/util/classNames';
+import useBoundStore from "@/util/stores";
 
 interface UserFeedbackProps {
     blockSlug: string;
@@ -46,9 +47,10 @@ const UserFeedback = ({ blockSlug, participant, feedbackInfo, inline = true }: U
                             value={value}
                         ></textarea>
                         <Button
-                            title={feedbackInfo.button}
-                            className={"user-feedback__button btn-primary anim anim-fade-in anim-speed-500"}
+                            label={feedbackInfo.button.label}
+                            className={"user-feedback__button anim anim-fade-in anim-speed-500"}
                             onClick={giveFeedback}
+                            color={feedbackInfo.button.color}
                         />
                     </div>
                     <HTML body={feedbackInfo.contact_body}></HTML>

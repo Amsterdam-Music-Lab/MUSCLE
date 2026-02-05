@@ -3,11 +3,12 @@ from os.path import join
 
 from django.template.loader import render_to_string
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.info import Info
-from experiment.actions.playback import Multiplayer
+from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
@@ -49,15 +50,22 @@ class ToontjeHoger6Relative(BaseRules):
         return Explainer(
             instruction="Relatief Gehoor",
             steps=[
-                Step("In dit experiment kun je testen hoe goed jouw relatieve gehoor is! Relatief gehoor is het vermogen om een melodie te herkennen, ongeacht of deze nu wat hoger of lager in toonhoogte wordt afgespeeld."),
+                Step(
+                    "In dit experiment kun je testen hoe goed jouw relatieve gehoor is! Relatief gehoor is het vermogen om een melodie te herkennen, ongeacht of deze nu wat hoger of lager in toonhoogte wordt afgespeeld."
+                ),
                 # Empty step adds some spacing between steps to improve readability
                 Step(""),
                 Step(
-                    "Je krijgt twee melodieën te horen, verschillend in toonhoogte.", number=1),
+                    "Je krijgt twee melodieën te horen, verschillend in toonhoogte.",
+                    number=1,
+                ),
                 Step("Luister goed, want je kunt ze maar één keer afspelen!", number=2),
-                Step("Aan jou de taak om te ontrafelen of deze melodieën hetzelfde zijn, ongeacht de toonhoogte! ", number=3),
+                Step(
+                    "Aan jou de taak om te ontrafelen of deze melodieën hetzelfde zijn, ongeacht de toonhoogte! ",
+                    number=3,
+                ),
             ],
-            button_label="Start"
+            button=Button("Start"),
         )
 
     def next_round(self, session: Session):
@@ -124,22 +132,24 @@ class ToontjeHoger6Relative(BaseRules):
         question = ButtonArrayQuestion(
             text="Zijn deze twee melodieën hetzelfde?",
             key=key,
-            choices={
-                "YES": "Ja",
-                "NO": "Nee",
-            },
-            style=[ColorScheme.BOOLEAN],
+            choices=[
+                {"value": "YES", "label": "Ja", "color": "colorPositive"},
+                {"value": "NO", "label": "Nee", "color": "colorNegative"},
+            ],
             result_id=prepare_result(
                 key, session, section=section1, expected_response=expected_response
             ),
         )
-        form = Form([question], submit_label="")
+        form = Form([question], submit_button=None)
 
         # Player
-        playback = Multiplayer(
-            [section1, section2],
+        second_label = "B" if round == 0 else "C"
+        playback = PlayButtons(
+            [
+                PlaybackSection(section1, label="A"),
+                PlaybackSection(section2, second_label),
+            ],
             play_once=True,
-            labels=['A', 'B' if round == 0 else 'C'],
         )
 
         trial = Trial(
@@ -177,8 +187,10 @@ class ToontjeHoger6Relative(BaseRules):
         info = Info(
             body=body,
             heading="Relatief gehoor",
-            button_label="Terug naar ToontjeHoger",
-            button_link=get_current_experiment_url(session)
+            button=Button(
+                "Terug naar ToontjeHoger",
+                link=get_current_experiment_url(session),
+            ),
         )
 
         return [*score, final, info]

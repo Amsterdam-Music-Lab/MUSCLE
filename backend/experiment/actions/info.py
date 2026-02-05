@@ -1,5 +1,7 @@
-from .base_action import BaseAction
+from typing import Optional
 
+from .base_action import BaseAction
+from .button import Button
 
 class Info(BaseAction):
     """
@@ -8,16 +10,14 @@ class Info(BaseAction):
     Args:
         body (str): HTML body
         heading (str): title/heading on top
-        button_label (str): label of button on bottom
-        button_link (str): (optional) button link. If no link is set, clicking the button will redirect the participant to the next action.
+        button (Button): properties of the button shown under the body
 
     Example:
         ```python
         Info(
             body="<p>Here is some information</p>",
             heading="This is the heading",
-            button_label="Next",
-            button_link="https://example.com",
+            button=Button("Next", "colorPrimary", "https://example.com"),
         )
         ```
 
@@ -27,8 +27,7 @@ class Info(BaseAction):
 
     view = "INFO"
 
-    def __init__(self, body, heading="", button_label=None, button_link=None):
+    def __init__(self, body, heading="", button: Optional[Button] = None):
         self.body = body
         self.heading = heading
-        self.button_label = button_label
-        self.button_link = button_link
+        self.button = button

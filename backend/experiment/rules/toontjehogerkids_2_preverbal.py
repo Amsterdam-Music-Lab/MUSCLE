@@ -3,6 +3,7 @@ from os.path import join
 
 from django.template.loader import render_to_string
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.info import Info
@@ -19,12 +20,14 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         return Explainer(
             instruction="Het eerste luisteren",
             steps=[
-                Step("Je krijgt straks een soort grafieken van geluid te zien, met een uitlegfilmpje."),
+                Step(
+                    "Je krijgt straks een soort grafieken van geluid te zien, met een uitlegfilmpje."
+                ),
                 Step("Welk plaatje denk jij dat hoort bij de stem van een mens?"),
                 Step("En hoor jij het verschil tussen twee babyhuiltjes?"),
             ],
             step_numbers=True,
-            button_label="Start",
+            button=Button("Start"),
         )
 
     def get_spectrogram_info(self):
@@ -37,7 +40,7 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         info = Info(
             body=body,
             heading="Wat is een spectrogram?",
-            button_label="Volgende",
+            button=Button("Volgende"),
         )
         return info
 
@@ -104,8 +107,7 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         info = Info(
             body=body,
             heading="Het eerste luisteren",
-            button_label="Terug naar ToontjeHogerKids",
-            button_link="/collection/thkids",
+            button=Button("Terug naar ToontjeHogerKids", link="/collection/thkids"),
         )
 
         return [*score, final, info]

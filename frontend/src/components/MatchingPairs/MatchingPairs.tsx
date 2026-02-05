@@ -9,7 +9,6 @@ import PlayCard from "./PlayCard";
 import { Card } from "@/types/Section";
 import Session from "@/types/Session";
 import Participant from "@/types/Participant";
-import Overlay from "../Overlay/Overlay";
 import { ScoreFeedbackDisplay } from "@/types/Playback";
 
 export const SCORE_FEEDBACK_DISPLAY: { [key: string]: ScoreFeedbackDisplay } = {
@@ -21,26 +20,20 @@ export const SCORE_FEEDBACK_DISPLAY: { [key: string]: ScoreFeedbackDisplay } = {
 interface MatchingPairsProps {
     playSection: (index: number) => void;
     sections: Card[];
-    playerIndex: number;
     showAnimation: boolean;
     finishedPlaying: () => void;
     scoreFeedbackDisplay?: ScoreFeedbackDisplay;
     submitResult: (result: any) => void;
-    tutorial?: { [key: string]: string };
     view: string;
 }
-
-type ScoreType = 'lucky_match' | 'memory_match' | 'no_match' | 'misremembered';
 
 const MatchingPairs = ({
     playSection,
     sections: initialSections, // renamed to make it clear these are initial values
-    playerIndex,
     showAnimation,
     finishedPlaying,
     scoreFeedbackDisplay = SCORE_FEEDBACK_DISPLAY.LARGE_TOP,
     submitResult,
-    tutorial,
     view
 }: MatchingPairsProps) => {
     const block = useBoundStore(state => state.block);
@@ -54,7 +47,6 @@ const MatchingPairs = ({
     const [score, setScore] = useState<number | null>(null);
     const [total, setTotal] = useState(bonusPoints);
     const [startOfTurn, setStartOfTurn] = useState(performance.now());
-    const [overlayWasShown, setOverlayWasShown] = useState(false);
 
     // New state to track card states
     const [sections, setSections] = useState(() => initialSections.map(section => ({
@@ -70,13 +62,6 @@ const MatchingPairs = ({
 
     // Check if the user is in between turns to show the hidden overlay
     const inBetweenTurns = Boolean(score && (firstCard && secondCard) || sections.filter(s => s.turned).length === 2);
-
-    const [tutorialOverlayState, setTutorialOverlayState] = useState({
-        isOpen: false,
-        title: '',
-        content: '',
-        completed: [] as ScoreType[],
-    });
 
     const columnCount = sections.length > 6 ? 4 : 3;
 
@@ -128,46 +113,6 @@ const MatchingPairs = ({
         }));
     };
 
-    const showOverlay = (score: number) => {
-
-        let scoreType: ScoreType = 'no_match';
-
-        switch (score) {
-            case 10:
-                scoreType = 'lucky_match';
-                break;
-            case 20:
-                scoreType = 'memory_match';
-                break;
-            case 0:
-                scoreType = 'no_match';
-                break;
-            case -10:
-                scoreType = 'misremembered';
-                break;
-        }
-
-        // check if the scoreType has already been shown
-        if (tutorialOverlayState.completed.includes(scoreType)) {
-            return false;
-        }
-
-        // check if the scoreType is in the tutorial object
-        if (!tutorial || !tutorial[scoreType]) {
-            return false;
-        }
-
-        // show the overlay
-        setTutorialOverlayState({
-            isOpen: true,
-            title: '',
-            content: tutorial[scoreType],
-            completed: [...tutorialOverlayState.completed, scoreType],
-        });
-
-        return true;
-    }
-
     const checkMatchingPairs = async (index: number) => {
 
         const turnedCards = sections.filter(s => s.turned);
@@ -196,15 +141,13 @@ const MatchingPairs = ({
                     const scoreResponse = await scoreIntermediateResult({
                         session,
                         participant,
-                        result: { "start_of_turn": startOfTurn, first_card: firstCard, second_card: updatedCurrentCard, overlay_was_shown: overlayWasShown, },
+                        result: { "start_of_turn": startOfTurn, first_card: firstCard, second_card: updatedCurrentCard },
                     });
                     if (!scoreResponse) {
                         throw new Error('We cannot currently proceed with the game. Try again later');
                     }
                     setScore(scoreResponse.score);
                     showFeedback(scoreResponse.score);
-                    const isShowingOverlay = showOverlay(scoreResponse.score);
-                    setOverlayWasShown(isShowingOverlay);
                 } catch {
                     setError('We cannot currently proceed with the game. Try again later');
                     return;
@@ -228,7 +171,7 @@ const MatchingPairs = ({
 
         const updatedSections = sections.map(section => {
             if (score === 10 || score === 20) {
-                if (section.id === firstCard?.id || section.id === secondCard?.id) {
+                if (section.link === firstCard?.link|| section.link === secondCard?.link) {
                     section.inactive = true;
                 }
             }
@@ -270,7 +213,7 @@ const MatchingPairs = ({
                     />}
 
                 <div className={classNames("playing-board", columnCount === 3 && "playing-board--three-columns")}>
-                    {sections.map((_section, index) => (
+                    {sections.map((section, index) => (
                         <PlayCard
                             key={index}
                             onClick={() => {
@@ -278,8 +221,7 @@ const MatchingPairs = ({
                                 checkMatchingPairs(index);
                             }}
                             registerUserClicks={registerUserClicks}
-                            playing={playerIndex === index}
-                            section={sections[index]}
+                            section={section}
                             showAnimation={showAnimation}
                             view={view}
                         />
@@ -293,15 +235,6 @@ const MatchingPairs = ({
                     data-testid="overlay"
                 ></div>
             </div>
-            <Overlay
-                isOpen={tutorialOverlayState.isOpen}
-                title={tutorialOverlayState.title}
-                content={tutorialOverlayState.content}
-                onClose={() => {
-                    finishTurn();
-                    setTutorialOverlayState({ ...tutorialOverlayState, isOpen: false });
-                }}
-            />
         </div>
 
     )

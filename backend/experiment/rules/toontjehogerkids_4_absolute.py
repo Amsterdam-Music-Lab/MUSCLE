@@ -1,6 +1,7 @@
 from os.path import join
 from django.template.loader import render_to_string
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.info import Info
@@ -24,7 +25,7 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
                 Step("Welke klinkt precies zoals jij 'm kent? Welke is het origineel?"),
             ],
             step_numbers=True,
-            button_label="Start",
+            button=Button("Start"),
         )
 
     def get_trial_question(self):
@@ -68,8 +69,9 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
         info = Info(
             body=body,
             heading="Absoluut gehoor",
-            button_label="Terug naar ToontjeHogerKids",
-            button_link=get_current_experiment_url(session),
+            button=Button(
+                "Terug naar ToontjeHogerKids", link=get_current_experiment_url(session)
+            ),
         )
 
         return [*score, final, info]

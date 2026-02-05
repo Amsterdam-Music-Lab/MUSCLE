@@ -25,7 +25,7 @@ def get_result(
     Raises:
         Result.DoesNotExist: if there is no `result_id` in the data, or a result with that id does not exist
     """
-    result_id = data.get("result_id")
+    result_id = data.get("resultId")
     try:
         result = Result.objects.get(pk=result_id, session=session)
     except Result.DoesNotExist:
@@ -168,5 +168,8 @@ def apply_scoring_rule(
     """
     scoring_rule = SCORING_RULES.get(result.scoring_rule)
     if scoring_rule:
-        return scoring_rule(result, data)
+        try:
+            return scoring_rule(result, data)
+        except Exception as e:
+            raise (e)
     return None

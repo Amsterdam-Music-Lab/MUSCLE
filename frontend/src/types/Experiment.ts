@@ -1,11 +1,13 @@
 import Block from "./Block";
 import Theme from "./Theme";
 
+import IButton from "@/types/Button";
+
 export interface Consent {
     text: string;
     title: string;
-    confirm: string;
-    deny: string;
+    confirmButton: IButton;
+    denyButton: IButton;
     view: 'CONSENT';
 }
 

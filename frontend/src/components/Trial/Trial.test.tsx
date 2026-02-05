@@ -21,7 +21,7 @@ vi.mock("../HTML/HTML", () => ({
     default: vi.fn(({ body }) => <div data-testid="mock-html">{body}</div>),
 }));
 
-const feedback_form = {
+const feedbackForm = {
     form: [{
         key: 'test_question',
         view: QuestionViews.BUTTON_ARRAY,
@@ -29,16 +29,15 @@ const feedback_form = {
         choices: { 'slow': '1 km/h', 'fast': '42 km/h' },
         style: {}
     }],
-    submit_label: 'Submit',
-    skip_label: 'Skip',
-    is_skippable: false
+    submitButton: {label: 'Submit'},
+    skipButton: {label: 'Skip'},
 };
 
 const defaultConfig = {
-    'listen_first': false,
-    'auto_advance': false,
-    'response_time': 5000,
-    'show_continue_button': false
+    'listenFirst': false,
+    'autoAdvance': false,
+    'responseTime': 5000,
+    'continueButton': undefined
 };
 
 describe('Trial', () => {
@@ -51,10 +50,10 @@ describe('Trial', () => {
 
     it("renders itself", () => {
         render(<Trial
-            feedback_form={feedback_form}
-            config={defaultConfig}
             onNext={mockOnNext}
             onResult={mockOnResult}
+            feedbackForm={feedbackForm}
+            {...defaultConfig}
         />);
         expect(screen.queryByRole('presentation')).toBeTruthy();
     });
@@ -62,8 +61,8 @@ describe('Trial', () => {
     it("renders Playback component when playback prop is provided", () => {
         render(<Trial
             playback={{ somePlaybackProp: true }}
-            feedback_form={feedback_form}
-            config={defaultConfig}
+            feedbackForm={feedbackForm}
+            {...defaultConfig}
             onNext={mockOnNext}
             onResult={mockOnResult}
         />);
@@ -74,8 +73,8 @@ describe('Trial', () => {
         const htmlBody = "Test HTML content";
         render(<Trial
             html={{ body: htmlBody }}
-            feedback_form={feedback_form}
-            config={defaultConfig}
+            feedbackForm={feedbackForm}
+            {...defaultConfig}
             onNext={mockOnNext}
             onResult={mockOnResult}
         />);
@@ -86,30 +85,30 @@ describe('Trial', () => {
 
     it("renders FeedbackForm when feedback_form prop is provided", () => {
         render(<Trial
-            feedback_form={feedback_form}
-            config={defaultConfig}
             onNext={mockOnNext}
             onResult={mockOnResult}
+            feedbackForm={feedbackForm}
+            {...defaultConfig}
         />);
         expect(screen.getByTestId('mock-feedback-form')).toBeTruthy();
     });
 
-    it("shows continue button when config.show_continue_button is true", () => {
+    it("shows continue button when continueButton is provided", () => {
         const config = { ...defaultConfig, show_continue_button: true, continue_label: 'Continue' };
         render(<Trial
-            config={config}
             onNext={mockOnNext}
             onResult={mockOnResult}
+            continueButton={{label: "Continue"}}
         />);
         expect(screen.getByText('Continue')).toBeTruthy();
     });
 
     it("calls onResult when FeedbackForm submits result", async () => {
         render(<Trial
-            feedback_form={feedback_form}
-            config={defaultConfig}
             onNext={mockOnNext}
             onResult={mockOnResult}
+            feedbackForm={feedbackForm}
+            {...defaultConfig}
         />);
         fireEvent.click(screen.getByTestId('mock-feedback-form'));
         await waitFor(() => {
@@ -121,24 +120,24 @@ describe('Trial', () => {
         const config = { ...defaultConfig, auto_advance: true };
         render(<Trial
             playback={{ view: 'AUTOPLAY' }}
-            config={config}
             onNext={mockOnNext}
             onResult={mockOnResult}
-            feedback_form={feedback_form}
+            feedbackForm={feedbackForm}
+            {...defaultConfig}
         />);
         fireEvent.click(screen.getByTestId('mock-playback'));
         expect(screen.getByTestId('mock-feedback-form')).toBeTruthy();
     });
 
-    it("auto-advances after specified timer when config.auto_advance_timer is set", async () => {
-        const config = { ...defaultConfig, auto_advance: true, auto_advance_timer: 42 };
+    it("auto-advances after specified timer when autoAdvance is true", async () => {
         render(<Trial
             playback={{ view: 'BUTTON' }}
-            config={config}
-            feedback_form={feedback_form}
             onNext={mockOnNext}
             onResult={mockOnResult}
-        />);
+            feedbackForm={feedbackForm}
+            autoAdvance={true}
+            responseTime={0.2}
+            />);
         fireEvent.click(screen.getByTestId('mock-playback'));
         await waitFor(() => {
             expect(mockOnResult).toHaveBeenCalled();
@@ -157,15 +156,15 @@ describe('Trial', () => {
     });
 
     it("calls onResult when form is not defined", async () => {
-        const formless_feedback_form = {
-            ...feedback_form,
+        const formlessFeedbackForm = {
+            ...feedbackForm,
             form: undefined
         };
         render(<Trial
-            config={defaultConfig}
             onNext={mockOnNext}
             onResult={mockOnResult}
-            feedback_form={formless_feedback_form}
+            feedbackForm={formlessFeedbackForm}
+            {...defaultConfig}
         />);
         fireEvent.click(screen.getByTestId('mock-feedback-form'));
         await waitFor(() => {
@@ -173,20 +172,17 @@ describe('Trial', () => {
         });
     });
 
-    it("calls onResult and onNext when form is not defined and break_round_on is met", async () => {
-        const formless_feedback_form = {
-            ...feedback_form,
+    it("calls onResult and onNext when form is not defined and breakRoundOn is met", async () => {
+        const formlessFeedbackForm = {
+            ...feedbackForm,
             form: undefined
         };
-        const config = {
-            ...defaultConfig,
-            break_round_on: { NOT: ['fast'] }
-        };
         render(<Trial
-            config={config}
+            {...defaultConfig}
+            breakRoundOn={{ NOT: ['fast'] }}
             onNext={mockOnNext}
             onResult={mockOnResult}
-            feedback_form={formless_feedback_form}
+            feedbackForm={formlessFeedbackForm}
         />);
         fireEvent.click(screen.getByTestId('mock-feedback-form'));
         await waitFor(() => {

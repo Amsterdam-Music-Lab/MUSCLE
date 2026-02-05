@@ -1,27 +1,29 @@
 import { act } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import Score from './Score';
-import makeDefaultScoreProps from '../../util/testUtils/makeDefaultScoreProps';
 import { vi, describe, expect, it } from 'vitest';
 
 vi.useFakeTimers();
 
+const makeDefaultScoreProps = (overrides = {}) => ({
+    last_song: 'Test Song',
+    score: 10,
+    score_message: 'Great job!',
+    total_score: 50,
+    texts: { score: 'Score' },
+    button: {label: 'Next'},
+    icon: 'fa-icon',
+    feedback: 'Well done!',
+    timer: null,
+    onNext: vi.fn(),
+    ...overrides,
+});
+
+
 describe('Score component', () => {
 
     it('renders correctly', () => {
-        const props = {
-            last_song: 'Test Song',
-            score: 10,
-            score_message: 'Great job!',
-            total_score: 50,
-            texts: { score: 'Score', next: 'Next' },
-            icon: null,
-            feedback: 'Well done!',
-            timer: null,
-            onNext: vi.fn(),
-        };
-
-        render(<Score {...props} />);
+        render(<Score {...makeDefaultScoreProps({icon: null})} />);
         expect(document.body.contains(screen.getByText('Great job!'))).toBe(true);
         expect(document.body.contains(screen.getByText('Test Song'))).toBe(true);
     });

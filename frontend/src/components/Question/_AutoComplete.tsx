@@ -22,10 +22,9 @@ const AutoComplete = ({ question, value, onChange }: AutoCompleteProps) => {
         throw new Error("AutoComplete question must have choices");
     }
 
-    const options = Object.keys(choices)
-        .map((val) => ({
-            value: val,
-            label: choices[val],
+    const options = choices.map((choice) => ({
+            value: choice.value,
+            label: choice.label,
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
 

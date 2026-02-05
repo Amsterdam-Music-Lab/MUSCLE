@@ -1,17 +1,18 @@
 from typing import List, TypedDict, Optional
 from .base_action import BaseAction
+from .button import Button, ButtonAction
 
 
-class StepResponse(TypedDict):
+class StepAction(TypedDict):
     number: Optional[int]
     description: str
 
 
-class ExplainerResponse(TypedDict):
+class ExplainerAction(TypedDict):
     view: str
     instruction: str
-    button_label: str
-    steps: List[StepResponse]
+    button: ButtonAction
+    steps: List[StepAction]
     timer: Optional[int]
 
 
@@ -28,7 +29,7 @@ class Step(object):
         self.description = description
         self.number = number
 
-    def action(self, number=None) -> StepResponse:
+    def action(self, number=None) -> StepAction:
         """Create an explainer step, with description and optional number"""
         return {"number": self.number if self.number else number, "description": self.description}
 
@@ -44,7 +45,7 @@ class Explainer(BaseAction):
     Args:
         instruction (str): Instruction for the explainer
         steps (List[Step]): List of steps to explain
-        button_label (Optional[str]): Label for the button that proceeds to the next view
+        button (Optional[Button]): Configure button that proceeds to the next view
         timer (Optional[int]): Timer in ms
         step_numbers (Optional[bool]): Show step numbers
     """
@@ -55,17 +56,17 @@ class Explainer(BaseAction):
         self,
         instruction: str,
         steps: List[Step],
-        button_label="Let's go!",
+        button: Button = Button("Let's go!", "colorPrimary"),
         timer: Optional[int] = None,
         step_numbers: Optional[bool] = False,
     ):
         self.instruction = instruction
         self.steps = steps
-        self.button_label = button_label
+        self.button = button
         self.timer = timer
         self.step_numbers = step_numbers
 
-    def action(self) -> ExplainerResponse:
+    def action(self) -> ExplainerAction:
         if self.step_numbers:
             serialized_steps = [step.action(index + 1) for index, step in enumerate(self.steps)]
         else:
@@ -73,7 +74,7 @@ class Explainer(BaseAction):
         return {
             "view": self.view,
             "instruction": self.instruction,
-            "button_label": self.button_label,
+            "button": self.button.action(),
             "steps": serialized_steps,
             "timer": self.timer,
         }

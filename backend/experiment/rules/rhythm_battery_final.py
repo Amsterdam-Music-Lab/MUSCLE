@@ -1,6 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from question.banks import get_question_bank
@@ -36,12 +37,17 @@ class RhythmBatteryFinal(BaseRules):
 
     def get_intro_explainer(self):
         return Explainer(
-            _('Finally, we would like to ask you to answer some questions about your musical and demographic background.'),
+            _(
+                'Finally, we would like to ask you to answer some questions about your musical and demographic background.'
+            ),
             steps=[
                 Step(
-                    _('After these questions, the experiment will proceed to the final screen.'))
+                    _(
+                        'After these questions, the experiment will proceed to the final screen.'
+                    )
+                )
             ],
-            button_label=_('Ok')
+            button=Button(_('Ok')),
         )
 
     def next_round(self, session):

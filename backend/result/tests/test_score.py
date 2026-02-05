@@ -4,6 +4,7 @@ from django.test import TestCase
 
 from experiment.models import Block
 from participant.models import Participant
+from question.models import ChoiceList
 from result.models import Result
 from result.score import boolean_score, reaction_time_score
 from section.models import Playlist, Section, Song
@@ -44,9 +45,9 @@ class ScoreTest(TestCase):
             "form": [
                 {
                     "key": "likert_test",
-                    "result_id": result.pk,
+                    "resultId": result.pk,
                     "view": "TEXT_RANGE",
-                    "choices": {1: "1", 2: "2", 3: "3", 4: "4", 5: "5", 6: "6", 7: "7"},
+                    "choices": ChoiceList.objects.get(pk="LIKERT_AGREE_7").to_dict(),
                     "value": value,
                 }
             ]
@@ -64,15 +65,18 @@ class ScoreTest(TestCase):
             "form": [
                 {
                     "key": "likert_test",
-                    "result_id": result.pk,
+                    "resultId": result.pk,
                     "view": "RADIOS",
-                    "choices": {
-                        "first": "Spam",
-                        "second": "Eggs and Spam",
-                        "third": "Eggs, Fried Beans and Spam",
-                        "fourth": "Spam, Fried Beans and Spam",
-                        "fifth": "Spam, Spam, Spam, Spam, Eggs and Spam",
-                    },
+                    "choices": [
+                        {"value": "first", "label": "Spam"},
+                        {"value": "second", "label": "Eggs and Spam"},
+                        {"value": "third", "label": "Eggs, Fried Beans and Spam"},
+                        {"value": "fourth", "label": "Spam, Fried Beans and Spam"},
+                        {
+                            "value": "fifth",
+                            "label": "Spam, Spam, Spam, Spam, Eggs and Spam",
+                        },
+                    ],
                     "value": "second",
                 }
             ],
@@ -91,7 +95,7 @@ class ScoreTest(TestCase):
             "form": [
                 {
                     "key": "correctness_test",
-                    "result_id": result.pk,
+                    "resultId": result.pk,
                     "view": "BUTTON_ARRAY",
                     "value": value,
                 }
@@ -109,9 +113,7 @@ class ScoreTest(TestCase):
         view = {
             "decision_time": 10,
             "config": {"response_time": 15},
-            "form": [
-                {"key": "recognize", "result_id": result.pk, "value": result_type}
-            ],
+            "form": [{"key": "recognize", "resultId": result.pk, "value": result_type}],
         }
         return self.make_request(view)
 
@@ -126,9 +128,7 @@ class ScoreTest(TestCase):
         view = {
             "decision_time": 10,
             "config": {"response_time": 15},
-            "form": [
-                {"key": "recognize", "result_id": result.pk, "value": result_type}
-            ],
+            "form": [{"key": "recognize", "resultId": result.pk, "value": result_type}],
         }
         return self.make_request(view)
 

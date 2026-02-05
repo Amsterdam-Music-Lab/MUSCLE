@@ -4,13 +4,28 @@ import { describe, it, expect, vi } from 'vitest';
 import Checkboxes from './_Checkboxes';
 import Question from '@/types/Question';
 
+vi.mock('../../util/stores', () => ({
+    __esModule: true,
+    default: (fn: (state: any) => any) => {
+        const state = {
+            theme: {
+                colorPrimary: "#d843e2", colorSecondary: "#39d7b8"
+            }
+        };
+
+        return fn(state);
+    },
+    useBoundStore: vi.fn()
+}));
+
 const mockQuestion: Question = {
     key: 'test-checkboxes',
-    choices: {
-        'option1': 'First Option',
-        'option2': 'Second Option',
-        'option3': 'Third Option'
-    }
+    text: 'Testing Checkboxes',
+    choices: [
+        {value: 'option1', label: 'First Option'},
+        {value: 'option2', label: 'Second Option'},
+        {value: 'option3', label: 'Third Option'}
+    ]
 };
 
 describe('Checkboxes', () => {
@@ -23,8 +38,8 @@ describe('Checkboxes', () => {
 
     it('displays all choices', () => {
         render(<Checkboxes question={mockQuestion} value="" onChange={() => { }} />);
-        Object.values(mockQuestion.choices).forEach(choice => {
-            expect(screen.getByText(choice)).toBeDefined();
+        mockQuestion.choices.forEach(choice => {
+            expect(screen.getByText(choice.label)).toBeDefined();
         });
     });
 
@@ -73,7 +88,7 @@ describe('Checkboxes', () => {
     it('throws an error when no choices are provided', () => {
         const invalidQuestion: Question = {
             key: 'invalid-checkboxes',
-            choices: {}
+            choices: []
         };
 
         expect(() => render(<Checkboxes question={invalidQuestion} value="" onChange={() => { }} />))

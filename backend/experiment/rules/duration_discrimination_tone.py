@@ -1,5 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer
 from experiment.actions.utils import render_feedback_trivia
 from .duration_discrimination import DurationDiscrimination
@@ -27,11 +28,7 @@ class DurationDiscriminationTone(DurationDiscrimination):
         else:
             instruction = _(
                 'The second tone was %(correct_response)s %(preposition)s the first tone. Your answer was INCORRECT.') % {'correct_response': correct_response, 'preposition': preposition}
-        return Explainer(
-            instruction=instruction,
-            steps=[],
-            button_label=button_label
-        )
+        return Explainer(instruction=instruction, steps=[], button=Button(button_label))
 
     def get_question_text(self):
         return _("Is the second tone EQUALLY LONG as the first tone or LONGER?")

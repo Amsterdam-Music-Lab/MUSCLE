@@ -67,13 +67,13 @@ describe('Final Component', () => {
         render(
             <BrowserRouter>
                 <Final
-                    button={{ text: 'Next', link: '' }}
+                    button={{ label: 'Next', link: '' }}
                     onNext={onNextMock}
                 />
             </BrowserRouter>
         );
 
-        fireEvent.click(screen.getByTestId('button'));
+        fireEvent.click(screen.queryByRole('button'));
         await waitFor(() => {
             expect(onNextMock).toHaveBeenCalled();
         });
@@ -179,7 +179,7 @@ describe('Final Component', () => {
             </BrowserRouter>
         );
 
-        fireEvent.click(screen.getByTestId('button'));
+        fireEvent.click(screen.queryByRole('button'));
         await waitFor(() => {
             expect(onNextMock).toHaveBeenCalled();
         });

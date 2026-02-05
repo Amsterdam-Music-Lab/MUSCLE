@@ -15,33 +15,21 @@ export default {
 };
 
 // Create a decorator that dynamically accepts a play_method
-const createCommonDecorator = (play_method: "BUFFER" | "EXTERNAL") => (Story: StoryFn) => {
-    const [initialized, setInitialized] = useState(false);
+const createCommonDecorator = (playMethod: "BUFFER" | "EXTERNAL") => (Story: StoryFn) => {
 
     const setCurrentAction = useBoundStore((state) => state.setCurrentAction);
     setCurrentAction({
         view: "TRIAL_VIEW",
         playback: {
             view: AUTOPLAY,
-            play_method,
-            show_animation: true,
-            preload_message: "Loading audio...",
+            showAnimation: true,
+            preloadMessage: "Loading audio...",
             instruction: "Click the button to play the audio.",
-            sections: [{ id: 0, url: audio }],
-            play_from: 0.0,
-            resume_play: false,
+            sections: [{ link: audio, color: 'colorPrimary', playMethod, playFrom: 0.0 }],
+            mute: false,
+            resumePlay: false,
         }
     });
-
-    if (!initialized) {
-        return (
-            <>
-                <button onClick={() => setInitialized(true)}>
-                    Initialize WebAudio
-                </button>
-            </>
-        );
-    }
 
     return (
         <div
@@ -53,27 +41,26 @@ const createCommonDecorator = (play_method: "BUFFER" | "EXTERNAL") => (Story: St
 };
 
 // Create playback arguments dynamically
-const createPlaybackArgs = (play_method: "BUFFER" | "EXTERNAL"): PlaybackProps => ({
-    playbackArgs: {
-        view: AUTOPLAY,
-        play_method,
-        show_animation: true,
-        preload_message: "Loading audio...",
-        instruction: "Click the button to play the audio.",
-        sections: [
-            {
-                id: 0,
-                url: audio,
-            }
-        ],
-        play_from: 0.0,
-        resume_play: false,
-    },
+const createPlaybackArgs = (playMethod: "BUFFER" | "EXTERNAL"): PlaybackProps => ({
+    view: AUTOPLAY,
+    showAnimation: true,
+    preloadMessage: "Loading audio...",
+    instruction: "Click the button to play the audio.",
+    sections: [
+        {
+            link: audio,
+            label: "",
+            playMethod,
+            playFrom: 0.0,
+        }
+    ],
+    resumePlay: false,
     onPreloadReady: () => { },
     autoAdvance: false,
     responseTime: 10,
     submitResult: () => { },
     finishedPlaying: () => { },
+    mute: false
 });
 
 export const PlaybackAutoplayBuffer = {

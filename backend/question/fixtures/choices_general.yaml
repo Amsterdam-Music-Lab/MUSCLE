@@ -5,42 +5,49 @@
     text: 'Yes'
     index: 0
     choicelist: BOOLEAN
+    color: 'colorPositive'
 - model: question.choice
   fields:
     key: 'no'
     text: 'No'
     index: 1
     choicelist: BOOLEAN
+    color: 'colorNegative'
 - model: question.choice
   fields:
     key: 'no'
     text: 'No'
     index: 0
     choicelist: BOOLEAN_NEGATIVE_FIRST
+    color: 'colorNegative'
 - model: question.choice
   fields:
     key: 'yes'
     text: 'Yes'
     index: 1
     choicelist: BOOLEAN_NEGATIVE_FIRST
+    color: 'colorPositive'
 - model: question.choice
   fields:
     key: '1'
     text: 'Yes'
     index: 0
     choicelist: BOOLEAN_UNDECIDED
+    color: 'colorPositive'
 - model: question.choice
   fields:
     key: '0'
     text: 'No'
     index: 1
     choicelist: BOOLEAN_UNDECIDED
+    color: 'colorNegative'
 - model: question.choice
   fields:
     key: '-1'
     text: I'm not sure
     index: 2
     choicelist: BOOLEAN_UNDECIDED
+    color: 'colorNeutral1'
 - model: question.choice
   fields:
     key: '1'
@@ -191,6 +198,7 @@
     text: fa-face-grin-hearts
     index: 0
     choicelist: LIKERT_ICONS_7
+    color: 'colorPrimary'
 - model: question.choice
   fields:
     key: '2'
@@ -227,6 +235,7 @@
     text: fa-face-angry
     index: 6
     choicelist: LIKERT_ICONS_7
+    color: 'colorNeutral2'
 - model: question.choice
   fields:
     key: '1'

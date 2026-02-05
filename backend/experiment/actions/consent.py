@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from typing import Literal
 
 from .base_action import BaseAction
+from .button import Button
 
 
 def get_render_format(url: str) -> Literal["HTML", "MARKDOWN"]:
@@ -70,8 +71,8 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
         consent = Consent(
             text=File(open("path/to/consent.md")),
             title="Informed consent",
-            confirm="I agree",
-            deny="Stop",
+            confirm_button=Button("I agree", "colorPositive"),
+            deny_button=Button("Stop", "colorNegative")
         )
         ```
 
@@ -101,8 +102,8 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
         self,
         text: File,
         title: str = "Informed consent",
-        confirm: str = _("I agree"),
-        deny: str = _("Stop"),
+        confirm_button: Button = Button(_("I agree"), 'colorPositive'),
+        deny_button: Button = Button(_("Stop"), 'colorNegative'),
         url: str = "",
     ) -> None:
         # Determine which text to use
@@ -122,5 +123,5 @@ class Consent(BaseAction):  # pylint: disable=too-few-public-methods
         # render text fot the consent component
         self.text = render_html_or_markdown(dry_text, render_format)
         self.title = title
-        self.confirm = confirm
-        self.deny = deny
+        self.confirmButton = confirm_button.action()
+        self.denyButton = deny_button.action()

@@ -48,14 +48,17 @@ class ResultTest(TestCase):
             question_key="speed_swallow",
             participant=self.participant
         )
-        view = { "form": [
-            {"key": "speed_swallow",
-            "result_id": result.id,
-            "view": "TEXT",
-            "scale_steps": 7,
-            "value": 'An African or a European swallow?'
-            }
-        ]}
+        view = {
+            "form": [
+                {
+                    "key": "speed_swallow",
+                    "resultId": result.id,
+                    "view": "TEXT",
+                    "scale_steps": 7,
+                    "value": 'An African or a European swallow?',
+                }
+            ]
+        }
         request = {
             "session_id": self.session.id,
             "json_data": json.dumps(view)
@@ -77,10 +80,15 @@ class ResultTest(TestCase):
         )
         data = {
             'form': [
-                {'key': 'silly_walk', 'value': 'very silly indeed', 'result_id': result1.pk},
-                {'key': 'tea', 'value': 'Ms Two Lumps', 'result_id': result2.pk}],
+                {
+                    'key': 'silly_walk',
+                    'value': 'very silly indeed',
+                    'resultId': result1.pk,
+                },
+                {'key': 'tea', 'value': 'Ms Two Lumps', 'resultId': result2.pk},
+            ],
             'config': {'something': 'registered as config'},
-            'decision_time': 42
+            'decision_time': 42,
         }
         handle_results(data, self.session)
         assert self.session.result_count() == 2

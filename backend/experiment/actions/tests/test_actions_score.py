@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import Mock
 
+from experiment.actions.button import Button
 from experiment.actions.score import Score
 
 
@@ -20,6 +21,7 @@ class TestScore(unittest.TestCase):
             title="Test Title",
             score=100,
             score_message="Score is 100",
+            button=Button('Custom label'),
             config={'show_section': True, 'show_total_score': True},
             icon="icon-test",
             timer=5,
@@ -33,13 +35,13 @@ class TestScore(unittest.TestCase):
             score.config, {'show_section': True, 'show_total_score': True})
         self.assertEqual(score.icon, "icon-test")
         self.assertEqual(
-            score.text,
+            score.texts,
             {
                 'score': 'Total Score',
-                'next': 'Next',
                 'listen_explainer': 'You listened to:',
             },
         )
+        self.assertEqual(score.button.label, 'Custom label')
         self.assertEqual(score.timer, 5)
 
     def test_initialization_minimal_parameters(self):
@@ -52,13 +54,13 @@ class TestScore(unittest.TestCase):
             score.config, {'show_section': False, 'show_total_score': False})
         self.assertIsNone(score.icon)
         self.assertEqual(
-            score.text,
+            score.texts,
             {
                 'score': 'Total Score',
-                'next': 'Next',
                 'listen_explainer': 'You listened to:',
             },
         )
+        self.assertEqual(score.button.label, 'Next')
         self.assertIsNone(score.timer)
 
     def test_action_serialization(self):
@@ -74,6 +76,7 @@ class TestScore(unittest.TestCase):
         self.assertIn('feedback', action)
         self.assertIn('icon', action)
         self.assertIn('timer', action)
+        self.assertIn('button', action)
 
     def test_default_score_message(self):
         score = Score(session=self.mock_session)
@@ -82,7 +85,3 @@ class TestScore(unittest.TestCase):
         self.assertIn(score.default_score_message(-5),
                       ["Incorrect"])  # Negative
         self.assertIn(score.default_score_message(None), ["No points"])  # None
-
-
-if __name__ == '__main__':
-    unittest.main()

@@ -8,19 +8,7 @@ from experiment.serializers import serialize_social_media_config, SocialMediaCon
 from session.models import Session
 
 from .base_action import BaseAction
-
-
-class ButtonConfiguration(TypedDict):
-    """
-    Button configuration for an optional call-to-action button.
-
-    Attributes:
-        text (str): The text displayed on the button.
-        link (str): The URL or path to navigate to when the button is clicked.
-    """
-
-    text: str
-    link: str
+from .button import Button, ButtonAction
 
 
 class LogoConfiguration(TypedDict):
@@ -43,7 +31,7 @@ class FinalActionResponse(TypedDict):
     accumulative_percentile: Optional[float]
     rank: Optional[str]
     final_text: Optional[str]
-    button: Optional[ButtonConfiguration]
+    button: Optional[Button]
     points: str
     action_texts: Dict[str, str]
     title: str
@@ -107,7 +95,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         session: Session,
         title: str = _("Final score"),
         final_text: Optional[str] = None,
-        button: Optional[ButtonConfiguration] = None,
+        button: Optional[Button] = None,
         points: Optional[str] = None,
         rank: Optional[str] = None,
         show_profile_link: bool = False,
@@ -150,7 +138,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
             "accumulative_percentile": self.accumulative_percentile,
             "rank": self.rank,
             "final_text": self.wrap_plain_final_text(),
-            "button": self.button,
+            "button": self.button.action() if self.button else None,
             "points": self.points,
             "action_texts": {
                 "play_again": _("Play again"),

@@ -3,14 +3,17 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.html import HTML
-from experiment.actions.playback import Autoplay
+from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion, IconRangeQuestion
 from experiment.actions.redirect import Redirect
 from experiment.actions.trial import Trial
+from experiment.actions.wrappers import boolean_question
+from question.models import ChoiceList
 from result.utils import prepare_result
 from result.models import Result
 from section.models import Section
@@ -57,7 +60,7 @@ class MusicalPreferences(BaseRules):
         return Explainer(
             instruction=_("Welcome to the Musical Preferences experiment!"),
             steps=[Step(_("Please start by checking your connection quality."))],
-            button_label=_("OK"),
+            button=Button(_("OK")),
         )
 
     def next_round(self, session: Session):
@@ -82,20 +85,36 @@ class MusicalPreferences(BaseRules):
                                 ),
                                 Step(_("Have fun!")),
                             ],
-                            button_label=_("Let's go!"),
+                            button=Button(_("Let's go!")),
                         )
                         return [explainer, *question_trials]
                     else:
                         explainer = Explainer(
                             instruction=_("How to play"),
                             steps=[
-                                Step(_("You will hear 64 music clips and have to answer two questions for each clip.")),
-                                Step(_("It will take 20-30 minutes to complete the whole experiment.")),
-                                Step(_("Either wear headphones or use your device's speakers.")),
-                                Step(_("Your final results will be displayed at the end.")),
+                                Step(
+                                    _(
+                                        "You will hear 64 music clips and have to answer two questions for each clip."
+                                    )
+                                ),
+                                Step(
+                                    _(
+                                        "It will take 20-30 minutes to complete the whole experiment."
+                                    )
+                                ),
+                                Step(
+                                    _(
+                                        "Either wear headphones or use your device's speakers."
+                                    )
+                                ),
+                                Step(
+                                    _(
+                                        "Your final results will be displayed at the end."
+                                    )
+                                ),
                                 Step(_("Have fun!")),
                             ],
-                            button_label=_("Start"),
+                            button=Button(_("Start")),
                         )
                         actions = [explainer]
                 else:
@@ -106,20 +125,31 @@ class MusicalPreferences(BaseRules):
                             form=[
                                 ButtonArrayQuestion(
                                     key="audio_check2",
-                                    choices={"no": _("Quit"), "yes": _("Next")},
+                                    choices=[
+                                        {
+                                            "value": "no",
+                                            "label": _("Quit"),
+                                            "color": "colorNegative",
+                                        },
+                                        {
+                                            "value": "yes",
+                                            "label": _("Next"),
+                                            "color": "colorPositive",
+                                        },
+                                    ],
                                     result_id=prepare_result(
                                         "audio_check2", session, scoring_rule="BOOLEAN"
                                     ),
                                     style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
                                 )
                             ],
-                            submit_label="",
+                            submit_button=None,
                         )
                         return Trial(
                             playback=playback,
                             html=html,
                             feedback_form=form,
-                            config={"response_time": 15},
+                            response_time=15,
                             title=_("Tech check"),
                         )
                     else:
@@ -132,13 +162,12 @@ class MusicalPreferences(BaseRules):
                 html = HTML(body="<h4>{}</h4>".format(_("Do you hear the music?")))
                 form = Form(
                     form=[
-                        ButtonArrayQuestion(
+                        boolean_question(
                             key="audio_check1",
-                            choices={"no": _("No"), "yes": _("Yes")},
+                            text="",
                             result_id=prepare_result(
                                 "audio_check1", session, scoring_rule="BOOLEAN"
                             ),
-                            style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
                         )
                     ]
                 )
@@ -148,7 +177,7 @@ class MusicalPreferences(BaseRules):
                         playback=playback,
                         feedback_form=form,
                         html=html,
-                        config={"response_time": 15},
+                        response_time=15,
                         title=_("Audio check"),
                     ),
                 ]
@@ -212,15 +241,7 @@ class MusicalPreferences(BaseRules):
         likert = IconRangeQuestion(
             text=_("2. How much do you like this song?"),
             key=like_key,
-            choices={
-                1: 'fa-face-grin-hearts',
-                2: 'fa-face-grin',
-                3: 'fa-face-smile',
-                4: 'fa-face-meh',
-                5: 'fa-face-frown',
-                6: 'fa-face-frown-open',
-                7: 'fa-face-angry',
-            },
+            choices=ChoiceList.objects.get(pk='LIKERT_ICONS_7').to_dict(),
             result_id=prepare_result(
                 like_key, session, section=section, scoring_rule="LIKERT"
             ),
@@ -229,19 +250,22 @@ class MusicalPreferences(BaseRules):
         know = ButtonArrayQuestion(
             text=_("1. Do you know this song?"),
             key=know_key,
-            choices={"yes": "fa-check", "unsure": "fa-question", "no": "fa-xmark"},
+            choices=[
+                {"value": "yes", "label": "fa-check", "color": "colorPositive"},
+                {"value": "unsure", "label": "fa-question", "color": "colorNeutral1"},
+                {"value": "no", "label": "fa-xmark", "color": "colorNegative"},
+            ],
             result_id=prepare_result(know_key, session, section=section),
             style=[ColorScheme.BOOLEAN],
         )
-        playback = Autoplay([section], show_animation=True)
+        playback = Autoplay(sections=[PlaybackSection(section)])
         form = Form([know, likert])
         view = Trial(
             playback=playback,
             feedback_form=form,
-            title=_("Song %(round)s/%(total)s") % {"round": round_number + 1, "total": session.block.rounds},
-            config={
-                "response_time": section.duration + 0.1,
-            },
+            title=_("Song %(round)s/%(total)s")
+            % {"round": round_number + 1, "total": session.block.rounds},
+            response_time=section.duration + 0.1,
         )
         actions.append(view)
         return actions

@@ -1,8 +1,6 @@
 import PlayCard from "../components/MatchingPairs/PlayCard";
 import catImage from "./assets/images/cat-01.webp";
 
-console.log(catImage);
-
 export default {
     title: "Playback/PlayCard",
     component: PlayCard,
@@ -16,30 +14,32 @@ const getDefaultArgs = (overrides = {}) => ({
     registerUserClicks: () => void 0,
     playing: true,
     section: {
-        id: 32,
-        url: "/section/32/78165/",
+        link: "/section/32/78165/",
+        color: "colorPrimary",
     },
     showAnimation: true,
     view: "MATCHINGPAIRS",
     ...overrides,
 });
 
+const DefaultDecorator = (Story) => {
+    return (
+        <div
+            style={{
+                width: "256px",
+                height: "256px",
+                backgroundColor: "#ddd",
+                padding: "1rem",
+            }}
+        >
+            <Story />
+        </div>
+    )
+}
+
 export const Default = {
     args: getDefaultArgs(),
-    decorators: [
-        (Story) => (
-            <div
-                style={{
-                    width: "256px",
-                    height: "256px",
-                    backgroundColor: "#ddd",
-                    padding: "1rem",
-                }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [DefaultDecorator],
 };
 
 export const Turned = {
@@ -50,20 +50,7 @@ export const Turned = {
             turned: true,
         },
     }),
-    decorators: [
-        (Story) => (
-            <div
-                style={{
-                    width: "256px",
-                    height: "256px",
-                    backgroundColor: "#ddd",
-                    padding: "1rem",
-                }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [DefaultDecorator],
 };
 
 export const Seen = {
@@ -74,20 +61,7 @@ export const Seen = {
             seen: true,
         },
     }),
-    decorators: [
-        (Story) => (
-            <div
-                style={{
-                    width: "256px",
-                    height: "256px",
-                    backgroundColor: "#ddd",
-                    padding: "1rem",
-                }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [DefaultDecorator],
 };
 
 export const Memory = {
@@ -98,20 +72,7 @@ export const Memory = {
             memory: true,
         },
     }),
-    decorators: [
-        (Story) => (
-            <div
-                style={{
-                    width: "256px",
-                    height: "256px",
-                    backgroundColor: "#ddd",
-                    padding: "1rem",
-                }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [DefaultDecorator],
 };
 
 export const Lucky = {
@@ -122,68 +83,25 @@ export const Lucky = {
             lucky: true,
         },
     }),
-    decorators: [
-        (Story) => (
-            <div
-                style={{
-                    width: "256px",
-                    height: "256px",
-                    backgroundColor: "#ddd",
-                    padding: "1rem",
-                }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [DefaultDecorator],
 };
 
 export const NoEvents = {
     args: getDefaultArgs({
         section: {
-            id: 32,
-            url: "/section/32/78165/",
             noevents: true,
         },
     }),
-    decorators: [
-        (Story) => (
-            <div
-                style={{
-                    width: "256px",
-                    height: "256px",
-                    backgroundColor: "#ddd",
-                    padding: "1rem",
-                }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [DefaultDecorator],
 };
 
 export const Inactive = {
     args: getDefaultArgs({
         section: {
-            id: 32,
-            url: "/section/32/78165/",
             inactive: true,
         },
     }),
-    decorators: [
-        (Story) => (
-            <div
-                style={{
-                    width: "256px",
-                    height: "256px",
-                    backgroundColor: "#ddd",
-                    padding: "1rem",
-                }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [DefaultDecorator],
 };
 
 export const Playing = {
@@ -198,22 +116,7 @@ export const Playing = {
             turned: true,
         },
     }),
-    decorators: [
-        (Story) => (
-            <div
-                style={{
-                    width: "128px",
-                    minHeight: "128px",
-                    margin: "1rem auto",
-                    height: "256px",
-                    backgroundColor: "#ddd",
-                    padding: "1rem",
-                }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [DefaultDecorator],
 };
 
 export const VisualMatchingPairs = {
@@ -222,24 +125,10 @@ export const VisualMatchingPairs = {
         registerUserClicks: () => alert("Registered"),
         playing: false,
         section: {
-            id: 32,
-            url: `http://localhost:6006/${catImage}`,
+            link: `http://localhost:6006/${catImage}`,
             turned: true,
         },
         view: "MATCHINGPAIRS",
     }),
-    decorators: [
-        (Story) => (
-            <div
-                style={{
-                    width: "256px",
-                    height: "256px",
-                    backgroundColor: "#ddd",
-                    padding: "1rem",
-                }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [DefaultDecorator],
 };

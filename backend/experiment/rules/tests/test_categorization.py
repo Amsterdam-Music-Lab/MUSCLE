@@ -1,11 +1,9 @@
 from django.test import TestCase
-from experiment.models import Block, Experiment, Phase
-from section.models import Playlist, Section, Song
+from experiment.models import Block
+from section.models import Playlist
 from participant.models import Participant
 from session.models import Session
 from experiment.rules.categorization import Categorization
-from result.models import Result
-
 
 class CategorizationRuleTest(TestCase):
 
@@ -78,7 +76,7 @@ class CategorizationRuleTest(TestCase):
         explainer = categorization.get_intro_explainer().action()
         self.assertEqual(explainer['instruction'],
                          'This is a listening experiment in which you have to respond to short sound sequences.')
-        self.assertEqual(explainer['button_label'], 'Ok')
+        self.assertEqual(explainer['button']['label'], 'Ok')
 
     def test_plan_experiment_and_phase(self):
         categorization = Categorization()
@@ -112,16 +110,28 @@ class CategorizationRuleTest(TestCase):
         if self.session.json_data.get('button_order') == 'neutral':
             self.assertEqual(self.session.json_data.get('button_colors'), 'Blue left, Orange right')
             if self.session.json_data.get('stimuli_a') == "BLUE":
-                self.assertEqual(self.session.json_data.get('choices'), {"A": ph, "B": ph})
+                self.assertEqual(
+                    self.session.json_data.get('choices'),
+                    [{"value": "A", "label": ph}, {"value": "B", "label": ph}],
+                )
             if self.session.json_data.get('stimuli_a') == "ORANGE":
-                self.assertEqual(self.session.json_data.get('choices'), {"B": ph, "A": ph})
+                self.assertEqual(
+                    self.session.json_data.get('choices'),
+                    [{"value": "B", "label": ph}, {"value": "A", "label": ph}],
+                )
 
         if self.session.json_data.get('button_order') == 'neutral-inverted':
             self.assertEqual(self.session.json_data.get('button_colors'), 'Orange left, Blue right')
             if self.session.json_data.get('stimuli_a') == "BLUE":
-                self.assertEqual(self.session.json_data.get('choices'), {"B": ph, "A": ph})
+                self.assertEqual(
+                    self.session.json_data.get('choices'),
+                    [{"value": "B", "label": ph}, {"value": "A", "label": ph}],
+                )
             if self.session.json_data.get('stimuli_a') == "ORANGE":
-                self.assertEqual(self.session.json_data.get('choices'), {"A": ph, "B": ph})
+                self.assertEqual(
+                    self.session.json_data.get('choices'),
+                    [{"value": "A", "label": ph}, {"value": "B", "label": ph}],
+                )
 
         # Test explainer
         self.assertEqual(categorization.get_intro_explainer().action()['instruction'], first_next_round[0].instruction)

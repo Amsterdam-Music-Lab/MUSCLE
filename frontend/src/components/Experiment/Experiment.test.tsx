@@ -35,6 +35,7 @@ const theme = {
     bodyFontUrl: 'bodyFontUrl.com',
     description: 'Description of the theme',
     headingFontUrl: 'headingFontUrl.com',
+    colorGrey: '#bdbebf',
     logo: {
         title: 'Logo title',
         description: 'Logo description',
@@ -128,7 +129,7 @@ describe('Experiment', () => {
     });
 
     it('shows consent first if available', async () => {
-        mock.onGet().replyOnce(200, { consent: '<p>This is our consent form!</p>', dashboard: [blockWithAllProps], nextBlock: block1 });
+        mock.onGet().replyOnce(200, { consent: {text: '<p>This is our consent form!</p>'}, dashboard: [blockWithAllProps], nextBlock: block1, theme});
         render(
             <MemoryRouter>
                 <Experiment />

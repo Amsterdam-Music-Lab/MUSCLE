@@ -10,20 +10,17 @@ export default {
     },
 };
 
-export const External = {
+export const Default = {
     args: {
         instruction: "Click the button to play the audio.",
         pageTitle: "Listen to the audio",
         duration: 0,
         sections: [
             {
-                id: 1,
-                url: audio,
+                link: audio,
+                playMethod: "EXTERNAL"
             },
         ],
-        playConfig: {
-            play_method: "EXTERNAL",
-        },
         onNext: () => {},
     },
     decorators: [

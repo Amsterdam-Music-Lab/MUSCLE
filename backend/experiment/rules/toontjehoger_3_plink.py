@@ -5,8 +5,9 @@ import re
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.playback import PlayButton
+from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.info import Info
@@ -65,12 +66,18 @@ class ToontjeHoger3Plink(BaseRules):
         return Explainer(
             instruction="Muziekherkenning",
             steps=[
-                Step("Je krijgt {} zeer korte muziekfragmenten te horen.".format(n_rounds)),
+                Step(
+                    "Je krijgt {} zeer korte muziekfragmenten te horen.".format(
+                        n_rounds
+                    )
+                ),
                 Step("Ken je het nummer? Noem de juiste artiest en titel!"),
-                Step("Weet je het niet? Beantwoord dan extra vragen over de tijdsperiode en emotie van het nummer."),
+                Step(
+                    "Weet je het niet? Beantwoord dan extra vragen over de tijdsperiode en emotie van het nummer."
+                ),
             ],
             step_numbers=True,
-            button_label="Start",
+            button=Button("Start"),
         )
 
     def next_round(self, session: Session):
@@ -160,10 +167,10 @@ class ToontjeHoger3Plink(BaseRules):
             next_round.append(self.get_score_view(session))
         # Get all song sections
         all_sections = session.playlist.section_set.all()
-        choices = {}
+        choices = []
         for section in all_sections:
             label = section.song_label()
-            choices[section.pk] = label
+            choices.append({"value": section.pk, "label": label})
 
         # Get section to recognize
         section = session.playlist.get_section(song_ids=session.get_unused_song_ids())
@@ -183,11 +190,13 @@ class ToontjeHoger3Plink(BaseRules):
         )
         plink_trials.append(
             Trial(
-                playback=PlayButton(sections=[section]),
+                playback=PlayButtons(PlaybackSection[section]),
                 feedback_form=Form(
-                    [question1], is_skippable=True, skip_label="Ik weet het niet", submit_label="Volgende"
+                    [question1],
+                    skip_button=Button("Ik weet het niet"),
+                    submit_button=Button("Volgende"),
                 ),
-                config={"break_round_on": {"NOT": [""]}},
+                break_round_on={"NOT": [""]},
             )
         )
         json_data = session.json_data
@@ -198,9 +207,11 @@ class ToontjeHoger3Plink(BaseRules):
                 instruction="Tussenronde",
                 steps=[
                     Step("Jammer dat je de artiest en titel van dit nummer niet weet!"),
-                    Step("Verdien extra punten door twee extra vragen over het nummer te beantwoorden."),
+                    Step(
+                        "Verdien extra punten door twee extra vragen over het nummer te beantwoorden."
+                    ),
                 ],
-                button_label="Start",
+                button=Button("Start"),
             )
             plink_trials.append(extra_questions_intro)
 
@@ -214,9 +225,10 @@ class ToontjeHoger3Plink(BaseRules):
 
         # Question
         periods = ["60's", "70's", "80's", "90's", "00's", "10's", "20's"]
-        period_choices = {}
+        period_choices = []
         for period in periods:
-            period_choices[period.replace("'", "")] = period
+            value = period.replace("'", "")
+            period_choices.append({"value": value, "label": period})
 
         question = RadiosQuestion(
             text="Wanneer is het nummer uitgebracht?",
@@ -230,9 +242,9 @@ class ToontjeHoger3Plink(BaseRules):
     def get_emotion_question(self, session, section):
         # Question
         emotions = ["vrolijk", "droevig", "boosheid", "angst", "tederheid"]
-        emotion_choices = {}
+        emotion_choices = []
         for emotion in emotions:
-            emotion_choices[emotion] = emotion.capitalize()
+            emotion_choices.append({"value": emotion, "label": emotion.capitalize()})
 
         question = RadiosQuestion(
             text="Welke emotie past bij dit nummer?",
@@ -292,8 +304,10 @@ class ToontjeHoger3Plink(BaseRules):
         info = Info(
             body=body,
             heading="Muziekherkenning",
-            button_label="Terug naar ToontjeHoger",
-            button_link=get_current_experiment_url(session),
+            button=Button(
+                "Terug naar ToontjeHoger",
+                link=get_current_experiment_url(session),
+            ),
         )
 
         return [score, final, info]

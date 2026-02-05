@@ -1,13 +1,15 @@
 import logging
 from django.template.loader import render_to_string
 from os.path import join
+
 from section.models import Playlist
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.html import HTML
 from experiment.actions.info import Info
-from experiment.actions.playback import Autoplay
+from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
@@ -58,7 +60,7 @@ class ToontjeHoger1Mozart(BaseRules):
                 Step("Lukt het om het juiste antwoord te vinden?"),
             ],
             step_numbers=True,
-            button_label="Start",
+            button=Button("Start"),
         )
 
         if rounds_passed == 0:
@@ -113,7 +115,7 @@ class ToontjeHoger1Mozart(BaseRules):
         info = Info(
             body=body,
             heading=heading,
-            button_label="Volgende",
+            button=Button("Volgende"),
         )
         return [info]
 
@@ -146,7 +148,7 @@ class ToontjeHoger1Mozart(BaseRules):
         # --------------------
 
         # Listen
-        playback = Autoplay([section], show_animation=True)
+        playback = Autoplay(sections=[PlaybackSection(section)], show_animation=True)
 
         listen_config = {
             "auto_advance": True,
@@ -168,19 +170,19 @@ class ToontjeHoger1Mozart(BaseRules):
         question = ButtonArrayQuestion(
             text=question,
             key=key,
-            choices={
-                "A": "A",
-                "B": "B",
-                "C": "C",
-                "D": "D",
-                "E": "E",
-            },
+            choices=[
+                {"value": "A", "label": "A", "color": "colorNeutral2"},
+                {"value": "B", "label": "B", "color": "colorNeutral1"},
+                {"value": "C", "label": "C", "color": "colorSecondary"},
+                {"value": "D", "label": "D", "color": "colorPrimary"},
+                {"value": "E", "label": "E", "color": "colorNeutral3"},
+            ],
             result_id=prepare_result(
                 key, session, section=section, expected_response=expected_response
             ),
             style=[ColorScheme.TOONTJEHOGER],
         )
-        form = Form([question], submit_label="")
+        form = Form([question], submit_button=None)
 
         image_trial = Trial(
             html=HTML(body='<img src="{}" style="max-height:326px;max-width: 100%;"/>'.format(image_url)),
@@ -199,7 +201,7 @@ class ToontjeHoger1Mozart(BaseRules):
                 Step("Lukt het nu om de juiste te kiezen?"),
             ],
             step_numbers=True,
-            button_label="Start",
+            button=Button("Start"),
         )
 
         return [explainer]
@@ -237,8 +239,10 @@ class ToontjeHoger1Mozart(BaseRules):
         info = Info(
             body=body,
             heading="Het Mozart effect",
-            button_label="Terug naar ToontjeHoger",
-            button_link=get_current_experiment_url(session),
+            button=Button(
+                "Terug naar ToontjeHoger",
+                link=get_current_experiment_url(session),
+            ),
         )
 
         return [*answer_explainer, *score, final, info]

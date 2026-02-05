@@ -1,18 +1,20 @@
 from io import BytesIO
 from os.path import join
-import roman
 from zipfile import ZipFile
 
 from django.db.models.query import QuerySet
 from django.core import serializers
 from django.http import HttpResponse
 from django.utils import timezone
+import roman
+
 
 from experiment.models import Experiment, Block, Feedback
 from result.models import Result
 from participant.models import Participant
 from section.models import Song, Section
 from session.models import Session
+
 
 def slugify(text: str) -> str:
     """Create a slug from given string
@@ -82,26 +84,12 @@ def external_url(text: str, url: str) -> str:
     return '<a href="{}" target="_blank" rel="noopener noreferrer" >{}</a>'.format(url, text)
 
 
-def create_player_labels(num_labels: int, label_style: str = "number") -> list[str]:
-    """Create player labels
-
-    Args:
-        num_labels: Number of labels
-        label_style: 'number', 'alphabetic', 'roman'
-
-    Returns:
-        Player label
-    """
-
-    return [format_label(i, label_style) for i in range(num_labels)]
-
-
 def format_label(number: int, label_style: str) -> str:
-    """Generate player_label for create_player_label()
+    """Generate a label based on an index and a label style
 
     Args:
         number: index
-        label_style: 'number', 'alphabetic', 'roman'
+        label_style: 'alphabetic', 'roman'
 
     Returns:
         Player label
