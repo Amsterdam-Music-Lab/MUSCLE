@@ -44,6 +44,23 @@ class ThemeConfigAdmin(NestedModelAdmin):  # Change this line
     fieldsets = (
         (None, {"fields": ("name", "description")}),
         (
+            "Colors Configuration",
+            {
+                "fields": (
+                    "color_primary",
+                    "color_secondary",
+                    "color_positive",
+                    "color_negative",
+                    "color_neutral1",
+                    "color_neutral2",
+                    "color_neutral3",
+                    "color_text",
+                    "color_background",
+                    "color_grey",
+                )
+            },
+        ),
+        (
             "Heading Font Configuration",
             {
                 "description": 'Please use a valid font-family name, url or enter the name or url of a font from Google Fonts (e.g. Roboto, Fredoka, Open Sans). See also <a href="https://fonts.google.com/" target="_blank">Google Fonts</a>',

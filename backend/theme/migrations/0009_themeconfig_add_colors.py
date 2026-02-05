@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='themeconfig',
             name='color_background',
-            field=models.CharField(blank=True, default=' #212529', max_length=8),
+            field=models.CharField(blank=True, default='#212529', max_length=8),
         ),
         migrations.AddField(
             model_name='themeconfig',
@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='themeconfig',
             name='color_positive',
-            field=models.CharField(blank=True, default='#00b612', max_length=8),
+            field=models.CharField(blank=True, default='#39d7b8', max_length=8),
         ),
         migrations.AddField(
             model_name='themeconfig',

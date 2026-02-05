@@ -14,6 +14,10 @@ class ThemeConfigForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        for field in self.fields:
+            if field.startswith('color'):
+                self.fields[field].widget = forms.TextInput(attrs={'type': 'color'})
+
     def save(self, commit=True):
         instance = super().save(commit=False)
 
