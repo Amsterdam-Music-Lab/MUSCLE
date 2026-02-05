@@ -8,7 +8,6 @@ interface DropDownProps {
 
 /** DropDown is a question view for selecting a single option from a dropdown list */
 const DropDown = ({ question, value, onChange }: DropDownProps) => {
-
     const choices = question.choices;
 
     if (!choices || choices.length <= 0) {
