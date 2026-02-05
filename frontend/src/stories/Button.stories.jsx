@@ -2,7 +2,8 @@ import Button from "../components/Button/Button";
 import useBoundStore from "@/util/stores";
 
 const ButtonDecorator = (Story) => {
-    StoreDecorator();
+    const setTheme = useBoundStore((state) => state.setTheme);
+    setTheme({ colorPrimary: '#d843e2', colorSecondary: '#39d7b8', colorPositive: '#00b612', colorNegative: '#fa5577', colorNeutral1: '#ffb14c'});
     return (
         <div
             style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
@@ -11,11 +12,6 @@ const ButtonDecorator = (Story) => {
         </div>
     );
 }
-
-const StoreDecorator = (Story) => {
-    const setTheme = useBoundStore((state) => state.setTheme);
-    setTheme({ colorPrimary: '#d843e2', colorSecondary: '#39d7b8', colorPositive: '#00b612', colorNegative: '#fa5577', colorNeutral1: '#ffb14c'});
-};
 
 export default {
     title: "Button/Button",
