@@ -27,6 +27,6 @@ class Button(BaseAction):
         self.link = link
 
     def validate_color(self, color: str):
-        if not color in valid_colors:
+        if color not in valid_colors:
             raise ValueError(f"{color} is not a valid color value")
         return color

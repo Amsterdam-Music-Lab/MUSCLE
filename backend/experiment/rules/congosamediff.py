@@ -156,7 +156,7 @@ class CongoSameDiff(BaseRules):
                 {"value": 'PROBABLY_SAME', "label": _('PROBABLY SAME')},
                 {"value": 'PROBABLY_DIFFERENT', "label": _('PROBABLY DIFFERENT')},
                 {"value": 'DEFINITELY_DIFFERENT', "label": _('DEFINITELY DIFFERENT')},
-                {"value": 'I_DONT_KNOW', "value": _('I DON’T KNOW')},
+                {"value": 'I_DONT_KNOW', "label": _('I DON’T KNOW')},
             ],
             key=key,
             result_id=prepare_result(
