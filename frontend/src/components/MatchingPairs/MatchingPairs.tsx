@@ -61,7 +61,7 @@ const MatchingPairs = ({
     })));
 
     // Check if the user is in between turns to show the hidden overlay
-    const inBetweenTurns = Boolean(score && (firstCard && secondCard) || sections.filter(s => s.turned).length === 2);
+    const inBetweenTurns = Boolean((score && (firstCard && secondCard)) || sections.filter(s => s.turned).length === 2);
 
     const columnCount = sections.length > 6 ? 4 : 3;
 

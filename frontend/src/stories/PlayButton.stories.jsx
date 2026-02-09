@@ -1,5 +1,6 @@
 import PlayButton from "../components/PlayBack/PlayButton";
 import useBoundStore from "@/util/stores";
+import audio from "./assets/music.ogg";
 
 export default {
     title: "Playback/PlayButton",

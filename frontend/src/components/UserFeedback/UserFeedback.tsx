@@ -5,7 +5,6 @@ import Button from '../Button/Button';
 import HTML from '../HTML/HTML';
 import { FeedbackInfo } from '@/types/Block';
 import classNames from '@/util/classNames';
-import useBoundStore from "@/util/stores";
 
 interface UserFeedbackProps {
     blockSlug: string;

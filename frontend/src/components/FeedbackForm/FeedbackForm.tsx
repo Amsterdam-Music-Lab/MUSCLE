@@ -57,7 +57,7 @@ const FeedbackForm = ({
 
     return (
         <div className="aha__feedback justify-content-center">
-            <form role="form">
+            <form>
                 {form.map((_question, index) => (
                     <Question
                         key={index}

@@ -43,7 +43,7 @@ const RangeSlider = ({ keys, labels, value, onSliderChange, changePosition=false
                 emptyValue={emptyValue}
                 changePosition={changePosition}
             />
-            <div className={classNames({ empty: emptyValue })} data-testid="range-slider" role="slider">
+            <div className={classNames({ empty: emptyValue })} data-testid="range-slider">
             <Slider
                 value={sliderValue}
                 onChange={onSliderChange}

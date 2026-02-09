@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import Button from "../Button/Button";
 import { Info as InfoAction } from "@/types/Action";
 import IButton from "@/types/Button";
-import { styleButton } from "@/util/stylingHelpers";
 
 export interface InfoProps extends InfoAction {
     onNext?: () => void;

@@ -1,5 +1,3 @@
-import { BrowserRouter as Router } from "react-router-dom";
-
 import Playlist from "../components/Playlist/Playlist";
 
 export default {

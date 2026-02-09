@@ -28,8 +28,6 @@ const defaultArgs = {
     }
 };
 
-const getArgs = (args = {}) => ({ ...defaultArgs, ...args });
-
 export default {
     title: "Consent/Consent",
     component: Consent,
