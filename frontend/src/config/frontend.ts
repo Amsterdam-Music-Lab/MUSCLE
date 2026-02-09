@@ -55,7 +55,7 @@ see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)`;
       plugins: [
         {
           name: "qrcode",
-          args: { value: "https://tunetwins.app" },
+          args: { value: "https://play.tunetwins.online" },
         },
         {
           name: "markdown",
