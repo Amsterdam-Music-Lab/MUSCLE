@@ -1,6 +1,5 @@
-import Slider from "react-rangeslider";
-import classNames from "classnames";
 import Question from "@/types/Question";
+import RangeSlider from "./_RangeSlider";
 
 interface RangeProps {
     question: Question;
@@ -10,31 +9,23 @@ interface RangeProps {
 
 /** Range is a question view that makes you select a value within the given range, using a slider */
 const Range = ({ question, value, onChange }: RangeProps) => {
-    const emptyValue = !value;
-
-    if ((!question.min_value && question.min_value !== 0) || (!question.max_value && question.max_value !== 0)) {
-        throw new Error('min_value and max_value are required for the Range component');
+    if (question.minValue == null || question.maxValue == null || question.maxValue <= question.minValue) {
+        throw new Error('valid minValue and maxValue are required for the Range component');
     }
 
-    if (emptyValue) {
-        value = (question.min_value + question.max_value) / 2;
-    }
+    const onSliderChange = (value: number) => onChange(value + question.minValue!);
+
+    const keys = Array.from(new Array(question.maxValue + 1 - (question.minValue || 0)), (_, i) => i + (question.minValue || 0));
+    const labels = keys.map( value => value.toString());
+
     return (
-        <div className={classNames("aha__range", { empty: emptyValue })}>
-            <h1 className="current-value">{emptyValue ? "↔" : value}</h1>
-
-            <Slider
+        <div className="aha__range">
+            <RangeSlider 
+                keys={keys}
+                labels={labels}
                 value={value}
-                onChange={onChange}
-                min={question.min_value}
-                max={question.max_value}
-                tooltip={false}
+                onSliderChange={onSliderChange}
             />
-
-            <div className="limits">
-                <span className="min">{question.min_value}</span>
-                <span className="max">{question.max_value}</span>
-            </div>
         </div>
     );
 };

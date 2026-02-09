@@ -5,16 +5,17 @@ import random
 
 from django.template.loader import render_to_string
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.info import Info
 from experiment.actions.form import Form
-from experiment.actions.playback import Multiplayer
+from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
 from experiment.actions.utils import get_current_experiment_url
-from experiment.utils import create_player_labels, non_breaking_spaces
+from experiment.utils import format_label, non_breaking_spaces
 from result.utils import prepare_result
 from section.models import Playlist
 from session.models import Session
@@ -38,13 +39,17 @@ class ToontjeHoger4Absolute(BaseRules):
             instruction="Absoluut gehoor",
             steps=[
                 Step(
-                    "Je gaat zo luisteren naar fragmenten muziek die je misschien herkent als de intro van een tv-programma of serie."),
+                    "Je gaat zo luisteren naar fragmenten muziek die je misschien herkent als de intro van een tv-programma of serie."
+                ),
                 Step(
-                    "Van ieder fragment kan je twee versies luisteren. Eén hiervan is het origineel. De andere hebben we een beetje hoger of lager gemaakt."),
-                Step("Kan jij horen welke van de twee versies precies zo hoog of laag is als je 'm kent? Welke is het origineel?"),
+                    "Van ieder fragment kan je twee versies luisteren. Eén hiervan is het origineel. De andere hebben we een beetje hoger of lager gemaakt."
+                ),
+                Step(
+                    "Kan jij horen welke van de twee versies precies zo hoog of laag is als je 'm kent? Welke is het origineel?"
+                ),
             ],
             step_numbers=True,
-            button_label="Start"
+            button=Button("Start"),
         )
 
     def next_round(self, session):
@@ -95,10 +100,15 @@ class ToontjeHoger4Absolute(BaseRules):
         random.shuffle(sections)
 
         # Player
-        playback = Multiplayer(
-            sections,
-            labels=create_player_labels(len(sections), 'alphabetic'),
-            style=[ColorScheme.NEUTRAL_INVERTED],
+        playback = PlayButtons(
+            [
+                PlaybackSection(
+                    section,
+                    label=format_label(i, "alphabetic"),
+                    color=f"colorNeutral{2-i}",
+                )
+                for i, section in enumerate(sections)
+            ],
         )
 
         # Question
@@ -106,10 +116,10 @@ class ToontjeHoger4Absolute(BaseRules):
         question = ButtonArrayQuestion(
             text=self.get_trial_question(),
             key=key,
-            choices={
-                "A": "A",
-                "B": "B",
-            },
+            choices=[
+                {"value": "A", "label": "A", "color": "colorNeutral2"},
+                {"value": "B", "label": "B", "color": "colorNeutral1"},
+            ],
             result_id=prepare_result(
                 key,
                 session,
@@ -118,7 +128,7 @@ class ToontjeHoger4Absolute(BaseRules):
             ),
             style=[ColorScheme.NEUTRAL_INVERTED],
         )
-        form = Form([question], submit_label="")
+        form = Form([question], submit_button=None)
 
         trial = Trial(
             playback=playback,
@@ -182,8 +192,10 @@ class ToontjeHoger4Absolute(BaseRules):
         info = Info(
             body=body,
             heading="Absoluut gehoor",
-            button_label="Terug naar ToontjeHoger",
-            button_link=get_current_experiment_url(session)
+            button=Button(
+                "Terug naar ToontjeHoger",
+                link=get_current_experiment_url(session),
+            ),
         )
 
         return [*score, final, info]

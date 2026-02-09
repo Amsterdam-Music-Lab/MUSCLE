@@ -2,11 +2,25 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, fireEvent, screen } from '@testing-library/react';
 import Range from './_Range';
 
+vi.mock('../../util/stores', () => ({
+    __esModule: true,
+    default: (fn: (state: any) => any) => {
+        const state = {
+            theme: {
+                colorPrimary: "#d843e2", colorSecondary: "#39d7b8"
+            }
+        };
+
+        return fn(state);
+    },
+    useBoundStore: vi.fn()
+}));
+
 describe('Range component', () => {
     const defaultProps = {
         question: {
-            min_value: 0,
-            max_value: 100,
+            minValue: 0,
+            maxValue: 100,
         },
         value: 50,
         onChange: vi.fn(),
@@ -20,7 +34,7 @@ describe('Range component', () => {
     });
 
     it('displays arrow icon when value is empty', () => {
-        render(<Range {...defaultProps} value={undefined} />);
+        render(<Range {...defaultProps} value="" />);
         expect(screen.getByText('↔')).toBeTruthy();
     });
 
@@ -32,25 +46,25 @@ describe('Range component', () => {
     });
 
     it('uses middle value when value prop is empty', () => {
-        render(<Range {...defaultProps} value={undefined} />);
+        render(<Range {...defaultProps} value="" />);
         const slider = document.querySelector('.rangeslider-horizontal') as HTMLElement;
         expect(slider.attributes['aria-valuenow'].value).toBe('50');
     });
 
-    it('throws an error when min_value or max_value is not provided', () => {
-        const props = { ...defaultProps, question: { min_value: 0 } };
-        expect(() => render(<Range {...props} />)).toThrow('min_value and max_value are required for the Range component');
+    it('throws an error when minValue or maxValue is not provided', () => {
+        const props = { ...defaultProps, question: { minValue: 0 } };
+        expect(() => render(<Range {...props} />)).toThrow('minValue and maxValue are required for the Range component');
 
-        const props2 = { ...defaultProps, question: { max_value: 100 } };
-        expect(() => render(<Range {...props2} />)).toThrow('min_value and max_value are required for the Range component');
+        const props2 = { ...defaultProps, question: { maxValue: 100 } };
+        expect(() => render(<Range {...props2} />)).toThrow('minValue and maxValue are required for the Range component');
 
-        const props3 = { ...defaultProps, question: { min_value: 0, max_value: null } };
-        expect(() => render(<Range {...props3} />)).toThrow('min_value and max_value are required for the Range component');
+        const props3 = { ...defaultProps, question: { minValue: 0, maxValue: null } };
+        expect(() => render(<Range {...props3} />)).toThrow('minValue and maxValue are required for the Range component');
 
-        const props4 = { ...defaultProps, question: { min_value: 0, max_value: undefined } };
-        expect(() => render(<Range {...props4} />)).toThrow('min_value and max_value are required for the Range component');
+        const props4 = { ...defaultProps, question: { minValue: 0, maxValue: undefined } };
+        expect(() => render(<Range {...props4} />)).toThrow('minValue and maxValue are required for the Range component');
 
-        const props5 = { ...defaultProps, question: { min_value: 0, max_value: 100 } };
+        const props5 = { ...defaultProps, question: { minValue: 0, maxValue: 100 } };
         expect(() => render(<Range {...props5} />)).not.toThrow();
     });
 });

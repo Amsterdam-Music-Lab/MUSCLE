@@ -1,18 +1,20 @@
 import { useState, useRef, useCallback } from "react";
 import classNames from "classnames";
 
-import { getAudioLatency, getCurrentTime, getTimeSince } from "@/util/time";
+import { getCurrentTime, getTimeSince } from "@/util/time";
 import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
 import { OnResultType } from "@/hooks/useResultHandler";
-import { TrialConfig } from "@/types/Trial";
-import { Trial as TrialAction } from "@/types/Action";
+import { ITrial } from "@/types/Action";
+import Theme from "@/types/Theme";
+import { BreakRoundOn } from "@/types/Trial";
 
-export interface TrialProps extends TrialAction {
+export interface TrialProps extends ITrial {
     onNext: (breakRound?: boolean) => void;
     onResult: OnResultType;
+    theme: Theme;
 }
 
 /**
@@ -26,14 +28,18 @@ const Trial = (props: TrialProps) => {
     const {
         playback,
         html,
-        feedback_form,
-        config,
+        feedbackForm,
+        responseTime,
+        listenFirst,
+        autoAdvance,
+        continueButton,
+        breakRoundOn,
         onNext,
         onResult,
     } = props;
 
     // Main component state
-    const [formActive, setFormActive] = useState(!config.listen_first);
+    const [formActive, setFormActive] = useState(playback? !listenFirst: true);
     // Preload is immediately set to ready if we don't have a playback object
     const [preloadReady, setPreloadReady] = useState(!playback);
 
@@ -48,7 +54,7 @@ const Trial = (props: TrialProps) => {
 
     // Create result data
     const makeResult = useCallback(
-        async (hasTimedOut: boolean) => {
+        async (hasTimedOut?: boolean) => {
 
             // Prevent multiple submissions
             if (submitted.current) {
@@ -56,22 +62,22 @@ const Trial = (props: TrialProps) => {
             }
             submitted.current = true;
 
-            if (!feedback_form) {
+            if (!feedbackForm) {
                 return onNext();
             }
 
 
-            const { form = [] } = feedback_form;
+            const { form = [] } = feedbackForm;
 
             if (hasTimedOut) {
                 form.map((formElement) => (formElement.value = "TIMEOUT"));
             }
 
-            if (feedback_form.is_skippable) {
+            if (feedbackForm.skipButton) {
                 form.map((formElement => (formElement.value = formElement.value || '')))
             }
 
-            const breakRoundConditions = config.break_round_on;
+            const breakRoundConditions = breakRoundOn;
             const shouldBreakRound = breakRoundConditions && checkBreakRound(form.map((formElement) => formElement.value), breakRoundConditions);
 
             await onResult(
@@ -79,19 +85,17 @@ const Trial = (props: TrialProps) => {
                     decision_time: getAndStoreDecisionTime(),
                     audio_latency_ms: getAudioLatency(),
                     form,
-                    config,
                 },
             );
-
             return onNext(shouldBreakRound);
 
         },
-        [feedback_form, config, onNext, onResult]
+        [feedbackForm, onNext, onResult]
     );
 
     const checkBreakRound = (
         values: string[],
-        breakConditions: TrialConfig['break_round_on']
+        breakConditions: BreakRoundOn
     ) => {
         switch (Object.keys(breakConditions)[0]) {
             case 'EQUALS':
@@ -125,36 +129,35 @@ const Trial = (props: TrialProps) => {
     }
 
     const finishedPlaying = useCallback(() => {
-
-        if (config.auto_advance) {
+        if (autoAdvance) {
 
             // Create a time_passed result
-            if (config.auto_advance_timer != null) {
-                if (playback.view === 'BUTTON') {
-                    startTime.current = getCurrentTime();
+            if (playback.view === 'BUTTON') {
+                startTime.current = getCurrentTime();
+                if (responseTime) {
+                    // create timeout result after responseTime
+                    setTimeout(() => {
+                        makeResult(true);
+                    }, responseTime * 1000);
                 }
-
-                setTimeout(() => {
-                    makeResult(true);
-                }, config.auto_advance_timer);
             } else {
                 makeResult(true);
             }
         }
         setFormActive(true);
         return;
-    }, [config, playback, makeResult]);
+    }, [autoAdvance, responseTime, playback, makeResult]);
 
     return (
-        <div role="presentation" className={classNames("aha__trial", config.style)}>
+        <div role="presentation" className={classNames("aha__trial")}>
             {playback && (
                 <Playback
-                    playbackArgs={playback}
+                    {...playback}
                     onPreloadReady={() => {
                         setPreloadReady(true);
                     }}
-                    autoAdvance={config.auto_advance}
-                    responseTime={config.response_time}
+                    autoAdvance={autoAdvance}
+                    responseTime={responseTime}
                     submitResult={makeResult}
                     startedPlaying={startTimer}
                     finishedPlaying={finishedPlaying}
@@ -165,21 +168,20 @@ const Trial = (props: TrialProps) => {
                     body={html.body}
                 />
             )}
-            {preloadReady && feedback_form && (
+            {preloadReady && feedbackForm && (
                 <FeedbackForm
                     formActive={formActive}
-                    form={feedback_form.form}
-                    buttonLabel={feedback_form.submit_label}
-                    skipLabel={feedback_form.skip_label}
-                    isSkippable={feedback_form.is_skippable}
+                    form={feedbackForm.form}
+                    submitButton={feedbackForm.submitButton}
+                    skipButton={feedbackForm.skipButton}
                     submitResult={makeResult}
                 />
             )}
-            {preloadReady && !feedback_form && config.show_continue_button && (
+            {preloadReady && !feedbackForm && continueButton && (
                 <div className="text-center">
                     <Button
-                        title={config.continue_label}
-                        className={"btn-primary anim anim-fade-in anim-speed-500"}
+                        {...continueButton}
+                        className={"anim anim-fade-in anim-speed-500"}
                         onClick={onNext}
                         disabled={!formActive}
                     />

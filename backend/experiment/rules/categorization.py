@@ -4,15 +4,16 @@ from django.utils import timezone
 from django.template.loader import render_to_string
 from django.db.models import Avg
 
+from experiment.actions.button import Button
 from experiment.actions.form import Form
 from experiment.actions.explainer import Explainer
 from experiment.actions.final import Final
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
-from experiment.actions.wrappers import two_alternative_forced
+from experiment.actions.wrappers import TwoAlternativeForced
 from session.models import Session
-from theme.styles import ButtonStyle, ColorScheme
+from theme.styles import ButtonStyle
 
 from .base import BaseRules
 
@@ -41,7 +42,7 @@ class Categorization(BaseRules):
         return Explainer(
             instruction="This is a listening experiment in which you have to respond to short sound sequences.",
             steps=[],
-            button_label="Ok",
+            button=Button("Ok"),
         )
 
     def next_round(self, session: Session):
@@ -88,7 +89,7 @@ class Categorization(BaseRules):
                 explainer2 = Explainer(
                     instruction="The experiment will now begin. Please don't close the browser during the experiment. You can only run it once. Click to start a sound sequence.",
                     steps=[],
-                    button_label="Ok",
+                    button=Button("Ok"),
                 )
                 trial = self.next_trial_action(session)
                 return [explainer2, trial]
@@ -118,7 +119,7 @@ class Categorization(BaseRules):
                 explainer = Explainer(
                     instruction="You are entering the main phase of the experiment. From now on you will only occasionally get feedback on your responses. Simply try to keep responding to the sound sequences as you did before.",
                     steps=[],
-                    button_label="Ok",
+                    button=Button("Ok"),
                 )
             else:
                 # Update passed training rounds for calc round_number
@@ -131,10 +132,6 @@ class Categorization(BaseRules):
                     # Clear group from session for reuse
                     end_data = {
                         "phase": "FAILED_TRAINING",
-                        "training_rounds": json_data["training_rounds"],
-                        "assigned_group": json_data["assigned_group"],
-                        "button_colors": json_data["button_colors"],
-                        "pair_colors": json_data["pair_colors"],
                     }
                     session.save_json_data(end_data)
                     session.final_score = 0
@@ -194,11 +191,6 @@ class Categorization(BaseRules):
             # final_score = sum([result.score for result in training_results])
             end_data = {
                 "phase": "FINISHED",
-                "training_rounds": json_data["training_rounds"],
-                "assigned_group": json_data["assigned_group"],
-                "button_colors": json_data["button_colors"],
-                "pair_colors": json_data["pair_colors"],
-                "group": json_data["group"],
             }
             session.save_json_data(end_data)
             session.finish()
@@ -269,21 +261,15 @@ class Categorization(BaseRules):
             # Assign a random group
             group = random.choice(["S1", "S2", "C1", "C2"])
         # Assign a random correct response color for 1A, 2A
-        stimuli_a = random.choice(["BLUE", "ORANGE"])
-        # Determine which button is orange and which is blue
-        button_order = random.choice(
-            [ColorScheme.NEUTRAL.value, ColorScheme.NEUTRAL_INVERTED.value]
-        )
         # Set expected resonse accordingly
         ph = "___"  # placeholder
-        if button_order == "neutral" and stimuli_a == "BLUE":
-            choices = {"A": ph, "B": ph}
-        elif (
-            button_order == ColorScheme.NEUTRAL_INVERTED.value and stimuli_a == "ORANGE"
-        ):
-            choices = {"A": ph, "B": ph}
-        else:
-            choices = {"B": ph, "A": ph}
+        colors = ['colorNeutral1', 'colorNeutral2']
+        random.shuffle(colors)
+        choices = [
+            {"value": "A", "label": ph, "color": colors[0]},
+            {"value": "B", "label": ph, "color": colors[1]},
+        ]
+        random.shuffle(choices)
         if group == "S1":
             assigned_group = "Same direction, Pair 1"
         elif group == "S2":
@@ -292,23 +278,12 @@ class Categorization(BaseRules):
             assigned_group = "Crossed direction, Pair 1"
         else:
             assigned_group = "Crossed direction, Pair 2"
-        if button_order == ColorScheme.NEUTRAL.value:
-            button_colors = "Blue left, Orange right"
-        else:
-            button_colors = "Orange left, Blue right"
-        if stimuli_a == "BLUE":
-            pair_colors = "A = Blue, B = Orange"
-        else:
-            pair_colors = "A = Orange, B = Blue"
+
         json_data = {
             "phase": "training",
             "training_rounds": "0",
             "assigned_group": assigned_group,
-            "button_colors": button_colors,
-            "pair_colors": pair_colors,
             "group": group,
-            "stimuli_a": stimuli_a,
-            "button_order": button_order,
             "choices": choices,
         }
         session.save_json_data(json_data)
@@ -426,9 +401,15 @@ class Categorization(BaseRules):
         elif last_score == 0:
             icon = "fa-face-frown"
         else:
-            pass  # throw error
+            raise ValueError(f"invalid last score: {last_score}")
 
-        return Score(session, icon=icon, timer=1, title=" ")
+        return Score(
+            session,
+            icon=icon,
+            timer=1,
+            button=Button(" "),
+            title=self.get_title(session),
+        )
 
     def get_trial_with_feedback(self, session):
         score = self.get_feedback(session)
@@ -454,18 +435,17 @@ class Categorization(BaseRules):
             expected_response = "B"
 
         choices = json_data["choices"]
-        config = {"listen_first": True, "auto_advance": True, "auto_advance_timer": 2500, "time_pass_break": False}
-        style = [json_data["button_order"]]
-        trial = two_alternative_forced(
+        trial = TwoAlternativeForced(
             session,
             section,
             choices,
             expected_response,
-            style=style,
             comment=json_data["phase"],
             scoring_rule="CORRECTNESS",
             title=self.get_title(session),
-            config=config,
+            auto_advance=True,
+            listen_first=True,
+            response_time=2.5,
         )
         return trial
 
@@ -478,6 +458,9 @@ class Categorization(BaseRules):
 repeat_training_or_quit = ButtonArrayQuestion(
     key="failed_training",
     text="You seem to have difficulties reacting correctly to the sound sequences. Is your audio on? If you want to give it another try, click on Ok.",
-    choices={"continued": "OK", "aborted": "Exit"},
-    style=[ButtonStyle.LARGE_GAP, ButtonStyle.LARGE_TEXT, ColorScheme.BOOLEAN],
+    choices=[
+        {"value": "continued", "label": "OK", "color": "colorPositive"},
+        {"value": "aborted", "label": "Exit", "color": "colorNegative"},
+    ],
+    style=[ButtonStyle.LARGE_GAP, ButtonStyle.LARGE_TEXT],
 )

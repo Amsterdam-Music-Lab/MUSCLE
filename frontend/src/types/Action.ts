@@ -1,9 +1,10 @@
 import Social from "@/types/Social";
 import Block, { FeedbackInfo } from "@/types/Block";
+import IButton from  "@/types/Button";
 import Participant from "@/types/Participant";
 import { PlaybackArgs } from "./Playback";
 import Question from "./Question";
-import { TrialConfig } from "./Trial";
+import { BreakRoundOn } from "./Trial";
 import { MutableRefObject } from "react";
 
 interface SharedActionProps {
@@ -19,7 +20,7 @@ interface ExplainerStep {
 
 export interface Explainer {
   instruction: string;
-  button_label: string;
+  button: IButton;
   steps?: Array<ExplainerStep>;
   timer: number | null;
 }
@@ -27,22 +28,24 @@ export interface Explainer {
 export interface Info {
   heading?: string;
   body: string | TrustedHTML;
-  button_label?: string;
-  button_link?: string;
+  button: IButton;
 }
 
 export interface IFeedbackForm {
   form: Question[];
-  submit_label: string;
-  skip_label: string;
-  is_skippable: boolean;
+  submitButton: IButton;
+  skipButton: IButton;
 }
 
-export interface Trial {
+export interface ITrial {
   playback: PlaybackArgs;
   html: { body: string | TrustedHTML };
-  feedback_form: IFeedbackForm;
-  config: TrialConfig;
+  feedbackForm: IFeedbackForm;
+  responseTime: number;
+  autoAdvance: boolean;
+  listenFirst: boolean;
+  continueButton?: IButton;
+  breakRoundOn?: BreakRoundOn;
 }
 
 export interface Score {
@@ -52,9 +55,9 @@ export interface Score {
   total_score?: number;
   texts: {
     score: string;
-    next: string;
     listen_explainer: string;
   };
+  button: IButton;
   icon?: string;
   feedback?: string;
   timer?: number;
@@ -71,10 +74,7 @@ export interface Final {
     profile: string;
     play_again: string;
   };
-  button: {
-    text: string;
-    link: string;
-  };
+  button: IButton;
   show_participant_link: boolean;
   participant_id_only: boolean;
   show_profile_link: boolean;

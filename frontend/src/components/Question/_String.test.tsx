@@ -5,7 +5,7 @@ import String from './_String';
 describe('String component', () => {
     const defaultProps = {
         question: {
-            max_length: 100,
+            maxLength: 100,
         },
         onChange: vi.fn(),
     };
@@ -36,12 +36,12 @@ describe('String component', () => {
         expect(preventDefaultMock).toHaveBeenCalled();
     });
 
-    it('respects max_length for text input', () => {
+    it('respects maxLength for text input', () => {
         const onChange = vi.fn();
         const props = {
             ...defaultProps,
             question: {
-                max_length: 5,
+                maxLength: 5,
             },
             onChange,
         };

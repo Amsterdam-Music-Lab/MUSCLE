@@ -5,7 +5,7 @@ from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
-from experiment.actions.playback import Autoplay
+from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.trial import Trial
 from experiment.rules.base import BaseRules
 from result.utils import prepare_result
@@ -80,14 +80,12 @@ class NewBlockRuleset(BaseRules):
             result_id=prepare_result(key, session, section=section),
         )
         form = Form([question])
-        playback = Autoplay([section])
+        playback = Autoplay(sections=[PlaybackSection(section)])
         view = Trial(
             playback=playback,
             feedback_form=form,
             title=_('Test block'),
-            config={
-                'response_time': section.duration,
-                'listen_first': True
-            }
+            response_time=section.duration,
+            listen_first=True,
         )
         return view

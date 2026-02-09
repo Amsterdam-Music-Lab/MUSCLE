@@ -3,15 +3,14 @@ import logging
 
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions.utils import (
-    final_action_with_optional_button,
-    render_feedback_trivia,
-)
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.form import Form
-from experiment.actions.playback import Autoplay
+from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
+from experiment.actions.utils import render_feedback_trivia
+from experiment.actions.wrappers import final_action_with_optional_button
 
 from result.utils import prepare_result
 from section.models import Playlist
@@ -137,10 +136,18 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
         question = ButtonArrayQuestion(
             key=key,
             text=_("Is the third rhythm the SAME or DIFFERENT?"),
-            choices={
-                self.first_condition: self.first_condition_i18n,
-                self.second_condition: self.second_condition_i18n,
-            },
+            choices=[
+                {
+                    "value": self.first_condition,
+                    "label": self.first_condition_i18n,
+                    "color": "colorNeutral1",
+                },
+                {
+                    "value": self.second_condition,
+                    "label": self.second_condition_i18n,
+                    "color": "colorNeutral2",
+                },
+            ],
             result_id=prepare_result(
                 key,
                 session,
@@ -148,15 +155,16 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
                 scoring_rule="CORRECTNESS",
             ),
         )
-        form = Form([question], submit_label="")
-        playback = Autoplay([section])
+        form = Form([question], submit_button=None)
+        playback = Autoplay(sections=[PlaybackSection(section)], show_animation=False)
 
         return Trial(
             playback=playback,
             feedback_form=form,
             title=_("Rhythm discrimination: %(title)s")
             % ({"title": self.get_title_counter(session)}),
-            config={"listen_first": True, "response_time": section.duration + 0.5},
+            listen_first=True,
+            response_time=section.duration + 0.5,
         )
 
     def get_title_counter(self, session):
@@ -246,7 +254,7 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
                 ),
             ],
             step_numbers=True,
-            button_label="Ok",
+            button=Button("Ok"),
         )
 
     def get_feedback_explainer(self, session):
@@ -260,7 +268,7 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
                 "The third rhythm is the %(correct_response)s. Your response was INCORRECT."
             ) % {"correct_response": correct_response}
         return Explainer(
-            instruction=instruction, steps=[], button_label=_("Next fragment")
+            instruction=instruction, steps=[], button=Button(_("Next fragment"))
         )
 
     def finalize_block(self, session):

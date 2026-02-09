@@ -11,6 +11,12 @@ export enum QuestionViews {
     TEXT_RANGE = "TEXT_RANGE",
 }
 
+interface Choice {
+    value: string;
+    label: string;
+    color?: string;
+}
+
 export default interface Question {
     key: string;
     text: string;
@@ -19,12 +25,10 @@ export default interface Question {
     style?: any;
     explainer?: string;
     expected_response?: string;
-    choices?: { [key: string]: string };
-    is_skippable?: boolean;
-    min_values?: number;
-    min_value?: number;
-    max_value?: number;
-    max_length?: number;
-    input_type?: 'number' | 'text';
-    result_id?: number;
+    choices?: Choice[];
+    minValues?: number;
+    minValue?: number;
+    maxValue?: number;
+    maxLength?: number;
+    resultId?: number;
 }

@@ -1,5 +1,6 @@
+import IButton from "@/types/Button";
 import IImage from "@/types/Image";
-import Theme from "./Theme";
+import Theme from "@/types/Theme";
 
 export default interface Block {
     slug: string;
@@ -23,7 +24,7 @@ export interface Playlist {
 
 export interface FeedbackInfo {
     header: string;
-    button: string;
+    button: IButton;
     contact_body: string;
     thank_you: string;
     show_float_button: boolean;

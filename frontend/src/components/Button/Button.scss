@@ -6,28 +6,4 @@
         opacity: 0.5;
         cursor: not-allowed;
     }
-
-    &.primary {
-        @include btn-style($primary);
-    }
-
-    &.secondary {
-        @include btn-style($secondary);
-    }
-
-    &.success {
-        @include btn-style($success);
-    }
-
-    &.positive {
-        @include btn-style($positive);
-    }
-
-    &.warning {
-        @include btn-style($warning);
-    }
-
-    &.negative {
-        @include btn-style($negative);
-    }
 }

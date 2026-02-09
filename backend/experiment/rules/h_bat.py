@@ -6,16 +6,17 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import BaseRules
 from .practice import PracticeMixin
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.form import Form
-from experiment.actions.playback import Autoplay
+from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
 from experiment.actions.utils import (
-    final_action_with_optional_button,
     get_average_difference_level_based,
     render_feedback_trivia,
 )
+from experiment.actions.wrappers import final_action_with_optional_button
 from experiment.rules.util.staircasing import register_turnpoint
 from result.utils import prepare_result
 from section.models import Playlist, Section
@@ -97,10 +98,18 @@ class HBat(BaseRules, PracticeMixin):
         question = ButtonArrayQuestion(
             key=key,
             text=self.get_trial_question(),
-            choices={
-                self.first_condition: self.first_condition_i18n,
-                self.second_condition: self.second_condition_i18n,
-            },
+            choices=[
+                {
+                    'value': self.first_condition,
+                    'label': self.first_condition_i18n,
+                    'color': 'colorNeutral1',
+                },
+                {
+                    'value': self.second_condition,
+                    'label': self.second_condition_i18n,
+                    'color': 'colorNeutral2',
+                },
+            ],
             result_id=prepare_result(
                 key,
                 session,
@@ -109,13 +118,13 @@ class HBat(BaseRules, PracticeMixin):
                 scoring_rule="CORRECTNESS",
             ),
         )
-        playback = Autoplay([section])
-        form = Form([question], submit_label="")
+        playback = Autoplay(sections=[PlaybackSection(section)], show_animation=False)
+        form = Form([question], submit_button=None)
         view = Trial(
             playback=playback,
             feedback_form=form,
             title=self.get_trial_title(),
-            config={"response_time": section.duration + 0.1},
+            response_time=section.duration + 0.1,
         )
         return view
 
@@ -128,22 +137,34 @@ class HBat(BaseRules, PracticeMixin):
     def get_intro_explainer(self):
         return Explainer(
             instruction=_(
-                'In this test you will hear a series of tones for each trial.'),
+                'In this test you will hear a series of tones for each trial.'
+            ),
             steps=[
-                Step(_(
-                    "It's your job to decide if the rhythm goes SLOWER of FASTER.")),
-                Step(_(
-                    'During the experiment it will become more difficult to hear the difference.')),
-                Step(_(
-                    "Try to answer as accurately as possible, even if you're uncertain.")),
+                Step(_("It's your job to decide if the rhythm goes SLOWER of FASTER.")),
+                Step(
+                    _(
+                        'During the experiment it will become more difficult to hear the difference.'
+                    )
+                ),
+                Step(
+                    _(
+                        "Try to answer as accurately as possible, even if you're uncertain."
+                    )
+                ),
                 Step(_("Remember: try not to move or tap along with the sounds")),
-                Step(_(
-                    "In this test, you can answer as soon as you feel you know the answer, but please wait until you are sure or the sound has stopped.")),
-                Step(_(
-                    'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
+                Step(
+                    _(
+                        "In this test, you can answer as soon as you feel you know the answer, but please wait until you are sure or the sound has stopped."
+                    )
+                ),
+                Step(
+                    _(
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'
+                    )
+                ),
             ],
             step_numbers=True,
-            button_label='Ok'
+            button=Button('Ok'),
         )
 
     def get_feedback_explainer(self, session: Session):
@@ -157,7 +178,7 @@ class HBat(BaseRules, PracticeMixin):
                 "The rhythm went %(correct_response)s. Your response was INCORRECT."
             ) % {"correct_response": correct_response}
         return Explainer(
-            instruction=instruction, steps=[], button_label=_("Next fragment")
+            instruction=instruction, steps=[], button=Button(_("Next fragment"))
         )
 
     def finalize_block(self, session):

@@ -4,9 +4,10 @@ from typing import Tuple, Union
 
 from django.utils.translation import gettext_lazy as _
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.form import Form
-from experiment.actions.playback import Autoplay
+from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
 from result.utils import prepare_result
@@ -154,7 +155,7 @@ class PracticeMixin(object):
                     )
                 ),
             ],
-            button_label="Ok",
+            button=Button("Ok"),
             step_numbers=True,
         )
 
@@ -174,7 +175,7 @@ class PracticeMixin(object):
                     % {"n_practice_rounds": self.n_practice_rounds}
                 ),
             ],
-            button_label=_("Begin experiment"),
+            button=Button(_("Begin experiment")),
         )
 
     def get_restart_explainer(self) -> Explainer:
@@ -192,7 +193,7 @@ class PracticeMixin(object):
                 Step(_("We will therefore practice again.")),
                 Step(_("But first, you can read the instructions again.")),
             ],
-            button_label=_("Continue"),
+            button=Button(_("Continue")),
         )
 
     def get_continuation_explainer(self) -> Explainer:
@@ -201,17 +202,22 @@ class PracticeMixin(object):
             Explainer object
         """
         return Explainer(
-            instruction=_(
-                'Now we will start the real experiment.'),
+            instruction=_('Now we will start the real experiment.'),
             steps=[
-                Step(_('Pay attention! During the experiment it will become more difficult to hear the difference between the tones.')),
-                Step(_(
-                        "Try to answer as accurately as possible, even if you're uncertain.")),
-                Step(_(
-                        "Remember that you don't move along or tap during the test.")),
+                Step(
+                    _(
+                        'Pay attention! During the experiment it will become more difficult to hear the difference between the tones.'
+                    )
+                ),
+                Step(
+                    _(
+                        "Try to answer as accurately as possible, even if you're uncertain."
+                    )
+                ),
+                Step(_("Remember that you don't move along or tap during the test.")),
             ],
             step_numbers=True,
-            button_label=_('Start')
+            button=Button(_('Start')),
         )
 
     def get_feedback_explainer(self, session: Session) -> Explainer:
@@ -229,11 +235,7 @@ class PracticeMixin(object):
             instruction = _(
                 "The second tone was %(correct_response)s than the first tone. Your answer was INCORRECT."
             ) % {"correct_response": correct_response}
-        return Explainer(
-            instruction=instruction,
-            steps=[],
-            button_label=_('Ok')
-        )
+        return Explainer(instruction=instruction, steps=[], button=Button(_('Ok')))
 
     def get_condition_and_correctness(self, session: Session) -> Tuple[str, bool]:
         """Checks whether the condition of the last Trial, and whether the response of the participant was correct.
@@ -315,10 +317,18 @@ class PracticeMixin(object):
                 "second_condition": self.second_condition_i18n,
             },
             key=key,
-            choices={
-                self.first_condition: self.first_condition_i18n,
-                self.second_condition: self.second_condition_i18n,
-            },
+            choices=[
+                {
+                    "value": self.first_condition,
+                    "label": self.first_condition_i18n,
+                    "color": "colorNeutral1",
+                },
+                {
+                    "value": self.second_condition,
+                    "label": self.second_condition_i18n,
+                    "color": "colorNeutral2",
+                },
+            ],
             result_id=prepare_result(
                 key,
                 session,
@@ -327,8 +337,8 @@ class PracticeMixin(object):
                 scoring_rule="CORRECTNESS",
             ),
         )
-        playback = Autoplay([section])
-        form = Form([question], submit_label="")
+        playback = Autoplay(sections=[PlaybackSection(section)])
+        form = Form([question], submit_button=None)
         return Trial(
             playback=playback,
             feedback_form=form,
@@ -340,7 +350,8 @@ class PracticeMixin(object):
                     "total_rounds": total_rounds,
                 }
             ),
-            config={"listen_first": True, "response_time": section.duration + 0.1},
+            listen_first=True,
+            response_time=section.duration + 0.1,
         )
 
     def practice_successful(self, session: Session) -> bool:

@@ -11,12 +11,12 @@ describe('Question Component', () => {
             key: 'test-question',
             text: 'Test Question',
             view: QuestionViews.STRING,
-            max_length: 200,
+            maxLength: 200,
             value: '',
-            choices: {
-                '1': 'One',
-                '2': 'Two',
-            },
+            choices: [
+                {value: '1', label: 'One'},
+                {value: '2', label: 'Two'},
+            ],
             style: {}
         },
         onChange: mockOnChange,
@@ -62,7 +62,10 @@ describe('Question Component', () => {
             question: {
                 ...defaultProps.question,
                 view: QuestionViews.BUTTON_ARRAY,
-                choices: { '1': 'One', '2': 'Two' },
+                choices: [
+                    {value: '1', label: 'One'},
+                    {value: '2', label: 'Two'},
+                ],
             }
         });
         render(<Question {...props} />);

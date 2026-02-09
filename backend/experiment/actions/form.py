@@ -1,17 +1,17 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from django.utils.translation import gettext_lazy as _
 
 from .base_action import BaseAction
+from .button import Button
 
 class Form(BaseAction):
     """The Form action is a view which brings together an array of questions with a submit and an optional skip button.
 
     Args:
         form (List[Question]): List of question components
-        submit_label (str): Text for submit button
-        skip_label (str): Text for skip button
-        is_skippable (bool): Whether form can be skipped
+        submit_button (Button): Button object specifying label and color of submit button
+        skip_button (Button): Button object specifying label and color of skip button
 
     Example:
         ```python
@@ -21,9 +21,10 @@ class Form(BaseAction):
                 text="What's your name?",
                 explainer="Please enter your full name.",
             ),
-            BooleanQuestion(
+            ButtonArrayQuestion(
                 key="is_student",
                 text="Are you a student?",
+                choices=[{'value': 'YES', 'text': _('YES'), {'value': 'NO', 'label': _('NO')}],
             ),
         ])
         ```
@@ -32,20 +33,17 @@ class Form(BaseAction):
     def __init__(
         self,
         form: List[Any],
-        submit_label: str = _("Continue"),
-        skip_label: str = _("Skip"),
-        is_skippable: bool = False,
+        submit_button: Optional[Button] = Button(_("Submit"), 'colorPrimary'),
+        skip_button: Optional[Button] = Button(_("Skip"), 'colorGrey'),
     ) -> None:
         self.form = form
-        self.submit_label = submit_label
-        self.skip_label = skip_label
-        self.is_skippable = is_skippable
+        self.submit_button = submit_button
+        self.skip_button = skip_button
 
     def action(self) -> Dict[str, Any]:
         serialized_form = [question.action() for question in self.form]
         return {
             "form": serialized_form,
-            "submit_label": self.submit_label,
-            "skip_label": self.skip_label,
-            "is_skippable": self.is_skippable,
+            "submitButton": self.submit_button.action() if self.submit_button else None,
+            "skipButton": self.skip_button.action() if self.skip_button else None,
         }

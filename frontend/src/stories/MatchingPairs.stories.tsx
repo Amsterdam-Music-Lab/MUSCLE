@@ -1,22 +1,28 @@
 import { http, HttpResponse } from 'msw'
 import useBoundStore from "@/util/stores";
 import MatchingPairs, { SCORE_FEEDBACK_DISPLAY } from "../components/MatchingPairs/MatchingPairs";
-
-
-import audio from "./assets/audio.wav";
 import { API_BASE_URL } from '@/config';
 import { URLS } from '@/API';
+import Cat01 from "./assets/images/cat-01.webp";
+import Cat02 from "./assets/images/cat-02.webp";
+import Cat03 from "./assets/images/cat-03.webp";
+import music from "./assets/music.ogg";
 
 const StoreDecorator = (Story) => {
     const setSession = useBoundStore((state) => state.setSession);
     const setParticipant = useBoundStore((state) => state.setParticipant);
+    const setBlock = useBoundStore((state) => state.setBlock);
+    const setTheme = useBoundStore((state) => state.setTheme);
+    const theme =  {colorPrimary:  '#d843e2', colorSecondary: '#39d7b8', colorPositive: '#39d7b8', colorNegative: '#fa5577', colorNeutral1: '#ffb14c', colorGrey: "#bbb"};
     setSession({ id: 1 });
     setParticipant({ id: 1, csrf_token: "123" });
+    setBlock({slug: 'test', theme: theme});
+    setTheme(theme);
 
     return (
         <div
             id="root"
-            style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+            style={{ width: "100%", height: "100%", backgroundColor: "#ddd", color: "white", padding: "1rem" }}
         >
             <Story />
         </div>
@@ -37,66 +43,15 @@ export default {
     },
 };
 
-const getDefaultArgs = (overrides = {}) => ({
+const getDefaultArgs = (overrides = {}, nSections = 8) => ({
     playSection: () => { },
-    sections: [
-        {
-            id: 1,
-            url: audio,
-            turned: false,
-            lucky: false,
-            memory: false,
-        },
-        {
-            id: 2,
-            url: audio,
-            turned: false,
-            lucky: false,
-            memory: false,
-        },
-        {
-            id: 3,
-            url: audio,
-            turned: false,
-            lucky: false,
-            memory: false,
-        },
-        {
-            id: 4,
-            url: audio,
-            turned: false,
-            lucky: false,
-            memory: false,
-        },
-        {
-            id: 5,
-            url: audio,
-            turned: false,
-            lucky: false,
-            memory: false,
-        },
-        {
-            id: 6,
-            url: audio,
-            turned: false,
-            lucky: false,
-            memory: false,
-        },
-        {
-            id: 7,
-            url: audio,
-            turned: false,
-            lucky: false,
-            memory: false,
-        },
-        {
-            id: 8,
-            url: audio,
-            turned: false,
-            lucky: false,
-            memory: false,
-        },
-    ],
+    sections: Array.from(new Array(nSections), (_) => { return {
+        link: music,
+        turned: false,
+        lucky: false,
+        memory: false,
+        playMethod: "BUFFER"
+    }}),
     playerIndex: 0,
     stopAudio: () => { },
     submitResult: () => { },
@@ -130,52 +85,7 @@ export const Default = {
 };
 
 export const WithThreeColumns = {
-    args: getDefaultArgs({
-        sections: [
-            {
-                id: 1,
-                url: audio,
-                turned: false,
-                lucky: false,
-                memory: false,
-            },
-            {
-                id: 2,
-                url: audio,
-                turned: false,
-                lucky: false,
-                memory: false,
-            },
-            {
-                id: 3,
-                url: audio,
-                turned: false,
-                lucky: false,
-                memory: false,
-            },
-            {
-                id: 4,
-                url: audio,
-                turned: false,
-                lucky: false,
-                memory: false,
-            },
-            {
-                id: 5,
-                url: audio,
-                turned: false,
-                lucky: false,
-                memory: false,
-            },
-            {
-                id: 6,
-                url: audio,
-                turned: false,
-                lucky: false,
-                memory: false,
-            },
-        ],
-    }),
+    args: getDefaultArgs({}, 4),
     decorators: [StoreDecorator],
     parameters: getDefaultParams({
         docs: {
@@ -196,7 +106,7 @@ export const WithSmallBottomRightScoreFeedback = {
     parameters: getDefaultParams({
         docs: {
             description: {
-                component: "This story shows the component with the default props.",
+                component: "This story shows the component with different positioning of feedback text",
             },
         },
     }),
@@ -211,8 +121,47 @@ export const WithShowAnimation = {
     parameters: getDefaultParams({
         docs: {
             description: {
-                component: "This story shows the component with the default props.",
+                component: "This story shows the component with animation of the turned cards",
             },
         },
     }),
 };
+
+export const VisualMatchingPairs = {
+    args: getDefaultArgs({sections: [
+        {
+            link: `http://localhost:6006${Cat01}`,
+            playMethod: 'NOAUDIO'
+        },
+        {
+            link: `http://localhost:6006${Cat02}`,
+            playMethod: 'NOAUDIO'
+        },
+        {
+            link: `http://localhost:6006${Cat03}`,
+            playMethod: 'NOAUDIO'
+        },
+        {
+            link: `http://localhost:6006${Cat02}`,
+            playMethod: 'NOAUDIO'
+        },
+        {
+            link: `http://localhost:6006${Cat01}`,
+            playMethod: 'NOAUDIO'
+        },
+        {
+            link: `http://localhost:6006${Cat03}`,
+            playMethod: 'NOAUDIO'
+        },
+    ]}),
+    decorators: [StoreDecorator],
+    parameters: getDefaultParams({
+            docs: {
+                description: {
+                    component: "This story shows the component with visual stimuli.",
+                },
+            },
+        }),
+    
+}
+

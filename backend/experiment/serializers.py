@@ -9,6 +9,7 @@ from experiment.actions.consent import Consent
 from image.serializers import serialize_image
 from participant.models import Participant
 from session.models import Session
+from theme.models import ThemeConfig
 from theme.serializers import serialize_theme
 from .models import Block, Experiment, Phase, SocialMediaConfig
 
@@ -122,12 +123,17 @@ def serialize_block(block_object: Block, language: str = "en") -> dict:
     Returns:
         Block info for a participant
     """
-
+    theme = (
+        block_object.theme_config
+        or block_object.phase.experiment.theme_config
+        or ThemeConfig()
+    )
     return {
         "slug": block_object.slug,
         "name": block_object.name,
         "description": block_object.description,
         "image": serialize_image(block_object.image) if block_object.image else None,
+        "theme": serialize_theme(theme),
     }
 
 

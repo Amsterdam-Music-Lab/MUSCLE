@@ -39,7 +39,9 @@ def update_choices():
                     )
                     existing.text = choice.text
                     existing.index = choice.index
+                    existing.color = choice.color
                     existing.save()
+
 
 def update_questions():
     question_keys = []

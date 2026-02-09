@@ -4,6 +4,7 @@ import random
 from django.utils.translation import gettext_lazy as _
 
 from .base import BaseRules
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
@@ -92,7 +93,7 @@ class Hooked(BaseRules):
                 ),
             ],
             step_numbers=True,
-            button_label=_("Let's go!"),
+            button=Button(_("Let's go!")),
         )
 
     def next_round(self, session: Session):
@@ -174,7 +175,7 @@ class Hooked(BaseRules):
                 Step(_("Did you hear the same song during previous rounds?")),
             ],
             step_numbers=True,
-            button_label=_("Continue"),
+            button=Button(_("Continue")),
         )
 
     def final_score_message(self, session: Session):
@@ -306,17 +307,19 @@ class Hooked(BaseRules):
         # Get section.
         condition = plan[round_number]
         section = self.select_heard_before_section(session, condition)
-        playback = Autoplay([section], show_animation=True, preload_message=_("Get ready!"))
+        playback = Autoplay(
+            sections=[section], show_animation=True, preload_message=_("Get ready!")
+        )
         # create Result object and save expected result to database
         key = "heard_before"
         form = Form(
             [
                 ButtonArrayQuestion(
                     key=key,
-                    choices={
-                        "new": _("No"),
-                        "old": _("Yes"),
-                    },
+                    choices=[
+                        {"value": "new", "label": _("No"), "color": "colorNegative"},
+                        {"value": "old", "label": _("Yes"), "color": "colorPositive"},
+                    ],
                     text=_("Did you hear this song in previous rounds?"),
                     result_id=prepare_result(
                         key,
@@ -329,12 +332,12 @@ class Hooked(BaseRules):
                 )
             ]
         )
-        config = {"auto_advance": True, "response_time": self.heard_before_time}
         trial = Trial(
             title=self.get_trial_title(session, round_number + 1),
             playback=playback,
             feedback_form=form,
-            config=config,
+            response_time=self.heard_before_time,
+            auto_advance=True,
         )
         return trial
 

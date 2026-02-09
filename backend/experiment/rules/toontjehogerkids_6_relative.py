@@ -3,6 +3,7 @@ from os.path import join
 
 from django.template.loader import render_to_string
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.info import Info
@@ -24,11 +25,17 @@ class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
                 Step("In dit testje kun je jouw relatief gehoor testen!"),
                 # Empty step adds some spacing between steps to improve readability
                 Step(""),
-                Step("Je hoort straks twee liedjes, de een wat hoger dan de andere.", number=1),
+                Step(
+                    "Je hoort straks twee liedjes, de een wat hoger dan de andere.",
+                    number=1,
+                ),
                 Step("Luister goed, want je kunt ze maar één keer afspelen!", number=2),
-                Step("De toonhoogte is dus anders. Klinkt het toch als hetzelfde liedje?", number=3),
+                Step(
+                    "De toonhoogte is dus anders. Klinkt het toch als hetzelfde liedje?",
+                    number=3,
+                ),
             ],
-            button_label="Start",
+            button=Button("Start"),
         )
 
     def get_score(self, session):
@@ -81,8 +88,9 @@ class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
         info = Info(
             body=body,
             heading="Relatief gehoor",
-            button_label="Terug naar ToontjeHogerKids",
-            button_link=get_current_experiment_url(session),
+            button=Button(
+                "Terug naar ToontjeHogerKids", link=get_current_experiment_url(session)
+            ),
         )
 
         return [*score, final, info]

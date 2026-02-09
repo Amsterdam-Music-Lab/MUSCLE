@@ -4,8 +4,8 @@ import json
 from django.test import TestCase, Client
 
 from experiment.utils import (
-    create_player_labels,
     block_export_json_results,
+    format_label,
     get_block_json_export_as_repsonse,
 )
 
@@ -17,13 +17,12 @@ from result.models import Result
 
 class TestExperimentUtils(TestCase):
 
-    def test_create_player_labels(self):
-        labels = create_player_labels(3, 'alphabetic')
-        assert labels == ['A', 'B', 'C']
-        labels = create_player_labels(4, 'roman')
-        assert labels == ['I', 'II', 'III', 'IV']
-        labels = create_player_labels(2)
-        assert labels == ['1', '2']
+    def test_format_label(self):
+        label = format_label(2, 'alphabetic')
+        self.assertEqual(label, 'C')
+        label = format_label(3, 'roman')
+        self.assertEqual(label, 'IV')
+
 
 class TestBlockExport(TestCase):
     fixtures = ["playlist", "experiment"]

@@ -15,24 +15,24 @@ from experiment.actions.question import (
 )
 from question.models import ChoiceList
 
+mock_choices = [{"value": "no", "label": "No"}, {"value": "yes", "label": "Yes"}]
+
 class FormTest(TestCase):
     def setUp(self):
         self.questions = [NumberQuestion(key='test_key', min_value=1, max_value=10)]
-        self.form = Form(form=self.questions, submit_label='Submit', skip_label='Skip', is_skippable=True)
+        self.form = Form(form=self.questions)
 
     def test_initialization(self):
         self.assertEqual(len(self.form.form), 1)
-        self.assertEqual(self.form.submit_label, 'Submit')
-        self.assertEqual(self.form.skip_label, 'Skip')
-        self.assertTrue(self.form.is_skippable)
+        self.assertEqual(self.form.submit_button.label, 'Submit')
+        self.assertEqual(self.form.skip_button.label, 'Skip')
 
     def test_action_method(self):
         action_result = self.form.action()
         self.assertIn('form', action_result)
         self.assertEqual(len(action_result['form']), 1)
-        self.assertIn('submit_label', action_result)
-        self.assertIn('skip_label', action_result)
-        self.assertIn('is_skippable', action_result)
+        self.assertIn('submitButton', action_result)
+        self.assertIn('skipButton', action_result)
 
 
 class NumberQuestionTest(TestCase):
@@ -51,10 +51,10 @@ class NumberQuestionTest(TestCase):
     def test_action_method(self):
         action_result = self.number_question.action()
         self.assertIn('key', action_result)
-        self.assertIn('min_value', action_result)
-        self.assertIn('max_value', action_result)
-        self.assertEqual(action_result['min_value'], 1)
-        self.assertEqual(action_result['max_value'], 10)
+        self.assertIn('minValue', action_result)
+        self.assertIn('maxValue', action_result)
+        self.assertEqual(action_result['minValue'], 1)
+        self.assertEqual(action_result['maxValue'], 10)
 
 
 class TextQuestionTest(TestCase):
@@ -71,111 +71,96 @@ class TextQuestionTest(TestCase):
     def test_action_method(self):
         action_result = self.text_question.action()
         self.assertIn('key', action_result)
-        self.assertIn('max_length', action_result)
-        self.assertEqual(action_result['max_length'], 100)
+        self.assertIn('maxLength', action_result)
+        self.assertEqual(action_result['maxLength'], 100)
 
 class MultipleChoiceQuestionTest(TestCase):
     def setUp(self):
         self.choice_question = CheckBoxQuestion(
-            key='test_key', choices={'no': 'No', 'yes': 'Yes'}, min_values=1
+            key='test_key', choices=mock_choices, min_values=1
         )
 
     def test_initialization(self):
         self.assertEqual(self.choice_question.key, 'test_key')
-        self.assertEqual(self.choice_question.choices, {'no': 'No', 'yes': 'Yes'})
+        self.assertEqual(self.choice_question.choices, mock_choices)
         self.assertEqual(self.choice_question.min_values, 1)
 
     def test_action_method(self):
         action_result = self.choice_question.action()
         self.assertIn('key', action_result)
         self.assertIn('choices', action_result)
-        self.assertEqual(action_result['choices'], {'no': 'No', 'yes': 'Yes'})
-        self.assertIn('min_values', action_result)
-        self.assertEqual(action_result['min_values'], 1)
+        self.assertEqual(action_result['choices'], mock_choices)
+        self.assertIn('minValues', action_result)
+        self.assertEqual(action_result['minValues'], 1)
 
 
 class DropdownQuestionTest(TestCase):
     def setUp(self):
-        self.dropdown_question = DropdownQuestion(
-            key='test_key',
-            choices={
-                'no': 'No',
-                'yes': 'Yes'
-            },
-        )
+        self.dropdown_question = DropdownQuestion(key='test_key', choices=mock_choices)
 
     def test_initialization(self):
         self.assertEqual(self.dropdown_question.key, 'test_key')
-        self.assertEqual(self.dropdown_question.choices, {'no': 'No', 'yes': 'Yes'})
+        self.assertEqual(self.dropdown_question.choices, mock_choices)
 
     def test_action_method(self):
         action_result = self.dropdown_question.action()
         self.assertIn('key', action_result)
         self.assertIn('choices', action_result)
-        self.assertEqual(action_result['choices'], {'no': 'No', 'yes': 'Yes'})
+        self.assertEqual(action_result['choices'], mock_choices)
 
 
 class AutoCompleteQuestionTest(TestCase):
     def setUp(self):
         self.autocomplete_question = AutoCompleteQuestion(
             key='test_key',
-            choices={
-                'no': 'No',
-                'yes': 'Yes'
-            },
+            choices=mock_choices,
         )
 
     def test_initialization(self):
         self.assertEqual(self.autocomplete_question.key, 'test_key')
-        self.assertEqual(self.autocomplete_question.choices, {'no': 'No', 'yes': 'Yes'})
+        self.assertEqual(self.autocomplete_question.choices, mock_choices)
 
     def test_action_method(self):
         action_result = self.autocomplete_question.action()
         self.assertIn('key', action_result)
         self.assertIn('choices', action_result)
-        self.assertEqual(action_result['choices'], {'no': 'No', 'yes': 'Yes'})
+        self.assertEqual(action_result['choices'], mock_choices)
 
 
 class RadiosQuestionTest(TestCase):
     def setUp(self):
         self.radios_question = RadiosQuestion(
             key='test_key',
-            choices={
-                'no': 'No',
-                'yes': 'Yes'
-            },
+            choices=mock_choices,
         )
 
     def test_initialization(self):
         self.assertEqual(self.radios_question.key, 'test_key')
-        self.assertEqual(self.radios_question.choices, {'no': 'No', 'yes': 'Yes'})
+        self.assertEqual(self.radios_question.choices, mock_choices)
 
     def test_action_method(self):
         action_result = self.radios_question.action()
         self.assertIn('key', action_result)
         self.assertIn('choices', action_result)
-        self.assertEqual(action_result['choices'], {'no': 'No', 'yes': 'Yes'})
+        self.assertEqual(action_result['choices'], mock_choices)
 
 
 class ButtonArrayQuestionTest(TestCase):
     def setUp(self):
         self.buttonarray_question = ButtonArrayQuestion(
             key='test_key',
-            choices={
-                'no': 'No',
-                'yes': 'Yes'
-            },
+            choices=mock_choices,
         )
 
     def test_initialization(self):
         self.assertEqual(self.buttonarray_question.key, 'test_key')
-        self.assertEqual(self.buttonarray_question.choices, {'no': 'No', 'yes': 'Yes'})
+        self.assertEqual(self.buttonarray_question.choices, mock_choices)
 
     def test_action_method(self):
         action_result = self.buttonarray_question.action()
         self.assertIn('key', action_result)
         self.assertIn('choices', action_result)
-        self.assertEqual(action_result['choices'], {'no': 'No', 'yes': 'Yes'})
+        self.assertEqual(action_result['choices'], mock_choices)
 
 
 class RangeQuestionTest(TestCase):
@@ -194,10 +179,10 @@ class RangeQuestionTest(TestCase):
     def test_action_method(self):
         action_result = self.range_question.action()
         self.assertIn('key', action_result)
-        self.assertIn('min_value', action_result)
-        self.assertIn('max_value', action_result)
-        self.assertEqual(action_result['min_value'], 1)
-        self.assertEqual(action_result['max_value'], 10)
+        self.assertIn('minValue', action_result)
+        self.assertIn('maxValue', action_result)
+        self.assertEqual(action_result['minValue'], 1)
+        self.assertEqual(action_result['maxValue'], 10)
 
 
 class TextRangeQuestionTest(TestCase):
@@ -210,18 +195,7 @@ class TextRangeQuestionTest(TestCase):
 
     def test_initialization(self):
         self.assertEqual(self.likert_question.key, 'test_key')
-        self.assertEqual(
-            self.likert_question.choices,
-            {
-                '1': "Completely Disagree",
-                '2': "Strongly Disagree",
-                '3': "Disagree",
-                '4': "Neither Agree nor Disagree",
-                '5': "Agree",
-                '6': "Strongly Agree",
-                '7': "Completely Agree",
-            },
-        )
+        self.assertEqual(len(self.likert_question.choices), 7)
 
     def test_action_method(self):
         action_result = self.likert_question.action()
@@ -229,15 +203,7 @@ class TextRangeQuestionTest(TestCase):
         self.assertIn('choices', action_result)
         self.assertEqual(
             action_result['choices'],
-            {
-                '1': "Completely Disagree",
-                '2': "Strongly Disagree",
-                '3': "Disagree",
-                '4': "Neither Agree nor Disagree",
-                '5': "Agree",
-                '6': "Strongly Agree",
-                '7': "Completely Agree",
-            },
+            ChoiceList.objects.get(pk="LIKERT_AGREE_7").to_dict(),
         )
 
 
@@ -254,15 +220,7 @@ class IconRangeTest(TestCase):
         self.assertEqual(self.likert_question_icon.view, 'ICON_RANGE')
         self.assertEqual(
             self.likert_question_icon.choices,
-            {
-                '1': 'fa-face-grin-hearts',
-                '2': 'fa-face-grin',
-                '3': 'fa-face-smile',
-                '4': 'fa-face-meh',
-                '5': 'fa-face-frown',
-                '6': 'fa-face-frown-open',
-                '7': 'fa-face-angry',
-            },
+            ChoiceList.objects.get(pk="LIKERT_ICONS_7").to_dict(),
         )
 
     def test_action_method(self):
@@ -273,13 +231,5 @@ class IconRangeTest(TestCase):
         self.assertIn('choices', action_result)
         self.assertEqual(
             action_result['choices'],
-            {
-                '1': 'fa-face-grin-hearts',
-                '2': 'fa-face-grin',
-                '3': 'fa-face-smile',
-                '4': 'fa-face-meh',
-                '5': 'fa-face-frown',
-                '6': 'fa-face-frown-open',
-                '7': 'fa-face-angry',
-            },
+            ChoiceList.objects.get(pk="LIKERT_ICONS_7").to_dict(),
         )

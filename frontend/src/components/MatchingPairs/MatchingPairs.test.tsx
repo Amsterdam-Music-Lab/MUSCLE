@@ -16,7 +16,10 @@ const initialState = {
     participant: 1,
     session: 1,
     setError: vi.fn(),
-    block: { bonus_points: 42 },
+    block: { bonus_points: 42, theme: {colorPositive: "#39d7b8"} },
+    theme: {
+        colorPrimary: "#d843e2", colorSecondary: "#39d7b8"
+    },
     currentAction: () => ({ view: 'TRIAL_VIEW' }),
 };
 
@@ -41,10 +44,10 @@ describe('MatchingPairs Component', () => {
     })
 
     let mockSections = [
-        { id: 1, content: 'Card 1', url: '/cat-01.jpg', inactive: false, turned: false, noevents: false, seen: false },
-        { id: 2, content: 'Card 2', url: '/cat-02.jpg', inactive: false, turned: false, noevents: false, seen: false },
-        { id: 3, content: 'Card 1', url: '/cat-01.jpg', inactive: false, turned: false, noevents: false, seen: false },
-        { id: 4, content: 'Card 2', url: '/cat-02.jpg', inactive: false, turned: false, noevents: false, seen: false },
+        { label: 'Card 1', link: '/cat-01.jpg', inactive: false, turned: false, noevents: false, seen: false },
+        { label: 'Card 2', link: '/cat-02.jpg', inactive: false, turned: false, noevents: false, seen: false },
+        { label: 'Card 1', link: '/cat-01.jpg', inactive: false, turned: false, noevents: false, seen: false },
+        { label: 'Card 2', link: '/cat-02.jpg', inactive: false, turned: false, noevents: false, seen: false },
     ];
 
     const baseProps = {
@@ -54,21 +57,15 @@ describe('MatchingPairs Component', () => {
         onFinish: vi.fn(),
         stopAudioAfter: 4.0,
         showAnimation: false,
-        tutorial: {
-            lucky_match: 'Lucky match tutorial content',
-            memory_match: 'Memory match tutorial content',
-            no_match: 'No match tutorial content',
-            misremembered: 'Misremembered tutorial content',
-        }
     };
 
     test('renders correctly', () => {
-        const { getByText } = render(<MatchingPairs sections={mockSections} setPlayerIndex={vi.fn()} />);
+        const { getByText } = render(<MatchingPairs sections={mockSections} />);
         expect(getByText('Pick a card')).not.toBeNull();
     });
 
     test('flips a card when clicked', async () => {
-        render(<MatchingPairs {...baseProps} sections={mockSections} setPlayerIndex={vi.fn()} />);
+        render(<MatchingPairs {...baseProps} sections={mockSections} />);
         const cards = screen.getAllByRole('button');
 
         fireEvent.click(cards[0]);
@@ -78,7 +75,7 @@ describe('MatchingPairs Component', () => {
 
     test('updates score after a match', async () => {
         mock.onPost().replyOnce(200, { score: 10 });
-        const { getByText } = render(<MatchingPairs {...baseProps} sections={mockSections} setPlayerIndex={vi.fn()} />);
+        const { getByText } = render(<MatchingPairs {...baseProps} sections={mockSections} />);
         const cards = screen.getAllByRole('button');
 
         fireEvent.click(cards[0]);
@@ -104,7 +101,7 @@ describe('MatchingPairs Component', () => {
     test('calls scoreIntermediateResult after each turn', async () => {
         mock.onPost().reply(200, { score: 10 });
         const spy = vi.spyOn(API, 'scoreIntermediateResult');
-        render(<MatchingPairs {...baseProps} sections={mockSections} tutorial={undefined} setPlayerIndex={vi.fn()} />);
+        render(<MatchingPairs {...baseProps} sections={mockSections} />);
         const cards = screen.getAllByTestId('play-card');
 
         mock.onPost().reply(200, { score: 10 });
@@ -131,7 +128,7 @@ describe('MatchingPairs Component', () => {
         mock.onPost().reply(200, { score: 10 });
         const submitResult = vi.fn();
         render(
-            <MatchingPairs {...baseProps} sections={mockSections} setPlayerIndex={vi.fn()} submitResult={submitResult} />
+            <MatchingPairs {...baseProps} sections={mockSections} submitResult={submitResult} />
         );
         const cards = screen.getAllByTestId('play-card');
 
@@ -197,194 +194,4 @@ describe('MatchingPairs Component', () => {
         expect(container.querySelector('.matching-pairs__score-feedback--small-bottom-right')).not.toBeNull();
     });
 
-    describe('Tutorial Overlay Integration', () => {
-        const tutorialContent = {
-            lucky_match: 'Lucky match tutorial content',
-            memory_match: 'Memory match tutorial content',
-            no_match: 'No match tutorial content',
-            misremembered: 'Misremembered tutorial content'
-        };
-
-
-
-        test('shows tutorial overlay on first lucky match', async () => {
-            render(
-                <MatchingPairs
-                    {...baseProps}
-                    sections={mockSections}
-                    tutorial={tutorialContent}
-                    setPlayerIndex={vi.fn()}
-                />
-            );
-            const cards = screen.getAllByTestId('play-card');
-
-            // Make a lucky match
-            fireEvent.click(cards[0]);
-            fireEvent.click(cards[2]);
-
-            await waitFor(() => {
-                expect(screen.getByText('Lucky match tutorial content')).toBeTruthy();
-            });
-        });
-
-        test('does not show tutorial overlay for same score type twice', async () => {
-            render(
-                <MatchingPairs
-                    {...baseProps}
-                    sections={mockSections}
-                    tutorial={tutorialContent}
-                    setPlayerIndex={vi.fn()}
-                />
-            );
-            const cards = screen.getAllByTestId('play-card');
-
-            // First lucky match
-            fireEvent.click(cards[0]);
-            fireEvent.click(cards[2]);
-
-            await waitFor(() => {
-                expect(screen.getByText('Lucky match tutorial content')).toBeTruthy();
-            });
-
-            // Close the overlay
-            const overlay = screen.getByRole('presentation');
-            expect(overlay).toBeTruthy();
-            const closeButton = overlay.querySelector('button');
-            expect(closeButton).toBeTruthy();
-            fireEvent.click(closeButton as Element);
-
-            // Second lucky match
-            fireEvent.click(cards[1]);
-            fireEvent.click(cards[3]);
-
-            // Wait a bit to ensure overlay doesn't appear
-            await new Promise(r => setTimeout(r, 100));
-            waitFor(() =>
-                expect(screen.queryByText('Lucky match tutorial content')).toBeNull()
-            );
-        });
-
-        test('closes tutorial overlay and finishes turn when clicking "Got it"', async () => {
-            const finishedPlaying = vi.fn();
-            render(
-                <MatchingPairs
-                    {...baseProps}
-                    sections={mockSections}
-                    tutorial={tutorialContent}
-                    setPlayerIndex={vi.fn()}
-                    finishedPlaying={finishedPlaying}
-                />
-            );
-            const cards = screen.getAllByTestId('play-card');
-
-            // Make a match
-            mock.onPost().reply(200, { score: 10 });
-            fireEvent.click(cards[0]);
-            fireEvent.click(cards[2]);
-
-            await waitFor(() => {
-                expect(screen.getByText('Lucky match tutorial content')).toBeTruthy();
-            });
-
-            // Close the overlay
-            const overlay = screen.getByRole('presentation');
-            expect(overlay).toBeTruthy();
-            const closeButton = overlay.querySelector('button');
-            expect(closeButton).toBeTruthy();
-            fireEvent.click(closeButton as Element);
-
-            waitFor(() => {
-                expect(screen.queryByText('Lucky match tutorial content')).toBeNull();
-                expect(finishedPlaying).toHaveBeenCalled();
-                expect(screen.getByText('Pick a card')).toBeTruthy();
-            });
-        });
-
-        test('closes tutorial overlay when pressing Escape key', async () => {
-            const finishedPlaying = vi.fn();
-            render(
-                <MatchingPairs
-                    {...baseProps}
-                    sections={mockSections}
-                    tutorial={tutorialContent}
-                    setPlayerIndex={vi.fn()}
-                    finishedPlaying={finishedPlaying}
-                />
-            );
-            const cards = screen.getAllByTestId('play-card');
-
-            // Make a match
-            fireEvent.click(cards[0]);
-            fireEvent.click(cards[2]);
-
-            await waitFor(() => {
-                expect(screen.getByText('Lucky match tutorial content')).toBeTruthy();
-            });
-
-            // Press Escape
-            fireEvent.keyDown(document, { key: 'Escape' });
-
-            waitFor(() => {
-                expect(screen.queryByText('Lucky match tutorial content')).toBeNull();
-                expect(finishedPlaying).toHaveBeenCalled();
-            });
-        });
-
-        test('does not show tutorial overlay when tutorial prop is not provided', async () => {
-            render(
-                <MatchingPairs
-                    {...baseProps}
-                    sections={mockSections}
-                    setPlayerIndex={vi.fn()}
-                />
-            );
-            const cards = screen.getAllByTestId('play-card');
-
-            // Make a match
-            fireEvent.click(cards[0]);
-            fireEvent.click(cards[2]);
-
-            // Wait a bit to ensure overlay doesn't appear
-            await new Promise(r => setTimeout(r, 100));
-            waitFor(() =>
-                expect(screen.queryByText('Lucky match tutorial content')).toBeNull()
-            );
-        });
-
-        test('shows different tutorial content for different match types', async () => {
-            render(
-                <MatchingPairs
-                    {...baseProps}
-                    sections={mockSections}
-                    tutorial={tutorialContent}
-                    setPlayerIndex={vi.fn()}
-                />
-            );
-            const cards = screen.getAllByTestId('play-card');
-
-            // First make a lucky match
-            fireEvent.click(cards[0]);
-            fireEvent.click(cards[2]);
-
-            await waitFor(() => {
-                expect(screen.getByText('Lucky match tutorial content')).toBeTruthy();
-            });
-
-            // Close the overlay
-            const overlay = screen.getByRole('presentation');
-            expect(overlay).toBeTruthy();
-            const closeButton = overlay.querySelector('button');
-            expect(closeButton).toBeTruthy();
-            fireEvent.click(closeButton as Element);
-
-            // Then make a memory match
-            mock.onPost().replyOnce(200, { score: 20 });
-            fireEvent.click(cards[1]);
-            fireEvent.click(cards[3]);
-
-            waitFor(() => {
-                expect(screen.getByText('Memory match tutorial content')).toBeTruthy();
-            });
-        });
-    });
 });

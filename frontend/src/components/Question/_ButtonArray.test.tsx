@@ -10,14 +10,12 @@ const getProps = (overrides = {}) => ({
         "view": QuestionViews.BUTTON_ARRAY,
         "explainer": "",
         "question": "1. Do you know this song?",
-        "skippable": false,
         "style": "boolean",
-        "choices": {
-            "yes": "Yes",
-            "unsure": "Unsure",
-            "no": "No"
-        },
-        "min_values": 1,
+        "choices": [
+            {value: "yes", label: "Yes"},
+            {value: "unsure", label: "Unsure"},
+            {value: "no", label: "No"}
+        ],
     },
     disabled: false,
     onChange: vi.fn(),
@@ -66,7 +64,7 @@ describe('ButtonArray', () => {
     });
 
     it('throws an error if the question has no choices', () => {
-        const props = getProps({ question: { ...getProps().question, choices: {} } });
+        const props = getProps({ question: { ...getProps().question, choices: [] } });
 
         expect(() => render(<ButtonArray {...props} />)).toThrowError('ButtonArray question must have choices');
 

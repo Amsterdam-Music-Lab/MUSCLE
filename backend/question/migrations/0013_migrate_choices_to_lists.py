@@ -1,7 +1,6 @@
 from django.db import migrations
 
 from question.management.commands.updatequestions import (
-    update_choices,
     update_choice_lists,
     update_questions,
 )
@@ -23,7 +22,7 @@ def choice_to_choice_list(apps, schema_editor):
     ChoiceListModel = apps.get_model("question.ChoiceList")
     QuestionModel = apps.get_model("question.Question")
     update_choice_lists()
-    update_choices()
+    # choices themselves will be added in migration 0016
     python_defined_questions = update_questions()
     for question in QuestionModel.objects.exclude(key__in=python_defined_questions):
         if hasattr(question, 'choice_set'):

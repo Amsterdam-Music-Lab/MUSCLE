@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from django.conf import settings
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
@@ -11,12 +12,12 @@ from experiment.actions.html import HTML
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.redirect import Redirect
 from experiment.actions.trial import Trial
-from experiment.actions.playback import Autoplay
+from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.playlist import PlaylistSelection
+from experiment.actions.wrappers import boolean_question
 from question.banks import get_question_bank
 from result.utils import prepare_result
 from session.models import Session
-from theme.styles import ColorScheme
 from .hooked import Hooked
 
 logger = logging.getLogger(__name__)
@@ -84,19 +85,24 @@ class Huang2022(Hooked):
                 html = HTML(body='<h4>{}</h4>'.format(_('Do you hear the music?')))
                 form = Form(
                     form=[
-                        ButtonArrayQuestion(
+                        boolean_question(
                             key='audio_check1',
-                            choices={'no': _('No'), 'yes': _('Yes')},
+                            text="",
                             result_id=prepare_result(
                                 'audio_check1', session, scoring_rule='BOOLEAN'
                             ),
-                            style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
                         )
                     ]
                 )
-                return [Trial(playback=playback, feedback_form=form, html=html,
-                             config={'response_time': 15},
-                             title=_("Audio check"))]
+                return [
+                    Trial(
+                        playback=playback,
+                        feedback_form=form,
+                        html=html,
+                        response_time=15,
+                        title=_("Audio check"),
+                    )
+                ]
             else:
                 if last_result.score == 0:
                     # user indicated they couldn't hear the music
@@ -107,17 +113,33 @@ class Huang2022(Hooked):
                             form=[
                                 ButtonArrayQuestion(
                                     key='audio_check2',
-                                    choices={'no': _('Quit'), 'yes': _('Try')},
+                                    choices=[
+                                        {
+                                            "value": "no",
+                                            "label": _('Quit'),
+                                            "color": "colorNegative",
+                                        },
+                                        {
+                                            "value": "yes",
+                                            "label": _('Try'),
+                                            "color": "colorPositive",
+                                        },
+                                    ],
                                     result_id=prepare_result(
                                         'audio_check2', session, scoring_rule='BOOLEAN'
                                     ),
-                                    style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
                                 )
                             ]
                         )
-                        return [Trial(playback=playback, html=html, feedback_form=form,
-                                     config={'response_time': 15},
-                                     title=_("Ready to experiment"))]
+                        return [
+                            Trial(
+                                playback=playback,
+                                html=html,
+                                feedback_form=form,
+                                response_time=15,
+                                title=_("Ready to experiment"),
+                            )
+                        ]
                     else:
                         # finish and redirect
                         session.finish()
@@ -128,29 +150,45 @@ class Huang2022(Hooked):
                     self.plan_sections(session)
                     # Show explainers and go to SongSync
                     explainer = Explainer(
-                    instruction=_("How to Play"),
-                    steps=[
-                        Step(_(
-                            "Do you recognise the song? Try to sing along. The faster you recognise songs, the more points you can earn.")),
-                        Step(_(
-                            "Do you really know the song? Keep singing or imagining the music while the sound is muted. The music is still playing: you just can’t hear it!")),
-                        Step(_(
-                            "Was the music in the right place when the sound came back? Or did we jump to a different spot during the silence?"))
-                    ],
-                    step_numbers=True,
-                    button_label=_("Let's go!"))
-                    explainer_devices = Explainer(
-                        instruction=_("You can use your smartphone, computer or tablet to participate in this experiment. Please choose the best network in your area to participate in the experiment, such as wireless network (WIFI), mobile data network signal (4G or above) or wired network. If the network is poor, it may cause the music to fail to load or the experiment may fail to run properly. You can access the experiment page through the following channels:"),
+                        instruction=_("How to Play"),
                         steps=[
-                            Step(_(
-                                "Directly click the link on WeChat (smart phone or PC version, or WeChat Web)"),
+                            Step(
+                                _(
+                                    "Do you recognise the song? Try to sing along. The faster you recognise songs, the more points you can earn."
+                                )
                             ),
-                            Step(_(
-                                "If the link to load the experiment page through the WeChat app on your cell phone fails, you can copy and paste the link in the browser of your cell phone or computer to participate in the experiment. You can use any of the currently available browsers, such as Safari, Firefox, 360, Google Chrome, Quark, etc."),
-                            )
+                            Step(
+                                _(
+                                    "Do you really know the song? Keep singing or imagining the music while the sound is muted. The music is still playing: you just can’t hear it!"
+                                )
+                            ),
+                            Step(
+                                _(
+                                    "Was the music in the right place when the sound came back? Or did we jump to a different spot during the silence?"
+                                )
+                            ),
                         ],
                         step_numbers=True,
-                        button_label=_("Continue")
+                        button=Button(_("Let's go!")),
+                    )
+                    explainer_devices = Explainer(
+                        instruction=_(
+                            "You can use your smartphone, computer or tablet to participate in this experiment. Please choose the best network in your area to participate in the experiment, such as wireless network (WIFI), mobile data network signal (4G or above) or wired network. If the network is poor, it may cause the music to fail to load or the experiment may fail to run properly. You can access the experiment page through the following channels:"
+                        ),
+                        steps=[
+                            Step(
+                                _(
+                                    "Directly click the link on WeChat (smart phone or PC version, or WeChat Web)"
+                                ),
+                            ),
+                            Step(
+                                _(
+                                    "If the link to load the experiment page through the WeChat app on your cell phone fails, you can copy and paste the link in the browser of your cell phone or computer to participate in the experiment. You can use any of the currently available browsers, such as Safari, Firefox, 360, Google Chrome, Quark, etc."
+                                ),
+                            ),
+                        ],
+                        step_numbers=True,
+                        button=Button(_("Continue")),
                     )
                     playlist = PlaylistSelection(session.block.playlists.all())
                     actions.extend([explainer, explainer_devices, playlist, *self.next_song_sync_action(session, round_number)])
@@ -179,12 +217,20 @@ class Huang2022(Hooked):
                     session, n_questions=None
                 )
                 if questionnaire:
-                    actions.extend([Explainer(
-                        instruction=_("Please answer some questions \
-                        on your musical (Goldsmiths-MSI) and demographic background"),
-                        steps=[],
-                        step_numbers=True,
-                        button_label=_("Let's go!")), *questionnaire])
+                    actions.extend(
+                        [
+                            Explainer(
+                                instruction=_(
+                                    "Please answer some questions \
+                        on your musical (Goldsmiths-MSI) and demographic background"
+                                ),
+                                steps=[],
+                                step_numbers=True,
+                                button=Button(_("Let's go!")),
+                            ),
+                            *questionnaire,
+                        ]
+                    )
                 else:
                     return [self.finalize(session)]
         return actions
@@ -246,8 +292,5 @@ class Huang2022(Hooked):
 def get_test_playback():
     from section.models import Section
     test_section = Section.objects.get(song__name='audiocheck')
-    playback = Autoplay(
-        sections=[test_section],
-        show_animation=True
-    )
+    playback = Autoplay(sections=[PlaybackSection(test_section)], show_animation=True)
     return playback

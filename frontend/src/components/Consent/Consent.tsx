@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import { saveAs } from 'file-saver';
 
-import { URLS } from "@/config";
 import Button from "../Button/Button";
 import Loading from "../Loading/Loading";
-import { createConsent, useConsent } from "../../API";
+import { createConsent, useConsent } from "@/API";
 import classNames from "classnames";
+import IButton from "@/types/Button";
 import Participant from "@/types/Participant";
+import { styleButton } from "@/util/stylingHelpers";
 
 export interface ConsentProps {
     title: string;
@@ -14,12 +15,12 @@ export interface ConsentProps {
     experiment: any;
     participant: Pick<Participant, 'csrf_token'>;
     onNext: () => void;
-    confirm: string;
-    deny: string;
+    confirmButton: IButton;
+    denyButton: IButton;
 }
 
 /** Consent is an experiment view that shows the consent text, and handles agreement/stop actions */
-const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }: ConsentProps) => {
+const Consent = ({ title, text, experiment, participant, onNext, confirmButton, denyButton }: ConsentProps) => {
     const [consent, loadingConsent] = useConsent(experiment.slug);
     const urlQueryString = window.location.search;
 
@@ -67,19 +68,19 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }
 
     const correction = width > 720 ? 300 : 250;
 
-
     // Show consent
     return (
-        <div className={classNames("aha__consent")}>
+        <div className={classNames("aha__consent")} style={{background: experiment.theme.colorText, color: experiment.theme.colorBackground}}>
             <div className="aha__consent-header d-flex">
                 <div className="flex-fill">
                     <h3>{title}</h3>
                 </div>
                 <div className="flex-end">
                     <button
-                        className="btn btn-download fa-solid fa-download font-weight-bold"
+                        className="btn fa-solid fa-download font-weight-bold"
                         data-testid="download-button"
                         onClick={onDownload}
+                        css={styleButton(experiment.theme.colorGrey)}
                     >
                     </button>
                 </div>
@@ -93,14 +94,13 @@ const Consent = ({ title, text, experiment, participant, onNext, confirm, deny }
             />
 
             <div className="buttons d-flex justify-content-between">
-                <a href={URLS.AMLHome} className="btn btn-negative btn-lg">
-                    {deny}
-                </a>
+                <Button
+                    {...denyButton}
+                />
 
                 <Button
-                    className="btn-positive"
+                    {...confirmButton}
                     onClick={onAgree}
-                    title={confirm}
                 />
 
             </div>

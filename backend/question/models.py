@@ -3,6 +3,8 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.actions import question
 from experiment.actions.question import QuestionAction
+from theme.models import ThemeConfig
+
 
 class Question(models.Model):
     """Model for question asked during experiment
@@ -125,7 +127,14 @@ class ChoiceList(models.Model):
     from_python = models.BooleanField(default=False, editable=False)
 
     def to_dict(self):
-        return {choice.key: choice.text for choice in self.choices.all()}
+        return [
+            {'value': choice.key, 'label': choice.text, 'color': choice.color}
+            for choice in self.choices.all()
+        ]
+
+
+def validate_color(value: str):
+    return value in ThemeConfig.valid_colors()
 
 
 class Choice(models.Model):
@@ -144,7 +153,14 @@ class Choice(models.Model):
     choicelist = models.ForeignKey(
         ChoiceList,
         on_delete=models.CASCADE,
-        related_name='choices',
+        related_name="choices",
+    )
+    color = models.CharField(
+        max_length=32,
+        blank=True,
+        default="",
+        help_text="Description of color in current theme, e.g. `colorPositive`",
+        validators=[validate_color],
     )
 
     class Meta:

@@ -33,9 +33,10 @@ Setup block data in the admin panel
 from django.db.models import Avg
 
 from .base import BaseRules
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer
 from experiment.actions.final import Final
-from experiment.actions.playback import PlayButton
+from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
 from experiment.actions.form import Form
@@ -53,7 +54,7 @@ class TwoAlternativeForced(BaseRules):
         return Explainer(
             instruction="This is a listening experiment in which you have to respond to short sound sequences",
             steps=[],
-            button_label='Ok'
+            button=Button('Ok'),
         )
 
     def next_round(self, session):
@@ -96,12 +97,10 @@ class TwoAlternativeForced(BaseRules):
 
         # Build Trial action, configure through config argument. Trial has Playback and Form with ButtonArrayQuestion to submit response.
 
-        playback = PlayButton([section])
+        playback = PlayButtons(sections=[PlaybackSection(section)])
 
         key = 'choice'
         button_style = [
-            ColorScheme.NEUTRAL,
-            TextStyle.INVISIBLE,
             ButtonStyle.LARGE_GAP,
             ButtonStyle.LARGE_TEXT,
         ]
@@ -115,17 +114,21 @@ class TwoAlternativeForced(BaseRules):
                 scoring_rule='CORRECTNESS',
             ),
             text="A or B?",
-            choices={'A': 'Answer A', 'B': 'Answer B'},
+            choices=[
+                {"value": "A", "label": "Answer A", "color": "colorNeutral1"},
+                {"value": "B", "label": "Answer B", "color": "colorNeutral2"},
+            ],
             style=button_style,
         )
 
-        feedback_form = Form([question], submit_label="")
+        feedback_form = Form([question], submit_button=None)
 
         trial = Trial(
             playback=playback,
             feedback_form=feedback_form,
             title=f"Round {session.get_rounds_passed()} / {len(session.playlist.section_set.all())}",
-            config = {'listen_first': True, 'decision_time': section.duration + .1}
+            listen_first=True,
+            response_time=section.duration + 0.1,
         )
 
         return trial
@@ -137,10 +140,8 @@ class TwoAlternativeForced(BaseRules):
 
         instruction = 'Your response was CORRECT' if session.last_result().given_response == session.last_result().section.tag else 'Your response was INCORRECT'
         button_label='Next fragment' if not session.rounds_complete() else 'Show final score'
-        feedback =  Explainer(
-            instruction=instruction,
-            steps=[],
-            button_label=button_label
+        feedback = Explainer(
+            instruction=instruction, steps=[], button=Button(button_label)
         )
 
         return feedback

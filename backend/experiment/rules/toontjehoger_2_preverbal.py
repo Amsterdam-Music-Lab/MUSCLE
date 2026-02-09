@@ -4,17 +4,18 @@ from os.path import join
 from django.template.loader import render_to_string
 
 from .toontjehoger_1_mozart import toontjehoger_ranks
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.html import HTML
 from experiment.actions.info import Info
-from experiment.actions.playback import ImagePlayer
+from experiment.actions.playback import PlayButtons, ImagePlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
 from experiment.actions.utils import get_current_experiment_url
-from experiment.utils import create_player_labels
+from experiment.utils import format_label
 from result.utils import prepare_result
 from section.models import Playlist
 from theme.styles import ColorScheme
@@ -79,7 +80,7 @@ class ToontjeHoger2Preverbal(BaseRules):
                 ),
             ],
             step_numbers=True,
-            button_label="Start",
+            button=Button("Start"),
         )
 
     def get_spectrogram_info(self):
@@ -92,7 +93,7 @@ class ToontjeHoger2Preverbal(BaseRules):
         info = Info(
             body=body,
             heading="Wat is een spectrogram?",
-            button_label="Volgende",
+            button=Button("Volgende"),
         )
         return info
 
@@ -152,15 +153,15 @@ class ToontjeHoger2Preverbal(BaseRules):
         question = ButtonArrayQuestion(
             text=self.get_round1_question(),
             key=key,
-            choices={
-                'A': 'A',
-                'B': 'B',
-                'C': 'C',
-            },
+            choices=[
+                {"value": "A", "label": "A", "color": "colorNeutral2"},
+                {"value": "B", "label": "B", "color": "colorNeutral1"},
+                {"value": "C", "label": "C", "color": "colorSecondary"},
+            ],
             result_id=prepare_result(key, session, expected_response="C"),
             style=[ColorScheme.NEUTRAL_INVERTED],
         )
-        form = Form([question], submit_label="")
+        form = Form([question], submit_button=None)
 
         image_trial = Trial(
             html=HTML(
@@ -201,17 +202,37 @@ class ToontjeHoger2Preverbal(BaseRules):
                 "Error: could not find section C for round 1")
 
         # Player
-        sections = [sectionA, sectionB, sectionC]
-        playback = ImagePlayer(
+        sections = [
+            ImagePlaybackSection(
+                sectionA,
+                label=format_label(0, "alphabetic"),
+                color="colorNeutral2",
+                image={
+                    "link": "/images/experiments/toontjehoger/spectrogram-trumpet.webp",
+                    "label": "Trompet",
+                },
+            ),
+            ImagePlaybackSection(
+                sectionB,
+                label=format_label(1, "alphabetic"),
+                color="colorNeutral1",
+                image={
+                    "link": "/images/experiments/toontjehoger/spectrogram-whale.webp",
+                    "label": "Walvis",
+                },
+            ),
+            ImagePlaybackSection(
+                sectionC,
+                label=format_label(2, "alphabetic"),
+                color="colorNeutral3",
+                image={
+                    "link": "/images/experiments/toontjehoger/spectrogram-human.webp",
+                    "label": "Mens",
+                },
+            ),
+        ]
+        playback = PlayButtons(
             sections,
-            labels=create_player_labels(len(sections), 'alphabetic'),
-            images=[
-                "/images/experiments/toontjehoger/spectrogram-trumpet.webp",
-                "/images/experiments/toontjehoger/spectrogram-whale.webp",
-                "/images/experiments/toontjehoger/spectrogram-human.webp",
-            ],
-            image_labels=['Trompet', 'Walvis', 'Mens'],
-            style=[ColorScheme.NEUTRAL_INVERTED],
         )
 
         trial = Trial(
@@ -238,15 +259,26 @@ class ToontjeHoger2Preverbal(BaseRules):
                 "Error: could not find section B for round 2")
 
         # Player
-        sections = [sectionA, sectionB]
-        playback = ImagePlayer(
+        sections = [
+            ImagePlaybackSection(
+                sectionA,
+                label=format_label(0, 'alphabetic'),
+                image={
+                    "link": "/images/experiments/toontjehoger/spectrogram-baby-french.webp"
+                },
+                color='colorNeutral2',
+            ),
+            ImagePlaybackSection(
+                sectionA,
+                label=format_label(1, 'alphabetic'),
+                image={
+                    "link": "/images/experiments/toontjehoger/spectrogram-baby-german.webp"
+                },
+                color='colorNeutral1',
+            ),
+        ]
+        playback = PlayButtons(
             sections,
-            labels=create_player_labels(len(sections), 'alphabetic'),
-            images=[
-                "/images/experiments/toontjehoger/spectrogram-baby-french.webp",
-                "/images/experiments/toontjehoger/spectrogram-baby-german.webp",
-            ],
-            style=[ColorScheme.NEUTRAL_INVERTED],
         )
 
         # Question
@@ -254,10 +286,10 @@ class ToontjeHoger2Preverbal(BaseRules):
         question = ButtonArrayQuestion(
             text=self.get_round_2_question(),
             key=key,
-            choices={
-                "A": "A",
-                "B": "B",
-            },
+            choices=[
+                {"value": "A", "label": "A", "color": "colorNeutral2"},
+                {"value": "B", "label": "B", "color": "colorNeutral1"},
+            ],
             result_id=prepare_result(key, session, expected_response="A"),
             style=[ColorScheme.NEUTRAL_INVERTED],
         )
@@ -298,8 +330,10 @@ class ToontjeHoger2Preverbal(BaseRules):
         info = Info(
             body=body,
             heading="Het eerste luisteren",
-            button_label="Terug naar ToontjeHoger",
-            button_link=get_current_experiment_url(session)
+            button=Button(
+                "Terug naar ToontjeHoger",
+                link=get_current_experiment_url(session),
+            ),
         )
 
         return [*score, final, info]

@@ -1,4 +1,5 @@
 import React from "react";
+import { css } from '@emotion/react'
 import useBoundStore from "@/util/stores";
 
 interface PageProps {
@@ -10,10 +11,30 @@ interface PageProps {
 const Page = ({ className, children }: PageProps) => {
 
     const theme = useBoundStore((state) => state.theme);
-    const backgroundImageUrl = theme?.backgroundUrl || '/public/images/background.jpg';
+    const backgroundImageUrl = theme?.backgroundUrl;
+    let style = {};
+
+    if (backgroundImageUrl) {
+        style = {
+            backgroundImage: `url(${backgroundImageUrl})`
+        }
+    } else {
+        style = {
+            backgroundColor: theme?.colorBackground
+        }
+    }
+
+    const stylePage = () => { 
+        return css`
+            color: ${theme?.colorText};
+            h3.title:after {
+                background-color: ${theme?.colorPrimary}
+            }
+        `
+    }
 
     return (
-        <div className={"aha__page " + (className ? className : "")} style={{ backgroundImage: `url(${backgroundImageUrl})` }}>
+        <div className={"aha__page " + (className ? className : "")} style={style} css={stylePage()}>
             {children}
         </div>
     );

@@ -5,15 +5,12 @@ import * as webAudio from "../../util/webAudio";
 import { playAudio, pauseAudio } from "../../util/audioControl";
 
 import AutoPlay from "./Autoplay";
-import PlayButton from "../PlayButton/PlayButton";
 import MultiPlayer from "./MultiPlayer";
-import ImagePlayer from "./ImagePlayer";
 import MatchingPairs from "../MatchingPairs/MatchingPairs";
 import Preload from "../Preload/Preload";
-import { AUTOPLAY, BUTTON, IMAGE, MATCHINGPAIRS, MULTIPLAYER, PRELOAD, PlaybackArgs, PlaybackView } from "@/types/Playback";
+import { AUTOPLAY, BUTTON, MATCHINGPAIRS, PRELOAD, PlaybackAction, PlaybackView } from "@/types/Playback";
 
-export interface PlaybackProps {
-    playbackArgs: PlaybackArgs;
+export interface PlaybackProps extends PlaybackAction {
     onPreloadReady: () => void;
     autoAdvance: boolean;
     responseTime: number;
@@ -27,7 +24,15 @@ interface PlaybackState {
 }
 
 const Playback = ({
-    playbackArgs,
+    sections,
+    view,
+    instruction,
+    preloadMessage,
+    playOnce,
+    showAnimation,
+    resumePlay=false,
+    mute=false,
+    scoreFeedbackDisplay,
     onPreloadReady,
     autoAdvance,
     responseTime,
@@ -36,7 +41,7 @@ const Playback = ({
     finishedPlaying,
 }: PlaybackProps) => {
     const [playerIndex, setPlayerIndex] = useState(-1);
-    const lastPlayerIndex = useRef(-1);
+    const [hasPlayed, setHasPlayed] = useState<number[]>([]);
     const activeAudioEndedListener = useRef<() => void>();
     const [state, setState] = useState<PlaybackState>({ view: PRELOAD });
 
@@ -45,23 +50,13 @@ const Playback = ({
     }
 
     // check if the users device is webaudio compatible
-    const playMethod = webAudio.compatibleDevice() ? playbackArgs.play_method : 'EXTERNAL';
-
-    const { sections, style } = playbackArgs;
-
-    // Keep track of which player has played, in a an array of player indices
-    const [hasPlayed, setHasPlayed] = useState<number[]>([]);
-    const prevPlayerIndex = useRef(-1);
+    const playMethod = webAudio.compatibleDevice() ? sections[0].playMethod : 'EXTERNAL';
 
     useEffect(() => {
-        const index = prevPlayerIndex.current;
-        if (index !== -1) {
-            setHasPlayed((hasPlayed) =>
-                index === -1 || hasPlayed.includes(index) ? hasPlayed : [...hasPlayed, index]
-            );
+        if (playerIndex !== -1 && !hasPlayed.includes(playerIndex)) {
+            setHasPlayed((prev) => [...prev, playerIndex]);
         }
-        prevPlayerIndex.current = parseInt(playerIndex, 10);
-    }, [playerIndex]);
+    }, [playerIndex, hasPlayed]);
 
     // Cancel events
     const cancelAudioListeners = useCallback(() => {
@@ -80,33 +75,24 @@ const Playback = ({
     const onAudioEnded = useCallback((index: number) => {
 
         // If the player index is not the last player index, return
-        if (lastPlayerIndex.current === index) {
+        if (playerIndex === index) {
             setPlayerIndex(-1);
         }
 
-        if (playbackArgs.timeout_after_playback) {
-            setTimeout(finishedPlaying, playbackArgs.timeout_after_playback);
-        } else {
-            finishedPlaying();
-        }
-    }, [playbackArgs, finishedPlaying]);
-
-    // Keep track of last player index
-    useEffect(() => {
-        lastPlayerIndex.current = playerIndex;
-    }, [playerIndex]);
+        finishedPlaying();
+    }, [finishedPlaying]);
 
     if (playMethod === 'EXTERNAL') {
         webAudio.closeWebAudio();
     }
 
     const getPlayheadShift = useCallback(() => {
-        /* if the current Playback view has resume_play set to true,
+        /* if the current Playback view has resumePlay set to true,
         retrieve previous Playback view's decisionTime from sessionStorage
         */
-        return playbackArgs.resume_play ?
+        return resumePlay ?
             parseFloat(window.sessionStorage.getItem('decisionTime')) : 0;
-    }, [playbackArgs]
+    }, [resumePlay]
     )
 
     // Play section with given index
@@ -114,9 +100,9 @@ const Playback = ({
         if (playMethod === 'NOAUDIO') {
             return;
         }
-        if (index !== lastPlayerIndex.current) {
+        if (index !== playerIndex) {
             // Load different audio
-            if (prevPlayerIndex.current !== -1) {
+            if (playerIndex !== -1) {
                 pauseAudio(playMethod);
             }
 
@@ -124,14 +110,14 @@ const Playback = ({
             setPlayerIndex(index);
 
             // Determine if audio should be played
-            if (playbackArgs.mute) {
+            if (mute) {
                 setPlayerIndex(-1);
                 pauseAudio(playMethod);
                 return;
             }
+            const section = sections[index]
 
-            const playheadShift = getPlayheadShift();
-            let latency = playAudio(sections[index], playMethod, playheadShift + playbackArgs.play_from);
+            let latency = playAudio(section, playMethod, getPlayheadShift() + section.playFrom);
 
             // Cancel active events
             cancelAudioListeners();
@@ -151,12 +137,12 @@ const Playback = ({
             return;
         }
         // Stop playback
-        if (lastPlayerIndex.current === index) {
+        if (playerIndex === index) {
             pauseAudio(playMethod);
             setPlayerIndex(-1);
             return;
         }
-    }, [sections, activeAudioEndedListener, cancelAudioListeners, getPlayheadShift, playbackArgs, playMethod, startedPlaying, onAudioEnded]
+    }, [sections, activeAudioEndedListener, cancelAudioListeners, getPlayheadShift, playMethod, startedPlaying, onAudioEnded, mute, resumePlay]
     );
 
     // Local logic for onfinished playing
@@ -178,16 +164,17 @@ const Playback = ({
         const attrs = {
             autoAdvance,
             finishedPlaying: onFinishedPlaying,
-            labels: playbackArgs.labels,
-            lastPlayerIndex,
             playSection,
-            playerIndex,
+            playing:playerIndex,
+            hasPlayed,
+            preloadMessage,
+            instruction,
+            playOnce,
             responseTime,
+            scoreFeedbackDisplay,
             sections,
-            setPlayerIndex,
             setView,
-            style,
-            showAnimation: playbackArgs.show_animation,
+            showAnimation,
             startedPlaying,
             submitResult,
             view,
@@ -198,50 +185,29 @@ const Playback = ({
                 return (
                     <Preload {...attrs}
                         playMethod={playMethod}
-                        preloadMessage={playbackArgs.preload_message}
+                        preloadMessage={preloadMessage}
                         onNext={() => {
-                            setView(playbackArgs.view);
+                            setView(view);
                             onPreloadReady();
                         }}
                     />
                 );
             case AUTOPLAY:
                 return <AutoPlay {...attrs}
-                    instruction={playbackArgs.instruction}
+                    instruction={instruction}
                 />;
             case BUTTON:
                 return (
-                    <PlayButton
-                        {...attrs}
-                        isPlaying={playerIndex > -1}
-                        disabled={playbackArgs.play_once && hasPlayed.includes(0)}
-                    />
-                );
-            case MULTIPLAYER:
-                return (
                     <MultiPlayer
                         {...attrs}
-                        labels={playbackArgs.labels}
-                        disabledPlayers={playbackArgs.play_once ? hasPlayed : undefined}
-                    />
-                );
-            case IMAGE:
-                return (
-                    <ImagePlayer
-                        {...attrs}
-                        images={playbackArgs.images}
-                        image_labels={playbackArgs.image_labels}
-                        disabledPlayers={playbackArgs.play_once ? hasPlayed : undefined}
                     />
                 );
             case MATCHINGPAIRS:
                 return (
                     <MatchingPairs
                         {...attrs}
-                        showAnimation={playbackArgs.show_animation}
-                        scoreFeedbackDisplay={playbackArgs.score_feedback_display}
+                        scoreFeedbackDisplay={scoreFeedbackDisplay}
                         view={playMethod === 'NOAUDIO' ? 'visual' : ''}
-                        tutorial={playbackArgs.tutorial}
                     />
                 );
             default:
@@ -251,7 +217,7 @@ const Playback = ({
 
     return (
         <div className="aha__playback">
-            <div className="playback"> {render(playbackArgs.view)} </div>{" "}
+            <div className="playback"> {render(view)} </div>{" "}
         </div>
     );
 };

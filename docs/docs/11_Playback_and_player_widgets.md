@@ -12,7 +12,7 @@ The `Trial` object may also contain a `Playback` object, which can refer to one 
 An example of how a `Playback` object is initalized in the Python backend:
 ```python
 playback = PlayButton(
-   [section]
+   [PlaybackSection(section)]
 )
 ```
 The only required argument for `Playback` objects is an array of audio sections. For `Autoplay`, `PlayButton` and `ImagePlay`, the first (and only) section in the array is used automatically. For `MultiPlayer` and `MatchingPairs`, the participant can control which section is being played by interacting with buttons or cards.
