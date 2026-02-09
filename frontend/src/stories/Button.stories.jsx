@@ -3,7 +3,7 @@ import useBoundStore from "@/util/stores";
 
 const ButtonDecorator = (Story) => {
     const setTheme = useBoundStore((state) => state.setTheme);
-    setTheme({ colorPrimary: '#d843e2', colorSecondary: '#39d7b8', colorPositive: '#00b612', colorNegative: '#fa5577', colorNeutral1: '#ffb14c'});
+    setTheme({ colorPrimary: '#d843e2', colorSecondary: '#39d7b8', colorPositive: '#39d7b8', colorNegative: '#fa5577', colorNeutral1: '#ffb14c'});
     return (
         <div
             style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}

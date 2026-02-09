@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Playback, { PlaybackProps } from "../components/Playback/Playback";
 import { AUTOPLAY } from "../types/Playback";
 

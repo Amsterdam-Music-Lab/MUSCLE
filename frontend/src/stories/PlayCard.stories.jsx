@@ -1,5 +1,6 @@
 import PlayCard from "../components/MatchingPairs/PlayCard";
 import catImage from "./assets/images/cat-01.webp";
+import useBoundStore from "@/util/stores";
 
 export default {
     title: "Playback/PlayCard",
@@ -23,12 +24,15 @@ const getDefaultArgs = (overrides = {}) => ({
 });
 
 const DefaultDecorator = (Story) => {
+    const setTheme = useBoundStore((state) => state.setTheme);
+    setTheme({colorPrimary:  '#d843e2', colorSecondary: '#39d7b8', colorPositive: '#39d7b8', colorNegative: '#fa5577', colorNeutral1: '#ffb14c', colorGrey: "#bbb"});
     return (
         <div
             style={{
                 width: "256px",
                 height: "256px",
                 backgroundColor: "#ddd",
+                color: "white",
                 padding: "1rem",
             }}
         >
@@ -45,8 +49,7 @@ export const Default = {
 export const Turned = {
     args: getDefaultArgs({
         section: {
-            id: 32,
-            url: "/section/32/78165/",
+            link: "/section/32/78165/",
             turned: true,
         },
     }),
@@ -56,8 +59,7 @@ export const Turned = {
 export const Seen = {
     args: getDefaultArgs({
         section: {
-            id: 32,
-            url: "/section/32/78165/",
+            link: "/section/32/78165/",
             seen: true,
         },
     }),
@@ -67,8 +69,7 @@ export const Seen = {
 export const Memory = {
     args: getDefaultArgs({
         section: {
-            id: 32,
-            url: "/section/32/78165/",
+            link: "/section/32/78165/",
             memory: true,
         },
     }),
@@ -78,8 +79,7 @@ export const Memory = {
 export const Lucky = {
     args: getDefaultArgs({
         section: {
-            id: 32,
-            url: "/section/32/78165/",
+            link: "/section/32/78165/",
             lucky: true,
         },
     }),
@@ -111,8 +111,7 @@ export const Playing = {
         playing: true,
         showAnimation: true,
         section: {
-            id: 32,
-            url: "/section/32/78165/",
+            link: "/section/32/78165/",
             turned: true,
         },
     }),
@@ -125,10 +124,10 @@ export const VisualMatchingPairs = {
         registerUserClicks: () => alert("Registered"),
         playing: false,
         section: {
-            link: `http://localhost:6006/${catImage}`,
+            link: `http://localhost:6006${catImage}`,
             turned: true,
+            playMethod: 'NOAUDIO'
         },
-        view: "MATCHINGPAIRS",
     }),
     decorators: [DefaultDecorator],
 };

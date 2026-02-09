@@ -16,7 +16,7 @@ const initialState = {
     participant: 1,
     session: 1,
     setError: vi.fn(),
-    block: { bonus_points: 42 },
+    block: { bonus_points: 42, theme: {colorPositive: "#39d7b8"} },
     currentAction: () => ({ view: 'TRIAL_VIEW' }),
 };
 

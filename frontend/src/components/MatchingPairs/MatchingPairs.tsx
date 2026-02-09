@@ -113,6 +113,24 @@ const MatchingPairs = ({
         }));
     };
 
+    const getFeedbackColor = () => {
+        let color;
+        switch(feedbackClass) {
+            case 'fblucky':
+                color = 'colorNeutral1';
+                break;
+            case 'fbmemory':
+                color = 'colorPositive';
+                break;
+            case 'fbmisrembered':
+                color = 'colorNegative';
+                break;
+            default:
+                color = 'colorGrey';
+        }
+        return block.theme[color]
+    }
+
     const checkMatchingPairs = async (index: number) => {
 
         const turnedCards = sections.filter(s => s.turned);
@@ -208,6 +226,7 @@ const MatchingPairs = ({
                         score={score}
                         total={total}
                         feedbackClass={feedbackClass}
+                        feedbackColor={getFeedbackColor()}
                         feedbackText={feedbackText}
                         scoreFeedbackDisplay={scoreFeedbackDisplay}
                     />}
@@ -245,6 +264,7 @@ interface ScoreFeedbackProps {
     score: number | null;
     feedbackText: string;
     feedbackClass: string;
+    feedbackColor: string;
     total: number;
 }
 
@@ -253,6 +273,7 @@ const ScoreFeedback = ({
     score,
     feedbackText,
     feedbackClass,
+    feedbackColor,
     total,
 }: ScoreFeedbackProps) => {
     return (
@@ -263,7 +284,7 @@ const ScoreFeedback = ({
             )}
         >
             <div className="col-6 align-self-start">
-                <div className={classNames("matching-pairs__feedback", feedbackClass)}>
+                <div className={classNames("matching-pairs__feedback", feedbackClass)} style={{color: feedbackColor}}>
                     {score} <br /> {feedbackText}
                 </div>
             </div>

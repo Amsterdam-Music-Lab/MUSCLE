@@ -3,6 +3,7 @@ import classNames from "classnames";
 import Histogram from "../Histogram/Histogram";
 import { API_ROOT } from "@/config";
 import { Card } from "@/types/Section";
+import useBoundStore from "@/util/stores";
 
 interface PlayCardProps {
     onClick: () => void;
@@ -14,6 +15,10 @@ interface PlayCardProps {
 }
 
 const PlayCard = ({ onClick, registerUserClicks, section, view, showAnimation }: PlayCardProps) => {
+    const theme = useBoundStore((state) => state.theme);
+    const cardColor = section.color || 'colorPrimary';
+    const cardColorValue = `hsl(from ${theme[cardColor]} h s 35%)`;
+    
     const getImgSrc = (url: string) => {
         if (url.startsWith("http")) {
             return url;
@@ -43,7 +48,7 @@ const PlayCard = ({ onClick, registerUserClicks, section, view, showAnimation }:
             role="button"
         >
             {section.turned ?
-                view === 'visual' ?
+                section.playMethod === 'NOAUDIO' ?
                     <div
                         data-testid="front"
                         className="front front--visual"
@@ -54,7 +59,7 @@ const PlayCard = ({ onClick, registerUserClicks, section, view, showAnimation }:
                     <Histogram
                         running={section.playing}
                         bars={histogramBars}
-                        backgroundColor="purple"
+                        backgroundColor={cardColorValue}
                         borderRadius=".5rem"
                         random={true}
                         interval={200}
