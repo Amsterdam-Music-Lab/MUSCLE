@@ -1,5 +1,6 @@
 import React from 'react';
 import './ProgressBar.scss';
+import useBoundStore from "@/util/stores";
 
 interface ProgressBarProps {
     /**
@@ -23,13 +24,14 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
 }) => {
     const clampedValue = Math.min(Math.max(0, value), max);
     const percentage = Math.round((clampedValue / max) * 100);
+    const theme = useBoundStore((state) => state.theme);
 
     return (
         <div className={`aml__progress-bar`}>
             <div className={`aml__progress-bar-container`}>
                 <div
                     className="aml__progress-bar-fill"
-                    style={{ width: `${percentage}%` }}
+                    style={{ width: `${percentage}%`, backgroundColor: `${theme?.colorPrimary}`}}
                 />
                 <div className={`aml__progress-bar-content`}>
                     {label && (
