@@ -14,7 +14,7 @@ interface PlayCardProps {
     showAnimation: boolean;
 }
 
-const PlayCard = ({ onClick, registerUserClicks, section, view, showAnimation }: PlayCardProps) => {
+const PlayCard = ({ onClick, registerUserClicks, section, showAnimation }: PlayCardProps) => {
     const theme = useBoundStore((state) => state.theme);
     const cardColor = section.color || 'colorPrimary';
     const cardColorValue = `hsl(from ${theme[cardColor]} h s 35%)`;

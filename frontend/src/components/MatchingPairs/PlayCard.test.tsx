@@ -2,7 +2,19 @@ import { vi, describe, it, expect } from "vitest";
 import { render, fireEvent, screen } from "@testing-library/react";
 import PlayCard from "./PlayCard";
 
-vi.mock("../../util/stores");
+vi.mock('../../util/stores', () => ({
+    __esModule: true,
+    default: (fn: (state: any) => any) => {
+        const state = {
+            theme: {
+                colorPrimary: "#d843e2", colorSecondary: "#39d7b8"
+            }
+        };
+
+        return fn(state);
+    },
+    useBoundStore: vi.fn()
+}));
 
 describe("PlayCard Component Tests", () => {
     const mockOnClick = vi.fn();
@@ -15,10 +27,6 @@ describe("PlayCard Component Tests", () => {
         seen: false,
         link: "test.jpg",
         label: "Test",
-        image: {
-            link: '/some/image.png',
-            label: 'Alt text'
-        }
     };
 
     it("should render without crashing", () => {
@@ -44,7 +52,7 @@ describe("PlayCard Component Tests", () => {
     });
 
     it("should display image for visual matching pairs view", () => {
-        render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, turned: true }} view="visual" />);
+        render(<PlayCard onClick={mockOnClick} registerUserClicks={mockRegisterUserClicks} section={{ ...sectionProps, turned: true, playMethod: 'NOAUDIO' }} view="visual" />);
         expect(document.body.contains(screen.getByAltText("Test"))).toBe(true);
     });
 

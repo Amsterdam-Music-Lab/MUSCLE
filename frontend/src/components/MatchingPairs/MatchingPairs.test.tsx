@@ -17,6 +17,9 @@ const initialState = {
     session: 1,
     setError: vi.fn(),
     block: { bonus_points: 42, theme: {colorPositive: "#39d7b8"} },
+    theme: {
+        colorPrimary: "#d843e2", colorSecondary: "#39d7b8"
+    },
     currentAction: () => ({ view: 'TRIAL_VIEW' }),
 };
 
