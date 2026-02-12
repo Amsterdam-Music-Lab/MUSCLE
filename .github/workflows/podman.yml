@@ -35,17 +35,17 @@ jobs:
       SQL_DATABASE: ${{ vars.SQL_DATABASE }}
       SQL_HOST: ${{ vars.SQL_HOST }}
       SQL_PORT: ${{ vars.SQL_PORT }}
-      FRONTEND_API_ROOT: ${{ vars.FRONTEND_API_ROOT }}
-      FRONTEND_EXPERIMENT_SLUG: ${{ vars.FRONTEND_EXPERIMENT_SLUG }}
-      FRONTEND_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
-      FRONTEND_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
-      FRONTEND_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
-      FRONTEND_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
-      FRONTEND_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
-      FRONTEND_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
-      FRONTEND_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
-      FRONTEND_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
-      FRONTEND_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
+      VITE_API_ROOT: ${{ vars.FRONTEND_API_ROOT }}
+      VITE_EXPERIMENT_SLUG: ${{ vars.FRONTEND_EXPERIMENT_SLUG }}
+      VITE_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
+      VITE_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
+      VITE_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
+      VITE_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
+      VITE_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
+      VITE_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
+      VITE_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
+      VITE_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
+      VITE_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
 
       # Secrets
       AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
@@ -65,20 +65,6 @@ jobs:
       - name: Create .env file
         run: |
           echo Deploying branch ${{ github.ref }} with commit ${{ github.sha }} to tunetwins environment
-          touch .env
-          echo "VITE_API_ROOT=$FRONTEND_API_ROOT" >> .env
-          echo "VITE_EXPERIMENT_SLUG=$FRONTEND_EXPERIMENT_SLUG" >> .env
-          echo "VITE_AML_HOME=$FRONTEND_AML_HOME" >> .env
-          echo "VITE_LOGO_URL=$FRONTEND_LOGO_URL" >> .env
-          echo "VITE_HTML_FAVICON=$FRONTEND_HTML_FAVICON" >> .env
-          echo "VITE_HTML_PAGE_TITLE=$FRONTEND_HTML_PAGE_TITLE" >> .env
-          echo "VITE_HTML_OG_DESCRIPTION=$FRONTEND_HTML_OG_DESCRIPTION" >> .env
-          echo "VITE_HTML_OG_IMAGE=$FRONTEND_HTML_OG_IMAGE" >> .env
-          echo "VITE_HTML_OG_TITLE=$FRONTEND_HTML_OG_TITLE" >> .env
-          echo "VITE_HTML_OG_URL=$FRONTEND_HTML_OG_URL" >> .env
-          echo "VITE_HTML_BODY_CLASS=$FRONTEND_HTML_BODY_CLASS" >> .env
-          echo "VITE_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
-          cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
       - name: Shut down running containers
@@ -106,6 +92,16 @@ jobs:
       - name: Check logs
         run: podman-compose -f docker-compose-deploy.yml logs
 
+
+  backup-test:
+    name: Backup test database to check this workflow
+    # this job runs only on commits to the main branch, or when manually triggered for the main branch
+    if: (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main' && github.ref != 'refs/heads/tunetwins' )
+    uses: ./.github/workflows/db-backup-template.yml
+    with:
+      runner: tst
+
+
   deploy-test:
     name: Deploy to test environment
     environment: Test
@@ -129,17 +125,17 @@ jobs:
       SQL_DATABASE: ${{ vars.SQL_DATABASE }}
       SQL_HOST: ${{ vars.SQL_HOST }}
       SQL_PORT: ${{ vars.SQL_PORT }}
-      FRONTEND_API_ROOT: ${{ vars.FRONTEND_API_ROOT }}
-      FRONTEND_EXPERIMENT_SLUG: ${{ vars.FRONTEND_EXPERIMENT_SLUG }}
-      FRONTEND_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
-      FRONTEND_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
-      FRONTEND_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
-      FRONTEND_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
-      FRONTEND_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
-      FRONTEND_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
-      FRONTEND_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
-      FRONTEND_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
-      FRONTEND_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
+      VITE_API_ROOT: ${{ vars.FRONTEND_API_ROOT }}
+      VITE_EXPERIMENT_SLUG: ${{ vars.FRONTEND_EXPERIMENT_SLUG }}
+      VITE_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
+      VITE_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
+      VITE_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
+      VITE_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
+      VITE_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
+      VITE_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
+      VITE_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
+      VITE_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
+      VITE_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
 
       # Secrets
       AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
@@ -159,20 +155,6 @@ jobs:
       - name: Create .env file
         run: |
           echo Deploying branch ${{ github.ref }} with commit ${{ github.sha }} to test environment
-          touch .env
-          echo "VITE_API_ROOT=$FRONTEND_API_ROOT" >> .env
-          echo "VITE_EXPERIMENT_SLUG=$FRONTEND_EXPERIMENT_SLUG" >> .env
-          echo "VITE_AML_HOME=$FRONTEND_AML_HOME" >> .env
-          echo "VITE_LOGO_URL=$FRONTEND_LOGO_URL" >> .env
-          echo "VITE_HTML_FAVICON=$FRONTEND_HTML_FAVICON" >> .env
-          echo "VITE_HTML_PAGE_TITLE=$FRONTEND_HTML_PAGE_TITLE" >> .env
-          echo "VITE_HTML_OG_DESCRIPTION=$FRONTEND_HTML_OG_DESCRIPTION" >> .env
-          echo "VITE_HTML_OG_IMAGE=$FRONTEND_HTML_OG_IMAGE" >> .env
-          echo "VITE_HTML_OG_TITLE=$FRONTEND_HTML_OG_TITLE" >> .env
-          echo "VITE_HTML_OG_URL=$FRONTEND_HTML_OG_URL" >> .env
-          echo "VITE_HTML_BODY_CLASS=$FRONTEND_HTML_BODY_CLASS" >> .env
-          echo "VITE_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
-          cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
       - name: Shut down running containers
@@ -219,7 +201,6 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
-
         # Variables
         AML_ALLOWED_HOSTS: ${{ vars.AML_ALLOWED_HOSTS }}
         AML_CORS_ORIGIN_WHITELIST: ${{ vars.AML_CORS_ORIGIN_WHITELIST }}
@@ -231,18 +212,18 @@ jobs:
         SENTRY_ENVIRONMENT: "acceptance"
         SQL_DATABASE: ${{ vars.SQL_DATABASE }}
         SQL_HOST: ${{ vars.SQL_HOST }}
-        SQL_PORT: ${{ vars.SQL_PORT }}
-        FRONTEND_API_ROOT: ${{ vars.FRONTEND_API_ROOT }}
-        FRONTEND_EXPERIMENT_SLUG: ${{ vars.FRONTEND_EXPERIMENT_SLUG }}
-        FRONTEND_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
-        FRONTEND_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
-        FRONTEND_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
-        FRONTEND_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
-        FRONTEND_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
-        FRONTEND_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
-        FRONTEND_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
-        FRONTEND_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
-        FRONTEND_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
+        VITE: ${{ vars.SQL_PORT }}
+        VITE_API_ROOT: ${{ vars.FRONTEND_API_ROOT }}
+        VITE_EXPERIMENT_SLUG: ${{ vars.FRONTEND_EXPERIMENT_SLUG }}
+        VITE_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
+        VITE_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
+        VITE_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
+        VITE_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
+        VITE_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
+        VITE_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
+        VITE_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
+        VITE_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
+        VITE_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
 
         # Secrets
         AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
@@ -259,22 +240,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Create .env file
-        run: |
-          touch .env
-          echo "VITE_API_ROOT=$FRONTEND_API_ROOT" >> .env
-          echo "VITE_EXPERIMENT_SLUG=$FRONTEND_EXPERIMENT_SLUG" >> .env
-          echo "VITE_AML_HOME=$FRONTEND_AML_HOME" >> .env
-          echo "VITE_LOGO_URL=$FRONTEND_LOGO_URL" >> .env
-          echo "VITE_HTML_FAVICON=$FRONTEND_HTML_FAVICON" >> .env
-          echo "VITE_HTML_PAGE_TITLE=$FRONTEND_HTML_PAGE_TITLE" >> .env
-          echo "VITE_HTML_OG_DESCRIPTION=$FRONTEND_HTML_OG_DESCRIPTION" >> .env
-          echo "VITE_HTML_OG_IMAGE=$FRONTEND_HTML_OG_IMAGE" >> .env
-          echo "VITE_HTML_OG_TITLE=$FRONTEND_HTML_OG_TITLE" >> .env
-          echo "VITE_HTML_OG_URL=$FRONTEND_HTML_OG_URL" >> .env
-          echo "VITE_HTML_BODY_CLASS=$FRONTEND_HTML_BODY_CLASS" >> .env
-          echo "VITE_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
-          cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
       - name: Shut down running containers
@@ -333,18 +298,18 @@ jobs:
       SQL_DATABASE: ${{ vars.SQL_DATABASE }}
       SQL_HOST: ${{ vars.SQL_HOST }}
       SQL_PORT: ${{ vars.SQL_PORT }}
-      FRONTEND_API_ROOT: ${{ vars.FRONTEND_API_ROOT }}
-      FRONTEND_EXPERIMENT_SLUG: ${{ vars.FRONTEND_EXPERIMENT_SLUG }}
-      FRONTEND_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
-      FRONTEND_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
-      FRONTEND_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
-      FRONTEND_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
-      FRONTEND_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
-      FRONTEND_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
-      FRONTEND_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
-      FRONTEND_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
-      FRONTEND_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
-      FRONTEND_PLAUSIBLE_DOMAIN: ${{ vars.FRONTEND_PLAUSIBLE_DOMAIN || '' }}
+      VITE_API_ROOT: ${{ vars.FRONTEND_API_ROOT }}
+      VITE_EXPERIMENT_SLUG: ${{ vars.FRONTEND_EXPERIMENT_SLUG }}
+      VITE_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
+      VITE_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
+      VITE_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
+      VITE_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
+      VITE_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
+      VITE_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
+      VITE_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
+      VITE_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
+      VITE_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
+      VITE_PLAUSIBLE_DOMAIN: ${{ vars.FRONTEND_PLAUSIBLE_DOMAIN || '' }}
 
       # Secrets
       AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
@@ -359,23 +324,6 @@ jobs:
       RUNNER_TRACKING_ID: ""
     steps:
       - uses: actions/checkout@v4
-      - name: Create .env file
-        run: |
-          touch .env
-          echo "VITE_API_ROOT=$FRONTEND_API_ROOT" >> .env
-          echo "VITE_EXPERIMENT_SLUG=$FRONTEND_EXPERIMENT_SLUG" >> .env
-          echo "VITE_AML_HOME=$FRONTEND_AML_HOME" >> .env
-          echo "VITE_LOGO_URL=$FRONTEND_LOGO_URL" >> .env
-          echo "VITE_HTML_FAVICON=$FRONTEND_HTML_FAVICON" >> .env
-          echo "VITE_HTML_PAGE_TITLE=$FRONTEND_HTML_PAGE_TITLE" >> .env
-          echo "VITE_HTML_OG_DESCRIPTION=$FRONTEND_HTML_OG_DESCRIPTION" >> .env
-          echo "VITE_HTML_OG_IMAGE=$FRONTEND_HTML_OG_IMAGE" >> .env
-          echo "VITE_HTML_OG_TITLE=$FRONTEND_HTML_OG_TITLE" >> .env
-          echo "VITE_HTML_OG_URL=$FRONTEND_HTML_OG_URL" >> .env
-          echo "VITE_HTML_BODY_CLASS=$FRONTEND_HTML_BODY_CLASS" >> .env
-          echo "VITE_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
-          echo "VITE_PLAUSIBLE_DOMAIN=$FRONTEND_PLAUSIBLE_DOMAIN" >> .env
-          cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
       - name: Shut down running containers
@@ -422,18 +370,18 @@ jobs:
       SQL_DATABASE: ${{ vars.SQL_DATABASE }}
       SQL_HOST: ${{ vars.SQL_HOST }}
       SQL_PORT: ${{ vars.SQL_PORT }}
-      FRONTEND_API_ROOT: ${{ vars.FRONTEND_API_ROOT }}
-      FRONTEND_EXPERIMENT_SLUG: ${{ vars.FRONTEND_EXPERIMENT_SLUG }}
-      FRONTEND_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
-      FRONTEND_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
-      FRONTEND_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
-      FRONTEND_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
-      FRONTEND_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
-      FRONTEND_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
-      FRONTEND_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
-      FRONTEND_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
-      FRONTEND_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
-      FRONTEND_PLAUSIBLE_DOMAIN: ${{ vars.FRONTEND_PLAUSIBLE_DOMAIN || '' }}
+      VITE_API_ROOT: ${{ vars.FRONTEND_API_ROOT }}
+      VITE_EXPERIMENT_SLUG: ${{ vars.FRONTEND_EXPERIMENT_SLUG }}
+      VITE_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
+      VITE_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
+      VITE_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
+      VITE_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
+      VITE_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
+      VITE_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
+      VITE_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
+      VITE_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
+      VITE_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
+      VITE_PLAUSIBLE_DOMAIN: ${{ vars.FRONTEND_PLAUSIBLE_DOMAIN || '' }}
 
       # Secrets
       AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
@@ -446,22 +394,6 @@ jobs:
       RUNNER_TRACKING_ID: ""
     steps:
       - uses: actions/checkout@v4
-      - name: Create .env file
-        run: |
-          touch .env
-          echo "VITE_API_ROOT=$FRONTEND_API_ROOT" >> .env
-          echo "VITE_EXPERIMENT_SLUG=$FRONTEND_EXPERIMENT_SLUG" >> .env
-          echo "VITE_AML_HOME=$FRONTEND_AML_HOME" >> .env
-          echo "VITE_LOGO_URL=$FRONTEND_LOGO_URL" >> .env
-          echo "VITE_HTML_FAVICON=$FRONTEND_HTML_FAVICON" >> .env
-          echo "VITE_HTML_PAGE_TITLE=$FRONTEND_HTML_PAGE_TITLE" >> .env
-          echo "VITE_HTML_OG_DESCRIPTION=$FRONTEND_HTML_OG_DESCRIPTION" >> .env
-          echo "VITE_HTML_OG_IMAGE=$FRONTEND_HTML_OG_IMAGE" >> .env
-          echo "VITE_HTML_OG_TITLE=$FRONTEND_HTML_OG_TITLE" >> .env
-          echo "VITE_HTML_OG_URL=$FRONTEND_HTML_OG_URL" >> .env
-          echo "VITE_HTML_BODY_CLASS=$FRONTEND_HTML_BODY_CLASS" >> .env
-          echo "VITE_PLAUSIBLE_DOMAIN=$FRONTEND_PLAUSIBLE_DOMAIN" >> .env
-          cp .env frontend/.env
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
       - name: Shut down running containers
