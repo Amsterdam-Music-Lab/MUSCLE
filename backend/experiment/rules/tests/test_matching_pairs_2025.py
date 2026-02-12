@@ -184,6 +184,13 @@ class MatchingPairs2025Test(TestCase):
         original_groups = {s.song for s in original_sections}
         self.assertEqual(frequency_groups, original_groups)
 
+    def test_override_num_pairs_with_rules_config(self):
+        n_pairs = 5
+        self.block.rules_config = {"n_pairs": n_pairs}
+        self.block.save()
+        sections = self.rules._select_sections(self.session)
+        self.assertEqual(len(sections), n_pairs * 2)
+
     def test_select_sections_unplayed(self):
         """test that we get preferably unplayed songs"""
         session = Session.objects.create(
