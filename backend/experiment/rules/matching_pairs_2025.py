@@ -132,16 +132,15 @@ class MatchingPairs2025(MatchingPairsGame):
         return previous_games_results.exists()
 
     def _select_sections(self, session: Session) -> list[Section]:
+        n_pairs = session.block.rules_config.get('n_pairs', self.num_pairs)
         cond, diff = self._select_least_played_condition_difficulty_pair(session)
-
-        songs = self._select_least_played_songs(session)
-
+        songs = self._select_least_played_songs(session, n_pairs)
         sections = list(
             session.playlist.section_set.filter(
                 song__pk__in=songs, group=cond, tag=diff
             )
         )
-        if not len(sections) == self.num_pairs:
+        if not len(sections) == n_pairs:
             raise ValueError(
                 "Not enough sections found for condition {} and difficulty {}".format(
                     cond, diff
@@ -156,9 +155,7 @@ class MatchingPairs2025(MatchingPairsGame):
             sections += equivalents
         else:
             sections += sections
-
         random.shuffle(sections)
-
         return sections
 
     def _get_possible_conditions(self, session):
@@ -242,7 +239,7 @@ class MatchingPairs2025(MatchingPairsGame):
         session.save_json_data({'condition': cond, 'difficulty': difficulty})
         return cond, difficulty
 
-    def _select_least_played_songs(self, session: Session) -> list[int]:
+    def _select_least_played_songs(self, session: Session, n_pairs: int) -> list[int]:
         songs = list(
             session.playlist.section_set.values_list('song', flat=True).distinct().all()
         )
@@ -251,19 +248,19 @@ class MatchingPairs2025(MatchingPairsGame):
             question_key='song', given_response__in=songs
         ).order_by('score')
         if not participant_results.count():
-            selected_songs = songs[: self.num_pairs]
+            selected_songs = songs[:n_pairs]
         else:
             participant_songs = [
                 int(result.given_response) for result in participant_results
             ]
             unplayed_songs = [song for song in songs if song not in participant_songs]
-            if len(unplayed_songs) >= self.num_pairs:
-                selected_songs = unplayed_songs[: self.num_pairs]
+            if len(unplayed_songs) >= n_pairs:
+                selected_songs = unplayed_songs[:n_pairs]
             else:
                 selected_songs = [
                     *unplayed_songs,
                     *participant_songs,
-                ][: self.num_pairs]
+                ][:n_pairs]
         for song in selected_songs:
             result, created = Result.objects.get_or_create(
                 participant=session.participant,
