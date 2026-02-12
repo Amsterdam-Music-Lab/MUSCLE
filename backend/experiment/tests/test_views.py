@@ -211,7 +211,7 @@ class TestExperimentViews(TestCase):
 
         # since Dutch translation is available, should be returned
         self.assertEqual(
-            response.json().get("description"), "Eens kijken of vertaling werkt."
+            response.json().get("description"), "<p>Eens kijken of vertaling werkt.</p>"
         )
 
     def test_get_block(self):
