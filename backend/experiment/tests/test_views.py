@@ -203,13 +203,13 @@ class TestExperimentViews(TestCase):
             headers={"Accept-Language": "nl"},
         )
 
-        # since Spanish translation is available, the Spanish content should be returned
+        # since Spanish translation is not available, Dutch content should be returned
         self.assertEqual(response.json().get("name"), "Probeersel")
 
         # request experiment with language set to Dutch
         response = self.client.get("/experiment/test_experiment_translated_content/", headers={"Accept-Language": "nl"})
 
-        # since no Dutch translation is available, the fallback content should be returned
+        # since Dutch translation is available, should be returned
         self.assertEqual(
             response.json().get("description"), "Eens kijken of vertaling werkt."
         )
