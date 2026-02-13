@@ -89,7 +89,7 @@ services:
     # 2. The static files from the server service (e.g., static files & uploads from the Django app)
     nginx-proxy:
         image: docker.io/nginx:alpine
-        command: nginx -g 'daemon off;'
+        command: cp -r /tmp/* /usr/share/nginx/html && nginx -g 'daemon off;'
         ports:
             - 80:80
             - 443:443
@@ -99,8 +99,7 @@ services:
             client-builder:
                 condition: service_completed_successfully
         volumes:
-            - ${HOST_DATA}/frontend-build:/usr/share/nginx/html
-            # Mounting server static content does not currently work: html folder overwritten by previous bind mount
+            - ${HOST_DATA}/frontend-build:/tmp
             - ${HOST_DATA}/server-static:/usr/share/nginx/html/django_static
             - ${HOST_DATA}/server-uploads:/usr/share/nginx/html/upload
             - ./nginx/custom-nginx.conf:/etc/nginx/conf.d/default.conf
