@@ -15,6 +15,15 @@ jobs:
       - name: Set Date
         id: date
         run: echo "DATE=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
+      
+      - name: Start database service
+        run: podman compose -f docker-compose-deploy.yml up db -d --no-recreate
+        env:
+          SQL_DATABASE: ${{ vars.SQL_DATABASE }}
+          SQL_HOST: ${{ vars.SQL_HOST }}
+          SQL_PORT: ${{ vars.SQL_PORT }}
+          SQL_USER: ${{ secrets.SQL_USER }}
+          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
 
       - name: Backup Database
         run: |
@@ -23,13 +32,3 @@ jobs:
       - name: Remove Old Backups (older than 7 days)
         run: |
           podman exec muscle_db_1 sh -c "find /backups -type f -name '*.dump' -mtime +7 -exec rm {} \;"
-      
-      - name: Restart database service on failure
-        if: ${{ failure() }}
-        run: podman compose -f docker-compose-deploy.yml up db -d
-        env:
-          SQL_DATABASE: ${{ vars.SQL_DATABASE }}
-          SQL_HOST: ${{ vars.SQL_HOST }}
-          SQL_PORT: ${{ vars.SQL_PORT }}
-          SQL_USER: ${{ secrets.SQL_USER }}
-          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
