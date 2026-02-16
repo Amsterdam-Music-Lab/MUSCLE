@@ -26,7 +26,7 @@ jobs:
       
       - name: Restart database service on failure
         if: ${{ failure() }}
-        run: podman compose -f docker-compose-deploy.yaml up db -d
+        run: podman compose -f docker-compose-deploy.yml up db -d
         env:
           SQL_DATABASE: ${{ vars.SQL_DATABASE }}
           SQL_HOST: ${{ vars.SQL_HOST }}
