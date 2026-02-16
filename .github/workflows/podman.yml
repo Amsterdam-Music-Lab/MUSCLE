@@ -92,16 +92,6 @@ jobs:
       - name: Check logs
         run: podman-compose -f docker-compose-deploy.yml logs
 
-
-  backup-test:
-    name: Backup test database to check this workflow
-    # this job runs only on commits to the main branch, or when manually triggered for the main branch
-    if: (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main' && github.ref != 'refs/heads/tunetwins' )
-    uses: ./.github/workflows/db-backup-template.yml
-    with:
-      runner: tst
-
-
   deploy-test:
     name: Deploy to test environment
     environment: Test
