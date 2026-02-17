@@ -16,8 +16,8 @@ jobs:
         id: date
         run: echo "DATE=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
       
-      - name: Backup Database
-        run: podman compose -f docker-compose-deploy.yml run --rm db sh -c "pg_dump -Fc > /backups/${{ env.DATE }}.dump"
+      - name: Start Database service
+        run: podman compose -f docker-compose-deploy.yml up db -d --no-recreate
         env:
           POSTGRES_DB: ${{ vars.SQL_DATABASE}}
           POSTGRES_USER: ${{ secrets.SQL_USER }}
@@ -28,6 +28,9 @@ jobs:
           PGDATABASE: ${{ vars.SQL_DATABASE }}
           PGPASSWORD: ${{ secrets.SQL_PASSWORD }}
       
+      - name: Backup database
+        run: podman exec muscle_db sh -c "pg_dump -Fc > /backups/${{ env.DATE }}.dump"
+      
       - name: Remove Old Backups (older than 7 days)
         run: |
-          podman compose -f docker-compose-deploy.yml run --rm db sh -c "find /backups -type f -name '*.dump' -mtime +7 -exec rm {} \;"
+          podman exec muscle_db sh -c "find /backups -type f -name '*.dump' -mtime +7 -exec rm {} \;"

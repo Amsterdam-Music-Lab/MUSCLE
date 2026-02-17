@@ -1,6 +1,7 @@
 services:
     db:
         image: postgres:16
+        container_name: muscle_db
         environment:
             - POSTGRES_DB=${SQL_DATABASE}
             - POSTGRES_USER=${SQL_USER}
