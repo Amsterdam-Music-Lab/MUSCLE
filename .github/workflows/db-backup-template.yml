@@ -43,14 +43,9 @@ jobs:
       SQL_USER: ${{ secrets.SQL_USER }}
       SQL_DATABASE: ${{ vars.SQL_DATABASE }}
       SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
-      # Prevent runner from exiting containers after startup
-      RUNNER_TRACKING_ID: ""
-    if: github.event_name == 'workflow_dispatch'
+    if: (github.event_name == 'workflow_dispatch' && !startsWith(github.ref, 'refs/tags'))
     steps:
       - uses: actions/checkout@v4
-      - name: Start Database service
-        run: podman compose -f docker-compose-deploy.yml start db
-      
-      - name: Check if pg_dump can be run on container
-        run: podman exec muscle_db sh -c "pg_dump --help"
+      - name: Check that we can access pg_dump
+        run: podman compose -f docker-compose-deploy.yml run --rm db sh -c "pg_dump --help"
       
