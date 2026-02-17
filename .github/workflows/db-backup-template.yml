@@ -11,29 +11,22 @@ on:
 jobs:
   backup:
     runs-on: ${{ inputs.runner }}
+    env:
+      SQL_HOST: ${{ vars.SQL_HOST }}
+      SQL_PORT: ${{ vars.SQL_PORT }}
+      SQL_USER: ${{ secrets.SQL_USER }}
+      SQL_DATABASE: ${{ vars.SQL_DATABASE }}
+      SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
       - name: Set Date
         id: date
         run: echo "DATE=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
-      
-      - name: Start Database service
-        run: podman compose -f docker-compose-deploy.yml up db -d --no-recreate
-        env:
-          SQL_HOST: ${{ vars.SQL_HOST }}
-          SQL_PORT: ${{ vars.SQL_PORT }}
-          SQL_USER: ${{ secrets.SQL_USER }}
-          SQL_DATABASE: ${{ vars.SQL_DATABASE }}
-          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
-          # Prevent runner from exiting containers after startup
-          RUNNER_TRACKING_ID: ""
-      
       - name: Backup database
-        run: podman exec muscle_db sh -c "pg_dump -Fc > /backups/${{ env.DATE }}.dump"
-      
+        run: podman compose -f docker-compose-deploy.yml run --rm db sh -c "pg_dump -Fc > /backups/${{ env.DATE }}.dump"
       - name: Remove Old Backups (older than 7 days)
         run: |
-          podman exec muscle_db sh -c "find /backups -type f -name '*.dump' -mtime +7 -exec rm {} \;"
+          podman compose -f docker-compose-deploy.yml run --rm db sh -c "find /backups -type f -name '*.dump' -mtime +7 -exec rm {} \;"
   
   diagnose_database:
     runs-on: tst
