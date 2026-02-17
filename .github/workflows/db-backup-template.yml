@@ -20,14 +20,13 @@ jobs:
       - name: Start Database service
         run: podman compose -f docker-compose-deploy.yml up db -d --no-recreate
         env:
-          POSTGRES_DB: ${{ vars.SQL_DATABASE}}
-          POSTGRES_USER: ${{ secrets.SQL_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.SQL_PASSWORD }}
-          PGHOST: ${{ vars.SQL_HOST }}
-          PGPORT: ${{ vars.SQL_PORT }}
-          PGUSER: ${{ secrets.SQL_USER }}
-          PGDATABASE: ${{ vars.SQL_DATABASE }}
-          PGPASSWORD: ${{ secrets.SQL_PASSWORD }}
+          SQL_HOST: ${{ vars.SQL_HOST }}
+          SQL_PORT: ${{ vars.SQL_PORT }}
+          SQL_USER: ${{ secrets.SQL_USER }}
+          SQL_DATABASE: ${{ vars.SQL_DATABASE }}
+          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+          # Prevent runner from exiting containers after startup
+          RUNNER_TRACKING_ID: ""
       
       - name: Backup database
         run: podman exec muscle_db sh -c "pg_dump -Fc > /backups/${{ env.DATE }}.dump"
@@ -39,14 +38,13 @@ jobs:
   diagnose_database:
     runs-on: tst
     env:
-      POSTGRES_DB: ${{ vars.SQL_DATABASE}}
-      POSTGRES_USER: ${{ secrets.SQL_USER }}
-      POSTGRES_PASSWORD: ${{ secrets.SQL_PASSWORD }}
-      PGHOST: ${{ vars.SQL_HOST }}
-      PGPORT: ${{ vars.SQL_PORT }}
-      PGUSER: ${{ secrets.SQL_USER }}
-      PGDATABASE: ${{ vars.SQL_DATABASE }}
-      PGPASSWORD: ${{ secrets.SQL_PASSWORD }}
+      SQL_HOST: ${{ vars.SQL_HOST }}
+      SQL_PORT: ${{ vars.SQL_PORT }}
+      SQL_USER: ${{ secrets.SQL_USER }}
+      SQL_DATABASE: ${{ vars.SQL_DATABASE }}
+      SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+      # Prevent runner from exiting containers after startup
+      RUNNER_TRACKING_ID: ""
     if: github.event_name == 'workflow_dispatch'
     steps:
       - uses: actions/checkout@v4
