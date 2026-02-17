@@ -11,7 +11,8 @@ jobs:
   backup:
     runs-on: ${{ inputs.runner }}
     steps:
-
+      - uses: actions/checkout@v4
+      
       - name: Set Date
         id: date
         run: echo "DATE=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
