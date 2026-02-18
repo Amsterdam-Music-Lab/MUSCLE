@@ -1,5 +1,8 @@
 name: Database Backup Template
 
+permissions:
+  contents: read
+
 on:
   workflow_call:
     inputs:
