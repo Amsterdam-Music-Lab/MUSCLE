@@ -1,5 +1,8 @@
 name: Podman build & deploy
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:
