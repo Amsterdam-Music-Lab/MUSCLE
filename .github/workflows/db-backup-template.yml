@@ -28,8 +28,8 @@ jobs:
           HOST_DATA: ${{ vars.HOST_DATA }}
           SQL_HOST: ${{ vars.SQL_HOST }}
           SQL_PORT: ${{ vars.SQL_PORT }}
-          SQL_USER: ${{ secrets.SQL_USER }}
           SQL_DATABASE: ${{ vars.SQL_DATABASE }}
+          SQL_USER: ${{ secrets.SQL_USER }}
           SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
         run: podman compose -f docker-compose-deploy.yml up db -d --no-recreate
       - name: Backup database
@@ -49,8 +49,8 @@ jobs:
           HOST_DATA: ${{ vars.HOST_DATA }}
           SQL_HOST: ${{ vars.SQL_HOST }}
           SQL_PORT: ${{ vars.SQL_PORT }}
-          SQL_USER: ${{ secrets.SQL_USER }}
           SQL_DATABASE: ${{ vars.SQL_DATABASE }}
+          SQL_USER: ${{ secrets.SQL_USER }}
           SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
         run: podman compose -f docker-compose-deploy.yml up db -d --no-recreate
       - name: Test backup
