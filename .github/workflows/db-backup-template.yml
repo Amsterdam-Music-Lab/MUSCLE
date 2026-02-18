@@ -25,6 +25,7 @@ jobs:
         run: echo "DATE=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
       - name: Start Postgres container
         env:
+          HOST_DATA: ${{ vars.HOST_DATA }}
           SQL_HOST: ${{ vars.SQL_HOST }}
           SQL_PORT: ${{ vars.SQL_PORT }}
           SQL_USER: ${{ secrets.SQL_USER }}
@@ -45,6 +46,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Start Postgres container
         env:
+          HOST_DATA: ${{ vars.HOST_DATA }}
           SQL_HOST: ${{ vars.SQL_HOST }}
           SQL_PORT: ${{ vars.SQL_PORT }}
           SQL_USER: ${{ secrets.SQL_USER }}
