@@ -35,17 +35,17 @@ jobs:
       SQL_DATABASE: ${{ vars.SQL_DATABASE }}
       SQL_HOST: ${{ vars.SQL_HOST }}
       SQL_PORT: ${{ vars.SQL_PORT }}
-      VITE_API_ROOT: ${{ vars.FRONTEND_API_ROOT }}
-      VITE_EXPERIMENT_SLUG: ${{ vars.FRONTEND_EXPERIMENT_SLUG }}
-      VITE_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
-      VITE_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
-      VITE_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
-      VITE_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
-      VITE_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
-      VITE_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
-      VITE_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
-      VITE_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
-      VITE_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
+      FRONTEND_API_ROOT: ${{ vars.FRONTEND_API_ROOT }}
+      FRONTEND_EXPERIMENT_SLUG: ${{ vars.FRONTEND_EXPERIMENT_SLUG }}
+      FRONTEND_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
+      FRONTEND_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
+      FRONTEND_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
+      FRONTEND_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
+      FRONTEND_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
+      FRONTEND_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
+      FRONTEND_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
+      FRONTEND_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
+      FRONTEND_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
 
       # Secrets
       AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
@@ -102,8 +102,8 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
-
       # Variables
+      HOST_DATA: ${{ vars.HOST_DATA }}
       AML_ALLOWED_HOSTS: ${{ vars.AML_ALLOWED_HOSTS }}
       AML_CORS_ORIGIN_WHITELIST: ${{ vars.AML_CORS_ORIGIN_WHITELIST }}
       CSRF_TRUSTED_ORIGINS: ${{ vars.CSRF_TRUSTED_ORIGINS }}
@@ -115,17 +115,17 @@ jobs:
       SQL_DATABASE: ${{ vars.SQL_DATABASE }}
       SQL_HOST: ${{ vars.SQL_HOST }}
       SQL_PORT: ${{ vars.SQL_PORT }}
-      VITE_API_ROOT: ${{ vars.FRONTEND_API_ROOT }}
-      VITE_EXPERIMENT_SLUG: ${{ vars.FRONTEND_EXPERIMENT_SLUG }}
-      VITE_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
-      VITE_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
-      VITE_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
-      VITE_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
-      VITE_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
-      VITE_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
-      VITE_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
-      VITE_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
-      VITE_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
+      FRONTEND_API_ROOT: ${{ vars.FRONTEND_API_ROOT }}
+      FRONTEND_EXPERIMENT_SLUG: ${{ vars.FRONTEND_EXPERIMENT_SLUG }}
+      FRONTEND_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
+      FRONTEND_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
+      FRONTEND_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
+      FRONTEND_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
+      FRONTEND_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
+      FRONTEND_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
+      FRONTEND_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
+      FRONTEND_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
+      FRONTEND_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
 
       # Secrets
       AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
@@ -142,7 +142,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Create .env file
+      - name: Set up action
         run: |
           echo Deploying branch ${{ github.ref }} with commit ${{ github.sha }} to test environment
       - name: Build Podman images
@@ -179,6 +179,7 @@ jobs:
     uses: ./.github/workflows/db-backup-template.yml
     with:
       runner: ACC
+      environment: Acceptance
 
   deploy-acceptance:
     name: Deploy to acceptance environment
@@ -264,6 +265,7 @@ jobs:
     uses: ./.github/workflows/db-backup-template.yml
     with:
       runner: PRD
+      environment: Production
 
   deploy-production:
     name: Deploy to production environment
@@ -310,7 +312,7 @@ jobs:
       DJANGO_SUPERUSER_USERNAME: ${{ secrets.DJANGO_SUPERUSER_USERNAME }}
       DJANGO_SUPERUSER_PASSWORD: ${{ secrets.DJANGO_SUPERUSER_PASSWORD }}
       DJANGO_SUPERUSER_EMAIL: ${{ secrets.DJANGO_SUPERUSER_EMAIL }}
-      # Prevent podman services from exiting after startup
+      # Prevent runner from exiting containers after startup
       RUNNER_TRACKING_ID: ""
     steps:
       - uses: actions/checkout@v4
