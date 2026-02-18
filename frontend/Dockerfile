@@ -1,18 +1,16 @@
 # Builder image
-FROM docker.io/node:18-alpine as builder
+FROM docker.io/node:18-alpine
 
 WORKDIR /client
 RUN yarn set version 4.1.1
 COPY package.json /client/
 COPY yarn.lock /client/
-COPY jsconfig.json /client/
-COPY . /client/
 
 RUN yarn
-RUN yarn build
-
-# Runner image that serves the built app using nginx
-FROM docker.io/nginx:alpine as runner
-
-COPY --from=builder /client/build /usr/share/nginx/html
-EXPOSE 80
+COPY jsconfig.json /client/
+COPY tsconfig.json /client/
+COPY tsconfig.node.json /client/
+COPY vite.config.ts /client/
+COPY index.html /client/
+COPY public /client/public
+COPY src /client/src

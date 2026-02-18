@@ -11,3 +11,4 @@ jobs:
     uses: ./.github/workflows/db-backup-template.yml
     with:
       runner: PRD
+      environment: Production

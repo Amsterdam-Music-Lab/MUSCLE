@@ -37,7 +37,6 @@ services:
   server:
     build:
       context: ./backend
-      dockerfile: Dockerfile
       target: dev
     depends_on:
       db:
