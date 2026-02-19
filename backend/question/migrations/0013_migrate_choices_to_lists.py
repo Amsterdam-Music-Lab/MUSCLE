@@ -1,10 +1,7 @@
-from django.db import migrations
+from glob import glob
 
-from question.management.commands.updatequestions import (
-    update_choices,
-    update_choice_lists,
-    update_questions,
-)
+from django.db import migrations
+from django.core import serializers
 
 
 def flip_boolean_sign(apps, schema_editor):
@@ -17,14 +14,21 @@ def flip_boolean_sign(apps, schema_editor):
         question.save()
 
 
+def get_python_defined_questions():
+    keys = []
+    for fixture in glob('/server/question/fixtures/[!choice]*.yaml'):
+        with open(fixture, 'r') as f:
+            questions = [obj.object for obj in serializers.deserialize('yaml', f)]
+            keys.extend([q.key for q in questions])
+    return keys
+
+
 def choice_to_choice_list(apps, schema_editor):
     """import the Python defined questions from fixtures, and update all other questions"""
     ChoiceModel = apps.get_model("question.Choice")
     ChoiceListModel = apps.get_model("question.ChoiceList")
     QuestionModel = apps.get_model("question.Question")
-    update_choice_lists()
-    update_choices()
-    python_defined_questions = update_questions()
+    python_defined_questions = get_python_defined_questions()
     for question in QuestionModel.objects.exclude(key__in=python_defined_questions):
         if hasattr(question, 'choice_set'):
             cl, has_created_choice_list = ChoiceListModel.objects.get_or_create(
