@@ -9,6 +9,8 @@ jobs:
 
   backup-production:
     uses: ./.github/workflows/db-backup-template.yml
+    secrets:
+      inherit
     with:
       runner: PRD
       environment: Production

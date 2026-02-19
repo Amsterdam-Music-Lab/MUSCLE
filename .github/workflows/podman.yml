@@ -179,21 +179,12 @@ jobs:
     name: Backup acceptance database before deployment
     # this job runs only on commits to the main branch, or when manually triggered for the main branch
     if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
-    environment: Acceptance
-    runs-on: ACC
-    steps:
-      - name: Optionally start database service
-        env:
-          HOST_DATA: ${{ vars.HOST_DATA }}
-          SQL_HOST: ${{ vars.SQL_HOST }}
-          SQL_PORT: ${{ vars.SQL_PORT }}
-          SQL_DATABASE: ${{ vars.SQL_DATABASE }}
-          SQL_USER: ${{ secrets.SQL_USER }}
-          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
-        run: podman compose -f docker-compose-deploy.yml up db -d --no-recreate
-      - uses: ./.github/workflows/db-backup-template.yml
-        with:
-          runner: ACC
+    uses: ./.github/workflows/db-backup-template.yml
+    secrets:
+      inherit
+    with:
+      runner: ACC
+      environment: Acceptance
 
   deploy-acceptance:
     name: Deploy to acceptance environment
@@ -277,21 +268,12 @@ jobs:
     name: Backup production database before deployment
     # this job runs only on tags or when a release is created, or when manually triggered for a tag
     if: startsWith(github.ref, 'refs/tags') || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags'))
-    environment: Production
-    runs-on: PRD
-    steps:
-      - name: Optionally start database service
-        env:
-          HOST_DATA: ${{ vars.HOST_DATA }}
-          SQL_HOST: ${{ vars.SQL_HOST }}
-          SQL_PORT: ${{ vars.SQL_PORT }}
-          SQL_DATABASE: ${{ vars.SQL_DATABASE }}
-          SQL_USER: ${{ secrets.SQL_USER }}
-          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
-        run: podman compose -f docker-compose-deploy.yml up db -d --no-recreate
-      - uses: ./.github/workflows/db-backup-template.yml
-        with:
-          runner: PRD
+    secrets:
+      inherit
+    uses: ./.github/workflows/db-backup-template.yml
+    with:
+      runner: PRD
+      environment: Production
 
   deploy-production:
     name: Deploy to production environment
