@@ -12,6 +12,8 @@ from section.models import Playlist, Song
 from session.models import Session
 
 class MatchingPairs2025Test(TestCase):
+    fixtures = ["choice_lists", "demographics"]
+
     @classmethod
     def setUpTestData(cls):
         cls.playlist = Playlist.objects.create(name="TestMatchingPairs2025")

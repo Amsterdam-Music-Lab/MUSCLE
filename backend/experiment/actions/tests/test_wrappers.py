@@ -10,6 +10,7 @@ from session.models import Session
 
 
 class ActionWrappersTest(TestCase):
+    fixtures = ["choice_lists"]
 
     def setUp(self):
         self.playlist = Playlist.objects.create(name='TestPlaylist')

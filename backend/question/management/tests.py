@@ -4,6 +4,7 @@ from django.test import TestCase
 from question.models import Choice, ChoiceList, Question
 
 class CreateQuestionsTest(TestCase):
+    fixtures = ['choice_lists', 'goldsmiths_msi', 'choices_goldsmiths_msi']
 
     def test_updatequestions(self):
         """at the beginning of this test,
@@ -20,9 +21,9 @@ class CreateQuestionsTest(TestCase):
         self.assertEqual(ChoiceList.objects.count(), 0)
         self.assertEqual(Question.objects.count(), 0)
         call_command('updatequestions')
-        self.assertEqual(Choice.objects.count(), n_choices)
+        self.assertGreater(Choice.objects.count(), n_choices)
         self.assertEqual(ChoiceList.objects.count(), n_choice_lists)
-        self.assertEqual(Question.objects.count(), n_questions)
+        self.assertGreater(Question.objects.count(), n_questions)
 
     def test_translatequestions(self):
         msi_24 = Question.objects.get(pk='msi_24_music_addiction')

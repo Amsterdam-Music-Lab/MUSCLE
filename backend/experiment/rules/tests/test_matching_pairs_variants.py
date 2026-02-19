@@ -8,6 +8,7 @@ from session.models import Session
 
 
 class TestMatchingPairsVariants(TestCase):
+    fixtures = ["choice_lists", "demographics"]
 
     def setUp(self):
         section_csv = (

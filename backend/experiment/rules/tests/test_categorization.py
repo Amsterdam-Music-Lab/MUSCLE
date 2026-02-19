@@ -1,13 +1,13 @@
 from django.test import TestCase
-from experiment.models import Block, Experiment, Phase
-from section.models import Playlist, Section, Song
+from experiment.models import Block
+from section.models import Playlist
 from participant.models import Participant
 from session.models import Session
 from experiment.rules.categorization import Categorization
-from result.models import Result
 
 
 class CategorizationRuleTest(TestCase):
+    fixtures = ["choice_lists", "demographics"]
 
     @classmethod
     def setUpTestData(cls):
