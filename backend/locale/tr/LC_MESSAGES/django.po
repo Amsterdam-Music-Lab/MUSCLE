@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 13:16+0100\n"
+"POT-Creation-Date: 2026-02-19 13:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -336,17 +336,17 @@ msgid ""
 "brains use this to process rhythm even better!"
 msgstr ""
 
-#: experiment/rules/base.py:36 experiment/rules/matching_pairs_2025.py:49
+#: experiment/rules/base.py:36 experiment/rules/matching_pairs_2025.py:34
 msgid "Do you have any remarks or questions?"
-msgstr ""
+msgstr "Herhangi bir yorumunuz veya sorunuz var mı?"
 
-#: experiment/rules/base.py:38 experiment/rules/matching_pairs_2025.py:51
+#: experiment/rules/base.py:38 experiment/rules/matching_pairs_2025.py:36
 msgid "Submit"
-msgstr ""
+msgstr "Gönder"
 
-#: experiment/rules/base.py:42 experiment/rules/matching_pairs_2025.py:55
+#: experiment/rules/base.py:42 experiment/rules/matching_pairs_2025.py:40
 msgid "We appreciate your feedback!"
-msgstr ""
+msgstr "Geri bildiriminiz için teşekkür ederiz!"
 
 #: experiment/rules/base.py:122 experiment/rules/musical_preferences.py:74
 msgid "Questionnaire"
@@ -882,73 +882,59 @@ msgid ""
 "Before starting the game, we would like to ask you %i demographic questions."
 msgstr ""
 
-#: experiment/rules/matching_pairs_2025.py:32
-msgid ""
-"This was not a match, so you get 0 points. Please try again to see if you "
-"can find a matching pair."
-msgstr ""
-
-#: experiment/rules/matching_pairs_2025.py:35
-msgid ""
-"You got a matching pair, but you didn't hear both cards before. This is "
-"considered a lucky match. You get 10 points."
-msgstr ""
-
-#: experiment/rules/matching_pairs_2025.py:37
-msgid "You got a matching pair. You get 20 points."
-msgstr ""
-
-#: experiment/rules/matching_pairs_2025.py:39
-msgid ""
-"You thought you found a matching pair, but you didn't. This is considered a "
-"misremembered pair. You lose 10 points."
-msgstr ""
-
-#: experiment/rules/matching_pairs_2025.py:68
+#: experiment/rules/matching_pairs_2025.py:53
 #, python-format
 msgid ""
 "Before starting the game, we would like to ask you %(n_questions)i "
 "demographic questions."
 msgstr ""
+"Oyuna başlamadan önce size %(n_questions)i adet demografik soru sormak istiyoruz."
 
-#: experiment/rules/matching_pairs_2025.py:92
+#: experiment/rules/matching_pairs_2025.py:78
 msgid "Click to start!"
-msgstr ""
+msgstr "Başlamak için tıklayın!"
 
-#: experiment/rules/matching_pairs_2025.py:171
+#: experiment/rules/matching_pairs_2025.py:152
 msgid ""
-"You get a board with 16 musical cards. **Pick a card,** and listen to it "
-"carefully..."
+"You get a board with %(n_cards)i musical cards. **Pick a card,** and listen "
+"to it carefully..."
 msgstr ""
+"%(n_cards)i müzik kartından oluşan bir oyun tahtasıyla başlayacaksınız. **Bir kart "
+"seçin** ve dikkatlice dinleyin…"
 
-#: experiment/rules/matching_pairs_2025.py:175
+#: experiment/rules/matching_pairs_2025.py:157
 msgid "Then try to **find a second card that matches it.**"
-msgstr ""
+msgstr "Ardından **onunla eşleşen ikinci kartı bulmaya çalışın.**"
 
-#: experiment/rules/matching_pairs_2025.py:179
-msgid "**Find the 8 matching pairs** to clear the board and score points:"
+#: experiment/rules/matching_pairs_2025.py:161
+#, python-format
+msgid ""
+"**Find the %(n_pairs)i matching pairs** to clear the board and score points:"
 msgstr ""
+"**%(n_pairs)i eşleşen çifti bulun**, tahtayı temizleyin ve puan kazanın!"
 
-#: experiment/rules/matching_pairs_2025.py:184
+#: experiment/rules/matching_pairs_2025.py:167
 msgid ""
 "**+20 points:** Matched first card with one you’ve heard before — memory "
 "wins!"
 msgstr ""
+"**+20 puan**: İlk kartı daha önce duyduğunuz kartla doğru eşleştirdiniz — hafızanız kazandı!"
 
-#: experiment/rules/matching_pairs_2025.py:189
+#: experiment/rules/matching_pairs_2025.py:172
 msgid ""
 "**-10 points:** Chose a wrong second card that’s heard before? Oops — "
 "penalty..."
 msgstr ""
+"**-10 puan**: Daha önce duyduğunuz bir karta yanlış eşleşme mi yaptınız? Oops — puan kaybettiniz!"
 
-#: experiment/rules/matching_pairs_2025.py:194
+#: experiment/rules/matching_pairs_2025.py:177
 msgid "Some cards sound **distorted** on purpose. Stay sharp!"
-msgstr ""
+msgstr "Bazı kartlar bilerek **bozulmuş (distorte edilmiş)** şekilde çalınır. Dikkatli olun!"
 
-#: experiment/rules/matching_pairs_2025.py:278
+#: experiment/rules/matching_pairs_2025.py:261
 #, python-format
 msgid "You outperformed {}% of the players!"
-msgstr ""
+msgstr "Oyuncuların {}% inden daha iyi performans gösterdiniz!"
 
 #: experiment/rules/matching_pairs_icmpc.py:16
 msgid "Enter a name to enter the ICMPC hall of fame"
