@@ -19,26 +19,11 @@ from .matching_pairs import MatchingPairsGame
 
 class MatchingPairs2025(MatchingPairsGame):
     """This is the working version of the Matching Pairs game for the 2025 Tunetwins experiment.
-    The difference between this version and the original Matching Pairs game is that this version has some additional tutorial messages.
-    These messages are intended to help the user understand the game.
-    The tutorial messages are displayed to the user in an overlay on the game screen.
-    There is also additional logic to balance condition types (degradations vs. original) and difficulty levels.
+    The difference between this version and the original Matching Pairs game is the additional logic to balance condition types (degradations vs. original) and difficulty levels.
     """
 
     ID = "MATCHING_PAIRS_2025"
     num_pairs = 8
-    tutorial = {
-        "no_match": _(
-            "This was not a match, so you get 0 points. Please try again to see if you can find a matching pair."
-        ),
-        "lucky_match": _(
-            "You got a matching pair, but you didn't hear both cards before. This is considered a lucky match. You get 10 points."
-        ),
-        "memory_match": _("You got a matching pair. You get 20 points."),
-        "misremembered": _(
-            "You thought you found a matching pair, but you didn't. This is considered a misremembered pair. You lose 10 points."
-        ),
-    }
 
     def feedback_info(self) -> FeedbackInfo:
         feedback_body = render_to_string(
@@ -73,7 +58,8 @@ class MatchingPairs2025(MatchingPairsGame):
                 actions.append(intro_questions)
                 actions.extend(questions)
             if not self._has_played_before(session):
-                actions.append(self.get_intro_explainer())
+                n_pairs = session.block.rules_config.get('n_pairs', self.num_pairs)
+                actions.append(self.get_intro_explainer(n_pairs))
             if not actions:
                 actions.append(
                     self.get_short_explainer()
@@ -107,16 +93,11 @@ class MatchingPairs2025(MatchingPairsGame):
         player_sections = self._select_sections(session)
         random.shuffle(player_sections)
 
-        # Only show tutorial if participant has never played this game before
-        has_played_before = self._has_played_before(session)
-        tutorial = self.tutorial if not has_played_before else None
-
         playback = MatchingPairs(
             sections=player_sections,
             stop_audio_after=5,
             show_animation=self.show_animation,
             score_feedback_display=self.score_feedback_display,
-            tutorial=tutorial,
         )
         trial = Trial(title="Tune twins", playback=playback, feedback_form=None, config={"show_continue_button": False})
 
@@ -162,22 +143,24 @@ class MatchingPairs2025(MatchingPairsGame):
         conditions = list(set(session.playlist.section_set.values_list('group', 'tag')))
         return conditions
 
-    def get_intro_explainer(self):
+    def get_intro_explainer(self, n_pairs):
         return Explainer(
             instruction="",
             steps=[
                 Step(
                     description=_(
-                        'You get a board with 16 musical cards. **Pick a card,** and listen to it carefully...'
+                        'You get a board with %(n_cards)i musical cards. **Pick a card,** and listen to it carefully...'
                     )
+                    % {"n_cards": n_pairs * 2}
                 ),
                 Step(
                     description=_("Then try to **find a second card that matches it.**")
                 ),
                 Step(
                     description=_(
-                        "**Find the 8 matching pairs** to clear the board and score points:"
+                        "**Find the %(n_pairs)i matching pairs** to clear the board and score points:"
                     )
+                    % {"n_pairs": n_pairs}
                 ),
                 Step(
                     description=_(
