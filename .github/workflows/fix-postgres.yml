@@ -19,4 +19,5 @@ jobs:
                 SQL_PORT: ${{ vars.SQL_PORT }}
                 SQL_USER: ${{ secrets.SQL_USER }}
                 SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+                HOST_DATA: ${{ vars.HOST_DATA }}
               run: podman compose -f docker-compose-deploy.yml run --rm db pg_resetwal /var/lib/postgresql/data
