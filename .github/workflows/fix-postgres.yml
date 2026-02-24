@@ -1,0 +1,22 @@
+name: Fix corrupted Posgres checkpoint
+
+permissions:
+  contents: read
+
+on:
+    workflow_dispatch:
+
+jobs:
+    reset-pg-checkpoint:
+        name: run pg_resetwal
+        environment: Production
+        runs-on: PRD
+        steps:
+            - name: "Run pg_resetwal"
+              env:
+                SQL_DATABASE: ${{ vars.SQL_DATABASE }}
+                SQL_HOST: ${{ vars.SQL_HOST }}
+                SQL_PORT: ${{ vars.SQL_PORT }}
+                SQL_USER: ${{ secrets.SQL_USER }}
+                SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+              run: podman compose -f docker-compose-deploy.yml run --rm muscle_db pg_resetwal /var/lib/postgresql/data
