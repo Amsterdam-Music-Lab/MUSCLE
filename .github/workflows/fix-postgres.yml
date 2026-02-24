@@ -1,4 +1,4 @@
-name: Fix corrupted Posgres checkpoint
+name: Fix Postgres database
 
 permissions:
   contents: read
@@ -7,12 +7,12 @@ on:
     workflow_dispatch:
 
 jobs:
-    reset-pg-checkpoint:
-        name: run pg_resetwal
+    start-db:
+        name: Run database container
         environment: Production
         runs-on: PRD
         steps:
-            - name: "Run pg_resetwal"
+            - name: "Start db container without starting Postgres"
               env:
                 SQL_DATABASE: ${{ vars.SQL_DATABASE }}
                 SQL_HOST: ${{ vars.SQL_HOST }}
@@ -20,4 +20,4 @@ jobs:
                 SQL_USER: ${{ secrets.SQL_USER }}
                 SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
                 HOST_DATA: ${{ vars.HOST_DATA }}
-              run: podman compose -f docker-compose-deploy.yml run --rm db pg_resetwal /var/lib/postgresql/data
+              run: podman compose -f docker-compose-deploy.yml run --rm db sleep 1000s
