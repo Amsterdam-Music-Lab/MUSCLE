@@ -26,15 +26,16 @@ interface PlaybackState {
     view: PlaybackView;
 }
 
-const Playback = ({
-    playbackArgs,
-    onPreloadReady,
-    autoAdvance,
-    responseTime,
-    submitResult,
-    startedPlaying,
-    finishedPlaying,
-}: PlaybackProps) => {
+const Playback = (props: PlaybackProps) => {
+    const {
+        playbackArgs,
+        onPreloadReady,
+        autoAdvance,
+        responseTime,
+        submitResult,
+        startedPlaying,
+        finishedPlaying,
+    } = props;
     const [playerIndex, setPlayerIndex] = useState(-1);
     const lastPlayerIndex = useRef(-1);
     const activeAudioEndedListener = useRef<() => void>();

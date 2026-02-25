@@ -17,25 +17,25 @@ import classNames from "@/util/classNames";
  * Final is a block view that shows the final scores of the block
  * It can only be the last view of a block
  */
-const Final = ({
-    block,
-    participant,
-    score,
-    final_text,
-    action_texts,
-    button,
-    onNext,
-    show_participant_link,
-    participant_id_only,
-    show_profile_link,
-    social,
-    feedback_info,
-    points,
-    rank,
-    logo,
-    percentile,
-}: FinalAction & SharedActionProps) => {
-
+const Final = (props: FinalAction & SharedActionProps) => {
+    const {
+        block,
+        participant,
+        score,
+        final_text,
+        action_texts,
+        button,
+        onNext,
+        show_participant_link,
+        participant_id_only,
+        show_profile_link,
+        social,
+        feedback_info,
+        points,
+        rank,
+        logo,
+        percentile
+    } = props;
     const session = useBoundStore((state) => state.session);
     const navigate = useNavigate();
 
