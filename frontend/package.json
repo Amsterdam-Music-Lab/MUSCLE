@@ -99,7 +99,7 @@
     "msw": "^2.6.6",
     "msw-storybook-addon": "^2.0.4",
     "prop-types": "15.8.1",
-    "storybook": "^8.6.15",
+    "storybook": "^8.6.17",
     "vitest": "^2.1.9"
   },
   "msw": {
