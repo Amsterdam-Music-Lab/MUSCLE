@@ -163,6 +163,9 @@ class Block(models.Model):
         blank=True,
     )
 
+    class Meta:
+        ordering = ["index"]
+
     def __str__(self):
         return self.name if self.name else self.slug
 
