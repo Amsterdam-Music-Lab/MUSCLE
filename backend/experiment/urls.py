@@ -1,7 +1,6 @@
 from django.urls import path
 from django.views.generic.base import TemplateView
 from .views import (
-    create_phase,
     FeedbackListView,
     get_block,
     get_experiment,
@@ -24,7 +23,6 @@ urlpatterns = [
     ),
     path('block/<slug:slug>/', get_block, name='block'),
     path('block/<slug:slug>/feedback/', post_feedback, name='feedback'),
-    path('phase/create/', create_phase, name='create_phase'),
     path('<slug:slug>/', get_experiment, name='experiment'),
     # Robots.txt
     path(
