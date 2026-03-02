@@ -10,7 +10,6 @@ from experiment.actions.trial import Trial
 from experiment.actions.wrappers import final_action_with_optional_button
 from question.models import ChoiceList
 from result.utils import prepare_result
-from theme.styles import ColorScheme
 
 boolean_and_middle_choices = [
     {
@@ -63,7 +62,6 @@ class RhythmBatteryIntro(BaseRules):
                         text=_("Are you in a quiet room?"),
                         choices=boolean_and_middle_choices,
                         result_id=result_pk,
-                        style=[ColorScheme.BOOLEAN],
                     )
                 ],
                 submit_button=None,
@@ -78,7 +76,6 @@ class RhythmBatteryIntro(BaseRules):
                         text=_("Do you have a stable internet connection?"),
                         choices=boolean_and_middle_choices,
                         result_id=result_pk,
-                        style=[ColorScheme.BOOLEAN],
                     )
                 ],
                 submit_button=None,
@@ -93,7 +90,6 @@ class RhythmBatteryIntro(BaseRules):
                         text=_("Are you wearing headphones?"),
                         choices=ChoiceList.objects.get(pk="BOOLEAN").to_dict(),
                         result_id=result_pk,
-                        style=[ColorScheme.BOOLEAN],
                     )
                 ],
                 submit_button=None,
@@ -117,7 +113,6 @@ class RhythmBatteryIntro(BaseRules):
                             {"value": "NO", "label": _('NO'), "color": "colorNegative"},
                         ],
                         result_id=result_pk,
-                        style=[ColorScheme.BOOLEAN],
                     ),
                 ],
                 submit_button=None,

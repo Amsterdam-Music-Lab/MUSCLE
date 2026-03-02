@@ -1,7 +1,4 @@
-from typing import Optional
-
 from .utils import camelize
-from theme.styles import FrontendStyle
 
 
 class BaseAction(object):
@@ -37,18 +34,6 @@ class BaseAction(object):
 
     view = "BASE"
 
-    def __init__(self, style: Optional[list[str]] = None):
-        """Initialize the base action with optional styling.
-
-        Args:
-            style: list of class arguments to set in the frontend
-        """
-        self.style = self._apply_style(style)
-
-    def _apply_style(self, style: list[str]) -> Optional[FrontendStyle]:
-        if style:
-            return FrontendStyle(style)
-
     def action(self) -> dict:
         """Serialize the action configuration for frontend consumption.
 
@@ -60,12 +45,9 @@ class BaseAction(object):
             dict: A dictionary containing:
                 - All instance variables from __dict__
                 - 'view': The action's ID for frontend component mapping
-                - 'style': Serialized style configuration if present
         """
         action_dict = self.camelize(self.__dict__)
         action_dict['view'] = self.view
-        if getattr(self, 'style', None):
-            action_dict['style'] = self.style.to_dict()
         return action_dict
 
     def camelize(self, input_dict: dict) -> dict:

@@ -16,7 +16,6 @@ from experiment.actions.trial import Trial
 from experiment.actions.utils import get_current_experiment_url
 from experiment.models import Session
 from result.utils import prepare_result
-from theme.styles import ColorScheme
 from .base import BaseRules
 
 
@@ -180,7 +179,6 @@ class ToontjeHoger1Mozart(BaseRules):
             result_id=prepare_result(
                 key, session, section=section, expected_response=expected_response
             ),
-            style=[ColorScheme.TOONTJEHOGER],
         )
         form = Form([question], submit_button=None)
 

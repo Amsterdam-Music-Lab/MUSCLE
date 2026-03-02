@@ -13,7 +13,6 @@ from experiment.actions.score import Score
 from experiment.actions.trial import Trial
 from experiment.actions.wrappers import TwoAlternativeForced
 from session.models import Session
-from theme.styles import ButtonStyle
 
 from .base import BaseRules
 
@@ -461,5 +460,4 @@ repeat_training_or_quit = ButtonArrayQuestion(
         {"value": "continued", "label": "OK", "color": "colorPositive"},
         {"value": "aborted", "label": "Exit", "color": "colorNegative"},
     ],
-    style=[ButtonStyle.LARGE_GAP, ButtonStyle.LARGE_TEXT],
 )

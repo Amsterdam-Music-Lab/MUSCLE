@@ -18,7 +18,6 @@ from experiment.actions.utils import get_current_experiment_url
 from experiment.utils import format_label
 from result.utils import prepare_result
 from section.models import Playlist
-from theme.styles import ColorScheme
 from .base import BaseRules
 
 logger = logging.getLogger(__name__)
@@ -159,7 +158,6 @@ class ToontjeHoger2Preverbal(BaseRules):
                 {"value": "C", "label": "C", "color": "colorSecondary"},
             ],
             result_id=prepare_result(key, session, expected_response="C"),
-            style=[ColorScheme.NEUTRAL_INVERTED],
         )
         form = Form([question], submit_button=None)
 
@@ -291,7 +289,6 @@ class ToontjeHoger2Preverbal(BaseRules):
                 {"value": "B", "label": "B", "color": "colorNeutral1"},
             ],
             result_id=prepare_result(key, session, expected_response="A"),
-            style=[ColorScheme.NEUTRAL_INVERTED],
         )
         form = Form([question])
 

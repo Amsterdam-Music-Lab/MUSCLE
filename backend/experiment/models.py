@@ -2,10 +2,8 @@ from os.path import join
 from typing import Optional
 
 from django.db import models
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _, get_language
 from django.contrib.postgres.fields import ArrayField
-from django.db.models.query import QuerySet
 
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from image.models import Image

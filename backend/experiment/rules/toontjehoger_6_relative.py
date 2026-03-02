@@ -15,7 +15,6 @@ from experiment.actions.trial import Trial
 from experiment.actions.utils import get_current_experiment_url
 from section.models import Playlist
 from session.models import Session
-from theme.styles import ColorScheme
 from .base import BaseRules
 from .toontjehoger_1_mozart import toontjehoger_ranks
 

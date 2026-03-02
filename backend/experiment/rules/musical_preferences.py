@@ -18,7 +18,6 @@ from result.utils import prepare_result
 from result.models import Result
 from section.models import Section
 from session.models import Session
-from theme.styles import ColorScheme
 
 from .base import BaseRules
 from .huang_2022 import get_test_playback
@@ -140,7 +139,6 @@ class MusicalPreferences(BaseRules):
                                     result_id=prepare_result(
                                         "audio_check2", session, scoring_rule="BOOLEAN"
                                     ),
-                                    style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
                                 )
                             ],
                             submit_button=None,
@@ -256,7 +254,6 @@ class MusicalPreferences(BaseRules):
                 {"value": "no", "label": "fa-xmark", "color": "colorNegative"},
             ],
             result_id=prepare_result(know_key, session, section=section),
-            style=[ColorScheme.BOOLEAN],
         )
         playback = Autoplay(sections=[PlaybackSection(section)])
         form = Form([know, likert])

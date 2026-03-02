@@ -18,7 +18,6 @@ from question.banks import get_question_bank
 from result.utils import prepare_result
 from section.models import Section
 from session.models import Session
-from theme.styles import ColorScheme, ButtonStyle
 
 
 logger = logging.getLogger(__name__)
@@ -328,7 +327,6 @@ class Hooked(BaseRules):
                         expected_response=condition,
                         scoring_rule="REACTION_TIME",
                     ),
-                    style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST, ButtonStyle.LARGE_GAP],
                 )
             ]
         )

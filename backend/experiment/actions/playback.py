@@ -101,7 +101,6 @@ class Playback(BaseAction):
         self.mute = mute
         self.resume_play = resume_play
         self.show_animation = show_animation
-        self.style = self._apply_style(style)
 
     def action(self):
         serialized = super().action()

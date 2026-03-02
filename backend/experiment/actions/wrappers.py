@@ -17,7 +17,6 @@ from question.models import ChoiceList
 from result.utils import prepare_result
 from section.models import Section
 from session.models import Session
-from theme.styles import ButtonStyle, TextStyle
 
 class TwoAlternativeForced(Trial):
     """
@@ -47,19 +46,12 @@ class TwoAlternativeForced(Trial):
         expected_response: Optional[str] = None,
         comment: str = "",
         scoring_rule: Optional[str] = None,
-        style: list[str] = [],
         **kwargs
     ):
         playback = PlayButtons(
             sections=[PlaybackSection(section, color='colorNeutral2')], play_once=True
         )
         key = "choice"
-        button_style = [
-            TextStyle.INVISIBLE,
-            ButtonStyle.LARGE_GAP,
-            ButtonStyle.LARGE_TEXT,
-        ]
-        button_style.extend(style)
         question = ButtonArrayQuestion(
             key=key,
             result_id=prepare_result(
@@ -71,7 +63,6 @@ class TwoAlternativeForced(Trial):
                 comment=comment,
             ),
             choices=choices,
-            style=button_style,
         )
         feedback_form = Form([question], submit_button=None)
         super().__init__(playback=playback, feedback_form=feedback_form, **kwargs)

@@ -2,7 +2,6 @@
 from typing import Any, List, Optional, TypedDict
 
 from experiment.actions.base_action import BaseAction
-from theme.styles import ColorScheme
 
 class QuestionAction(BaseAction):
     """
@@ -13,7 +12,6 @@ class QuestionAction(BaseAction):
         result_id: the identifier of the `Result` object associated with this question
         text: the text shown to the user
         explainer: optionally, an instruction for the user of how to use the shown widget
-        style: list of style classes for display in the frontend
         scoring_rule: the scoring rule with which to score the user's response
         view: the view (widget) shown to the user, set in the subclasses
     """
@@ -24,14 +22,12 @@ class QuestionAction(BaseAction):
         result_id: int = None,
         text: str = '',
         explainer: str = '',
-        style: list[str] = [],
         view: str = '',
     ):
         self.key = key
         self.text = text
         self.result_id = result_id
         self.explainer = explainer
-        self.style = self._apply_style(style)
         self.view = view
 
 
@@ -216,7 +212,6 @@ class IconRangeQuestion(ChoiceQuestionAction):
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(view="ICON_RANGE", **kwargs)
-        self.style = self._apply_style([ColorScheme.GRADIENT_7])
 
 
 class NumberQuestion(OpenQuestionAction):

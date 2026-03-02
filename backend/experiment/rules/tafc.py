@@ -41,7 +41,6 @@ from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
 from experiment.actions.form import Form
 from result.utils import prepare_result
-from theme.styles import ButtonStyle, ColorScheme, TextStyle
 
 
 class TwoAlternativeForced(BaseRules):
@@ -100,10 +99,6 @@ class TwoAlternativeForced(BaseRules):
         playback = PlayButtons(sections=[PlaybackSection(section)])
 
         key = 'choice'
-        button_style = [
-            ButtonStyle.LARGE_GAP,
-            ButtonStyle.LARGE_TEXT,
-        ]
         question = ButtonArrayQuestion(
             key=key,
             result_id=prepare_result(
@@ -118,7 +113,6 @@ class TwoAlternativeForced(BaseRules):
                 {"value": "A", "label": "Answer A", "color": "colorNeutral1"},
                 {"value": "B", "label": "Answer B", "color": "colorNeutral2"},
             ],
-            style=button_style,
         )
 
         feedback_form = Form([question], submit_button=None)

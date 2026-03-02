@@ -25,33 +25,14 @@
             column-gap: 2vw;
         }
 
-        &.buttons-large-gap {
-            column-gap: 5rem;
-        }
-
-        &.buttons-large-text {
-            font-size: 1.3rem;
-        }
-
         .btn {
             min-width: 4rem;
-            min-height: 4rem;
+            min-height: 3rem;
         }
 
         input {
             display: none;
         }
 
-        &.invisible-text {
-            .btn.btn-secondary {
-                color: transparent;
-                width: 4rem;
-                height: 4rem;
-
-                &:hover {
-                    color: transparent;
-                }
-            }
-        }
     }
 }

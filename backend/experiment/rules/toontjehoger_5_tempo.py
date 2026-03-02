@@ -19,7 +19,6 @@ from experiment.utils import format_label, non_breaking_spaces
 from result.utils import prepare_result
 from section.models import Playlist
 from session.models import Session
-from theme.styles import ColorScheme
 from .base import BaseRules
 from .toontjehoger_1_mozart import toontjehoger_ranks
 
@@ -163,7 +162,6 @@ class ToontjeHoger5Tempo(BaseRules):
                 section=section_original,
                 expected_response="A" if sections[0].id == section_original.id else "B",
             ),
-            style=[ColorScheme.NEUTRAL_INVERTED],
         )
         form = Form([question], submit_button=None)
 
