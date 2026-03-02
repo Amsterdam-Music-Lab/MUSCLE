@@ -13,6 +13,7 @@ from experiment.actions.question import ButtonArrayQuestion, IconRangeQuestion
 from experiment.actions.redirect import Redirect
 from experiment.actions.trial import Trial
 from experiment.actions.wrappers import boolean_question
+from experiment.serializers import get_theme_config
 from question.models import ChoiceList
 from result.utils import prepare_result
 from result.models import Result
@@ -65,6 +66,7 @@ class MusicalPreferences(BaseRules):
     def next_round(self, session: Session):
         round_number = session.get_rounds_passed()
         actions = []
+        theme = get_theme_config(session.block)
         if round_number == 0:
             last_result = session.last_result()
             if last_result:
@@ -188,7 +190,10 @@ class MusicalPreferences(BaseRules):
                         {
                             "unlocked": _("Love unlocked"),
                             "n_songs": round_number,
-                            "top_participant": self.get_preferred_songs(like_results, 3),
+                            "top_participant": self.get_preferred_songs(
+                                like_results, 3
+                            ),
+                            "card_background_color": theme.color_neutral2,
                         },
                     )
                 )
@@ -204,8 +209,11 @@ class MusicalPreferences(BaseRules):
                         {
                             "unlocked": _("Knowledge unlocked"),
                             "n_songs": round_number - 1,
-                            "top_participant": self.get_preferred_songs(like_results, 3),
+                            "top_participant": self.get_preferred_songs(
+                                like_results, 3
+                            ),
                             "n_known_songs": known_songs,
+                            "card_background_color": theme.color_neutral2,
                         },
                     )
                 )
@@ -227,6 +235,7 @@ class MusicalPreferences(BaseRules):
                             "top_participant": top_participant,
                             "n_known_songs": known_songs,
                             "top_all": top_all,
+                            "card_background_color": theme.color_neutral2,
                         },
                     )
                 )

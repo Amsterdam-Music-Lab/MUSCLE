@@ -113,6 +113,14 @@ def serialize_phase(phase: Phase, participant: Participant, times_played: int) -
     }
 
 
+def get_theme_config(block_object: Block):
+    return (
+        block_object.theme_config
+        or block_object.phase.experiment.theme_config
+        or ThemeConfig()
+    )
+
+
 def serialize_block(block_object: Block, language: str = "en") -> dict:
     """Serialize block
 
@@ -123,11 +131,7 @@ def serialize_block(block_object: Block, language: str = "en") -> dict:
     Returns:
         Block info for a participant
     """
-    theme = (
-        block_object.theme_config
-        or block_object.phase.experiment.theme_config
-        or ThemeConfig()
-    )
+    theme = get_theme_config(block_object)
     return {
         "slug": block_object.slug,
         "name": block_object.name,

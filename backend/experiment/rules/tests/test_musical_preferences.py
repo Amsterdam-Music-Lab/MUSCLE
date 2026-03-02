@@ -64,7 +64,13 @@ class MusicalPreferencesTest(TestCase):
         mp = MusicalPreferences()
 
         # Go to the last round (top_all = ... caused the error)
-        for i in range(self.session.block.rounds + 1):
+        for i in range(3, self.session.block.rounds + 1):
             actions = mp.next_round(self.session)
-            if i == self.session.block.rounds + 1:
+            if i == mp.preference_offset:
+                self.assertIn('Love', actions[0].html.body[:30])
+            elif i == mp.knowledge_offset:
+                self.assertIn('Knowledge', actions[0].html.body[:30])
+            elif i == self.session.block.rounds:
+                self.assertIn('Connection', actions[0].html.body[:30])
+            else:
                 self.assertIsNotNone(actions)
