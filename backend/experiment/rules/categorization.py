@@ -262,12 +262,11 @@ class Categorization(BaseRules):
             group = random.choice(["S1", "S2", "C1", "C2"])
         # Assign a random correct response color for 1A, 2A
         # Set expected resonse accordingly
-        ph = "___"  # placeholder
         colors = ['colorNeutral1', 'colorNeutral2']
         random.shuffle(colors)
         choices = [
-            {"value": "A", "label": ph, "color": colors[0]},
-            {"value": "B", "label": ph, "color": colors[1]},
+            {"value": "A", "label": "", "color": colors[0]},
+            {"value": "B", "label": "", "color": colors[1]},
         ]
         random.shuffle(choices)
         if group == "S1":
