@@ -1,5 +1,149 @@
 .aha__dashboard {
 
+    .dashboard {
+        border-top: 12px solid rgba(white, 0.2);
+        border-bottom: 12px solid rgba(white, 0.2);
+        border-radius: 12px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        background-color: rgba(white, 0.2);
+        max-width: 1200px;
+        margin: 0 1.25rem;
+
+        @media (max-width: 720px) {
+            padding: 15px 15px;
+        }
+
+        @media (min-width: $breakpoint-xl) {
+            margin: 0 auto;
+        }
+
+        ul {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            flex-wrap: wrap;
+            column-gap: 25px;
+            row-gap: 25px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+
+            @media (max-width: 420px) {
+                column-gap: 15px;
+                row-gap: 15px;
+            }
+
+            &:hover {
+                li {
+                    opacity: 0.8;
+                }
+            }
+
+            li {
+                border-radius: 5px;
+                border: 1px solid rgba(black, 0.5);
+                transition: opacity 0.3s ease-out, box-shadow 0.3s ease-out;
+                background-color: rgba($black, 0.5);
+                box-shadow: 0 0 0 rgba(black, 0.5);
+                background-position: center center;
+                background-size: cover;
+
+                @media (max-width: 350px) {
+                    width: 100%;
+                }
+
+                &:hover {
+                    opacity: 1;
+                    box-shadow: 0 2px 15px rgba(black, 0.3);
+                }
+
+                img {
+                    object-fit: cover;
+                    width: 100%;
+                    height: 200px;
+                }
+
+                .placeholder {
+                    height: 200px;
+                    background-color: $gray;
+                    background-blend-mode: multiply;
+                    border-top-left-radius: 5px;
+                    border-top-right-radius: 5px;
+                }
+
+                a {
+                    display: block;
+                    text-decoration: none;
+                    color: white;
+                    width: 300px;
+                    max-width: 100%;
+                    min-height: 300px;
+                    position: relative;
+
+                    @media (max-width: 420px) {
+                        width: 100%;
+                    }
+
+                    .image {
+                        height: 200px;
+                        background-color: $gray;
+                        border-top-left-radius: 5px;
+                        border-top-right-radius: 5px;
+                        background-size: cover;
+                        background-repeat: no-repeat;
+                        background-position: center center;
+                        position: relative;
+                        background-blend-mode: multiply;
+                    }
+
+                    h3 {
+                        padding: 15px 15px 10px;
+                        margin: 0;
+                    }
+
+                    p {
+                        margin: 0;
+                        padding: 0 15px 15px;
+                        opacity: 0.8;
+                    }
+
+                    .status-bar {
+                        position: absolute;
+                        bottom: .25rem;
+                        right: .25rem;
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: center;
+                        column-gap: .25rem;
+                    }
+
+                    .counter {
+                        color: var(--white);
+                        background-color: rgba(0, 0, 0, 0.3);
+                        padding: 0.2rem 0.5rem;
+                        border-radius: 0.5rem;
+                        transition: background-color 0.3s ease-out;
+
+                        &:hover {
+                            background-color: rgba(0, 0, 0, 1);
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+    .privacy {
+        border-top: 2px solid rgba(white, 0.2);
+        width: 100%;
+        padding: 20px;
+        text-align: center;
+        font-size: 0.9em;
+    }
+
+
     .aha__logo {
         margin: 10px auto 0;
         display: block;

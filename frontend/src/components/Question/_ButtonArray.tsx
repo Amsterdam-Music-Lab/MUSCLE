@@ -72,7 +72,7 @@ const ToggleButton = ({ label, value, index, name, disabled, onChange, checked, 
     const disabledClasses = disabled ? 'disabled' : '';
     const checkedClasses = checked ? 'checked' : '';
     const indexString = index.toString();
-    const colorValue = theme? theme[color] : '#fabbacc';
+    const colorValue = theme? theme[color] : '';
     
     return (
         <label
