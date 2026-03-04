@@ -6,7 +6,6 @@ import AutoComplete from "./_AutoComplete";
 import ButtonArray from "./_ButtonArray";
 import Checkboxes from "./_Checkboxes";
 import DropDown from "./_DropDown";
-import IconRange from "./_IconRange";
 import Number from "./_Number";
 import Radios from "./_Radios";
 import Range from "./_Range";
@@ -62,8 +61,6 @@ const Question = ({
                 return <Range {...attrs} />;
             case QuestionViews.TEXT_RANGE:
                 return <TextRange {...attrs} />;
-            case QuestionViews.ICON_RANGE:
-                return <IconRange {...attrs} />;
             case QuestionViews.STRING:
                 return <String {...attrs} />;
             default:

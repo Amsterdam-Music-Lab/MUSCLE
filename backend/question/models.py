@@ -15,7 +15,7 @@ class Question(models.Model):
         from_python (bool): whether this Question was added through a Python fixture (not editable)
         explainer (str): Question explainer text
         is_skippable (bool): If question can be skipped during experiment
-        type (str): Question type {"AutoCompleteQuestion", "ButtonArrayQuestion", "CheckboxQuestion", "DropdownQuestion", "IconRangeQuestion", "NumberQuestion", "RadiosQuestion", "RangeQuestion", "TextQuestion", "TextRangeQuestion"}
+        type (str): Question type {"AutoCompleteQuestion", "ButtonArrayQuestion", "CheckboxQuestion", "DropdownQuestion", "NumberQuestion", "RadiosQuestion", "RangeQuestion", "TextQuestion", "TextRangeQuestion"}
         profile_scoring_rule (str): Profile scoring rule {"", "LIKERT", "REVERSE_LIKERT", "CATEGORIES_TO_LIKERT"} (ChoiceQuestion, LikertQuestion)
         min_value (float): Minimal value (NumberQuestion)
         max_value (float): Maximal value (NumberQuestion)
@@ -34,9 +34,6 @@ class Question(models.Model):
             "Checkboxes: Present choices as checkboxes (multiple options)"
         )
         DROPDOWN = "DropdownQuestion", _("Dropdown: Present choices in a dropdown menu")
-        ICON_RANGE = "IconRangeQuestion", _(
-            "Icon Range: Present choices as a range slider with icons"
-        )
         NUMBER = "NumberQuestion", _(
             "Number: Present a number field to select a number"
         )

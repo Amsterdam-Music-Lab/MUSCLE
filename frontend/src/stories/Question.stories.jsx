@@ -219,7 +219,7 @@ export const IconRange = {
             text: "This is the question",
             explainer: "This is the explainer",
             icon: "🌎",
-            view: "ICON_RANGE",
+            view: "TEXT_RANGE",
             value: "",
             choices: [{value: "globe", label: "fa-globe", color: "colorPrimary"}, {value: "pencil", label: "fa-pencil"}, {value: "bike", label: "fa-bicycle", color: "colorSecondary"}],
             minValue: 1,

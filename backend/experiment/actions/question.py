@@ -33,7 +33,7 @@ class QuestionAction(BaseAction):
 
 class Choice(TypedDict):
     """The structure of the dictionary for a question choice
-    Note that color (optional) is only shown in ButtonArrayQuestion and IconRangeQuestion
+    Note that color (optional) is only shown in ButtonArrayQuestion and TextRangeQuestion
     """
 
     value: str
@@ -188,30 +188,6 @@ class DropdownQuestion(ChoiceQuestionAction):
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(view="DROPDOWN", **kwargs)
-
-
-class IconRangeQuestion(ChoiceQuestionAction):
-    """A question showing a range slider with icons.
-
-    Args:
-        choices (dict): dictionary of answer options, the values identify icons
-
-    Example:
-        ```python
-        question = IconRangeQuestion(
-            key="satisfaction",
-            text="How satisfied are you with the service?",
-            choices=[
-                {"value": 1, "label": "fa-face-smile"},
-                {"value": 2, "label": "fa-face-meh"},
-                {"value": 3, "label": "fa-face-frown"}
-            [
-        )
-        ```
-    """
-
-    def __init__(self, **kwargs: Any) -> None:
-        super().__init__(view="ICON_RANGE", **kwargs)
 
 
 class NumberQuestion(OpenQuestionAction):

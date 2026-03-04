@@ -6,7 +6,6 @@ from experiment.actions.question import (
     ButtonArrayQuestion,
     CheckBoxQuestion,
     DropdownQuestion,
-    IconRangeQuestion,
     RangeQuestion,
     RadiosQuestion,
     NumberQuestion,
@@ -210,14 +209,14 @@ class TextRangeQuestionTest(TestCase):
 class IconRangeTest(TestCase):
 
     def setUp(self):
-        self.likert_question_icon = IconRangeQuestion(
+        self.likert_question_icon = TextRangeQuestion(
             key='test_key',
             choices=ChoiceList.objects.get(pk='LIKERT_ICONS_7').to_dict(),
         )
 
     def test_initialization(self):
         self.assertEqual(self.likert_question_icon.key, 'test_key')
-        self.assertEqual(self.likert_question_icon.view, 'ICON_RANGE')
+        self.assertEqual(self.likert_question_icon.view, 'TEXT_RANGE')
         self.assertEqual(
             self.likert_question_icon.choices,
             ChoiceList.objects.get(pk="LIKERT_ICONS_7").to_dict(),

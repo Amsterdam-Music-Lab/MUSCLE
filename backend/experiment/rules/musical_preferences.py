@@ -9,7 +9,7 @@ from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.html import HTML
 from experiment.actions.playback import Autoplay, PlaybackSection
-from experiment.actions.question import ButtonArrayQuestion, IconRangeQuestion
+from experiment.actions.question import ButtonArrayQuestion, TextRangeQuestion
 from experiment.actions.redirect import Redirect
 from experiment.actions.trial import Trial
 from experiment.actions.wrappers import boolean_question
@@ -245,7 +245,7 @@ class MusicalPreferences(BaseRules):
             return [feedback, self.get_final_view(session, top_participant, known_songs, round_number, top_all)]
         section = session.playlist.get_section(song_ids=session.get_unused_song_ids())
         like_key = "like_song"
-        likert = IconRangeQuestion(
+        likert = TextRangeQuestion(
             text=_("2. How much do you like this song?"),
             key=like_key,
             choices=ChoiceList.objects.get(pk='LIKERT_ICONS_7').to_dict(),
