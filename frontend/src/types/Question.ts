@@ -11,7 +11,7 @@ export enum QuestionViews {
 }
 
 export interface Choice {
-    value: string;
+    value: string | number;
     label: string;
     color?: string;
 }

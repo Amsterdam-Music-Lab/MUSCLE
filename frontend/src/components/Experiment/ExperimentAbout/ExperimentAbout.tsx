@@ -50,7 +50,7 @@ export const ExperimentAbout: React.FC<IExperiment> = (experiment: IExperiment) 
                 {experiment.backButtonText}
             </Link>
             <div className="col-12 mt-3" role="contentinfo" css={styleAboutText(experiment.theme?.colorPrimary || '')}>
-                <HTML body={experiment.aboutContent} innerClassName="about-text text-left pb-3 text-white" />
+                <HTML body={experiment.aboutContent} innerClassName="about-text text-left pb-3" />
             </div>
         </div>
     );

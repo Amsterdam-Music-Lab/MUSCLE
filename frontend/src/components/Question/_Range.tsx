@@ -4,7 +4,7 @@ import RangeSlider from "./_RangeSlider";
 interface RangeProps {
     question: Question;
     value: number;
-    onChange: (value: number) => void;
+    onChange: (value: string) => void;
 }
 
 /** Range is a question view that makes you select a value within the given range, using a slider */
@@ -13,18 +13,20 @@ const Range = ({ question, value, onChange }: RangeProps) => {
         throw new Error('valid minValue and maxValue are required for the Range component');
     }
 
-    const onSliderChange = (value: number) => onChange(value + question.minValue!);
-
     const keys = Array.from(new Array(question.maxValue + 1 - (question.minValue || 0)), (_, i) => i + (question.minValue || 0));
-    const labels = keys.map( value => value.toString());
+    const choices = keys.map( value => {
+        return {
+            value: value,
+            label: value.toString()
+        }
+    });
 
     return (
         <div className="aha__range">
             <RangeSlider 
-                keys={keys}
-                labels={labels}
+                choices={choices}
                 value={value}
-                onSliderChange={onSliderChange}
+                onChange={onChange}
             />
         </div>
     );
