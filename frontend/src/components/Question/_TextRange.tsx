@@ -19,18 +19,12 @@ const TextRange = ({ question, value, onChange }: TextRangeProps) => {
         throw new Error("TextRange question must have choices");
     }
 
-    const keys = choices.map(choice => choice.value);
-    const labels = choices.map(choice => choice.label);
-
-    const onSliderChange = (index: number) => onChange(keys[index]);
-
     return (
         <div className="aha__text_range">
             <RangeSlider 
-                keys={keys}
-                labels={labels}
+                choices={choices}
                 value={value}
-                onSliderChange={onSliderChange}
+                onChange={onChange}
             />
         </div>
     )

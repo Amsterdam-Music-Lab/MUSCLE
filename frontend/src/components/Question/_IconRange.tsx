@@ -15,20 +15,14 @@ const IconRange = ({ question, value, onChange}: IconRangeProps) => {
         throw new Error("IconRange question must have choices");
     }
 
-    const keys = choices.map(choice => choice.value);
-    const labels = choices.map(choice => choice.label);
-
-    const onSliderChange = (index: number) => {
-        onChange(keys[index]);
-    };
+    
 
     return (
         <div className={classNames("aha__icon-range", question.style)}>
             <RangeSlider 
-                keys={keys}
-                labels={labels}
+                choices={choices}
                 value={value}
-                onSliderChange={onSliderChange}
+                onChange={onChange}
                 changePosition={true}
             />
         </div>

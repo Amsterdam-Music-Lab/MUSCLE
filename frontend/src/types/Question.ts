@@ -11,7 +11,7 @@ export enum QuestionViews {
     TEXT_RANGE = "TEXT_RANGE",
 }
 
-interface Choice {
+export interface Choice {
     value: string;
     label: string;
     color?: string;

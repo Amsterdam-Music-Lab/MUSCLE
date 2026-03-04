@@ -5,22 +5,30 @@ import { css } from '@emotion/react'
 import RangeLimits from "./_RangeLimits";
 import RangeTitle from "./_RangeTitle";
 import useBoundStore from "@/util/stores";
+import { Choice } from "@/types/Question";
 
 interface RangeProps {
-    keys: string[] | number[];
-    labels: string[];
+    choices: Choice[];
     value: string | number;
-    onSliderChange: (sliderIndex: number) => void
-    changePosition?: boolean
+    onChange: (value: string) => void;
+    changePosition?: boolean;
 }
 
-const RangeSlider = ({ keys, labels, value, onSliderChange, changePosition=false }: RangeProps) => {
-    const emptyValue = value === "";
-    let sliderValue = !emptyValue ? keys.indexOf(value) : Math.round((keys.length - 1)/2);
+const RangeSlider = ({ choices, value, onChange, changePosition=false }: RangeProps) => {
 
     const theme = useBoundStore((state) => state.theme);
     const sliderEmptyColor = theme["colorPrimary"];
     const sliderActiveColor = theme["colorSecondary"]
+
+    const keys = choices.map(choice => choice.value);
+    const labels = choices.map(choice => choice.label);
+
+    const emptyValue = value === "";
+    let sliderValue = !emptyValue ? keys.indexOf(value) : Math.round((keys.length - 1)/2);
+
+    const onSliderChange = (index: number) => {
+        onChange(keys[index]);
+    };
     
     const sliderStyle = () => {
         return css`
@@ -38,7 +46,7 @@ const RangeSlider = ({ keys, labels, value, onSliderChange, changePosition=false
         <div className="aha__range_slider" css={sliderStyle()}>
 
             <RangeTitle
-                labels={labels}
+                choices={choices}
                 sliderValue={sliderValue}
                 emptyValue={emptyValue}
                 changePosition={changePosition}
