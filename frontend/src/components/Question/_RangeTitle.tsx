@@ -11,14 +11,15 @@ interface RangeTitleProps {
 }
 
 const RangeTitle = ({ choices, sliderValue, emptyValue, changePosition = false }: RangeTitleProps) => {
-    console.log(sliderValue, choices.length)
-    const position = sliderValue * 96 / (choices.length - 1) - 48; // position in percent, with 2 % on each side as margin
-    console.log(position);
+    const position = sliderValue * 96 / (choices.length - 1) - 48; // position from -48% to 48%
     const theme = useBoundStore((state) => state.theme);
     const colors = choices.map((value) => value.color || "");
 
-    const getLabelColor = () => {
-        if (theme && colors[0]) {
+    const getLabelColor = () : string | undefined => {
+        /* return the color hex value from theme if color is defined for the current sliderValue
+            If only the first and last color are defined, return a gradient for the other sliderValues
+        */
+        if (theme && colors[0] && colors[choices.length - 1]) {
             if (theme[colors[sliderValue]]) {
                 return theme[colors[sliderValue]];
             } else {
