@@ -50,9 +50,18 @@ class BlockForm(ModelForm):
 
     class Meta:
         model = Block
-        fields = ["index", "slug", "name", "description",
-                  "rounds", "bonus_points", "playlists", "rules", "theme_config"
-                  ]
+        fields = [
+            "index",
+            "slug",
+            "name",
+            "description",
+            "image",
+            "rounds",
+            "bonus_points",
+            "playlists",
+            "rules",
+            "theme_config",
+        ]
         help_texts = {
             "name": _("The name and description will be displayed in dashboard mode."),
             "image": _(
