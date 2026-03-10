@@ -131,7 +131,7 @@ requires-dist = [
     { name = "django-cors-headers", specifier = ">=4.9.0" },
     { name = "django-inline-actions", specifier = ">=2.4.0" },
     { name = "django-markup", specifier = ">=1.10" },
-    { name = "django-modeltranslation", specifier = ">=0.19.19" },
+    { name = "django-modeltranslation", git = "https://github.com/BeritJanssen/django-modeltranslation.git" },
     { name = "django-nested-admin", specifier = ">=4.1.6" },
     { name = "markdown", specifier = ">=3.10.1" },
     { name = "pillow", specifier = ">=12.1.0" },
@@ -384,15 +384,11 @@ wheels = [
 
 [[package]]
 name = "django-modeltranslation"
-version = "0.20.2"
-source = { registry = "https://pypi.org/simple" }
+version = "0.1.dev1264+gf7942003b"
+source = { git = "https://github.com/BeritJanssen/django-modeltranslation.git#f7942003bbb1345afe8d58c0ce64889378653bc6" }
 dependencies = [
     { name = "django" },
     { name = "typing-extensions" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/62/aa/3492ab6250e0c87e26f2f4fd522e4c9b214da871bfe4089a13888a802c6e/django_modeltranslation-0.20.2.tar.gz", hash = "sha256:d687bdcae9305dcdc8d644b75f1d687f355073e82049f4b9c4ba0feb347a0980", size = 81589, upload-time = "2026-03-01T15:59:07.262Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/79/46/6c1edcab4233baa02cc6cfaf43e01ccc0c28757f9450171e54d790512e21/django_modeltranslation-0.20.2-py3-none-any.whl", hash = "sha256:964385c3cf3a584f564e995f2e9ff0e961d0297ef04ff51821ac529e12064290", size = 98257, upload-time = "2026-03-01T15:59:06.09Z" },
 ]
 
 [[package]]
