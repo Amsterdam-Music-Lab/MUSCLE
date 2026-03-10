@@ -139,6 +139,7 @@ class TestDuplicateExperiment(TestCase):
         cls.block1 = Block.objects.create(
             slug="block1",
             phase=cls.first_phase,
+            index=1,
             name_en="First block",
             description_en="Block1 description",
             name_nl="Eerste blok",
@@ -148,6 +149,7 @@ class TestDuplicateExperiment(TestCase):
         cls.block2 = Block.objects.create(
             slug="block2",
             phase=cls.first_phase,
+            index=2,
             name_en="Second block",
             description_en="Block2 description",
             name_nl="Tweede blok",
@@ -157,6 +159,7 @@ class TestDuplicateExperiment(TestCase):
         cls.block3 = Block.objects.create(
             slug="block3",
             phase=cls.second_phase,
+            index=1,
             name_en="Third block",
             description_en="Block3 description",
             name_nl="Derde blok",
@@ -166,6 +169,7 @@ class TestDuplicateExperiment(TestCase):
         cls.block4 = Block.objects.create(
             slug="block4",
             phase=cls.second_phase,
+            index=2,
             name_en="Fourth block",
             description_en="Block4 description",
             name_nl="Vierde blok",
@@ -202,8 +206,8 @@ class TestDuplicateExperiment(TestCase):
         all_phases = Phase.objects.all()
 
         all_blocks = Block.objects.all()
-        last_block = Block.objects.last()
         new_block1 = Block.objects.get(slug="block1-duplitest")
+        self.assertIsNotNone(new_block1)
 
         all_question_lists = QuestionList.objects.all()
         all_questions = Question.objects.all()
@@ -214,8 +218,9 @@ class TestDuplicateExperiment(TestCase):
         self.assertEqual(all_phases.count(), 4)
 
         self.assertEqual(all_blocks.count(), 8)
-        self.assertEqual(last_block.slug, 'block4-duplitest')
-        self.assertEqual(last_block.theme_config.name, 'test_theme')
+        block4duplicate = Block.objects.get(slug='block4-duplitest')
+        self.assertIsNotNone(block4duplicate)
+        self.assertEqual(block4duplicate.theme_config.name, 'test_theme')
 
         self.assertEqual(new_block1.playlists.all().count(), 2)
 
