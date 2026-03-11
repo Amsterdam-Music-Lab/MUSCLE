@@ -234,16 +234,16 @@ class IconRangeTest(TestCase):
         self.assertEqual(self.likert_question_icon.key, 'test_key')
         self.assertEqual(self.likert_question_icon.view, 'TEXT_RANGE')
         self.assertEqual(
-            self.likert_question_icon.choices,
-            {
-                '1': 'fa-face-grin-hearts',
-                '2': 'fa-face-grin',
-                '3': 'fa-face-smile',
-                '4': 'fa-face-meh',
-                '5': 'fa-face-frown',
-                '6': 'fa-face-frown-open',
-                '7': 'fa-face-angry',
-            },
+            [choice.get('label') for choice in self.likert_question_icon.choices],
+            [
+                'fa-face-grin-hearts',
+                'fa-face-grin',
+                'fa-face-smile',
+                'fa-face-meh',
+                'fa-face-frown',
+                'fa-face-frown-open',
+                'fa-face-angry',
+            ],
         )
 
     def test_action_method(self):
@@ -253,14 +253,14 @@ class IconRangeTest(TestCase):
         self.assertEqual(action_result['view'], 'TEXT_RANGE')
         self.assertIn('choices', action_result)
         self.assertEqual(
-            action_result['choices'],
-            {
-                '1': 'fa-face-grin-hearts',
-                '2': 'fa-face-grin',
-                '3': 'fa-face-smile',
-                '4': 'fa-face-meh',
-                '5': 'fa-face-frown',
-                '6': 'fa-face-frown-open',
-                '7': 'fa-face-angry',
-            },
+            [choice.get('label') for choice in action_result['choices']],
+            [
+                'fa-face-grin-hearts',
+                'fa-face-grin',
+                'fa-face-smile',
+                'fa-face-meh',
+                'fa-face-frown',
+                'fa-face-frown-open',
+                'fa-face-angry',
+            ],
         )

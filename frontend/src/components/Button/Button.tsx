@@ -98,14 +98,14 @@ const Button = ({
         return (
             <button
                 className={classNames({ disabled }, className, padding, "aha__button btn btn-lg")}
-                onClick={(e) => {
+                onClick={() => {
                     clickOnceGuard();
                 }}
                 disabled={disabled}
                 style={style}
                 css={styleButton(colorValue)}
                 tabIndex={0}
-                onKeyDown={(e) => {
+                onKeyDown={() => {
                     clickOnceGuard();
                 }}
                 type="button"

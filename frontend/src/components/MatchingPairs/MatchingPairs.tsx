@@ -24,7 +24,7 @@ interface MatchingPairsProps {
     showAnimation: boolean;
     finishedPlaying: () => void;
     scoreFeedbackDisplay?: ScoreFeedbackDisplay;
-    submitResult: (result: any) => void;
+    submitResult: (result: OnResultParams) => void;
     view: string;
 }
 

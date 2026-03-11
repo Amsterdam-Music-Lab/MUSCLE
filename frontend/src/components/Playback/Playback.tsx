@@ -115,7 +115,6 @@ const Playback = ({
                 pauseAudio(playMethod);
                 return;
             }
-            const section = sections[index]
 
             const playheadShift = getPlayheadShift();
             const latency = playAudio(sections[index], playMethod, playheadShift + playbackArgs.play_from);

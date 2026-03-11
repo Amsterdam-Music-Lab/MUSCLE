@@ -24,7 +24,7 @@ const RangeSlider = ({ choices, value, onChange, changePosition=false }: RangePr
     const labels = choices.map(choice => choice.label);
 
     const emptyValue = value === "";
-    let sliderValue = !emptyValue ? keys.indexOf(value) : Math.round((keys.length - 1)/2);
+    const sliderValue = !emptyValue ? keys.indexOf(value) : Math.round((keys.length - 1)/2);
 
     const onSliderChange = (index: number) => {
         onChange(keys[index]);
