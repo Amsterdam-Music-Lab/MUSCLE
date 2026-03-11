@@ -10,6 +10,7 @@ import { Card } from "@/types/Section";
 import Session from "@/types/Session";
 import Participant from "@/types/Participant";
 import { ScoreFeedbackDisplay } from "@/types/Playback";
+import { OnResultParams } from "@/hooks/useResultHandler";
 
 export const SCORE_FEEDBACK_DISPLAY: { [key: string]: ScoreFeedbackDisplay } = {
     SMALL_BOTTOM_RIGHT: 'small-bottom-right',

@@ -1,4 +1,7 @@
 from typing import List, TypedDict, Optional
+
+from django_markup.markup import formatter
+
 from .base_action import BaseAction
 from .button import Button, ButtonAction
 
@@ -31,7 +34,10 @@ class Step(object):
 
     def action(self, number=None) -> StepAction:
         """Create an explainer step, with description and optional number"""
-        return {"number": self.number if self.number else number, "description": self.description}
+        return {
+            "number": self.number if self.number else number,
+            "description": formatter(self.description, "markdown"),
+        }
 
 
 class Explainer(BaseAction):

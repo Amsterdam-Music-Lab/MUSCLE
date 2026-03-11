@@ -6,7 +6,7 @@ let buffers: { [key: string]: AudioBuffer } = {};
 let audioContext: AudioContext;
 let analyzer: AnalyserNode;
 
-export let audioInitialized = false;
+export const audioInitialized = false;
 
 // Declare audio property on window object
 declare global {
@@ -65,7 +65,7 @@ export const getTotalLatency = () => {
         outputLatency = 0;
     }
 
-    let totalLatency = (baseLatency + outputLatency) * 1000;
+    const totalLatency = (baseLatency + outputLatency) * 1000;
     return totalLatency;
 };
 
@@ -101,7 +101,7 @@ export const loadBuffer = async (link: string, canPlay: () => void) => {
 };
 
 export const checkSectionLoaded = (section: Section) => {
-    if (buffers.hasOwnProperty(section.link)) {
+    if (Object.hasOwn(buffers, section.link)) {
         return true;
     };
 };

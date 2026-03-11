@@ -18,6 +18,9 @@ class SerializerTest(TestCase):
     fixtures = [
         "playlist",
         "experiment",
+        "choice_lists",
+        "demographics",
+        "goldsmiths_msi",
     ]
 
     @classmethod

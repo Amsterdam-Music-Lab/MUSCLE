@@ -120,14 +120,6 @@ const Trial = (props: TrialProps) => {
         return decisionTime;
     }
 
-    const getAudioLatency = () => {
-        if (window.sessionStorage.getItem('audioLatency') !== null) {
-            return window.sessionStorage.getItem('audioLatency');
-        } else {
-            return NaN;
-        }
-    }
-
     const finishedPlaying = useCallback(() => {
         if (autoAdvance) {
 

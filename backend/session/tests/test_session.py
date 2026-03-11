@@ -11,6 +11,15 @@ from session.models import Session
 
 
 class SessionTest(TestCase):
+    fixtures = [
+        "choice_lists",
+        "demographics",
+        "goldsmiths_msi",
+        "musicgens",
+        "stomp",
+        "tipi",
+        "vanderbilt",
+    ]
 
     @classmethod
     def setUpTestData(cls):

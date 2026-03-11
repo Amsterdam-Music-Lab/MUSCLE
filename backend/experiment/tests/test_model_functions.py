@@ -7,6 +7,13 @@ from session.models import Session
 
 
 class TestModelBlock(TestCase):
+    fixtures = [
+        "choice_lists",
+        "demographics",
+        "goldsmiths_msi",
+        "musicgens",
+        "vanderbilt",
+    ]
 
     @classmethod
     def setUpTestData(cls):

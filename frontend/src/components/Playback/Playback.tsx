@@ -9,12 +9,13 @@ import MultiPlayer from "./MultiPlayer";
 import MatchingPairs from "../MatchingPairs/MatchingPairs";
 import Preload from "../Preload/Preload";
 import { AUTOPLAY, BUTTON, MATCHINGPAIRS, PRELOAD, PlaybackAction, PlaybackView } from "@/types/Playback";
+import { OnResultParams } from "@/hooks/useResultHandler";
 
 export interface PlaybackProps extends PlaybackAction {
     onPreloadReady: () => void;
     autoAdvance: boolean;
     responseTime: number;
-    submitResult: (result: any) => void;
+    submitResult: (result: OnResultParams) => void;
     startedPlaying?: () => void;
     finishedPlaying: () => void;
 }
@@ -60,8 +61,7 @@ const Playback = ({
 
     // Cancel events
     const cancelAudioListeners = useCallback(() => {
-        activeAudioEndedListener.current
-            && activeAudioEndedListener.current();
+        activeAudioEndedListener.current?.();
     }, []);
 
     // Cancel all events when component unmounts
@@ -117,7 +117,8 @@ const Playback = ({
             }
             const section = sections[index]
 
-            let latency = playAudio(section, playMethod, getPlayheadShift() + section.playFrom);
+            const playheadShift = getPlayheadShift();
+            const latency = playAudio(sections[index], playMethod, playheadShift + playbackArgs.play_from);
 
             // Cancel active events
             cancelAudioListeners();
@@ -149,7 +150,7 @@ const Playback = ({
     const onFinishedPlaying = useCallback(() => {
         setPlayerIndex(-1);
         pauseAudio(playMethod);
-        finishedPlaying && finishedPlaying();
+        finishedPlaying();
     }, [finishedPlaying, playMethod]);
 
     // Stop audio on unmount

@@ -1,25 +1,58 @@
 name: Database Backup Template
 
+permissions:
+  contents: read
+
 on:
   workflow_call:
     inputs:
       runner:
         required: true
         type: string
+      environment:
+        required: true
+        type: string
+  workflow_dispatch:
 
 jobs:
   backup:
     runs-on: ${{ inputs.runner }}
+    environment: ${{ inputs.environment }}
     steps:
-
+      - uses: actions/checkout@v4
       - name: Set Date
         id: date
         run: echo "DATE=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
-
-      - name: Backup Database
-        run: |
-          podman exec muscle_db_1 sh -c "pg_dump -Fc > /backups/${{ env.DATE }}.dump"
-
+      - name: Start database container
+        env:
+          HOST_DATA: ${{ vars.HOST_DATA }}
+          SQL_HOST: ${{ vars.SQL_HOST }}
+          SQL_PORT: ${{ vars.SQL_PORT }}
+          SQL_DATABASE: ${{ vars.SQL_DATABASE }}
+          SQL_USER: ${{ secrets.SQL_USER }}
+          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+        run: podman compose -f docker-compose-deploy.yml up db -d --no-recreate
+      - name: Backup database
+        run: podman exec muscle_db sh -c "pg_dump -Fc > /backups/${{ env.DATE }}.dump"
       - name: Remove Old Backups (older than 7 days)
         run: |
-          podman exec muscle_db_1 sh -c "find /backups -type f -name '*.dump' -mtime +7 -exec rm {} \;"
+          podman exec muscle_db sh -c "find /backups -type f -name '*.dump' -mtime +7 -exec rm {} \;"
+  
+  diagnose_database:
+    runs-on: tst
+    environment: Test
+    if: (github.event_name == 'workflow_dispatch' && !startsWith(github.ref, 'refs/tags'))
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start Postgres container
+        env:
+          HOST_DATA: ${{ vars.HOST_DATA }}
+          SQL_HOST: ${{ vars.SQL_HOST }}
+          SQL_PORT: ${{ vars.SQL_PORT }}
+          SQL_DATABASE: ${{ vars.SQL_DATABASE }}
+          SQL_USER: ${{ secrets.SQL_USER }}
+          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+        run: podman compose -f docker-compose-deploy.yml up db -d --no-recreate
+      - name: Test backup
+        run: podman exec muscle_db sh -c "pg_dump -Fc > /backups/test.dump"
+      

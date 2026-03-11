@@ -11,6 +11,8 @@ from session.models import Session
 
 
 class MatchingPairsTest(TestCase):
+    fixtures = ["choice_lists", "demographics"]
+
     @classmethod
     def setUpTestData(cls):
         section_csv = (

@@ -5,9 +5,9 @@ import MockAdapter from "axios-mock-adapter";
 import axios from 'axios';
 
 import Experiment from './Experiment';
-let mock = new MockAdapter(axios);
+const mock = new MockAdapter(axios);
 
-let mockUseParams = vi.fn();
+const mockUseParams = vi.fn();
 
 vi.mock('react-router-dom', async () => {
     const actual = await vi.importActual('react-router-dom');

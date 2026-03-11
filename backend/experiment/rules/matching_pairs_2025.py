@@ -19,10 +19,7 @@ from .matching_pairs import MatchingPairsGame
 
 class MatchingPairs2025(MatchingPairsGame):
     """This is the working version of the Matching Pairs game for the 2025 Tunetwins experiment.
-    The difference between this version and the original Matching Pairs game is that this version has some additional tutorial messages.
-    These messages are intended to help the user understand the game.
-    The tutorial messages are displayed to the user in an overlay on the game screen.
-    There is also additional logic to balance condition types (degradations vs. original) and difficulty levels.
+    The difference between this version and the original Matching Pairs game is the additional logic to balance condition types (degradations vs. original) and difficulty levels.
     """
 
     ID = "MATCHING_PAIRS_2025"
@@ -61,7 +58,8 @@ class MatchingPairs2025(MatchingPairsGame):
                 actions.append(intro_questions)
                 actions.extend(questions)
             if not self._has_played_before(session):
-                actions.append(self.get_intro_explainer())
+                n_pairs = session.block.rules_config.get('n_pairs', self.num_pairs)
+                actions.append(self.get_intro_explainer(n_pairs))
             if not actions:
                 actions.append(
                     self.get_short_explainer()
@@ -119,16 +117,15 @@ class MatchingPairs2025(MatchingPairsGame):
         return previous_games_results.exists()
 
     def _select_sections(self, session: Session) -> list[Section]:
+        n_pairs = session.block.rules_config.get('n_pairs', self.num_pairs)
         cond, diff = self._select_least_played_condition_difficulty_pair(session)
-
-        songs = self._select_least_played_songs(session)
-
+        songs = self._select_least_played_songs(session, n_pairs)
         sections = list(
             session.playlist.section_set.filter(
                 song__pk__in=songs, group=cond, tag=diff
             )
         )
-        if not len(sections) == self.num_pairs:
+        if not len(sections) == n_pairs:
             raise ValueError(
                 "Not enough sections found for condition {} and difficulty {}".format(
                     cond, diff
@@ -143,31 +140,31 @@ class MatchingPairs2025(MatchingPairsGame):
             sections += equivalents
         else:
             sections += sections
-
         random.shuffle(sections)
-
         return sections
 
     def _get_possible_conditions(self, session):
         conditions = list(set(session.playlist.section_set.values_list('group', 'tag')))
         return conditions
 
-    def get_intro_explainer(self):
+    def get_intro_explainer(self, n_pairs):
         return Explainer(
             instruction="",
             steps=[
                 Step(
                     description=_(
-                        'You get a board with 16 musical cards. **Pick a card,** and listen to it carefully...'
+                        'You get a board with %(n_cards)i musical cards. **Pick a card,** and listen to it carefully...'
                     )
+                    % {"n_cards": n_pairs * 2}
                 ),
                 Step(
                     description=_("Then try to **find a second card that matches it.**")
                 ),
                 Step(
                     description=_(
-                        "**Find the 8 matching pairs** to clear the board and score points:"
+                        "**Find the %(n_pairs)i matching pairs** to clear the board and score points:"
                     )
+                    % {"n_pairs": n_pairs}
                 ),
                 Step(
                     description=_(
@@ -229,7 +226,7 @@ class MatchingPairs2025(MatchingPairsGame):
         session.save_json_data({'condition': cond, 'difficulty': difficulty})
         return cond, difficulty
 
-    def _select_least_played_songs(self, session: Session) -> list[int]:
+    def _select_least_played_songs(self, session: Session, n_pairs: int) -> list[int]:
         songs = list(
             session.playlist.section_set.values_list('song', flat=True).distinct().all()
         )
@@ -238,19 +235,19 @@ class MatchingPairs2025(MatchingPairsGame):
             question_key='song', given_response__in=songs
         ).order_by('score')
         if not participant_results.count():
-            selected_songs = songs[: self.num_pairs]
+            selected_songs = songs[:n_pairs]
         else:
             participant_songs = [
                 int(result.given_response) for result in participant_results
             ]
             unplayed_songs = [song for song in songs if song not in participant_songs]
-            if len(unplayed_songs) >= self.num_pairs:
-                selected_songs = unplayed_songs[: self.num_pairs]
+            if len(unplayed_songs) >= n_pairs:
+                selected_songs = unplayed_songs[:n_pairs]
             else:
                 selected_songs = [
                     *unplayed_songs,
                     *participant_songs,
-                ][: self.num_pairs]
+                ][:n_pairs]
         for song in selected_songs:
             result, created = Result.objects.get_or_create(
                 participant=session.participant,

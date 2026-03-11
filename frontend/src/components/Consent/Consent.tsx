@@ -8,11 +8,12 @@ import classNames from "classnames";
 import IButton from "@/types/Button";
 import Participant from "@/types/Participant";
 import { styleButton } from "@/util/stylingHelpers";
+import Experiment from "@/types/Experiment";
 
 export interface ConsentProps {
     title: string;
     text: string;
-    experiment: any;
+    experiment: Experiment;
     participant: Pick<Participant, 'csrf_token'>;
     onNext: () => void;
     confirmButton: IButton;

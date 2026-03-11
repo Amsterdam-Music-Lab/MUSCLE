@@ -6,6 +6,7 @@ from session.models import Session
 from experiment.rules.categorization import Categorization
 
 class CategorizationRuleTest(TestCase):
+    fixtures = ["choice_lists", "demographics"]
 
     @classmethod
     def setUpTestData(cls):

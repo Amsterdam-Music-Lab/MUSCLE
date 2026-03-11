@@ -8,8 +8,6 @@ from django.contrib.postgres.fields import ArrayField
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from image.models import Image
 from question.models import Question, QuestionInList, QuestionList
-from session.models import Session
-from theme.models import ThemeConfig
 
 from .validators import markdown_html_validator, block_slug_validator, experiment_slug_validator
 
@@ -134,6 +132,7 @@ class Block(models.Model):
         bonus_points (int): Bonus points
         rules (str): The rules used for this block
         theme_config (theme.models.ThemeConfig): Theme settings
+        rules_config (dict): a dictionary containing extra settings for the rules coupled to the block
     """
 
     phase = models.ForeignKey(Phase, on_delete=models.CASCADE, related_name="blocks", blank=True, null=True)
@@ -156,6 +155,15 @@ class Block(models.Model):
     theme_config = models.ForeignKey(
         ThemeConfig, on_delete=models.SET_NULL, blank=True, null=True
     )
+
+    rules_config = models.JSONField(
+        default=dict,
+        help_text=_("Extra settings to control the behaviour of the block's rules"),
+        blank=True,
+    )
+
+    class Meta:
+        ordering = ["index"]
 
     def __str__(self):
         return self.name if self.name else self.slug

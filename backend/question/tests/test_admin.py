@@ -11,6 +11,7 @@ from question.models import Choice, ChoiceList, Question
 
 
 class QuestionAdminTestCase(TestCase):
+    fixtures = ['choice_lists', 'choices_countries', 'demographics']
 
     def test_duplicate_question(self):
         question_admin = QuestionAdmin(model=Question, admin_site=AdminSite())
@@ -28,6 +29,7 @@ class QuestionAdminTestCase(TestCase):
 
 
 class ChoiceListAdminTestCase(TestCase):
+    fixtures = ['choice_lists', 'choices_general']
 
     def test_duplicate_choice_list(self):
         cs_admin = ChoiceListAdmin(model=ChoiceList, admin_site=AdminSite())

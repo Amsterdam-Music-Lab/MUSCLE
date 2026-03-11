@@ -5,12 +5,12 @@ import { saveAs } from 'file-saver';
 import { vi, Mock, expect, it, describe, } from 'vitest';
 import { buttonColorOptions } from "@/types/Button";
 
-global.Blob = vi.fn().mockImplementation((content, options) => ({
-    content,
-    options
-}));
+(global as any).Blob = vi.fn().mockImplementation(function (this: any, content, options) {
+    this.content = content;
+    this.options = options;
+});
 
-global.URL.createObjectURL = vi.fn();
+(global as any).URL.createObjectURL = vi.fn();
 
 vi.mock('file-saver', () => ({
     saveAs: vi.fn(),
