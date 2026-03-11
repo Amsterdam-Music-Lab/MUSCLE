@@ -7,11 +7,12 @@ import Loading from "../Loading/Loading";
 import { createConsent, useConsent } from "../../API";
 import classNames from "classnames";
 import Participant from "@/types/Participant";
+import Experiment from "@/types/Experiment";
 
 export interface ConsentProps {
     title: string;
     text: string;
-    experiment: any;
+    experiment: Experiment;
     participant: Pick<Participant, 'csrf_token'>;
     onNext: () => void;
     confirm: string;

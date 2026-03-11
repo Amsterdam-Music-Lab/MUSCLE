@@ -15,8 +15,8 @@ export default interface Question {
     key: string;
     text: string;
     view: QuestionViews;
-    value?: any;
-    style?: any;
+    value?: string | number;
+    style?: string;
     explainer?: string;
     expected_response?: string;
     choices?: { [key: string]: string };

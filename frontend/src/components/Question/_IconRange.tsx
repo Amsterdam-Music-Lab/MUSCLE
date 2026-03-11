@@ -5,8 +5,8 @@ import Question from "@/types/Question";
 
 interface IconRangeProps {
     question: Question;
-    value: any;
-    onChange: any;
+    value: string;
+    onChange: () => void;
 }
 
 const IconRange = ({ question, value, onChange}: IconRangeProps) => {

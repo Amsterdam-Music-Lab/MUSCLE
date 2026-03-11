@@ -33,7 +33,7 @@ describe('TextRange Component', () => {
             <TextRange question={mockQuestion} value="3" onChange={() => { }} />
         );
 
-        let slider = document.querySelector('.rangeslider');
+        const slider = document.querySelector('.rangeslider');
         expect(slider).toBeTruthy();
         expect(slider?.getAttribute('aria-valuemin')).toBe('0');
         expect(slider?.getAttribute('aria-valuenow')).toBe('20');

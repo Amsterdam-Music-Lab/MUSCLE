@@ -41,10 +41,10 @@ const Circle = ({
             duration,
             onTick: (t) => {
                 setTime(Math.min(t, duration));
-                onTick && onTick(t);
+                onTick?.(t);
             },
             onFinish: () => {
-                onFinish && onFinish();
+                onFinish?.();
             },
         });
     }, [running, duration, onTick, onFinish, startTime]);

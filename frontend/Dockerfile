@@ -1,16 +1,23 @@
-# Builder image
-FROM docker.io/node:18-alpine
+# Base image
+FROM docker.io/node:22-alpine as base
 
 WORKDIR /client
 RUN yarn set version 4.1.1
 COPY package.json /client/
 COPY yarn.lock /client/
-
-RUN yarn
 COPY jsconfig.json /client/
+RUN yarn
+
+FROM base as dev
 COPY tsconfig.json /client/
 COPY tsconfig.node.json /client/
 COPY vite.config.ts /client/
+COPY vite-env.d.ts /client/
+COPY vitest.config.ts /client/
+COPY eslint.config.mjs /client
 COPY index.html /client/
-COPY public /client/public
-COPY src /client/src
+
+FROM base as prod
+COPY . /client/
+RUN yarn build
+

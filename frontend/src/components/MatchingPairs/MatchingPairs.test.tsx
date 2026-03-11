@@ -40,7 +40,7 @@ describe('MatchingPairs Component', () => {
         mock.restore()
     })
 
-    let mockSections = [
+    const mockSections = [
         { id: 1, content: 'Card 1', url: '/cat-01.jpg', inactive: false, turned: false, noevents: false, seen: false },
         { id: 2, content: 'Card 2', url: '/cat-02.jpg', inactive: false, turned: false, noevents: false, seen: false },
         { id: 3, content: 'Card 1', url: '/cat-01.jpg', inactive: false, turned: false, noevents: false, seen: false },

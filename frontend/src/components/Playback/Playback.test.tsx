@@ -17,7 +17,7 @@ describe('Playback', () => {
         submitResult: vi.fn(),
     }
 
-    let playbackArgs: PlaybackArgs = {
+    const playbackArgs: PlaybackArgs = {
         view: 'BUTTON',
         show_animation: false,
         instruction: 'Listen, just listen!',

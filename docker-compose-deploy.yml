@@ -66,6 +66,8 @@ services:
     client-builder:
         build:
             context: ./frontend
+            dockerfile: Dockerfile
+            target: prod
         # build with the base path set to VITE_STATIC_URL (to pull from CDN) or "/" as fallback
         command: sh -c "yarn build --base ${VITE_STATIC_URL:-/}"
         volumes:

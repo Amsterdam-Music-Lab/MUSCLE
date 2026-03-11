@@ -56,13 +56,13 @@ const Button = ({
     return (
         <button
             className={classNames({ disabled }, className, padding, "aha__button btn btn-lg")}
-            onClick={(e) => {
+            onClick={() => {
                 clickOnceGuard();
             }}
             disabled={disabled}
             style={style}
             tabIndex={0}
-            onKeyPress={(e) => {
+            onKeyDown={() => {
                 clickOnceGuard();
             }}
             type="button"

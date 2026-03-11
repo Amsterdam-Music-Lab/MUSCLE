@@ -10,7 +10,7 @@ interface UseResultHandlerParams {
     participant: Participant;
 }
 
-interface OnResultParams {
+export interface OnResultParams {
     // If feedback form is provided
     form: Question[];
     decision_time?: number;
