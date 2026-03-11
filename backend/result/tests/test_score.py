@@ -12,6 +12,7 @@ from session.models import Session
 
 
 class ScoreTest(TestCase):
+    fixtures = ["choice_lists", "choices_general"]
 
     @classmethod
     def setUpTestData(cls):

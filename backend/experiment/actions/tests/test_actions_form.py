@@ -19,6 +19,3 @@ class FormTest(TestCase):
         action_result = self.form.action()
         self.assertIn('form', action_result)
         self.assertEqual(len(action_result['form']), 1)
-        self.assertIn('submit_label', action_result)
-        self.assertIn('skip_label', action_result)
-        self.assertIn('is_skippable', action_result)

@@ -10,7 +10,7 @@ from session.models import Session
 
 
 class MusicalPreferencesTest(TestCase):
-    fixtures = ["playlist", "experiment"]
+    fixtures = ["playlist", "experiment", "choice_lists", "choices_general"]
 
     @classmethod
     def setUpTestData(cls):

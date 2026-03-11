@@ -2,10 +2,7 @@
 
 from django.db import migrations, models
 import question.models
-from question.management.commands.updatequestions import update_choices
 
-def choices_with_color(app, schema_editor):
-    update_choices()
 
 class Migration(migrations.Migration):
 
@@ -24,8 +21,5 @@ class Migration(migrations.Migration):
                 max_length=32,
                 validators=[question.models.validate_color],
             ),
-        ),
-        migrations.RunPython(
-            choices_with_color, reverse_code=migrations.RunPython.noop
         ),
     ]
