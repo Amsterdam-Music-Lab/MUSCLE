@@ -7,6 +7,7 @@ import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
 import { OnResultType } from "@/hooks/useResultHandler";
+import { getAudioLatency } from "@/util/time";
 import { ITrial } from "@/types/Action";
 import Theme from "@/types/Theme";
 import { BreakRoundOn } from "@/types/Trial";
