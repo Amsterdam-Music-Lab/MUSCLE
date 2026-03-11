@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('question', '0015_alter_questioninlist_options_and_more'),
+        ('question', '0016_choice_color'),
     ]
 
     operations = [
