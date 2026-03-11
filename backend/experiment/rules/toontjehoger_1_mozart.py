@@ -12,8 +12,8 @@ from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
 from experiment.actions.utils import get_current_experiment_url
-from experiment.models import Session
 from result.utils import prepare_result
+from session.models import Session
 from theme.styles import ColorScheme
 from .base import BaseRules
 
@@ -21,7 +21,7 @@ from .base import BaseRules
 logger = logging.getLogger(__name__)
 
 
-def toontjehoger_ranks(session):
+def toontjehoger_ranks(session: Session):
     score = session.final_score
     if score < 25:
         return "PLASTIC"
@@ -91,7 +91,7 @@ class ToontjeHoger1Mozart(BaseRules):
     def get_task_explainer(self):
         return "Welke vorm ontstaat er na het afknippen van de hoekjes?"
 
-    def get_answer_explainer(self, session, round):
+    def get_answer_explainer(self, session: Session, round):
         last_result = session.last_result()
 
         correct_answer_given = last_result.score > 0
@@ -117,7 +117,7 @@ class ToontjeHoger1Mozart(BaseRules):
         )
         return [info]
 
-    def get_score(self, session):
+    def get_score(self, session: Session):
         # Feedback message
         last_result = session.last_result()
         section = last_result.section
@@ -208,7 +208,7 @@ class ToontjeHoger1Mozart(BaseRules):
         score = self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
         return score
 
-    def get_final_round(self, session):
+    def get_final_round(self, session: Session):
         # Finish session.
         session.finish()
         session.save()

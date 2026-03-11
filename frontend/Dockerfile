@@ -21,8 +21,3 @@ FROM base as prod
 COPY . /client/
 RUN yarn build
 
-# Runner image that serves the built app using nginx
-FROM docker.io/nginx:alpine as runner
-
-COPY --from=builder /client/build /usr/share/nginx/html
-EXPOSE 80

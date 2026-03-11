@@ -33,7 +33,7 @@ def serialize_experiment(experiment: Experiment) -> dict:
     serialized = {
         "slug": experiment.slug,
         "name": experiment.name,
-        "description": experiment.description,
+        "description": formatter(experiment.description, filter_name="markdown"),
     }
 
     if experiment.consent:
@@ -141,7 +141,8 @@ def get_upcoming_block(phase: Phase, participant: Participant, times_played: int
     """
     blocks = list(phase.blocks.all())
 
-    shuffle(blocks)
+    if phase.randomize:
+        shuffle(blocks)
     finished_session_counts = [get_finished_session_count(block, participant) for block in blocks]
 
     min_session_count = min(finished_session_counts)

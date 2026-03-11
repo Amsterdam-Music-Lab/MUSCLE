@@ -60,7 +60,7 @@ const ExplainerItem = ({ number = null, description, delay = 0 }: ExplainerItemP
         style={{ animationDelay: delay + "ms" }}
     >
         {number != null && <h4 className="number">{number}</h4>}
-        <span>{description}</span>
+        <span dangerouslySetInnerHTML={{ __html: description }}/>
     </li>
 );
 

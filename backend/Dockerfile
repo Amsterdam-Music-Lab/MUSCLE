@@ -28,4 +28,4 @@ RUN uv add pygraphviz django-extensions
 # Generate graphviz image
 # See also https://django-extensions.readthedocs.io/en/latest/graph_models.html
 # for more options
-ENTRYPOINT ["python", "manage.py", "graph_models", "-a", "-g", "-o", "/server/static/model_graph.png"]
+ENTRYPOINT ["uv", "run", "python", "manage.py", "graph_models", "-a", "-g", "-o", "/server/static/model_graph.png"]

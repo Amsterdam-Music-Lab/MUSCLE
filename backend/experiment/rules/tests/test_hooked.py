@@ -24,6 +24,13 @@ class HookedTest(TestCase):
     fixtures = [
         "playlist",
         "experiment",
+        "choice_lists",
+        "demographics",
+        "goldsmiths_msi",
+        "musicgens",
+        "stomp",
+        "tipi",
+        "vanderbilt",
     ]
 
     @classmethod

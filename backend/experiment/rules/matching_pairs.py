@@ -92,14 +92,15 @@ class MatchingPairsGame(BaseRules):
             return [score]
 
     def select_sections(self, session):
+        n_pairs = session.block.rules_config.get("n_pairs", self.num_pairs)
         json_data = session.json_data
         pairs = json_data.get("pairs", [])
-        if len(pairs) < self.num_pairs:
+        if len(pairs) < n_pairs:
             pairs = list(session.playlist.section_set.order_by().distinct("group").values_list("group", flat=True))
             random.seed(self.random_seed)
             random.shuffle(pairs)
-        selected_pairs = pairs[: self.num_pairs]
-        session.save_json_data({"pairs": pairs[self.num_pairs :]})
+        selected_pairs = pairs[:n_pairs]
+        session.save_json_data({"pairs": pairs[n_pairs:]})
         originals = session.playlist.section_set.filter(group__in=selected_pairs, tag="Original")
         degradations = json_data.get("degradations")
         if not degradations:

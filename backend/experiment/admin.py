@@ -5,9 +5,9 @@ from django.contrib import admin, messages
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db import models
 from django.db.models.query import QuerySet
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.urls import path, reverse
 from django.utils.html import format_html, format_html_join
 
 from inline_actions.admin import InlineActionsModelAdminMixin
@@ -128,6 +128,21 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
     formfield_overrides = {
         models.TextField: {"widget": MarkdownPreviewTextInput},
     }
+
+    def get_urls(self):
+        urls = super().get_urls()
+        create_phase_url = path(
+            "<path:object_id>/change/phase/create/",
+            self.create_phase,
+            name="experiment_experiment_create_phase",
+        )
+        return [create_phase_url, *urls]
+
+    def create_phase(self, request, object_id):
+        experiment = Experiment.objects.get(pk=object_id)
+        phase_count = Phase.objects.filter(experiment=experiment).count()
+        phase = Phase.objects.create(experiment=experiment, index=phase_count)
+        return JsonResponse({"created": phase.id})
 
     def experiment_name(self, obj):
         return obj.name or "<Unnamed>"

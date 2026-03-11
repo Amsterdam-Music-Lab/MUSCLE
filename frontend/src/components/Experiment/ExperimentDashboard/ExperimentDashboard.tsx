@@ -40,15 +40,15 @@ export const ExperimentDashboard: React.FC<ExperimentDashboardProps> = ({ experi
                     socialMediaConfig={socialMediaConfig}
                 />
             )}
-            {/* Experiments */}
+            {/* Blocks */}
             <div role="menu" className="dashboard toontjehoger">
                 <ul>
-                    {dashboard.map((exp: IBlock) => (
-                        <li key={exp.slug}>
-                            <Link to={getExperimentHref(exp.slug)} role="menuitem">
-                                <ImageOrPlaceholder imagePath={exp.image?.file} alt={exp.image?.alt ?? exp.description} />
-                                <h3>{exp.name}</h3>
-                                <p>{exp.description}</p>
+                    {dashboard.map((block: IBlock) => (
+                        <li key={block.slug}>
+                            <Link to={getExperimentHref(block.slug)} role="menuitem">
+                                <ImageOrPlaceholder imagePath={block.image?.file} alt={block.image?.alt ?? block.description} />
+                                <h3>{block.name}</h3>
+                                <p>{block.description}</p>
                             </Link>
                         </li>
                     ))}
