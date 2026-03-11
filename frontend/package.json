@@ -79,7 +79,7 @@
     "msw": "^2.6.6",
     "msw-storybook-addon": "^2.0.4",
     "prop-types": "15.8.1",
-    "storybook": "^10.2.1",
+    "storybook": "^10.2.10",
     "typescript-eslint": "^8.54.0",
     "vitest": "^4.0.18"
   },
