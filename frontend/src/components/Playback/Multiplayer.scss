@@ -30,44 +30,4 @@
             margin: 0;
         }
     }
-
-    &.neutral-inverted {
-
-        .player-wrapper:nth-child(1) {
-
-            .aha__play-button {
-                background-color: $blue;
-                box-shadow: 0 0 0 0.2em rgba($blue, 0.5);
-            }
-
-            .banner {
-                background-color: rgba($blue, 0.75);
-            }
-        }
-
-        .player-wrapper:nth-child(2) {
-
-            .aha__play-button {
-                background-color: $yellow;
-                box-shadow: 0 0 0 0.2em rgba($yellow, 0.5);
-            }
-
-            .banner {
-                background-color: rgba($yellow, 0.75);
-            }
-        }
-
-        .player-wrapper:nth-child(3) {
-
-            .aha__play-button {
-                background-color: $teal;
-                box-shadow: 0 0 0 0.2em rgba($teal, 0.5);
-            }
-
-            .banner {
-                background-color: rgba($teal, 0.75);
-            }
-        }
-
-    }
 }

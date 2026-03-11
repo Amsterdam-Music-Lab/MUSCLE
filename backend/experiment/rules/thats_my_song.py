@@ -91,13 +91,13 @@ class ThatsMySong(Hooked):
                 question = CheckBoxQuestion(
                     key="playlist_decades",
                     text=_("Choose two or more decades of music"),
-                    choices={
-                        "1960s": "1960s",
-                        "1970s": "1970s",
-                        "1980s": "1980s",
-                        "1990s": "1990s",
-                        "2000s": "2000s",
-                    },
+                    choices=[
+                        {"value": "1960s", "label": "1960s"},
+                        {"value": "1970s", "label": "1970s"},
+                        {"value": "1980s", "label": "1980s"},
+                        {"value": "1990s", "label": "1990s"},
+                        {"value": "2000s", "label": "2000s"},
+                    ],
                     min_values=2,
                     result_id=prepare_result("playlist_decades", session=session),
                 )

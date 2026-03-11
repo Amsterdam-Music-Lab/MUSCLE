@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import Circle from "../Circle/Circle";
 import CountDown from "../CountDown/CountDown";
 import Histogram from "../Histogram/Histogram";
+import PlaybackSection from "@/types/Section";
 
 interface AutoPlayProps {
     instruction?: string;
+    sections: PlaybackSection[];
     showAnimation: boolean;
-    playSection: (section: number) => void;
+    playSection: (index: number) => void;
     startedPlaying: boolean;
     finishedPlaying: () => void;
     responseTime: number;
@@ -20,7 +22,7 @@ const AutoPlay = ({ instruction, showAnimation, playSection, startedPlaying, fin
 
     // Handle view logic
     useEffect(() => {
-        playSection(0)
+        playSection(0);
     }, [playSection, startedPlaying]);
 
     return (

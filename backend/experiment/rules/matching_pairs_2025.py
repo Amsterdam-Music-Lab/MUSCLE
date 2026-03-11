@@ -11,7 +11,7 @@ from session.models import Session
 
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
-from experiment.actions.playback import MatchingPairs
+from experiment.actions.playback import MatchingPairs, PlaybackSection
 from experiment.actions.trial import Trial
 from experiment.actions.types import FeedbackInfo
 from .matching_pairs import MatchingPairsGame
@@ -94,12 +94,16 @@ class MatchingPairs2025(MatchingPairsGame):
         random.shuffle(player_sections)
 
         playback = MatchingPairs(
-            sections=player_sections,
-            stop_audio_after=5,
+            sections=[PlaybackSection(section) for section in player_sections],
             show_animation=self.show_animation,
             score_feedback_display=self.score_feedback_display,
         )
-        trial = Trial(title="Tune twins", playback=playback, feedback_form=None, config={"show_continue_button": False})
+        trial = Trial(
+            title="Tune twins",
+            playback=playback,
+            feedback_form=None,
+            continue_button=None,
+        )
 
         return trial
 

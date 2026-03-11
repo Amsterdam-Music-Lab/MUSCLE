@@ -6,7 +6,6 @@ from django.utils.translation import gettext_lazy as _, get_language
 from django.contrib.postgres.fields import ArrayField
 
 from experiment.standards.iso_languages import ISO_LANGUAGES
-from theme.models import ThemeConfig
 from image.models import Image
 from question.models import Question, QuestionInList, QuestionList
 
@@ -132,7 +131,7 @@ class Block(models.Model):
         rounds (int): Number of rounds
         bonus_points (int): Bonus points
         rules (str): The rules used for this block
-        theme_config (theme.models.ThemeConfig): Theme settings
+        theme_config (theme.ThemeConfig): Theme settings
         rules_config (dict): a dictionary containing extra settings for the rules coupled to the block
     """
 
@@ -154,7 +153,7 @@ class Block(models.Model):
     rules = models.CharField(default="", max_length=64)
 
     theme_config = models.ForeignKey(
-        ThemeConfig, on_delete=models.SET_NULL, blank=True, null=True
+        "theme.ThemeConfig", on_delete=models.SET_NULL, blank=True, null=True
     )
 
     rules_config = models.JSONField(

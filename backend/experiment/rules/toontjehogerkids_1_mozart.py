@@ -1,6 +1,8 @@
 import logging
 from django.template.loader import render_to_string
 from os.path import join
+
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.info import Info
@@ -27,7 +29,7 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
                 Step("Kun jij het juiste antwoord vinden?"),
             ],
             step_numbers=True,
-            button_label="Start",
+            button=Button("Start"),
         )
 
     def get_task_explainer(self):
@@ -69,8 +71,10 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
         info = Info(
             body=body,
             heading="Het Mozart effect",
-            button_label="Terug naar ToontjeHogerKids",
-            button_link=get_current_experiment_url(session),
+            button=Button(
+                "Terug naar ToontjeHogerKids",
+                link=get_current_experiment_url(session),
+            ),
         )
 
         return [*answer_explainer, *score, final, info]

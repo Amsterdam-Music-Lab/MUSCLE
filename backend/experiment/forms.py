@@ -55,6 +55,7 @@ class BlockForm(ModelForm):
             "slug",
             "name",
             "description",
+            "image",
             "rounds",
             "bonus_points",
             "playlists",

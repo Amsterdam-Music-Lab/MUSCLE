@@ -2,12 +2,12 @@ import itertools
 import re
 
 from django.utils.translation import gettext_lazy as _
-from experiment.actions.utils import final_action_with_optional_button
+from experiment.actions.wrappers import final_action_with_optional_button
 from section.models import Playlist, Section
 from session.models import Session
 from experiment.actions.explainer import Explainer
 from experiment.actions.form import Form
-from experiment.actions.playback import PlayButton
+from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
 from .base import BaseRules
@@ -109,14 +109,18 @@ class CongoSameDiff(BaseRules):
         question = ButtonArrayQuestion(
             text="Did the participant complete the practice round correctly?",
             key=key,
-            choices={
-                "YES": "Yes, continue",
-                "NO": "No, restart the practice trials",
-            },
+            choices=[
+                {"value": "YES", "label": "Yes, continue", "color": "colorPositive"},
+                {
+                    "value": "NO",
+                    "label": "No, restart the practice trials",
+                    "color": "colorNegative",
+                },
+            ],
             result_id=result_pk,
         )
 
-        form = Form([question], submit_label="")
+        form = Form([question], submit_button=None)
 
         trial = Trial(
             feedback_form=form,
@@ -147,29 +151,27 @@ class CongoSameDiff(BaseRules):
         question = ButtonArrayQuestion(
             explainer=f'{practice_label} ({trial_index}/{trials_count}) | {section_name} | {section_tag} | {section_group}',
             text=_('Is the third sound the SAME or DIFFERENT as the first two sounds?'),
-            choices={
-                'DEFINITELY_SAME': _('DEFINITELY SAME'),
-                'PROBABLY_SAME': _('PROBABLY SAME'),
-                'PROBABLY_DIFFERENT': _('PROBABLY DIFFERENT'),
-                'DEFINITELY_DIFFERENT': _('DEFINITELY DIFFERENT'),
-                'I_DONT_KNOW': _('I DON’T KNOW'),
-            },
+            choices=[
+                {"value": 'DEFINITELY_SAME', "label": _('DEFINITELY SAME')},
+                {"value": 'PROBABLY_SAME', "label": _('PROBABLY SAME')},
+                {"value": 'PROBABLY_DIFFERENT', "label": _('PROBABLY DIFFERENT')},
+                {"value": 'DEFINITELY_DIFFERENT', "label": _('DEFINITELY DIFFERENT')},
+                {"value": 'I_DONT_KNOW', "label": _('I DON’T KNOW')},
+            ],
             key=key,
             result_id=prepare_result(
                 key, session, section=section, expected_response=expected_response
             ),
         )
         form = Form([question])
-        playback = PlayButton([section], play_once=False)
+        playback = PlayButtons(sections=[PlaybackSection(section)], play_once=False)
         block_name = session.block.slug if session.block else "Musicality Battery Block"
         view = Trial(
             playback=playback,
             feedback_form=form,
             title=_(block_name),
-            config={
-                'response_time': section.duration,
-                'listen_first': False,
-            }
+            response_time=section.duration,
+            listen_first=False,
         )
         return view
 

@@ -84,27 +84,6 @@
 
 .matching-pairs__feedback {
     float: left;
-    color: white;
-
-    &.fbnomatch {
-        color: $gray;
-    }
-
-    &.fblucky {
-        color: $yellow;
-    }
-
-    &.fbmemory {
-        color: $teal;
-    }
-
-    &.fbmisremembered {
-        color: $red;
-    }
-
-    &.nomessage {
-        opacity: 0;
-    }
 }
 
 .matching-pairs__score {

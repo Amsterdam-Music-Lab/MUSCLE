@@ -22,8 +22,9 @@ export const ExperimentDashboard: React.FC<ExperimentDashboardProps> = ({ experi
     const nextBlockSlug = experiment.nextBlock?.slug;
     const showHeader = experiment.theme?.header;
     const socialMediaConfig = experiment.socialMediaConfig;
+    const primaryColor = experiment.theme?.colorPrimary || '';
 
-    const getExperimentHref = (slug: string) => `/block/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
+    const getBlockHref = (slug: string) => `/block/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     return (
         <div className="aha__dashboard">
@@ -38,6 +39,7 @@ export const ExperimentDashboard: React.FC<ExperimentDashboardProps> = ({ experi
                     nextBlockButtonText={nextBlockButtonText}
                     aboutButtonText={aboutButtonText}
                     socialMediaConfig={socialMediaConfig}
+                    buttonColor={primaryColor}
                 />
             )}
             {/* Blocks */}
@@ -45,14 +47,14 @@ export const ExperimentDashboard: React.FC<ExperimentDashboardProps> = ({ experi
                 <ul>
                     {dashboard.map((block: IBlock) => (
                         <li key={block.slug}>
-                            <Link to={getExperimentHref(block.slug)} role="menuitem">
+                            <Link to={getBlockHref(block.slug)} role="menuitem">
                                 <ImageOrPlaceholder imagePath={block.image?.file} alt={block.image?.alt ?? block.description} />
                                 <h3>{block.name}</h3>
                                 <p>{block.description}</p>
                             </Link>
                         </li>
                     ))}
-                    {dashboard.length === 0 && <p>No experiments found</p>}
+                    {dashboard.length === 0 && <p>No blocks found</p>}
                 </ul>
             </div>
         </div>
@@ -61,6 +63,7 @@ export const ExperimentDashboard: React.FC<ExperimentDashboardProps> = ({ experi
 
 const ImageOrPlaceholder = ({ imagePath, alt }: { imagePath?: string, alt: string }) => {
     const imgSrc = imagePath ?? null;
+    console.log(imgSrc);
 
     return imgSrc ? <img src={imgSrc} alt={alt} /> : <div className="placeholder" />;
 }

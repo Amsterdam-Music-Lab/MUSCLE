@@ -22,7 +22,6 @@ controlVisibility = (selected) => {
         case "AutoCompleteQuestion":
         case "ButtonArrayQuestion":
         case "DropdownQuestion":
-        case "IconRangeQuestion":
         case "RadiosQuestion":
         case "TextRangeQuestion":
             showFields([".field-choices", ".field-profile_scoring_rule"]);  

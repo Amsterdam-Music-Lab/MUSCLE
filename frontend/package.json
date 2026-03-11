@@ -4,6 +4,7 @@
   "type": "module",
   "license": "MIT",
   "dependencies": {
+    "@emotion/react": "^11.14.0",
     "@sentry/react": "^10.37.0",
     "@vitejs/plugin-react": "^5.1.2",
     "axios": ">=1.12.0",
@@ -36,8 +37,7 @@
     "storybook": "storybook dev -p 6006 --no-open",
     "storybook:build": "storybook build",
     "lint": "eslint src/**/*.{js,jsx,ts,tsx}",
-    "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx}",
-    "build-storybook": "storybook build"
+    "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx}"
   },
   "browserslist": {
     "production": [

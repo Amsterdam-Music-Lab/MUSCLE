@@ -1,53 +1,59 @@
-import React from "react";
-import PlayerSmall from "../PlayButton/PlayerSmall";
 import classNames from "classnames";
-import { PlaybackArgs } from "@/types/Playback";
-import Section from "@/types/Section";
+
+import PlayButton from "./PlayButton";
+import PlaybackSection from "@/types/Section";
 
 interface MultiPlayerProps {
     playSection: (index: number) => void;
-    sections: Section[];
-    playerIndex: string;
-    labels?: PlaybackArgs["labels"];
-    disabledPlayers?: number[];
-    extraContent?: (index: number) => JSX.Element;
-    style?: PlaybackArgs["style"];
+    hasPlayed: number[];
+    sections: PlaybackSection[];
+    playOnce?: boolean;
+    playing: number;
 }
 
 const MultiPlayer = ({
     playSection,
     sections,
-    playerIndex,
-    labels,
-    disabledPlayers,
-    extraContent,
-    style,
+    playOnce=false,
+    hasPlayed=[],
+    playing
 }: MultiPlayerProps) => {
+    const checkPlaySection = (index: number) => {
+        playSection(index);
+    }
     return (
         <div
             data-testid="multiplayer"
             className={classNames(
                 "aha__multiplayer d-flex justify-content-around",
                 "player-count-" + sections.length,
-                style
             )}
         >
-            {sections.map((_section, index) => (
+            {sections.map((section, index) => (
                 <div className="player-wrapper" key={index}>
-                    <PlayerSmall
-                        onClick={() => {
-                            playSection(index);
-                        }}
+                    <PlayButton
+                        playSection={checkPlaySection}
                         disabled={
-                            Array.isArray(disabledPlayers) &&
-                            disabledPlayers.includes(index)
+                            playOnce ? hasPlayed.includes(index) : false
                         }
-                        label={
-                            labels ? labels[index] : ""
-                        }
-                        playing={parseInt(playerIndex) === index}
+                        playIndex={index}
+                        section={section}
+                        isPlaying={playing===index}
                     />
-                    {extraContent && extraContent(index)}
+                    {section.image && (
+                    <div className="image">
+                        <img
+                            src={section.image.link}
+                            alt={section.image.label}
+                            onClick={() => {
+                                playSection(index);
+                            }}
+                        />
+                        {section.image.label && (
+                            <span>{section.image.label}</span>
+                        )}
+                    </div>
+                    )}
                 </div>)
             )}
         </div>

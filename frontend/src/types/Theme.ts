@@ -33,4 +33,14 @@ export default interface Theme {
     name: string;
     footer: Footer | null;
     header: Header | null;
+    colorPrimary: string;
+    colorSecondary: string;
+    colorPositive: string;
+    colorNegative: string;
+    colorNeutral1: string;
+    colorNeutral2: string;
+    colorNeutral3: string;
+    colorGrey: string;
+    colorText: string;
+    colorBackground: string;
 }

@@ -6,7 +6,6 @@ import AutoComplete from "./_AutoComplete";
 import ButtonArray from "./_ButtonArray";
 import Checkboxes from "./_Checkboxes";
 import DropDown from "./_DropDown";
-import IconRange from "./_IconRange";
 import Number from "./_Number";
 import Radios from "./_Radios";
 import Range from "./_Range";
@@ -31,9 +30,9 @@ const Question = ({
 }: QuestionProps) => {
     const [value, setValue] = useState(question.value || "");
 
-    const registerChange = (value: string | number | boolean) => {
-        onChange(value, id);
-        setValue(value);
+    const registerChange = (newValue: string | number | boolean) => {
+        onChange(newValue, id);
+        setValue(newValue);
     };
 
     // render view
@@ -46,27 +45,24 @@ const Question = ({
         };
 
         switch (view) {
+            case QuestionViews.AUTOCOMPLETE:
+                return <AutoComplete {...attrs} />;
             case QuestionViews.BUTTON_ARRAY:
                 return <ButtonArray {...attrs} />;
             case QuestionViews.CHECKBOXES:
                 return <Checkboxes {...attrs} />;
             case QuestionViews.DROPDOWN:
                 return <DropDown {...attrs} />;
-            case QuestionViews.AUTOCOMPLETE:
-                return <AutoComplete {...attrs} />;
+            case QuestionViews.NUMBER:
+                return <Number {...attrs} />;
             case QuestionViews.RADIOS:
                 return <Radios {...attrs} />;
             case QuestionViews.RANGE:
                 return <Range {...attrs} />;
             case QuestionViews.TEXT_RANGE:
                 return <TextRange {...attrs} />;
-            case QuestionViews.ICON_RANGE:
-                return <IconRange {...attrs} />;
             case QuestionViews.STRING:
                 return <String {...attrs} />;
-            case QuestionViews.NUMBER:
-                return <Number {...attrs} />;
-
             default:
                 return <div>Unknown question view {view}</div>;
         }

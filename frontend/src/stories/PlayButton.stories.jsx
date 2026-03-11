@@ -1,4 +1,6 @@
-import PlayButton from "../components/PlayButton/PlayButton";
+import PlayButton from "../components/PlayBack/PlayButton";
+import useBoundStore from "@/util/stores";
+import audio from "./assets/music.ogg";
 
 export default {
     title: "Playback/PlayButton",
@@ -8,94 +10,45 @@ export default {
     },
 };
 
+const SharedDecorator = (Story) => {
+    const setTheme = useBoundStore((state) => state.setTheme);
+    setTheme({ colorPrimary: '#d843e2', colorNeutral1: '#ffb14c', colorNeutral2: "#0cc7f1", colorNeutral3: "#2b2bee"});
+    return (
+        <div
+            style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+        >
+            <Story />
+        </div>
+    )
+};
+
+const defaultArgs = {
+    playSection: () => {},
+    section: { link: audio, label: 'Play Button label', color: 'colorPrimary', playMethod: 'BUFFER', playFrom: 0.0 },
+    view: 'BUTTON',
+}
+
+const getArgs = (overrides = {}) => ({
+    ...defaultArgs,
+    ...overrides
+})
+
 export const Default = {
-    args: {},
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    args: getArgs(),
+    decorators: [SharedDecorator],
 };
 
 export const Playing = {
-    args: {
+    args: getArgs({
         isPlaying: true,
-    },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    }),
+    decorators: [SharedDecorator],
 };
 
-export const BooleanColorScheme = {
-    args: {
+export const ChangedColor = {
+    args: getArgs({
         isPlaying: false,
-        className: "boolean",
-    },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
-};
-
-export const BooleanNegativeFirstColorScheme = {
-    args: {
-        isPlaying: false,
-        className: "boolean-negative-first",
-    },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
-};
-
-export const NeutralColorScheme = {
-    args: {
-        isPlaying: false,
-        className: "neutral",
-    },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
-};
-
-export const NeutralInvertedColorScheme = {
-    args: {
-        isPlaying: false,
-        className: "neutral-inverted",
-    },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+        section: { link: audio, label: 'Play Button label', color: 'colorNeutral1', playMethod: 'BUFFER', playFrom: 0.0 }
+    }),
+    decorators: [SharedDecorator],
 };

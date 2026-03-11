@@ -1,4 +1,5 @@
 import ButtonArray from "../components/Question/_ButtonArray";
+import useBoundStore from "@/util/stores";
 
 export default {
     title: "Question/ButtonArray",
@@ -14,7 +15,7 @@ const defaultArgs = {
         explainer: "This is the explainer",
         view: "BUTTON_ARRAY",
         value: "",
-        choices: ["Choice 1", "Choice 2", "Choice 3"],
+        choices: [{value: 1, label: "Choice 1", color: "colorNeutral1"}, {value: 2, label: "Choice 2", color: "colorNeutral2"}, {value: 3, label: "Choice 3", color: "colorNeutral3"}],
     },
     onChange: () => { },
     id: 0,
@@ -24,30 +25,30 @@ const defaultArgs = {
 
 const getArgs = (args = {}) => ({ ...defaultArgs, ...args });
 
+const ButtonArrayDecorator = (Story) => {
+    StoreDecorator();
+    return (
+        <div
+            style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+        >
+            <Story />
+        </div>
+    );
+}
+
+const StoreDecorator = (Story) => {
+    const setTheme = useBoundStore((state) => state.setTheme);
+    setTheme({ colorPositive: '#39d7b8', colorNegative: '#fa5577', colorNeutral1: '#ffb14c', colorNeutral2: "#0cc7f1", colorNeutral3: "#2b2bee"});
+};
+
 export const Default = {
     args: getArgs(),
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [ButtonArrayDecorator],
 };
 
 export const Disabled = {
     args: getArgs({ disabled: true }),
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [ButtonArrayDecorator],
 };
 
 export const CategorizationWithHiddenText = {
@@ -57,31 +58,20 @@ export const CategorizationWithHiddenText = {
             view: "BUTTON_ARRAY",
             explainer: "",
             question: "",
-            result_id: 16549,
-            is_skippable: false,
+            resultId: 16549,
             style: {
                 "invisible-text": true,
                 "buttons-large-gap": true,
                 "buttons-large-text": true,
-                "neutral-inverted": true,
             },
-            choices: {
-                A: "___",
-                B: "___",
-            },
-            min_values: 1,
-            expected_response: "A",
+            choices: [
+                {value: "A", label: "   ", color: "colorNeutral1"},
+                {value: "B", label: "   ", color: "colorNeutral2"},
+            ],
+            expectedResponse: "A",
         },
     }),
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [ButtonArrayDecorator],
 };
 
 export const CategorizationWithHiddenTextDisabled = {
@@ -91,85 +81,29 @@ export const CategorizationWithHiddenTextDisabled = {
             key: "choice",
             view: "BUTTON_ARRAY",
             explainer: "",
-            question: "",
-            is_skippable: false,
+            text: "",
+            choices: [
+                {value: "A", label: "   ", color: "colorNeutral1"},
+                {value: "B", label: "   ", color: "colorNeutral2"},
+            ],
+            expectedResponse: "A",
             style: {
                 "invisible-text": true,
                 "buttons-large-gap": true,
                 "buttons-large-text": true,
-                "neutral-inverted": true,
-            },
-            choices: {
-                A: "___",
-                B: "___",
-            },
-            min_values: 1,
-            expected_response: "A",
+            }
         },
     }),
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [ButtonArrayDecorator],
 };
 
 export const BooleanColorScheme = {
-    args: getArgs(),
-    decorators: [
-        (Story) => (
-            <div
-                className="boolean"
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
-};
-
-export const BooleanNegativeFirstColorScheme = {
-    args: getArgs(),
-    decorators: [
-        (Story) => (
-            <div
-                className="boolean-negative-first"
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
-};
-
-export const NeutralColorScheme = {
-    args: getArgs(),
-    decorators: [
-        (Story) => (
-            <div
-                className="neutral"
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
-};
-
-export const NeutralInvertedColorScheme = {
-    args: getArgs(),
-    decorators: [
-        (Story) => (
-            <div
-                className="neutral-inverted"
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    args: getArgs({question: {
+        key: "truth",
+        choices: [
+            {value: "true", label: "True", color: "colorPositive"},
+            {value: "false", label: "False", color: "colorNegative"}
+        ]
+    }}),
+    decorators: [ButtonArrayDecorator],
 };

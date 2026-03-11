@@ -5,7 +5,6 @@ from experiment.actions.question import (
     ButtonArrayQuestion,
     CheckBoxQuestion,
     DropdownQuestion,
-    IconRangeQuestion,
     RangeQuestion,
     RadiosQuestion,
     NumberQuestion,
@@ -31,10 +30,10 @@ class NumberQuestionTest(TestCase):
     def test_action_method(self):
         action_result = self.number_question.action()
         self.assertIn('key', action_result)
-        self.assertIn('min_value', action_result)
-        self.assertIn('max_value', action_result)
-        self.assertEqual(action_result['min_value'], 1)
-        self.assertEqual(action_result['max_value'], 10)
+        self.assertIn('minValue', action_result)
+        self.assertIn('maxValue', action_result)
+        self.assertEqual(action_result['minValue'], 1)
+        self.assertEqual(action_result['maxValue'], 10)
 
 
 class TextQuestionTest(TestCase):
@@ -51,8 +50,8 @@ class TextQuestionTest(TestCase):
     def test_action_method(self):
         action_result = self.text_question.action()
         self.assertIn('key', action_result)
-        self.assertIn('max_length', action_result)
-        self.assertEqual(action_result['max_length'], 100)
+        self.assertIn('maxLength', action_result)
+        self.assertEqual(action_result['maxLength'], 100)
 
 class MultipleChoiceQuestionTest(TestCase):
     def setUp(self):
@@ -70,8 +69,8 @@ class MultipleChoiceQuestionTest(TestCase):
         self.assertIn('key', action_result)
         self.assertIn('choices', action_result)
         self.assertEqual(action_result['choices'], {'no': 'No', 'yes': 'Yes'})
-        self.assertIn('min_values', action_result)
-        self.assertEqual(action_result['min_values'], 1)
+        self.assertIn('minValues', action_result)
+        self.assertEqual(action_result['minValues'], 1)
 
 
 class DropdownQuestionTest(TestCase):
@@ -174,10 +173,10 @@ class RangeQuestionTest(TestCase):
     def test_action_method(self):
         action_result = self.range_question.action()
         self.assertIn('key', action_result)
-        self.assertIn('min_value', action_result)
-        self.assertIn('max_value', action_result)
-        self.assertEqual(action_result['min_value'], 1)
-        self.assertEqual(action_result['max_value'], 10)
+        self.assertIn('minValue', action_result)
+        self.assertIn('maxValue', action_result)
+        self.assertEqual(action_result['minValue'], 1)
+        self.assertEqual(action_result['maxValue'], 10)
 
 
 class TextRangeQuestionTest(TestCase):
@@ -192,16 +191,16 @@ class TextRangeQuestionTest(TestCase):
     def test_initialization(self):
         self.assertEqual(self.likert_question.key, 'test_key')
         self.assertEqual(
-            self.likert_question.choices,
-            {
-                '1': "Completely Disagree",
-                '2': "Strongly Disagree",
-                '3': "Disagree",
-                '4': "Neither Agree nor Disagree",
-                '5': "Agree",
-                '6': "Strongly Agree",
-                '7': "Completely Agree",
-            },
+            [choice.get('label') for choice in self.likert_question.choices],
+            [
+                "Completely Disagree",
+                "Strongly Disagree",
+                "Disagree",
+                "Neither Agree nor Disagree",
+                "Agree",
+                "Strongly Agree",
+                "Completely Agree",
+            ],
         )
 
     def test_action_method(self):
@@ -209,16 +208,16 @@ class TextRangeQuestionTest(TestCase):
         self.assertIn('key', action_result)
         self.assertIn('choices', action_result)
         self.assertEqual(
-            action_result['choices'],
-            {
-                '1': "Completely Disagree",
-                '2': "Strongly Disagree",
-                '3': "Disagree",
-                '4': "Neither Agree nor Disagree",
-                '5': "Agree",
-                '6': "Strongly Agree",
-                '7': "Completely Agree",
-            },
+            [choice.get('label') for choice in action_result['choices']],
+            [
+                "Completely Disagree",
+                "Strongly Disagree",
+                "Disagree",
+                "Neither Agree nor Disagree",
+                "Agree",
+                "Strongly Agree",
+                "Completely Agree",
+            ],
         )
 
 
@@ -226,42 +225,42 @@ class IconRangeTest(TestCase):
     fixtures = ["choice_lists", "choices_general"]
 
     def setUp(self):
-        self.likert_question_icon = IconRangeQuestion(
+        self.likert_question_icon = TextRangeQuestion(
             key='test_key',
             choices=ChoiceList.objects.get(pk='LIKERT_ICONS_7').to_dict(),
         )
 
     def test_initialization(self):
         self.assertEqual(self.likert_question_icon.key, 'test_key')
-        self.assertEqual(self.likert_question_icon.view, 'ICON_RANGE')
+        self.assertEqual(self.likert_question_icon.view, 'TEXT_RANGE')
         self.assertEqual(
-            self.likert_question_icon.choices,
-            {
-                '1': 'fa-face-grin-hearts',
-                '2': 'fa-face-grin',
-                '3': 'fa-face-smile',
-                '4': 'fa-face-meh',
-                '5': 'fa-face-frown',
-                '6': 'fa-face-frown-open',
-                '7': 'fa-face-angry',
-            },
+            [choice.get('label') for choice in self.likert_question_icon.choices],
+            [
+                'fa-face-grin-hearts',
+                'fa-face-grin',
+                'fa-face-smile',
+                'fa-face-meh',
+                'fa-face-frown',
+                'fa-face-frown-open',
+                'fa-face-angry',
+            ],
         )
 
     def test_action_method(self):
         action_result = self.likert_question_icon.action()
         self.assertIn('key', action_result)
         self.assertIn('view', action_result)
-        self.assertEqual(action_result['view'], 'ICON_RANGE')
+        self.assertEqual(action_result['view'], 'TEXT_RANGE')
         self.assertIn('choices', action_result)
         self.assertEqual(
-            action_result['choices'],
-            {
-                '1': 'fa-face-grin-hearts',
-                '2': 'fa-face-grin',
-                '3': 'fa-face-smile',
-                '4': 'fa-face-meh',
-                '5': 'fa-face-frown',
-                '6': 'fa-face-frown-open',
-                '7': 'fa-face-angry',
-            },
+            [choice.get('label') for choice in action_result['choices']],
+            [
+                'fa-face-grin-hearts',
+                'fa-face-grin',
+                'fa-face-smile',
+                'fa-face-meh',
+                'fa-face-frown',
+                'fa-face-frown-open',
+                'fa-face-angry',
+            ],
         )

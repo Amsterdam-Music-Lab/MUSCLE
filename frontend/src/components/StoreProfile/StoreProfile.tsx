@@ -58,7 +58,7 @@ const StoreProfile = () => {
             {/* Buttons */}
             <div className="d-flex justify-content-between">
                 {/* Cancel */}
-                <Link to={URLS.profile} className="btn btn-gray btn-lg">
+                <Link to={URLS.profile} className="btn btn-lg">
                     Cancel
                 </Link>
 

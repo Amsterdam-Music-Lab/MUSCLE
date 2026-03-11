@@ -1,11 +1,13 @@
 import Block from "./Block";
 import Theme from "./Theme";
 
+import IButton from "@/types/Button";
+
 export interface Consent {
     text: string;
     title: string;
-    confirm: string;
-    deny: string;
+    confirmButton: IButton;
+    denyButton: IButton;
     view: 'CONSENT';
 }
 
@@ -25,6 +27,7 @@ export default interface Experiment {
     aboutContent: string;
     consent?: Consent;
     theme?: Theme;
+    backButtonText?: string;
     accumulatedScore: number;
     playedSessions: number;
     socialMediaConfig?: SocialMediaConfig;

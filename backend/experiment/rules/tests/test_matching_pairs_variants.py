@@ -47,7 +47,10 @@ class TestMatchingPairsVariants(TestCase):
         ).get_matching_pairs_trial(another_session)
         assert isinstance(first_trial, Trial)
         assert isinstance(second_trial, Trial)
-        assert first_trial.playback.sections != second_trial.playback.sections
+        assert (
+            first_trial.playback.sections[0].link
+            != second_trial.playback.sections[0].link
+        )
 
     def test_fixed_order_sections(self):
         block = Block.objects.create(
@@ -65,9 +68,12 @@ class TestMatchingPairsVariants(TestCase):
         )
         second_trial = another_session.block_rules(
         ).get_matching_pairs_trial(another_session)
-        assert isinstance(first_trial, Trial)
-        assert isinstance(second_trial, Trial)
-        assert first_trial.playback.sections == second_trial.playback.sections
+        self.assertIsInstance(first_trial, Trial)
+        self.assertIsInstance(second_trial, Trial)
+        self.assertEqual(
+            first_trial.playback.sections[0].link,
+            second_trial.playback.sections[0].link,
+        )
 
     def test_visual_matching_pairs(self):
         section_csv = (
@@ -95,4 +101,4 @@ class TestMatchingPairsVariants(TestCase):
         rules = session.block_rules()
         trial = rules.get_matching_pairs_trial(session)
         self.assertIsInstance(trial, Trial)
-        self.assertEqual(trial.playback.play_method, 'NOAUDIO')
+        self.assertEqual(trial.playback.sections[0].play_method, 'NOAUDIO')

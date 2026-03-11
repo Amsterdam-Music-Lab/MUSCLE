@@ -20,8 +20,8 @@
 // Experiment
 @import "./Consent/Consent";
 @import "./Block/Block";
-@import "./Experiment/Experiment";
 @import "./Experiment/ExperimentDashboard/ExperimentDashboard";
+@import "./Experiment/Header/Header";
 @import "./Explainer/Explainer";
 @import "./Final/Final";
 @import "./FloatingActionButton/FloatingActionButton";
@@ -31,12 +31,10 @@
 @import "./MatchingPairs/MatchingPairs";
 @import "./MatchingPairs/PlayCard";
 @import "./Playlist/Playlist";
-@import "./PlayButton/PlayButton";
-@import "./PlayButton/PlayerSmall";
+@import "./Playback/PlayButton";
 @import "./Playback/Autoplay";
 @import "./Playback/Multiplayer";
 @import "./Playback/Playback";
-@import "./Playback/ImagePlayer";
 @import "./Preload/Preload";
 @import "./Question/Question";
 @import "./Score/Score";

@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import Question from "../Question/Question";
 import Button from "../Button/Button";
+import IButton from "@/types/Button";
 import IQuestion from "@/types/Question";
 import { QuestionViews } from "@/types/Question";
 import { OnResultParams } from "@/hooks/useResultHandler";
@@ -9,9 +10,8 @@ import { OnResultParams } from "@/hooks/useResultHandler";
 interface FeedbackFormProps {
     formActive: boolean;
     form: IQuestion[];
-    buttonLabel: string;
-    skipLabel: string;
-    isSkippable: boolean;
+    submitButton: IButton;
+    skipButton: IButton;
     submitResult: (result: OnResultParams) => void;
 }
 
@@ -19,9 +19,8 @@ interface FeedbackFormProps {
 const FeedbackForm = ({
     formActive,
     form,
-    buttonLabel,
-    skipLabel,
-    isSkippable,
+    submitButton,
+    skipButton,
     submitResult,
 }: FeedbackFormProps) => {
     const [formValid, setFormValid] = useState(false);
@@ -32,7 +31,7 @@ const FeedbackForm = ({
         form[question_index].value = value;
         // for every non-skippable question, check that we have a value
         const validFormElements = form.filter(formElement => {
-            if (formElement.is_skippable || (formElement.value && validateFormElement(formElement))) {
+            if (formElement.value && validateFormElement(formElement)) {
                 return true;
             }
             return false;
@@ -51,7 +50,7 @@ const FeedbackForm = ({
 
     function validateFormElement(formElement: IQuestion) {
         // For multiple choices in CHECKBOXES view, formElement.value is a string of comma-separated values
-        if (formElement.view === "CHECKBOXES" && formElement.min_values && (formElement.value.split(",").length < formElement.min_values)) {
+        if (formElement.view === "CHECKBOXES" && formElement.minValues && (formElement.value.split(",").length < formElement.minValues)) {
             return false;
         }
         return true;
@@ -73,17 +72,19 @@ const FeedbackForm = ({
                 {showSubmitButtons && (
 
                     <div className="row justify-content-around">
-                        {isSkippable && (
+                        {skipButton && (
                             // skip button
                             <Button
+                                {...skipButton}
                                 onClick={() => {
                                     submitResult();
                                 }}
-                                className={"btn-gray col-4 align-self-start"
+                                className={"=col-4 align-self-start"
                                 }
-                                title={skipLabel}
+                               
                             />)}
                         <Button
+                            {...submitButton}
                             onClick={() => {
                                 submitResult();
                             }}
@@ -91,7 +92,6 @@ const FeedbackForm = ({
                                 "submit col-4"
                             }
                             disabled={!formValid}
-                            title={buttonLabel}
                         />
 
                     </div>

@@ -1,6 +1,4 @@
-from typing import Optional
-
-from theme.styles import FrontendStyle
+from .utils import camelize
 
 
 class BaseAction(object):
@@ -11,7 +9,7 @@ class BaseAction(object):
     inherit from this base class to ensure consistent behavior and structure.
 
     Key Features:
-    - Provides a standardized way to serialize action data for frontend components
+    - Provides a standardized way to serialize actiolinkn data for frontend components
     - Handles frontend styling configuration
     - Ensures each action has a unique identifier through the ID class variable
     - Implements a common interface for action serialization via the action() method
@@ -36,18 +34,6 @@ class BaseAction(object):
 
     view = "BASE"
 
-    def __init__(self, style: Optional[list[str]] = None):
-        """Initialize the base action with optional styling.
-
-        Args:
-            style: list of class arguments to set in the frontend
-        """
-        self.style = self._apply_style(style)
-
-    def _apply_style(self, style: list[str]) -> Optional[FrontendStyle]:
-        if style:
-            return FrontendStyle(style)
-
     def action(self) -> dict:
         """Serialize the action configuration for frontend consumption.
 
@@ -59,10 +45,13 @@ class BaseAction(object):
             dict: A dictionary containing:
                 - All instance variables from __dict__
                 - 'view': The action's ID for frontend component mapping
-                - 'style': Serialized style configuration if present
         """
-        action_dict = self.__dict__
+        action_dict = self.camelize(self.__dict__)
         action_dict['view'] = self.view
-        if getattr(self, 'style', None):
-            action_dict['style'] = self.style.to_dict()
         return action_dict
+
+    def camelize(self, input_dict: dict) -> dict:
+        output_dict = {}
+        for key in input_dict.keys():
+            output_dict[camelize(key)] = input_dict[key]
+        return output_dict

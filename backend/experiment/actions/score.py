@@ -6,6 +6,7 @@ from django.utils.translation import gettext as _
 from result.models import Result
 from session.models import Session
 from .base_action import BaseAction
+from .button import Button
 
 
 class ScoreConfig(TypedDict):
@@ -32,7 +33,10 @@ class Score(BaseAction):
         score (Optional[float]): the score to report, will override result.score
         score_message: a function which constructs feedback text based on the score
         config (Optional[ScoreConfig]): a dict with the following settings:
-        icon (Optional[str]): the name of a themify-icon shown with the view or None
+            - show_section (bool): whether to show the previous section
+            - show_total_score (bool): whether to show the total score
+        button (Button): a button to continue to the next view
+        icon (Optional[str]): the name of a fontawesome icon shown with the view or None
         timer (Optional[int]): int or None. If int, wait for as many seconds until showing the next view
         feedback (Optional[str]): An additional feedback text
 
@@ -46,6 +50,7 @@ class Score(BaseAction):
         self,
         session: Session,
         title: str = "",
+        button: Optional[Button] = Button(_("Next"), 'colorPrimary'),
         result: Optional[Result] = None,
         score: Optional[float] = None,
         score_message: str = "",
@@ -66,9 +71,9 @@ class Score(BaseAction):
         if config:
             self.config.update(config)
         self.icon = icon
-        self.text = {
+        self.button = button
+        self.texts = {
             "score": _("Total Score"),
-            "next": _("Next"),
             "listen_explainer": _("You listened to:"),
         }
         self.last_song = result.section.song_label() if result else session.last_song()
@@ -86,7 +91,8 @@ class Score(BaseAction):
             "title": self.title,
             "score": self.score,
             "score_message": self.score_message,
-            "texts": self.text,
+            "texts": self.texts,
+            "button": self.button.action(),
             "feedback": self.feedback,
             "icon": self.icon,
             "timer": self.timer,

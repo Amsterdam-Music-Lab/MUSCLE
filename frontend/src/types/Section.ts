@@ -1,9 +1,22 @@
-export interface Section {
-    id: number;
-    url: string;
+interface PlaybackImage {
+    link: string,
+    label: string
 }
 
-export interface Card extends Section {
+type PlaybackMethod = "EXTERNAL" | "HTML" | "BUFFER" | "NOAUDIO";
+
+export interface PlaybackSection {
+    link: string,
+    label: string,
+    color?: string,
+    image?: PlaybackImage,
+    playFrom?: number,
+    playMethod?: PlaybackMethod,
+    mute?: boolean,
+    hasPlayed?: boolean
+}
+
+export interface Card extends PlaybackSection {
     name: string;
     turned: boolean;
     inactive: boolean;
@@ -16,4 +29,4 @@ export interface Card extends Section {
     audio_latency_ms?: number;
 }
 
-export default Section;
+export default PlaybackSection;

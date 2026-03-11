@@ -9,7 +9,7 @@ vi.mock("../../util/stores");
 describe("DefaultPage Component Tests", () => {
     const explainerProps = {
         instruction: 'Some instruction',
-        button_label: 'Next',
+        button: {label: 'Next', color: "#fabacc"},
         steps: [],
         onNext: vi.fn(),
         timer: 1

@@ -1,6 +1,12 @@
 import { BrowserRouter as Router } from "react-router-dom";
 
 import Final from "../components/Final/Final";
+import useBoundStore from "@/util/stores";
+
+const StoreDecorator = (Story) => {
+    const setTheme = useBoundStore((state) => state.setTheme);
+    setTheme({ colorPrimary: "#d843e2", colorSecondary: "#39d7b8" });
+};
 
 export default {
     title: "Final/Final",
@@ -29,11 +35,11 @@ function getFinalData(overrides = {}) {
         `,
         points: "points",
         button: {
-            text: "Button",
+            label: "Button",
             link: "https://www.example.com",
         },
         logo: {
-            image: "https://via.placeholder.com/150",
+            image: "/images/logo-white.svg",
             link: "https://www.example.com",
         },
         social: {
@@ -51,10 +57,12 @@ function getFinalData(overrides = {}) {
         participant_id_only: false,
         feedback_info: {
             header: "Feedback",
-            button: "Submit",
+            button: {
+                label: "Submit",
+            },
             thank_you: "Thank you for your feedback!",
             contact_body:
-                '<p>Please contact us at <a href="mailto:info@example.com">',
+                '<p>Please contact us at <a href="mailto:info@example.com">info@example.com</a></p>',
         },
         block: {
             slug: "test",
@@ -65,15 +73,18 @@ function getFinalData(overrides = {}) {
     };
 }
 
-const getDecorator = (Story) => (
-    <div
-        style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
-    >
-        <Router>
-            <Story />
-        </Router>
-    </div>
-);
+const getDecorator = (Story) => {
+    StoreDecorator();
+    return (
+        <div
+            style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
+        >
+            <Router>
+                <Story />
+            </Router>
+        </div>
+    );
+}
 
 export const Default = {
     args: getFinalData(),
@@ -84,7 +95,7 @@ export const Default = {
 export const RelativeButtonLink = {
     args: getFinalData({
         button: {
-            text: "Play again",
+            label: "Play again",
             link: "/profile",
         },
     }),
@@ -95,7 +106,7 @@ export const RelativeButtonLink = {
 export const AbsoluteButtonLink = {
     args: getFinalData({
         button: {
-            text: "Button",
+            label: "Button",
             link: "https://www.example.com",
         },
     }),

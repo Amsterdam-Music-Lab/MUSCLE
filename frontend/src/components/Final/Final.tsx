@@ -4,14 +4,15 @@ import { useNavigate } from "react-router-dom";
 import Rank from "../Rank/Rank";
 import Social from "@/components/Social/Social";
 
-import { URLS } from "@/config";
-import { finalizeSession } from "../../API";
-import useBoundStore from "../../util/stores";
+
+import Button from "../Button/Button";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 import UserFeedback from "../UserFeedback/UserFeedback";
-import FinalButton from "./FinalButton";
+import { finalizeSession } from "@/API";
+import { URLS } from "@/config";
 import { Final as FinalAction } from "@/types/Action";
 import classNames from "@/util/classNames";
+import useBoundStore from "@/util/stores";
 
 export interface FinalProps extends FinalAction {
     onNext: () => void;
@@ -64,9 +65,9 @@ const Final = ({
             </div>
             {button && (
                 <div className="text-center pt-4">
-                    <FinalButton
-                        button={button}
-                        onNext={onNext}
+                    <Button
+                        {...button}
+                        onClick={onNext}
                     />
                 </div>
             )}

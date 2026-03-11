@@ -221,7 +221,6 @@ A list of session `Result` objects containing the participant's responses to the
                     "listen_first": true,
                     "response_time": 5,
                     "continue_label": "Verder",
-                    "time_pass_break": false,
                     "auto_advance_timer": 2500,
                     "show_continue_button": true
                 },

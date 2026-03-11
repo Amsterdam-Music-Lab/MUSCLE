@@ -4,6 +4,7 @@ import random
 
 from django.template.loader import render_to_string
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.info import Info
@@ -22,12 +23,16 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
         return Explainer(
             instruction="Maatgevoel",
             steps=[
-                Step("Je krijgt zo steeds twee keer een stukje muziek te horen met piepjes erin."),
-                Step("Bij de ene versie zijn de piepjes in de maat, bij de andere niet in de maat.   "),
+                Step(
+                    "Je krijgt zo steeds twee keer een stukje muziek te horen met piepjes erin."
+                ),
+                Step(
+                    "Bij de ene versie zijn de piepjes in de maat, bij de andere niet in de maat.   "
+                ),
                 Step("Kan jij horen waar de piepjes in de maat van de muziek zijn?"),
             ],
             step_numbers=True,
-            button_label="Start",
+            button=Button("Start"),
         )
 
     def get_random_section_pair(self, session, genre):
@@ -121,8 +126,9 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
         info = Info(
             body=body,
             heading="Timing en tempo",
-            button_label="Terug naar ToontjeHogerKids",
-            button_link=get_current_experiment_url(session),
+            button=Button(
+                "Terug naar ToontjeHogerKids", link=get_current_experiment_url(session)
+            ),
         )
 
         return [*score, final, info]
