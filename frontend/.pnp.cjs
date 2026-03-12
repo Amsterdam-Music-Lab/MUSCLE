@@ -5400,10 +5400,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["immutable", [\
-      ["npm:5.1.4", {\
-        "packageLocation": "../../../.yarn/berry/cache/immutable-npm-5.1.4-cddca3d05c-10c0.zip/node_modules/immutable/",\
+      ["npm:5.1.5", {\
+        "packageLocation": "../../../.yarn/berry/cache/immutable-npm-5.1.5-65d37ab8d3-10c0.zip/node_modules/immutable/",\
         "packageDependencies": [\
-          ["immutable", "npm:5.1.4"]\
+          ["immutable", "npm:5.1.5"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -7162,7 +7162,7 @@ const RAW_RUNTIME_STATE =
           ["sass", "npm:1.97.3"],\
           ["@parcel/watcher", "npm:2.5.6"],\
           ["chokidar", "npm:4.0.3"],\
-          ["immutable", "npm:5.1.4"],\
+          ["immutable", "npm:5.1.5"],\
           ["source-map-js", "npm:1.2.1"]\
         ],\
         "linkType": "HARD"\
