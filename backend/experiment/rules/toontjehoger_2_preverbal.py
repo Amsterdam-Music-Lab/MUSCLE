@@ -202,7 +202,7 @@ class ToontjeHoger2Preverbal(BaseRules):
         # Player
         sections = [
             ImagePlaybackSection(
-                sectionA,
+                section=sectionA,
                 label=format_label(0, "alphabetic"),
                 color="colorNeutral2",
                 image={
@@ -211,7 +211,7 @@ class ToontjeHoger2Preverbal(BaseRules):
                 },
             ),
             ImagePlaybackSection(
-                sectionB,
+                section=sectionB,
                 label=format_label(1, "alphabetic"),
                 color="colorNeutral1",
                 image={
@@ -220,7 +220,7 @@ class ToontjeHoger2Preverbal(BaseRules):
                 },
             ),
             ImagePlaybackSection(
-                sectionC,
+                section=sectionC,
                 label=format_label(2, "alphabetic"),
                 color="colorNeutral3",
                 image={
@@ -230,7 +230,7 @@ class ToontjeHoger2Preverbal(BaseRules):
             ),
         ]
         playback = PlayButtons(
-            sections,
+            sections=sections,
         )
 
         trial = Trial(
@@ -259,7 +259,7 @@ class ToontjeHoger2Preverbal(BaseRules):
         # Player
         sections = [
             ImagePlaybackSection(
-                sectionA,
+                section=sectionA,
                 label=format_label(0, 'alphabetic'),
                 image={
                     "link": "/images/experiments/toontjehoger/spectrogram-baby-french.webp"
@@ -267,7 +267,7 @@ class ToontjeHoger2Preverbal(BaseRules):
                 color='colorNeutral2',
             ),
             ImagePlaybackSection(
-                sectionA,
+                section=sectionA,
                 label=format_label(1, 'alphabetic'),
                 image={
                     "link": "/images/experiments/toontjehoger/spectrogram-baby-german.webp"
@@ -276,7 +276,7 @@ class ToontjeHoger2Preverbal(BaseRules):
             ),
         ]
         playback = PlayButtons(
-            sections,
+            sections=sections,
         )
 
         # Question

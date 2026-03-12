@@ -144,9 +144,9 @@ class ToontjeHoger6Relative(BaseRules):
         # Player
         second_label = "B" if round == 0 else "C"
         playback = PlayButtons(
-            [
-                PlaybackSection(section1, label="A"),
-                PlaybackSection(section2, second_label),
+            sections=[
+                PlaybackSection(section1, label="A", color="colorNeutral2"),
+                PlaybackSection(section2, second_label, color="colorNeutral2"),
             ],
             play_once=True,
         )
