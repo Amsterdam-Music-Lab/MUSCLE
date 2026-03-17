@@ -103,13 +103,9 @@ class ToontjeHoger6Relative(BaseRules):
         return [score]
 
     def get_round(self, round: int, session: Session):
-
-        # Config
-        # -----------------
         # section 1 is always section 'a'
         try:
-            section1 = session.playlist.get_section(
-                filter_by={'tag': 'a'})
+            section1 = session.playlist.section_set.get(tag='a')
         except:
             raise Exception(
                 "Error: could not find section1 for round {}".format(round))
@@ -117,8 +113,7 @@ class ToontjeHoger6Relative(BaseRules):
         # Get correct tag for round 0 or 1
         tag = 'b' if round == 0 else 'c'
         try:
-            section2 = session.playlist.get_section(
-                filter_by={'tag': tag})
+            section2 = session.playlist.section_set.get(tag=tag)
         except:
             raise Exception(
                 "Error: could not find section2 for round {}".format(round))
