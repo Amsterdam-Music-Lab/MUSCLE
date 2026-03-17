@@ -100,6 +100,7 @@ class TestToontjeHoger5Tempo(TestCase):
                 'Vladimir Ashkenazy,"F. Chopin, Grande Valse Brillante, op. 18",0.0,1.0,/toontjehoger/tempo/C4_P1_OR_88.mp3,C4_P1_OR,or\n'
             ),
         )
+        playlist._update_sections()
         block = Block.objects.create(
             slug='test-th-5', rules="TOONTJE_HOGER_5_TEMPO", rounds=5
         )

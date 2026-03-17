@@ -149,16 +149,11 @@ class ToontjeHoger1Mozart(BaseRules):
         # Listen
         playback = Autoplay(sections=[PlaybackSection(section)], show_animation=True)
 
-        listen_config = {
-            "auto_advance": True,
-            "show_continue_button": False,
-            "response_time": section.duration,
-        }
-
         listen = Trial(
-            config=listen_config,
             playback=playback,
             title=self.TITLE,
+            auto_advance=True,
+            response_time=section.duration,
         )
 
         # Step 2

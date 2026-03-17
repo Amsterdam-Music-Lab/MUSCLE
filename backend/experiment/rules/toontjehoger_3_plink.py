@@ -190,7 +190,7 @@ class ToontjeHoger3Plink(BaseRules):
         )
         plink_trials.append(
             Trial(
-                playback=PlayButtons(PlaybackSection[section]),
+                playback=PlayButtons(sections=[PlaybackSection(section)]),
                 feedback_form=Form(
                     [question1],
                     skip_button=Button("Ik weet het niet"),

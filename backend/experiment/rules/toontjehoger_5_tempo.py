@@ -17,7 +17,7 @@ from experiment.actions.trial import Trial
 from experiment.actions.utils import get_current_experiment_url
 from experiment.utils import format_label, non_breaking_spaces
 from result.utils import prepare_result
-from section.models import Playlist
+from section.models import Playlist, Song
 from session.models import Session
 from .base import BaseRules
 from .toontjehoger_1_mozart import toontjehoger_ranks
@@ -77,15 +77,17 @@ class ToontjeHoger5Tempo(BaseRules):
         # Previous tags
         songs = session.get_unused_song_ids(filter_by={"tag__startswith": genre})
         song_id = random.choice(songs)
-        sections = session.playlist.section_set.filter(song__id=song_id)
+        sections = list(session.playlist.section_set.filter(song__id=song_id))
         random.shuffle(sections)
         return sections
 
-    def get_section_changed(self, session, tag):
+    def get_section_changed(self, session: Session, song: Song):
         try:
-            section_changed = session.playlist.get_section(filter_by={"tag": tag, "group": "ch"})
+            section_changed = session.playlist.get_section(
+                filter_by={"song__pk": song.id, "group": "ch"}
+            )
         except:
-            raise Exception("Error: could not find changed section: {}".format(tag))
+            raise Exception("Error: could not find changed section: {}".format(song))
         return section_changed
 
     def get_trial_question(self):
