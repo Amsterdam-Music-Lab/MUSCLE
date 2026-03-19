@@ -36,7 +36,7 @@ class TestToontjeHoger3Plink(TestCase):
         rules = block.get_rules()
         for round in range(block.rounds):
             actions = rules.next_round(session)
-            last_result = session.result_set.last()
+            last_result = session.result_set.filter(question_key='plink').last()
             last_result.score = rules.SCORE_MAIN_CORRECT
             last_result.save()
             self.assertIsNotNone(actions)

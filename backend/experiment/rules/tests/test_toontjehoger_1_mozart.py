@@ -50,4 +50,8 @@ class TestToontjeHogerKids1Mozart(TestCase):
         session = Session.objects.create(block=block, participant=Participant.objects.create(), playlist=playlist)
         rules = block.get_rules()
         for round in range(block.rounds):
-            self.assertIsNotNone(rules.next_round(session))
+            actions = rules.next_round(session)
+            last_result = session.result_set.last()
+            last_result.score = rules.SCORE_CORRECT
+            last_result.save()
+            self.assertIsNotNone(actions)

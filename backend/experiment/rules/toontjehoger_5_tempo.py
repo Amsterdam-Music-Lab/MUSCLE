@@ -71,20 +71,30 @@ class ToontjeHoger5Tempo(BaseRules):
         - session: current Session
         - genre: (C)lassic (J)azz (R)ock
 
-        Extract sections of an unplayed song, filtered by tags starting with genre letter
+        Extract sections of an unplayed piece, filtered by tags starting with genre letter
         return the original (group "or") and changed (group "ch") version
+        The changed version may also be a performance by a different artist
         """
         # Previous tags
-        songs = session.get_unused_song_ids(filter_by={"tag__startswith": genre})
-        song_id = random.choice(songs)
-        sections = list(session.playlist.section_set.filter(song__id=song_id))
+        previous_pieces = session.result_set.filter(section__isnull=False).values_list(
+            "section__song__name", flat=True
+        )
+        original_section = (
+            session.playlist.section_set.filter(tag__startswith=genre)
+            .exclude(song__name__in=previous_pieces)
+            .filter(group="or")
+            .order_by("?")
+        ).first()
+        changed_section = self.get_section_changed(session, original_section.song)
+        sections = [original_section, changed_section]
         random.shuffle(sections)
         return sections
 
     def get_section_changed(self, session: Session, song: Song):
+        """get a section with the same name, but potentially different artist"""
         try:
             section_changed = session.playlist.get_section(
-                filter_by={"song__pk": song.id, "group": "ch"}
+                filter_by={"song__name": song.name, "group": "ch"}
             )
         except:
             raise Exception("Error: could not find changed section: {}".format(song))
@@ -146,11 +156,16 @@ class ToontjeHoger5Tempo(BaseRules):
         if section_original is None:
             raise Exception("Error: could not get section from result")
 
-        tag_changed = section_original.tag.replace("OR", "CH")
-        section_changed = self.get_section_changed(session=result.session, tag=tag_changed)
+        section_changed = self.get_section_changed(
+            session=result.session, song=section_original.song
+        )
 
         if section_changed is None:
-            raise Exception("Error: could not get changed section for tag: {}".format(tag_changed))
+            raise Exception(
+                "Error: could not get changed section for piece: {}".format(
+                    section_original.song.name
+                )
+            )
 
         return (section_original, section_changed)
 
