@@ -111,13 +111,27 @@ class TestToontjeHoger4Absolute(TestCase):
         playlist = Playlist.objects.create(
             name="test-th4",
             csv=(
-                "AML,Breaking Bad,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item13_a.mp3,a,13\n"
-                "AML,De wereld draait door,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item3_c.mp3,c,3\n"
-                "AML,ER,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item11_a.mp3,a,11\n"
-                "AML,Friends,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item4_a.mp3,a,4\n"
-                "AML,Game of Thrones,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item5_a.mp3,a,5\n"
-                "AML,het NOS Journaal,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item8_a.mp3,a,8\n"
-                "AML,Sesamstraat,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item6_a.mp3,a,6\n"
+                "AML,Star Wars,0,1,/toontjehoger/absolute/4_Toonhoogte_Item1_a.mp3,0,a,1'\n"
+                "AML,Star Wars,0,1,/toontjehoger/absolute/4_Toonhoogte_Item1_b.mp3,0,b,1\n"
+                "AML,Star Wars,0,1,/toontjehoger/absolute/4_Toonhoogte_Item1_c.mp3,0,c,1\n"
+                "AML,Viva la vida van Coldplay,0,1,/toontjehoger/absolute/4_Toonhoogte_Item2_a.mp3,0,a,2\n"
+                "AML,Viva la vida van Coldplay,0,1,/toontjehoger/absolute/4_Toonhoogte_Item2_b.mp3,0,b,2\n"
+                "AML,Viva la vida van Coldplay,0,1,/toontjehoger/absolute/4_Toonhoogte_Item2_c.mp3,0,c,2\n"
+                "AML,De wereld draait door,0,1,/toontjehoger/absolute/4_Toonhoogte_Item3_a.mp3,0,a,3\n"
+                "AML,De wereld draait door,0,1,/toontjehoger/absolute/4_Toonhoogte_Item3_b.mp3,0,b,3\n"
+                "AML,De wereld draait door,0,1,/toontjehoger/absolute/4_Toonhoogte_Item3_c.mp3,0,c,3\n"
+                "AML,Friends,0,1,/toontjehoger/absolute/4_Toonhoogte_Item4_a.mp3,0,a,4\n"
+                "AML,Friends,0,1,/toontjehoger/absolute/4_Toonhoogte_Item4_b.mp3,0,b,4\n"
+                "AML,Friends,0,1,/toontjehoger/absolute/4_Toonhoogte_Item4_c.mp3,0,c,4\n"
+                "AML,Game of Thrones,0,1,/toontjehoger/absolute/4_Toonhoogte_Item5_a.mp3,0,a,5\n"
+                "AML,Game of Thrones,0,1,/toontjehoger/absolute/4_Toonhoogte_Item5_b.mp3,0,b,5\n"
+                "AML,Game of Thrones,0,1,/toontjehoger/absolute/4_Toonhoogte_Item5_c.mp3,0,c,5\n"
+                "AML,Sesamstraat,0,1,/toontjehoger/absolute/4_Toonhoogte_Item6_a.mp3,0,a,6\n"
+                "AML,Sesamstraat,0,1,/toontjehoger/absolute/4_Toonhoogte_Item6_b.mp3,0,b,6\n"
+                "AML,Sesamstraat,0,1,/toontjehoger/absolute/4_Toonhoogte_Item6_c.mp3,0,c,6\n"
+                "AML,NOS Studio Sport,0,1,/toontjehoger/absolute/4_Toonhoogte_Item7_a.mp3,0,a,7\n"
+                "AML,NOS Studio Sport,0,1,/toontjehoger/absolute/4_Toonhoogte_Item7_b.mp3,0,b,7\n"
+                "AML,NOS Studio Sport,0,1,/toontjehoger/absolute/4_Toonhoogte_Item7_c.mp3,0,c,7\n"
             ),
         )
         playlist._update_sections()
