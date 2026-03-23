@@ -20,8 +20,6 @@ export default defineConfig({
         'src/**/*.stories.{js,jsx,ts,tsx}',
         'src/index.tsx',
         'src/serviceWorker.js',
-        '.pnp.cjs',
-        '.pnp.loader.mjs',
         '.storybook/**',
         '.yarn/**',
         'src/util/testUtils/useEffectDebugger.js',
