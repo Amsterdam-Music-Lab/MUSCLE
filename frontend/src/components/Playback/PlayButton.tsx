@@ -22,10 +22,6 @@ const PlayButton = ({ playSection, className = "", disabled, section, isPlaying,
 
     return (
         <>
-            {section.label && <>
-                <div className="banner"></div>
-                <h3 className="label">{section.label}</h3>
-            </>}
             <div
                 className={classNames("aha__play-button border-outside", "btn", {
                     stop: isPlaying, disabled: disabled || isPlaying
@@ -37,7 +33,13 @@ const PlayButton = ({ playSection, className = "", disabled, section, isPlaying,
                 onKeyDown={playSection && !disabled ? () => playSection(playIndex) : undefined}
             >
             </div>
-            <div className="playbutton-spacer"></div>
+            {/* <div className="mask"></div> */}
+            {section.label && <>
+                <center>
+                    <div className="banner" style={{backgroundColor: colorValue}}></div>
+                    <h3 className="label">{section.label}</h3>
+                </center>
+            </>}
         </>
     );
 };

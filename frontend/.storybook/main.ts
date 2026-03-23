@@ -14,17 +14,10 @@ const config = {
     docs: {},
 
     viteFinal: (config) => {
-        return mergeConfig(config, {
-            base: "/MUSCLE/storybook/",
-            resolve: {
-                alias: {
-                    '@/': '/src/',
-                },
-            },
-        });
+        return mergeConfig(config, {});
     },
 
-    staticDirs: ["../public"],
+    staticDirs: ["../public", "../src/stories/assets"],
 
     env: {
         VITE_API_ROOT: "http://localhost:8000",
