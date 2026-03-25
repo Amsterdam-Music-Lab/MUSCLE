@@ -1,7 +1,7 @@
 from os.path import split
 import random
 
-
+from django.db.models import Avg
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 
@@ -37,6 +37,27 @@ class MatchingPairs2025(MatchingPairsGame):
             "You thought you found a matching pair, but you didn't. This is considered a misremembered pair. You lose 10 points."
         ),
     }
+    cutoff = 30
+    titles = [
+        {
+            "header": _("Great job finishing Game 1"),
+            "body": _("Your first star is within reach!"),
+        },
+        {"header": _("Just 1 more game to earn your first star!"), "body": ""},
+        {"header": _("First star unlocked! 💫"), "body": "Keep going for the second!"},
+        {
+            "header": _("Keep up the momentum!"),
+            "body": _("Your next star is coming up!"),
+        },
+        {"header": _("Just 1 more game to earn your second star!")},
+        {"header": _("Second star unlocked! 💫"), "body": _("You’re halfway there!")},
+        {"header": _("Keep it up!"), "body": _("Your third star is waiting!")},
+        {"header": _("Game 8 complete!"), "body": _("The third star is almost yours!")},
+        {"header": _("Third star unlocked! 💫"), "body": _("Final sprint!")},
+        {"header": _("Just 2 games left to complete the challenge!")},
+        {"header": _("Just 1 game to unlock your title!")},
+        {},  # empty title dict for last game since the header / body is set elsewhere
+    ]
 
     def feedback_info(self) -> FeedbackInfo:
         feedback_body = render_to_string(
@@ -90,14 +111,58 @@ class MatchingPairs2025(MatchingPairsGame):
         return Explainer(_("Click to start!"), steps=[])
 
     def _get_final_actions(self, session: Session):
+        played_sessions = session.participant.session_set.filter(
+            finished_at__isnull=False,
+            block__in=session.block.phase.blocks.all(),
+        )
+        n_sessions = played_sessions.count()
+        if n_sessions % 12 == 0:
+            # final board, percentile is based on participant's accumulative score
+            percentile = session.participant.percentile_rank_accumulative_score()
+            display_percentile = max(self.cutoff, percentile)
+            mean = played_sessions.aggregate(Avg("final_score"))["final_score__avg"]
+            final_text = _(
+                "Based on the experimental data, your music memory mean score is %(mean)d. The average score was 32.63 for Dutch participants and 37.20 for U.S. participants. Your score was higher than %(percentile)d%% of participants."
+            ) % {"percentile": display_percentile, "mean": mean}
+            if percentile > 75:
+                title = {
+                    "header": _("Exceptional"),
+                    "body": _("Sharp Recognition"),
+                }
+                extra_info = _(
+                    "This indicates that you have excellent music perception ability."
+                )
+            elif percentile > 50:
+                title = {"header": _("Advanced"), "body": _("Clear Recognition")}
+                extra_info = _(
+                    "This indicates that your performance in music perception is above average."
+                )
+            elif percentile >= 40:
+                title = {"header": _("Average"), "body": _("Stable Performance")}
+                extra_info = _(
+                    "This indicates that your perception abiulity is around the average level."
+                )
+            else:
+                title = {"header": _("Developing"), "body": _("Ongoing Exploration")}
+                extra_info = _(
+                    "This indicates that your music perception ability still has room for further development."
+                )
+        else:
+            percentile = session.percentile_rank()
+            display_percentile = max(percentile, self.cutoff)
+            final_text = _(
+                "Congrats! You did better than %(percentile)d%% of players at this level"
+            ) % {"percentile": display_percentile}
+            extra_info = None
+            title = self.titles[n_sessions - 1 % 12]
         score = Final(
             session,
-            title="Score",
+            title=title,
             total_score=session.final_score,
-            final_text=self._final_text(self._get_percentile_rank(session)),
-            button={"text": "Next game", "link": self.get_experiment_url(session)},
-            percentile=self._get_percentile_rank(session),
-            accumulative_percentile=session.participant.percentile_rank_accumulative_score(),
+            final_text=final_text,
+            extra_info=extra_info,
+            button={"text": "Keep playing!", "link": self.get_experiment_url(session)},
+            percentile=percentile,
         )
         return [score]
 
@@ -274,9 +339,6 @@ class MatchingPairs2025(MatchingPairsGame):
                 result.score += 1
             result.save()
         return selected_songs
-
-    def _final_text(self, percentile):
-        return _("You outperformed {}% of the players!").format(percentile)
 
     def _get_percentile_rank(self, session):
         """

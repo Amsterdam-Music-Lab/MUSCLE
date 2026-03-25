@@ -3,6 +3,8 @@ from unittest import skip
 
 from django.db.models import Avg
 from django.test import TestCase
+from django.utils import timezone
+
 
 from experiment.models import Block, Experiment, Phase
 from experiment.actions.final import Final
@@ -278,7 +280,12 @@ class MatchingPairs2025Test(TestCase):
 
     def test_get_final_actions(self):
         mp_block = Block.objects.create(phase=self.phase, rules="MATCHING_PAIRS_2025", slug="mpairs-2025-2")
-        session = Session.objects.create(participant=self.participant, block=mp_block, final_score=100)
+        session = Session.objects.create(
+            participant=self.participant,
+            block=mp_block,
+            final_score=100,
+            finished_at=timezone.now(),
+        )
         final_action = self.rules._get_final_actions(session)[0]
         self.assertIsInstance(final_action, Final)
         self.assertEqual(final_action.total_score, 100)
