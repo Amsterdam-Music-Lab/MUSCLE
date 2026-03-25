@@ -64,9 +64,15 @@ export interface Final {
   block: Block;
   participant: Participant;
   score: number;
+  title: {
+    header: string;
+    body: string;
+  }
+  extraInfo: string;
   totalScore?: number;
   percentile?: number;
-  final_text?: string | TrustedHTML;
+  finalText?: string;
+  extraInfo?: string;
   action_texts: {
     all_experiments: string;
     profile: string;

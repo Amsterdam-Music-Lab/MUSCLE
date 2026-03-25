@@ -13,19 +13,8 @@ const DEFAULT_CUTOFF = 30;
 
 export interface RankingPluginArgs {
   percentile: number;
-  cutoff: number;
-
-  /**
-   * Message shown above when the percentile is above the cutoff. You can use
-   * two variables in the template string: percentile and cutoff
-   */
-  headerAboveCutoff?: string;
-
-  /**
-   * Message shown above when the percentile is below the cutoff. You can use
-   * two variables in the template string: percentile and cutoff
-   */
-  headerBelowCuttoff?: string;
+  finalText: string;
+  extraInfo: string;
 }
 
 export interface RankingPluginMeta extends PluginMeta<RankingPluginArgs> {
@@ -38,6 +27,8 @@ export interface RankingPluginSpec extends PluginSpec<RankingPluginArgs> {
 
 function RankingPlugin({
   percentile,
+  finalText,
+  extraInfo,
   cutoff = DEFAULT_CUTOFF,
 }: RankingPluginArgs) {
   return (
@@ -50,14 +41,13 @@ function RankingPlugin({
 
 function getWrapperProps({
   percentile,
+  finalText,
+  extraInfo,
   cutoff = DEFAULT_CUTOFF,
 }: RankingPluginArgs) {
-  percentile = percentile !== undefined ? Math.round(percentile) : "";
-  const title =
-    percentile > cutoff
-      ? t`Congrats! You did better than ${percentile}% of players at this level`
-      : t`Congrats! You did better than ${cutoff}% of players at this level`;
-  return { title };
+  const title = finalText;
+  const caption = extraInfo;
+  return { title, caption };
 }
 
 function isVisible({ percentile }: RankingPluginArgs) {

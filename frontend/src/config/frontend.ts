@@ -72,7 +72,6 @@ see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)`;
     args: {
       plugins: [
         { name: "ranking" },
-        { name: "overall-ranking" },
         { name: "scores" },
         {
           name: "timeline",
@@ -166,15 +165,7 @@ Match melodies, clear the board, and minimize mistakes!
         header: t`Yay, you've earned a star! 💫`,
         body: t`Play on and collect 'm all...`,
       },
-      first: {
-        header: t`Woohoo! You've earned your first star! 💫`,
-        body: t`Can you collect them all?`,
-      },
-      last: {
-        header: t`🎉 Amazing! You've finished the game!`,
-        body: t`Play on? Let's start another round of games...`,
-      },
-    },
+    }
   };
 
   const tunetwinsView: ViewConfig = {
