@@ -55,4 +55,39 @@ jobs:
           DJANGO_SUPERUSER_USERNAME: ${{ secrets.DJANGO_SUPERUSER_USERNAME }}
           DJANGO_SUPERUSER_PASSWORD: ${{ secrets.DJANGO_SUPERUSER_PASSWORD }}
           DJANGO_SUPERUSER_EMAIL: ${{ secrets.DJANGO_SUPERUSER_EMAIL }}
-        run: 
+        run: |
+          touch .env
+          echo "FRONTEND_API_ROOT=$FRONTEND_API_ROOT" >> .env
+          echo "FRONTEND_EXPERIMENT_SLUG=$FRONTEND_EXPERIMENT_SLUG" >> .env
+          echo "FRONTEND_AML_HOME=$FRONTEND_AML_HOME" >> .env
+          echo "FRONTEND_LOGO_URL=$FRONTEND_LOGO_URL" >> .env
+          echo "FRONTEND_HTML_FAVICON=$FRONTEND_HTML_FAVICON" >> .env
+          echo "FRONTEND_HTML_PAGE_TITLE=$FRONTEND_HTML_PAGE_TITLE" >> .env
+          echo "FRONTEND_HTML_OG_DESCRIPTION=$FRONTEND_HTML_OG_DESCRIPTION" >> .env
+          echo "FRONTEND_HTML_OG_IMAGE=$FRONTEND_HTML_OG_IMAGE" >> .env
+          echo "FRONTEND_HTML_OG_TITLE=$FRONTEND_HTML_OG_TITLE" >> .env
+          echo "FRONTEND_HTML_OG_URL=$FRONTEND_HTML_OG_URL" >> .env
+          echo "FRONTEND_HTML_BODY_CLASS=$FRONTEND_HTML_BODY_CLASS" >> .env
+          echo "FRONTEND_SENTRY_DSN=$FRONTEND_SENTRY_DSN" >> .env
+          echo "FRONTEND_PLAUSIBLE_DOMAIN=$FRONTEND_PLAUSIBLE_DOMAIN" >> .env
+          echo "FRONTEND_STATIC_URL=$FRONTEND_STATIC_URL" >> .env
+          echo "HOST_DATA=/home/github-runner/podman-volumes" >> .env
+          echo "AML_ALLOWED_HOSTS" >> .env
+          echo "AML_CORS_ORIGIN_WHITELIST" >> .env
+          echo "CSRF_TRUSTED_ORIGINS" >> .env
+          echo "AML_DEBUG" >> .env
+          echo "AML_LOCATION_PROVIDER" >> .env
+          echo "AML_SUBPATH" >> .env
+          echo "DJANGO_SETTINGS_MODULE" >> .env
+          echo "SENTRY_ENVIRONMENT" >> .env
+          echo "SQL_DATABASE" >> .env
+          echo "SQL_HOST" >> .env
+          echo "SQL_PORT" >> .env
+          echo "AML_SECRET_KEY" >> .env
+          echo "SENTRY_DSN" >> .env
+          echo "SQL_USER" >> .env
+          echo "SQL_PASSWORD" >> .env
+          echo "FRONTEND_SENTRY_DSN" >> .env
+          echo "DJANGO_SUPERUSER_USERNAME" >> .env
+          echo "DJANGO_SUPERUSER_PASSWORD" >> .env
+          echo "DJANGO_SUPERUSER_EMAIL" >> .env
