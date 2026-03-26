@@ -136,6 +136,7 @@ views.final = {
         percentile: action.percentile,
         finalText: action.final_text,
         extraInfo: action.extra_info,
+        progressText: action.progress_text,
         score: action.score,
         totalScore: experiment.accumulatedScore + action.score,
         timeline: { ...timeline, currentStep: timelineStep },

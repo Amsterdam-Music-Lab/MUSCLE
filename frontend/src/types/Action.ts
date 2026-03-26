@@ -68,7 +68,8 @@ export interface Final {
     header: string;
     body: string;
   }
-  extraInfo: string;
+  extraInfo?: string;
+  progressText?: string;
   totalScore?: number;
   percentile?: number;
   finalText?: string;

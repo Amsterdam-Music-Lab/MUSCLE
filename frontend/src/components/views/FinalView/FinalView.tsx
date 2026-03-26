@@ -76,6 +76,7 @@ export default function FinalView({
   totalScore,
   finalText,
   extraInfo,
+  progressText,
   timeline,
   plugins: initPlugins,
   trophyContent: initTrophyContent,
@@ -99,11 +100,13 @@ export default function FinalView({
   if (timeline) {
     const steps = processTimelineConfig({ timeline });
     const step = timeline.currentStep ?? 1;
-    console.log(step);
     const symbol = steps[step - 1]?.symbol ?? "dot";
-    iconName = symbol;
-    isLastStep =
+    if (symbol !== "dot") {
+      iconName = symbol;
+      isFirstStep = step === steps.findIndex((s) => s.symbol !== "dot") + 1;
+      isLastStep =
         step === steps.map((s) => s.symbol !== "dot").lastIndexOf(true) + 1;
+    }
   }
 
   // Pass data to plugins
@@ -120,16 +123,23 @@ export default function FinalView({
           timeline,
           finalText,
           extraInfo,
+          progressText,
           shareConfig,
         };
         break;
 
       case "trophy": {
-        if (!timeline) return null;
         if (iconName === undefined) {
           return null;
-        } else {
+        } else if (isFirstStep) {
+          updated.args = { ...updated.args, iconName, ...trophyContent?.first };
+          break;
+        } else if (isLastStep) {
           updated.args = { ...updated.args, iconName, header: title.header, body: title.body };
+          break;
+        } else {
+          const content = trophyContent[step] ?? trophyContent?.default ?? {};
+          updated.args = { ...updated.args, iconName, ...content };
           break;
         }
       }

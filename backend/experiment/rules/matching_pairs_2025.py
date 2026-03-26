@@ -38,25 +38,19 @@ class MatchingPairs2025(MatchingPairsGame):
         ),
     }
     cutoff = 30
-    titles = [
-        {
-            "header": _("Great job finishing Game 1"),
-            "body": _("Your first star is within reach!"),
-        },
-        {"header": _("Just 1 more game to earn your first star!"), "body": ""},
-        {"header": _("First star unlocked! 💫"), "body": "Keep going for the second!"},
-        {
-            "header": _("Keep up the momentum!"),
-            "body": _("Your next star is coming up!"),
-        },
-        {"header": _("Just 1 more game to earn your second star!")},
-        {"header": _("Second star unlocked! 💫"), "body": _("You’re halfway there!")},
-        {"header": _("Keep it up!"), "body": _("Your third star is waiting!")},
-        {"header": _("Game 8 complete!"), "body": _("The third star is almost yours!")},
-        {"header": _("Third star unlocked! 💫"), "body": _("Final sprint!")},
-        {"header": _("Just 2 games left to complete the challenge!")},
-        {"header": _("Just 1 game to unlock your title!")},
-        {},  # empty title dict for last game since the header / body is set elsewhere
+    progress_info = [
+        _("Great job finishing Game 1 - your first star is within reach!"),
+        _("Just 1 more game to earn your first star!"),
+        _("First star unlocked - keep going for the second!"),
+        _("Keep up the momentum! - your next star is coming up!"),
+        _("Just 1 more game to earn your second star!"),
+        _("Second star unlocked - you’re halfway there!"),
+        _("Keep it up - your third star is waiting!"),
+        _("Game 8 complete - the third star is almost yours!"),
+        _("Third star unlocked  - final sprint!"),
+        _("Just 2 games left to complete the challenge!"),
+        _("Just 1 game to unlock your title!"),
+        _("All stars collected — Congratulations, you cleared all levels!"),
     ]
 
     def feedback_info(self) -> FeedbackInfo:
@@ -121,31 +115,25 @@ class MatchingPairs2025(MatchingPairsGame):
             percentile = session.participant.percentile_rank_accumulative_score()
             display_percentile = max(self.cutoff, percentile)
             mean = played_sessions.aggregate(Avg("final_score"))["final_score__avg"]
-            final_text = _(
-                "Based on the experimental data, your music memory mean score is %(mean)d. The average score was 32.63 for Dutch participants and 37.20 for U.S. participants. Your score was higher than %(percentile)d%% of participants."
+            extra_info = _(
+                "Your music memory mean score is %(mean)d. The average score was 32.63 for Dutch participants and 37.20 for U.S. participants. Your score was higher than %(percentile)d%% of participants."
             ) % {"percentile": display_percentile, "mean": mean}
             if percentile > 75:
                 title = {
                     "header": _("Exceptional"),
                     "body": _("Sharp Recognition"),
                 }
-                extra_info = _(
-                    "This indicates that you have excellent music perception ability."
-                )
+                final_text = _("You have excellent music perception ability.")
             elif percentile > 50:
                 title = {"header": _("Advanced"), "body": _("Clear Recognition")}
-                extra_info = _(
-                    "This indicates that your performance in music perception is above average."
-                )
+                final_text = _("Your performance in music perception is above average.")
             elif percentile >= 40:
                 title = {"header": _("Average"), "body": _("Stable Performance")}
-                extra_info = _(
-                    "This indicates that your perception abiulity is around the average level."
-                )
+                final_text = _("Your perception ability is around the average level.")
             else:
                 title = {"header": _("Developing"), "body": _("Ongoing Exploration")}
-                extra_info = _(
-                    "This indicates that your music perception ability still has room for further development."
+                final_text = _(
+                    "Your music perception ability still has room for further development."
                 )
         else:
             percentile = session.percentile_rank()
@@ -154,13 +142,14 @@ class MatchingPairs2025(MatchingPairsGame):
                 "Congrats! You did better than %(percentile)d%% of players at this level"
             ) % {"percentile": display_percentile}
             extra_info = None
-            title = self.titles[n_sessions - 1 % 12]
+            title = {}
         score = Final(
             session,
             title=title,
             total_score=session.final_score,
             final_text=final_text,
             extra_info=extra_info,
+            progress_text=self.progress_info[(n_sessions - 1) % 12],
             button={"text": "Keep playing!", "link": self.get_experiment_url(session)},
             percentile=percentile,
         )

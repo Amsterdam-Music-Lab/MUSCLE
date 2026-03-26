@@ -65,6 +65,7 @@ export default function ScoreBoard({
   className,
   finalText,
   extraInfo,
+  progressText,
   ...cardProps
 }: ScoreBoardProps) {
   // Pass dynamic attributes to all plugins
@@ -84,7 +85,7 @@ export default function ScoreBoard({
         break;
 
       case "timeline":
-        updated.args = { ...updated.args, timeline };
+        updated.args = { ...updated.args, timeline, progressText };
     }
 
     return updated;
