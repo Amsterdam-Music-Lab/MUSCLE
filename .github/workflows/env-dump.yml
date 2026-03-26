@@ -1,5 +1,8 @@
 name: Dump .env file
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:    # Allows manual triggering
 
