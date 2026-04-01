@@ -80,11 +80,13 @@ Card.Section = ({
       )}
       {...divProps}
     >
-      {title && (
+      {title !== undefined ? (title.startsWith("<") ? (
+        <div dangerouslySetInnerHTML={{ __html: title }} class="backdrop"></div>
+      ): (
         <TitleTag className={classNames(titleClass, `text-fill-${variant}`)}>
           {title}
         </TitleTag>
-      )}
+      )) : (<div/>)}
       {children && <div className={styles.sectionContent}>{children}</div>}
       {caption && (
         <CaptionTag className={classNames(titleClass, `text-fill-${variant}`)}>

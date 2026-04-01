@@ -12,9 +12,8 @@ import { ProgressBar } from "@/components/ui";
 const DEFAULT_CUTOFF = 30;
 
 export interface RankingPluginArgs {
-  percentile: number;
+  percentile?: number;
   finalText: string;
-  extraInfo: string;
 }
 
 export interface RankingPluginMeta extends PluginMeta<RankingPluginArgs> {
@@ -28,26 +27,24 @@ export interface RankingPluginSpec extends PluginSpec<RankingPluginArgs> {
 function RankingPlugin({
   percentile,
   finalText,
-  extraInfo,
   cutoff = DEFAULT_CUTOFF,
 }: RankingPluginArgs) {
   return (
-    <ProgressBar
-      value={percentile > cutoff ? percentile : cutoff}
-      variant="primary"
-    />
-  );
+    isVisible && (
+      <ProgressBar
+        value={percentile > cutoff ? percentile : cutoff}
+        variant="primary"
+      />
+  ));
 }
 
 function getWrapperProps({
   percentile,
   finalText,
-  extraInfo,
   cutoff = DEFAULT_CUTOFF,
 }: RankingPluginArgs) {
   const title = finalText;
-  const caption = extraInfo;
-  return { title, caption };
+  return { title };
 }
 
 function isVisible({ percentile }: RankingPluginArgs) {
@@ -59,7 +56,6 @@ export const rankingPlugin: RankingPluginMeta = {
   component: RankingPlugin,
   description: "Displays the ranking",
   defaultSpecs: {
-    isVisible,
     getWrapperProps,
   },
 };

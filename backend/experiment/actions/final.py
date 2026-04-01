@@ -107,7 +107,6 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         session: Session,
         title: str = _("Final score"),
         final_text: Optional[dict] = None,
-        extra_info: Optional[str] = None,
         progress_text: Optional[str] = None,
         button: Optional[ButtonConfiguration] = None,
         points: Optional[str] = None,
@@ -123,7 +122,6 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         self.session = session
         self.title = title
         self.final_text = final_text
-        self.extra_info = extra_info
         self.progress_text = progress_text
         self.button = button
         self.rank = rank
@@ -151,7 +149,6 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
             "percentile": self.percentile,
             "rank": self.rank,
             "final_text": self.final_text,
-            "extra_info": self.extra_info,
             "progress_text": self.progress_text,
             "button": self.button,
             "points": self.points,

@@ -122,7 +122,6 @@ export default function FinalView({
           percentile,
           timeline,
           finalText,
-          extraInfo,
           progressText,
           shareConfig,
         };

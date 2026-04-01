@@ -64,7 +64,6 @@ export default function ScoreBoard({
   plugins = DEFAULT_PLUGINS,
   className,
   finalText,
-  extraInfo,
   progressText,
   ...cardProps
 }: ScoreBoardProps) {
@@ -73,7 +72,7 @@ export default function ScoreBoard({
     const updated: AllPluginSpec = { ...plugin };
     switch (plugin.name) {
       case "ranking":
-        updated.args = { ...updated.args, percentile, finalText, extraInfo };
+        updated.args = { ...updated.args, percentile, finalText };
         break;
 
       case "scores":

@@ -4,6 +4,7 @@ import random
 from django.db.models import Avg
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
+from django_markup.markup import formatter
 
 from result.models import Result
 from section.models import Section
@@ -24,7 +25,7 @@ class MatchingPairs2025(MatchingPairsGame):
     """
 
     ID = "MATCHING_PAIRS_2025"
-    num_pairs = 8
+    num_pairs = 1
     tutorial = {
         "no_match": _(
             "This was not a match, so you get 0 points. Please try again to see if you can find a matching pair."
@@ -110,45 +111,48 @@ class MatchingPairs2025(MatchingPairsGame):
             block__in=session.block.phase.blocks.all(),
         )
         n_sessions = played_sessions.count()
-        if n_sessions % 12 == 0:
+        if n_sessions:
             # final board, percentile is based on participant's accumulative score
             percentile = session.participant.percentile_rank_accumulative_score()
+            percentile_message = (
+                _("Top %(percent)i of participants")
+                % {"percent": round(100 - percentile)},
+            )
             display_percentile = max(self.cutoff, percentile)
             mean = played_sessions.aggregate(Avg("final_score"))["final_score__avg"]
-            extra_info = _(
-                "Your music memory mean score is %(mean)d. The average score was 32.63 for Dutch participants and 37.20 for U.S. participants. Your score was higher than %(percentile)d%% of participants."
-            ) % {"percentile": display_percentile, "mean": mean}
-            if percentile > 75:
-                title = {
-                    "header": _("Exceptional"),
-                    "body": _("Sharp Recognition"),
-                }
-                final_text = _("You have excellent music perception ability.")
-            elif percentile > 50:
-                title = {"header": _("Advanced"), "body": _("Clear Recognition")}
-                final_text = _("Your performance in music perception is above average.")
-            elif percentile >= 40:
-                title = {"header": _("Average"), "body": _("Stable Performance")}
-                final_text = _("Your perception ability is around the average level.")
+            title = {"body": percentile_message}
+            final_text = _(
+                "## RESULT ANALYSIS\n"
+                "Your mean score is **%(mean)d**.  \n"
+                "The average score was **41,6** for Dutch participants and **66** for US participants.  \n"
+                "*You demonstrated excellent music recognition ability.*  \n"
+            ) % {"mean": mean}
+            if percentile >= 90:
+                title.update({"header": _("Exceptional - Razor-Sharp Recognition")})
+            elif percentile >= 75:
+                title.update({"header": _("Advanced - High-Fidelity Recognition")})
+                # final_text = _("Your music recognition is above average — well done!")
+            elif percentile >= 50:
+                title.update({"header": _("Proficient - Reliable Recognition")})
+                # final_text = _("Your music recognition is around the average level.")
             else:
-                title = {"header": _("Developing"), "body": _("Ongoing Exploration")}
-                final_text = _(
-                    "Your music perception ability still has room for further development."
-                )
+                title.update({"header": _("Exploring - Untapped Potential")})
+                # final_text = _(
+                #     "Your music recognition has room to grow — and that's completely normal when listening to unfamiliar music!	"
+                # )
+            percentile = None
         else:
             percentile = session.percentile_rank()
             display_percentile = max(percentile, self.cutoff)
             final_text = _(
                 "Congrats! You did better than %(percentile)d%% of players at this level"
             ) % {"percentile": display_percentile}
-            extra_info = None
             title = {}
         score = Final(
             session,
             title=title,
             total_score=session.final_score,
-            final_text=final_text,
-            extra_info=extra_info,
+            final_text=formatter(final_text, filter_name="markdown"),
             progress_text=self.progress_info[(n_sessions - 1) % 12],
             button={"text": "Keep playing!", "link": self.get_experiment_url(session)},
             percentile=percentile,
