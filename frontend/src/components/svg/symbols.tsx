@@ -10,8 +10,10 @@ import type { StarProps } from "./Star";
 
 import { Star } from "./Star";
 import { Dot } from "./Dot";
+import { Cup, CupProps } from "../modules/Cup";
 
 export const symbols = {
+  cup: (props: CupProps) => <Cup radius={5} {...props} />,
   dot: Dot,
 
   star: (props: StarProps) => <Star numPoints={5} {...props} />,

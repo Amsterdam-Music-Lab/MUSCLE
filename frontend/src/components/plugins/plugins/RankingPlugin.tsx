@@ -30,7 +30,7 @@ function RankingPlugin({
   cutoff = DEFAULT_CUTOFF,
 }: RankingPluginArgs) {
   return (
-    isVisible && (
+    percentile !== null && (
       <ProgressBar
         value={percentile > cutoff ? percentile : cutoff}
         variant="primary"
@@ -45,10 +45,6 @@ function getWrapperProps({
 }: RankingPluginArgs) {
   const title = finalText;
   return { title };
-}
-
-function isVisible({ percentile }: RankingPluginArgs) {
-  return typeof percentile === "number" && percentile > 0 && percentile <= 100;
 }
 
 export const rankingPlugin: RankingPluginMeta = {

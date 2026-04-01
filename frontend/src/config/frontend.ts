@@ -46,7 +46,7 @@ see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)`;
     "star-6",
     "dot",
     "dot",
-    "star-7",
+    "cup",
   ];
 
   const qrPluginSpec = {
