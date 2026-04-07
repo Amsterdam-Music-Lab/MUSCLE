@@ -113,7 +113,6 @@ export default function Star({
               r={(size - 1) / 2}
             />
             <mask id={`mask-${id}`}>
-              <rect x="0" y="0" width={size} height={size} fill="black" />
               <use href={`#circle-${id}`} fill="white" />
             </mask>
           </>

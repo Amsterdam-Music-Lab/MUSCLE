@@ -72,6 +72,7 @@ export default function FinalView({
   social: shareConfig,
   feedback_info,
   percentile,
+  rank,
   score: turnScore,
   totalScore,
   finalText,
@@ -131,14 +132,14 @@ export default function FinalView({
         if (iconName === undefined) {
           return null;
         } else if (isFirstStep) {
-          updated.args = { ...updated.args, iconName, ...trophyContent?.first };
+          updated.args = { ...updated.args, iconName, ...trophyContent?.first, label: rank?.text, type: rank?.class };
           break;
         } else if (isLastStep) {
-          updated.args = { ...updated.args, iconName, header: title.header, body: title.body };
+          updated.args = { ...updated.args, iconName, header: title.header, body: title.body, label: rank?.text, type: rank?.class };
           break;
         } else {
           const content = trophyContent[step] ?? trophyContent?.default ?? {};
-          updated.args = { ...updated.args, iconName, ...content };
+          updated.args = { ...updated.args, iconName, ...content, label: rank?.text, type: rank?.class };
           break;
         }
       }

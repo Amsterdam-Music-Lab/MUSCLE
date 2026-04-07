@@ -57,10 +57,10 @@ export interface CupProps extends HTMLAttributes<HTMLDivElement> {
  * to different colors, and the cup can be animated. The cup can also have a label.
  */
 export default function Cup({
-  type = "plastic",
+  type = "diamond",
   label,
   radius = 150,
-  showHalo = true,
+  showHalo = false,
   animate = true,
   uppercase = true,
   className,

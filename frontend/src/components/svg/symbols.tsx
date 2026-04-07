@@ -10,14 +10,18 @@ import type { StarProps } from "./Star";
 
 import { Star } from "./Star";
 import { Dot } from "./Dot";
-import { Cup, CupProps } from "../modules/Cup";
+import { Cup as CupIcon } from "./Cup";
+import { Cup as CupTrophy } from "../modules/Cup";
 
 export const symbols = {
-  cup: (props: CupProps) => <Cup radius={5} {...props} />,
+  cup: (props) => {
+    console.log(props)
+    if (props.label) {
+      return <CupTrophy {...props}/>
+    }  else { return <CupIcon {...props}/> }
+  },
   dot: Dot,
-
   star: (props: StarProps) => <Star numPoints={5} {...props} />,
-
   "star-4": (props: Omit<StarProps, "numPoints">) => (
     <Star numPoints={4} {...props} />
   ),

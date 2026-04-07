@@ -134,6 +134,7 @@ views.final = {
         social: action.social,
         feedback_info: action.feedback_info,
         percentile: action.percentile,
+        rank: action.rank,
         finalText: action.final_text,
         extraInfo: action.extra_info,
         progressText: action.progress_text,
