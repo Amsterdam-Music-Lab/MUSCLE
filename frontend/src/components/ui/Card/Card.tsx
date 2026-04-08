@@ -66,6 +66,7 @@ Card.Section = ({
   titleTag = "h3",
   captionTag = "em",
   titleClass = styles.sectionTitle,
+  captionClass = styles.sectionCaption,
   ...divProps
 }: CardSectionProps) => {
   const TitleTag = titleTag;
@@ -89,7 +90,7 @@ Card.Section = ({
       ))}
       {children && <div className={styles.sectionContent}>{children}</div>}
       {caption && (
-        <CaptionTag className={classNames(titleClass, `text-fill-${variant}`)}>
+        <CaptionTag className={classNames(captionClass, `text-fill-${variant}`)}>
           {caption}
         </CaptionTag>)}
     </section>
