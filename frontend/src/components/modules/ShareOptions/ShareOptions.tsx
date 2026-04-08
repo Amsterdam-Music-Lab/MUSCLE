@@ -21,6 +21,7 @@ import {
 
 import styles from "./ShareOptions.module.scss";
 import { Icon } from "@/components/icons";
+import { QRCode } from "@/components/plugins";
 
 const copyToClipboard = async (message: string) => {
   await navigator.clipboard.writeText(message);
@@ -160,10 +161,14 @@ export default function ShareOptions({
     .filter(Boolean);
 
   return (
+    <>
+    <QRCode value={config.url} size={70} variant="primary"/>
     <div className={classNames(styles.share, className)} {...divProps}>
+      
       {shareComponents.map((Component, i) => (
         <Component config={config} className={styles.button} key={i} />
       ))}
     </div>
+    </>
   );
 }

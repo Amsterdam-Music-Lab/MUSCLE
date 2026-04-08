@@ -22,7 +22,7 @@ export interface QRCodePluginArgs {
   variant?: Variant;
 }
 
-function QRCode({
+export function QRCode({
   value,
   level = "L",
   size = 70,

@@ -14,12 +14,7 @@ import { Cup as CupIcon } from "./Cup";
 import { Cup as CupTrophy } from "../modules/Cup";
 
 export const symbols = {
-  cup: (props) => {
-    console.log(props)
-    if (props.label) {
-      return <CupTrophy {...props}/>
-    }  else { return <CupIcon {...props}/> }
-  },
+  cup: (props) => props.label ? <CupTrophy {...props}/> : <CupIcon {...props}/>,
   dot: Dot,
   star: (props: StarProps) => <Star numPoints={5} {...props} />,
   "star-4": (props: Omit<StarProps, "numPoints">) => (
