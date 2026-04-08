@@ -60,7 +60,7 @@ see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)`;
         {
           name: "markdown",
           args: {
-            content: t`**Invite your friends to play!** Simply ask them to scan this QR code.`,
+            content: t`**Think you've got a good ear? See how your friends compare!** Share your results and have them scan the QR code to take the challenge.`,
           },
         },
       ],

@@ -82,6 +82,11 @@ export default function ScoreBoard({
       case "share":
         updated.args = { ...updated.args, config: shareConfig };
         break;
+      
+      case "flex":
+        // adjust url set in QR code from shareConfig
+        updated.args.plugins[0].args.value = shareConfig.url;
+        break;
 
       case "timeline":
         updated.args = { ...updated.args, timeline, progressText };
