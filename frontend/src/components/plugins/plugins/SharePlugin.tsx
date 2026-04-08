@@ -10,9 +10,8 @@ import type { PluginMeta, PluginSpec } from "@/types/plugin";
 import type { Variant } from "@/types/themeProvider";
 import type { ShareConfig } from "@/types/share";
 import { useLingui } from "@lingui/react/macro";
-import { ExpandableButton } from "@/components/buttons";
 import { ShareOptions } from "@/components/modules";
-import { QRCode } from "@/components/plugins";
+import { ExpandableButton } from "@/components/buttons";
 
 interface SharePluginProps {
   config: ShareConfig;
@@ -27,8 +26,6 @@ function SharePlugin({
 }: SharePluginProps) {
   const { t } = useLingui();
   return (
-    <div style={{ display: "flex", gap: "3em" }}>
-    <QRCode value={config.url} size={70} fgColor="black"/>
     <ExpandableButton
       title={label ?? t`Share`}
       rounded={true}
@@ -36,7 +33,6 @@ function SharePlugin({
     >
       <ShareOptions config={config!} />
     </ExpandableButton>
-    </div>
   );
 }
 

@@ -9,7 +9,3 @@
 export type { AllPluginMeta, AllPluginSpec } from "./pluginRegistry";
 export type { PluginRendererProps } from "./PluginRenderer";
 export { default as PluginRenderer } from "./PluginRenderer";
-
-// Export the QRCode component directly
-export { QRCode } from "./plugins/QRCodePlugin";
-export type { QRCodePluginArgs } from "./plugins/QRCodePlugin";

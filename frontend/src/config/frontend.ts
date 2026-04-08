@@ -49,7 +49,6 @@ see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)`;
     "cup",
   ];
 
-  /* not using this spec, QR code displayed in Share plugin */
   const qrPluginSpec = {
     name: "flex",
     args: {
@@ -78,9 +77,10 @@ see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)`;
           name: "timeline",
           args: { timeline: { symbols: timelineSymbols } },
         },
+        qrPluginSpec,
         {
           name: "share",
-          wrapperProps: { title: t`Think you've got a good ear? See how your friends compare!`, caption: t`Share your results and have them scan the QR code to take the challenge.` },
+          wrapperProps: { title: t`Take a screenshot or share your score!` },
         },
       ],
     },
