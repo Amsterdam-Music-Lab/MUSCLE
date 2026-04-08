@@ -111,31 +111,13 @@ class MatchingPairs2025(MatchingPairsGame):
             block__in=session.block.phase.blocks.all(),
         )
         n_sessions = played_sessions.count()
-        session_total = played_sessions.aggregate(Sum("final_score"))[
-            "final_score__sum"
-        ]
-        session_average_temporal = played_sessions.filter(
-            json_data__icontains="TD"
-        ).aggregate(Avg("final_score"))["final_score__avg"]
-        session_average_spectral = played_sessions.filter(
-            json_data__icontains="SD"
-        ).aggregate(Avg("final_score"))["final_score__avg"]
-        if session_average_temporal > session_average_spectral:
-            additional = _(
-                "*In addition, your rhythm recognition performance is stronger than your pitch recognition performance — that's less common, and suggests you have a unique way of processing music!*"
-            )
-        elif session_average_spectral > session_average_temporal:
-            additional = _(
-                "*In addition, your pitch recognition performance is stronger than your rhythm recognition performance — that's the most common pattern we see!*"
-            )
-        else:
-            additional = _(
-                "*In addition, your pitch and rhythm recognition performance is equally balanced — a rare and well-rounded profile!*"
-            )
 
         if n_sessions % 12 == 0:
             # final board, percentile is based on participant's accumulative score
             percentile = session.participant.percentile_rank_accumulative_score()
+            session_total = played_sessions.aggregate(Sum("final_score"))[
+                "final_score__sum"
+            ]
             rank = self.rank(percentile)
             percentile_message = (
                 _("Top %(percent)i%% of participants")
@@ -170,7 +152,7 @@ class MatchingPairs2025(MatchingPairsGame):
                     "#### Your music recognition has room to grow — and that's completely normal when listening to unfamiliar music!  \n"
                 )
             percentile = None
-            final += additional
+            final += self.get_additional_info(played_sessions)
             final_text = formatter(final, filter_name="markdown")
         else:
             percentile = self._get_percentile_rank(session)
@@ -191,6 +173,26 @@ class MatchingPairs2025(MatchingPairsGame):
             rank=rank,
         )
         return [score]
+
+    def get_additional_info(self, played_sessions) -> str:
+        session_average_temporal = played_sessions.filter(
+            json_data__icontains="TD"
+        ).aggregate(Avg("final_score"))["final_score__avg"]
+        session_average_spectral = played_sessions.filter(
+            json_data__icontains="SD"
+        ).aggregate(Avg("final_score"))["final_score__avg"]
+        if session_average_temporal > session_average_spectral:
+            return _(
+                "*In addition, your rhythm recognition performance is stronger than your pitch recognition performance — that's less common, and suggests you have a unique way of processing music!*"
+            )
+        elif session_average_spectral > session_average_temporal:
+            return _(
+                "*In addition, your pitch recognition performance is stronger than your rhythm recognition performance — that's the most common pattern we see!*"
+            )
+        else:
+            return _(
+                "*In addition, your pitch and rhythm recognition performance is equally balanced — a rare and well-rounded profile!*"
+            )
 
     def get_matching_pairs_trial(self, session: Session):
         player_sections = self._select_sections(session)
