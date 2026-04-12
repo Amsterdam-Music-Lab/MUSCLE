@@ -48,7 +48,7 @@ const RAW_RUNTIME_STATE =
           ["@vitejs/plugin-react", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:5.1.2"],\
           ["@vitest/coverage-istanbul", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:4.0.18"],\
           ["@vitest/coverage-v8", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:4.0.18"],\
-          ["axios", "npm:1.13.6"],\
+          ["axios", "npm:1.15.0"],\
           ["axios-mock-adapter", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:2.1.0"],\
           ["classnames", "npm:2.5.1"],\
           ["coverage-badges-cli", "npm:2.2.0"],\
@@ -3703,7 +3703,7 @@ const RAW_RUNTIME_STATE =
           ["@vitejs/plugin-react", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:5.1.2"],\
           ["@vitest/coverage-istanbul", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:4.0.18"],\
           ["@vitest/coverage-v8", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:4.0.18"],\
-          ["axios", "npm:1.13.6"],\
+          ["axios", "npm:1.15.0"],\
           ["axios-mock-adapter", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:2.1.0"],\
           ["classnames", "npm:2.5.1"],\
           ["coverage-badges-cli", "npm:2.2.0"],\
@@ -3876,13 +3876,13 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["axios", [\
-      ["npm:1.13.6", {\
-        "packageLocation": "../../../.yarn/berry/cache/axios-npm-1.13.6-d50d919f38-10c0.zip/node_modules/axios/",\
+      ["npm:1.15.0", {\
+        "packageLocation": "../../../.yarn/berry/cache/axios-npm-1.15.0-9132fa0a61-10c0.zip/node_modules/axios/",\
         "packageDependencies": [\
-          ["axios", "npm:1.13.6"],\
-          ["follow-redirects", "virtual:d50d919f386f79799dbf08310718a8c9d013b7f3b397074380009da46d244077279bb24d4805528d90f5d6fcb9c4461336f26e9e65c9ce8e9362a24682e57206#npm:1.15.11"],\
+          ["axios", "npm:1.15.0"],\
+          ["follow-redirects", "virtual:9132fa0a61efc86c3366c1f4c98c4eaafaefa0c123aca659f85cbce3e47a61c0090e4615b3b10a9c9285534e80db49e04a98baf895cccb5d9c934849464afff0#npm:1.15.11"],\
           ["form-data", "npm:4.0.5"],\
-          ["proxy-from-env", "npm:1.1.0"]\
+          ["proxy-from-env", "npm:2.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -3900,7 +3900,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["axios-mock-adapter", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:2.1.0"],\
           ["@types/axios", null],\
-          ["axios", "npm:1.13.6"],\
+          ["axios", "npm:1.15.0"],\
           ["fast-deep-equal", "npm:3.1.3"],\
           ["is-buffer", "npm:2.0.5"]\
         ],\
@@ -5033,10 +5033,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:d50d919f386f79799dbf08310718a8c9d013b7f3b397074380009da46d244077279bb24d4805528d90f5d6fcb9c4461336f26e9e65c9ce8e9362a24682e57206#npm:1.15.11", {\
-        "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-6127a471c1/4/.yarn/berry/cache/follow-redirects-npm-1.15.11-ae7b2db266-10c0.zip/node_modules/follow-redirects/",\
+      ["virtual:9132fa0a61efc86c3366c1f4c98c4eaafaefa0c123aca659f85cbce3e47a61c0090e4615b3b10a9c9285534e80db49e04a98baf895cccb5d9c934849464afff0#npm:1.15.11", {\
+        "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-fdd81fa3e5/4/.yarn/berry/cache/follow-redirects-npm-1.15.11-ae7b2db266-10c0.zip/node_modules/follow-redirects/",\
         "packageDependencies": [\
-          ["follow-redirects", "virtual:d50d919f386f79799dbf08310718a8c9d013b7f3b397074380009da46d244077279bb24d4805528d90f5d6fcb9c4461336f26e9e65c9ce8e9362a24682e57206#npm:1.15.11"],\
+          ["follow-redirects", "virtual:9132fa0a61efc86c3366c1f4c98c4eaafaefa0c123aca659f85cbce3e47a61c0090e4615b3b10a9c9285534e80db49e04a98baf895cccb5d9c934849464afff0#npm:1.15.11"],\
           ["@types/debug", null],\
           ["debug", null]\
         ],\
@@ -6640,10 +6640,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["proxy-from-env", [\
-      ["npm:1.1.0", {\
-        "packageLocation": "../../../.yarn/berry/cache/proxy-from-env-npm-1.1.0-c13d07f26b-10c0.zip/node_modules/proxy-from-env/",\
+      ["npm:2.1.0", {\
+        "packageLocation": "../../../.yarn/berry/cache/proxy-from-env-npm-2.1.0-ce678f045b-10c0.zip/node_modules/proxy-from-env/",\
         "packageDependencies": [\
-          ["proxy-from-env", "npm:1.1.0"]\
+          ["proxy-from-env", "npm:2.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\
