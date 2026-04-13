@@ -22,9 +22,6 @@ $crownImage: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkzIiBoZWlnaHQ9IjE5M
   display: flex;
   align-items: center;
 
-  // This is determined by the rays image
-  width: calc(1.5 * var(--cup-radius));
-  height: calc(1.5 * var(--cup-radius));
   overflow: hidden;
   box-sizing: content-box;
 }
