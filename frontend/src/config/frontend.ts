@@ -46,7 +46,7 @@ see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)`;
     "star-6",
     "dot",
     "dot",
-    "star-7",
+    "cup",
   ];
 
   const qrPluginSpec = {
@@ -60,7 +60,7 @@ see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)`;
         {
           name: "markdown",
           args: {
-            content: t`**Invite your friends to play!** Simply ask them to scan this QR code.`,
+            content: t`**Think you've got a good ear? See how your friends compare!** Share your results and have them scan the QR code to take the challenge.`,
           },
         },
       ],
@@ -72,17 +72,14 @@ see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)`;
     args: {
       plugins: [
         { name: "ranking" },
-        { name: "overall-ranking" },
         { name: "scores" },
         {
           name: "timeline",
           args: { timeline: { symbols: timelineSymbols } },
-          wrapperProps: { title: t`Your progress...` },
         },
         qrPluginSpec,
         {
           name: "share",
-          wrapperProps: { title: t`Take a screenshot or share your score!` },
         },
       ],
     },

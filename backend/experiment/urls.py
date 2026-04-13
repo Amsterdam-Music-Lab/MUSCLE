@@ -7,7 +7,6 @@ from .views import (
     get_experiment,
     post_feedback,
     render_markdown,
-    validate_block_playlist,
 )
 
 app_name = 'experiment'

@@ -12,20 +12,8 @@ import { ProgressBar } from "@/components/ui";
 const DEFAULT_CUTOFF = 30;
 
 export interface RankingPluginArgs {
-  percentile: number;
-  cutoff: number;
-
-  /**
-   * Message shown above when the percentile is above the cutoff. You can use
-   * two variables in the template string: percentile and cutoff
-   */
-  headerAboveCutoff?: string;
-
-  /**
-   * Message shown above when the percentile is below the cutoff. You can use
-   * two variables in the template string: percentile and cutoff
-   */
-  headerBelowCuttoff?: string;
+  percentile?: number;
+  finalText: string;
 }
 
 export interface RankingPluginMeta extends PluginMeta<RankingPluginArgs> {
@@ -38,30 +26,25 @@ export interface RankingPluginSpec extends PluginSpec<RankingPluginArgs> {
 
 function RankingPlugin({
   percentile,
+  finalText,
   cutoff = DEFAULT_CUTOFF,
 }: RankingPluginArgs) {
   return (
-    <ProgressBar
-      value={percentile > cutoff ? percentile : cutoff}
-      variant="primary"
-    />
-  );
+    percentile !== null && (
+      <ProgressBar
+        value={percentile > cutoff ? percentile : cutoff}
+        variant="primary"
+      />
+  ));
 }
 
 function getWrapperProps({
   percentile,
+  finalText,
   cutoff = DEFAULT_CUTOFF,
 }: RankingPluginArgs) {
-  percentile = percentile !== undefined ? Math.round(percentile) : "";
-  const title =
-    percentile > cutoff
-      ? t`Congrats! You did better than ${percentile}% of players at this level`
-      : t`Congrats! You did better than ${cutoff}% of players at this level`;
+  const title = finalText;
   return { title };
-}
-
-function isVisible({ percentile }: RankingPluginArgs) {
-  return typeof percentile === "number" && percentile > 0 && percentile <= 100;
 }
 
 export const rankingPlugin: RankingPluginMeta = {
@@ -69,7 +52,6 @@ export const rankingPlugin: RankingPluginMeta = {
   component: RankingPlugin,
   description: "Displays the ranking",
   defaultSpecs: {
-    isVisible,
     getWrapperProps,
   },
 };

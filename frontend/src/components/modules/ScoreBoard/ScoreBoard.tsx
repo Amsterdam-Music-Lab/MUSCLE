@@ -25,6 +25,9 @@ export interface ScoreBoardProps extends CardProps {
   /** The percentile */
   percentile?: number;
 
+  /** The text sent from the backend */
+  finalText?: string;
+
   /** The timeline configuration */
   timeline?: TimelineConfig;
 
@@ -60,6 +63,8 @@ export default function ScoreBoard({
   shareConfig,
   plugins = DEFAULT_PLUGINS,
   className,
+  finalText,
+  progressText,
   ...cardProps
 }: ScoreBoardProps) {
   // Pass dynamic attributes to all plugins
@@ -67,15 +72,7 @@ export default function ScoreBoard({
     const updated: AllPluginSpec = { ...plugin };
     switch (plugin.name) {
       case "ranking":
-        updated.args = { ...updated.args, percentile };
-        break;
-
-      case "overall-ranking":
-        updated.args = {
-          ...updated.args,
-          percentile: overallPercentile,
-          totalScore,
-        };
+        updated.args = { ...updated.args, percentile, finalText };
         break;
 
       case "scores":
@@ -85,9 +82,14 @@ export default function ScoreBoard({
       case "share":
         updated.args = { ...updated.args, config: shareConfig };
         break;
+      
+      case "flex":
+        // adjust url set in QR code from shareConfig
+        updated.args.plugins[0].args.value = shareConfig.url;
+        break;
 
       case "timeline":
-        updated.args = { ...updated.args, timeline };
+        updated.args = { ...updated.args, timeline, progressText };
     }
 
     return updated;

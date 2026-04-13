@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/config/frontend.ts:91
+#: src/config/frontend.ts:89
 msgid ""
 "\n"
 "How good are you in memorizing music? \n"
@@ -54,8 +54,12 @@ msgid "{turnScore} points"
 msgstr "{turnScore}分"
 
 #: src/config/frontend.ts:63
-msgid "**Invite your friends to play!** Simply ask them to scan this QR code."
-msgstr "分享二维码，**邀请朋友来挑战**，看看谁的分数更高！"
+#~ msgid "**Invite your friends to play!** Simply ask them to scan this QR code."
+#~ msgstr "分享二维码，**邀请朋友来挑战**，看看谁的分数更高！"
+
+#: src/config/frontend.ts:63
+msgid "**Think you've got a good ear? See how your friends compare!** Share your results and have them scan the QR code to take the challenge."
+msgstr "**看看朋友们能不能超过您！** 分享您的成绩，让他们扫码来挑战吧。"
 
 #: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:54
 msgid "+{turnScore} points"
@@ -65,7 +69,7 @@ msgstr "+{turnScore}分"
 #~ msgid "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
 #~ msgstr "⚠️ 游戏仍在开发中：我们正在进行测试。如果您遇到任何问题或有建议，**请使用即将出现在右下角的反馈按钮**分享您的反馈。"
 
-#: src/config/frontend.ts:174
+#: src/config/frontend.ts:172
 msgid "🎉 Amazing! You've finished the game!"
 msgstr "🎉 太棒了！您完成了本轮游戏！"
 
@@ -97,7 +101,7 @@ msgstr "返回"
 msgid "Bronze"
 msgstr "青铜"
 
-#: src/config/frontend.ts:171
+#: src/config/frontend.ts:169
 msgid "Can you collect them all?"
 msgstr "您能集齐所有星星吗？"
 
@@ -106,12 +110,12 @@ msgid "Confirm"
 msgstr "确认"
 
 #: src/components/plugins/plugins/RankingPlugin.tsx:59
-msgid "Congrats! You did better than {cutoff}% of players at this level"
-msgstr "祝贺您！您的表现超过了此级别{cutoff}%的玩家"
+#~ msgid "Congrats! You did better than {cutoff}% of players at this level"
+#~ msgstr "祝贺您！您的表现超过了此级别{cutoff}%的玩家"
 
 #: src/components/plugins/plugins/RankingPlugin.tsx:58
-msgid "Congrats! You did better than {percentile}% of players at this level"
-msgstr "祝贺您！您的表现超过了此级别{percentile}%的玩家"
+#~ msgid "Congrats! You did better than {percentile}% of players at this level"
+#~ msgstr "祝贺您！您的表现超过了此级别{percentile}%的玩家"
 
 #: src/components/views/ConsentView/ConsentView.tsx:109
 msgid "Deny consent"
@@ -142,8 +146,8 @@ msgid "Explanation"
 msgstr "说明"
 
 #: src/components/plugins/plugins/OverallRankingPlugin.tsx:40
-msgid "Game complete! Your final score is {totalScore}. That's better than {percentile}% of players."
-msgstr "本轮游戏结束！您的总得分为 {totalScore}，超过了 {percentile}% 的玩家！"
+#~ msgid "Game complete! Your final score is {totalScore}. That's better than {percentile}% of players."
+#~ msgstr "本轮游戏结束！您的总得分为 {totalScore}，超过了 {percentile}% 的玩家！"
 
 #: src/components/views/ConsentDeniedView/ConsentDeniedView.tsx:31
 msgid "Go back to the homepage"
@@ -209,7 +213,7 @@ msgstr "可惜它们不匹配..."
 msgid "Not quite, try again!"
 msgstr "差一点，再试一次！"
 
-#: src/config/frontend.ts:127
+#: src/config/frontend.ts:125
 msgid "Note:"
 msgstr "温馨提示："
 
@@ -233,16 +237,16 @@ msgstr "塑料"
 msgid "Platinum"
 msgstr "白金"
 
-#: src/components/views/FinalView/FinalView.tsx:198
-#: src/config/frontend.ts:158
+#: src/components/views/FinalView/FinalView.tsx:183
+#: src/config/frontend.ts:156
 msgid "Play another game!"
 msgstr "继续游戏！"
 
-#: src/config/frontend.ts:167
+#: src/config/frontend.ts:165
 msgid "Play on and collect 'm all..."
 msgstr "继续游戏，收集全部..."
 
-#: src/config/frontend.ts:175
+#: src/config/frontend.ts:173
 msgid "Play on? Let's start another round of games..."
 msgstr "继续游戏？让我们开始新的一轮..."
 
@@ -278,12 +282,12 @@ msgstr "白银"
 msgid "Skip"
 msgstr "跳过"
 
-#: src/config/frontend.ts:142
+#: src/config/frontend.ts:140
 msgid "Start the game!"
 msgstr "开始游戏！"
 
-#: src/components/views/SurveyView/SurveyView.tsx:117
 #: src/components/modules/FeedbackForm/ControlledFeedbackForm.tsx:77
+#: src/components/views/SurveyView/SurveyView.tsx:117
 msgid "Submit"
 msgstr "提交"
 
@@ -291,25 +295,27 @@ msgstr "提交"
 msgid "Submit more feedback"
 msgstr "提交更多反馈"
 
-#: src/config/frontend.ts:85
+#: src/config/frontend.ts:83
 msgid "Take a screenshot or share your score!"
 msgstr "别忘了截图保存及分享您的分数！"
 
-#: src/config/frontend.ts:116
+#: src/config/frontend.ts:114
 msgid "Test Your Musical Memory!"
 msgstr "测试您的音乐记忆力！"
 
-#: src/config/frontend.ts:130
+#: src/config/frontend.ts:128
 msgid "The first load may take a while due to the amount of content, but later runs will be smoother. The difficulty of game levels is randomized. After collecting all the stars, you will receive a total score and see how you rank among players worldwide."
-msgstr "首次加载可能稍慢，之后将更加流畅。\n关卡难度随机，每局游戏约 3–5 分钟。集齐所有星星完成游戏，看看您的总分超过了多少玩家！"
+msgstr ""
+"首次加载可能稍慢，之后将更加流畅。\n"
+"关卡难度随机，每局游戏约 3–5 分钟。集齐所有星星完成游戏，看看您的总分超过了多少玩家！"
 
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:79
 msgid "This is your lucky day!"
 msgstr "今天您很幸运哦！"
 
-#: src/components/plugins/plugins/ScoresPlugin.tsx:43
-#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:228
+#: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:43
+#: src/components/plugins/plugins/ScoresPlugin.tsx:43
 msgid "Total score"
 msgstr "总分"
 
@@ -327,11 +333,11 @@ msgstr "很遗憾，如果您不愿意提供同意，就无法参与此实验。
 msgid "Well done!"
 msgstr "做得好！"
 
-#: src/config/frontend.ts:170
+#: src/config/frontend.ts:168
 msgid "Woohoo! You've earned your first star! 💫"
 msgstr "太棒了！您获得了第一颗星星！💫"
 
-#: src/config/frontend.ts:166
+#: src/config/frontend.ts:164
 msgid "Yay, you've earned a star! 💫"
 msgstr "耶，您赢得了一颗星星！💫"
 
@@ -348,5 +354,5 @@ msgid "Your feedback was submitted."
 msgstr "您的反馈已提交。"
 
 #: src/config/frontend.ts:80
-msgid "Your progress..."
-msgstr "当前进度"
+#~ msgid "Your progress..."
+#~ msgstr "当前进度"

@@ -22,9 +22,6 @@ $crownImage: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkzIiBoZWlnaHQ9IjE5M
   display: flex;
   align-items: center;
 
-  // This is determined by the rays image
-  width: calc(1.5 * var(--cup-radius));
-  height: calc(1.5 * var(--cup-radius));
   overflow: hidden;
   box-sizing: content-box;
 }
@@ -92,9 +89,10 @@ $crownImage: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkzIiBoZWlnaHQ9IjE5M
 }
 
 .label {
-  width: 60%;
+  width: 70%;
   text-align: center;
   font-size: 1.1rem;
+  color: white;
 
   &.uppercase {
     text-transform: uppercase;

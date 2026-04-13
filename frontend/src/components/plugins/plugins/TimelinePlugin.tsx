@@ -9,7 +9,9 @@
 import type { PluginMeta, PluginSpec } from "@/types/plugin";
 import Timeline, { type TimelineProps } from "@/components/modules/Timeline/Timeline";
 
-export interface TimelinePluginArgs extends TimelineProps {}
+export interface TimelinePluginArgs extends TimelineProps {
+    progressText: string;
+}
 
 export interface TimelinePluginMeta extends PluginMeta<TimelinePluginArgs> {
     name: "timeline";
@@ -19,9 +21,17 @@ export interface TimelinePluginSpec extends PluginSpec<TimelinePluginArgs> {
     name: "timeline";
 }
 
+function getWrapperProps({
+  progressText,
+}: RankingPluginArgs) {
+  return { title: progressText };
+}
+
 export const timelinePlugin: TimelinePluginMeta = {
     name: "timeline",
     component: Timeline,
     description: "Displays an timeline",
-    defaultSpecs: {},
+    defaultSpecs: {
+        getWrapperProps,
+    },
 };

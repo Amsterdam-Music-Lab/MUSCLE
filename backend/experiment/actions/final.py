@@ -71,7 +71,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
 
     Args:
         session (Session): The current session object associated with the participant.
-        title (str): The title displayed at the top of the final view. Defaults to a localized "Final score".
+        title (dict): A header and body of the title displayed at the top of the final view.
         final_text (Optional[str]): An optional concluding message (e.g., "Thanks for participating!").
         button (Optional[ButtonConfiguration]): Optional call-to-action button configuration. For example:
                                             {"text": "Play again", "link": "/{experiment_slug}"}.
@@ -106,7 +106,8 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         self,
         session: Session,
         title: str = _("Final score"),
-        final_text: Optional[str] = None,
+        final_text: Optional[dict] = None,
+        progress_text: Optional[str] = None,
         button: Optional[ButtonConfiguration] = None,
         points: Optional[str] = None,
         rank: Optional[str] = None,
@@ -117,11 +118,11 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         total_score: Optional[float] = None,
         logo: Optional[LogoConfiguration] = None,
         percentile: Optional[float] = None,
-        accumulative_percentile: Optional[float] = None,
     ):
         self.session = session
         self.title = title
         self.final_text = final_text
+        self.progress_text = progress_text
         self.button = button
         self.rank = rank
         self.show_profile_link = show_profile_link
@@ -130,7 +131,6 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         self.feedback_info = feedback_info
         self.logo = logo
         self.percentile = percentile
-        self.accumulative_percentile = accumulative_percentile
 
         if total_score is None:
             self.total_score = self.session.total_score()
@@ -147,9 +147,9 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
             "view": self.view,
             "score": self.total_score,
             "percentile": self.percentile,
-            "accumulative_percentile": self.accumulative_percentile,
             "rank": self.rank,
-            "final_text": self.wrap_plain_final_text(),
+            "final_text": self.final_text,
+            "progress_text": self.progress_text,
             "button": self.button,
             "points": self.points,
             "action_texts": {
@@ -173,12 +173,3 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         if hasattr(experiment, "social_media_config") and experiment.social_media_config:
             return serialize_social_media_config(experiment.social_media_config, session.total_score())
         return None
-
-    def wrap_plain_final_text(self):
-        """check if `final_text` starts with a html tag
-        If not, wrap it in a `<center>` element for better alignment
-        """
-        tag_pattern = re.compile("<[a-z]*>")
-        if self.final_text and not re.match(tag_pattern, str(self.final_text)):
-            return f"<center>{self.final_text}</center>"
-        return self.final_text
