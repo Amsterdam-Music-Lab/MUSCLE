@@ -219,14 +219,15 @@ class MatchingPairs2025Test(TestCase):
             self.rules.num_pairs - len(single_plays),
         )
 
-    def create_session(self, final_score, json_data):
-        participant = Participant.objects.create()
+    def create_session(self, final_score, json_data, participant=None):
+        participant = participant or Participant.objects.create()
         session = Session.objects.create(
             block=self.block,
             participant=participant,
             playlist=self.playlist,
             final_score=final_score,
             json_data=json_data,
+            finished_at=timezone.now(),
         )
         return session
 
@@ -293,6 +294,45 @@ class MatchingPairs2025Test(TestCase):
     def test_get_possible_conditions(self):
         possible_conditions = self.rules._get_possible_conditions(self.session)
         self.assertEqual(len(possible_conditions), 11)
+
+    def test_get_additional_info_SD_higher(self):
+        td_data = {'condition': 'TD', 'difficulty': '4'}
+        self.create_session(100, td_data, self.participant)
+        self.create_session(120, td_data, self.participant)
+        sd_data = {'condition': 'SD', 'difficulty': '4'}
+        self.create_session(120, sd_data, self.participant)
+        self.create_session(150, sd_data, self.participant)
+        info = self.rules.get_additional_info(self.participant.session_set.all())
+        self.assertIn(
+            "your pitch recognition performance is stronger than your rhythm recognition performance",
+            info,
+        )
+
+    def test_get_additional_info_TD_higher(self):
+        td_data = {'condition': 'SD', 'difficulty': '4'}
+        self.create_session(100, td_data, self.participant)
+        self.create_session(120, td_data, self.participant)
+        sd_data = {'condition': 'TD', 'difficulty': '4'}
+        self.create_session(120, sd_data, self.participant)
+        self.create_session(150, sd_data, self.participant)
+        info = self.rules.get_additional_info(self.participant.session_set.all())
+        self.assertIn(
+            "your rhythm recognition performance is stronger than your pitch recognition performance",
+            info,
+        )
+
+    def test_get_additional_infoequal(self):
+        td_data = {'condition': 'SD', 'difficulty': '4'}
+        self.create_session(100, td_data, self.participant)
+        self.create_session(140, td_data, self.participant)
+        sd_data = {'condition': 'TD', 'difficulty': '4'}
+        self.create_session(120, sd_data, self.participant)
+        self.create_session(120, sd_data, self.participant)
+        info = self.rules.get_additional_info(self.participant.session_set.all())
+        self.assertIn(
+            "your pitch and rhythm recognition performance is equally balanced",
+            info,
+        )
 
 
 @skip("This test simulates repeated playthroughs, comment this line out to run")
