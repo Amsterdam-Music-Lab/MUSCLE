@@ -1046,7 +1046,7 @@ msgstr ""
 
 #: experiment/rules/matching_pairs_2025.py:137
 msgid "Razor-Sharp Recognition"
-msgstr "听即中\t"
+msgstr "一听即中\t"
 
 #: experiment/rules/matching_pairs_2025.py:139
 msgid "#### You demonstrated excellent music recognition ability.  \n"
