@@ -1,9 +1,10 @@
 from os.path import split
 import random
 
-
+from django.db.models import Avg, Sum
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
+from django_markup.markup import formatter
 
 from result.models import Result
 from section.models import Section
@@ -37,6 +38,23 @@ class MatchingPairs2025(MatchingPairsGame):
             "You thought you found a matching pair, but you didn't. This is considered a misremembered pair. You lose 10 points."
         ),
     }
+    cutoff = 30
+    progress_info = [
+        _("Nice start! Your first star is 2 games away."),
+        _("One more for your first star!"),
+        _("First star earned! On to the second."),
+        _("Cruising along — next star in 2 games."),
+        _("One more for star number two!"),
+        _("Second star! You're halfway there."),
+        _("Two-thirds done — the final star awaits."),
+        _("So close to the third star!"),
+        _("All three stars earned — now finish strong!"),
+        _("Two games left. You've got this!"),
+        _("Final game — your title is waiting!"),
+        _(
+            "All experiments complete. Thank you for making a real contribution to music science!"
+        ),
+    ]
 
     def feedback_info(self) -> FeedbackInfo:
         feedback_body = render_to_string(
@@ -90,16 +108,93 @@ class MatchingPairs2025(MatchingPairsGame):
         return Explainer(_("Click to start!"), steps=[])
 
     def _get_final_actions(self, session: Session):
+        played_sessions = session.participant.session_set.filter(
+            finished_at__isnull=False,
+            block__in=session.block.phase.blocks.all(),
+        )
+        n_sessions = played_sessions.count()
+
+        if n_sessions % 12 == 0:
+            # final board, percentile is based on participant's accumulative score
+            percentile = session.participant.percentile_rank_accumulative_score()
+            session_total = played_sessions.aggregate(Sum("final_score"))[
+                "final_score__sum"
+            ]
+            rank = self.rank(percentile)
+            display_percentile = max(self.cutoff, round(percentile))
+            percentile_message = (
+                _("You outperformed %(percent)i%% of all the participants")
+                % {"percent": display_percentile},
+            )
+            mean = played_sessions.aggregate(Avg("final_score"))["final_score__avg"]
+            title = {"body": percentile_message}
+            final = _(
+                "### Result Analysis\n"
+                "Your mean score is **%(mean)d** (%(total)i/%(n_sessions)i).  \n\n"
+                "The average score was **36.25** for Dutch participants and **44,86** for US participants.  \n"
+            ) % {"mean": mean, "total": session_total, "n_sessions": n_sessions}
+            if percentile >= 90:
+                title.update({"header": _("Razor-Sharp Recognition")})
+                final += _(
+                    "#### You demonstrated excellent music recognition ability.  \n"
+                )
+            elif percentile >= 75:
+                title.update({"header": _("High-Fidelity Recognition")})
+                final += _(
+                    "#### Your music recognition is above average — well done!  \n"
+                )
+            elif percentile >= 50:
+                title.update({"header": _("Reliable Recognition")})
+                final += _(
+                    "#### Your music recognition is around the average level.  \n"
+                )
+            else:
+                title.update({"header": _("Untapped Potential")})
+                final += _(
+                    "#### Your music recognition has room to grow — and that's completely normal when listening to unfamiliar music!  \n"
+                )
+            percentile = None
+            final += self.get_additional_info(played_sessions)
+            final_text = formatter(final, filter_name="markdown")
+        else:
+            percentile = self._get_percentile_rank(session)
+            rank = self.rank(percentile)
+            display_percentile = max(percentile, self.cutoff)
+            final_text = _(
+                "Congrats! You did better than %(percentile)d%% of players at this level"
+            ) % {"percentile": display_percentile}
+            title = {}
         score = Final(
             session,
-            title="Score",
+            title=title,
             total_score=session.final_score,
-            final_text=self._final_text(self._get_percentile_rank(session)),
-            button={"text": "Next game", "link": self.get_experiment_url(session)},
-            percentile=self._get_percentile_rank(session),
-            accumulative_percentile=session.participant.percentile_rank_accumulative_score(),
+            final_text=final_text,
+            progress_text=self.progress_info[(n_sessions - 1) % 12],
+            button={"text": "Keep playing!", "link": self.get_experiment_url(session)},
+            percentile=percentile,
+            rank=rank,
         )
         return [score]
+
+    def get_additional_info(self, played_sessions) -> str:
+        session_average_temporal = played_sessions.filter(
+            json_data__icontains="TD"
+        ).aggregate(Avg("final_score"))["final_score__avg"]
+        session_average_spectral = played_sessions.filter(
+            json_data__icontains="SD"
+        ).aggregate(Avg("final_score"))["final_score__avg"]
+        if session_average_temporal > session_average_spectral:
+            return _(
+                "*In addition, your rhythm recognition performance is stronger than your pitch recognition performance — that's less common, and suggests you have a unique way of processing music!*"
+            )
+        elif session_average_spectral > session_average_temporal:
+            return _(
+                "*In addition, your pitch recognition performance is stronger than your rhythm recognition performance — that's the most common pattern we see!*"
+            )
+        else:
+            return _(
+                "*In addition, your pitch and rhythm recognition performance is equally balanced — a rare and well-rounded profile!*"
+            )
 
     def get_matching_pairs_trial(self, session: Session):
         player_sections = self._select_sections(session)
@@ -275,9 +370,6 @@ class MatchingPairs2025(MatchingPairsGame):
             result.save()
         return selected_songs
 
-    def _final_text(self, percentile):
-        return _("You outperformed {}% of the players!").format(percentile)
-
     def _get_percentile_rank(self, session):
         """
         Returns:
@@ -294,6 +386,16 @@ class MatchingPairs2025(MatchingPairsGame):
             },
         }
         return session.percentile_rank(filter_conditions)
+
+    def rank(self, percentile: float):
+        if percentile <= 49:
+            return {"text": _("Exploring"), "class": "bronze"}
+        elif percentile <= 74:
+            return {"text": _("Proficient"), "class": "silver"}
+        elif percentile <= 89:
+            return {"text": _("Advanced"), "class": "gold"}
+        else:
+            return {"text": _("Supreme"), "class": "diamond"}
 
     def get_info_playlist(self, section_path: str):
         path, filename = split(section_path)

@@ -57,7 +57,6 @@ describe("MultiPlayer Component", () => {
   test("calls playSection with correct index when PlayerSmall is clicked", () => {
     render(<MultiPlayer {...defaultProps} />);
     const players = screen.getAllByTestId("mock-small-player");
-    console.log(players[1]);
     fireEvent.click(players[1]);
     expect(mockPlaySection).toHaveBeenCalledWith(1);
   });

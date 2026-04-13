@@ -185,7 +185,7 @@ class Session(models.Model):
             return section.song_label()
         return ""
 
-    def percentile_rank(self, filter_conditions) -> float:
+    def percentile_rank(self, filter_conditions={}) -> float:
         """
         Returns:
             Percentile rank of this session for the associated block, based on `final_score`

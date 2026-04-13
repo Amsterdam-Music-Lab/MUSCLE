@@ -23,10 +23,8 @@ import { TrophyProps } from "@/components/modules";
 export type TrophyText = Pick<TrophyProps, "header" | "body">;
 
 export interface TrophyContent {
-  first?: TrophyText;
-  last?: TrophyText;
-  default?: TrophyText;
-  [step: number]: TrophyText | undefined;
+  header: string;
+  body: string;
 }
 
 export interface FinalViewProps
@@ -56,17 +54,8 @@ export interface FinalViewProps
  *
  * ```ts
  * const trophyContent = {
- *  default: {
  *    header: "Yay, you've earned a star!",
  *    body: "Play on to earn more..."
- *  },
- *
- *  // Special names for the first/last step:
- *  first: { header: "...", body: "..." },
- *  last: { header: "...", body: "..." },
- *
- *  // Or specify the content for a particular step
- *  6: {header: "...", body: "..."},
  * }
  * ```
  */
@@ -76,15 +65,19 @@ export default function FinalView({
   action_texts: userLinkTexts,
   button,
   onNext,
+  title,
   show_participant_link,
   participant_id_only,
   show_profile_link,
   social: shareConfig,
   feedback_info,
   percentile,
-  overallPercentile,
+  rank,
   score: turnScore,
   totalScore,
+  finalText,
+  extraInfo,
+  progressText,
   timeline,
   plugins: initPlugins,
   trophyContent: initTrophyContent,
@@ -117,12 +110,6 @@ export default function FinalView({
     }
   }
 
-  if (!isLastStep) {
-    overallPercentile = undefined;
-  } else {
-    percentile = undefined;
-  }
-
   // Pass data to plugins
   plugins = plugins?.map((plugin) => {
     const updated: AllPluginSpec = { args: {}, ...plugin };
@@ -134,27 +121,25 @@ export default function FinalView({
           turnScore,
           totalScore,
           percentile,
-          overallPercentile,
           timeline,
+          finalText,
+          progressText,
           shareConfig,
         };
         break;
 
       case "trophy": {
-        if (!timeline) return null;
-
-        // If the current step has a trophy, enable the trophy plugin
         if (iconName === undefined) {
           return null;
         } else if (isFirstStep) {
-          updated.args = { ...updated.args, iconName, ...trophyContent?.first };
+          updated.args = { ...updated.args, iconName, ...trophyContent?.first, label: rank?.text, type: rank?.class };
           break;
         } else if (isLastStep) {
-          updated.args = { ...updated.args, iconName, ...trophyContent?.last };
+          updated.args = { ...updated.args, iconName, header: title.header, body: title.body, label: rank?.text, type: rank?.class };
           break;
         } else {
           const content = trophyContent[step] ?? trophyContent?.default ?? {};
-          updated.args = { ...updated.args, iconName, ...content };
+          updated.args = { ...updated.args, iconName, ...content, label: rank?.text, type: rank?.class };
           break;
         }
       }

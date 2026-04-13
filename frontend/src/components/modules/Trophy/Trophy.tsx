@@ -61,6 +61,8 @@ export default function Trophy({
   body,
   className,
   iconProps = {},
+  type,
+  label,
   showConfetti = true,
   confettiProps = {},
   wobble = true,
@@ -113,6 +115,8 @@ export default function Trophy({
         )}
         <Trophy
           size={100}
+          label={label}
+          type={type}
           variant="secondary"
           className={classNames(styles.trophyIcon, iconClassName)}
           {...otherIconProps}
