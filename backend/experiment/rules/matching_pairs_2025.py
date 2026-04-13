@@ -51,7 +51,9 @@ class MatchingPairs2025(MatchingPairsGame):
         _("All three stars earned — now finish strong!"),
         _("Two games left. You've got this!"),
         _("Final game — your title is waiting!"),
-        _("Challenge complete! Let's see your results..."),
+        _(
+            "All experiments complete. Thank you for making a real contribution to music science!"
+        ),
     ]
 
     def feedback_info(self) -> FeedbackInfo:
