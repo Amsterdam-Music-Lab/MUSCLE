@@ -80,7 +80,6 @@ see [UvA Privacy](https://www.uva.nl/en/home/disclaimers/privacy.html)`;
         qrPluginSpec,
         {
           name: "share",
-          wrapperProps: { title: t`Take a screenshot or share your score!` },
         },
       ],
     },
