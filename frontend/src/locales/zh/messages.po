@@ -59,7 +59,7 @@ msgstr "{turnScore}分"
 
 #: src/config/frontend.ts:63
 msgid "**Think you've got a good ear? See how your friends compare!** Share your results and have them scan the QR code to take the challenge."
-msgstr "**觉得自己耳朵灵？看看朋友们能不能超过你！** 分享你的成绩，让他们扫码来挑战吧。"
+msgstr "**看看朋友们能不能超过您！** 分享您的成绩，让他们扫码来挑战吧。"
 
 #: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:54
 msgid "+{turnScore} points"

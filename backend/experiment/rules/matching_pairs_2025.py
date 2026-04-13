@@ -121,17 +121,17 @@ class MatchingPairs2025(MatchingPairsGame):
                 "final_score__sum"
             ]
             rank = self.rank(percentile)
+            display_percentile = max(self.cutoff, round(percentile))
             percentile_message = (
-                _("Top %(percent)i%% of participants")
-                % {"percent": round(100 - percentile)},
+                _("You outperformed %(percent)i%% of all the participants")
+                % {"percent": display_percentile},
             )
-            display_percentile = max(self.cutoff, percentile)
             mean = played_sessions.aggregate(Avg("final_score"))["final_score__avg"]
             title = {"body": percentile_message}
             final = _(
                 "### Result Analysis\n"
                 "Your mean score is **%(mean)d** (%(total)i/%(n_sessions)i).  \n\n"
-                "The average score was **41,6** for Dutch participants and **66** for US participants.  \n"
+                "The average score was **36.25** for Dutch participants and **44,86** for US participants.  \n"
             ) % {"mean": mean, "total": session_total, "n_sessions": n_sessions}
             if percentile >= 90:
                 title.update({"header": _("Razor-Sharp Recognition")})
