@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-13 15:45+0200\n"
+"POT-Creation-Date: 2026-04-14 21:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1026,6 +1026,7 @@ msgid "Click to start!"
 msgstr "点击以开始!"
 
 #: experiment/rules/matching_pairs_2025.py:126
+#, python-format
 msgid "You outperformed %(percent)i%% of all the participants"
 msgstr "您的表现超过了 %(percent)i%% 的参与者"
 
@@ -1033,12 +1034,12 @@ msgstr "您的表现超过了 %(percent)i%% 的参与者"
 #, python-format
 msgid ""
 "### Result Analysis\n"
-"Your mean score is **%(mean)d** (%(total)i/%(n_sessions)i).  \n"
+"Your mean score is **%(mean)d** (%(total)i points/%(n_sessions)i).  \n"
 "\n"
 "The average score was **36.25** for Dutch participants and **44,86** for US "
 "participants.  \n"
 msgstr ""
-"您的音乐识别平均得分为 **%(mean)d** 分（共 %(total)i/%(n_sessions)i "
+"您的音乐识别平均得分为 **%(mean)d** 分（共 %(total)i 分/%(n_sessions)i "
 "局）。  \n"
 "\n"
 "作为参考，荷兰参与者的平均分为 **36.25**，美国参与者的平均分为 "
@@ -1049,42 +1050,42 @@ msgid "Razor-Sharp Recognition"
 msgstr "一听即中\t"
 
 #: experiment/rules/matching_pairs_2025.py:139
-msgid "#### You demonstrated excellent music recognition ability.  \n"
-msgstr "#### 卓越级\t您的音乐识别表现非常出色！  \n"
+msgid "#### You demonstrated exceptional music recognition ability!  \n"
+msgstr "#### 你的音乐识别表现非常优异！  \n"
 
 #: experiment/rules/matching_pairs_2025.py:142
 msgid "High-Fidelity Recognition"
 msgstr "敏锐辨识"
 
-#: experiment/rules/matching_pairs_2025.py:144
-msgid "#### Your music recognition is above average — well done!  \n"
-msgstr "#### 优秀级\t您的音乐识别表现优于大多数人，很棒！  \n"
+#: experiment/rules/matching_pairs_2025.py:143
+msgid "#### Your music recognition is stronger than most！  \n"
+msgstr "#### 你的音乐识别表现优于大多数人！  \n"
 
-#: experiment/rules/matching_pairs_2025.py:147
+#: experiment/rules/matching_pairs_2025.py:145
 msgid "Reliable Recognition"
 msgstr "从容识别"
 
-#: experiment/rules/matching_pairs_2025.py:149
-msgid "#### Your music recognition is around the average level.  \n"
-msgstr "#### 平均级\t您的音乐识别表现处于平均水平。  \n"
+#: experiment/rules/matching_pairs_2025.py:147
+msgid "#### Your music recognition is above average — well done!  \n"
+msgstr "#### 你的音乐识别表现良好，高于平均水平！  \n"
 
-#: experiment/rules/matching_pairs_2025.py:152
+#: experiment/rules/matching_pairs_2025.py:150
 msgid "Untapped Potential"
 msgstr "无限可能"
 
-#: experiment/rules/matching_pairs_2025.py:154
+#: experiment/rules/matching_pairs_2025.py:152
 msgid ""
 "#### Your music recognition has room to grow — and that's completely normal "
 "when listening to unfamiliar music!  \n"
 msgstr ""
 "#### 发展级\t您的音乐识别表现还有成长空间，这在不熟悉音乐的情况下完全正常！\n"
 
-#: experiment/rules/matching_pairs_2025.py:164
+#: experiment/rules/matching_pairs_2025.py:162
 #, python-format
 msgid "Congrats! You did better than %(percentile)d%% of players at this level"
 msgstr "祝贺您！您的表现超过了此级别%(percentile)d%%的玩家"
 
-#: experiment/rules/matching_pairs_2025.py:188
+#: experiment/rules/matching_pairs_2025.py:186
 msgid ""
 "*In addition, your rhythm recognition performance is stronger than your "
 "pitch recognition performance — that's less common, and suggests you have a "
@@ -1093,14 +1094,14 @@ msgstr ""
 "*此外，您的节奏识别表现优于音调识别表现，这与大部分参与者的识别模式不同，您在"
 "聆听和加工音乐信号方面很特别哦！*"
 
-#: experiment/rules/matching_pairs_2025.py:192
+#: experiment/rules/matching_pairs_2025.py:190
 msgid ""
 "*In addition, your pitch recognition performance is stronger than your "
 "rhythm recognition performance — that's the most common pattern we see!*"
 msgstr ""
 "*此外，您的音调识别表现优于节奏识别表现，这与大部分参与者的识别模式相一致。*"
 
-#: experiment/rules/matching_pairs_2025.py:196
+#: experiment/rules/matching_pairs_2025.py:194
 msgid ""
 "*In addition, your pitch and rhythm recognition performance is equally "
 "balanced — a rare and well-rounded profile!*"
@@ -1108,49 +1109,49 @@ msgstr ""
 "*此外，您的音调识别表现和节奏识别表现旗鼓相当——这是非常少见且均衡的识别模式！"
 "*"
 
-#: experiment/rules/matching_pairs_2025.py:267
+#: experiment/rules/matching_pairs_2025.py:265
 msgid ""
 "You get a board with 16 musical cards. **Pick a card,** and listen to it "
 "carefully..."
 msgstr "您将在游戏中看到16张音乐卡片。**请选择一张卡片**，仔细聆听..."
 
-#: experiment/rules/matching_pairs_2025.py:271
+#: experiment/rules/matching_pairs_2025.py:269
 msgid "Then try to **find a second card that matches it.**"
 msgstr "然后尝试**找到与之匹配的第二张卡片。**"
 
-#: experiment/rules/matching_pairs_2025.py:275
+#: experiment/rules/matching_pairs_2025.py:273
 msgid "**Find the 8 matching pairs** to clear the board and score points:"
 msgstr "**找出全部8对匹配卡片**即可完成游戏，计分规则如下："
 
-#: experiment/rules/matching_pairs_2025.py:280
+#: experiment/rules/matching_pairs_2025.py:278
 msgid ""
 "**+20 points:** Matched first card with one you’ve heard before — memory "
 "wins!"
 msgstr "**+20分**：将第一张卡片与之前听过的卡片成功配对 —— 出色的记忆！"
 
-#: experiment/rules/matching_pairs_2025.py:285
+#: experiment/rules/matching_pairs_2025.py:283
 msgid ""
 "**-10 points:** Chose a wrong second card that’s heard before? Oops — "
 "penalty..."
 msgstr "**-10分**：第二张卡片听过但选错了？遗憾扣分。"
 
-#: experiment/rules/matching_pairs_2025.py:290
+#: experiment/rules/matching_pairs_2025.py:288
 msgid "Some cards sound **distorted** on purpose. Stay sharp!"
 msgstr "部分卡片的声音经过**失真处理**。但这正是挑战所在，请认真聆听辨别！"
 
-#: experiment/rules/matching_pairs_2025.py:392
+#: experiment/rules/matching_pairs_2025.py:390
 msgid "Exploring"
 msgstr "探索级"
 
-#: experiment/rules/matching_pairs_2025.py:394
+#: experiment/rules/matching_pairs_2025.py:392
 msgid "Proficient"
 msgstr "进阶级"
 
-#: experiment/rules/matching_pairs_2025.py:396
+#: experiment/rules/matching_pairs_2025.py:394
 msgid "Advanced"
 msgstr "优秀级"
 
-#: experiment/rules/matching_pairs_2025.py:398
+#: experiment/rules/matching_pairs_2025.py:396
 msgid "Supreme"
 msgstr "卓越级"
 

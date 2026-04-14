@@ -130,23 +130,21 @@ class MatchingPairs2025(MatchingPairsGame):
             title = {"body": percentile_message}
             final = _(
                 "### Result Analysis\n"
-                "Your mean score is **%(mean)d** (%(total)i/%(n_sessions)i).  \n\n"
+                "Your mean score is **%(mean)d** (%(total)i points/%(n_sessions)i).  \n\n"
                 "The average score was **36.25** for Dutch participants and **44,86** for US participants.  \n"
             ) % {"mean": mean, "total": session_total, "n_sessions": n_sessions}
             if percentile >= 90:
                 title.update({"header": _("Razor-Sharp Recognition")})
                 final += _(
-                    "#### You demonstrated excellent music recognition ability.  \n"
+                    "#### You demonstrated exceptional music recognition ability!  \n"
                 )
             elif percentile >= 75:
                 title.update({"header": _("High-Fidelity Recognition")})
-                final += _(
-                    "#### Your music recognition is above average — well done!  \n"
-                )
+                final += _("#### Your music recognition is stronger than most！  \n")
             elif percentile >= 50:
                 title.update({"header": _("Reliable Recognition")})
                 final += _(
-                    "#### Your music recognition is around the average level.  \n"
+                    "#### Your music recognition is above average — well done!  \n"
                 )
             else:
                 title.update({"header": _("Untapped Potential")})
