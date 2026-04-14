@@ -13,15 +13,23 @@ interface PlayButtonProps {
     section: PlaybackSection
 }
 
+const SectionLabel = ({ label, colorValue, hasImage }: { label: string; colorValue: string; hasImage: boolean; }) => (
+    <div className={classNames("section-label", {"has-image": hasImage})}>
+        <div className={classNames("banner", {"has-image": hasImage})} style={{backgroundColor: colorValue}}>
+            <h3 className="label">{label}</h3>
+        </div>
+    </div>
+);
+
 const PlayButton = ({ playSection, className = "", disabled, section, isPlaying, playIndex}: PlayButtonProps) => {
 
     const theme = useBoundStore((state) => state.theme);
     const color = section.color || 'colorNeutral2';
     const colorValue = theme? theme[color] : '#fabbacc';
-        
+    const hasLabel = section.label;
 
     return (
-        <>
+        <div className={classNames("play-button-container", { "has-image": section.image })}>
             <div
                 className={classNames("aha__play-button border-outside", "btn", {
                     stop: isPlaying, disabled: disabled || isPlaying
@@ -33,14 +41,8 @@ const PlayButton = ({ playSection, className = "", disabled, section, isPlaying,
                 onKeyDown={playSection && !disabled ? () => playSection(playIndex) : undefined}
             >
             </div>
-            {/* <div className="mask"></div> */}
-            {section.label && <>
-                <center>
-                    <div className="banner" style={{backgroundColor: colorValue}}></div>
-                    <h3 className="label">{section.label}</h3>
-                </center>
-            </>}
-        </>
+            {hasLabel && <SectionLabel label={section.label} colorValue={colorValue} hasImage={section.image}/>}
+        </div>
     );
 };
 

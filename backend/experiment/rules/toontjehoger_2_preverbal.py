@@ -222,7 +222,7 @@ class ToontjeHoger2Preverbal(BaseRules):
             ImagePlaybackSection(
                 section=sectionC,
                 label=format_label(2, "alphabetic"),
-                color="colorNeutral3",
+                color="colorSecondary",
                 image={
                     "link": "/images/experiments/toontjehoger/spectrogram-human.webp",
                     "label": "Mens",

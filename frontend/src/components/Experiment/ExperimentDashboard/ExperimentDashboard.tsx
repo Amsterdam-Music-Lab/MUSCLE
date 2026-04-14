@@ -63,7 +63,6 @@ export const ExperimentDashboard: React.FC<ExperimentDashboardProps> = ({ experi
 
 const ImageOrPlaceholder = ({ imagePath, alt }: { imagePath?: string, alt: string }) => {
     const imgSrc = imagePath ?? null;
-    console.log(imgSrc);
 
     return imgSrc ? <img src={imgSrc} alt={alt} /> : <div className="placeholder" />;
 }
