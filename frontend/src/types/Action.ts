@@ -2,7 +2,7 @@ import Social from "@/types/Social";
 import Block, { FeedbackInfo } from "@/types/Block";
 import IButton from  "@/types/Button";
 import Participant from "@/types/Participant";
-import { PlaybackArgs } from "./Playback";
+import { PlaybackAction } from "./Playback";
 import Question from "./Question";
 import { BreakRoundOn } from "./Trial";
 import { MutableRefObject } from "react";
@@ -38,7 +38,7 @@ export interface IFeedbackForm {
 }
 
 export interface ITrial {
-  playback: PlaybackArgs;
+  playback: PlaybackAction;
   html: { body: string | TrustedHTML };
   feedbackForm: IFeedbackForm;
   responseTime: number;
