@@ -115,10 +115,10 @@ class Hooked(BaseRules):
                     final_text=self.final_score_message(session),
                     rank=self.rank(session),
                     show_profile_link=True,
-                    button={
-                        "text": _("Play again"),
-                        "link": self.get_play_again_url(session),
-                    },
+                    button=Button(
+                        _("Play again"),
+                        link=self.get_play_again_url(session),
+                    ),
                 ),
             ]
 

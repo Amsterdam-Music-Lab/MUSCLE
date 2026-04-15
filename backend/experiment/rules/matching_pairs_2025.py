@@ -9,6 +9,7 @@ from result.models import Result
 from section.models import Section
 from session.models import Session
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.playback import MatchingPairs, PlaybackSection
@@ -83,7 +84,7 @@ class MatchingPairs2025(MatchingPairsGame):
             title="Score",
             total_score=session.final_score,
             final_text=self._final_text(self._get_percentile_rank(session)),
-            button={"text": "Next game", "link": self.get_experiment_url(session)},
+            button=Button(_("Next game"), link=self.get_experiment_url(session)),
             percentile=self._get_percentile_rank(session),
             accumulative_percentile=session.participant.percentile_rank_accumulative_score(),
         )

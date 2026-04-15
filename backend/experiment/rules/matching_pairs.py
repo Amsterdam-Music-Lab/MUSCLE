@@ -4,6 +4,7 @@ import json
 from django.utils.translation import gettext_lazy as _
 
 from .base import BaseRules
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.playback import MatchingPairs, PlaybackSection
@@ -84,7 +85,7 @@ class MatchingPairsGame(BaseRules):
                 session,
                 title="Score",
                 final_text="Can you score higher than your friends and family? Share and let them try!",
-                button={"text": "Play again", "link": self.get_play_again_url(session)},
+                button=Button(_("Play again"), link=self.get_play_again_url(session)),
                 rank=self.rank(session, exclude_unfinished=False),
                 feedback_info=self.feedback_info(),
             )

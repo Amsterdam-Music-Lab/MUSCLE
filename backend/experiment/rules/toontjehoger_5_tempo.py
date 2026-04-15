@@ -225,7 +225,7 @@ class ToontjeHoger5Tempo(BaseRules):
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),
-            button={"text": "Wat hebben we getest?"},
+            button=Button("Wat hebben we getest?"),
         )
 
         # Info page
