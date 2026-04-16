@@ -41,9 +41,8 @@ const Playback = ({
     startedPlaying,
     finishedPlaying,
 }: PlaybackProps) => {
-    const [playerIndex, setPlayerIndex] = useState(-1);
-    const [hasPlayed, setHasPlayed] = useState<number[]>([]);
     const activeAudioEndedListener = useRef<() => void>();
+    const [playingSections, setPlayingSections] = useState(sections)
     const [state, setState] = useState<PlaybackState>({ view: PRELOAD });
 
     const setView = (view: PlaybackView) => {
@@ -52,12 +51,6 @@ const Playback = ({
 
     // check if the users device is webaudio compatible
     const playMethod = webAudio.compatibleDevice() ? sections[0].playMethod : 'EXTERNAL';
-
-    useEffect(() => {
-        if (playerIndex !== -1 && !hasPlayed.includes(playerIndex)) {
-            setHasPlayed((prev) => [...prev, playerIndex]);
-        }
-    }, [playerIndex, hasPlayed]);
 
     // Cancel events
     const cancelAudioListeners = useCallback(() => {
@@ -73,11 +66,17 @@ const Playback = ({
 
     // Audio ended playing
     const onAudioEnded = useCallback((index: number) => {
-
-        // If the player index is not the last player index, return
-        if (playerIndex === index) {
-            setPlayerIndex(-1);
-        }
+        setPlayingSections( prev => prev.map( (section, sectionIndex) => {
+            if (index === sectionIndex) {
+                return {
+                    ...section,
+                    playing: false,
+                    hasPlayed: true
+                }
+            } else {
+                return section
+            }
+        }))
 
         finishedPlaying();
     }, [finishedPlaying]);
@@ -100,24 +99,26 @@ const Playback = ({
         if (playMethod === 'NOAUDIO') {
             return;
         }
-        if (index !== playerIndex) {
-            // Load different audio
-            if (playerIndex !== -1) {
+
+        // Determine if audio should be played
+        if (index === -1 || mute) {
+            pauseAudio(playMethod);
+            return;
+        }
+
+        if (!playingSections[index].playing) {
+            // only pause
+            
+            if (playingSections.filter(s => s.playing).length > 0) {
+                // Load different audio if any other audio is playing
                 pauseAudio(playMethod);
             }
 
-            // Store player index
-            setPlayerIndex(index);
-
-            // Determine if audio should be played
-            if (mute) {
-                setPlayerIndex(-1);
-                pauseAudio(playMethod);
-                return;
-            }
+            // set section as playing
+            setPlayingSections( prev => prev.map((section, sectionIndex) => sectionIndex == index ? {...section, playing: true} : {...section, playing: false}) );
 
             const playheadShift = getPlayheadShift();
-            const latency = playAudio(sections[index], playMethod, playheadShift + sections[index].playFrom);
+            const latency = playAudio(playingSections[index], playMethod, playheadShift + playingSections[index].playFrom);
 
             // Cancel active events
             cancelAudioListeners();
@@ -135,22 +136,13 @@ const Playback = ({
             }
 
             return;
-        }
-        // Stop playback
-        if (playerIndex === index) {
+        } else {
             pauseAudio(playMethod);
-            setPlayerIndex(-1);
+            setPlayingSections(prev => prev.map(section => {return { ...section, playing: false }}));
             return;
         }
-    }, [sections, activeAudioEndedListener, cancelAudioListeners, getPlayheadShift, playMethod, startedPlaying, onAudioEnded, mute, resumePlay]
+    }, [playingSections, setPlayingSections, activeAudioEndedListener, cancelAudioListeners, getPlayheadShift, playMethod, startedPlaying, onAudioEnded, mute, resumePlay]
     );
-
-    // Local logic for onfinished playing
-    const onFinishedPlaying = useCallback(() => {
-        setPlayerIndex(-1);
-        pauseAudio(playMethod);
-        finishedPlaying();
-    }, [finishedPlaying, playMethod]);
 
     // Stop audio on unmount
     useEffect(
@@ -163,19 +155,17 @@ const Playback = ({
     const render = (view: PlaybackView) => {
         const attrs = {
             autoAdvance,
-            finishedPlaying: onFinishedPlaying,
             playSection,
-            playing:playerIndex,
-            hasPlayed,
             preloadMessage,
             instruction,
             playOnce,
             responseTime,
             scoreFeedbackDisplay,
-            sections,
+            sections: playingSections,
             setView,
             showAnimation,
             startedPlaying,
+            finishedPlaying,
             submitResult,
             view,
         };

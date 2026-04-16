@@ -1,3 +1,4 @@
+import { useState } from "react";
 import classNames from "classnames";
 
 import PlaybackSection from "@/types/Section";
@@ -5,11 +6,10 @@ import useBoundStore from "@/util/stores";
 import { styleButton } from "@/util/stylingHelpers";
 
 interface PlayButtonProps {
-    playSection?: (index: number) => void;
-    playIndex: number;
+    onClick: () => void;
     className?: string;
     disabled?: boolean;
-    isPlaying: boolean;
+    isPlaying: boolean
     section: PlaybackSection
 }
 
@@ -21,24 +21,30 @@ const SectionLabel = ({ label, colorValue, hasImage }: { label: string; colorVal
     </div>
 );
 
-const PlayButton = ({ playSection, className = "", disabled, section, isPlaying, playIndex}: PlayButtonProps) => {
+const PlayButton = ({ onClick, className = "", disabled, isPlaying, section }: PlayButtonProps) => {
 
     const theme = useBoundStore((state) => state.theme);
     const color = section.color || 'colorNeutral2';
     const colorValue = theme? theme[color] : '#fabbacc';
     const hasLabel = section.label;
 
+    const playSection = () => {
+        if (!disabled) {
+            return onClick();
+        }
+    }
+
     return (
         <div className={classNames("play-button-container", { "has-image": section.image })}>
             <div
                 className={classNames("aha__play-button border-outside", "btn", {
-                    stop: isPlaying, disabled: disabled || isPlaying
+                    stop: isPlaying, disabled: disabled
                 }, className)}
                 role="button"
                 css={styleButton(colorValue)}
-                onClick={playSection && !disabled ? () => playSection(playIndex) : undefined}
+                onClick={playSection}
                 tabIndex={0}
-                onKeyDown={playSection && !disabled ? () => playSection(playIndex) : undefined}
+                onKeyDown={playSection}
             >
             </div>
             {hasLabel && <SectionLabel label={section.label} colorValue={colorValue} hasImage={section.image}/>}

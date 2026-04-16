@@ -8,7 +8,6 @@ import useBoundStore from "@/util/stores";
 interface PlayCardProps {
     onClick: () => void;
     registerUserClicks: (x: number, y: number) => void;
-    playing: boolean;
     section: Card;
     view: string;
     showAnimation: boolean;
