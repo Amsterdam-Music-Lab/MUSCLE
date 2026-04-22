@@ -36,6 +36,7 @@ const PlayButton = ({ onClick, className = "", disabled, isPlaying, section }: P
 
     return (
         <div className={classNames("play-button-container", { "has-image": section.image })}>
+            {hasLabel && <SectionLabel label={section.label} colorValue={colorValue} hasImage={section.image}/>}
             <div
                 className={classNames("aha__play-button border-outside", "btn", {
                     stop: isPlaying, disabled: disabled
@@ -47,7 +48,6 @@ const PlayButton = ({ onClick, className = "", disabled, isPlaying, section }: P
                 onKeyDown={playSection}
             >
             </div>
-            {hasLabel && <SectionLabel label={section.label} colorValue={colorValue} hasImage={section.image}/>}
         </div>
     );
 };

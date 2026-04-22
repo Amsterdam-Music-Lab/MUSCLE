@@ -57,6 +57,7 @@ $playIconSize: 30px;
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+    margin-bottom: 1em;
     
     &.has-image {
         flex-direction: row;
@@ -69,15 +70,23 @@ $playIconSize: 30px;
     border-radius: 60px;
     width: 4em;
     height: 6em;
-    margin-top: -80%;
+    margin-bottom: -80%;
+
+    .label {
+        text-align: center;
+        padding-top: 13%;
+    }
 }
 
 .banner.has-image {
     width: 8em;
     height: 4em;
+    margin-top: -20%;
+    margin-left: 50%;
+
+    .label {
+        margin-left: -30%;
+    }
 }
 
-.label {
-    text-align: center;
-    top: 10em;
-}
+
