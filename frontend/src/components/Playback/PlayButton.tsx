@@ -1,4 +1,3 @@
-import { useState } from "react";
 import classNames from "classnames";
 
 import PlaybackSection from "@/types/Section";
@@ -13,13 +12,16 @@ interface PlayButtonProps {
     section: PlaybackSection
 }
 
-const SectionLabel = ({ label, colorValue, hasImage }: { label: string; colorValue: string; hasImage: boolean; }) => (
-    <div className={classNames("section-label", {"has-image": hasImage})}>
-        <div className={classNames("banner", {"has-image": hasImage})} style={{backgroundColor: colorValue}}>
-            <h3 className="label">{label}</h3>
+const SectionLabel = ({ label, colorValue, hasImage }: { label: string; colorValue: string; hasImage: boolean; }) => {
+    const labelColor = `hsl(from ${colorValue} h s 30%)`;
+    return (
+        <div className={classNames("section-label", {"has-image": hasImage})}>
+            <div className={classNames("banner", {"has-image": hasImage})} style={{backgroundColor: labelColor}}>
+                <h3 className="label">{label}</h3>
+            </div>
         </div>
-    </div>
-);
+    );
+}
 
 const PlayButton = ({ onClick, className = "", disabled, isPlaying, section }: PlayButtonProps) => {
 
@@ -39,7 +41,7 @@ const PlayButton = ({ onClick, className = "", disabled, isPlaying, section }: P
             {hasLabel && <SectionLabel label={section.label} colorValue={colorValue} hasImage={section.image}/>}
             <div
                 className={classNames("aha__play-button border-outside", "btn", {
-                    stop: isPlaying, disabled: disabled
+                    stop: isPlaying, disabled: disabled, "has-image": section.image
                 }, className)}
                 role="button"
                 css={styleButton(colorValue)}

@@ -1,18 +1,22 @@
-$playButtonSize: 120px;
-$playIconSize: 30px;
+
 
 .aha__play-button {
     transition: background-color 0.3s ease-out, filter 0.3s ease-out;
     outline: none;
     width: $playButtonSize;
     height: $playButtonSize;
-    border-radius: $playButtonSize ();
+    border-radius: $playButtonSize;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     font-size: 30px;
     z-index: 2;
+
+    &.has-image {
+        height: $image-height;
+        width: $image-height;
+    }
 
     &.disabled{
         filter: grayscale(100%);
@@ -65,27 +69,26 @@ $playIconSize: 30px;
 }
 
 .banner {
-    z-index: 0;
     opacity: 0.5;
     border-radius: 60px;
     width: 4em;
     height: 6em;
-    margin-bottom: -80%;
+    margin-bottom: -70%;
 
     .label {
         text-align: center;
-        padding-top: 13%;
+        padding-top: 20%;
     }
 }
 
 .banner.has-image {
     width: 8em;
     height: 4em;
-    margin-top: -20%;
-    margin-left: 50%;
+    margin-top: -50%;
+    margin-right: -4.5em;
 
     .label {
-        margin-left: -30%;
+        margin-left: -40%;
     }
 }
 

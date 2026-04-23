@@ -8,7 +8,6 @@
     .player-wrapper {
         position: relative;
         display: flex;
-        align-items: center;
         gap: 2em;
     }
 
@@ -32,8 +31,8 @@
 
     .image {
         max-width: 400px;
-        width: calc(100% - 160px);
-        height: 130px;
+        margin-left: -2%;
+        height: $image-height;
         cursor: pointer;
         transition: filter 0.2s ease-out;
         box-shadow: 0 0 15px rgba(black, 0.4);
