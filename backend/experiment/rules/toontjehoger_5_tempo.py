@@ -17,7 +17,7 @@ from experiment.actions.trial import Trial
 from experiment.actions.utils import get_current_experiment_url
 from experiment.utils import format_label, non_breaking_spaces
 from result.utils import prepare_result
-from section.models import Playlist
+from section.models import Playlist, Song
 from session.models import Session
 from .base import BaseRules
 from .toontjehoger_1_mozart import toontjehoger_ranks
@@ -71,58 +71,33 @@ class ToontjeHoger5Tempo(BaseRules):
         - session: current Session
         - genre: (C)lassic (J)azz (R)ock
 
-        Voor de track: genereer drie random integers van 1-5 (bijv. [4 2 4])
-        Plak deze aan de letters C, J en R (bijv. [C4, J2, R4])
-        Voor het paar: genereer drie random integers van 1-2 (bijv. [1 2 2])
-        Plak deze aan de letter P (bijv. P1, P2, P2)
-        We willen zowel de originele als de veranderde versie van het paar. Dus combineer
-        bovenstaande met OR en CH (bijv. “C4_P1_OR”, “C4_P1_CH”, etc.)
+        Extract sections of an unplayed piece, filtered by tags starting with genre letter
+        return the original (group "or") and changed (group "ch") version
+        The changed version may also be a performance by a different artist
         """
         # Previous tags
-        previous_tags = [result.section.tag for result in session.result_set.all()]
-
-        # Get a random, unused track
-        # Loop until there is a valid tag
-        iterations = 0
-        valid_tag = False
-        tag_base = ""
-        tag_original = ""
-        while not valid_tag:
-            track = random.choice([1, 2, 3, 4, 5])
-            pair = random.choice([1, 2])
-            tag_base = "{}{}_P{}_".format(
-                genre.upper(),
-                track,
-                pair,
-            )
-            tag_original = tag_base + "OR"
-            if tag_original not in previous_tags:
-                valid_tag = True
-
-            # Failsafe: prevent infinite loop
-            # If this happens, just reuse a track
-            iterations += 1
-            if iterations > 10:
-                valid_tag = True
-
-        tag_changed = tag_base + "CH"
-
-        section_original = session.playlist.get_section(filter_by={"tag": tag_original, "group": "or"})
-
-        if not section_original:
-            raise Exception("Error: could not find original section: {}".format(tag_original))
-
-        section_changed = self.get_section_changed(session=session, tag=tag_changed)
-
-        sections = [section_original, section_changed]
+        previous_pieces = session.result_set.filter(section__isnull=False).values_list(
+            "section__song__name", flat=True
+        )
+        original_section = (
+            session.playlist.section_set.filter(tag__startswith=genre)
+            .exclude(song__name__in=previous_pieces)
+            .filter(group="or")
+            .order_by("?")
+        ).first()
+        changed_section = self.get_section_changed(session, original_section.song)
+        sections = [original_section, changed_section]
         random.shuffle(sections)
         return sections
 
-    def get_section_changed(self, session, tag):
+    def get_section_changed(self, session: Session, song: Song):
+        """get a section with the same name, but potentially different artist"""
         try:
-            section_changed = session.playlist.get_section(filter_by={"tag": tag, "group": "ch"})
+            section_changed = session.playlist.get_section(
+                filter_by={"song__name": song.name, "group": "ch"}
+            )
         except:
-            raise Exception("Error: could not find changed section: {}".format(tag))
+            raise Exception("Error: could not find changed section: {}".format(song))
         return section_changed
 
     def get_trial_question(self):
@@ -181,11 +156,16 @@ class ToontjeHoger5Tempo(BaseRules):
         if section_original is None:
             raise Exception("Error: could not get section from result")
 
-        tag_changed = section_original.tag.replace("OR", "CH")
-        section_changed = self.get_section_changed(session=result.session, tag=tag_changed)
+        section_changed = self.get_section_changed(
+            session=result.session, song=section_original.song
+        )
 
         if section_changed is None:
-            raise Exception("Error: could not get changed section for tag: {}".format(tag_changed))
+            raise Exception(
+                "Error: could not get changed section for piece: {}".format(
+                    section_original.song.name
+                )
+            )
 
         return (section_original, section_changed)
 
@@ -245,7 +225,7 @@ class ToontjeHoger5Tempo(BaseRules):
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),
-            button={"text": "Wat hebben we getest?"},
+            button=Button("Wat hebben we getest?"),
         )
 
         # Info page

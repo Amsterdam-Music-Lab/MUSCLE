@@ -1,6 +1,6 @@
 import PlayButton from "../components/PlayBack/PlayButton";
 import useBoundStore from "@/util/stores";
-import audio from "./assets/music.ogg";
+import music from "./assets/music.ogg";
 
 export default {
     title: "Playback/PlayButton",
@@ -11,8 +11,9 @@ export default {
 };
 
 const SharedDecorator = (Story) => {
+    const theme = { colorPrimary: '#d843e2', colorNeutral1: '#ffb14c', colorNeutral2: "#0cc7f1", colorNeutral3: "#2b2bee"};
     const setTheme = useBoundStore((state) => state.setTheme);
-    setTheme({ colorPrimary: '#d843e2', colorNeutral1: '#ffb14c', colorNeutral2: "#0cc7f1", colorNeutral3: "#2b2bee"});
+    setTheme(theme);
     return (
         <div
             style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
@@ -24,8 +25,9 @@ const SharedDecorator = (Story) => {
 
 const defaultArgs = {
     playSection: () => {},
-    section: { link: audio, label: 'Play Button label', color: 'colorPrimary', playMethod: 'BUFFER', playFrom: 0.0 },
+    section: { link: music, label: 'LABEL', color: 'colorPrimary', playMethod: 'EXTERNAL', playFrom: 0.0 },
     view: 'BUTTON',
+    isPlaying: false,
 }
 
 const getArgs = (overrides = {}) => ({
@@ -48,7 +50,7 @@ export const Playing = {
 export const ChangedColor = {
     args: getArgs({
         isPlaying: false,
-        section: { link: audio, label: 'Play Button label', color: 'colorNeutral1', playMethod: 'BUFFER', playFrom: 0.0 }
+        section: { link: music, label: 'LABEL', color: 'colorNeutral1', playMethod: 'EXTERNAL', playFrom: 0.0 }
     }),
     decorators: [SharedDecorator],
 };

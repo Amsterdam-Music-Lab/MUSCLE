@@ -16,14 +16,16 @@ interface AutoPlayProps {
     className?: string;
 }
 
-const AutoPlay = ({ instruction, showAnimation, playSection, startedPlaying, finishedPlaying, responseTime, className = '' }: AutoPlayProps) => {
+const AutoPlay = ({ instruction, sections, showAnimation, playSection, startedPlaying, finishedPlaying, responseTime, className = '' }: AutoPlayProps) => {
 
     const [running, setRunning] = useState(true);
 
     // Handle view logic
     useEffect(() => {
-        playSection(0);
-    }, [playSection, startedPlaying]);
+        if (!sections[0].playing) {
+            playSection(0);
+        }
+    }, [playSection, sections, startedPlaying]);
 
     return (
         <div className={"aha__autoplay d-flex flex-column justify-content-center align-items-center " + className}>

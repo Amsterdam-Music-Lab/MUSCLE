@@ -190,7 +190,7 @@ class ToontjeHoger3Plink(BaseRules):
         )
         plink_trials.append(
             Trial(
-                playback=PlayButtons(PlaybackSection[section]),
+                playback=PlayButtons(sections=[PlaybackSection(section)]),
                 feedback_form=Form(
                     [question1],
                     skip_button=Button("Ik weet het niet"),
@@ -296,7 +296,7 @@ class ToontjeHoger3Plink(BaseRules):
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),
-            button={"text": "Wat hebben we getest?"},
+            button=Button("Wat hebben we getest?"),
         )
 
         # Info page

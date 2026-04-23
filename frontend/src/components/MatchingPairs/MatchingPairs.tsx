@@ -186,6 +186,7 @@ const MatchingPairs = ({
 
     const finishTurn = () => {
         setStartOfTurn(performance.now());
+        playSection(-1);
         finishedPlaying();
 
         const updatedSections = sections.map(section => {

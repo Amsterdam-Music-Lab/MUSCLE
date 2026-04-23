@@ -1,5 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
+from experiment.actions.button import Button
 from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.question import CheckBoxQuestion
@@ -73,10 +74,10 @@ class ThatsMySong(Hooked):
                     + " For more information about this experiment, visit the Vanderbilt University Medical Center Music Cognition Lab.",
                     rank=self.rank(session),
                     show_profile_link=True,
-                    button={
-                        "text": _("Play again"),
-                        "link": self.get_play_again_url(session),
-                    },
+                    button=Button(
+                        _("Play again"),
+                        link=self.get_play_again_url(session),
+                    ),
                     logo={
                         "image": "/images/vumc_mcl_logo.png",
                         "link": "https://www.vumc.org/music-cognition-lab/welcome",

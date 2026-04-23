@@ -103,13 +103,9 @@ class ToontjeHoger6Relative(BaseRules):
         return [score]
 
     def get_round(self, round: int, session: Session):
-
-        # Config
-        # -----------------
         # section 1 is always section 'a'
         try:
-            section1 = session.playlist.get_section(
-                filter_by={'tag': 'a'})
+            section1 = session.playlist.section_set.get(tag='a')
         except:
             raise Exception(
                 "Error: could not find section1 for round {}".format(round))
@@ -117,8 +113,7 @@ class ToontjeHoger6Relative(BaseRules):
         # Get correct tag for round 0 or 1
         tag = 'b' if round == 0 else 'c'
         try:
-            section2 = session.playlist.get_section(
-                filter_by={'tag': tag})
+            section2 = session.playlist.section_set.get(tag=tag)
         except:
             raise Exception(
                 "Error: could not find section2 for round {}".format(round))
@@ -144,9 +139,9 @@ class ToontjeHoger6Relative(BaseRules):
         # Player
         second_label = "B" if round == 0 else "C"
         playback = PlayButtons(
-            [
-                PlaybackSection(section1, label="A"),
-                PlaybackSection(section2, second_label),
+            sections=[
+                PlaybackSection(section1, label="A", color="colorNeutral2"),
+                PlaybackSection(section2, second_label, color="colorNeutral2"),
             ],
             play_once=True,
         )
@@ -177,7 +172,7 @@ class ToontjeHoger6Relative(BaseRules):
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),
-            button={'text': 'Wat hebben we getest?'}
+            button=Button('Wat hebben we getest?'),
         )
 
         # Info page

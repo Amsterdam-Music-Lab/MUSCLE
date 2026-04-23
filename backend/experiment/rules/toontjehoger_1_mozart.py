@@ -149,16 +149,12 @@ class ToontjeHoger1Mozart(BaseRules):
         # Listen
         playback = Autoplay(sections=[PlaybackSection(section)], show_animation=True)
 
-        listen_config = {
-            "auto_advance": True,
-            "show_continue_button": False,
-            "response_time": section.duration,
-        }
-
         listen = Trial(
-            config=listen_config,
             playback=playback,
             title=self.TITLE,
+            auto_advance=True,
+            response_time=section.duration,
+            continue_button=None,
         )
 
         # Step 2
@@ -229,7 +225,7 @@ class ToontjeHoger1Mozart(BaseRules):
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),
-            button={"text": "Wat hebben we getest?"},
+            button=Button("Wat hebben we getest?"),
         )
 
         # Info page

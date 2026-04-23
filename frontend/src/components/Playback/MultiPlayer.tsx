@@ -4,23 +4,17 @@ import PlayButton from "./PlayButton";
 import PlaybackSection from "@/types/Section";
 
 interface MultiPlayerProps {
-    playSection: (index: number) => void;
-    hasPlayed: number[];
     sections: PlaybackSection[];
     playOnce?: boolean;
-    playing: number;
+    playSection: (index: number) => void;
 }
 
 const MultiPlayer = ({
     playSection,
     sections,
     playOnce=false,
-    hasPlayed=[],
-    playing
 }: MultiPlayerProps) => {
-    const checkPlaySection = (index: number) => {
-        playSection(index);
-    }
+    
     return (
         <div
             data-testid="multiplayer"
@@ -32,22 +26,19 @@ const MultiPlayer = ({
             {sections.map((section, index) => (
                 <div className="player-wrapper" key={index}>
                     <PlayButton
-                        playSection={checkPlaySection}
+                        onClick={() => playSection(index)}
+                        isPlaying={section.playing}
                         disabled={
-                            playOnce ? hasPlayed.includes(index) : false
+                            playOnce ? section.hasPlayed : false
                         }
-                        playIndex={index}
                         section={section}
-                        isPlaying={playing===index}
                     />
                     {section.image && (
                     <div className="image">
                         <img
                             src={section.image.link}
                             alt={section.image.label}
-                            onClick={() => {
-                                playSection(index);
-                            }}
+                            onClick={() => playSection(index)}
                         />
                         {section.image.label && (
                             <span>{section.image.label}</span>
