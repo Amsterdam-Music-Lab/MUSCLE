@@ -203,7 +203,7 @@ class Speech2Song(BaseRules):
             question = question_speech(session, section)
         else:
             question = question_sound(session, section)
-        return Trial(playback=None, feedback_form=Form([question]))
+        return Trial(playback=None, feedback_form=Form([question], skip_button=None))
 
 
 def question_speech(session, section):
@@ -212,12 +212,13 @@ def question_speech(session, section):
         key=key,
         text=_('Does this sound like song or speech to you?'),
         choices=[
-            _('sounds exactly like speech'),
-            _('sounds somewhat like speech'),
-            _('sounds neither like speech nor like song'),
-            _('sounds somewhat like song'),
-            _('sounds exactly like song')],
-        result_id=prepare_result(key, session, section=section, scoring_rule='LIKERT')
+            {"value": 1, "label": _('sounds exactly like speech')},
+            {"value": 2, "label": _('sounds somewhat like speech')},
+            {"value": 3, "label": _('sounds neither like speech nor like song')},
+            {"value": 4, "label": _('sounds somewhat like song')},
+            {"value": 5, "label": _('sounds exactly like song')},
+        ],
+        result_id=prepare_result(key, session, section=section, scoring_rule='LIKERT'),
     )
 
 
@@ -225,14 +226,17 @@ def question_sound(session, section):
     key = 'sound2music'
     return RadiosQuestion(
         key=key,
-        text=_(
-            'Does this sound like music or an environmental sound to you?'),
+        text=_('Does this sound like music or an environmental sound to you?'),
         choices=[
-            _('sounds exactly like an environmental sound'),
-            _('sounds somewhat like an environmental sound'),
-            _('sounds neither like an environmental sound nor like music'),
-            _('sounds somewhat like music'),
-            _('sounds exactly like music')],
+            {"value": 1, "label": _('sounds exactly like an environmental sound')},
+            {"value": 2, "label": _('sounds somewhat like an environmental sound')},
+            {
+                "value": 3,
+                "label": _('sounds neither like an environmental sound nor like music'),
+            },
+            {"value": 4, "label": _('sounds somewhat like music')},
+            {"value": 5, "label": _('sounds exactly like music')},
+        ],
         result_id=prepare_result(key, session, section=section, scoring_rule='LIKERT'),
     )
 
