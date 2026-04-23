@@ -19,7 +19,6 @@ class Migration(migrations.Migration):
                 default='',
                 help_text='Description of color in current theme, e.g. `colorPositive`',
                 max_length=32,
-                validators=[question.models.validate_color],
             ),
         ),
     ]
