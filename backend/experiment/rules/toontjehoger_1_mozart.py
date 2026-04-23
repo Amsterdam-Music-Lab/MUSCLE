@@ -154,6 +154,7 @@ class ToontjeHoger1Mozart(BaseRules):
             title=self.TITLE,
             auto_advance=True,
             response_time=section.duration,
+            continue_button=None,
         )
 
         # Step 2
