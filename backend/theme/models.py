@@ -45,10 +45,13 @@ class ThemeConfig(models.Model):
         return self.name
 
     def valid_colors(self):
-        return [
-            camelize(color)
-            for color in filter(lambda x: x.startswith('color'), dir(self))
-        ]
+        return [camelize(color) for color in self.get_colors()]
+
+    def get_color_choices(self):
+        return [(color, camelize(color)) for color in self.get_colors()]
+
+    def get_colors(self):
+        return [color for color in filter(lambda x: x.startswith('color'), dir(self))]
 
 
 class SponsorImage(models.Model):

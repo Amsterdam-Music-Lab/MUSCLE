@@ -130,10 +130,6 @@ class ChoiceList(models.Model):
         ]
 
 
-def validate_color(value: str):
-    return value in ThemeConfig.valid_colors()
-
-
 class Choice(models.Model):
     """Choice objects are tied to Questions via ChoiceLists.
 
@@ -157,7 +153,7 @@ class Choice(models.Model):
         blank=True,
         default="",
         help_text="Description of color in current theme, e.g. `colorPositive`",
-        validators=[validate_color],
+        choices=ThemeConfig().get_color_choices(),
     )
 
     class Meta:
