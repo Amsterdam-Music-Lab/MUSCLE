@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
+    "django.contrib.postgres",
     "django.contrib.sessions",
     "django.contrib.humanize",
     "django.contrib.messages",
@@ -133,6 +134,7 @@ LANGUAGES = [
     ("nl", _("Dutch")),
     ("pt", _("Portuguese")),
     ("zh-hans", _("Chinese")),
+    ("tr", _("Turkish")),
 ]
 MODELTRANSLATION_LANGUAGES = [lang[0] for lang in LANGUAGES]
 MODELTRANSLATION_FALLBACK_LANGUAGES = ('en', 'nl')

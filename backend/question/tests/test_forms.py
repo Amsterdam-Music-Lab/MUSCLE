@@ -8,6 +8,8 @@ from question.banks import PRESET_BANKS
 
 
 class QuestionListFormTestCase(TestCase):
+    fixtures = ['demographics', 'choice_lists']
+
     @classmethod
     def setUpTestData(cls):
         experiment = Experiment.objects.create(slug='test_experiment')

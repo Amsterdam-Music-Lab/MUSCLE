@@ -1,9 +1,10 @@
 import Social from "@/types/Social";
 import Block, { FeedbackInfo } from "@/types/Block";
+import IButton from  "@/types/Button";
 import Participant from "@/types/Participant";
-import { PlaybackArgs } from "./Playback";
+import { PlaybackAction } from "./Playback";
 import Question from "./Question";
-import { TrialConfig } from "./Trial";
+import { BreakRoundOn } from "./Trial";
 import { MutableRefObject } from "react";
 
 export interface SharedActionProps {
@@ -24,7 +25,7 @@ interface ExplainerStep {
 export interface ExplainerAction {
   view: "EXPLAINER";
   instruction: string;
-  button_label: string;
+  button: IButton;
   steps?: Array<ExplainerStep>;
   timer: number | null;
 }
@@ -33,23 +34,24 @@ export interface InfoAction {
   view: "INFO";
   heading?: string;
   body: string | TrustedHTML;
-  button_label?: string;
-  button_link?: string;
+  button: IButton;
 }
 
 export interface FeedbackForm {
   form: Question[];
-  submit_label: string;
-  skip_label: string;
-  is_skippable: boolean;
+  submitButton: IButton;
+  skipButton: IButton;
 }
 
-export interface TrialAction {
-  view: "TRIAL";
-  playback: PlaybackArgs;
+export interface ITrial {
+  playback: PlaybackAction;
   html: { body: string | TrustedHTML };
-  feedback_form: FeedbackForm;
-  config: TrialConfig;
+  feedbackForm: FeedbackForm;
+  responseTime: number;
+  autoAdvance: boolean;
+  listenFirst: boolean;
+  continueButton?: IButton;
+  breakRoundOn?: BreakRoundOn;
 }
 
 export interface ScoreAction {
@@ -60,9 +62,9 @@ export interface ScoreAction {
   total_score?: number;
   texts: {
     score: string;
-    next: string;
     listen_explainer: string;
   };
+  button: IButton;
   icon?: string;
   feedback?: string;
   timer?: number;
@@ -71,21 +73,18 @@ export interface ScoreAction {
 export interface FinalAction {
   score: number;
   percentile?: number;
-  final_text: string | TrustedHTML;
-  action_texts: {
-    all_experiments: string;
+  finalText: string | TrustedHTML;
+  actionTexts: {
+    allExperiments: string;
     profile: string;
-    play_again: string;
+    playAgain: string;
   };
-  button: {
-    text: string;
-    link: string;
-  };
-  show_participant_link: boolean;
-  participant_id_only: boolean;
-  show_profile_link: boolean;
+  button: IButton;
+  showParticipantLink: boolean;
+  participantIdOnly: boolean;
+  showProfileLink: boolean;
   social: Social;
-  feedback_info?: FeedbackInfo;
+  feedbackInfo?: FeedbackInfo;
   points: string;
   rank: {
     class: string;

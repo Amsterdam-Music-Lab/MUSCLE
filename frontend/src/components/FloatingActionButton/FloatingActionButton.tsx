@@ -1,6 +1,7 @@
 
 import React from 'react';
 import classNames from '@/util/classNames';
+import useBoundStore from "@/util/stores";
 
 type Position = 'bottom-left' | 'bottom-right' | 'top-left' | 'top-right' | 'center-left' | 'center-right';
 
@@ -20,6 +21,7 @@ const FloatingActionButton = ({
 }: FloatingActionButtonProps): JSX.Element => {
 
     const [expanded, setExpanded] = React.useState(false);
+    const theme = useBoundStore((state) => state.theme);
 
     /**
      * The getPositionClassNames function generates CSS class names based on the provided position string for a floating action button.
@@ -48,6 +50,7 @@ const FloatingActionButton = ({
                 onClick={() => setExpanded(!expanded)}
             >
                 <i
+                    style={{color: theme?.colorBackground}}
                     data-testid="floating-action-button__icon"
                     className={`floating-action-button__icon fa ${expanded ? 'fa-times' : icon}`}
                 />

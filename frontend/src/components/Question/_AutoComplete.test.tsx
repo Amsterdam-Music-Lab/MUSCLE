@@ -6,11 +6,11 @@ import Question from '@/types/Question';
 
 const mockQuestion: Question = {
     key: 'test-autocomplete',
-    choices: {
-        'option1': 'First Option',
-        'option2': 'Second Option',
-        'option3': 'Third Option'
-    }
+    choices: [
+        {value: 'option1', label: 'First Option'},
+        {value: 'option2', label: 'Second Option'},
+        {value: 'option3', label: 'Third Option'}
+    ]
 };
 
 describe('AutoComplete', () => {

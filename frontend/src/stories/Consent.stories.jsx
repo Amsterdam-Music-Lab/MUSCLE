@@ -1,4 +1,12 @@
 import Consent from "../components/Consent/Consent";
+import useBoundStore from "@/util/stores";
+
+const theme = { colorPositive: '#00b612', colorNegative: '#fa5577', colorGrey: '#bdbebf'};
+
+const StoreDecorator = (Story) => {
+    const setTheme = useBoundStore((state) => state.setTheme);
+    setTheme(theme);
+};
 
 const defaultArgs = {
     title: "This is the title",
@@ -6,14 +14,19 @@ const defaultArgs = {
     onNext: () => {
         console.log("Next button clicked");
     },
-    confirm: "Confirm",
-    deny: "Deny",
-    block: {
-        slug: "experiment-slug",
+    confirmButton: {
+        label: "Confirm",
+        color: "colorPositive"
     },
+    denyButton: {
+        label: "Deny",
+        color: "colorNegative"
+    },
+    experiment: {
+        slug: "experiment-slug",
+        theme: theme
+    }
 };
-
-const getArgs = (args = {}) => ({ ...defaultArgs, ...args });
 
 export default {
     title: "Consent/Consent",
@@ -24,26 +37,17 @@ export default {
 };
 
 export const Default = {
-    args: {
-        ...getArgs(),
-        title: "This is the Consent component's title",
-        text: "<h2>This is the Consent component's text</h2><p>It can contain lists, headings, bold, italic and underlined text, you name it!</p><ul><li><b>Item 1</b></li><li><i>Item 2</i></li><li><u>Item 3</u></li></ul>",
-        onNext: () => {
-            console.log("On next triggered");
-        },
-        confirm: "Confirm",
-        deny: "Deny",
-        block: {
-            slug: "experiment-slug",
-        },
-    },
+    args: defaultArgs,
     decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
+        (Story) => {
+            StoreDecorator(); 
+            return (
+                <div
+                    style={{ width: "100%", height: "100%", backgroundColor: "#ddd", padding: "1rem" }}
+                >
+                    <Story />
+                </div>
+            )
+        }
     ],
 };

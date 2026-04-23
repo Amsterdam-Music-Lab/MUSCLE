@@ -1,5 +1,6 @@
 import UserFeedback from "@/components/UserFeedback/UserFeedback";
 import FloatingActionButton from "@/components/FloatingActionButton/FloatingActionButton";
+import useBoundStore from "@/util/stores";
 
 export default {
     title: "FloatingActionButton/FloatingActionButton",
@@ -14,27 +15,35 @@ const userFeedbackProps = {
     participant: "test",
     feedbackInfo: {
         header: "Feedback",
-        button: "Submit",
+        button: {
+            label: "Submit",
+            color: "colorPrimary"
+        },
         thank_you: "Thank you for your feedback!",
         contact_body:
             '<p>Please contact us at <a href="mailto:info@example.com">info@example.com</a> if you have any questions.</p>',
+        show_float_button: true
     },
     inline: false,
 };
+
+const feedbackDecorator = (Story) => {
+    const setTheme = useBoundStore((state) => state.setTheme);
+    setTheme({ colorPrimary: "#d843e2", colorBackground: "black" });
+    return (
+        <div
+            style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
+        >
+            <Story />
+        </div>
+    )
+}
 
 export const Default = {
     args: {
         children: <UserFeedback {...userFeedbackProps} />,
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [feedbackDecorator],
 };
 
 export const TopLeft = {
@@ -42,15 +51,7 @@ export const TopLeft = {
         position: "top-left",
         children: <UserFeedback {...userFeedbackProps} />,
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [feedbackDecorator],
 };
 
 export const TopRight = {
@@ -58,15 +59,7 @@ export const TopRight = {
         position: "top-right",
         children: <UserFeedback {...userFeedbackProps} />,
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [feedbackDecorator],
 };
 
 export const BottomLeft = {
@@ -74,15 +67,7 @@ export const BottomLeft = {
         position: "bottom-left",
         children: <UserFeedback {...userFeedbackProps} />,
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [feedbackDecorator],
 };
 
 export const BottomRight = {
@@ -90,15 +75,7 @@ export const BottomRight = {
         position: "bottom-right",
         children: <UserFeedback {...userFeedbackProps} />,
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [feedbackDecorator],
 };
 
 export const CenterLeft = {
@@ -106,15 +83,7 @@ export const CenterLeft = {
         position: "center-left",
         children: <UserFeedback {...userFeedbackProps} />,
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [feedbackDecorator],
 };
 
 export const CenterRight = {
@@ -122,13 +91,5 @@ export const CenterRight = {
         position: "center-right",
         children: <UserFeedback {...userFeedbackProps} />,
     },
-    decorators: [
-        (Story) => (
-            <div
-                style={{ width: "100%", height: "100%", backgroundColor: "#aaa", padding: "1rem" }}
-            >
-                <Story />
-            </div>
-        ),
-    ],
+    decorators: [feedbackDecorator],
 };

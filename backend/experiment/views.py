@@ -7,8 +7,9 @@ from django.utils.translation import gettext_lazy as _, get_language
 from django.views.generic.list import ListView
 from django_markup.markup import formatter
 
-from .models import Block, Experiment, Feedback, Phase, Session
+from .models import Block, Experiment, Feedback
 from section.models import Playlist
+from session.models import Session
 from experiment.serializers import (
     serialize_block,
     serialize_experiment,
@@ -53,7 +54,6 @@ def get_block(request: HttpRequest, slug: str) -> JsonResponse:
     # create data
     block_data = {
         **serialize_block(block),
-        "theme": serialize_theme(block.theme_config) if block.theme_config else None,
         "class_name": class_name,  # can be used to override style
         "rounds": block.rounds,
         "bonus_points": block.bonus_points,
@@ -65,18 +65,8 @@ def get_block(request: HttpRequest, slug: str) -> JsonResponse:
         "loading_text": _("Loading"),
         "session_id": session.id,
     }
-
     response = JsonResponse(block_data, json_dumps_params={"indent": 4})
-
     return response
-
-
-def create_phase(request):
-    experiment_id = request.POST.get('experiment_id')
-    experiment = Experiment.objects.get(pk=experiment_id)
-    phase_count = Phase.objects.filter(experiment=experiment).count()
-    phase = Phase.objects.create(experiment=experiment, index=phase_count)
-    return JsonResponse({"created": phase.id})
 
 
 def post_feedback(request, slug):

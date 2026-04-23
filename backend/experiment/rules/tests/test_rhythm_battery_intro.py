@@ -12,6 +12,7 @@ from experiment.actions.trial import Trial
 
 
 class RhythmBatteryIntroTest(TestCase):
+    fixtures = ["choice_lists", "choices_general"]
 
     def setUp(self):
         playlist = PlaylistModel.objects.create(

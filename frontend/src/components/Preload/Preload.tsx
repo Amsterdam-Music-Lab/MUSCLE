@@ -4,14 +4,13 @@ import classNames from "classnames";
 import Circle from "../Circle/Circle";
 import * as audio from "../../util/audio";
 import * as webAudio from "../../util/webAudio";
-import Section from "@/types/Section";
+import PlaybackSection from "@/types/Section";
 
 interface PreloadProps {
-    sections: Section[];
+    sections: PlaybackSection[];
     playMethod: string;
     duration: number;
     preloadMessage: string;
-    pageTitle: string;
     onNext: () => void;
 }
 
@@ -34,7 +33,7 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, onNext }: Pre
         const preloadResources = async () => {
             if (playMethod === 'NOAUDIO') {
 
-                await Promise.all(sections.map((section) => fetch(section.url)));
+                await Promise.all(sections.map((section) => fetch(section.link)));
 
                 return onNext();
             }
@@ -57,7 +56,7 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, onNext }: Pre
                     }
 
                     // Load sections in buffer
-                    return webAudio.loadBuffer(section.id, section.url, () => {
+                    return webAudio.loadBuffer(section.link, () => {
                         if (index === (sections.length - 1)) {
                             setAudioAvailable(true);
                         }
@@ -70,7 +69,7 @@ const Preload = ({ sections, playMethod, duration, preloadMessage, onNext }: Pre
                 // Load audio until available
                 // Return remove listener
                 sections.forEach((section, index) => {
-                    return audio.loadUntilAvailable(section.url, () => {
+                    return audio.loadUntilAvailable(section.link, () => {
                         if (index === (sections.length - 1)) {
                             setAudioAvailable(true);
                         }

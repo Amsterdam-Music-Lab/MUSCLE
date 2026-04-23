@@ -113,7 +113,8 @@ class Participant(models.Model):
             profile_dict[profile.get('question_key')] = profile.get('given_response')
             score = profile.get('score')
             if score:
-                profile_dict[f'{profile.get('question_key')}_score'] = score
+                question_key = profile.get('question_key')
+                profile_dict[f'{question_key}_score'] = score
         return profile_dict
 
     def is_dutch(self) -> bool:

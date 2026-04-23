@@ -1,9 +1,10 @@
 from django.db import models
-from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 from experiment.actions import question
 from experiment.actions.question import QuestionAction
+from theme.models import ThemeConfig
+
 
 class Question(models.Model):
     """Model for question asked during experiment
@@ -14,12 +15,12 @@ class Question(models.Model):
         from_python (bool): whether this Question was added through a Python fixture (not editable)
         explainer (str): Question explainer text
         is_skippable (bool): If question can be skipped during experiment
-        type (str): Question type {"AutoCompleteQuestion", "ButtonArrayQuestion", "CheckboxQuestion", "DropdownQuestion", "IconRangeQuestion", "NumberQuestion", "RadiosQuestion", "RangeQuestion", "TextQuestion", "TextRangeQuestion"}
+        type (str): Question type {"AutoCompleteQuestion", "ButtonArrayQuestion", "CheckboxQuestion", "DropdownQuestion", "NumberQuestion", "RadiosQuestion", "RangeQuestion", "TextQuestion", "TextRangeQuestion"}
         profile_scoring_rule (str): Profile scoring rule {"", "LIKERT", "REVERSE_LIKERT", "CATEGORIES_TO_LIKERT"} (ChoiceQuestion, LikertQuestion)
         min_value (float): Minimal value (NumberQuestion)
         max_value (float): Maximal value (NumberQuestion)
         max_length (int): Maximal length (TextQuestion)
-        min_values (int): Minimum number of values to choose (ChoiceQuestion)
+        min_values (int): Minimum number of values to choose (CheckboxQuestion)
     """
 
     class QuestionTypes(models.TextChoices):
@@ -33,9 +34,6 @@ class Question(models.Model):
             "Checkboxes: Present choices as checkboxes (multiple options)"
         )
         DROPDOWN = "DropdownQuestion", _("Dropdown: Present choices in a dropdown menu")
-        ICON_RANGE = "IconRangeQuestion", _(
-            "Icon Range: Present choices as a range slider with icons"
-        )
         NUMBER = "NumberQuestion", _(
             "Number: Present a number field to select a number"
         )
@@ -70,11 +68,11 @@ class Question(models.Model):
     # only applicable for TextQuestion: maximal length of text
     max_length = models.IntegerField(blank=True, null=True)
 
-    # ChoiceQuestion
+    # applicable for AUTOCOMPLETE, BUTTON_ARRAY, CHECKBOXES, DROPDOWN, ICON_RANGE, RADIOS, TEXT_RANGE
     choices = models.ForeignKey(
         'question.ChoiceList', null=True, on_delete=models.SET_NULL
     )
-    # only applicable for CheckBoxQuestion
+    # only applicable for CHECKBOXES
     min_values = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
@@ -126,7 +124,10 @@ class ChoiceList(models.Model):
     from_python = models.BooleanField(default=False, editable=False)
 
     def to_dict(self):
-        return {choice.key: choice.text for choice in self.choices.all()}
+        return [
+            {'value': choice.key, 'label': choice.text, 'color': choice.color}
+            for choice in self.choices.all()
+        ]
 
 
 class Choice(models.Model):
@@ -145,7 +146,14 @@ class Choice(models.Model):
     choicelist = models.ForeignKey(
         ChoiceList,
         on_delete=models.CASCADE,
-        related_name='choices',
+        related_name="choices",
+    )
+    color = models.CharField(
+        max_length=32,
+        blank=True,
+        default="",
+        help_text="Description of color in current theme, e.g. `colorPositive`",
+        choices=ThemeConfig().get_color_choices(),
     )
 
     class Meta:

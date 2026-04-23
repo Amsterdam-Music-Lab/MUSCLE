@@ -1,8 +1,12 @@
 from django.utils.translation import gettext_lazy as _
 
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.utils import final_action_with_optional_button, render_feedback_trivia
-from experiment.actions.utils import get_average_difference_level_based
+from experiment.actions.utils import (
+    get_average_difference_level_based,
+    render_feedback_trivia,
+)
+from experiment.actions.wrappers import final_action_with_optional_button
 
 from session.models import Session
 
@@ -21,20 +25,37 @@ class BST(HBat):
     def get_intro_explainer(self):
         return Explainer(
             instruction=_(
-                'In this test you will hear a number of rhythms which have a regular beat.'),
+                'In this test you will hear a number of rhythms which have a regular beat.'
+            ),
             steps=[
-                Step(_(
-                        "It's your job to decide if the rhythm has a DUPLE METER (a MARCH) or a TRIPLE METER (a WALTZ).")),
-                Step(_("Every SECOND tone in a DUPLE meter (march) is louder and every THIRD tone in a TRIPLE meter (waltz) is louder.")),
-                Step(_(
-                        "Try to answer as accurately as possible, even if you're uncertain.")),
+                Step(
+                    _(
+                        "It's your job to decide if the rhythm has a DUPLE METER (a MARCH) or a TRIPLE METER (a WALTZ)."
+                    )
+                ),
+                Step(
+                    _(
+                        "Every SECOND tone in a DUPLE meter (march) is louder and every THIRD tone in a TRIPLE meter (waltz) is louder."
+                    )
+                ),
+                Step(
+                    _(
+                        "Try to answer as accurately as possible, even if you're uncertain."
+                    )
+                ),
                 Step(_("Remember: try not to move or tap along with the sounds")),
-                Step(_(
-                        "In this test, you can answer as soon as you feel you know the answer, but please wait until you are sure or the sound has stopped.")),
-                Step(_(
-                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
+                Step(
+                    _(
+                        "In this test, you can answer as soon as you feel you know the answer, but please wait until you are sure or the sound has stopped."
+                    )
+                ),
+                Step(
+                    _(
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'
+                    )
+                ),
             ],
-            button_label='Ok'
+            button=Button('Ok'),
         )
 
     def get_trial_question(self):
@@ -54,7 +75,7 @@ class BST(HBat):
                 "The rhythm was a %(correct_response)s Your answer was INCORRECT."
             ) % {"correct_response": correct_response}
         return Explainer(
-            instruction=instruction, steps=[], button_label=_("Next fragment")
+            instruction=instruction, steps=[], button=Button(_("Next fragment"))
         )
 
     def finalize_block(self, session):

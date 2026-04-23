@@ -3,17 +3,21 @@ import classNames from "classnames";
 import Histogram from "../Histogram/Histogram";
 import { API_ROOT } from "@/config";
 import { Card } from "@/types/Section";
+import useBoundStore from "@/util/stores";
 
 interface PlayCardProps {
     onClick: () => void;
     registerUserClicks: (x: number, y: number) => void;
-    playing: boolean;
     section: Card;
     view: string;
     showAnimation: boolean;
 }
 
-const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAnimation }: PlayCardProps) => {
+const PlayCard = ({ onClick, registerUserClicks, section, showAnimation }: PlayCardProps) => {
+    const theme = useBoundStore((state) => state.theme);
+    const cardColor = section.color || 'colorPrimary';
+    const cardColorValue = `hsl(from ${theme[cardColor]} h s 35%)`;
+    
     const getImgSrc = (url: string) => {
         if (url.startsWith("http")) {
             return url;
@@ -43,18 +47,18 @@ const PlayCard = ({ onClick, registerUserClicks, playing, section, view, showAni
             role="button"
         >
             {section.turned ?
-                view === 'visual' ?
+                section.playMethod === 'NOAUDIO' ?
                     <div
                         data-testid="front"
                         className="front front--visual"
                     >
-                        <img src={getImgSrc(section.url)} alt={section.name} />
+                        <img src={getImgSrc(section.link)} alt={section.label} />
                     </div>
                     :
                     <Histogram
-                        running={playing}
+                        running={section.playing}
                         bars={histogramBars}
-                        backgroundColor="purple"
+                        backgroundColor={cardColorValue}
                         borderRadius=".5rem"
                         random={true}
                         interval={200}

@@ -86,7 +86,7 @@
                     a {
                         color: white;
                         transition: opacity 0.3s ease-out;
-                        border-bottom: 2px solid $pink;
+                        border-bottom: 2px solid $primary;
                         text-decoration: none !important;
 
                         &:hover {
@@ -124,7 +124,7 @@
             button {
                 padding: 6px;
                 color: white;
-                background-color: $teal;
+                background-color: $success;
                 border: 0;
                 border-top-right-radius: 3px;
                 border-bottom-right-radius: 3px;

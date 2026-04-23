@@ -16,7 +16,8 @@ class ImageAdminTest(TestCase):
         image = Image.objects.create(file='path/to/image.jpg')
         preview = self.admin.image_preview(image)
         expected_preview = format_html(
-            '<img src="/upload/path/to/image.jpg" style="max-height: 50px;"/>')
+            '<img src="/upload/path/to/image.jpg" style="max-height: 50px;"/>', {}
+        )
         self.assertEqual(preview, expected_preview)
 
     def test_image_preview_without_file(self):

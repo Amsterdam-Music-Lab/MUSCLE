@@ -79,7 +79,7 @@ const Experiment = () => {
             <Routes>
                 <Route
                     path={'/about'}
-                    element={<ExperimentAbout content={experiment?.aboutContent} slug={experiment.slug} backButtonText={experiment.backButtonText} />}
+                    element={<ExperimentAbout experiment={experiment} />}
                 />
                 <Route
                     path={'*'}

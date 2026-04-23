@@ -18,6 +18,7 @@ export const useGet = <T,>(url: string): [T | null, boolean] => {
                 setLoading(false);
             } catch (err) {
                 setData(null);
+                console.error(err);
                 setLoading(false);
             }
         };

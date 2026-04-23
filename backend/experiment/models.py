@@ -2,16 +2,12 @@ from os.path import join
 from typing import Optional
 
 from django.db import models
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _, get_language
 from django.contrib.postgres.fields import ArrayField
-from django.db.models.query import QuerySet
 
 from experiment.standards.iso_languages import ISO_LANGUAGES
-from theme.models import ThemeConfig
 from image.models import Image
 from question.models import Question, QuestionInList, QuestionList
-from session.models import Session
 
 from .validators import markdown_html_validator, block_slug_validator, experiment_slug_validator
 
@@ -135,7 +131,8 @@ class Block(models.Model):
         rounds (int): Number of rounds
         bonus_points (int): Bonus points
         rules (str): The rules used for this block
-        theme_config (theme.models.ThemeConfig): Theme settings
+        theme_config (theme.ThemeConfig): Theme settings
+        rules_config (dict): a dictionary containing extra settings for the rules coupled to the block
     """
 
     phase = models.ForeignKey(Phase, on_delete=models.CASCADE, related_name="blocks", blank=True, null=True)
@@ -156,8 +153,17 @@ class Block(models.Model):
     rules = models.CharField(default="", max_length=64)
 
     theme_config = models.ForeignKey(
-        ThemeConfig, on_delete=models.SET_NULL, blank=True, null=True
+        "theme.ThemeConfig", on_delete=models.SET_NULL, blank=True, null=True
     )
+
+    rules_config = models.JSONField(
+        default=dict,
+        help_text=_("Extra settings to control the behaviour of the block's rules"),
+        blank=True,
+    )
+
+    class Meta:
+        ordering = ["index"]
 
     def __str__(self):
         return self.name if self.name else self.slug

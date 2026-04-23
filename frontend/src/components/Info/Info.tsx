@@ -3,9 +3,8 @@ import { useEffect, useState } from "react";
 import Button from "../Button/Button";
 import { InfoAction, SharedActionProps } from "@/types/Action";
 
-
 /** Info is a block view that shows the Info text, and handles agreement/stop actions */
-const Info = ({ heading, body, button_label, button_link, onNext }: InfoAction & SharedActionProps) => {
+const Info = ({ heading, body, button, onNext }: InfoAction & SharedActionProps) => {
     const [maxHeight, setMaxHeight] = useState(getMaxHeight());
 
     useEffect(() => {
@@ -36,25 +35,12 @@ const Info = ({ heading, body, button_label, button_link, onNext }: InfoAction &
                 data-testid="info-body"
             />
 
-            {button_label && (
+            {button && (
                 <div className="buttons d-flex justify-content-center pt-3">
-                    {button_link ? (
-                        <a
-                            className="btn btn-primary"
-                            href={button_link}
-                            target={button_link.startsWith("http") ? "_blank" : undefined}
-                            rel="noopener noreferrer"
-                        >
-                            {button_label}
-                        </a>
-                    ) : onNext ? (
-                        <Button
-                            className="btn-primary"
-                            onClick={onNext}
-                            title={button_label}
-                        />
-                    ) : null
-                    }
+                    <Button
+                        {...button}
+                        onClick={onNext}
+                    />
                 </div>
             )}
         </div>

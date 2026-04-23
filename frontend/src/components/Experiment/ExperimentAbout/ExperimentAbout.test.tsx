@@ -4,14 +4,20 @@ import { it, expect, describe } from 'vitest';
 
 import ExperimentAbout from './ExperimentAbout';
 
+const experiment = {
+    slug: "some_slug",
+    backButtonText: "Terug",
+    aboutContent: '## Hello World!\n\n**Lorem ipsum**',
+    theme: {
+        colorPrimary: "#d843e2", colorSecondary: "#39d7b8"
+    }
+}
+
 describe('ExperimentAbout', () => {
 
     it('shows the about page content', () => {
-
-        const content = '## Hello World!\n\n**Lorem ipsum**';
-
         render(
-            <ExperimentAbout content={content} />,
+            <ExperimentAbout {...experiment} />,
             { wrapper: Router }
         );
 
@@ -21,10 +27,8 @@ describe('ExperimentAbout', () => {
 
     it('shows a "Terug" button with a link to the previous page based on a given slug', () => {
 
-        const content = '## Hello World!\n\n**Lorem ipsum**';
-
         render(
-            <ExperimentAbout content={content} slug="some_slug" backButtonText="Terug" />,
+            <ExperimentAbout {...experiment} />,
             { wrapper: Router }
         )
 

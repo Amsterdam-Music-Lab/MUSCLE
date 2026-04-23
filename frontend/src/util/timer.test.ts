@@ -2,7 +2,7 @@ import { beforeEach, afterEach, describe, it, expect, vi } from 'vitest';
 import Timer from './timer';
 
 describe('Timer', () => {
-    let originalRequestAnimationFrame: any;
+    let originalRequestAnimationFrame: (callback: FrameRequestCallback) => number;
     let now = 0;
 
     beforeEach(() => {
@@ -14,10 +14,12 @@ describe('Timer', () => {
         // Mock requestAnimationFrame
         originalRequestAnimationFrame = window.requestAnimationFrame;
         window.requestAnimationFrame = (cb) => {
+            const frameRate = 1000 / 60; // Simulate 60fps
             setTimeout(() => {
-                now += 1000 / 60; // Simulate 60fps
+                now += frameRate;
                 cb(performance.now());
-            }, 1000 / 60);
+            }, frameRate);
+            return frameRate
         };
     });
 

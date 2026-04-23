@@ -1,9 +1,12 @@
 import csv
-from os.path import join
+from os import listdir
+from os.path import isdir, join
+from zipfile import ZipFile
 
 from inline_actions.admin import InlineActionsModelAdminMixin
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
+from django.db.models.query import QuerySet
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.conf import settings
@@ -49,9 +52,28 @@ class SongAdmin(admin.ModelAdmin):
         return False
 
 
+@admin.action(description="Export selected playlists")
+def playlist_export(modeladmin, request, queryset: QuerySet[Playlist]):
+    response = HttpResponse(content_type='application/zip')
+    with ZipFile(response, 'w') as zip_file:
+        for playlist in queryset:
+            # write csv data
+            zip_file.writestr(f"{playlist.name}.csv", data=playlist.csv)
+            if playlist.url_prefix:
+                continue
+            uploads = join(settings.MEDIA_ROOT, playlist.get_upload_path())
+            if not isdir(uploads):
+                continue
+            for audio_file in listdir(uploads):
+                zip_file.write(join(uploads, audio_file))
+        response['Content-Disposition'] = 'attachment; filename=playlists.zip'
+        return response
+
+
 class PlaylistAdmin(InlineActionsModelAdminMixin, admin.ModelAdmin):
     form = PlaylistAdminForm
     change_form_template = "change_form.html"
+    actions = [playlist_export]
     list_display = ("name", "_section_count", "_block_count")
     search_fields = ["name", "section__song__artist", "section__song__name"]
     inline_actions = ["add_sections", "edit_sections", "export_csv"]

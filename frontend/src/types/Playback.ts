@@ -1,4 +1,4 @@
-import Section from "./Section";
+import PlaybackSection from "./Section";
 
 export const AUTOPLAY = "AUTOPLAY";
 export const BUTTON = "BUTTON";
@@ -9,32 +9,17 @@ export const PRELOAD = "PRELOAD";
 
 export type PlaybackView = typeof AUTOPLAY | typeof BUTTON | typeof MULTIPLAYER | typeof IMAGE | typeof MATCHINGPAIRS | typeof PRELOAD;
 
-type PlaybackMethod = "EXTERNAL" | "HTML" | "BUFFER" | "NOAUDIO";
-
-interface FrontendStyle {
-    [key: string]: boolean;
-}
-
 export type ScoreFeedbackDisplay = "large-top" | "small-bottom-right" | "hidden";
 
-export interface PlaybackArgs {
+// the information received from the backend
+export interface PlaybackAction {
     view: PlaybackView;
-    play_method: PlaybackMethod;
-    show_animation: boolean;
-    preload_message: string;
+    showAnimation: boolean;
+    preloadMessage: string;
     instruction: string;
-    sections: Section[];
-    play_from: number;
-
-    labels?: string[];
-    image_labels?: string[];
-    images?: string[];
-    style?: FrontendStyle;
-    mute?: boolean;
-    play_once?: boolean;
-    resume_play?: boolean;
-    stop_audio_after?: number;
-    timeout_after_playback?: number;
-    score_feedback_display?: ScoreFeedbackDisplay;
-    tutorial?: { [key: string]: string };
+    sections: PlaybackSection[];
+    mute: boolean;
+    resumePlay?: boolean;
+    playOnce?: boolean;
+    scoreFeedbackDisplay?: ScoreFeedbackDisplay;
 }

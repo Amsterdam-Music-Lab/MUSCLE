@@ -1,0 +1,23 @@
+name: Fix Postgres database
+
+permissions:
+  contents: read
+
+on:
+    workflow_dispatch:
+
+jobs:
+    start-db:
+        name: Run database container
+        environment: Production
+        runs-on: PRD
+        steps:
+            - name: "Start db container without starting Postgres"
+              env:
+                SQL_DATABASE: ${{ vars.SQL_DATABASE }}
+                SQL_HOST: ${{ vars.SQL_HOST }}
+                SQL_PORT: ${{ vars.SQL_PORT }}
+                SQL_USER: ${{ secrets.SQL_USER }}
+                SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+                HOST_DATA: ${{ vars.HOST_DATA }}
+              run: podman compose -f docker-compose-deploy.yml run --rm db sleep 1000s

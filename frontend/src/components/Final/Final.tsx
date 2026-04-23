@@ -4,14 +4,14 @@ import { useNavigate } from "react-router-dom";
 import Rank from "../Rank/Rank";
 import Social from "@/components/Social/Social";
 
-import { URLS } from "@/config";
-import { finalizeSession } from "../../API";
-import useBoundStore from "../../util/stores";
+
+import Button from "../Button/Button";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 import UserFeedback from "../UserFeedback/UserFeedback";
 import FinalButton from "./FinalButton";
 import { FinalAction, SharedActionProps } from "@/types/Action";
 import classNames from "@/util/classNames";
+import useBoundStore from "@/util/stores";
 
 /**
  * Final is a block view that shows the final scores of the block
@@ -22,15 +22,15 @@ const Final = (props: FinalAction & SharedActionProps) => {
         block,
         participant,
         score,
-        final_text,
-        action_texts,
+        finalText,
+        actionTexts,
         button,
         onNext,
-        show_participant_link,
-        participant_id_only,
-        show_profile_link,
+        showParticipantLink,
+        participantIdOnly,
+        showProfileLink,
         social,
-        feedback_info,
+        feedbackInfo,
         points,
         rank,
         logo,
@@ -60,9 +60,9 @@ const Final = (props: FinalAction & SharedActionProps) => {
             </div>
             {button && (
                 <div className="text-center pt-4">
-                    <FinalButton
-                        button={button}
-                        onNext={onNext}
+                    <Button
+                        {...button}
+                        onClick={onNext}
                     />
                 </div>
             )}

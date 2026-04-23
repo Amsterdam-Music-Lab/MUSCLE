@@ -120,13 +120,11 @@ const createSessionSlice: StateCreator<SessionSlice> = (set) => ({
 interface ThemeSlice {
     theme: ITheme | null;
     setTheme: (theme: ITheme) => void;
-    resetTheme: () => void;
 }
 
 const createThemeSlice: StateCreator<ThemeSlice> = (set) => ({
     theme: null,
     setTheme: (theme: ITheme) => set(() => ({ theme })),
-    resetTheme: () => set(() => ({ theme: null })),
 });
 
 export const useBoundStore = create<BlockSlice & DocumentHeadSlice & ErrorSlice & ParticipantSlice & ActionSlice & SessionSlice & ThemeSlice>((...args) => ({

@@ -99,7 +99,7 @@ class RhythmDiscriminationTest(TestCase):
         return next_round
 
     def _unpack_result_id(self, trial_view: Trial) -> int:
-        return trial_view["feedback_form"]["form"][0]["result_id"]
+        return trial_view["feedbackForm"]["form"][0]["resultId"]
 
     def _infer_expected_response(self, result_id: int) -> str:
         result = Result.objects.get(pk=result_id)
@@ -166,7 +166,7 @@ class RhythmDiscriminationTest(TestCase):
             "/result/score/",
             {
                 "session_id": session_id,
-                "json_data": '{"decision_time":2,"form":[{"key":"same","value":"%s","result_id":%s}]}'
+                "json_data": '{"decision_time":2,"form":[{"key":"same","value":"%s","resultId":%s}]}'
                 % (expected_response, result_id),
                 "csrfmiddlewaretoken": csrf_token,
             },

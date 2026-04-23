@@ -28,14 +28,14 @@ class ResultUtilsTest(TestCase):
         result = Result.objects.create(
             participant=self.participant, question_key='some_key'
         )
-        data = {'result_id': result.id}
+        data = {'resultId': result.id}
         result = get_result(self.session, data)
         self.assertIsNotNone(result)
         new_participant = Participant.objects.create()
         result = Result.objects.create(
             participant=new_participant, question_key='another_key'
         )
-        data = {'result_id': result.id}
+        data = {'resultId': result.id}
         with self.assertRaises(Result.DoesNotExist):
             get_result(self.session, data)
 
@@ -47,6 +47,6 @@ class ResultUtilsTest(TestCase):
             expected_response='42',
             given_response='42',
         )
-        data = {'result_id': result.id, 'value': '42'}
+        data = {'resultId': result.id, 'value': '42'}
         score = apply_scoring_rule(result, data)
         self.assertEqual(score, 1)

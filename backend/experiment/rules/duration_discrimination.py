@@ -7,16 +7,14 @@ from django.utils.translation import gettext_lazy as _
 from .base import BaseRules
 from .practice import PracticeMixin
 from section.models import Section
-from experiment.actions.playback import Autoplay
+from experiment.actions.button import Button
+from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.form import Form
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
-from experiment.actions.utils import (
-    final_action_with_optional_button,
-    get_average_difference,
-    render_feedback_trivia,
-)
+from experiment.actions.utils import get_average_difference, render_feedback_trivia
+from experiment.actions.wrappers import final_action_with_optional_button
 from experiment.rules.util.staircasing import register_turnpoint
 from result.models import Result
 from result.utils import prepare_result
@@ -81,11 +79,7 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
         else:
             instruction = _(
                 'The second interval was %(correct_response)s %(preposition)s the first interval. Your answer was INCORRECT.') % {'correct_response': correct_response, 'preposition': preposition}
-        return Explainer(
-            instruction=instruction,
-            steps=[],
-            button_label=button_label
-        )
+        return Explainer(instruction=instruction, steps=[], button=Button(button_label))
 
     def get_next_trial(self, session: Session) -> Trial:
         """
@@ -112,23 +106,32 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
         question = ButtonArrayQuestion(
             text=question_text,
             key=key,
-            choices={
-                self.first_condition: self.first_condition_i18n,
-                self.second_condition: self.second_condition_i18n,
-            },
+            choices=[
+                {
+                    'value': self.first_condition,
+                    'label': self.first_condition_i18n,
+                    'color': 'colorNeutral1',
+                },
+                {
+                    'value': self.second_condition,
+                    'label': self.second_condition_i18n,
+                    'color': 'colorNeutral2',
+                },
+            ],
             result_id=prepare_result(
                 key, session, section=section, expected_response=trial_condition
             ),
         )
 
-        playback = Autoplay([section])
-        form = Form([question], submit_label="")
+        playback = Autoplay(sections=[PlaybackSection(section)], show_animation=False)
+        form = Form([question], submit_button=None)
         view = Trial(
             playback=playback,
             feedback_form=form,
             title=_("%(title)s %(task)s")
             % {"title": self.subtask, "task": self.task_description},
-            config={"listen_first": True, "response_time": section.duration + 0.1},
+            listen_first=True,
+            response_time=section.duration + 0.1,
         )
         return view
 
@@ -140,16 +143,25 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
             instruction=self.get_introduction(),
             steps=[
                 Step(self.get_task_explanation()),
-                Step(_(
-                    'During the experiment it will become more difficult to hear the difference.')),
-                Step(_(
-                    "Try to answer as accurately as possible, even if you're uncertain.")),
+                Step(
+                    _(
+                        'During the experiment it will become more difficult to hear the difference.'
+                    )
+                ),
+                Step(
+                    _(
+                        "Try to answer as accurately as possible, even if you're uncertain."
+                    )
+                ),
                 Step(_("Remember: try not to move or tap along with the sounds")),
-                Step(_(
-                    'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'))
+                Step(
+                    _(
+                        'This test will take around 4 minutes to complete. Try to stay focused for the entire test!'
+                    )
+                ),
             ],
-            button_label='Ok',
-            step_numbers=True
+            button=Button('Ok'),
+            step_numbers=True,
         )
 
     def get_task_explanation(self):

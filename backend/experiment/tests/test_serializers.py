@@ -18,6 +18,9 @@ class SerializerTest(TestCase):
     fixtures = [
         "playlist",
         "experiment",
+        "choice_lists",
+        "demographics",
+        "goldsmiths_msi",
     ]
 
     @classmethod
@@ -154,3 +157,15 @@ class SerializerTest(TestCase):
                 "tags": [],
             },
         )
+        self.assertEqual(serialized_block.get("theme").get("name"), "test_theme")
+
+    def test_serialize_block_without_theme_config(self):
+        block = Block.objects.create(
+            slug="test-block",
+            phase=self.phase1,
+            name="Test Block",
+            description="This is a test block",
+        )
+        participant = Participant.objects.create()
+        serialized_block = serialize_block(block, participant)
+        self.assertEqual(serialized_block.get("theme").get("name"), "Default")

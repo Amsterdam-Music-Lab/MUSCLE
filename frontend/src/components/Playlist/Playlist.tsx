@@ -29,6 +29,7 @@ const Playlist = ({ block, instruction, onNext, playlist }: PlaylistAction & Sha
                                 onNext();
                             }}
                             delay={index * 250}
+                            iconColor={block.theme?.colorPrimary}
                         />
                     ))}
                 </ul>
@@ -41,9 +42,10 @@ interface PlaylistItemProps {
     delay: number;
     playlist: { id: string, name: string };
     onClick: (playlistId: string) => void;
+    iconColor: string;
 }
 
-const PlaylistItem = ({ delay, playlist, onClick }: PlaylistItemProps) => (
+const PlaylistItem = ({ delay, playlist, onClick, iconColor }: PlaylistItemProps) => (
     <li
         data-testid="playlist-item"
         onClick={() => {
@@ -56,7 +58,7 @@ const PlaylistItem = ({ delay, playlist, onClick }: PlaylistItemProps) => (
         className="anim anim-fade-in-slide-left anim-speed-300"
         style={{ animationDelay: delay + "ms" }}
     >
-        <i className="icon" />
+        <i className="icon" style={{backgroundColor: iconColor}}/>
         <span>{playlist.name}</span>
     </li>
 );

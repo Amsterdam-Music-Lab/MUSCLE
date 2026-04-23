@@ -8,10 +8,9 @@ interface DropDownProps {
 
 /** DropDown is a question view for selecting a single option from a dropdown list */
 const DropDown = ({ question, value, onChange }: DropDownProps) => {
-
     const choices = question.choices;
 
-    if (!choices || Object.keys(choices).length <= 0) {
+    if (!choices || choices.length <= 0) {
         throw new Error("DropDown question must have choices");
     }
 
@@ -24,9 +23,9 @@ const DropDown = ({ question, value, onChange }: DropDownProps) => {
                 name={question.key}
             >
                 <option value=""></option>
-                {Object.keys(choices).map((val, index) => (
-                    <option value={val} key={index}>
-                        {choices[val]}
+                {choices.map((choice, index) => (
+                    <option value={choice.value} key={index}>
+                        {choice.label}
                     </option>
                 ))}
             </select>

@@ -4,13 +4,27 @@ import { describe, it, expect, vi } from 'vitest';
 import Radios from './_Radios';
 import Question from '@/types/Question';
 
+vi.mock('../../util/stores', () => ({
+    __esModule: true,
+    default: (fn: (state: any) => any) => {
+        const state = {
+            theme: {
+                colorPrimary: "#d843e2", colorSecondary: "#39d7b8"
+            }
+        };
+
+        return fn(state);
+    },
+    useBoundStore: vi.fn()
+}));
+
 const mockQuestion: Question = {
     key: 'test-radios',
-    choices: {
-        '1': 'First Option',
-        '2': 'Second Option',
-        '3': 'Third Option'
-    }
+    choices: [
+        {value: '1', label: 'First Option'},
+        {value: '2', label: 'Second Option'},
+        {value: '3', label: 'Third Option'}
+    ]
 };
 
 describe('Radios', () => {
@@ -22,7 +36,7 @@ describe('Radios', () => {
     });
 
     it('throws an error when no choices are provided', () => {
-        const invalidQuestion = { ...mockQuestion, choices: {} };
+        const invalidQuestion = { ...mockQuestion, choices: [] };
         expect(() => render(<Radios question={invalidQuestion} value="" onChange={() => { }} />))
             .toThrow('Radios question must have choices');
     });

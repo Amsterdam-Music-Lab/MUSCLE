@@ -37,8 +37,7 @@ services:
   server:
     build:
       context: ./backend
-      dockerfile: DockerfileDevelop
-      target: base
+      target: dev
     depends_on:
       db:
         condition: service_healthy
@@ -46,6 +45,7 @@ services:
         condition: service_started
     volumes:
       - translation_data:/unicode-translations/
+      - uv_backend_env:/.venv
       - type: bind
         source: ./backend
         target: /server
@@ -65,13 +65,15 @@ services:
       - SQL_USER=${SQL_USER}
       - SQL_PASSWORD=${SQL_PASSWORD}
       - SQL_HOST=${SQL_HOST}
+      - UV_PROJECT_ENVIRONMENT=/.venv
     ports:
       - 8000:8000
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "uv run python manage.py migrate && uv run python manage.py runserver 0.0.0.0:8000"
   client:
     build:
       context: ./frontend
-      dockerfile: DockerfileDevelop
+      dockerfile: Dockerfile
+      target: dev
     volumes:
       - type: bind
         source: ./frontend/src
@@ -82,24 +84,6 @@ services:
       - type: bind
         source: ./frontend/.storybook
         target: /client/.storybook
-      - type: bind
-        source: ./frontend/tsconfig.json
-        target: /client/tsconfig.json
-      - type: bind
-        source: ./frontend/tsconfig.node.json
-        target: /client/tsconfig.node.json
-      - type: bind
-        source: ./frontend/vite-env.d.ts
-        target: /client/vite-env.d.ts
-      - type: bind
-        source: ./frontend/vite.config.ts
-        target: /client/vite.config.ts
-      - type: bind
-        source: ./frontend/vitest.config.ts
-        target: /client/vitest.config.ts
-      - type: bind
-        source: ./frontend/index.html
-        target: /client/index.html
     environment:
       - VITE_API_ROOT=${FRONTEND_API_ROOT}
       - VITE_EXPERIMENT_SLUG=${FRONTEND_EXPERIMENT_SLUG}
@@ -123,3 +107,4 @@ volumes:
   db_data:
   db_backup:
   translation_data:
+  uv_backend_env:

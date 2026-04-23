@@ -22,6 +22,7 @@ describe('AutoPlay Component', () => {
     const mockFinishedPlaying = vi.fn();
 
     const defaultProps = {
+        sections: [{link: 'audio/to/play.mp3'}],
         showAnimation: true,
         playSection: mockPlaySection,
         startedPlaying: false,

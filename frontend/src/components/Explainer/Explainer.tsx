@@ -8,7 +8,7 @@ import { ExplainerAction, SharedActionProps } from "@/types/Action";
  * If the button has not been clicked, onNext will be called automatically after the timer expires (in milliseconds).
  * If timer == null, onNext will only be called after the button is clicked.
  */
-const Explainer = ({ instruction, button_label, steps = [], timer = null, onNext }: ExplainerAction & SharedActionProps) => {
+const Explainer = ({ instruction, button, steps = [], timer = null, onNext }: ExplainerAction & SharedActionProps) => {
 
     useEffect(() => {
         if (timer != null) {
@@ -34,9 +34,10 @@ const Explainer = ({ instruction, button_label, steps = [], timer = null, onNext
 
             <div className="text-center">
                 <Button
-                    className="btn-primary anim anim-fade-in anim-speed-300"
+                    className="anim anim-fade-in anim-speed-300"
                     onClick={onNext}
-                    title={button_label}
+                    label={button.label}
+                    color={button.color}
                     style={{ animationDelay: steps.length * 300 + "ms" }}
                 />
             </div>
@@ -51,14 +52,17 @@ interface ExplainerItemProps {
 }
 
 /** ExplainerItems renders an item in the explainer list, with optional icon or number */
-const ExplainerItem = ({ number = null, description, delay = 0 }: ExplainerItemProps) => (
+const ExplainerItem = ({ number = null, description, delay = 0 }: ExplainerItemProps) => {
+    const theme = useBoundStore((state) => state.theme);
+    return (
     <li
         className="anim anim-fade-in-slide-left anim-speed-300"
         style={{ animationDelay: delay + "ms" }}
     >
-        {number != null && <h4 className="number">{number}</h4>}
-        <span>{description}</span>
+        {number != null && <h4 className="number" style={{color: theme?.colorText, backgroundColor: theme?.colorBackground}}>{number}</h4>}
+        <span dangerouslySetInnerHTML={{ __html: description }}/>
     </li>
-);
+    )
+};
 
 export default Explainer;

@@ -6,7 +6,10 @@ import Explainer from './Explainer';
 describe('Explainer Component', () => {
     const props = {
         instruction: 'Some instruction',
-        button_label: 'Next',
+        button: {
+            label: 'Next',
+            color: '#fabacc'
+        },
         steps: [],
         onNext: vi.fn(),
         timer: 1
