@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import Rank from "../Rank/Rank";
 import Social from "@/components/Social/Social";
-
-
 import Button from "../Button/Button";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 import UserFeedback from "../UserFeedback/UserFeedback";
@@ -12,6 +10,7 @@ import FinalButton from "./FinalButton";
 import { FinalAction, SharedActionProps } from "@/types/Action";
 import classNames from "@/util/classNames";
 import useBoundStore from "@/util/stores";
+import { URLS } from '@/API';
 
 /**
  * Final is a block view that shows the final scores of the block
@@ -27,7 +26,7 @@ const Final = (props: FinalAction & SharedActionProps) => {
         button,
         onNext,
         showParticipantLink,
-        participantIdOnly,
+        participantIDOnly,
         showProfileLink,
         social,
         feedbackInfo,
@@ -38,10 +37,6 @@ const Final = (props: FinalAction & SharedActionProps) => {
     } = props;
     const session = useBoundStore((state) => state.session);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        finalizeSession({ session: session!, participant });
-    }, [session, participant]);
 
     return (
         <div className="aha__final d-flex flex-column justify-content-center">
@@ -56,7 +51,7 @@ const Final = (props: FinalAction & SharedActionProps) => {
                 </div>
             )}
             <div className="aha__final-text">
-                <div dangerouslySetInnerHTML={{ __html: final_text }} />
+                <div dangerouslySetInnerHTML={{ __html: finalText }} />
             </div>
             {button && (
                 <div className="text-center pt-4">
@@ -77,29 +72,29 @@ const Final = (props: FinalAction & SharedActionProps) => {
                 social={social}
             />
             )}
-            {show_profile_link && (
+            {showProfileLink && (
                 <div className=" mt-2 d-flex justify-content-center">
                     <a className="home text-center" href={URLS.AMLHome}>
-                        {action_texts.all_experiments}
+                        {actionTexts.allExperiments}
                     </a>
                     <div
                         data-testid="profile-link"
                         className="home text-center"
                         onClick={() => navigate(URLS.profile)}
                     >
-                        {action_texts.profile}
+                        {actionTexts.profile}
                     </div>
                 </div>
             )}
-            {show_participant_link && (
+            {showParticipantLink && (
                 <ParticipantLink
-                    participantIDOnly={participant_id_only}
+                    participantIDOnly={participantIDOnly}
                 />
             )}
-            {feedback_info && (<UserFeedback
+            {feedbackInfo && (<UserFeedback
                 blockSlug={block.slug}
                 participant={participant}
-                feedbackInfo={feedback_info}
+                feedbackInfo={feedbackInfo}
             />)}
 
         </div>

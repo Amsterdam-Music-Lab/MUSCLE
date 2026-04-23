@@ -81,7 +81,7 @@ export interface FinalAction {
   };
   button: IButton;
   showParticipantLink: boolean;
-  participantIdOnly: boolean;
+  participantIDOnly: boolean;
   showProfileLink: boolean;
   social: Social;
   feedbackInfo?: FeedbackInfo;

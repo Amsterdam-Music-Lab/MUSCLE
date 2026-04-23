@@ -39,7 +39,6 @@ export const URLS = {
     session: {
         create: "/session/create/",
         next_round: (id: string) => "/session/" + id + "/next_round/",
-        finalize: (id: string) => "/session/" + id + "/finalize/"
     },
     theme: {
         get: (id: string) => `/theme/${id}`,
