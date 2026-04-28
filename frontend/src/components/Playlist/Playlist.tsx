@@ -1,16 +1,10 @@
-import { Playlist as PlaylistAction } from "@/types/Action";
-import Block from "@/types/Block";
+import { PlaylistAction, SharedActionProps } from "@/types/Action";
 import { useEffect } from "react";
-
-export interface PlaylistProps extends PlaylistAction {
-    block: Block;
-    onNext: () => void;
-}
 
 /**
  * Playlist is a block view, that handles (auto)selection of a playlist
  */
-const Playlist = ({ block, instruction, onNext, playlist }: PlaylistProps) => {
+const Playlist = ({ block, instruction, onNext, playlist }: PlaylistAction & SharedActionProps) => {
     const playlists = block.playlists;
 
     useEffect(() => {

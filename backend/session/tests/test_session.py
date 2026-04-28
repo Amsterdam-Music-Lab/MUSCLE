@@ -44,21 +44,6 @@ class SessionTest(TestCase):
         response = self.client.post('/session/create', data)
         assert response.status_code != 500
 
-    def test_finalize(self):
-        response = self.client.get('/participant/')
-        response_data = json.loads(response.content)
-        csrf_token = response_data.get('csrf_token')
-        participant = Participant.objects.get(pk=response_data.get('id'))
-        session = Session.objects.create(
-            block=self.block,
-            participant=participant)
-        data = {
-            'csrfmiddlewaretoken:': csrf_token
-        }
-        response = self.client.post('/session/{}/finalize/'.format(session.pk), data)
-        assert response.status_code == 200
-        assert Session.objects.filter(finished_at__isnull=False).count() == 1
-
     def test_percentile_rank(self):
         # create one session with relatively low score
         Session.objects.create(

@@ -1,16 +1,10 @@
 import { useEffect, useState } from "react";
 
 import Button from "../Button/Button";
-import { Info as InfoAction } from "@/types/Action";
-import IButton from "@/types/Button";
-
-export interface InfoProps extends InfoAction {
-    onNext?: () => void;
-    button: IButton;
-}
+import { InfoAction, SharedActionProps } from "@/types/Action";
 
 /** Info is a block view that shows the Info text, and handles agreement/stop actions */
-const Info = ({ heading, body, button, onNext }: InfoProps) => {
+const Info = ({ heading, body, button, onNext }: InfoAction & SharedActionProps) => {
     const [maxHeight, setMaxHeight] = useState(getMaxHeight());
 
     useEffect(() => {
