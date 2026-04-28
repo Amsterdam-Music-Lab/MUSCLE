@@ -174,7 +174,7 @@ class QuestionList(models.Model):
 
     name = models.CharField(default="", max_length=128)
     block = models.ForeignKey('experiment.Block', on_delete=models.CASCADE)
-    index = models.PositiveIntegerField()  # index of QuestionList within Block
+    index = models.PositiveIntegerField(default=0)
     questions = models.ManyToManyField(Question, through="QuestionInList")
     randomize = models.BooleanField(default=False)
 
@@ -184,11 +184,8 @@ class QuestionList(models.Model):
         verbose_name_plural = "Question Lists"
 
     def __str__(self):
-        return _(
-            "QuestionList %(qs_name)s of block with slug %(block_slug)s: %(n_questions)i questions"
-        ) % {
-            'qs_name': self.name,
-            'block_slug': self.block.slug,
+        return _("%(qs_name)s: %(n_questions)i questions") % {
+            'qs_name': self.name or f"{self.block.slug}({self.index})",
             'n_questions': self.questions.count() if self.pk else 0,
         }
 
