@@ -6,9 +6,7 @@ import FeedbackForm from "../FeedbackForm/FeedbackForm";
 import HTML from "../HTML/HTML";
 import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
-import { TrialConfig } from "@/types/Trial";
 import { SharedActionProps, TrialAction } from "@/types/Action";
-
 
 /**
  * Trial is a block view to present information to the user and/or collect user feedback

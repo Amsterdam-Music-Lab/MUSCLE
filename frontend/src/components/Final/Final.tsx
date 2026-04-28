@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Rank from "../Rank/Rank";
@@ -6,10 +5,8 @@ import Social from "@/components/Social/Social";
 import Button from "../Button/Button";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 import UserFeedback from "../UserFeedback/UserFeedback";
-import FinalButton from "./FinalButton";
 import { FinalAction, SharedActionProps } from "@/types/Action";
 import classNames from "@/util/classNames";
-import useBoundStore from "@/util/stores";
 import { URLS } from '@/API';
 
 /**
@@ -35,7 +32,6 @@ const Final = (props: FinalAction & SharedActionProps) => {
         logo,
         percentile
     } = props;
-    const session = useBoundStore((state) => state.session);
     const navigate = useNavigate();
 
     return (
