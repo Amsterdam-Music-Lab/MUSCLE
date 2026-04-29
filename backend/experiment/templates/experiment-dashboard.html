@@ -1,6 +1,4 @@
 {% extends "admin/base_site.html" %} {% load inline_action_tags %} {% block content %}{% load static %}
-<script src="{% static 'experiment_dashboard_sessions.js' %}"></script>
-<script src="{% static 'experiment_dashboard_feedback.js' %}"></script>
 <style>
     input {
         margin-right: 1rem;
@@ -205,7 +203,8 @@
                 <form action="" method="post">
                     {% csrf_token %}{% render_inline_action_fields %}
                     <input type="hidden" name="export-block" maxlength="128" id="export-block" value="{{ block.slug }}">
-                    <input type="submit" name="_export" value="Export JSON" />
+                    <input type="submit" name="_export_json" value="Export JSON" />
+                    {% if block.n_sessions <= 100 %}<input type="submit" name="_export_csv" value="Export CSV" />{% endif %}
                 </form>
             </td>
         </tr>
@@ -214,5 +213,4 @@
 </table>
 <p class="help-text">* Click to view in a new window</p>
 
-<script src="{% static 'experiment_dashboard.js' %}"></script>
 {% endblock %}

@@ -27,7 +27,7 @@ from experiment.forms import (
 from experiment.widgets import MarkdownPreviewTextInput
 from question.admin import QuestionListInline
 from question.models import QuestionList, QuestionInList
-from .utils import get_block_json_export_as_repsonse
+from .utils import get_block_csv_export_as_response, get_block_json_export_as_response
 
 
 class FeedbackAdmin(admin.ModelAdmin):
@@ -291,9 +291,13 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
     def experimenter_dashboard(self, request, obj, parent_obj=None):
         """Open researchers dashboard for an experiment"""
 
-        if "_export" in request.POST:
+        if "_export_json" in request.POST:
             block_slug = request.POST.get("export-block")
-            return get_block_json_export_as_repsonse(block_slug)
+            return get_block_json_export_as_response(block_slug)
+
+        if "_export_csv" in request.POST:
+            block_slug = request.POST.get("export-block")
+            return get_block_csv_export_as_response(block_slug)
 
         annotated_blocks = self._annotate_blocks(obj.associated_blocks())
         stats = self._generate_stats(annotated_blocks)
