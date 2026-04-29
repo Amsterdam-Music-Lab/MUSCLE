@@ -7,7 +7,7 @@ class ResultInline(admin.TabularInline):
     """Inline to show results linked to given participant"""
 
     model = Result
-    fields = ["created_at", "question_key", "given_response"]
+    fields = ["created_at", "question_key", "given_response", "score"]
     extra = 0
 
 
