@@ -1,5 +1,6 @@
 import json
 import logging
+from typing import Union
 
 from django.http import Http404, HttpRequest, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
@@ -31,11 +32,11 @@ class FeedbackListView(ListView):
         return super().get_queryset().filter(block__id=self.kwargs.get('block_id'))
 
 
-def get_block(request: HttpRequest, slug: str) -> JsonResponse:
+def get_block(request: HttpRequest, experiment_slug: str, slug: str) -> JsonResponse:
     """Get block data from active block with given :slug
     DO NOT modify session data here, it will break participant_id system
        (/participant and /block/<slug> are called at the same time by the frontend)"""
-    block = get_object_or_404(Block, slug=slug)
+    block = get_object_or_404(Block, slug=slug, phase__experiment__slug=experiment_slug)
     class_name = ""
     active_language = get_language()
 
@@ -69,11 +70,13 @@ def get_block(request: HttpRequest, slug: str) -> JsonResponse:
     return response
 
 
-def post_feedback(request, slug):
+def post_feedback(
+    request, experiment_slug: str, slug: str
+) -> Union[JsonResponse, HttpResponseBadRequest]:
     text = request.POST.get("feedback")
     if not text:
         return HttpResponseBadRequest()
-    block = get_object_or_404(Block, slug=slug)
+    block = get_object_or_404(Block, slug=slug, phase__experiment__slug=experiment_slug)
     feedback = Feedback(text=text, block=block)
     feedback.save()
     return JsonResponse({"status": "ok"})

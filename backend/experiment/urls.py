@@ -21,9 +21,13 @@ urlpatterns = [
     path(
         'feedback_list/<int:block_id>', FeedbackListView.as_view(), name='feedback_list'
     ),
-    path('block/<slug:slug>/', get_block, name='block'),
-    path('block/<slug:slug>/feedback/', post_feedback, name='feedback'),
     path('<slug:slug>/', get_experiment, name='experiment'),
+    path('<slug:experiment_slug>/block/<slug:slug>/', get_block, name='block'),
+    path(
+        '<slug:experiment_slug>/block/<slug:slug>/feedback/',
+        post_feedback,
+        name='feedback',
+    ),
     # Robots.txt
     path(
         "robots.txt",
