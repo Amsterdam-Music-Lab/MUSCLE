@@ -139,21 +139,6 @@ def get_profiles_of_participants(
     return Result.objects.filter(participant__in=participants)
 
 
-def get_block_csv_export_as_response(block_slug: str):
-    '''Create a download response for the admin experimenter dashboard'''
-    csv_string = block_export_csv_results(block_slug)
-    response = HttpResponse(csv_string)
-    response["Content-Type"] = "text/csv"
-    response["Content-Disposition"] = (
-        'attachment; filename="'
-        + block_slug
-        + "-"
-        + timezone.now().isoformat()
-        + '.csv"'
-    )
-    return response
-
-
 def block_export_csv_results(block_slug: str) -> StringIO:
     """export results and profiles in two csvs
     This export does not provide all data, but a selection of the variables
@@ -199,6 +184,21 @@ def block_export_csv_results(block_slug: str) -> StringIO:
     writer.writeheader()
     writer.writerows(combined_output)
     return csv_buffer.getvalue()
+
+
+def get_block_csv_export_as_response(block_slug: str) -> HttpResponse:
+    '''Create a download response for the admin experimenter dashboard'''
+    csv_string = block_export_csv_results(block_slug)
+    response = HttpResponse(csv_string)
+    response["Content-Type"] = "text/csv"
+    response["Content-Disposition"] = (
+        'attachment; filename="'
+        + block_slug
+        + "-"
+        + timezone.now().isoformat()
+        + '.csv"'
+    )
+    return response
 
 
 def block_export_json_results(block_slug: str) -> ZipFile:
@@ -255,7 +255,7 @@ def block_export_json_results(block_slug: str) -> ZipFile:
     return zip_buffer
 
 
-def get_block_json_export_as_response(block_slug: str):
+def get_block_json_export_as_response(block_slug: str) -> HttpResponse:
     '''Create a download response for the admin experimenter dashboard'''
     zip_buffer = block_export_json_results(block_slug)
     response = HttpResponse(zip_buffer.getbuffer())
