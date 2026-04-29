@@ -42,7 +42,7 @@ const Experiment = () => {
         setHasShownConsent(true);
     }
 
-    const getBlockHref = (slug: string) => `/block/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
+    const getBlockHref = (experimentSlug: string, blockSlug: string) => `/${experimentSlug}/block/${blockSlug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     if (loadingExperiment) {
         return (
@@ -71,7 +71,7 @@ const Experiment = () => {
     }
 
     if (!displayDashboard && nextBlock) {
-        return <Redirect to={getBlockHref(nextBlock.slug)} />
+        return <Redirect to={getBlockHref(slug, nextBlock.slug)} />
     }
 
     return (

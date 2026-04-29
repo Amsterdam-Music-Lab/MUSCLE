@@ -17,8 +17,8 @@ axios.defaults.withCredentials = true;
 // API endpoints
 export const URLS = {
     block: {
-        get: (slug: string) => "/experiment/block/" + slug + "/",
-        feedback: (slug: string) => "/experiment/block/" + slug + "/feedback/",
+        get: (experimentSlug: string, slug: string) => `/experiment/${experimentSlug}/block/${slug}/`,
+        feedback: (experimentSlug: string, slug: string) => `/experiment/${experimentSlug}/block/${slug}/feedback/`,
     },
     experiment: {
         get: (slug: string) => `/experiment/${slug}/`
@@ -45,8 +45,8 @@ export const URLS = {
     }
 };
 
-export const useBlock = (slug: string): [IBlock | null, boolean] =>
-    useGet<IBlock>(API_BASE_URL + URLS.block.get(slug));
+export const useBlock = (experimentSlug: string, slug: string): [IBlock | null, boolean] =>
+    useGet<IBlock>(API_BASE_URL + URLS.block.get(experimentSlug, slug));
 
 export const useExperiment = (slug: string) => {
     const data = useGet<Experiment>(API_BASE_URL + URLS.experiment.get(slug));
@@ -186,30 +186,6 @@ export const getNextRound = async ({ session }: GetNextRoundParams): Promise<Rou
     }
 };
 
-interface FinalizeSessionParams {
-    session: Session;
-    participant: Participant;
-}
-
-// Tell the backend that the session is finished
-export const finalizeSession = async ({ session, participant }: FinalizeSessionParams) => {
-
-    const sessionId = session.id.toString();
-
-    try {
-        const response = await axios.post(
-            API_BASE_URL + URLS.session.finalize(sessionId),
-            qs.stringify({
-                csrfmiddlewaretoken: participant.csrf_token,
-            })
-        );
-        return response.data;
-    } catch (err) {
-        console.error(err);
-        return null;
-    }
-}
-
 interface ShareParticipantParams {
     email: string;
     participant: Participant;
@@ -233,14 +209,15 @@ export const shareParticipant = async ({ email, participant }: ShareParticipantP
 };
 
 interface PostFeedbackParams {
+    experimentSlug: string;
     blockSlug: string;
     feedback: string;
     participant: Participant;
 }
 
 // Collect user feedback
-export const postFeedback = async ({ blockSlug, feedback, participant }: PostFeedbackParams) => {
-    const endpoint = API_BASE_URL + URLS.block.feedback(blockSlug)
+export const postFeedback = async ({ experimentSlug, blockSlug, feedback, participant }: PostFeedbackParams) => {
+    const endpoint = API_BASE_URL + URLS.block.feedback(experimentSlug, blockSlug)
     try {
         const response = await axios.post(
             endpoint,
