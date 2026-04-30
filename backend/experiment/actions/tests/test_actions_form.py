@@ -7,7 +7,7 @@ mock_choices = [{"value": "no", "label": "No"}, {"value": "yes", "label": "Yes"}
 
 class FormTest(TestCase):
     def setUp(self):
-        self.questions = [NumberQuestion(key='test_key', min_value=1, max_value=10)]
+        self.questions = [NumberQuestion(key='test_key', max_value=10)]
         self.form = Form(form=self.questions)
 
     def test_initialization(self):

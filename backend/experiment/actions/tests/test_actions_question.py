@@ -18,13 +18,12 @@ class NumberQuestionTest(TestCase):
     def setUp(self):
         self.number_question = NumberQuestion(
             key='test_key',
-            min_value=1,
             max_value=10,
         )
 
     def test_initialization(self):
         self.assertEqual(self.number_question.key, 'test_key')
-        self.assertEqual(self.number_question.min_value, 1)
+        self.assertEqual(self.number_question.min_value, 0)
         self.assertEqual(self.number_question.max_value, 10)
 
     def test_action_method(self):
@@ -32,7 +31,7 @@ class NumberQuestionTest(TestCase):
         self.assertIn('key', action_result)
         self.assertIn('minValue', action_result)
         self.assertIn('maxValue', action_result)
-        self.assertEqual(action_result['minValue'], 1)
+        self.assertEqual(action_result['minValue'], 0)
         self.assertEqual(action_result['maxValue'], 10)
 
 
