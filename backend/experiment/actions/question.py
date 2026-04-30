@@ -192,22 +192,19 @@ class DropdownQuestion(ChoiceQuestionAction):
 
 class NumberQuestion(OpenQuestionAction):
     """A question showing numeric input.
+    NOTE: cannot set min value to avoid input rejecting keyboard input
 
     Args:
-        min_value: Minimum allowed value
         max_value: Maximum allowed value
         **kwargs: Additional Question arguments
     """
 
     def __init__(
         self,
-        min_value: int = 0,
         max_value: int = 120,
         **kwargs: Any,
     ) -> None:
-        super().__init__(
-            min_value=min_value, max_value=max_value, view="NUMBER", **kwargs
-        )
+        super().__init__(min_value=0, max_value=max_value, view="NUMBER", **kwargs)
 
 
 class RadiosQuestion(ChoiceQuestionAction):

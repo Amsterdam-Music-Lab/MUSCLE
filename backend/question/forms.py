@@ -20,8 +20,8 @@ class QuestionForm(ModelForm):
 
     class Meta:
         help_texts = {
-            "min_value": "The minimum number allowed in the Number / Range question",
-            "max_value": "The maximum number allowed in the Number / Range question",
+            "min_value": "The minimum number in the Range question",
+            "max_value": "The maximum number in the Number / Range question",
             "min_values": "How many options should be selected by participant in the Checkbox question",
             "max_length": "The maximum number of characters allowed in the Text question",
         }
