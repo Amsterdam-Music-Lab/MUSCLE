@@ -19,7 +19,6 @@ jobs:
     runs-on: ${{ inputs.runner }}
     environment: ${{ inputs.environment }}
     steps:
-      - uses: actions/checkout@v4
       - name: Dump environment information
         env:
           # Variables
