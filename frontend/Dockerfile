@@ -6,9 +6,9 @@ RUN yarn set version 4.1.1
 COPY package.json /client/
 COPY yarn.lock /client/
 COPY jsconfig.json /client/
-RUN yarn
 
 FROM base as dev
+RUN yarn
 COPY tsconfig.json /client/
 COPY tsconfig.node.json /client/
 COPY vite.config.ts /client/
@@ -18,6 +18,5 @@ COPY eslint.config.mjs /client
 COPY index.html /client/
 
 FROM base as prod
+RUN yarn
 COPY . /client/
-RUN yarn build
-
