@@ -18,5 +18,4 @@ COPY eslint.config.mjs /client
 COPY index.html /client/
 
 FROM base as prod
-RUN yarn
 COPY . /client/
