@@ -135,10 +135,10 @@ class Block(models.Model):
         rules_config (dict): a dictionary containing extra settings for the rules coupled to the block
     """
 
-    phase = models.ForeignKey(Phase, on_delete=models.CASCADE, related_name="blocks", blank=True, null=True)
-    slug = models.SlugField(
-        db_index=True, max_length=64, unique=True, validators=[block_slug_validator]
+    phase = models.ForeignKey(
+        Phase, on_delete=models.CASCADE, related_name="blocks", null=True
     )
+    slug = models.SlugField(max_length=64, validators=[block_slug_validator])
     index = models.IntegerField(default=0, help_text="Index of the block in the phase. Lower numbers come first.")
 
     name = models.CharField(max_length=64, blank=True, default="")
