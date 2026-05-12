@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import Button from "../Button/Button";
 import { ExplainerAction, SharedActionProps } from "@/types/Action";
-
+import useBoundStore from "@/util/stores";
 
 /**
  * Explainer is a block view that shows a list of steps
