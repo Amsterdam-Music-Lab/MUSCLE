@@ -56,7 +56,7 @@ class BeatAlignmentRuleTest(TestCase):
         session.update({PARTICIPANT_KEY: participant.id})
         session.save()
 
-        block_response = self.client.get('/experiment/block/ba/')
+        block_response = self.client.get('/experiment/bat_test/block/ba/')
 
         block_json = self.load_json(block_response)
         self.assertTrue(

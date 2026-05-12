@@ -138,7 +138,9 @@ class RhythmDiscriminationTest(TestCase):
 
     def _get_block_info(self, block_slug):
         """Get block information"""
-        block_response = self.client.get(f"/experiment/block/{block_slug}/")
+        block_response = self.client.get(
+            f"/experiment/rhythm_battery/block/{block_slug}/"
+        )
         block_json = self.load_json_or_fail(block_response)
 
         self.assertTrue(
