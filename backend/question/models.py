@@ -17,8 +17,8 @@ class Question(models.Model):
         is_skippable (bool): If question can be skipped during experiment
         type (str): Question type {"AutoCompleteQuestion", "ButtonArrayQuestion", "CheckboxQuestion", "DropdownQuestion", "NumberQuestion", "RadiosQuestion", "RangeQuestion", "TextQuestion", "TextRangeQuestion"}
         profile_scoring_rule (str): Profile scoring rule {"", "LIKERT", "REVERSE_LIKERT", "CATEGORIES_TO_LIKERT"} (ChoiceQuestion, LikertQuestion)
-        min_value (float): Minimal value (NumberQuestion)
-        max_value (float): Maximal value (NumberQuestion)
+        min_value (float): Minimal value (RangeQuestion)
+        max_value (float): Maximal value (NumberQuestion, RangeQuestion)
         max_length (int): Maximal length (TextQuestion)
         min_values (int): Minimum number of values to choose (CheckboxQuestion)
     """

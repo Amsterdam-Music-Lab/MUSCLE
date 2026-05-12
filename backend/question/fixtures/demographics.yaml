@@ -5,7 +5,6 @@
     text: What is your age?
     explainer: ''
     type: NumberQuestion
-    min_value: 6
     max_value: 120
     profile_scoring_rule: ''
     choices: null
