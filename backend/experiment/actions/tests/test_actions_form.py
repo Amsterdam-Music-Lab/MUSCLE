@@ -19,3 +19,4 @@ class FormTest(TestCase):
         action_result = self.form.action()
         self.assertIn('form', action_result)
         self.assertEqual(len(action_result['form']), 1)
+        self.assertIsNone(action_result.get("skipButton"))
