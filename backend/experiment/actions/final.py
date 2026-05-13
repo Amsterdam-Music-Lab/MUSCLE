@@ -8,8 +8,7 @@ from experiment.serializers import serialize_social_media_config, SocialMediaCon
 from session.models import Session
 
 from .base_action import BaseAction
-from .button import Button, ButtonAction
-
+from .button import Button
 
 class LogoConfiguration(TypedDict):
     """
@@ -135,22 +134,22 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
             "view": self.view,
             "score": self.total_score,
             "percentile": self.percentile,
-            "accumulative_percentile": self.accumulative_percentile,
+            "accumulativePercentile": self.accumulative_percentile,
             "rank": self.rank,
-            "final_text": self.wrap_plain_final_text(),
+            "finalText": self.wrap_plain_final_text(),
             "button": self.button.action() if self.button else None,
             "points": self.points,
-            "action_texts": {
-                "play_again": _("Play again"),
+            "actionTexts": {
+                "playAgain": _("Play again"),
                 "profile": _("My profile"),
-                "all_experiments": _("All experiments"),
+                "allExperiments": _("All experiments"),
             },
             "title": self.title,
             "social": self.get_social_media_config(self.session),
-            "show_profile_link": self.show_profile_link,
-            "show_participant_link": self.show_participant_link,
-            "feedback_info": self.feedback_info,
-            "participant_id_only": self.show_participant_id_only,
+            "showProfileLink": self.show_profile_link,
+            "showParticipantLink": self.show_participant_link,
+            "feedbackInfo": self.feedback_info,
+            "participantIDOnly": self.show_participant_id_only,
             "logo": self.logo,
         }
 
