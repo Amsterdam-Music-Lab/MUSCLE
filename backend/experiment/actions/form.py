@@ -42,6 +42,8 @@ class Form(BaseAction):
 
     def action(self) -> Dict[str, Any]:
         serialized_form = [question.action() for question in self.form]
+        if not all([question.get('isSkippable') for question in serialized_form]):
+            self.skip_button = None
         return {
             "form": serialized_form,
             "submitButton": self.submit_button.action() if self.submit_button else None,
