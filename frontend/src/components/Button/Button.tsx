@@ -73,9 +73,7 @@ const Button = ({
         return url && url.startsWith("/");
     }
 
-    const buttonIsLink = !onClick && link;
-
-    if (buttonIsLink) {
+    if (link) {
         
          // If the button has a relative link, it will render a Link component
         if (isRelativeUrl(link)) {
