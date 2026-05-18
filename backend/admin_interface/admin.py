@@ -88,7 +88,7 @@ class AdminInterfaceConfigurationAdmin(admin.ModelAdmin):
 
         if not theme:
             return "No theme assigned"
-        
+
         fields = AdminInterfaceThemeConfigurationInline.fields
         color_fields = [f for f in fields if f.startswith('color_')]
         color_overview = ''.join(
@@ -96,7 +96,7 @@ class AdminInterfaceConfigurationAdmin(admin.ModelAdmin):
             for f in color_fields
         )
 
-        return format_html(f'<div>{color_overview}</div>')
+        return format_html('<div>{}</div>', color_overview)
 
 
 admin.site.register(
