@@ -15,6 +15,7 @@ def get_unanswered_questions(participant: Model, question_set: QuerySet) -> Gene
 
     """
     keys_answered = participant.profile_results().values_list('question_key', flat=True)
+    breakpoint()
     for question_obj in question_set:
         if question_obj.key in keys_answered:
             continue

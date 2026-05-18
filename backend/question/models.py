@@ -183,6 +183,9 @@ class QuestionList(models.Model):
         unique_together = ["name", "block"]
         verbose_name_plural = "Question Lists"
 
+    def get_questions(self):
+        return self.questions.order_by('question_in_list')
+
     def __str__(self):
         return _("%(qs_name)s: %(n_questions)i questions") % {
             'qs_name': self.name or f"{self.block.slug}({self.index})",
@@ -200,7 +203,9 @@ class QuestionInList(models.Model):
     """
 
     questionlist = models.ForeignKey(QuestionList, on_delete=models.CASCADE)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    question = models.ForeignKey(
+        Question, on_delete=models.CASCADE, related_name="question_in_list"
+    )
     index = models.PositiveIntegerField(default=0)
 
     class Meta:
