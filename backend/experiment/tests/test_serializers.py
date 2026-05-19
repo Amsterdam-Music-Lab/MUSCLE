@@ -152,6 +152,7 @@ class SerializerTest(TestCase):
                 "file": f"{settings.BASE_URL}/upload/test-image.jpg",
                 "href": "https://www.example.com",
                 "alt": "Test",
+                "backgroundColor": "",
                 "rel": "",
                 "target": "_self",
                 "tags": [],
