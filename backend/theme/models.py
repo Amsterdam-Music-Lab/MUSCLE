@@ -3,16 +3,16 @@ from django.db import models
 from experiment.actions.utils import camelize
 
 COLOR_CHOICES = [
-    ('color_background', 'colorBackground'),
-    ('color_grey', 'colorGrey'),
-    ('color_negative', 'colorNegative'),
-    ('color_neutral1', 'colorNeutral1'),
-    ('color_neutral2', 'colorNeutral2'),
-    ('color_neutral3', 'colorNeutral3'),
-    ('color_positive', 'colorPositive'),
-    ('color_primary', 'colorPrimary'),
-    ('color_secondary', 'colorSecondary'),
-    ('color_text', 'colorText'),
+    ('colorBackground', 'Background color'),
+    ('colorGrey', 'Grey color'),
+    ('colorNegative', 'Negative color'),
+    ('colorNeutral1', 'Neutral color 1'),
+    ('colorNeutral2', 'Neutral color 2'),
+    ('colorNeutral3', 'Neutral color 3'),
+    ('colorPositive', 'Positive color'),
+    ('colorPrimary', 'Primary color'),
+    ('colorSecondary', 'Secondary color'),
+    ('colorText', 'Text color'),
 ]
 
 class ThemeConfig(models.Model):
