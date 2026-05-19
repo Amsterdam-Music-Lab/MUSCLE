@@ -48,7 +48,7 @@ export const ExperimentDashboard: React.FC<ExperimentDashboardProps> = ({ experi
                     {dashboard.map((block: IBlock) => (
                         <li key={block.slug}>
                             <Link to={getBlockHref(block.slug)} role="menuitem">
-                                <ImageOrPlaceholder imagePath={block.image?.file} alt={block.image?.alt ?? block.description} />
+                                <ImageOrPlaceholder imagePath={block.image?.file} alt={block.image?.alt ?? block.description} backgroundColor={block.image && block.image.backgroundColor? experiment.theme[block.image?.backgroundColor] : null}/>
                                 <h3>{block.name}</h3>
                                 <p>{block.description}</p>
                             </Link>
@@ -61,10 +61,10 @@ export const ExperimentDashboard: React.FC<ExperimentDashboardProps> = ({ experi
     );
 }
 
-const ImageOrPlaceholder = ({ imagePath, alt }: { imagePath?: string, alt: string }) => {
+const ImageOrPlaceholder = ({ imagePath, alt, backgroundColor }: { imagePath?: string, alt: string, backgroundColor?: string }) => {
     const imgSrc = imagePath ?? null;
 
-    return imgSrc ? <img src={imgSrc} alt={alt} /> : <div className="placeholder" />;
+    return imgSrc ? <img src={imgSrc} alt={alt} style={{backgroundColor: backgroundColor}}/> : <div className="placeholder" />;
 }
 
 export default ExperimentDashboard;
