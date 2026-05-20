@@ -8,7 +8,7 @@ from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
-from experiment.actions.playback import Autoplay
+from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.playlist import PlaylistSelection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
@@ -307,7 +307,9 @@ class Hooked(BaseRules):
         condition = plan[round_number]
         section = self.select_heard_before_section(session, condition)
         playback = Autoplay(
-            sections=[section], show_animation=True, preload_message=_("Get ready!")
+            sections=[PlaybackSection(section)],
+            show_animation=True,
+            preload_message=_("Get ready!"),
         )
         # create Result object and save expected result to database
         key = "heard_before"

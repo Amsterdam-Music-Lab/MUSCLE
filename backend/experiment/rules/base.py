@@ -105,7 +105,9 @@ class BaseRules(object):
         if n_questions is None:
             n_questions = sum(ql.questions.count() for ql in question_lists)
         for ql in question_lists:
-            questions = ql.questions.order_by("?") if ql.randomize else ql.questions
+            questions = (
+                ql.questions.order_by("?") if ql.randomize else ql.get_questions()
+            )
             question_iterator = get_unanswered_questions(
                 session.participant, questions.all()
             )

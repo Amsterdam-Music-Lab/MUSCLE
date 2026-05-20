@@ -6,11 +6,11 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "audioread>=3.1.0",
-    "django>=6.0.1",
+    "django>=6.0.5",
     "django-cors-headers>=4.9.0",
     "django-inline-actions>=2.4.0",
     "django-markup>=1.10",
-    "django-modeltranslation",
+    "django-modeltranslation>=0.20.3",
     "django-nested-admin>=4.1.6",
     "markdown>=3.10.1",
     "pillow>=12.2.0",
@@ -38,6 +38,3 @@ lint = [
 prod = [
     "gunicorn>=23.0.0",
 ]
-
-[tool.uv.sources]
-django-modeltranslation = { git = "https://github.com/BeritJanssen/django-modeltranslation.git" }

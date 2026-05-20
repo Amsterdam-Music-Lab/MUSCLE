@@ -1,12 +1,15 @@
-from zipfile import ZipFile
+import csv
 import json
+from zipfile import ZipFile
 
 from django.test import TestCase, Client
 
 from experiment.utils import (
+    block_export_csv_results,
     block_export_json_results,
     format_label,
-    get_block_json_export_as_repsonse,
+    get_block_csv_export_as_response,
+    get_block_json_export_as_response,
 )
 
 from experiment.models import Experiment, Phase, Block, Feedback
@@ -68,6 +71,18 @@ class TestBlockExport(TestCase):
     def setUp(self):
         self.client = Client()
 
+    def test_block_csv_export(self):
+        csv_output = block_export_csv_results(self.block.slug)
+        reader = csv.DictReader(csv_output.split("\n"))
+        self.assertEqual(len([r for r in reader]), 10)
+
+    def test_block_csv_export_admin(self):
+        response = get_block_csv_export_as_response(self.block.slug)
+        # test response from forced download
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNotNone(response.content)
+        self.assertEqual(response["content-type"], "text/csv")
+
     def test_block_json_export(self):
         zip_buffer = block_export_json_results(self.block.slug)
         with ZipFile(zip_buffer, "r") as test_zip:
@@ -107,7 +122,7 @@ class TestBlockExport(TestCase):
             self.assertEqual(len(this_feedback), 2)
 
     def test_block_json_export_admin(self):
-        response = get_block_json_export_as_repsonse(self.block.slug)
+        response = get_block_json_export_as_response(self.block.slug)
         # test response from forced download
         self.assertEqual(response.status_code, 200)
         self.assertIsNotNone(response.content)

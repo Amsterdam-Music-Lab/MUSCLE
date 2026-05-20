@@ -2,6 +2,19 @@ from django.db import models
 
 from experiment.actions.utils import camelize
 
+COLOR_CHOICES = [
+    ('colorBackground', 'Background color'),
+    ('colorGrey', 'Grey color'),
+    ('colorNegative', 'Negative color'),
+    ('colorNeutral1', 'Neutral color 1'),
+    ('colorNeutral2', 'Neutral color 2'),
+    ('colorNeutral3', 'Neutral color 3'),
+    ('colorPositive', 'Positive color'),
+    ('colorPrimary', 'Primary color'),
+    ('colorSecondary', 'Secondary color'),
+    ('colorText', 'Text color'),
+]
+
 class ThemeConfig(models.Model):
     """A model defining the theme of an experiment or block
 
@@ -45,10 +58,10 @@ class ThemeConfig(models.Model):
         return self.name
 
     def valid_colors(self):
-        return [
-            camelize(color)
-            for color in filter(lambda x: x.startswith('color'), dir(self))
-        ]
+        return [camelize(color) for color in self.get_colors()]
+
+    def get_colors(self):
+        return [color for color in filter(lambda x: x.startswith('color'), dir(self))]
 
 
 class SponsorImage(models.Model):

@@ -45,11 +45,11 @@ class TestMatchingPairsVariants(TestCase):
         )
         second_trial = another_session.block_rules(
         ).get_matching_pairs_trial(another_session)
-        assert isinstance(first_trial, Trial)
-        assert isinstance(second_trial, Trial)
-        assert (
-            first_trial.playback.sections[0].link
-            != second_trial.playback.sections[0].link
+        self.assertIsInstance(first_trial, Trial)
+        self.assertIsInstance(second_trial, Trial)
+        self.assertNotEqual(
+            first_trial.playback.sections[0].link,
+            second_trial.playback.sections[0].link,
         )
 
     def test_fixed_order_sections(self):

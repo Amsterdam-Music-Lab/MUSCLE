@@ -1,5 +1,6 @@
-from django.forms import ChoiceField, ModelForm, TextInput
+from django.forms import ChoiceField, ModelChoiceField, ModelForm, TextInput
 
+from experiment.models import Block
 from question.models import Question, QuestionInList, QuestionList
 from question.banks import PRESET_BANKS
 
@@ -19,8 +20,8 @@ class QuestionForm(ModelForm):
 
     class Meta:
         help_texts = {
-            "min_value": "The minimum number allowed in the Number / Range question",
-            "max_value": "The maximum number allowed in the Number / Range question",
+            "min_value": "The minimum number in the Range question",
+            "max_value": "The maximum number in the Number / Range question",
             "min_values": "How many options should be selected by participant in the Checkbox question",
             "max_length": "The maximum number of characters allowed in the Text question",
         }
@@ -29,12 +30,20 @@ class QuestionForm(ModelForm):
 QUESTION_BANK_CHOICES = [(None, '-----')] + [(key, key) for key in PRESET_BANKS.keys()]
 
 
+class BlockModelChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return f"{str(obj.phase.experiment)}: {str(obj)}"
+
+
 class QuestionListForm(ModelForm):
     questions_from_bank = ChoiceField(
         choices=QUESTION_BANK_CHOICES,
         initial=None,
         required=False,
         label="Add all questions from a question bank",
+    )
+    block = BlockModelChoiceField(
+        queryset=Block.objects.filter(phase__experiment__active=True),
     )
 
     class Meta:

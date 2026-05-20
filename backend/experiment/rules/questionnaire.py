@@ -30,4 +30,4 @@ class Questionnaire(BaseRules):
 
         session.finish()
         session.save()
-        return Redirect(session.block.phase.experiment.slug)
+        return Redirect(f"../{session.block.phase.experiment.slug}")

@@ -27,7 +27,7 @@ const Consent = ({ title, text, experiment, participant, onNext, confirmButton, 
 
     // Listen for consent, and auto advance if already given
     useEffect(() => {
-        if (consent || (new URLSearchParams(urlQueryString).get("participant_id"))) {
+        if ( consent ) {
             onNext();
         }
     }, [consent, onNext, urlQueryString]);

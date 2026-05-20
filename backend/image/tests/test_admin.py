@@ -38,7 +38,17 @@ class ImageAdminTest(TestCase):
         self.assertEqual(self.admin.list_filter, expected_list_filter)
 
     def test_fields(self):
-        expected_fields = ['file', 'title', 'description', 'alt', 'href', 'rel', 'target', 'tags']
+        expected_fields = [
+            'file',
+            'title',
+            'description',
+            'alt',
+            'href',
+            'rel',
+            'target',
+            'tags',
+            'background_color',
+        ]
         self.assertEqual(self.admin.fields, expected_fields)
 
     def test_readonly_fields(self):

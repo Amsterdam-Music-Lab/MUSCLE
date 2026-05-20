@@ -26,8 +26,17 @@ class ImageAdmin(admin.ModelAdmin):
     list_display = ('image_preview', 'title', 'description', 'tags', 'created_at')
     search_fields = ['title', 'description', 'tags']
     list_filter = [TagsListFilter]
-    fields = ['file', 'title', 'description', 'alt', 'href', 'rel',
-              'target', 'tags']
+    fields = [
+        'file',
+        'title',
+        'description',
+        'alt',
+        'href',
+        'rel',
+        'target',
+        'tags',
+        'background_color',
+    ]
     readonly_fields = ['created_at', 'updated_at']
 
     def image_preview(self, obj):

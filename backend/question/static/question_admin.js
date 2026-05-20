@@ -30,6 +30,8 @@ controlVisibility = (selected) => {
             showFields([".field-choices", ".field-profile_scoring_rule", ".field-min_values"]);  
             break;
         case "NumberQuestion":
+            showFields([".field-max_value"]);
+            break;
         case "RangeQuestion":
             showFields([".field-min_value", ".field-max_value"]);  
             break;

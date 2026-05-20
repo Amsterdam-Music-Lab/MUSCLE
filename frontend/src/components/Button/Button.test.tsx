@@ -51,15 +51,7 @@ describe('Button component', () => {
         expect(button.style.backgroundColor).toBe('blue');
     });
 
-    test('renders anchor tag when button label & button link are provided', () => {
-        render(<Button label="Click me" link="https://example.com" />);
-        const anchor = screen.getByText('Click me');
-        expect(anchor).toBeTruthy();
-        expect(anchor?.textContent).toBe('Click me');
-        expect(anchor.tagName).toBe('A');
-    });
-
-    test('renders button when label & onClick is provided', () => {
+    it('renders button when only label is provided', () => {
         render(<Button label="Click me" onClick={vi.fn()} />);
         const button = screen.queryByRole('button');
         expect(button).toBeTruthy();
@@ -67,19 +59,13 @@ describe('Button component', () => {
         expect(button?.tagName).toBe('BUTTON');
     });
 
-        test('renders anchor tag when link is provided', () => {
-        render(<Button label="Click me" link="https://example.com"/>);
+    it('renders anchor tag when link is provided', () => {
+        render(<Button label="Click me" link="https://example.com" onClick={vi.fn()} />);
         const anchor = screen.getByText('Click me');
         expect(anchor.tagName).toBe('A');
         expect(anchor.getAttribute('href')).toBe('https://example.com');
         expect(anchor.getAttribute('target')).toBe('_blank');
         expect(anchor.getAttribute('rel')).toBe('noopener noreferrer');
-    });
-
-    test('renders button without link when only button label is provided', () => {
-        render(<Button body="Test body" label="Click me" onClick={vi.fn()} />);
-        const button = screen.getByText('Click me');
-        expect(button.tagName).toBe('BUTTON');
     });
 
 });

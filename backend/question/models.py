@@ -3,8 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.actions import question
 from experiment.actions.question import QuestionAction
-from theme.models import ThemeConfig
-
+from theme.models import COLOR_CHOICES
 
 class Question(models.Model):
     """Model for question asked during experiment
@@ -17,8 +16,8 @@ class Question(models.Model):
         is_skippable (bool): If question can be skipped during experiment
         type (str): Question type {"AutoCompleteQuestion", "ButtonArrayQuestion", "CheckboxQuestion", "DropdownQuestion", "NumberQuestion", "RadiosQuestion", "RangeQuestion", "TextQuestion", "TextRangeQuestion"}
         profile_scoring_rule (str): Profile scoring rule {"", "LIKERT", "REVERSE_LIKERT", "CATEGORIES_TO_LIKERT"} (ChoiceQuestion, LikertQuestion)
-        min_value (float): Minimal value (NumberQuestion)
-        max_value (float): Maximal value (NumberQuestion)
+        min_value (float): Minimal value (RangeQuestion)
+        max_value (float): Maximal value (NumberQuestion, RangeQuestion)
         max_length (int): Maximal length (TextQuestion)
         min_values (int): Minimum number of values to choose (CheckboxQuestion)
     """
@@ -130,10 +129,6 @@ class ChoiceList(models.Model):
         ]
 
 
-def validate_color(value: str):
-    return value in ThemeConfig.valid_colors()
-
-
 class Choice(models.Model):
     """Choice objects are tied to Questions via ChoiceLists.
 
@@ -157,7 +152,7 @@ class Choice(models.Model):
         blank=True,
         default="",
         help_text="Description of color in current theme, e.g. `colorPositive`",
-        validators=[validate_color],
+        choices=COLOR_CHOICES,
     )
 
     class Meta:
@@ -178,7 +173,7 @@ class QuestionList(models.Model):
 
     name = models.CharField(default="", max_length=128)
     block = models.ForeignKey('experiment.Block', on_delete=models.CASCADE)
-    index = models.PositiveIntegerField()  # index of QuestionList within Block
+    index = models.PositiveIntegerField(default=0)
     questions = models.ManyToManyField(Question, through="QuestionInList")
     randomize = models.BooleanField(default=False)
 
@@ -187,12 +182,12 @@ class QuestionList(models.Model):
         unique_together = ["name", "block"]
         verbose_name_plural = "Question Lists"
 
+    def get_questions(self):
+        return self.questions.order_by('question_in_list')
+
     def __str__(self):
-        return _(
-            "QuestionList %(qs_name)s of block with slug %(block_slug)s: %(n_questions)i questions"
-        ) % {
-            'qs_name': self.name,
-            'block_slug': self.block.slug,
+        return _("%(qs_name)s: %(n_questions)i questions") % {
+            'qs_name': self.name or f"{self.block.slug}({self.index})",
             'n_questions': self.questions.count() if self.pk else 0,
         }
 
@@ -207,7 +202,9 @@ class QuestionInList(models.Model):
     """
 
     questionlist = models.ForeignKey(QuestionList, on_delete=models.CASCADE)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    question = models.ForeignKey(
+        Question, on_delete=models.CASCADE, related_name="question_in_list"
+    )
     index = models.PositiveIntegerField(default=0)
 
     class Meta:

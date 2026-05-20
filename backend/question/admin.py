@@ -21,9 +21,9 @@ class QuestionInListInline(admin.TabularInline):
 
 class QuestionListInline(admin.TabularInline):
     model = QuestionList
-    inlines = [QuestionInListInline]
-    readonly_fields = ["name"]
+    form = QuestionListForm
     extra = 0
+    exclude = ["name"]
     show_change_link = True
 
 

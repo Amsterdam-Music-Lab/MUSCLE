@@ -7,10 +7,14 @@ import Question from "./Question";
 import { BreakRoundOn } from "./Trial";
 import { MutableRefObject } from "react";
 
-interface SharedActionProps {
+export interface SharedActionProps {
+  block: Block;
+  participant: Participant;
   title?: string;
   config?: object;
   style?: object;
+  onNext: (doBreak?: boolean) => void;
+  onResult?: () => void;
 }
 
 interface ExplainerStep {
@@ -18,20 +22,22 @@ interface ExplainerStep {
   description: string;
 }
 
-export interface Explainer {
+export interface ExplainerAction {
+  view: "EXPLAINER";
   instruction: string;
   button: IButton;
   steps?: Array<ExplainerStep>;
   timer: number | null;
 }
 
-export interface Info {
+export interface InfoAction {
+  view: "INFO";
   heading?: string;
   body: string | TrustedHTML;
   button: IButton;
 }
 
-export interface IFeedbackForm {
+export interface FeedbackForm {
   form: Question[];
   submitButton: IButton;
   skipButton: IButton;
@@ -40,7 +46,7 @@ export interface IFeedbackForm {
 export interface ITrial {
   playback: PlaybackAction;
   html: { body: string | TrustedHTML };
-  feedbackForm: IFeedbackForm;
+  feedbackForm: FeedbackForm;
   responseTime: number;
   autoAdvance: boolean;
   listenFirst: boolean;
@@ -48,7 +54,8 @@ export interface ITrial {
   breakRoundOn?: BreakRoundOn;
 }
 
-export interface Score {
+export interface ScoreAction {
+  view: "SCORE";
   last_song?: string;
   score: number;
   score_message: string;
@@ -63,23 +70,21 @@ export interface Score {
   timer?: number;
 }
 
-export interface Final {
-  block: Block;
-  participant: Participant;
+export interface FinalAction {
   score: number;
   percentile?: number;
-  final_text: string | TrustedHTML;
-  action_texts: {
-    all_experiments: string;
+  finalText: string | TrustedHTML;
+  actionTexts: {
+    allExperiments: string;
     profile: string;
-    play_again: string;
+    playAgain: string;
   };
   button: IButton;
-  show_participant_link: boolean;
-  participant_id_only: boolean;
-  show_profile_link: boolean;
+  showParticipantLink: boolean;
+  participantIDOnly: boolean;
+  showProfileLink: boolean;
   social: Social;
-  feedback_info?: FeedbackInfo;
+  feedbackInfo?: FeedbackInfo;
   points: string;
   rank: {
     class: string;
@@ -91,30 +96,32 @@ export interface Final {
   };
 }
 
-export interface Playlist {
+export interface PlaylistAction {
+  view: "PLAYLIST";
   instruction: string;
   playlist: MutableRefObject<string>;
 }
 
-export interface Redirect {
+export interface RedirectAction {
+  view: "REDIRECT";
   url: string;
 }
 
-export interface Loading {
+export interface LoadingAction {
+  view: "LOADING";
   duration?: number;
   loadingText?: string;
 }
 
-export type Action = SharedActionProps &
-  (
-    | { view: "EXPLAINER" } & Explainer
-    | { view: "INFO" } & Info
-    | { view: "TRIAL_VIEW" } & Trial
-    | { view: 'SCORE' } & Score
-    | { view: 'FINAL' } & Final
-    | { view: 'PLAYLIST' } & Playlist
-    | { view: 'REDIRECT' } & Redirect
-    | { view: "LOADING" } & Loading
+export type Action = ( 
+  ExplainerAction
+    | InfoAction
+    | TrialAction
+    | ScoreAction
+    | FinalAction
+    | PlaylistAction
+    | RedirectAction
+    | LoadingAction
   )
 
 export default Action;

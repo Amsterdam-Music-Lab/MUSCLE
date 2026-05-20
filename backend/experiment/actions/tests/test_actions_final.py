@@ -85,7 +85,7 @@ class FinalTest(TestCase):
         final = Final(self.session)
         final.final_text = 'plain text'
         serialized = final.action()
-        self.assertEqual(serialized.get('final_text'), '<center>plain text</center>')
+        self.assertEqual(serialized.get('finalText'), '<center>plain text</center>')
         final.final_text = '<p>wrapped text</p>'
         serialized = final.action()
-        self.assertEqual(serialized.get('final_text'), final.final_text)
+        self.assertEqual(serialized.get('finalText'), final.final_text)

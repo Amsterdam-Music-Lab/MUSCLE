@@ -75,11 +75,3 @@ def next_round(request, session_id):
 
     return JsonResponse({"next_round": actions}, json_dumps_params={"indent": 4})
 
-
-def finalize_session(request, session_id):
-    # Get session
-    participant = get_participant(request)
-    session = get_object_or_404(Session, pk=session_id, participant__id=participant.id)
-    session.finish()
-    session.save()
-    return JsonResponse({"status": "ok"})

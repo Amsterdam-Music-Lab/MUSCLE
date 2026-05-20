@@ -40,8 +40,8 @@ def serialize_experiment(experiment: Experiment) -> dict:
     if experiment.consent:
         serialized["consent"] = Consent(experiment.consent).action()
 
-    if experiment.theme_config:
-        serialized["theme"] = serialize_theme(experiment.theme_config)
+    theme = experiment.theme_config or ThemeConfig()
+    serialized["theme"] = serialize_theme(theme)
 
     if experiment.about_content:
         serialized["aboutContent"] = formatter(
