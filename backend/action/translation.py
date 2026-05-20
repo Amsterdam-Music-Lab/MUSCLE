@@ -1,11 +1,5 @@
 from modeltranslation.translator import register, TranslationOptions
-from .models import Button, Explainer, Step
-
-
-@register(Button)
-class ExplainerTranslationOptions(TranslationOptions):
-    fields = ('label', )
-
+from .models import Explainer, Step
 
 @register(Explainer)
 class ExplainerTranslationOptions(TranslationOptions):
