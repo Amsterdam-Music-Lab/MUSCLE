@@ -3,8 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.actions import question
 from experiment.actions.question import QuestionAction
-from theme.models import ThemeConfig
-
+from theme.models import COLOR_CHOICES
 
 class Question(models.Model):
     """Model for question asked during experiment
@@ -153,7 +152,7 @@ class Choice(models.Model):
         blank=True,
         default="",
         help_text="Description of color in current theme, e.g. `colorPositive`",
-        choices=ThemeConfig().get_color_choices(),
+        choices=COLOR_CHOICES,
     )
 
     class Meta:
