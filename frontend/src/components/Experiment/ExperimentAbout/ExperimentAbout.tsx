@@ -6,7 +6,7 @@ import HTML from '../../HTML/HTML';
 import IExperiment from "@/types/Experiment";
 import { styleButtonOutline } from "@/util/stylingHelpers";
 
-export const ExperimentAbout: React.FC<IExperiment> = (experiment: IExperiment) => {
+export const ExperimentAbout: React.FC<IExperiment> = ({ aboutContent, backButtonText, slug, theme }) => {
 
     const styleAboutText = (primaryColor: string) => {
         return css`
@@ -21,7 +21,6 @@ export const ExperimentAbout: React.FC<IExperiment> = (experiment: IExperiment) 
                     position: absolute;
                     background-color: ${primaryColor};
                     bottom: -5px;
-                    left: -31px;
                     width: 100px;
                     height: 5px;
                 }
@@ -45,12 +44,12 @@ export const ExperimentAbout: React.FC<IExperiment> = (experiment: IExperiment) 
 
     return (
         <div className="container">
-            <Link className="btn btn-lg mt-3" css={styleButtonOutline(experiment.theme?.colorPrimary || '')} to={`/${experiment.slug}`}>
+            <Link className="btn btn-lg mt-3" css={styleButtonOutline(theme?.colorPrimary || '')} to={`/${slug}`}>
                 <i className="fas fa-arrow-left mr-2"></i>
-                {experiment.backButtonText}
+                {backButtonText}
             </Link>
-            <div className="col-12 mt-3" role="contentinfo" css={styleAboutText(experiment.theme?.colorPrimary || '')}>
-                <HTML body={experiment.aboutContent} innerClassName="about-text text-left pb-3" />
+            <div className="col-12 mt-3" role="contentinfo" style={{color: theme?.colorText}} css={styleAboutText(theme?.colorPrimary || '')}>
+                <HTML body={aboutContent}  innerClassName="about-text text-left pb-3" />
             </div>
         </div>
     );
