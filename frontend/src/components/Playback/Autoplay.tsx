@@ -22,7 +22,7 @@ const AutoPlay = ({ instruction, sections, showAnimation, playSection, startedPl
 
     // Handle view logic
     useEffect(() => {
-        if (!sections[0].playing) {
+        if (!sections[0].playing && !sections[0].hasPlayed) {
             playSection(0);
         }
     }, [playSection, sections, startedPlaying]);
