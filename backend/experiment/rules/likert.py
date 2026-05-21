@@ -11,6 +11,7 @@ from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import TextRangeQuestion
 from experiment.actions.trial import Trial
 from experiment.rules.base import BaseRules
+from question.models import Question
 from result.utils import prepare_result
 from session.models import Session
 
@@ -61,17 +62,29 @@ class Likert(BaseRules):
             return [self.get_trial(session, total_rounds)]
 
     def get_trial(self, session, total_rounds):
-        question_key = 'likert'
+        configured_question_key = session.block.rules_config.get("question_key")
+        question_key = configured_question_key or "likert"
         played_sections = session.result_set.filter(question_key=question_key).values_list('section__id', flat=True)
         section = session.playlist.get_section(exclude={'pk__in': played_sections})
         playback = Autoplay(sections=[PlaybackSection(section)], show_animation=False)
-        question = TextRangeQuestion(key=question_key, explainer=_("Rate from lowest to highest"), choices=[
-            {"value": 1, "label": _("Lowest")},
-            {"value": 2, "label": _("Low")},
-            {"value": 3, "label": _("Medium")},
-            {"value": 4, "label": _("High")},
-            {"value": 5, "label": _("Highest")},
-        ], result_id=prepare_result(question_key, session, scoring_rule="LIKERT", section=section))
+        question_key = configured_question_key or "likert"
+        if configured_question_key:
+            question = Question.objects.get(key=question_key).convert_to_action()
+        else:
+            question = TextRangeQuestion(
+                key=question_key,
+                explainer=_("Rate from lowest to highest"),
+                choices=[
+                    {"value": 1, "label": _("Lowest")},
+                    {"value": 2, "label": _("Low")},
+                    {"value": 3, "label": _("Medium")},
+                    {"value": 4, "label": _("High")},
+                    {"value": 5, "label": _("Highest")},
+                ],
+            )
+        question.result_id = prepare_result(
+            question_key, session, scoring_rule="LIKERT", section=section
+        )
         form = Form(form=[question])
         return Trial(
             playback=playback,
