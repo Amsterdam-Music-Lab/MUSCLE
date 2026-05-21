@@ -37,7 +37,6 @@ export const URLS = {
         consent: "/result/consent/"
     },
     session: {
-        create: "/session/create/",
         next_round: (id: string) => "/session/" + id + "/next_round/",
     },
     theme: {
