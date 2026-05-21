@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 class Likert(BaseRules):
     """ Simple experiment presenting an audio file with Likert scale"""
     ID = "LIKERT_EXPERIMENT"
-    
+
     def get_intro_explainer(self, session: Session):
         """Explain the game"""
         explainer_identifier = session.block.rules_config.get('intro_explainer')
@@ -44,12 +44,15 @@ class Likert(BaseRules):
                 step_numbers=True,
                 button=Button(_("Let's go!")),
             )
-    
+
     def next_round(self, session: Session):
         round_number = session.get_rounds_passed()
         total_rounds = session.playlist.section_set.count()
         if round_number == 0:
-            return [self.get_intro_explainer(session)]
+            return [
+                self.get_intro_explainer(session),
+                self.get_trial(session, total_rounds),
+            ]
         elif round_number == total_rounds:
             return [
                 Final(session, title=_("End of experiment"), final_text=_("Thank you for participating!"))
@@ -61,7 +64,7 @@ class Likert(BaseRules):
         question_key = 'likert'
         played_sections = session.result_set.filter(question_key=question_key).values_list('section__id', flat=True)
         section = session.playlist.get_section(exclude={'pk__in': played_sections})
-        playback = Autoplay(sections=[PlaybackSection(section)])
+        playback = Autoplay(sections=[PlaybackSection(section)], show_animation=False)
         question = TextRangeQuestion(key=question_key, explainer=_("Rate from lowest to highest"), choices=[
             {"value": 1, "label": _("Lowest")},
             {"value": 2, "label": _("Low")},
@@ -73,5 +76,7 @@ class Likert(BaseRules):
         return Trial(
             playback=playback,
             feedback_form=form,
-            title=_("Round %(round_number)d of %(total_rounds)d") % {'round_number': len(played_sections), 'total_rounds': total_rounds}
+            title=_("Round %(round_number)d of %(total_rounds)d")
+            % {'round_number': len(played_sections), 'total_rounds': total_rounds},
+            response_time=section.duration,
         )
