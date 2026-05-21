@@ -15,6 +15,8 @@ COLOR_CHOICES = [
     ('colorText', 'Text color'),
 ]
 
+VALID_COLORS = [c[0] for c in COLOR_CHOICES]
+
 class ThemeConfig(models.Model):
     """A model defining the theme of an experiment or block
 

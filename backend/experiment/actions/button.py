@@ -1,9 +1,7 @@
 from typing import Optional, TypedDict
 
 from .base_action import BaseAction
-from theme.models import ThemeConfig
-
-valid_colors = ThemeConfig().valid_colors()
+from theme.models import VALID_COLORS
 
 class ButtonAction(TypedDict):
     label: str
@@ -27,6 +25,6 @@ class Button(BaseAction):
         self.link = link
 
     def validate_color(self, color: str):
-        if color not in valid_colors:
+        if color not in VALID_COLORS:
             raise ValueError(f"{color} is not a valid color value")
         return color
