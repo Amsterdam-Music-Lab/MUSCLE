@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "inline_actions",
     "django_markup",
     "corsheaders",
+    "action",
     "experiment",
     "image",
     "participant",
