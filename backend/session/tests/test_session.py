@@ -35,15 +35,6 @@ class SessionTest(TestCase):
             playlist=cls.playlist
         )
 
-    def test_create(self):
-        data = {
-            'block_id': self.block.pk,
-            'playlist_id': self.playlist.pk,
-            'participant_id': self.participant.pk
-        }
-        response = self.client.post('/session/create', data)
-        assert response.status_code != 500
-
     def test_percentile_rank(self):
         # create one session with relatively low score
         Session.objects.create(

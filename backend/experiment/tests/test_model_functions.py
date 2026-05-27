@@ -3,8 +3,6 @@ from django.test import TestCase
 from experiment.models import Block, Experiment, Phase
 from participant.models import Participant
 from question.models import QuestionInList, QuestionList
-from session.models import Session
-
 
 class TestModelBlock(TestCase):
     fixtures = [

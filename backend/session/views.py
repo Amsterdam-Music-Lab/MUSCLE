@@ -1,48 +1,11 @@
-from django.http import Http404, JsonResponse, HttpResponseBadRequest
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
-from django.views.decorators.http import require_POST
 
 from .models import Session
-from experiment.models import Block, Experiment
+from experiment.models import Experiment
 from experiment.serializers import serialize_actions
 from experiment.actions.utils import EXPERIMENT_KEY
-from section.models import Playlist
 from participant.utils import get_participant
-
-
-@require_POST
-def create_session(request):
-    """Create new session for given experiment for current participant"""
-
-    # Current participant
-    participant = get_participant(request)
-
-    # Get block
-    block_id = request.POST.get("block_id")
-    if not block_id:
-        return HttpResponseBadRequest("block_id not defined")
-    try:
-        block = Block.objects.get(pk=block_id)
-    except Block.DoesNotExist:
-        raise Http404("Block does not exist")
-
-    # Create new session
-    session = Session(block=block, participant=participant)
-
-    if request.POST.get("playlist_id"):
-        try:
-            playlist = Playlist.objects.get(pk=request.POST.get("playlist_id"), block__id=session.block.id)
-            session.playlist = playlist
-        except:
-            raise Http404("Playlist does not exist")
-    elif block.playlists.count() >= 1:
-        # register first playlist
-        session.playlist = block.playlists.first()
-
-    # Save session
-    session.save()
-
-    return JsonResponse({"session": {"id": session.id}})
 
 
 def next_round(request, session_id):
@@ -74,4 +37,3 @@ def next_round(request, session_id):
         actions = [actions]
 
     return JsonResponse({"next_round": actions}, json_dumps_params={"indent": 4})
-
