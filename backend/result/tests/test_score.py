@@ -22,7 +22,9 @@ class ScoreTest(TestCase):
         cls.section = Section.objects.create(
             playlist=playlist, song=song, filename="not/to_be_found.mp3", tag=0
         )
-        cls.block = Block.objects.create(rules='RHYTHM_BATTERY_INTRO', slug='test')
+        cls.block = Block.objects.create(
+            rules='RHYTHM_BATTERY_INTRO', identifier='test'
+        )
         cls.session = Session.objects.create(
             block=cls.block, participant=cls.participant, playlist=playlist
         )

@@ -16,11 +16,11 @@ class TestEurovision(BaseTest):
 
         try:
 
-            block_slug = self.config['block_slugs'][block_name]
-            self.driver.get(f"{self.base_url}/block/{block_slug}")
+            block_identifier = self.config['block_identifiers'][block_name]
+            self.driver.get(f"{self.base_url}/block/{block_identifier}")
 
             # if page body contains the word "Error", raise an exception
-            self.check_for_error(block_name, block_slug)
+            self.check_for_error(block_name, block_identifier)
 
             # Check & Agree to Informed Consent
             self.agree_to_consent()

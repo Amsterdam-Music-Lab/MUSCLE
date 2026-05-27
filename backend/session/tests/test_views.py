@@ -13,7 +13,9 @@ class SessionViewsTest(TestCase):
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.playlist1 = Playlist.objects.create(name="First Playlist")
         cls.playlist2 = Playlist.objects.create(name="Second Playlist")
-        cls.block = Block.objects.create(slug="testviews", rules="RHYTHM_BATTERY_INTRO")
+        cls.block = Block.objects.create(
+            identifier="testviews", rules="RHYTHM_BATTERY_INTRO"
+        )
         cls.block.playlists.add(cls.playlist1, cls.playlist2)
 
     def setUp(self):
@@ -52,10 +54,10 @@ class SessionViewsTest(TestCase):
         assert response
 
     def test_next_round_with_experiment(self):
-        slug = "myexperiment"
-        experiment = Experiment.objects.create(slug=slug)
+        identifier = "myexperiment"
+        experiment = Experiment.objects.create(identifier=identifier)
         request_session = self.client.session
-        request_session[EXPERIMENT_KEY] = slug
+        request_session[EXPERIMENT_KEY] = identifier
         request_session.save()
         session = Session.objects.create(block=self.block, participant=self.participant)
         response = self.client.get(f"/session/{session.id}/next_round/")
@@ -67,4 +69,4 @@ class SessionViewsTest(TestCase):
         self.block.save()
         response = self.client.get(f"/session/{session.id}/next_round/")
         changed_session = Session.objects.get(pk=session.pk)
-        assert changed_session.json_data.get(EXPERIMENT_KEY) == slug
+        assert changed_session.json_data.get(EXPERIMENT_KEY) == identifier

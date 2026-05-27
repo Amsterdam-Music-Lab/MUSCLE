@@ -25,7 +25,8 @@ class SessionTest(TestCase):
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.block = Block.objects.create(
-            rules='RHYTHM_BATTERY_INTRO', slug='test')
+            rules='RHYTHM_BATTERY_INTRO', identifier='test'
+        )
         cls.playlist = Playlist.objects.create(
             name='Test playlist'
         )
@@ -120,7 +121,7 @@ class SessionTest(TestCase):
         Result.objects.create(session=self.session, question_key='some random key')
         self.assertEqual(self.session.get_rounds_passed(), 1)
         self.assertEqual(self.session.get_rounds_passed(self.block.get_rules().counted_result_keys), 1)
-        new_block = Block.objects.create(rules='HOOKED', slug='hooked_test')
+        new_block = Block.objects.create(rules='HOOKED', identifier='hooked_test')
         new_playlist = Playlist.objects.create(name='another_test')
         new_session = Session.objects.create(block=new_block, playlist=new_playlist, participant=self.participant)
         self.assertEqual(new_session.get_rounds_passed(new_block.get_rules().counted_result_keys), 0)

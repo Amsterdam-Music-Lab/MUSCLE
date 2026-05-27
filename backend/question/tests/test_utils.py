@@ -13,7 +13,7 @@ class UtilsTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
-        block = Block.objects.create(rules='RHYTHM_BATTERY_INTRO', slug='test')
+        block = Block.objects.create(rules='RHYTHM_BATTERY_INTRO', identifier='test')
         cls.result = Result.objects.create(
             participant=cls.participant,
             question_key='dgf_gender_identity',

@@ -10,7 +10,7 @@ This will prompt you to provide an experiment name for your new experiment's rul
 - add references to your new rules file to `experiment/rules/__init__.py`
 
 ## Set up the experiment
-Go to the admin interface at `localhost:8000/admin`. If you click on `Add` next to `Experiments`, you can verify that your rules now appear in the `Rules` dropdown. Give the experiment a name and assign a slug to it. Also, tie a playlist to it. Now you can see the experiment in action if you navigate to `localhost:3000/{your_slug}`. The experiment plays audio files and presents a `BooleanQuestion` "Do you like this song?" as many times as there are rounds in the experiment (you can adjust this in the admin interface), and then shows a `Final` action.
+Go to the admin interface at `localhost:8000/admin`. If you click on `Add` next to `Experiments`, you can verify that your rules now appear in the `Rules` dropdown. Give the experiment a name and assign a identifier to it. Also, tie a playlist to it. Now you can see the experiment in action if you navigate to `localhost:3000/{your_identifier}`. The experiment plays audio files and presents a `BooleanQuestion` "Do you like this song?" as many times as there are rounds in the experiment (you can adjust this in the admin interface), and then shows a `Final` action.
 
 ## The rules file
 Open your new rules file `experiment/rules/{experiment_name}.py` and edit away! You can see some methods implemented for you.

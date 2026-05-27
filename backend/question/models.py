@@ -9,7 +9,7 @@ class Question(models.Model):
     """Model for question asked during experiment
 
     Attributes:
-        key (slug): Unique identifier
+        identifier (slug): Unique identifier
         text (str): Question text
         from_python (bool): whether this Question was added through a Python fixture (not editable)
         explainer (str): Question explainer text
@@ -43,7 +43,7 @@ class Question(models.Model):
             "Text Range: Present choices as a range slider with text"
         )
 
-    key = models.SlugField(primary_key=True, max_length=128)
+    identifier = models.SlugField(primary_key=True, max_length=128)
     text = models.CharField(max_length=1024)
     explainer = models.TextField(blank=True, default="")
     from_python = models.BooleanField(default=False, editable=False)
@@ -115,11 +115,11 @@ class ChoiceList(models.Model):
     """A resusable list of choices for a question
 
     Attributes:
-        key (str): the key by which this choice list can be identified
+        identifier (str): unique itentifier of this choice list
         from_python (bool): whether this ChoiceList was added through a Python fixture (not editable)
     """
 
-    key = models.SlugField(max_length=64, primary_key=True)
+    identifier = models.SlugField(max_length=64, primary_key=True)
     from_python = models.BooleanField(default=False, editable=False)
 
     def to_dict(self):
@@ -133,13 +133,13 @@ class Choice(models.Model):
     """Choice objects are tied to Questions via ChoiceLists.
 
     Attributes:
-        key (slug): Unique identifier
+        identifier (slug): Unique identifier
         text (str): Choice text
         index (int): Index of choice within Question
         choicelist (ChoiceList): ChoiceList that the Choice is associated with
     """
 
-    key = models.SlugField(max_length=128)
+    identifier = models.SlugField(max_length=128)
     text = models.CharField()
     index = models.PositiveIntegerField(default=0)
     choicelist = models.ForeignKey(
@@ -187,7 +187,7 @@ class QuestionList(models.Model):
 
     def __str__(self):
         return _("%(qs_name)s: %(n_questions)i questions") % {
-            'qs_name': self.name or f"{self.block.slug}({self.index})",
+            'qs_name': self.name or f"{self.block.identifier}({self.index})",
             'n_questions': self.questions.count() if self.pk else 0,
         }
 
