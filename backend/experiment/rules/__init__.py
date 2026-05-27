@@ -11,7 +11,6 @@ from .hbat_bst import BST
 from .hooked import Hooked
 from .huang_2022 import Huang2022
 from .kuiper_2020 import Kuiper2020
-from .likert import Likert
 from .matching_pairs import MatchingPairsGame
 from .matching_pairs_fixed import MatchingPairsFixed
 from .matching_pairs_lite import MatchingPairsLite
@@ -51,11 +50,17 @@ BLOCK_RULES = {
     CongoSameDiff.ID: CongoSameDiff,
     DurationDiscrimination.ID: DurationDiscrimination,
     DurationDiscriminationTone.ID: DurationDiscriminationTone,
+    Eurovision2020.ID: Eurovision2020,
     HBat.ID: HBat,
     HBatBFIT.ID: HBatBFIT,
     Hooked.ID: Hooked,
     HookedTeleTunes.ID: HookedTeleTunes,
-    Likert.ID: Likert,
+    Huang2022.ID: Huang2022,
+    Kuiper2020.ID: Kuiper2020,
+    MatchingPairsFixed.ID: MatchingPairsFixed,
+    MatchingPairsGame.ID: MatchingPairsGame,
+    MatchingPairsLite.ID: MatchingPairsLite,
+    MatchingPairsICMPC.ID: MatchingPairsICMPC,
     MatchingPairs2025.ID: MatchingPairs2025,
     MusicalPreferences.ID: MusicalPreferences,
     Questionnaire.ID: Questionnaire,
