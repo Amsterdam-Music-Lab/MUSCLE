@@ -2,7 +2,7 @@
 
 Set the following experiment values in the admin:
 
-| Experiment | Slug         | Rounds |
+| Experiment | Identifier         | Rounds |
 | ---------- | ------------ | ------ |
 | home       | toontjehoger | 0      |
 
@@ -25,7 +25,7 @@ backend/experiment/rules/toontjehoger_6_relative.py
 
 Set the following per-block values in the admin:
 
-| Block | Slug                     | Rounds |
+| Block | Identifier                     | Rounds |
 | ---------- | ------------------------ | ------ |
 | 1          | toontjehoger_1_mozart    | 2      |
 | 2          | toontjehoger_2_preverbal | 2      |

@@ -32,7 +32,7 @@ def serialize_experiment(experiment: Experiment) -> dict:
     """
 
     serialized = {
-        "slug": experiment.slug,
+        "identifier": experiment.identifier,
         "name": experiment.name,
         "description": formatter(experiment.description, filter_name="markdown"),
     }
@@ -133,7 +133,7 @@ def serialize_block(block_object: Block, language: str = "en") -> dict:
     """
     theme = get_theme_config(block_object)
     return {
-        "slug": block_object.slug,
+        "identifier": block_object.identifier,
         "name": block_object.name,
         "description": block_object.description,
         "image": serialize_image(block_object.image) if block_object.image else None,

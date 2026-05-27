@@ -52,7 +52,7 @@ class BlockForm(ModelForm):
         model = Block
         fields = [
             "index",
-            "slug",
+            "identifier",
             "name",
             "description",
             "image",
@@ -68,8 +68,8 @@ class BlockForm(ModelForm):
             "image": _(
                 "An image that will be displayed on the experiment page and as a meta image in search engines."
             ),
-            "slug": _(
-                "The slug is used to identify the block in the URL so you can access it on the web as follows: app.amsterdammusiclab.nl/{slug} <br>\
+            "identifier": _(
+                "The identifier is used to identify the block in the URL so you can access it on the web as follows: app.amsterdammusiclab.nl/{identifier} <br>\
             It must be unique, lowercase and contain only letters, numbers, and hyphens. Nor can it start with any of the following reserved words: admin, server, block, participant, result, section, session, static."
             ),
             "rules_config": _(

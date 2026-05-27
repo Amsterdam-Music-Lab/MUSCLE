@@ -18,7 +18,7 @@ class TestModelBlock(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.block = Block.objects.create(
-            rules="THATS_MY_SONG", slug="hooked", rounds=42
+            rules="THATS_MY_SONG", identifier="hooked", rounds=42
         )
 
     def test_separate_rules_instance(self):
@@ -37,7 +37,7 @@ class TestModelBlock(TestCase):
     def test_add_default_question_lists(self):
         block = Block(
             name='test question list',
-            slug='test_question_list',
+            identifier='test_question_list',
             rules='RHYTHM_BATTERY_FINAL',
         )
         block.save()  # triggers `add_default_question_lists` method
@@ -79,9 +79,21 @@ class TestModelExperiment(TestCase):
         phase2 = Phase.objects.create(experiment=experiment)
         Block.objects.bulk_create(
             [
-                Block(rules="THATS_MY_SONG", slug="hooked", rounds=42, phase=phase1),
-                Block(rules="THATS_MY_SONG", slug="unhinged", rounds=42, phase=phase2),
-                Block(rules="THATS_MY_SONG", slug="derailed", rounds=42, phase=phase2),
+                Block(
+                    rules="THATS_MY_SONG", identifier="hooked", rounds=42, phase=phase1
+                ),
+                Block(
+                    rules="THATS_MY_SONG",
+                    identifier="unhinged",
+                    rounds=42,
+                    phase=phase2,
+                ),
+                Block(
+                    rules="THATS_MY_SONG",
+                    identifier="derailed",
+                    rounds=42,
+                    phase=phase2,
+                ),
             ]
         )
         self.assertEqual(experiment.associated_blocks().count(), 3)

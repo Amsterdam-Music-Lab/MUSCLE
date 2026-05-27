@@ -1,11 +1,11 @@
 """
 Setup block data in the admin panel
 
-* Choose a slug for the block ('tafc')
+* Choose a identifier for the block ('tafc')
 
 * Upload sound files
     * Find the root directory name of the uploaded sound files. It is backend/upload on your local machine. On a server, ask the administrator.
-    * Create a new directory within the root directory, use slug 'tafc' for the name
+    * Create a new directory within the root directory, use identifier 'tafc' for the name
     * Copy files (sample_1.wav - sample_5.wav)
 
 * Create playlist:
@@ -23,13 +23,14 @@ Setup block data in the admin panel
 * Create experiment
     * Admin panel -> Blocks -> Add
     * Choose name: TwoAlternativeForced
-    * Slug: tafc
+    * Identifier: tafc
     * Rules: TwoAlternativeForced
     * Rounds: 5
     * Playlists: tafc
     * Save and continue editing
     * QUESTION SERIES -> Add rules' default and save
 """
+
 from django.db.models import Avg
 
 from .base import BaseRules

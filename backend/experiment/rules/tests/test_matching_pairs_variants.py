@@ -30,7 +30,7 @@ class TestMatchingPairsVariants(TestCase):
 
     def test_lite_version(self):
         block = Block.objects.create(
-            rules='MATCHING_PAIRS_LITE', slug='mpairs_lite'
+            rules='MATCHING_PAIRS_LITE', identifier='mpairs_lite'
         )
         session = Session.objects.create(
             block=block,
@@ -54,7 +54,8 @@ class TestMatchingPairsVariants(TestCase):
 
     def test_fixed_order_sections(self):
         block = Block.objects.create(
-            rules='MATCHING_PAIRS_FIXED', slug='mpairs_fixed')
+            rules='MATCHING_PAIRS_FIXED', identifier='mpairs_fixed'
+        )
         session = Session.objects.create(
             block=block,
             participant=self.participant,
@@ -90,7 +91,9 @@ class TestMatchingPairsVariants(TestCase):
         playlist.csv = section_csv
         playlist._update_sections()
 
-        block = Block.objects.create(rules='MATCHING_PAIRS_LITE', slug='vmpairs', rounds=3)
+        block = Block.objects.create(
+            rules='MATCHING_PAIRS_LITE', identifier='vmpairs', rounds=3
+        )
 
         session = Session.objects.create(
             block=block,

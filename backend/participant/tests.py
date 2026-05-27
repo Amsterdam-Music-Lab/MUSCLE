@@ -17,7 +17,9 @@ class ParticipantTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
-        cls.block = Block.objects.create(rules='RHYTHM_BATTERY_INTRO', slug='test')
+        cls.block = Block.objects.create(
+            rules='RHYTHM_BATTERY_INTRO', identifier='test'
+        )
         cls.session = Session.objects.create(
             block=cls.block,
             participant=cls.participant,
@@ -217,7 +219,7 @@ class ParticipantTest(TestCase):
         )
         these_scores = self.participant.scores_per_experiment()
         self.assertEqual(len(these_scores), 1)
-        self.assertEqual(these_scores[0]['block_slug'], "test")
+        self.assertEqual(these_scores[0]['block_identifier'], "test")
         self.assertEqual(these_scores[0]['rank'], {'text': 'silver', 'class': 'silver'})
         self.assertEqual(these_scores[0]['score'], 30.0)
         self.assertEqual(these_scores[0]['date'], "today")

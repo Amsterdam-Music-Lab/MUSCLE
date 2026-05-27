@@ -33,12 +33,12 @@ class BeatAlignmentRuleTest(TestCase):
         playlist.csv = csv
         playlist._update_sections()
         experiment = Experiment.objects.create(
-            slug="bat_test", name="Beat Alignment Test"
+            identifier="bat_test", name="Beat Alignment Test"
         )
         phase = Phase.objects.create(experiment=experiment)
         # rules is BeatAlignment.ID in beat_alignment.py
         cls.block = Block.objects.create(
-            phase=phase, rules="BEAT_ALIGNMENT", slug="ba", rounds=13
+            phase=phase, rules="BEAT_ALIGNMENT", identifier="ba", rounds=13
         )
         cls.block.playlists.add(playlist)
 
@@ -61,7 +61,7 @@ class BeatAlignmentRuleTest(TestCase):
         block_json = self.load_json(block_response)
         self.assertTrue(
             {
-                "slug",
+                "identifier",
                 "class_name",
                 "rounds",
                 "playlists",

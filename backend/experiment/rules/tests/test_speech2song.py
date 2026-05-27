@@ -33,7 +33,8 @@ class Speech2SongTest(TestCase):
         cls.playlist._update_sections()
         cls.participant = Participant.objects.create()
         cls.block = Block.objects.create(
-            rules='SPEECH_TO_SONG', slug='s2s', rounds=16)
+            rules='SPEECH_TO_SONG', identifier='s2s', rounds=16
+        )
         cls.session = Session.objects.create(
             block=cls.block,
             participant=cls.participant,

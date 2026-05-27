@@ -36,7 +36,9 @@ class MatchingPairsTest(TestCase):
         cls.playlist.csv = section_csv
         cls.playlist._update_sections()
         cls.participant = Participant.objects.create()
-        cls.block = Block.objects.create(rules="MATCHING_PAIRS", slug="mpairs", rounds=42)
+        cls.block = Block.objects.create(
+            rules="MATCHING_PAIRS", identifier="mpairs", rounds=42
+        )
         cls.session = Session.objects.create(block=cls.block, participant=cls.participant, playlist=cls.playlist)
         cls.rules = cls.session.block_rules()
 

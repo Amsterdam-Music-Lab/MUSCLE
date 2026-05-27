@@ -28,7 +28,7 @@ class MusicalPreferencesTest(TestCase):
         audiocheck_playlist = Playlist.objects.get(name="AudioSetup")
         audiocheck_playlist._update_sections()
 
-        cls.block = Block.objects.get(slug="mpref")
+        cls.block = Block.objects.get(identifier="mpref")
         cls.block.playlists.add(cls.playlist)
         cls.session = Session.objects.create(
             block=cls.block, participant=cls.participant, playlist=cls.playlist

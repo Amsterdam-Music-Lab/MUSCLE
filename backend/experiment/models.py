@@ -9,17 +9,20 @@ from experiment.standards.iso_languages import ISO_LANGUAGES
 from image.models import Image
 from question.models import Question, QuestionInList, QuestionList
 
-from .validators import markdown_html_validator, block_slug_validator, experiment_slug_validator
+from .validators import (
+    markdown_html_validator,
+    identifier_validator,
+)
 
 language_choices = [(key, ISO_LANGUAGES[key]) for key in ISO_LANGUAGES.keys()]
 
 
 def consent_upload_path(instance, filename) -> str:
-    """Generate path to save consent file based on experiment.slug and language
+    """Generate path to save consent file based on experiment.identifier and language
     Returns:
         upload_to (str): Path for uploading the consent file
     """
-    folder_name = instance.slug
+    folder_name = instance.identifier
     language = get_language()
     return join("consent", folder_name, f"consent_{language}", filename)
 
@@ -28,7 +31,7 @@ class Experiment(models.Model):
     """A model to allow nesting multiple phases with blocks into a 'parent' experiment
 
     Attributes:
-        slug (str): Slug
+        identifier (str): Identifier of the experiment
         name (str): Name of the experiment
         description (str): Description
         consent (FileField): Consent text markdown or html
@@ -42,12 +45,12 @@ class Experiment(models.Model):
         phases (Queryset[Phase]): Queryset of Phase instances
     """
 
-    slug = models.SlugField(
+    identifier = models.SlugField(
         db_index=True,
         max_length=64,
         unique=True,
         null=True,
-        validators=[experiment_slug_validator],
+        validators=[identifier_validator],
     )
     name = models.CharField(max_length=64, blank=True, default="")
     description = models.TextField(blank=True, default="")
@@ -73,7 +76,7 @@ class Experiment(models.Model):
     phases: models.QuerySet["Phase"]
 
     def __str__(self):
-        return self.name or self.slug
+        return self.name or self.identifier
 
     class Meta:
         verbose_name_plural = "Experiments"
@@ -107,9 +110,7 @@ class Phase(models.Model):
     randomize = models.BooleanField(default=False, help_text="Randomize the order of the blocks in this phase.")
 
     def __str__(self):
-        compound_name = (
-            self.experiment.name or self.experiment.slug or "Unnamed experiment"
-        )
+        compound_name = self.experiment.name or self.experiment.identifier
         return f"{compound_name} ({self.index})"
 
     class Meta:
@@ -122,7 +123,7 @@ class Block(models.Model):
     Attributes:
         phase (Phase): The phase this block belongs to
         index (int): Index of this block in the phase
-        slug (str): Slug for this block
+        identifier (str): Identifier for this block
         name (str): Block name
         description (str): Description
         playlists (list(section.models.Playlist)): The playlist(s) used in this block
@@ -136,8 +137,8 @@ class Block(models.Model):
     """
 
     phase = models.ForeignKey(Phase, on_delete=models.CASCADE, related_name="blocks", blank=True, null=True)
-    slug = models.SlugField(
-        db_index=True, max_length=64, unique=True, validators=[block_slug_validator]
+    identifier = models.SlugField(
+        db_index=True, max_length=64, unique=True, validators=[identifier_validator]
     )
     index = models.IntegerField(default=0, help_text="Index of the block in the phase. Lower numbers come first.")
 
@@ -166,7 +167,7 @@ class Block(models.Model):
         ordering = ["index"]
 
     def __str__(self):
-        return self.name if self.name else self.slug
+        return self.name if self.name else self.identifier
 
     def session_count(self) -> int:
         """Number of sessions
@@ -200,7 +201,9 @@ class Block(models.Model):
         from experiment.rules import BLOCK_RULES
 
         if self.rules not in BLOCK_RULES:
-            raise ValueError(f"Rules do not exist (anymore): {self.rules} for block {self.name} ({self.slug})")
+            raise ValueError(
+                f"Rules do not exist (anymore): {self.rules} for block {self.name} ({self.identifier})"
+            )
 
         cl = BLOCK_RULES[self.rules]
         return cl()
@@ -344,5 +347,5 @@ class SocialMediaConfig(models.Model):
         }
 
     def __str__(self):
-        social_media_description = self.experiment.name or self.experiment.slug
+        social_media_description = self.experiment.name or self.experiment.identifier
         return f"Social Media for {social_media_description}"

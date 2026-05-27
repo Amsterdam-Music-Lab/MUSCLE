@@ -158,14 +158,14 @@ class Participant(models.Model):
         # Create best rank/score data per experiment session
         for session in sessions:
 
-            if session.block.slug in hits:
+            if session.block.identifier in hits:
                 continue
 
-            hits[session.block.slug] = True
+            hits[session.block.identifier] = True
 
             scores.append(
                 {
-                    "block_slug": session.block.slug,
+                    "block_identifier": session.block.identifier,
                     "rank": session.block.get_rules().rank(session),
                     "score": session.final_score,
                     "date": naturalday(session.finished_at),

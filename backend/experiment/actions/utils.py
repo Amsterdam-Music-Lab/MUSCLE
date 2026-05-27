@@ -33,17 +33,18 @@ def get_current_experiment_url(session: Session) -> str | None:
         ```
 
     Note:
-        Returns None if there is no experiment slug.
+        Returns None if there is no experiment identifier.
     """
-    experiment_slug = session.json_data.get(EXPERIMENT_KEY)
-    if not experiment_slug:
+
+    experiment_identifier = session.json_data.get(EXPERIMENT_KEY)
+    if not experiment_identifier:
         return None
 
     if session.participant.participant_id_url:
         participant_id_url = session.participant.participant_id_url
-        return f"/{experiment_slug}?participant_id={participant_id_url}"
+        return f"/{experiment_identifier}?participant_id={participant_id_url}"
     else:
-        return f"/{experiment_slug}"
+        return f"/{experiment_identifier}"
 
 
 def render_feedback_trivia(feedback, trivia) -> str:

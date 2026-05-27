@@ -29,7 +29,7 @@ class TestToontjeHoger2Preverbal(TestCase):
 
     def test_can_play_through_th(self):
         block_th = Block.objects.create(
-            slug="test_th_2", rules='TOONTJE_HOGER_2_PREVERBAL', rounds=2
+            identifier="test_th_2", rules='TOONTJE_HOGER_2_PREVERBAL', rounds=2
         )
         session = Session.objects.create(
             block=block_th,
@@ -42,7 +42,7 @@ class TestToontjeHoger2Preverbal(TestCase):
 
     def test_playthough_th_kids(self):
         block_th = Block.objects.create(
-            slug="test_th_2", rules='TOONTJE_HOGER_KIDS_2_PREVERBAL', rounds=2
+            identifier="test_th_2", rules='TOONTJE_HOGER_KIDS_2_PREVERBAL', rounds=2
         )
         session = Session.objects.create(
             block=block_th,

@@ -8,9 +8,9 @@ def markdown_html_validator():
     return FileExtensionValidator(allowed_extensions=valid_extensions)
 
 
-def block_slug_validator(value):
+def identifier_validator(value):
 
-    disallowed_slugs = [
+    disallowed_identifiers = [
         'admin',
         'server',
         'experiment',
@@ -22,15 +22,11 @@ def block_slug_validator(value):
         'block',
     ]
 
-    # Slug cannot start with a disallowed slug
-    for slug in disallowed_slugs:
-        if value.lower().startswith(slug):
-            raise ValidationError(f'The slug cannot start with "{slug}".')
+    # Identifier cannot start with a disallowed identifier
+    for identifier in disallowed_identifiers:
+        if value.lower().startswith(identifier):
+            raise ValidationError(f'The identifier cannot start with "{identifier}".')
 
-    # Slugs must be lowercase
+    # Identifiers must be lowercase
     if value.lower() != value:
-        raise ValidationError('Slugs must be lowercase.')
-
-
-# This is the validator that is used in the migration file
-experiment_slug_validator = block_slug_validator
+        raise ValidationError('Identifiers must be lowercase.')

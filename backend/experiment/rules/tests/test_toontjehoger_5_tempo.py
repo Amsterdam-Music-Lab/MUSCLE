@@ -102,7 +102,7 @@ class TestToontjeHoger5Tempo(TestCase):
         )
         playlist._update_sections()
         block = Block.objects.create(
-            slug='test-th-5', rules="TOONTJE_HOGER_5_TEMPO", rounds=5
+            identifier='test-th-5', rules="TOONTJE_HOGER_5_TEMPO", rounds=5
         )
         session = Session.objects.create(
             block=block,
@@ -159,7 +159,7 @@ class ToontjeHogerKids5TempoTest(TestCase):
 
     def test_can_play_through(self):
         block = Block.objects.create(
-            slug='test-th-5', rules="TOONTJE_HOGER_KIDS_5_TEMPO", rounds=5
+            identifier='test-th-5', rules="TOONTJE_HOGER_KIDS_5_TEMPO", rounds=5
         )
         session = Session.objects.create(
             block=block,

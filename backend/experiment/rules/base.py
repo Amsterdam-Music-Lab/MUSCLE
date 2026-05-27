@@ -72,11 +72,11 @@ class BaseRules(object):
             if session.participant.participant_id_url
             else ""
         )
-        return f"/block/{session.block.slug}{participant_id_url_param}"
+        return f"/block/{session.block.identifier}{participant_id_url_param}"
 
     def get_experiment_url(self, session: Session) -> str:
         """
-        return the experiment url. Defaults to experiment.slug
+        return the experiment url. Defaults to experiment.identifier
 
         Args:
             session: current session
@@ -86,7 +86,7 @@ class BaseRules(object):
             if session.participant.participant_id_url
             else ""
         )
-        return f"/{session.block.phase.experiment.slug}{participant_id_url_param}"
+        return f"/{session.block.phase.experiment.identifier}{participant_id_url_param}"
 
     def get_profile_question_trials(
         self, session: Session, n_questions: int = 1

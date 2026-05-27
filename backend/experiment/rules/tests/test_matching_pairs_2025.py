@@ -21,9 +21,14 @@ class MatchingPairs2025Test(TestCase):
         cls.playlist._update_sections()
         cls.playlist.save()
         cls.participant = Participant.objects.create()
-        cls.exp = Experiment.objects.create(slug="matching_pairs_2025")
+        cls.exp = Experiment.objects.create(identifier="matching_pairs_2025")
         cls.phase = Phase.objects.create(experiment=cls.exp)
-        cls.block = Block.objects.create(rules="MATCHING_PAIRS_2025", slug="mpairs-2025", rounds=42, phase=cls.phase)
+        cls.block = Block.objects.create(
+            rules="MATCHING_PAIRS_2025",
+            identifier="mpairs-2025",
+            rounds=42,
+            phase=cls.phase,
+        )
         cls.session = Session.objects.create(block=cls.block, participant=cls.participant, playlist=cls.playlist)
         cls.rules = cls.session.block_rules()
 
@@ -261,7 +266,7 @@ class MatchingPairs2025Test(TestCase):
 
     def test_has_played_before_returns_false(self):
         """Test that _has_played_before returns False when there are no previous results."""
-        experiment = Experiment.objects.create(slug="dummy_experiment")
+        experiment = Experiment.objects.create(identifier="dummy_experiment")
         phase = Phase.objects.create(experiment=experiment)
 
         session = Session.objects.create(block=self.block, participant=self.participant, playlist=self.playlist)
@@ -283,7 +288,9 @@ class MatchingPairs2025Test(TestCase):
         self.assertTrue(self.rules._has_played_before(session))
 
     def test_get_final_actions(self):
-        mp_block = Block.objects.create(phase=self.phase, rules="MATCHING_PAIRS_2025", slug="mpairs-2025-2")
+        mp_block = Block.objects.create(
+            phase=self.phase, rules="MATCHING_PAIRS_2025", identifier="mpairs-2025-2"
+        )
         session = Session.objects.create(participant=self.participant, block=mp_block, final_score=100)
         final_action = self.rules._get_final_actions(session)[0]
         self.assertIsInstance(final_action, Final)
@@ -300,7 +307,7 @@ class PlaythroughSimulationTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.exp = Experiment.objects.create(slug="matching_pairs_2025")
+        cls.exp = Experiment.objects.create(identifier="matching_pairs_2025")
         cls.phase = Phase.objects.create(experiment=cls.exp)
         cls.ch_playlist = Playlist.objects.get(name="MP2.0 - CH")
         cls.ch_playlist._update_sections()
@@ -309,7 +316,10 @@ class PlaythroughSimulationTest(TestCase):
         cls.tv_playlist = Playlist.objects.get(name="MP2.0 - TV")
         cls.tv_playlist._update_sections()
         cls.block = Block.objects.create(
-            rules="MATCHING_PAIRS_2025", slug="mpairs-2025", rounds=1, phase=cls.phase
+            rules="MATCHING_PAIRS_2025",
+            identifier="mpairs-2025",
+            rounds=1,
+            phase=cls.phase,
         )
         cls.participant = Participant.objects.create()
         cls.rules = cls.block.get_rules()

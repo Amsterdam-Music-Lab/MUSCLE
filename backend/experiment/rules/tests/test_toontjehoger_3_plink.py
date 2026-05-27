@@ -31,7 +31,9 @@ class TestToontjeHoger3Plink(TestCase):
             "Golden Earring,Radar Love,0.0,1.0,toontjehoger/plink/2021-006.mp3,70s,vrolijk\n"
         ))
         playlist._update_sections()
-        block = Block.objects.create(slug="test-th-plink", rules="TOONTJE_HOGER_3_PLINK", rounds=10)
+        block = Block.objects.create(
+            identifier="test-th-plink", rules="TOONTJE_HOGER_3_PLINK", rounds=10
+        )
         session = Session.objects.create(block=block, participant=Participant.objects.create(), playlist=playlist)
         rules = block.get_rules()
         for round in range(block.rounds):
@@ -43,7 +45,7 @@ class TestToontjeHoger3Plink(TestCase):
 
 
 class TestToontjeHogerKids3Plink(TestCase):
-    
+
     def test_initializes(self):
         rules = ToontjeHogerKids3Plink()
         self.assertEqual(rules.ID, "TOONTJE_HOGER_KIDS_3_PLINK")
@@ -66,7 +68,9 @@ class TestToontjeHogerKids3Plink(TestCase):
             "The Tokens,The Lion Sleeps Tonight (Wimoweh),0.0,1.0,toontjehoger_kids/plink/2024-012.mp3,0,70s;tederheid\n"
         ))
         playlist._update_sections()
-        block = Block.objects.create(slug="test-thk-plink", rules="TOONTJE_HOGER_KIDS_3_PLINK", rounds=10)
+        block = Block.objects.create(
+            identifier="test-thk-plink", rules="TOONTJE_HOGER_KIDS_3_PLINK", rounds=10
+        )
         session = Session.objects.create(block=block, participant=Participant.objects.create(), playlist=playlist)
         rules = block.get_rules()
         for round in range(block.rounds):
