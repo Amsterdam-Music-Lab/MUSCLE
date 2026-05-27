@@ -132,7 +132,7 @@ A list of `Result` objects containing the participant's anwers to the profile qu
             "participant": 425,
             "section": null,
             "created_at": "2024-07-20T14:28:13.227Z",
-            "question_key": "dgf_generation",
+            "question_identifier": "dgf_generation",
             "expected_response": null,
             "given_response": "gen_x",
             "comment": "",
@@ -175,7 +175,7 @@ A list of `Result` objects containing the participant's anwers to the profile qu
     - `participant`: Foreign key `fk` relates to the `Participant` object. (`participant.pk`)
     - `Section`: Not used for profile (`Participant`) results.
     - `created_at`: Timestamp logged on creation of this `Result` object. (Set in the timezone of the server)
-    - `question_key`: Unique identifier for this question.
+    - `question_identifier`: Unique identifier for this question.
     - `expected_response`: Not used for profile (`Participant`) results.
     - `given_response`: Participant's response to the question.
     - `comment`: Optional comment, sent by the backend.
@@ -200,7 +200,7 @@ A list of session `Result` objects containing the participant's responses to the
             "participant": null,
             "section": 44,
             "created_at": "2024-07-22T10:29:57.720Z",
-            "question_key": "choice",
+            "question_identifier": "choice",
             "expected_response": "B",
             "given_response": "B",
             "comment": "testing",
@@ -247,7 +247,7 @@ A list of session `Result` objects containing the participant's responses to the
     - `Participant`: Not used for trial `Session` results.
     - `section`: Foreign key `fk` relates to the `Section` object used for this trial. (`Section.pk`)
     - `created_at`: Timestamp logged on creation of this `Result` object.
-    - `question_key`: Unique identifier for the `Question` type in this trial.
+    - `question_identifier`: Unique identifier for the `Question` type in this trial.
     - `expected_response`: The expected/correct response to this trial.
     - `given_response`: Participant's response to this trial.
     - `comment`: Optional comment, sent by the backend.

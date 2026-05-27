@@ -28,7 +28,7 @@ class Speech2Song(BaseRules):
         self.question_lists = [
             {
                 "name": "Question series Speech2Song",
-                "question_keys": [
+                "question_identifiers": [
                     'dgf_age',
                     'dgf_gender_identity',
                     'dgf_country_of_origin_open',

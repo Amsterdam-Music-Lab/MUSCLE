@@ -25,12 +25,12 @@ class TestModelBlock(TestCase):
         rules1 = self.block.get_rules()
         rules2 = self.block.get_rules()
         keys1 = (
-            rules1.question_lists[0]["question_keys"]
-            + rules1.question_lists[1]["question_keys"]
+            rules1.question_lists[0]["question_identifiers"]
+            + rules1.question_lists[1]["question_identifiers"]
         )
         keys2 = (
-            rules2.question_lists[0]["question_keys"]
-            + rules2.question_lists[1]["question_keys"]
+            rules2.question_lists[0]["question_identifiers"]
+            + rules2.question_lists[1]["question_identifiers"]
         )
         assert keys1 == keys2
 

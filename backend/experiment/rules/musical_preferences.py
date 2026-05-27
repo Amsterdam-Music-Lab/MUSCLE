@@ -44,7 +44,7 @@ class MusicalPreferences(BaseRules):
         self.question_lists = [
             {
                 "name": "Musical Preferences",
-                "question_keys": [
+                "question_identifiers": [
                     "msi_38_listen_music",
                     "dgf_genre_preference_zh",
                     "dgf_gender_identity_zh",
@@ -119,7 +119,7 @@ class MusicalPreferences(BaseRules):
                         )
                         actions = [explainer]
                 else:
-                    if last_result.question_key == "audio_check1":
+                    if last_result.question_identifier == "audio_check1":
                         playback = get_test_playback()
                         html = HTML(body=render_to_string("html/huang_2022/audio_check.html"))
                         form = Form(
@@ -182,7 +182,7 @@ class MusicalPreferences(BaseRules):
                     ),
                 ]
         if round_number == self.preference_offset:
-            like_results = session.result_set.filter(question_key="like_song")
+            like_results = session.result_set.filter(question_identifier="like_song")
             feedback = Trial(
                 html=HTML(
                     body=render_to_string(
@@ -200,8 +200,10 @@ class MusicalPreferences(BaseRules):
             )
             actions = [feedback]
         elif round_number == self.knowledge_offset:
-            like_results = session.result_set.filter(question_key="like_song")
-            known_songs = session.result_set.filter(question_key="know_song", score=2).count()
+            like_results = session.result_set.filter(question_identifier="like_song")
+            known_songs = session.result_set.filter(
+                question_identifier="know_song", score=2
+            ).count()
             feedback = Trial(
                 html=HTML(
                     body=render_to_string(
@@ -220,9 +222,13 @@ class MusicalPreferences(BaseRules):
             )
             actions = [feedback]
         elif round_number == session.block.rounds:
-            like_results = session.result_set.filter(question_key="like_song")
-            known_songs = session.result_set.filter(question_key="know_song", score=2).count()
-            all_results = Result.objects.filter(question_key="like_song", section_id__isnull=False)
+            like_results = session.result_set.filter(question_identifier="like_song")
+            known_songs = session.result_set.filter(
+                question_identifier="know_song", score=2
+            ).count()
+            all_results = Result.objects.filter(
+                question_identifier="like_song", section_id__isnull=False
+            )
             top_participant = self.get_preferred_songs(like_results, 3)
             top_all = self.get_preferred_songs(all_results, 3)
             feedback = Trial(

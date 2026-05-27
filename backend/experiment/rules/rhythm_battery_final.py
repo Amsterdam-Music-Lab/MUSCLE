@@ -18,12 +18,12 @@ class RhythmBatteryFinal(BaseRules):
         self.question_lists = [
             {
                 "name": "MSI_F3_MUSICAL_TRAINING",
-                "question_keys": get_question_bank('MSI_F3_MUSICAL_TRAINING'),
+                "question_identifiers": get_question_bank('MSI_F3_MUSICAL_TRAINING'),
                 "randomize": True,
             },
             {
                 "name": "Demographics",
-                "question_keys": [
+                "question_identifiers": [
                     'dgf_gender_identity',
                     'dgf_age',
                     'dgf_education_gold_msi',

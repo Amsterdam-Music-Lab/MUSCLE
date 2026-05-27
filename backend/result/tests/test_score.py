@@ -32,14 +32,14 @@ class ScoreTest(TestCase):
     def likert_request(self, rule, value, profile=False):
         if profile:
             result = Result.objects.create(
-                question_key="test",
+                question_identifier="test",
                 participant=self.participant,
                 section=self.section,
                 scoring_rule=rule,
             )
         else:
             result = Result.objects.create(
-                question_key="test",
+                question_identifier="test",
                 session=self.session,
                 section=self.section,
                 scoring_rule=rule,
@@ -62,7 +62,7 @@ class ScoreTest(TestCase):
             session=self.session,
             section=self.section,
             scoring_rule='LIKERT',
-            question_key='test',
+            question_identifier='test',
         )
         view = {
             "form": [
@@ -92,7 +92,7 @@ class ScoreTest(TestCase):
             section=self.section,
             expected_response='spam',
             scoring_rule='CORRECTNESS',
-            question_key='',
+            question_identifier='',
         )
         view = {
             "form": [
@@ -108,7 +108,7 @@ class ScoreTest(TestCase):
 
     def song_sync_recognize_request(self, result_type):
         result = Result.objects.create(
-            question_key='recognize',
+            question_identifier='recognize',
             session=self.session,
             section=self.section,
             scoring_rule='SONG_SYNC_RECOGNITION',
@@ -122,7 +122,7 @@ class ScoreTest(TestCase):
 
     def song_sync_continue_request(self, result_type):
         result = Result.objects.create(
-            question_key='correct_place',
+            question_identifier='correct_place',
             session=self.session,
             section=self.section,
             scoring_rule='SONG_SYNC_VERIFICATION',
@@ -201,12 +201,16 @@ class ScoreTest(TestCase):
 
     def test_boolean_score(self):
         result = Result.objects.create(
-            session=self.session, question_key='boolean_test', given_response='no'
+            session=self.session,
+            question_identifier='boolean_test',
+            given_response='no',
         )
         score = boolean_score(result, {})
         self.assertEqual(score, 0)
         result = Result.objects.create(
-            session=self.session, question_key='boolean_test', given_response='yes'
+            session=self.session,
+            question_identifier='boolean_test',
+            given_response='yes',
         )
         score = boolean_score(result, {})
         self.assertEqual(score, 1)
@@ -214,7 +218,7 @@ class ScoreTest(TestCase):
     def test_reaction_time_score(self):
         result = Result.objects.create(
             session=self.session,
-            question_key='reaction_test',
+            question_identifier='reaction_test',
             expected_response='yes',
             json_data={'decision_time': 5, 'response_time': 10},
         )

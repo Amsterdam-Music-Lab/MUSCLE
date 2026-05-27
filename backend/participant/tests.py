@@ -26,31 +26,30 @@ class ParticipantTest(TestCase):
         )
         cls.result1 = Result.objects.create(
             participant=cls.participant,
-            question_key='test1',
+            question_identifier='test1',
             given_response='2 1/2',
-            score=2.5
+            score=2.5,
         )
         cls.result2 = Result.objects.create(
-            participant=cls.participant,
-            question_key='test2'
+            participant=cls.participant, question_identifier='test2'
         )
 
         cls.result3 = Result.objects.create(
             participant=cls.participant,
-            question_key='msi_01_music_activities',
-            score=1
+            question_identifier='msi_01_music_activities',
+            score=1,
         )
 
         cls.result4 = Result.objects.create(
             participant=cls.participant,
-            question_key='msi_08_intrigued_styles',
-            score=2
+            question_identifier='msi_08_intrigued_styles',
+            score=2,
         )
 
         cls.result5 = Result.objects.create(
             participant=cls.participant,
-            question_key='msi_24_music_addiction',
-            score=5
+            question_identifier='msi_24_music_addiction',
+            score=5,
         )
 
     def setUp(self):
@@ -132,13 +131,15 @@ class ParticipantTest(TestCase):
         self.block.create_question_list(
             {
                 "name": "test_msi1",
-                "question_keys": get_question_bank("MSI_F1_ACTIVE_ENGAGEMENT"),
+                "question_identifiers": get_question_bank("MSI_F1_ACTIVE_ENGAGEMENT"),
             }
         )
         self.block.create_question_list(
             {
                 "name": "test_msi2",
-                "question_keys": get_question_bank("MSI_F2_PERCEPTUAL_ABILITIES"),
+                "question_identifiers": get_question_bank(
+                    "MSI_F2_PERCEPTUAL_ABILITIES"
+                ),
             }
         )
         score_sum = self.participant.score_sum(
@@ -188,15 +189,21 @@ class ParticipantTest(TestCase):
     def test_profile_results(self):
         Result.objects.bulk_create(
             [
-                Result(participant=self.participant,
-                       question_key='msi_01_music_activities',
-                       given_response="response"),
-                Result(participant=self.participant,
-                       question_key='msi_24_music_addiction',
-                       given_response="response"),
-                Result(participant=self.participant,
-                       question_key='msi_08_intrigued_styles',
-                       given_response="response"),
+                Result(
+                    participant=self.participant,
+                    question_identifier='msi_01_music_activities',
+                    given_response="response",
+                ),
+                Result(
+                    participant=self.participant,
+                    question_identifier='msi_24_music_addiction',
+                    given_response="response",
+                ),
+                Result(
+                    participant=self.participant,
+                    question_identifier='msi_08_intrigued_styles',
+                    given_response="response",
+                ),
             ]
         )
         this_profile = self.participant.profile_results()

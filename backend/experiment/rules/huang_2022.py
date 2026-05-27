@@ -36,12 +36,12 @@ class Huang2022(Hooked):
         self.question_lists = [
             {
                 "name": "MSI_ALL",
-                "question_keys": get_question_bank('MSI_ALL'),
+                "question_identifiers": get_question_bank('MSI_ALL'),
                 "randomize": False,
             },
             {
                 "name": "Demographics and other",
-                "question_keys": [
+                "question_identifiers": [
                     'msi_39_best_instrument',
                     'dgf_genre_preference_zh',
                     'dgf_generation',
@@ -106,7 +106,7 @@ class Huang2022(Hooked):
             else:
                 if last_result.score == 0:
                     # user indicated they couldn't hear the music
-                    if last_result.question_key == 'audio_check1':
+                    if last_result.question_identifier == 'audio_check1':
                         playback = get_test_playback()
                         html = HTML(body=render_to_string('html/huang_2022/audio_check.html'))
                         form = Form(

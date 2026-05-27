@@ -54,10 +54,10 @@ class Speech2SongTest(TestCase):
     def test_repeated_presentation(self):
         section = self.playlist.section_set.first()
         Result.objects.create(
-            question_key='speech2song',
+            question_identifier='speech2song',
             session=self.session,
             section=section,
-            score=2
+            score=2,
         )
         actions = self.session.block_rules().next_repeated_representation(self.session, True)
         self.assertEqual(type(actions), list)

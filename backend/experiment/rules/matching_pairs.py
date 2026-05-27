@@ -28,7 +28,7 @@ class MatchingPairsGame(BaseRules):
         self.question_lists = [
             {
                 "name": "Demographics",
-                "question_keys": [
+                "question_identifiers": [
                     "dgf_gender_identity",
                     "dgf_generation",
                     "dgf_musical_experience",

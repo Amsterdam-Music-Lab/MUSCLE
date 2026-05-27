@@ -247,7 +247,7 @@ class Block(models.Model):
         ql.randomize = question_list.get("randomize", False)
         ql.save()
 
-        for i, question in enumerate(question_list["question_keys"]):
+        for i, question in enumerate(question_list["question_identifiers"]):
             try:
                 question_obj = Question.objects.get(pk=question)
             except Question.DoesNotExist:

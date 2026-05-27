@@ -259,11 +259,11 @@ class ToontjeHoger3Plink(BaseRules):
         """
         Calculate score, based on the data field
         """
-        if result.question_key == "plink":
+        if result.question_identifier == "plink":
             return (
                 self.SCORE_MAIN_CORRECT if result.expected_response == result.given_response else self.SCORE_MAIN_WRONG
             )
-        elif result.question_key == "era":
+        elif result.question_identifier == "era":
             result.session.save_json_data({"extra_questions_intro_shown": True})
             result.session.save()
             return (

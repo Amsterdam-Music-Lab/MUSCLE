@@ -44,7 +44,7 @@ def update_choices():
 
 
 def update_questions():
-    question_keys = []
+    question_identifiers = []
     for fixture in glob('/server/question/fixtures/[!choice]*.yaml'):
         with open(fixture, 'r') as f:
             questions = [obj.object for obj in serializers.deserialize('yaml', f)]
@@ -55,5 +55,5 @@ def update_questions():
                 except IntegrityError:
                     Question.objects.get(key=question.key).delete()
                     question.save()
-                question_keys.append(question.key)
-    return question_keys
+                question_identifiers.append(question.key)
+    return question_identifiers

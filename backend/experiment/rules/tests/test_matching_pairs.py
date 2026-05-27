@@ -72,7 +72,7 @@ class MatchingPairsTest(TestCase):
     def intermediate_score_request(self, data):
         request_data = {"json_data": json.dumps(data), **self.csrf_token, **self.session_data}
         self.client.post("/result/intermediate_score/", request_data)
-        result = Result.objects.filter(question_key="move").last()
+        result = Result.objects.filter(question_identifier="move").last()
         return result
 
     def test_intermediate_score(self):

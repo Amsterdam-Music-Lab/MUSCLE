@@ -86,9 +86,10 @@ class Participant(models.Model):
             ```python
             all_profile_results = participant.profile_results()
             for profile in all_profile_results:
-                print(f"{profile.question_key} - {profile.given_response}")
+                print(f"{profile.question_identifier} - {profile.given_response}")
             ```
         """
+
         return self.result_set.all().filter(given_response__isnull=False)
 
     def profile(self) -> dict:
@@ -107,14 +108,16 @@ class Participant(models.Model):
         """
         profile_dict = {}
         profile_list = self.profile_results().values(
-            'question_key', 'given_response', 'score'
+            'question_identifier', 'given_response', 'score'
         )
         for profile in profile_list:
-            profile_dict[profile.get('question_key')] = profile.get('given_response')
+            profile_dict[profile.get('question_identifier')] = profile.get(
+                'given_response'
+            )
             score = profile.get('score')
             if score:
-                question_key = profile.get('question_key')
-                profile_dict[f'{question_key}_score'] = score
+                question_identifier = profile.get('question_identifier')
+                profile_dict[f'{question_identifier}_score'] = score
         return profile_dict
 
     def is_dutch(self) -> bool:
@@ -189,5 +192,9 @@ class Participant(models.Model):
             score_sum = participant.score_sum(question_list)
             ```
         """
-        question_keys = question_list.questions.values_list('key')
-        return self.result_set.all().filter(question_key__in=question_keys).aggregate(Sum("score"))['score__sum']
+        question_identifiers = question_list.questions.values_list('key')
+        return (
+            self.result_set.all()
+            .filter(question_identifier__in=question_identifiers)
+            .aggregate(Sum("score"))['score__sum']
+        )

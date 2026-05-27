@@ -76,7 +76,7 @@ class BlockModelTest(TestCase):
                     expected_response=1,
                     given_response=1,
                     score=question_score,
-                    question_key=f"test_question_{j + 1}",
+                    question_identifier=f"test_question_{j + 1}",
                 )
                 for j in range(amount_of_results)
             ]

@@ -35,18 +35,17 @@ class ResultTest(TestCase):
 
     def test_get_multiple(self):
         Result.objects.create(
-            participant=self.participant, question_key="duplicate_key"
+            participant=self.participant, question_identifier="duplicate_key"
         )
         Result.objects.create(
-            participant=self.participant, question_key="duplicate_key"
+            participant=self.participant, question_identifier="duplicate_key"
         )
         response = self.client.get('/result/duplicate_key/')
         self.assertEqual(response.status_code, 409)
 
     def test_create(self):
         result = Result.objects.create(
-            question_key="speed_swallow",
-            participant=self.participant
+            question_identifier="speed_swallow", participant=self.participant
         )
         view = {
             "form": [

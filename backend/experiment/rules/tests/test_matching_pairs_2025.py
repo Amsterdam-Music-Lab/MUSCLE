@@ -75,7 +75,7 @@ class MatchingPairs2025Test(TestCase):
         for cond in conditions:
             result, _created = Result.objects.get_or_create(
                 participant=self.session.participant,
-                question_key="condition",
+                question_identifier="condition",
                 given_response=f"{cond[0]}_{cond[1]}",
             )
             result.score = score
@@ -115,7 +115,7 @@ class MatchingPairs2025Test(TestCase):
         for song in songs:
             result, _created = Result.objects.get_or_create(
                 participant=self.session.participant,
-                question_key="song",
+                question_identifier="song",
                 given_response=song,
             )
             result.score = score
@@ -337,7 +337,7 @@ class PlaythroughSimulationTest(TestCase):
                 actions = self.rules.next_round(session)
                 self.assertNotEqual(len(actions), 0)
             song_results = Result.objects.filter(
-                participant=self.participant, question_key='song'
+                participant=self.participant, question_identifier='song'
             )
             average_plays = song_results.aggregate(Avg('score'))['score__avg']
             # check that all songs have been played equally frequently, give or take 1
@@ -345,7 +345,7 @@ class PlaythroughSimulationTest(TestCase):
                 self.assertAlmostEqual(song_result.score, average_plays, delta=1)
             song_results.delete()
             condition_results = Result.objects.filter(
-                participant=self.participant, question_key='condition'
+                participant=self.participant, question_identifier='condition'
             )
             average_conditions = condition_results.aggregate(Avg('score'))['score__avg']
             # check that all conditions have been played equally frequently, give or take 1

@@ -14,7 +14,9 @@ def get_unanswered_questions(participant: Model, question_set: QuerySet) -> Gene
         Next unasked profile question
 
     """
-    keys_answered = participant.profile_results().values_list('question_key', flat=True)
+    keys_answered = participant.profile_results().values_list(
+        'question_identifier', flat=True
+    )
     for question_obj in question_set:
         if question_obj.key in keys_answered:
             continue

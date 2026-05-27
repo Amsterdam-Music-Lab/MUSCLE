@@ -86,7 +86,9 @@ def consent(request: HttpRequest) -> JsonResponse:
     participant = get_participant(request)
     data = json.loads(request.POST.get('json_data'))
     Result.objects.get_or_create(
-        participant=participant, question_key=data.get('key'), given_response='agreed'
+        participant=participant,
+        question_identifier=data.get('key'),
+        given_response='agreed',
     )
     return JsonResponse({'status': 'ok'})
 
@@ -105,20 +107,22 @@ def current_profile(request: HttpRequest) -> JsonResponse:
 
 
 def get_result(
-    request: HttpRequest, question_key: str
+    request: HttpRequest, question_identifier: str
 ) -> Union[JsonResponse, HttpResponse]:
     """Get data of a specific result from participant profile
 
     Args:
         request: frontend request
-        question_key: the `question_key` of the result
+        question_identifier: the `question_identifier` of the result
 
     Returns:
         a JsonResponse with the answer, or a `No Content` HttpResponse
     """
     participant = get_participant(request)
     try:
-        result = Result.objects.get(question_key=question_key, participant=participant)
+        result = Result.objects.get(
+            question_identifier=question_identifier, participant=participant
+        )
     except Result.DoesNotExist:
         return HttpResponse(
             status=204,

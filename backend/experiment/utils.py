@@ -110,7 +110,7 @@ def block_export_csv_results(block_identifier: str) -> StringIO:
     result_output_keys = [
         "session__id",
         "participant__id",
-        "question_key",
+        "question_identifier",
         "created_at",
         "expected_response",
         "given_response",
@@ -130,7 +130,7 @@ def block_export_csv_results(block_identifier: str) -> StringIO:
     profile_output_keys = [
         "participant__id",
         "participant__country_code",
-        "question_key",
+        "question_identifier",
         "created_at",
         "expected_response",
         "given_response",

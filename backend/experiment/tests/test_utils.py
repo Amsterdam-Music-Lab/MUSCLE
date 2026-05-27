@@ -51,11 +51,11 @@ class TestBlockExport(TestCase):
                 session=Session.objects.first(),
                 expected_response=i,
                 given_response=i,
-                question_key="test_question_" + str(i),
+                question_identifier="test_question_" + str(i),
             )
             Result.objects.create(
                 participant=cls.participant,
-                question_key=i,
+                question_identifier=i,
                 given_response=i,
             )
 

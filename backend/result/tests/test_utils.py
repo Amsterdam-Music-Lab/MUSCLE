@@ -26,14 +26,14 @@ class ResultUtilsTest(TestCase):
 
     def test_result_invalid(self):
         result = Result.objects.create(
-            participant=self.participant, question_key='some_key'
+            participant=self.participant, question_identifier='some_key'
         )
         data = {'resultId': result.id}
         result = get_result(self.session, data)
         self.assertIsNotNone(result)
         new_participant = Participant.objects.create()
         result = Result.objects.create(
-            participant=new_participant, question_key='another_key'
+            participant=new_participant, question_identifier='another_key'
         )
         data = {'resultId': result.id}
         with self.assertRaises(Result.DoesNotExist):
@@ -42,7 +42,7 @@ class ResultUtilsTest(TestCase):
     def test_apply_scoring_rule(self):
         result = Result.objects.create(
             session=self.session,
-            question_key='test_result',
+            question_identifier='test_result',
             scoring_rule='CORRECTNESS',
             expected_response='42',
             given_response='42',

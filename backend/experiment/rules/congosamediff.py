@@ -22,8 +22,7 @@ class CongoSameDiff(BaseRules):
 
     def next_round(self, session: Session):
         practice_done = session.result_set.filter(
-            question_key='practice_done',
-            given_response='YES'
+            question_identifier='practice_done', given_response='YES'
         ).exists()
 
         if practice_done:

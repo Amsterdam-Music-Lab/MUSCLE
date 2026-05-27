@@ -16,8 +16,8 @@ class UtilsTestCase(TestCase):
         block = Block.objects.create(rules='RHYTHM_BATTERY_INTRO', identifier='test')
         cls.result = Result.objects.create(
             participant=cls.participant,
-            question_key='dgf_gender_identity',
-            given_response='non_answer'
+            question_identifier='dgf_gender_identity',
+            given_response='non_answer',
         )
         questions = Question.objects.filter(
             key__in=['dgf_country_of_origin', 'dgf_generation', 'dgf_gender_identity']
@@ -46,12 +46,12 @@ class UtilsTestCase(TestCase):
             question = next(question_iterator)
         Result.objects.create(
             participant=self.participant,
-            question_key='dgf_country_of_origin',
+            question_identifier='dgf_country_of_origin',
             given_response="Christmas Island",
         )
         Result.objects.create(
             participant=self.participant,
-            question_key='dgf_generation',
+            question_identifier='dgf_generation',
             given_response="Golden Age",
         )
         question_iterator = get_unanswered_questions(

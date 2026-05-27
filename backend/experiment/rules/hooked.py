@@ -44,28 +44,28 @@ class Hooked(BaseRules):
         self.question_lists = [
             {
                 "name": "DEMOGRAPHICS",
-                "question_keys": get_question_bank('DEMOGRAPHICS')
+                "question_identifiers": get_question_bank('DEMOGRAPHICS')
                 + ["msi_39_best_instrument"],
                 "randomize": True,
             },  # 1. Demographic questions (7 questions)
             {
                 "name": "MSI_FG_GENERAL",
-                "question_keys": get_question_bank('MSI_FG_GENERAL'),
+                "question_identifiers": get_question_bank('MSI_FG_GENERAL'),
                 "randomize": True,
             },  # 2. General music sophistication
             {
                 "name": "MSI_ALL",
-                "question_keys": get_question_bank('MSI_ALL'),
+                "question_identifiers": get_question_bank('MSI_ALL'),
                 "randomize": True,
             },  # 3. Complete music sophistication (20 questions)
             {
                 "name": "STOMP20",
-                "question_keys": get_question_bank('STOMP20'),
+                "question_identifiers": get_question_bank('STOMP20'),
                 "randomize": True,
             },  # 4. STOMP (20 questions)
             {
                 "name": "TIPI",
-                "question_keys": get_question_bank('TIPI'),
+                "question_identifiers": get_question_bank('TIPI'),
                 "randomize": True,
             },  # 5. TIPI (10 questions)
         ]
@@ -187,7 +187,7 @@ class Hooked(BaseRules):
         n_old_new_correct = 0
 
         for result in session.result_set.all():
-            if result.question_key == "recognize":
+            if result.question_identifier == "recognize":
                 if result.given_response == "yes":
                     n_sync_guessed += 1
                     json_data = result.json_data

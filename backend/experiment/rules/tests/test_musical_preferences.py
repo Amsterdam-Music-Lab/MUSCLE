@@ -43,7 +43,12 @@ class MusicalPreferencesTest(TestCase):
 
     def test_preferred_songs(self):
         for index, section in enumerate(list(self.playlist.section_set.all())):
-            Result.objects.create(question_key="like_song", score=5 - index, section=section, session=self.session)
+            Result.objects.create(
+                question_identifier="like_song",
+                score=5 - index,
+                section=section,
+                session=self.session,
+            )
         mp = MusicalPreferences()
         preferred_sections = mp.get_preferred_songs(self.session.result_set.order_by("?"), 3)
         assert preferred_sections[0]["artist"] == "SuperArtist"
@@ -55,12 +60,22 @@ class MusicalPreferencesTest(TestCase):
         # Create 3 results with a section
         for index, section in enumerate(list(self.playlist.section_set.all())):
             if index < 3:
-                Result.objects.create(question_key="like_song", score=5 - index, section=section, session=self.session)
+                Result.objects.create(
+                    question_identifier="like_song",
+                    score=5 - index,
+                    section=section,
+                    session=self.session,
+                )
 
         other_session = Session.objects.create(block=self.block, participant=self.participant, playlist=self.playlist)
 
         for i in range(10):
-            Result.objects.create(question_key="like_song", score=5 - i, section=None, session=other_session)
+            Result.objects.create(
+                question_identifier="like_song",
+                score=5 - i,
+                section=None,
+                session=other_session,
+            )
         mp = MusicalPreferences()
 
         # Go to the last round (top_all = ... caused the error)

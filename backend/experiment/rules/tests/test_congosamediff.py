@@ -53,8 +53,8 @@ class CongoSameDiffTest(TestCase):
         Result.objects.create(
             session=self.session,
             participant=self.participant,
-            question_key='practice_done',
-            given_response='YES'
+            question_identifier='practice_done',
+            given_response='YES',
         )
         with patch.object(self.session, 'get_rounds_passed', return_value=2):
             final_action = congo_same_diff.next_round(self.session)
@@ -92,8 +92,8 @@ class CongoSameDiffTest(TestCase):
         Result.objects.create(
             session=self.session,
             participant=self.participant,
-            question_key='practice_done',
-            given_response='YES'
+            question_identifier='practice_done',
+            given_response='YES',
         )
 
         non_practice_action = congo_same_diff.next_round(self.session)
