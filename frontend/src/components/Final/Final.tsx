@@ -88,7 +88,7 @@ const Final = (props: FinalAction & SharedActionProps) => {
                 />
             )}
             {feedbackInfo && (<UserFeedback
-                blockSlug={block.slug}
+                blockIdentifier={block.identifier}
                 participant={participant}
                 feedbackInfo={feedbackInfo}
             />)}

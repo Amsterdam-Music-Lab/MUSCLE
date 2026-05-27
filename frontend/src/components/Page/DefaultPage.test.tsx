@@ -18,8 +18,8 @@ describe("DefaultPage Component Tests", () => {
     const defaultProps = {
         className: 'aha__default',
         title: "Default page title",
-        experimentSlug: 'some_experiment',
-        nextBlockSlug: 'some_experiment',
+        experimentIdentifier: 'some_experiment',
+        nextBlockIdentifier: 'some_experiment',
     }
 
     it('renders itself with children', async () => {

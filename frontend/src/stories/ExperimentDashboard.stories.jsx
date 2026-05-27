@@ -17,19 +17,19 @@ export default {
 };
 
 const TestData = {
-    slug: 'my-experiment',
+    identifier: 'my-experiment',
     name: 'My Experiment',
     description: 'This is the experiment description',
     dashboard: [
         {
-            slug: 'first-block',
+            identifier: 'first-block',
             name: 'First block',
             description: 'Description of the first block',
             image: {
                 file: "/images/experiments/visual-matching-pairs/chimp.jpg",
             }
         }, {
-            slug: 'second-block',
+            identifier: 'second-block',
             name: 'Second block',
             description: 'Description of the second block',
             image: {
@@ -38,7 +38,7 @@ const TestData = {
         } 
     ],
     nextBlock: {
-        slug: 'first-block',
+        identifier: 'first-block',
         name: 'First block'
     },
     aboutContent: 'This is some content for the about page',

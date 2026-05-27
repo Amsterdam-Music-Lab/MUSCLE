@@ -9,7 +9,7 @@ vi.mock('../../API', () => ({
 }));
 
 describe('UserFeedback', () => {
-    const mockBlockSlug = 'test-slug';
+    const mockBlockIdentifier = 'test-identifier';
     const mockParticipant = { id: 1 };
     const mockFeedbackInfo = {
         header: 'Your Feedback',
@@ -25,7 +25,7 @@ describe('UserFeedback', () => {
     it('renders the feedback form', () => {
         const { getByText, getByRole } = render(
             <UserFeedback
-                blockSlug={mockBlockSlug}
+                blockidentifier={mockBlockIdentifier}
                 participant={mockParticipant}
                 feedbackInfo={mockFeedbackInfo}
             />
@@ -39,7 +39,7 @@ describe('UserFeedback', () => {
     it('allows input to be entered', () => {
         const { getByRole } = render(
             <UserFeedback
-                blockSlug={mockBlockSlug}
+                blockidentifier={mockBlockIdentifier}
                 participant={mockParticipant}
                 feedbackInfo={mockFeedbackInfo}
             />
@@ -56,7 +56,7 @@ describe('UserFeedback', () => {
 
         const { getByText, getByRole, queryByText } = render(
             <UserFeedback
-                blockSlug={mockBlockSlug}
+                blockidentifier={mockBlockIdentifier}
                 participant={mockParticipant}
                 feedbackInfo={mockFeedbackInfo}
             />
@@ -67,7 +67,7 @@ describe('UserFeedback', () => {
 
         await waitFor(() => {
             expect(postFeedback).toHaveBeenCalledWith({
-                blockSlug: mockBlockSlug,
+                blockIdentifier: mockBlockIdentifier,
                 feedback: 'Great experience!',
                 participant: mockParticipant
             });

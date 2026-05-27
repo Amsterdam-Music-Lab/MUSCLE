@@ -24,7 +24,7 @@ function getPlaylistData(overrides = {}) {
                 },
                 score: '250',
                 date: "Never",
-                block_slug: "block-slug",
+                block_identifier: "block-identifier",
             },
             {
                 finished_at: "2021-09-20T12:00:00Z",
@@ -34,7 +34,7 @@ function getPlaylistData(overrides = {}) {
                 },
                 score: '200',
                 date: "Tomorrow",
-                block_slug: "block-slug",
+                block_identifier: "block-identifier",
             },
             {
                 finished_at: "2021-09-20T12:00:00Z",
@@ -44,7 +44,7 @@ function getPlaylistData(overrides = {}) {
                 },
                 score: '150',
                 date: "Ereyesterday",
-                block_slug: "block-slug",
+                block_identifier: "block-identifier",
             },
             {
                 finished_at: "2021-09-20T12:00:00Z",
@@ -54,7 +54,7 @@ function getPlaylistData(overrides = {}) {
                 },
                 score: '100',
                 date: "Yesterday",
-                block_slug: "block-slug",
+                block_identifier: "block-identifier",
             },
             {
                 finished_at: "2021-09-21T12:00:00Z",
@@ -64,7 +64,7 @@ function getPlaylistData(overrides = {}) {
                 },
                 score: 50,
                 date: "Today",
-                block_slug: "block-slug",
+                block_identifier: "block-identifier",
             },
             {
                 finished_at: "2021-09-20T12:00:00Z",
@@ -74,7 +74,7 @@ function getPlaylistData(overrides = {}) {
                 },
                 score: '2',
                 date: "Last year",
-                block_slug: "block-slug",
+                block_identifier: "block-identifier",
             },
         ],
         ...overrides,
@@ -93,7 +93,7 @@ const getDecorator = (Story) => (
 export const Default = {
     args: {
         block: {
-            slug: 'test',
+            identifier: 'test',
             name: 'Test block',
             theme: {
                 colorPrimary: 'teal'

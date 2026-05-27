@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import axios from "axios";
 
-import { API_BASE_URL, EXPERIMENT_SLUG, URLS } from "@/config";
+import { API_BASE_URL, EXPERIMENT_IDENTIFIER, URLS } from "@/config";
 import { URLS as API_URLS } from "../../API";
 import useBoundStore from "../../util/stores";
 import Block from "../Block/Block";
@@ -69,7 +69,7 @@ const App = () => {
                         {/* Default experiment */}
                         <Route
                             path="/"
-                            element={<Redirect to={URLS.experiment.replace(":slug", EXPERIMENT_SLUG)} />}
+                            element={<Redirect to={URLS.experiment.replace(":identifier", EXPERIMENT_IDENTIFIER)} />}
                         />
 
                         {/* Profile */}

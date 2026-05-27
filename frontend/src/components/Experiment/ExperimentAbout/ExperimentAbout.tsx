@@ -6,7 +6,7 @@ import HTML from '../../HTML/HTML';
 import IExperiment from "@/types/Experiment";
 import { styleButtonOutline } from "@/util/stylingHelpers";
 
-export const ExperimentAbout: React.FC<IExperiment> = ({ aboutContent, backButtonText, slug, theme }) => {
+export const ExperimentAbout: React.FC<IExperiment> = ({ aboutContent, backButtonText, identifier, theme }) => {
 
     const styleAboutText = (primaryColor: string) => {
         return css`
@@ -44,7 +44,7 @@ export const ExperimentAbout: React.FC<IExperiment> = ({ aboutContent, backButto
 
     return (
         <div className="container">
-            <Link className="btn btn-lg mt-3" css={styleButtonOutline(theme?.colorPrimary || '')} to={`/${slug}`}>
+            <Link className="btn btn-lg mt-3" css={styleButtonOutline(theme?.colorPrimary || '')} to={`/${identifier}`}>
                 <i className="fas fa-arrow-left mr-2"></i>
                 {backButtonText}
             </Link>

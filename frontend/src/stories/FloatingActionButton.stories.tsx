@@ -11,7 +11,7 @@ export default {
 };
 
 const userFeedbackProps = {
-    blockSlug: "test",
+    blockIdentifier: "test",
     participant: "test",
     feedbackInfo: {
         header: "Feedback",
