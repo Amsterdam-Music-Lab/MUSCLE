@@ -55,6 +55,7 @@ class Likert(BaseRules):
                 self.get_trial(session, total_rounds),
             ]
         elif round_number == total_rounds:
+            session.finish()
             return [
                 Final(session, title=_("End of experiment"), final_text=_("Thank you for participating!"))
             ]

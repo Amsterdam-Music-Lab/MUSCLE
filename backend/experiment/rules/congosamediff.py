@@ -178,8 +178,6 @@ class CongoSameDiff(BaseRules):
     def get_final_round(self, session: Session):
         # Finish session
         session.finish()
-        session.save()
-
         return Final(
             session,
             title=_("End"),

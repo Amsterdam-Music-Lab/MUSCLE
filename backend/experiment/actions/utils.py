@@ -15,7 +15,7 @@ def camelize(input_str: str) -> str:
     return sub(snake_case_pattern, lambda match: match.group(1).upper(), input_str)
 
 
-def get_current_experiment_url(session: Session) -> str | None:
+def get_experiment_url(session: Session) -> str | None:
     """
     Description: Retrieve the URL for the current experiment.
 
@@ -27,7 +27,7 @@ def get_current_experiment_url(session: Session) -> str | None:
 
     Example:
         ```python
-        url = get_current_experiment_url(session)
+        url = get_experiment_url(session)
         ```
 
     Note:

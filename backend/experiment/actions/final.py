@@ -4,7 +4,7 @@ from typing import Optional, Dict, TypedDict
 from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.types import FeedbackInfo
-from experiment.actions.utils import get_current_experiment_url
+from experiment.actions.utils import get_experiment_url
 from experiment.serializers import serialize_social_media_config, SocialMediaConfigConfiguration
 from session.models import Session
 
@@ -160,7 +160,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         """
         Render a button in the Final action if the link back to the experiment page is valid
         """
-        button_link = get_current_experiment_url(session)
+        button_link = get_experiment_url(session)
         if button_link:
             return Button(label=_("Next"), link=button_link)
 

@@ -55,15 +55,15 @@ class Session(models.Model):
         """
         return self.block.get_rules()
 
-    def finish(self):
+    def finish(self, final_score: float = None):
         """Finish current session with the following steps:
 
         1. set the `finished_at` timestamp to the current moment
 
-        2. set the `final_score` field to the sum of all results' scores
+        2. set the `final_score` field to the passed value, or to the sum of all results' scores
         """
         self.finished_at = timezone.now()
-        self.final_score = self.total_score()
+        self.final_score = final_score or self.total_score()
         self.save()
 
     def get_rounds_passed(self, apply_results_filter: bool = True) -> int:

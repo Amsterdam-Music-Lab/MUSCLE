@@ -104,10 +104,7 @@ class Hooked(BaseRules):
         if round_number == session.block.rounds:
             # Finish session.
             session.finish()
-            session.save()
 
-            # Return a score and final score action.
-            total_score = session.total_score()
             return [
                 self.get_score(session, round_number),
                 Final(

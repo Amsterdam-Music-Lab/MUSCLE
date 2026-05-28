@@ -271,7 +271,7 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
             instruction=instruction, steps=[], button=Button(_("Next fragment"))
         )
 
-    def finalize_block(self, session):
+    def finalize_block(self, session: Session):
         # we had 4 practice trials and 60 experiment trials
         percentage = (
             sum([res.score for res in session.result_set.all()])
@@ -289,6 +289,7 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
             to hear the rhythm really well."
         )
         final_text = render_feedback_trivia(feedback, trivia)
+        session.finish()
         return Final(session, title=_("End"), final_text=final_text)
 
     def practice_successful(self, session: Session) -> bool:

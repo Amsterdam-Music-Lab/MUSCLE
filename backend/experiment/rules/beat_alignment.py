@@ -61,7 +61,6 @@ class BeatAlignment(BaseRules):
         if session.rounds_complete():
             # Finish session
             session.finish()
-            session.save()
             percentage = int(
                 (sum([r.score for r in session.result_set.all()]) / session.block.rounds) * 100)
             feedback = _('Well done! You’ve answered {} percent correctly!').format(

@@ -88,5 +88,4 @@ class BST(HBat):
         trivia = _("A march and a waltz are very common meters in Western music, but in other cultures, much more complex meters also exist!")
         final_text = render_feedback_trivia(feedback, trivia)
         session.finish()
-        session.save()
         return Final(session, title=_("End"), final_text=final_text)

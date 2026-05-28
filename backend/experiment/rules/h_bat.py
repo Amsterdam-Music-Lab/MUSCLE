@@ -181,7 +181,7 @@ class HBat(BaseRules, PracticeMixin):
             instruction=instruction, steps=[], button=Button(_("Next fragment"))
         )
 
-    def finalize_block(self, session):
+    def finalize_block(self, session: Session) -> Final:
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
@@ -193,7 +193,6 @@ class HBat(BaseRules, PracticeMixin):
                     speeding up or slowing down with only {} percent!").format(percentage)
         trivia = self.get_trivia()
         final_text = render_feedback_trivia(feedback, trivia)
-        session.finish()
         session.save()
         return Final(session, title=_("End"), final_text=final_text)
 

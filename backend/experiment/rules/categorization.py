@@ -72,7 +72,7 @@ class Categorization(BaseRules):
                     session.result_set.all().delete()
                     json_data = {"phase": "ABORTED", "training_rounds": json_data["training_rounds"]}
                     session.save_json_data(json_data)
-                    session.save()
+                    session.finish()
                     profile.delete()
                     final_message = render_to_string("final/categorization_final.html")
                     final = Final(
@@ -133,8 +133,7 @@ class Categorization(BaseRules):
                         "phase": "FAILED_TRAINING",
                     }
                     session.save_json_data(end_data)
-                    session.final_score = 0
-                    session.save()
+                    session.finish(final_score=0)
                     profiles = session.participant.profile_results()
                     for profile in profiles:
                         # Delete failed_training tag from profile

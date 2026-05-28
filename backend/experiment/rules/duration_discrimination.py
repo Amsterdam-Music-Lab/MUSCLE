@@ -170,14 +170,13 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
     def get_introduction(self):
         return _('In this test you will hear two time durations for each trial, which are marked by two tones.')
 
-    def finalize_block(self, session):
+    def finalize_block(self, session: Session) -> Final:
         ''' After 8 turnpoints, finalize experiment
         Give participant feedback
         '''
         difference = get_average_difference(session, 4, self.start_diff)
         final_text = self.get_final_text(difference)
         session.finish()
-        session.save()
         return Final(session, title=_("End"), final_text=final_text)
 
     def get_final_text(self, difference):

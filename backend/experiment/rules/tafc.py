@@ -41,7 +41,7 @@ from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
 from experiment.actions.form import Form
 from result.utils import prepare_result
-
+from session.models import Session
 
 class TwoAlternativeForced(BaseRules):
     ID = 'TWO_ALTERNATIVE_FORCED'
@@ -140,7 +140,7 @@ class TwoAlternativeForced(BaseRules):
 
         return feedback
 
-    def get_final_view(self, session):
+    def get_final_view(self, session: Session) -> Final:
         """
         Get Final view (action).
         """
@@ -166,13 +166,14 @@ class TwoAlternativeForced(BaseRules):
         else:
             rank = ranks['PLASTIC']
             final_text = "Congratulations! You did OK and won a plastic medal!"
-
+        final_score = round(score_percent)
+        session.finish(final_score=final_score)
         final = Final(
             session=session,
             final_text=final_text,
             rank=rank,
-            total_score=round(score_percent),
-            points='% correct'
+            total_score=final_score,
+            points='% correct',
         )
 
         return final

@@ -235,9 +235,8 @@ class Huang2022(Hooked):
                     return [self.finalize(session)]
         return actions
 
-    def finalize(self, session):
+    def finalize(self, session: Session) -> Final:
         session.finish()
-        session.save()
         return Final(
             session=session,
             final_text=self.final_score_message(session),

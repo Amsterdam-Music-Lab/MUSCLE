@@ -4,12 +4,10 @@ from typing import Optional
 from django.utils.translation import gettext as _
 
 from .button import Button
-from .final import Final
 from .form import Form
 from .question import Choice
 from .playback import Autoplay, PlayButtons, PlaybackSection
 from .trial import Trial
-from .utils import get_current_experiment_url
 
 from experiment.actions.utils import randomize_playhead
 from experiment.actions.question import ButtonArrayQuestion

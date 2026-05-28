@@ -14,10 +14,11 @@ from experiment.actions.playback import PlayButtons, ImagePlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
-from experiment.actions.utils import get_current_experiment_url
+from experiment.actions.utils import get_experiment_url
 from experiment.utils import format_label
 from result.utils import prepare_result
 from section.models import Playlist
+from session.models import Session
 from .base import BaseRules
 
 logger = logging.getLogger(__name__)
@@ -302,11 +303,9 @@ class ToontjeHoger2Preverbal(BaseRules):
     def calculate_score(self, result, data):
         return self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
 
-    def get_final_round(self, session):
-
+    def get_final_round(self, session: Session):
         # Finish session.
         session.finish()
-        session.save()
 
         # Score
         score = self.get_score(session, session.get_rounds_passed())
@@ -314,6 +313,7 @@ class ToontjeHoger2Preverbal(BaseRules):
         # Final
         final_text = "Goed gedaan! Je hebt beide vragen correct beantwoord!" if session.final_score >= 2 * \
             self.SCORE_CORRECT else "Dat bleek toch even lastig!"
+        session.finish()
         final = Final(
             session=session,
             final_text=final_text,
@@ -329,7 +329,7 @@ class ToontjeHoger2Preverbal(BaseRules):
             heading="Het eerste luisteren",
             button=Button(
                 "Terug naar ToontjeHoger",
-                link=get_current_experiment_url(session),
+                link=get_experiment_url(session),
             ),
         )
 

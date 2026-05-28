@@ -10,6 +10,7 @@ from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
 from question.models import ChoiceList
 from result.utils import prepare_result
+from session.models import Session
 
 boolean_and_middle_choices = [
     {
@@ -28,7 +29,7 @@ boolean_and_middle_choices = [
 class RhythmBatteryIntro(BaseRules):
     ID = 'RHYTHM_BATTERY_INTRO'
 
-    def next_round(self, session):
+    def next_round(self, session: Session):
         round_number = session.get_rounds_passed()
         playback = None
         feedback_form = None
@@ -127,12 +128,11 @@ class RhythmBatteryIntro(BaseRules):
             )
             message = _(
                 "Please keep the eventual sound level the same over the course of the experiment.")
+            session.finish()
             actions = [
                 Trial(playback, feedback_form),
                 Final(session, final_text=message),
             ]
-            session.finish()
-            session.save()
             return actions
 
         view = Trial(playback, feedback_form=feedback_form)
