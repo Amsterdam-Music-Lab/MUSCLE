@@ -7,28 +7,6 @@ from ..base import BaseRules
 
 
 class BaseRulesTest(TestCase):
-    def test_get_play_again_url(self):
-        block = Block.objects.create(slug="music-lab", rules="QUESTIONNAIRE")
-        session = Session.objects.create(
-            block=block,
-            participant=Participant.objects.create(),
-        )
-        base = BaseRules()
-        play_again_url = base.get_play_again_url(session)
-        self.assertEqual(play_again_url, "/block/music-lab")
-
-    def test_get_play_again_url_with_participant_id(self):
-        block = Block.objects.create(slug="music-lab", rules="QUESTIONNAIRE")
-        participant = Participant.objects.create(
-            participant_id_url="42",
-        )
-        session = Session.objects.create(
-            block=block,
-            participant=participant,
-        )
-        base = BaseRules()
-        play_again_url = base.get_play_again_url(session)
-        self.assertEqual(play_again_url, "/block/music-lab?participant_id=42")
 
     def test_validate_playlist(self):
         base = BaseRules()

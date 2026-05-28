@@ -70,10 +70,6 @@ class MatchingPairs2025(MatchingPairsGame):
             actions.append(trial)
             return actions
 
-        # Finish session and show final view
-        session.finish()
-        session.save()
-
         return self._get_final_actions(session)
 
     def get_short_explainer(self):

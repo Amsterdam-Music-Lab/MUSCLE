@@ -63,7 +63,8 @@ class Session(models.Model):
         2. set the `final_score` field to the passed value, or to the sum of all results' scores
         """
         self.finished_at = timezone.now()
-        self.final_score = final_score or self.total_score()
+        if not self.final_score:
+            self.final_score = final_score or self.total_score()
         self.save()
 
     def get_rounds_passed(self, apply_results_filter: bool = True) -> int:
