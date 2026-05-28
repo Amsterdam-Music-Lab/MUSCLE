@@ -4,6 +4,7 @@ from typing import Optional, Dict, TypedDict
 from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.types import FeedbackInfo
+from experiment.actions.utils import get_current_experiment_url
 from experiment.serializers import serialize_social_media_config, SocialMediaConfigConfiguration
 from session.models import Session
 
@@ -61,7 +62,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         title (str): The title displayed at the top of the final view. Defaults to a localized "Final score".
         final_text (Optional[str]): An optional concluding message (e.g., "Thanks for participating!").
         button (Optional[ButtonConfiguration]): Optional call-to-action button configuration. For example:
-                                            {"text": "Play again", "link": "/{experiment_slug}"}.
+                                            {"text": "Play again", "link": "/{experiment_slug}"}. If not provided, the `default_button` method is used.
         points (Optional[str]): The label for the score units (e.g., "points"). Defaults to a localized "points".
         rank (Optional[str]): The participant's rank (e.g., "GOLD"). If not provided, no rank is displayed.
         show_profile_link (bool): If True, display a link to the participant's profile.
@@ -109,7 +110,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         self.session = session
         self.title = title
         self.final_text = final_text
-        self.button = button
+        self.button = button or self.default_button(session)
         self.rank = rank
         self.show_profile_link = show_profile_link
         self.show_participant_link = show_participant_link
@@ -154,6 +155,14 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         }
 
         return response
+
+    def default_button(self, session: Session):
+        """
+        Render a button in the Final action if the link back to the experiment page is valid
+        """
+        button_link = get_current_experiment_url(session)
+        if button_link:
+            return Button(label=_("Next"), link=button_link)
 
     def get_social_media_config(self, session: Session) -> Optional[SocialMediaConfigConfiguration]:
         experiment = session.block.phase.experiment

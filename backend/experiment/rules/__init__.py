@@ -13,9 +13,6 @@ from .huang_2022 import Huang2022
 from .kuiper_2020 import Kuiper2020
 from .likert import Likert
 from .matching_pairs import MatchingPairsGame
-from .matching_pairs_fixed import MatchingPairsFixed
-from .matching_pairs_lite import MatchingPairsLite
-from .matching_pairs_icmpc import MatchingPairsICMPC
 from .matching_pairs_2025 import MatchingPairs2025
 from .musical_preferences import MusicalPreferences
 from .questionnaire import Questionnaire
@@ -59,10 +56,7 @@ BLOCK_RULES = {
     Huang2022.ID: Huang2022,
     Kuiper2020.ID: Kuiper2020,
     Likert.ID: Likert,
-    MatchingPairsFixed.ID: MatchingPairsFixed,
     MatchingPairsGame.ID: MatchingPairsGame,
-    MatchingPairsLite.ID: MatchingPairsLite,
-    MatchingPairsICMPC.ID: MatchingPairsICMPC,
     MatchingPairs2025.ID: MatchingPairs2025,
     MusicalPreferences.ID: MusicalPreferences,
     Questionnaire.ID: Questionnaire,

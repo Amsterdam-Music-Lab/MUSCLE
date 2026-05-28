@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from .base import BaseRules
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
@@ -13,7 +14,6 @@ from experiment.actions.trial import Trial
 from experiment.actions.utils import (
     render_feedback_trivia,
 )
-from experiment.actions.wrappers import final_action_with_optional_button
 from result.utils import prepare_result
 from section.models import Playlist
 
@@ -69,7 +69,7 @@ class BeatAlignment(BaseRules):
             trivia = _('In the UK, over 140.000 people did \
                 this test when it was first developed?')
             final_text = render_feedback_trivia(feedback, trivia)
-            return final_action_with_optional_button(session, final_text)
+            return Final(session, title=_("End"), final_text=final_text)
 
         # Practice rounds
         if not session.json_data.get("done_practice"):

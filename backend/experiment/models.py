@@ -67,6 +67,13 @@ class Experiment(models.Model):
     )
     disclaimer = models.TextField(blank=True, default="")
     privacy = models.TextField(blank=True, default="")
+    replayable = models.BooleanField(
+        blank=True,
+        default=False,
+        help_text=(
+            "If True, the experiment will restart from the first block after the last block has been finished."
+        ),
+    )
     theme_config = models.ForeignKey("theme.ThemeConfig", blank=True, null=True, on_delete=models.SET_NULL)
     active = models.BooleanField(default=True)
     social_media_config: Optional["SocialMediaConfig"]
