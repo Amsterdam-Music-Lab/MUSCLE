@@ -12,7 +12,7 @@ from experiment.actions.info import Info
 from experiment.actions.question import DropdownQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
-from experiment.actions.utils import get_current_experiment_url
+from experiment.actions.utils import get_experiment_url
 from experiment.utils import non_breaking_spaces
 from result.utils import prepare_result
 from section.models import Section
@@ -114,7 +114,6 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
     def get_final_round(self, session):
         # Finish session.
         session.finish()
-        session.save()
 
         # Score
         score = self.get_score_view(session)
@@ -145,7 +144,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
             body=body,
             heading="Muziekherkenning",
             button=Button(
-                "Terug naar ToontjeHogerKids", link=get_current_experiment_url(session)
+                "Terug naar ToontjeHogerKids", link=get_experiment_url(session)
             ),
         )
 

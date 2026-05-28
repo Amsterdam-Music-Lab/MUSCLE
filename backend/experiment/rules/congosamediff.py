@@ -2,10 +2,10 @@ import itertools
 import re
 
 from django.utils.translation import gettext_lazy as _
-from experiment.actions.wrappers import final_action_with_optional_button
 from section.models import Playlist, Section
 from session.models import Session
 from experiment.actions.explainer import Explainer
+from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
@@ -178,11 +178,9 @@ class CongoSameDiff(BaseRules):
     def get_final_round(self, session: Session):
         # Finish session
         session.finish()
-        session.save()
-
-        return final_action_with_optional_button(
-            title=_('End'),
-            session=session,
+        return Final(
+            session,
+            title=_("End"),
             final_text=_('Thank you for participating!'),
         )
 

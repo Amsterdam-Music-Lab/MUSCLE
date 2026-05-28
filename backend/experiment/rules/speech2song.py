@@ -161,7 +161,6 @@ class Speech2Song(BaseRules):
         else:
             # Finish session
             session.finish()
-            session.save()
             # Return a score and final score action
             return Final(
                 title=_('End of experiment'),

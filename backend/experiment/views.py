@@ -16,10 +16,8 @@ from experiment.serializers import (
     serialize_phase,
 )
 from experiment.rules import BLOCK_RULES
-from experiment.actions.utils import EXPERIMENT_KEY
 from participant.models import Participant
 from participant.utils import get_or_create_participant
-from theme.serializers import serialize_theme
 
 logger = logging.getLogger(__name__)
 
@@ -102,7 +100,6 @@ def get_experiment(
             status=500,
         )
 
-    request.session[EXPERIMENT_KEY] = slug
     participant = get_or_create_participant(request)
 
     phases = list(experiment.phases.order_by("index").all())

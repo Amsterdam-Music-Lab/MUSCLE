@@ -8,6 +8,7 @@ from .base import BaseRules
 from .practice import PracticeMixin
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
@@ -16,7 +17,6 @@ from experiment.actions.utils import (
     get_average_difference_level_based,
     render_feedback_trivia,
 )
-from experiment.actions.wrappers import final_action_with_optional_button
 from experiment.rules.util.staircasing import register_turnpoint
 from result.utils import prepare_result
 from section.models import Playlist, Section
@@ -181,7 +181,7 @@ class HBat(BaseRules, PracticeMixin):
             instruction=instruction, steps=[], button=Button(_("Next fragment"))
         )
 
-    def finalize_block(self, session):
+    def finalize_block(self, session: Session) -> Final:
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
@@ -193,9 +193,8 @@ class HBat(BaseRules, PracticeMixin):
                     speeding up or slowing down with only {} percent!").format(percentage)
         trivia = self.get_trivia()
         final_text = render_feedback_trivia(feedback, trivia)
-        session.finish()
         session.save()
-        return final_action_with_optional_button(session, final_text)
+        return Final(session, title=_("End"), final_text=final_text)
 
     def get_trivia(self):
         return _("When people listen to music, they often perceive an underlying regular pulse, like the woodblock \

@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from experiment.models import Block
+from experiment.models import Block, Experiment, Phase
 from experiment.rules.toontjehoger_3_plink import ToontjeHoger3Plink
 from experiment.rules.toontjehogerkids_3_plink import ToontjeHogerKids3Plink
 from participant.models import Participant
@@ -31,7 +31,11 @@ class TestToontjeHoger3Plink(TestCase):
             "Golden Earring,Radar Love,0.0,1.0,toontjehoger/plink/2021-006.mp3,70s,vrolijk\n"
         ))
         playlist._update_sections()
-        block = Block.objects.create(slug="test-th-plink", rules="TOONTJE_HOGER_3_PLINK", rounds=10)
+        experiment = Experiment.objects.create(slug="plink")
+        phase = Phase.objects.create(experiment=experiment)
+        block = Block.objects.create(
+            phase=phase, slug="test-th-plink", rules="TOONTJE_HOGER_3_PLINK", rounds=10
+        )
         session = Session.objects.create(block=block, participant=Participant.objects.create(), playlist=playlist)
         rules = block.get_rules()
         for round in range(block.rounds):

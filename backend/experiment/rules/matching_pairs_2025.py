@@ -15,6 +15,7 @@ from experiment.actions.final import Final
 from experiment.actions.playback import MatchingPairs, PlaybackSection
 from experiment.actions.trial import Trial
 from experiment.actions.types import FeedbackInfo
+from experiment.actions.utils import get_experiment_url
 from .matching_pairs import MatchingPairsGame
 
 
@@ -69,22 +70,19 @@ class MatchingPairs2025(MatchingPairsGame):
             actions.append(trial)
             return actions
 
-        # Finish session and show final view
-        session.finish()
-        session.save()
-
         return self._get_final_actions(session)
 
     def get_short_explainer(self):
         return Explainer(_("Click to start!"), steps=[])
 
-    def _get_final_actions(self, session: Session):
+    def _get_final_actions(self, session: Session) -> list[Final]:
+        session.finish()
         score = Final(
             session,
             title="Score",
             total_score=session.final_score,
             final_text=self._final_text(self._get_percentile_rank(session)),
-            button=Button(_("Next game"), link=self.get_experiment_url(session)),
+            button=Button(_("Next game"), link=get_experiment_url(session)),
             percentile=self._get_percentile_rank(session),
             accumulative_percentile=session.participant.percentile_rank_accumulative_score(),
         )

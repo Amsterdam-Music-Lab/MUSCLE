@@ -1,7 +1,6 @@
 from django.test import TestCase
 
 from experiment.models import Block, Experiment, Phase
-from experiment.actions.utils import EXPERIMENT_KEY
 from participant.models import Participant
 from section.models import Playlist
 from session.models import Session
@@ -10,10 +9,14 @@ from session.models import Session
 class SessionViewsTest(TestCase):
     @classmethod
     def setUpTestData(cls):
+        experiment = Experiment.objects.create(slug='myexperiment')
+        phase = Phase.objects.create(experiment=experiment)
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.playlist1 = Playlist.objects.create(name="First Playlist")
         cls.playlist2 = Playlist.objects.create(name="Second Playlist")
-        cls.block = Block.objects.create(slug="testviews", rules="RHYTHM_BATTERY_INTRO")
+        cls.block = Block.objects.create(
+            phase=phase, slug="testviews", rules="RHYTHM_BATTERY_INTRO"
+        )
         cls.block.playlists.add(cls.playlist1, cls.playlist2)
 
     def setUp(self):
@@ -27,19 +30,6 @@ class SessionViewsTest(TestCase):
         assert response
 
     def test_next_round_with_experiment(self):
-        slug = "myexperiment"
-        experiment = Experiment.objects.create(slug=slug)
-        request_session = self.client.session
-        request_session[EXPERIMENT_KEY] = slug
-        request_session.save()
         session = Session.objects.create(block=self.block, participant=self.participant)
         response = self.client.get(f"/session/{session.id}/next_round/")
-        assert response
-        changed_session = Session.objects.get(pk=session.pk)
-        assert changed_session.json_data.get(EXPERIMENT_KEY) is None
-        phase = Phase.objects.create(experiment=experiment)
-        self.block.phase = phase
-        self.block.save()
-        response = self.client.get(f"/session/{session.id}/next_round/")
-        changed_session = Session.objects.get(pk=session.pk)
-        assert changed_session.json_data.get(EXPERIMENT_KEY) == slug
+        self.assertIsNotNone(response)

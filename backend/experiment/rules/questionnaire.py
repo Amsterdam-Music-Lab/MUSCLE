@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from .base import BaseRules
 from experiment.actions.explainer import Explainer
 from experiment.actions.redirect import Redirect
+from experiment.actions.utils import get_experiment_url
 from session.models import Session
 
 class Questionnaire(BaseRules):
@@ -29,5 +30,4 @@ class Questionnaire(BaseRules):
             return actions
 
         session.finish()
-        session.save()
-        return Redirect(f"../{session.block.phase.experiment.slug}")
+        return Redirect(f"../{get_experiment_url(session)}")

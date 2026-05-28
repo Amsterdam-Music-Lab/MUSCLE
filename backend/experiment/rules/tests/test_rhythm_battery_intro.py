@@ -2,7 +2,7 @@ from django.test import TestCase
 from section.models import Section, Song, Playlist as PlaylistModel
 from participant.models import Participant
 from session.models import Session
-from experiment.models import Block
+from experiment.models import Block, Experiment, Phase
 from experiment.rules.rhythm_battery_intro import RhythmBatteryIntro
 from experiment.actions.explainer import Explainer
 from experiment.actions.final import Final
@@ -28,7 +28,11 @@ class RhythmBatteryIntroTest(TestCase):
             filename="not/to_be_found.mp3",
             tag=0
         )
-        self.block = Block.objects.create(slug="TEST", rules="RHYTHM_BATTERY_INTRO")
+        experiment = Experiment.objects.create(slug="rhythm_battery_intro")
+        phase = Phase.objects.create(experiment=experiment)
+        self.block = Block.objects.create(
+            phase=phase, slug="TEST", rules="RHYTHM_BATTERY_INTRO"
+        )
         participant = Participant.objects.create()
         self.session = Session.objects.create(
             block=Block.objects.first(),

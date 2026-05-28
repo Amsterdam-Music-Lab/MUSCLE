@@ -8,8 +8,6 @@ from django.db.models.query import QuerySet
 
 from session.models import Session, Result
 
-EXPERIMENT_KEY = "experiment"
-
 
 def camelize(input_str: str) -> str:
     """convert a snake_case to camelCase string"""
@@ -17,7 +15,7 @@ def camelize(input_str: str) -> str:
     return sub(snake_case_pattern, lambda match: match.group(1).upper(), input_str)
 
 
-def get_current_experiment_url(session: Session) -> str | None:
+def get_experiment_url(session: Session) -> str | None:
     """
     Description: Retrieve the URL for the current experiment.
 
@@ -29,21 +27,30 @@ def get_current_experiment_url(session: Session) -> str | None:
 
     Example:
         ```python
-        url = get_current_experiment_url(session)
+        url = get_experiment_url(session)
         ```
 
     Note:
         Returns None if there is no experiment slug.
     """
-    experiment_slug = session.json_data.get(EXPERIMENT_KEY)
-    if not experiment_slug:
-        return None
+    experiment = session.block.phase.experiment
+
+    if not experiment.replayable:
+        blocks = experiment.associated_blocks()
+        played_sessions = (
+            Session.objects.filter(block__in=blocks, finished_at__isnull=False)
+            .values_list("block")
+            .distinct()
+            .count()
+        )
+        if played_sessions == blocks.count():
+            return None
 
     if session.participant.participant_id_url:
         participant_id_url = session.participant.participant_id_url
-        return f"/{experiment_slug}?participant_id={participant_id_url}"
+        return f"/{experiment.slug}?participant_id={participant_id_url}"
     else:
-        return f"/{experiment_slug}"
+        return f"/{experiment.slug}"
 
 
 def render_feedback_trivia(feedback, trivia) -> str:
@@ -62,7 +69,7 @@ def render_feedback_trivia(feedback, trivia) -> str:
         rendered = render_feedback_trivia("Good job!", "Did you know ...?")
         ```
 
-    Note: Can be used as the `final_text` parameter in the `Final` action or the `final_action_with_optional_button` function.
+    Note: Can be used as the `final_text` parameter in the `Final` action
     """
     context = {"feedback": feedback, "trivia": trivia}
     return render_to_string(join("final", "feedback_trivia.html"), context)

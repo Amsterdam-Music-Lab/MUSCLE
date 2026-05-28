@@ -9,7 +9,7 @@ from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.info import Info
 from experiment.actions.score import Score
-from experiment.actions.utils import get_current_experiment_url
+from experiment.actions.utils import get_experiment_url
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_5_tempo import ToontjeHoger5Tempo
 
@@ -94,7 +94,6 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
     def get_final_round(self, session):
         # Finish session.
         session.finish()
-        session.save()
 
         # Score
         score = self.get_score(session)
@@ -127,7 +126,7 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
             body=body,
             heading="Timing en tempo",
             button=Button(
-                "Terug naar ToontjeHogerKids", link=get_current_experiment_url(session)
+                "Terug naar ToontjeHogerKids", link=get_experiment_url(session)
             ),
         )
 

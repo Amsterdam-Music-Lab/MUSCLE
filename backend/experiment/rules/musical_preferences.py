@@ -240,9 +240,7 @@ class MusicalPreferences(BaseRules):
                     )
                 )
             )
-            session.finish()
-            session.save()
-            return [feedback, self.get_final_view(session, top_participant, known_songs, round_number, top_all)]
+            return [feedback, self.get_final_view(session)]
         section = session.playlist.get_section(song_ids=session.get_unused_song_ids())
         like_key = "like_song"
         likert = TextRangeQuestion(
@@ -282,8 +280,9 @@ class MusicalPreferences(BaseRules):
         else:
             return super().calculate_score(result, data)
 
-    def get_final_view(self, session, top_participant, known_songs, n_songs, top_all):
+    def get_final_view(self, session: Session):
         # finalize block
+        session.finish()
         view = Final(
             session,
             title=_("End"),
