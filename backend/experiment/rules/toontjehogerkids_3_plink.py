@@ -92,10 +92,12 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
     def get_plink_trials(self, session: Session, section: Section, choices: dict, expected_response: str) -> list:
         next_round = []
         question1 = DropdownQuestion(
-            key="plink",
+            identifier="plink",
             choices=choices,
             text="Kies de artiest en de titel van het nummer",
-            result_id=prepare_result("plink", session, section=section, expected_response=expected_response),
+            result_id=prepare_result(
+                "plink", session, section=section, expected_response=expected_response
+            ),
         )
         next_round.append(
             Trial(

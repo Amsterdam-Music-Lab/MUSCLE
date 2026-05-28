@@ -86,7 +86,7 @@ class Huang2022(Hooked):
                 form = Form(
                     form=[
                         boolean_question(
-                            key='audio_check1',
+                            identifier='audio_check1',
                             text="",
                             result_id=prepare_result(
                                 'audio_check1', session, scoring_rule='BOOLEAN'
@@ -112,7 +112,7 @@ class Huang2022(Hooked):
                         form = Form(
                             form=[
                                 ButtonArrayQuestion(
-                                    key='audio_check2',
+                                    identifier='audio_check2',
                                     choices=[
                                         {
                                             "value": "no",

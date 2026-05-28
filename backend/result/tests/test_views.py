@@ -35,12 +35,12 @@ class ResultTest(TestCase):
 
     def test_get_multiple(self):
         Result.objects.create(
-            participant=self.participant, question_identifier="duplicate_key"
+            participant=self.participant, question_identifier="duplicate_identifier"
         )
         Result.objects.create(
-            participant=self.participant, question_identifier="duplicate_key"
+            participant=self.participant, question_identifier="duplicate_identifier"
         )
-        response = self.client.get('/result/duplicate_key/')
+        response = self.client.get('/result/duplicate_identifier/')
         self.assertEqual(response.status_code, 409)
 
     def test_create(self):
@@ -50,7 +50,7 @@ class ResultTest(TestCase):
         view = {
             "form": [
                 {
-                    "key": "speed_swallow",
+                    "identifier": "speed_swallow",
                     "resultId": result.id,
                     "view": "TEXT",
                     "scale_steps": 7,
@@ -80,11 +80,11 @@ class ResultTest(TestCase):
         data = {
             'form': [
                 {
-                    'key': 'silly_walk',
+                    'identifier': 'silly_walk',
                     'value': 'very silly indeed',
                     'resultId': result1.pk,
                 },
-                {'key': 'tea', 'value': 'Ms Two Lumps', 'resultId': result2.pk},
+                {'identifier': 'tea', 'value': 'Ms Two Lumps', 'resultId': result2.pk},
             ],
             'config': {'something': 'registered as config'},
             'decision_time': 42,

@@ -139,7 +139,7 @@ A list of `Result` objects containing the participant's anwers to the profile qu
             "score": null,
             "scoring_rule": "",
             "json_data": {
-                "key": "dgf_generation",
+                "identifier": "dgf_generation",
                 "view": "RADIOS",
                 "style": "neutral",
                 "value": "gen_x",
@@ -207,7 +207,7 @@ A list of session `Result` objects containing the participant's responses to the
             "score": 1.0,
             "scoring_rule": "CORRECTNESS",
             "json_data": {
-                "key": "choice",
+                "identifier": "choice",
                 "view": "BUTTON_ARRAY",
                 "style": {
                     "neutral": true,

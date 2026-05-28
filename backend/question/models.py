@@ -75,7 +75,7 @@ class Question(models.Model):
     min_values = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
-        return "(" + self.key + ") " + self.text
+        return "(" + self.identifier + ") " + self.text
 
     def convert_to_action(self) -> QuestionAction:
         """convert this Question instance to a serializable `experiment.question.action`"""
@@ -83,10 +83,10 @@ class Question(models.Model):
         if self.choices:
             choices = self.choices.to_dict()
             question_action = question_type(
-                key=self.key, text=self.text, choices=choices
+                identifier=self.identifier, text=self.text, choices=choices
             )
         else:
-            question_action = question_type(key=self.key, text=self.text)
+            question_action = question_type(identifier=self.identifier, text=self.text)
         optional_fields = [
             'min_value',
             'max_value',
@@ -108,7 +108,7 @@ class Question(models.Model):
             setattr(question_action, field, getattr(self, field))
 
     class Meta:
-        ordering = ["key"]
+        ordering = ["identifier"]
 
 
 class ChoiceList(models.Model):
@@ -124,7 +124,7 @@ class ChoiceList(models.Model):
 
     def to_dict(self):
         return [
-            {'value': choice.key, 'label': choice.text, 'color': choice.color}
+            {'value': choice.identifier, 'label': choice.text, 'color': choice.color}
             for choice in self.choices.all()
         ]
 
@@ -157,7 +157,7 @@ class Choice(models.Model):
 
     class Meta:
         ordering = ["index"]
-        unique_together = ["key", "choicelist"]
+        unique_together = ["identifier", "choicelist"]
 
 
 class QuestionList(models.Model):

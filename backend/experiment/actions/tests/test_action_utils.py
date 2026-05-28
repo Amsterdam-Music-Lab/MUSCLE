@@ -1,6 +1,10 @@
 from django.test import TestCase
 
-from experiment.actions.utils import EXPERIMENT_KEY, get_current_experiment_url, randomize_playhead
+from experiment.actions.utils import (
+    EXPERIMENT_IDENTIFIER,
+    get_current_experiment_url,
+    randomize_playhead,
+)
 from experiment.models import Block
 from participant.models import Participant
 from section.models import Playlist
@@ -18,7 +22,7 @@ class TestActions(TestCase):
 
     def test_experiment_url(self):
         self.assertEqual(get_current_experiment_url(self.session), None)
-        self.session.save_json_data({EXPERIMENT_KEY: 'superduperexperiment'})
+        self.session.save_json_data({EXPERIMENT_IDENTIFIER: 'superduperexperiment'})
         self.assertEqual(get_current_experiment_url(self.session), '/superduperexperiment')
         self.participant.participant_id_url = 'participant42'
         self.assertEqual(get_current_experiment_url(self.session), '/superduperexperiment?participant_id=participant42')

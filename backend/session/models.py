@@ -67,21 +67,23 @@ class Session(models.Model):
 
     def get_rounds_passed(self, apply_results_filter: bool = True) -> int:
         """Get number of rounds passed, measured by the number of results on this session,
-        taking into account the `counted_result_keys` array that may be defined per rules file
+        taking into account the `counted_result_identifiers` array that may be defined per rules file
 
         Attributes:
-            counted_result_keys: array of the Result.question_identifier strings which should be taken into account for counting rounds; if empty, all results will be counted.
+            counted_result_identifiers: array of the Result.question_identifier strings which should be taken into account for counting rounds; if empty, all results will be counted.
 
         Returns:
-            number of results, filtered by `counted_result_keys`, if supplied
+            number of results, filtered by `counted_result_identifiers`, if supplied
         """
 
         results = self.result_set
-        filter_keys = (
-            self.block_rules().counted_result_keys if apply_results_filter else None
+        filter_identifiers = (
+            self.block_rules().counted_result_identifiers
+            if apply_results_filter
+            else None
         )
-        if filter_keys:
-            results = results.filter(question_identifier__in=filter_keys)
+        if filter_identifiers:
+            results = results.filter(question_identifier__in=filter_identifiers)
         return results.count()
 
     def get_used_song_ids(self, exclude: dict = {}) -> Iterable[int]:
@@ -120,7 +122,7 @@ class Session(models.Model):
 
     def last_result(self, question_identifiers: list[str] = []) -> Optional[Result]:
         """
-        Utility function to retrieve the last result, optionally filtering by relevant question keys.
+        Utility function to retrieve the last result, optionally filtering by relevant question identifiers.
         If more than one result needs to be processed, or for more advanced filtering,
         you can refer to the results on a session by `session.result_set` and query using the
         [Django's querying syntax](https://docs.djangoproject.com/en/4.2/topics/db/queries/)
@@ -140,11 +142,11 @@ class Session(models.Model):
         """Retrieve previous n results.
 
         Args:
-            question_identifiers: a list of question keys for which results should be retrieved, if empty, any results will be returned
+            question_identifiers: a list of question identifiers for which results should be retrieved, if empty, any results will be returned
             n_results: number of results to return
 
         Returns:
-            list of Result objects with the given question keys
+            list of Result objects with the given question identifiers
         """
         results = self._filter_results(question_identifiers)
         return list(results.order_by("-created_at")[:n_results])
@@ -153,7 +155,7 @@ class Session(models.Model):
         self, question_identifiers: list[str] = []
     ) -> Union[Section, None]:
         """
-        Utility function to retrieve the last section played in the session, optinally filtering by result question keys.
+        Utility function to retrieve the last section played in the session, optinally filtering by result question identifiers.
         Uses `last_result` underneath.
 
         Attributes:
@@ -169,7 +171,7 @@ class Session(models.Model):
 
     def last_score(self, question_identifiers: list[str] = []) -> float:
         """
-        Utility function to retrieve last score logged to the session, optionally filtering by result question keys.
+        Utility function to retrieve last score logged to the session, optionally filtering by result question identifiers.
         Uses `last_result` underneath.
 
         Attributes:
@@ -185,7 +187,7 @@ class Session(models.Model):
 
     def last_song(self, question_identifiers: list[str] = []) -> str:
         """
-        Utility function to retrieve label (artist - name) of last song played in session, optionally filtering by result question keys.
+        Utility function to retrieve label (artist - name) of last song played in session, optionally filtering by result question identifiers.
         Uses `last_result` underneath.
 
         Attributes:
@@ -227,7 +229,7 @@ class Session(models.Model):
     def rounds_complete(self) -> bool:
         """
         Attributes:
-            counted_result_keys: array of the Result.question_identifier strings which should be taken into account for counting rounds; if empty, all results will be counted.
+            counted_result_identifiers: array of the Result.question_identifier strings which should be taken into account for counting rounds; if empty, all results will be counted.
 
         Returns:
             True if there are results for each experiment round

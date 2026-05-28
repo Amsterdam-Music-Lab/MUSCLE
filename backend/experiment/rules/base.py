@@ -24,7 +24,7 @@ class BaseRules(object):
     """Base class for other rules classes"""
 
     contact_email = settings.CONTACT_MAIL
-    counted_result_keys = []
+    counted_result_identifiers = []
 
     def feedback_info(self) -> FeedbackInfo:
         """
@@ -115,7 +115,7 @@ class BaseRules(object):
                 try:
                     question_obj = next(question_iterator)
                     profile_result = prepare_profile_result(
-                        question_obj.key, session.participant
+                        question_obj.identifier, session.participant
                     )
                     question = question_obj.convert_to_action()
                     question.result_id = profile_result.id

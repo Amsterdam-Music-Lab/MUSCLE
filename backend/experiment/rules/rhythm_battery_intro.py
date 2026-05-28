@@ -53,12 +53,14 @@ class RhythmBatteryIntro(BaseRules):
             )
             actions.append(self.get_intro_explainer())
             actions.append(explainer)
-            key = 'quiet_room'
-            result_pk = prepare_result(key, session, expected_response=key)
+            identifier = 'quiet_room'
+            result_pk = prepare_result(
+                identifier, session, expected_response=identifier
+            )
             feedback_form = Form(
                 [
                     ButtonArrayQuestion(
-                        key=key,
+                        identifier=identifier,
                         text=_("Are you in a quiet room?"),
                         choices=boolean_and_middle_choices,
                         result_id=result_pk,
@@ -67,12 +69,14 @@ class RhythmBatteryIntro(BaseRules):
                 submit_button=None,
             )
         elif round_number == 1:
-            key = 'internet_connection'
-            result_pk = prepare_result(key, session, expected_response=key)
+            identifier = 'internet_connection'
+            result_pk = prepare_result(
+                identifier, session, expected_response=identifier
+            )
             feedback_form = Form(
                 [
                     ButtonArrayQuestion(
-                        key='internet_connection',
+                        identifier='internet_connection',
                         text=_("Do you have a stable internet connection?"),
                         choices=boolean_and_middle_choices,
                         result_id=result_pk,
@@ -81,12 +85,14 @@ class RhythmBatteryIntro(BaseRules):
                 submit_button=None,
             )
         elif round_number == 2:
-            key = 'headphones'
-            result_pk = prepare_result(key, session, expected_response=key)
+            identifier = 'headphones'
+            result_pk = prepare_result(
+                identifier, session, expected_response=identifier
+            )
             feedback_form = Form(
                 [
                     ButtonArrayQuestion(
-                        key=key,
+                        identifier=identifier,
                         text=_("Are you wearing headphones?"),
                         choices=ChoiceList.objects.get(pk="BOOLEAN").to_dict(),
                         result_id=result_pk,
@@ -95,12 +101,14 @@ class RhythmBatteryIntro(BaseRules):
                 submit_button=None,
             )
         elif round_number == 3:
-            key = 'notifications_off'
-            result_pk = prepare_result(key, session, expected_response=key)
+            identifier = 'notifications_off'
+            result_pk = prepare_result(
+                identifier, session, expected_response=identifier
+            )
             feedback_form = Form(
                 [
                     ButtonArrayQuestion(
-                        key=key,
+                        identifier=identifier,
                         text=_(
                             "Do you have sound notifications from other devices turned off?"
                         ),

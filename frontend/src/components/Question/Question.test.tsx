@@ -8,7 +8,7 @@ describe('Question Component', () => {
 
     const defaultProps = {
         question: {
-            key: 'test-question',
+            identifier: 'test-question',
             text: 'Test Question',
             view: QuestionViews.STRING,
             maxLength: 200,

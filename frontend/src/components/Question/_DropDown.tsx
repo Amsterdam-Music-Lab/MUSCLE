@@ -20,7 +20,7 @@ const DropDown = ({ question, value, onChange }: DropDownProps) => {
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 tabIndex={0}
-                name={question.key}
+                name={question.identifier}
             >
                 <option value=""></option>
                 {choices.map((choice, index) => (

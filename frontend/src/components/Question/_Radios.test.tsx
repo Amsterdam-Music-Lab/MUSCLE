@@ -19,7 +19,7 @@ vi.mock('../../util/stores', () => ({
 }));
 
 const mockQuestion: Question = {
-    key: 'test-radios',
+    identifier: 'test-radios',
     choices: [
         {value: '1', label: 'First Option'},
         {value: '2', label: 'Second Option'},

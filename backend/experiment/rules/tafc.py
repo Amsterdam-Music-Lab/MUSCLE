@@ -99,11 +99,11 @@ class TwoAlternativeForced(BaseRules):
 
         playback = PlayButtons(sections=[PlaybackSection(section)])
 
-        key = 'choice'
+        identifier = 'choice'
         question = ButtonArrayQuestion(
-            key=key,
+            identifier=identifier,
             result_id=prepare_result(
-                key,
+                identifier,
                 session=session,
                 section=section,
                 expected_response=expected_response,

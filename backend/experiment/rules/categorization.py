@@ -454,7 +454,7 @@ class Categorization(BaseRules):
 
 
 repeat_training_or_quit = ButtonArrayQuestion(
-    key="failed_training",
+    identifier="failed_training",
     text="You seem to have difficulties reacting correctly to the sound sequences. Is your audio on? If you want to give it another try, click on Ok.",
     choices=[
         {"value": "continued", "label": "OK", "color": "colorPositive"},

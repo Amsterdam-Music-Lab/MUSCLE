@@ -19,7 +19,7 @@ vi.mock('../../util/stores', () => ({
 
 describe('TextRange Component', () => {
     const mockQuestion: Question = {
-        key: 'test',
+        identifier: 'test',
         text: 'Test Question',
         explainer: 'Test Explainer',
         view: QuestionViews.TEXT_RANGE,

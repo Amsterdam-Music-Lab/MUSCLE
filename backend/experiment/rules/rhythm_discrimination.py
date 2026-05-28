@@ -132,9 +132,9 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
         expected_response = (
             self.first_condition if condition["group"] == "0" else self.second_condition
         )
-        key = "same_or_different"
+        identifier = "same_or_different"
         question = ButtonArrayQuestion(
-            key=key,
+            identifier=identifier,
             text=_("Is the third rhythm the SAME or DIFFERENT?"),
             choices=[
                 {
@@ -149,7 +149,7 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
                 },
             ],
             result_id=prepare_result(
-                key,
+                identifier,
                 session,
                 expected_response=expected_response,
                 scoring_rule="CORRECTNESS",

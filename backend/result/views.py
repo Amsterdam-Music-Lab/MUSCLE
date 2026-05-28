@@ -87,7 +87,7 @@ def consent(request: HttpRequest) -> JsonResponse:
     data = json.loads(request.POST.get('json_data'))
     Result.objects.get_or_create(
         participant=participant,
-        question_identifier=data.get('key'),
+        question_identifier=data.get('identifier'),
         given_response='agreed',
     )
     return JsonResponse({'status': 'ok'})

@@ -13,5 +13,5 @@ class MatchingPairsICMPC(MatchingPairsGame):
 
 
 ICMPC_HALL_OF_FAME = TextQuestion(
-    key='fame_name', text=_("Enter a name to enter the ICMPC hall of fame")
+    identifier='fame_name', text=_("Enter a name to enter the ICMPC hall of fame")
 )

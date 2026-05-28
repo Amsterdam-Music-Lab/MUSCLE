@@ -77,7 +77,7 @@ export const createConsent = async ({ experiment, participant }: CreateConsentPa
             qs.stringify({
                 json_data: JSON.stringify(
                     {
-                        key: "consent_" + experiment.identifier,
+                        identifier: "consent_" + experiment.identifier,
                         value: true,
                     }
                 ),

@@ -2,7 +2,7 @@ from django.test import TestCase
 from experiment.models import Block, Experiment, Phase
 from result.models import Result
 from participant.models import Participant
-from participant.utils import PARTICIPANT_KEY
+from participant.utils import PARTICIPANT_identifier
 from section.models import Playlist
 from session.models import Session
 import json
@@ -53,7 +53,7 @@ class BeatAlignmentRuleTest(TestCase):
         participant.save()
 
         session = self.client.session
-        session.update({PARTICIPANT_KEY: participant.id})
+        session.update({PARTICIPANT_identifier: participant.id})
         session.save()
 
         block_response = self.client.get('/experiment/block/ba/')
@@ -68,7 +68,7 @@ class BeatAlignmentRuleTest(TestCase):
                 "loading_text",
                 "session_id",
             }
-            <= block_json.keys()
+            <= block_json.identifiers()
         )
         session_id = block_json['session_id']
         response = self.client.post(
@@ -88,15 +88,18 @@ class BeatAlignmentRuleTest(TestCase):
         header = {'HTTP_USER_AGENT': "Test device with test browser"}
         participant_response = self.client.get('/participant/', **header)
         participant_json = self.load_json(participant_response)
-        self.assertTrue({'id', 'hash', 'csrf_token', 'country'}
-                        <= participant_json.keys())
+        self.assertTrue(
+            {'id', 'hash', 'csrf_token', 'country'} <= participant_json.identifiers()
+        )
         csrf_token = participant_json['csrf_token']
 
         consent_response = self.client.get('/result/consent_ba/')
         # returns 204 if no consent has been given so far
         self.assertEqual(consent_response.status_code, 204)
-        data = {"json_data": "{\"key\":\"consent_ba\",\"value\":true}",
-                "csrfmiddlewaretoken": csrf_token}
+        data = {
+            "json_data": "{\"identifier\":\"consent_ba\",\"value\":true}",
+            "csrfmiddlewaretoken": csrf_token,
+        }
         consent_response = self.client.post('/result/consent/', data)
         consent_json = self.load_json(consent_response)
         self.assertTrue(consent_json['status'], 'ok')

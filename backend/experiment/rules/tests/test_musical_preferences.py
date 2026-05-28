@@ -39,7 +39,7 @@ class MusicalPreferencesTest(TestCase):
         actions = rules.next_round(self.session)
         self.assertEqual(len(actions), 2)
         self.assertIsInstance(actions[1], Trial)
-        self.assertEqual(actions[1].feedback_form.form[0].key, "audio_check1")
+        self.assertEqual(actions[1].feedback_form.form[0].identifier, "audio_check1")
 
     def test_preferred_songs(self):
         for index, section in enumerate(list(self.playlist.section_set.all())):

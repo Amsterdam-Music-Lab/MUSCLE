@@ -24,7 +24,7 @@ class BlockForm(ModelForm):
         self.fields["rules"] = ChoiceField(choices=sorted(choices))
 
     def clean_playlists(self):
-        # Check if there is a rulesid selected and key exists
+        # Check if there is a rulesid selected and identifier exists
         if "rules" not in self.cleaned_data:
             return self.cleaned_data["playlists"]
 

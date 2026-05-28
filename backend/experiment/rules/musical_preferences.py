@@ -36,7 +36,7 @@ class MusicalPreferences(BaseRules):
     preference_offset = 21  # after this many rounds rounds, show information with the participant's preferences
     knowledge_offset = 42  # after this many rounds, show additionally how many songs the participant knows
     contact_email = "musicexp_china@163.com"
-    counted_result_keys = ["like_song"]
+    counted_result_identifiers = ["like_song"]
 
     know_score = {"yes": 2, "unsure": 1, "no": 0}
 
@@ -125,7 +125,7 @@ class MusicalPreferences(BaseRules):
                         form = Form(
                             form=[
                                 ButtonArrayQuestion(
-                                    key="audio_check2",
+                                    identifier="audio_check2",
                                     choices=[
                                         {
                                             "value": "no",
@@ -163,7 +163,7 @@ class MusicalPreferences(BaseRules):
                 form = Form(
                     form=[
                         boolean_question(
-                            key="audio_check1",
+                            identifier="audio_check1",
                             text="",
                             result_id=prepare_result(
                                 "audio_check1", session, scoring_rule="BOOLEAN"
@@ -250,25 +250,25 @@ class MusicalPreferences(BaseRules):
             session.save()
             return [feedback, self.get_final_view(session, top_participant, known_songs, round_number, top_all)]
         section = session.playlist.get_section(song_ids=session.get_unused_song_ids())
-        like_key = "like_song"
+        like_identifier = "like_song"
         likert = TextRangeQuestion(
             text=_("2. How much do you like this song?"),
-            key=like_key,
+            identifier=like_identifier,
             choices=ChoiceList.objects.get(pk='LIKERT_ICONS_7').to_dict(),
             result_id=prepare_result(
-                like_key, session, section=section, scoring_rule="LIKERT"
+                like_identifier, session, section=section, scoring_rule="LIKERT"
             ),
         )
-        know_key = "know_song"
+        know_identifier = "know_song"
         know = ButtonArrayQuestion(
             text=_("1. Do you know this song?"),
-            key=know_key,
+            identifier=know_identifier,
             choices=[
                 {"value": "yes", "label": "fa-check", "color": "colorPositive"},
                 {"value": "unsure", "label": "fa-question", "color": "colorNeutral1"},
                 {"value": "no", "label": "fa-xmark", "color": "colorNegative"},
             ],
-            result_id=prepare_result(know_key, session, section=section),
+            result_id=prepare_result(know_identifier, session, section=section),
         )
         playback = Autoplay(sections=[PlaybackSection(section)])
         form = Form([know, likert])
@@ -283,7 +283,7 @@ class MusicalPreferences(BaseRules):
         return actions
 
     def calculate_score(self, result, data):
-        if data.get("key") == "know_song":
+        if data.get("identifier") == "know_song":
             return self.know_score.get(data.get("value"))
         else:
             return super().calculate_score(result, data)

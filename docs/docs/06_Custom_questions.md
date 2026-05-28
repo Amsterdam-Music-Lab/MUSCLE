@@ -10,7 +10,7 @@ Choice lists are collections of answer options for multiple choice questions, fo
 However, you can add custom choice lists through the admin interface by clicking "Add":
 <img width="500" alt="Choice List" src="../assets/images/ChoiceList.png">
 
-To create a choice list, you need to provide a descriptive key. Note that the key can only contain letters, numbers, and underscores. You can then proceed to add choices. For each choice, a key and a display text, which can be translated in all configured languages, should be entered.
+To create a choice list, you need to provide a descriptive identifier. Note that the identifier can only contain letters, numbers, and underscores. You can then proceed to add choices. For each choice, a identifier and a display text, which can be translated in all configured languages, should be entered.
 
 ## Question Lists
 Question Lists are sets of questions you can attach to a given block in your experiment. If you click "Add", you will see the following form:
@@ -28,7 +28,7 @@ Questions are the actual question objects. Many questions are already configured
 
 On the top, you can choose the language(s) in which you wish to enter the question. The languages that are shown can be configured through the `LANGUAGES` settings in Django. Note that it is not necessary to provide translations, but that a question will be much more reusable if it has translations to multiple languages.
 
-Enter a descriptive question key, e.g., `favorite_food_open_question`. Note that the key can only contain letters, numbers, and underscores.
+Enter a descriptive, unique question identifier, e.g., `favorite_food_open_question`. Note that the identifier can only contain letters, numbers, and underscores.
 
 The Text is the actual question text that will be asked to the participant. Optionally, you can also add an Explainer with instructions to the participant, e.g., "Rate on a scale of 1 to 7".
 

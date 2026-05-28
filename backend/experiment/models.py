@@ -235,7 +235,8 @@ class Block(models.Model):
                 self.create_question_list(ql, i)
 
     def create_question_list(self, question_list: dict, index: int = 0):
-        """create a question list for this block based on a dict specifying name and list of question keys"""
+        """create a question list for this block based on a dict specifying name and list of question identifiers"""
+
         ql, created = QuestionList.objects.get_or_create(
             name=question_list["name"], block=self, index=index
         )
@@ -252,7 +253,7 @@ class Block(models.Model):
                 question_obj = Question.objects.get(pk=question)
             except Question.DoesNotExist:
                 raise Question.DoesNotExist(
-                    f"Question with key {question} does not exist."
+                    f"Question with identifier {question} does not exist."
                 )
             QuestionInList.objects.create(
                 questionlist=ql,

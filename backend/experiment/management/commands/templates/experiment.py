@@ -70,14 +70,14 @@ class NewBlockRuleset(BaseRules):
             return self.get_next_trial(session)
 
     def get_next_trial(self, session) -> Trial:
-        # define a key, by which responses to this trial can be found in the database
-        key = 'test_trial'
+        # define a identifier, by which responses to this trial can be found in the database
+        identifier = 'test_trial'
         # get a random section
         section = session.playlist.get_section()
         question = ButtonArrayQuestion(
             text=_("Do you like this song?"),
-            key=key,
-            result_id=prepare_result(key, session, section=section),
+            identifier=identifier,
+            result_id=prepare_result(identifier, session, section=section),
         )
         form = Form([question])
         playback = Autoplay(sections=[PlaybackSection(section)])

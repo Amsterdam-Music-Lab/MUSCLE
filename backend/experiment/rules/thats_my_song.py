@@ -95,7 +95,7 @@ class ThatsMySong(Hooked):
             ):
                 actions = [self.get_intro_explainer()]
                 question = CheckBoxQuestion(
-                    key="playlist_decades",
+                    identifier="playlist_decades",
                     text=_("Choose two or more decades of music"),
                     choices=[
                         {"value": "1960s", "label": "1960s"},

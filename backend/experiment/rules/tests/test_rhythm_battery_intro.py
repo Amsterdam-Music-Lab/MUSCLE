@@ -46,7 +46,7 @@ class RhythmBatteryIntroTest(TestCase):
         self.assertIsInstance(actions[2], Trial)
         self.assertIsInstance(actions[2].feedback_form, Form)
         self.assertEqual(len(actions[2].feedback_form.form), 1)
-        self.assertEqual(actions[2].feedback_form.form[0].key, 'quiet_room')
+        self.assertEqual(actions[2].feedback_form.form[0].identifier, 'quiet_room')
 
     def test_next_round_last_time(self):
         listening_conditions = RhythmBatteryIntro()

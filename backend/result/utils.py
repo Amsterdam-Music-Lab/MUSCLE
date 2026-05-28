@@ -71,14 +71,17 @@ def prepare_profile_result(
     As profile Results are usually demographic questions, they are not tied to a `section` or an `expected_response`
 
     Args:
-        question_identifier: the key of the question in the questionnaire dictionaries
+        question_identifier: the identifier of the question in the questionnaire dictionaries
         participant: the participant on which the Result is going to be registered
         **kwargs: can be any other field(s) defined on the `Result` model
 
     Returns:
         `Result` object
     """
-    scoring_rule = Question.objects.get(key=question_identifier).profile_scoring_rule
+
+    scoring_rule = Question.objects.get(
+        identifier=question_identifier
+    ).profile_scoring_rule
     result, created = Result.objects.get_or_create(
         question_identifier=question_identifier,
         participant=participant,
@@ -96,7 +99,7 @@ def prepare_result(
     """Create a `Result` object, and provide its id to be serialized
 
     Args:
-        question_identifier: the key of the question in the questionnaire dictionaries
+        question_identifier: the identifier of the question in the questionnaire dictionaries
         session: the session on which the Result is going to be registered
         **kwargs: can be any other field(s) defined on the `Result` model
 

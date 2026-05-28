@@ -26,14 +26,14 @@ class ResultUtilsTest(TestCase):
 
     def test_result_invalid(self):
         result = Result.objects.create(
-            participant=self.participant, question_identifier='some_key'
+            participant=self.participant, question_identifier='some_identifier'
         )
         data = {'resultId': result.id}
         result = get_result(self.session, data)
         self.assertIsNotNone(result)
         new_participant = Participant.objects.create()
         result = Result.objects.create(
-            participant=new_participant, question_identifier='another_key'
+            participant=new_participant, question_identifier='another_identifier'
         )
         data = {'resultId': result.id}
         with self.assertRaises(Result.DoesNotExist):

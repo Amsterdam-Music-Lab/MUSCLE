@@ -108,31 +108,56 @@ class SessionTest(TestCase):
 
     def test_last_score(self):
         for i in range(10):
-            keys = ['a', 'a', 'b', 'b', 'b', 'b', 'c', 'c', 'c', 'd']
+            identifiers = ['a', 'a', 'b', 'b', 'b', 'b', 'c', 'c', 'c', 'd']
             Result.objects.create(
-                session=self.session, question_identifier=keys[i], score=i
+                session=self.session, question_identifier=identifiers[i], score=i
             )
         score = self.session.last_score(["c", "d"])
         self.assertEqual(score, 9)
 
     def test_get_rounds_passed(self):
         Result.objects.create(
-            session=self.session, question_identifier='some random key'
+            session=self.session, question_identifier='some random identifier'
         )
         self.assertEqual(self.session.get_rounds_passed(), 1)
-        self.assertEqual(self.session.get_rounds_passed(self.block.get_rules().counted_result_keys), 1)
+        self.assertEqual(
+            self.session.get_rounds_passed(
+                self.block.get_rules().counted_result_identifiers
+            ),
+            1,
+        )
         new_block = Block.objects.create(rules='HOOKED', identifier='hooked_test')
         new_playlist = Playlist.objects.create(name='another_test')
         new_session = Session.objects.create(block=new_block, playlist=new_playlist, participant=self.participant)
-        self.assertEqual(new_session.get_rounds_passed(new_block.get_rules().counted_result_keys), 0)
-        Result.objects.create(session=new_session, question_identifier='recognize')
-        self.assertEqual(new_session.get_rounds_passed(new_block.get_rules().counted_result_keys), 1)
-        Result.objects.create(
-            session=new_session, question_identifier='another random key'
+        self.assertEqual(
+            new_session.get_rounds_passed(
+                new_block.get_rules().counted_result_identifiers
+            ),
+            0,
         )
-        self.assertEqual(new_session.get_rounds_passed(new_block.get_rules().counted_result_keys), 1)
+        Result.objects.create(session=new_session, question_identifier='recognize')
+        self.assertEqual(
+            new_session.get_rounds_passed(
+                new_block.get_rules().counted_result_identifiers
+            ),
+            1,
+        )
+        Result.objects.create(
+            session=new_session, question_identifier='another random identifier'
+        )
+        self.assertEqual(
+            new_session.get_rounds_passed(
+                new_block.get_rules().counted_result_identifiers
+            ),
+            1,
+        )
         Result.objects.create(session=new_session, question_identifier='heard_before')
-        self.assertEqual(new_session.get_rounds_passed(new_block.get_rules().counted_result_keys), 2)
+        self.assertEqual(
+            new_session.get_rounds_passed(
+                new_block.get_rules().counted_result_identifiers
+            ),
+            2,
+        )
 
     def test_json_data(self):
         self.session.save_json_data({'test': 'tested'})

@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from experiment.models import Block, Experiment, Phase
-from experiment.actions.utils import EXPERIMENT_KEY
+from experiment.actions.utils import EXPERIMENT_IDENTIFIER
 from participant.models import Participant
 from section.models import Playlist
 from session.models import Session
@@ -57,16 +57,16 @@ class SessionViewsTest(TestCase):
         identifier = "myexperiment"
         experiment = Experiment.objects.create(identifier=identifier)
         request_session = self.client.session
-        request_session[EXPERIMENT_KEY] = identifier
+        request_session[EXPERIMENT_IDENTIFIER] = identifier
         request_session.save()
         session = Session.objects.create(block=self.block, participant=self.participant)
         response = self.client.get(f"/session/{session.id}/next_round/")
         assert response
         changed_session = Session.objects.get(pk=session.pk)
-        assert changed_session.json_data.get(EXPERIMENT_KEY) is None
+        assert changed_session.json_data.get(EXPERIMENT_IDENTIFIER) is None
         phase = Phase.objects.create(experiment=experiment)
         self.block.phase = phase
         self.block.save()
         response = self.client.get(f"/session/{session.id}/next_round/")
         changed_session = Session.objects.get(pk=session.pk)
-        assert changed_session.json_data.get(EXPERIMENT_KEY) == identifier
+        assert changed_session.json_data.get(EXPERIMENT_IDENTIFIER) == identifier

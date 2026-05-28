@@ -102,10 +102,10 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
         except Section.DoesNotExist:
             return None
         question_text = self.get_question_text()
-        key = self.task_description.replace(" ", "_")
+        identifier = self.task_description.replace(" ", "_")
         question = ButtonArrayQuestion(
             text=question_text,
-            key=key,
+            identifier=identifier,
             choices=[
                 {
                     'value': self.first_condition,
@@ -119,7 +119,7 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
                 },
             ],
             result_id=prepare_result(
-                key, session, section=section, expected_response=trial_condition
+                identifier, session, section=section, expected_response=trial_condition
             ),
         )
 

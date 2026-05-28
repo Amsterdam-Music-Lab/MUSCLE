@@ -310,7 +310,7 @@ class HookedTest(TestCase):
                     self.assertNotIn(heard_before_section, song_sync_sections)
 
     def test_thats_my_song(self):
-        tms_keys = get_question_bank('VANDERBILT_FIXED')
+        tms_identifiers = get_question_bank('VANDERBILT_FIXED')
         block = Block.objects.get(identifier="thats_my_song")
         block.add_default_question_lists()
         playlist = Playlist.objects.get(name="ThatsMySong")
@@ -329,7 +329,7 @@ class HookedTest(TestCase):
             elif i == 0:
                 self.assertEqual(len(actions), 2)
                 self.assertEqual(
-                    actions[1].feedback_form.form[0].key, "playlist_decades"
+                    actions[1].feedback_form.form[0].identifier, "playlist_decades"
                 )
                 result = Result.objects.get(
                     session=session, question_identifier="playlist_decades"
@@ -340,24 +340,28 @@ class HookedTest(TestCase):
                 assert session.result_set.count() == 3
                 assert session.json_data.get("plan") is not None
                 assert len(actions) == 3
-                assert actions[0].feedback_form.form[0].key == "recognize"
-                assert actions[2].feedback_form.form[0].key == "correct_place"
+                assert actions[0].feedback_form.form[0].identifier == "recognize"
+                assert actions[2].feedback_form.form[0].identifier == "correct_place"
             else:
                 assert actions[0].view == "SCORE"
                 if i < rules.question_offset + 1:
                     assert len(actions) == 4
-                    assert actions[1].feedback_form.form[0].key == "recognize"
+                    assert actions[1].feedback_form.form[0].identifier == "recognize"
                 elif i < heard_before_offset + 1:
                     assert len(actions) == 5
-                    assert actions[1].feedback_form.form[0].key in tms_keys
+                    assert (
+                        actions[1].feedback_form.form[0].identifier in tms_identifiers
+                    )
                 elif i == heard_before_offset + 1:
                     assert len(actions) == 3
                     assert actions[1].view == "EXPLAINER"
-                    assert actions[2].feedback_form.form[0].key == "heard_before"
+                    assert actions[2].feedback_form.form[0].identifier == "heard_before"
                 else:
                     assert len(actions) == 3
-                    assert actions[1].feedback_form.form[0].key in tms_keys
-                    assert actions[2].feedback_form.form[0].key == "heard_before"
+                    assert (
+                        actions[1].feedback_form.form[0].identifier in tms_identifiers
+                    )
+                    assert actions[2].feedback_form.form[0].identifier == "heard_before"
 
     def test_hooked_china(self):
         block = Block.objects.get(identifier="huang_2022")
@@ -373,7 +377,7 @@ class HookedTest(TestCase):
         Section.objects.create(playlist=playlist, song=song, filename=SimpleUploadedFile("some_audio.wav", b""))
         actions = rules.next_round(session)
         self.assertIsInstance(actions[0], Trial)
-        self.assertEqual(actions[0].feedback_form.form[0].key, "audio_check1")
+        self.assertEqual(actions[0].feedback_form.form[0].identifier, "audio_check1")
 
         # check that question trials are as expected
         question_trials = rules.get_profile_question_trials(session, None)
@@ -381,7 +385,7 @@ class HookedTest(TestCase):
             'questions__count'
         ]
         self.assertEqual(len(question_trials), n_total_questions)
-        keys = [q.feedback_form.form[0].key for q in question_trials]
+        identifiers = [q.feedback_form.form[0].identifier for q in question_trials]
         questions = rules.question_lists[0]["question_identifiers"][0:3]
         for question in questions:
-            self.assertIn(question, keys)
+            self.assertIn(question, identifiers)

@@ -123,16 +123,16 @@ class ToontjeHoger5Tempo(BaseRules):
         )
 
         # Question
-        key = "pitch"
+        identifier = "pitch"
         question = ButtonArrayQuestion(
             text=self.get_trial_question(),
-            key=key,
+            identifier=identifier,
             choices=[
                 {"value": "A", "label": "A", "color": "colorNegative2"},
                 {"value": "B", "label": "B", "color": "colorNegative1"},
             ],
             result_id=prepare_result(
-                key,
+                identifier,
                 session,
                 section=section_original,
                 expected_response="A" if sections[0].id == section_original.id else "B",

@@ -148,16 +148,16 @@ class ToontjeHoger2Preverbal(BaseRules):
 
     def get_round1(self, session):
         # Question
-        key = 'expected_spectrogram'
+        identifier = 'expected_spectrogram'
         question = ButtonArrayQuestion(
             text=self.get_round1_question(),
-            key=key,
+            identifier=identifier,
             choices=[
                 {"value": "A", "label": "A", "color": "colorNeutral2"},
                 {"value": "B", "label": "B", "color": "colorNeutral1"},
                 {"value": "C", "label": "C", "color": "colorSecondary"},
             ],
-            result_id=prepare_result(key, session, expected_response="C"),
+            result_id=prepare_result(identifier, session, expected_response="C"),
         )
         form = Form([question], submit_button=None)
 
@@ -280,15 +280,15 @@ class ToontjeHoger2Preverbal(BaseRules):
         )
 
         # Question
-        key = 'baby'
+        identifier = 'baby'
         question = ButtonArrayQuestion(
             text=self.get_round_2_question(),
-            key=key,
+            identifier=identifier,
             choices=[
                 {"value": "A", "label": "A", "color": "colorNeutral2"},
                 {"value": "B", "label": "B", "color": "colorNeutral1"},
             ],
-            result_id=prepare_result(key, session, expected_response="A"),
+            result_id=prepare_result(identifier, session, expected_response="A"),
         )
         form = Form([question])
 

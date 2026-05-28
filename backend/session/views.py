@@ -5,7 +5,7 @@ from django.views.decorators.http import require_POST
 from .models import Session
 from experiment.models import Block, Experiment
 from experiment.serializers import serialize_actions
-from experiment.actions.utils import EXPERIMENT_KEY
+from experiment.actions.utils import EXPERIMENT_IDENTIFIER
 from section.models import Playlist
 from participant.utils import get_participant
 
@@ -56,14 +56,14 @@ def next_round(request, session_id):
     session = get_object_or_404(Session, pk=session_id, participant__id=participant.id)
 
     # check if this block is part of an Experiment
-    experiment_identifier = request.session.get(EXPERIMENT_KEY)
+    experiment_identifier = request.session.get(EXPERIMENT_IDENTIFIER)
     if experiment_identifier:
         # check that current session does not have the experiment information saved yet
-        if not session.json_data.get(EXPERIMENT_KEY):
+        if not session.json_data.get(EXPERIMENT_IDENTIFIER):
             # set information of the Experiment to the session
             experiment = Experiment.objects.get(identifier=experiment_identifier)
             if experiment and session.block in experiment.associated_blocks():
-                session.save_json_data({EXPERIMENT_KEY: experiment_identifier})
+                session.save_json_data({EXPERIMENT_IDENTIFIER: experiment_identifier})
 
     # Get next round for given session
     actions = serialize_actions(session.block_rules().next_round(session))

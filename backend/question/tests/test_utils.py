@@ -20,7 +20,11 @@ class UtilsTestCase(TestCase):
             given_response='non_answer',
         )
         questions = Question.objects.filter(
-            key__in=['dgf_country_of_origin', 'dgf_generation', 'dgf_gender_identity']
+            identifier__in=[
+                'dgf_country_of_origin',
+                'dgf_generation',
+                'dgf_gender_identity',
+            ]
         )
         cls.question_list = QuestionList.objects.create(
             name='TEST_QUESTION_LIST', block=block, index=0
@@ -39,9 +43,9 @@ class UtilsTestCase(TestCase):
             self.participant, self.question_list.questions.all()
         )
         question = next(question_iterator)
-        self.assertEqual(question.key, 'dgf_country_of_origin')
+        self.assertEqual(question.identifier, 'dgf_country_of_origin')
         question = next(question_iterator)
-        self.assertEqual(question.key, 'dgf_generation')
+        self.assertEqual(question.identifier, 'dgf_generation')
         with self.assertRaises(StopIteration):
             question = next(question_iterator)
         Result.objects.create(

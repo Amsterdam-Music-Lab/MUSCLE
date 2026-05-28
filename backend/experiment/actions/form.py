@@ -17,12 +17,12 @@ class Form(BaseAction):
         ```python
         form = Form([
             TextQuestion(
-                key="name",
+                identifier="name",
                 text="What's your name?",
                 explainer="Please enter your full name.",
             ),
             ButtonArrayQuestion(
-                key="is_student",
+                identifier="is_student",
                 text="Are you a student?",
                 choices=[{'value': 'YES', 'text': _('YES'), {'value': 'NO', 'label': _('NO')}],
             ),

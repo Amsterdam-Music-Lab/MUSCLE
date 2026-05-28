@@ -192,7 +192,7 @@ class Participant(models.Model):
             score_sum = participant.score_sum(question_list)
             ```
         """
-        question_identifiers = question_list.questions.values_list('key')
+        question_identifiers = question_list.questions.values_list('identifier')
         return (
             self.result_set.all()
             .filter(question_identifier__in=question_identifiers)

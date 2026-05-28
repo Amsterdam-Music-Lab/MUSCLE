@@ -110,16 +110,16 @@ class ToontjeHoger4Absolute(BaseRules):
         )
 
         # Question
-        key = 'pitch'
+        identifier = 'pitch'
         question = ButtonArrayQuestion(
             text=self.get_trial_question(),
-            key=key,
+            identifier=identifier,
             choices=[
                 {"value": "A", "label": "A", "color": "colorNeutral2"},
                 {"value": "B", "label": "B", "color": "colorNeutral1"},
             ],
             result_id=prepare_result(
-                key,
+                identifier,
                 session,
                 section=section1,
                 expected_response="A" if sections[0].id == section1.id else "B",

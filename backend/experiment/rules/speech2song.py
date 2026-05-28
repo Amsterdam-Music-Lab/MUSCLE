@@ -207,9 +207,9 @@ class Speech2Song(BaseRules):
 
 
 def question_speech(session, section):
-    key = 'speech2song'
+    identifier = 'speech2song'
     return RadiosQuestion(
-        key=key,
+        identifier=identifier,
         text=_('Does this sound like song or speech to you?'),
         choices=[
             {"value": 1, "label": _('sounds exactly like speech')},
@@ -218,14 +218,16 @@ def question_speech(session, section):
             {"value": 4, "label": _('sounds somewhat like song')},
             {"value": 5, "label": _('sounds exactly like song')},
         ],
-        result_id=prepare_result(key, session, section=section, scoring_rule='LIKERT'),
+        result_id=prepare_result(
+            identifier, session, section=section, scoring_rule='LIKERT'
+        ),
     )
 
 
 def question_sound(session, section):
-    key = 'sound2music'
+    identifier = 'sound2music'
     return RadiosQuestion(
-        key=key,
+        identifier=identifier,
         text=_('Does this sound like music or an environmental sound to you?'),
         choices=[
             {"value": 1, "label": _('sounds exactly like an environmental sound')},
@@ -237,7 +239,9 @@ def question_sound(session, section):
             {"value": 4, "label": _('sounds somewhat like music')},
             {"value": 5, "label": _('sounds exactly like music')},
         ],
-        result_id=prepare_result(key, session, section=section, scoring_rule='LIKERT'),
+        result_id=prepare_result(
+            identifier, session, section=section, scoring_rule='LIKERT'
+        ),
     )
 
 

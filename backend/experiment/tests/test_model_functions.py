@@ -24,15 +24,15 @@ class TestModelBlock(TestCase):
     def test_separate_rules_instance(self):
         rules1 = self.block.get_rules()
         rules2 = self.block.get_rules()
-        keys1 = (
+        identifiers1 = (
             rules1.question_lists[0]["question_identifiers"]
             + rules1.question_lists[1]["question_identifiers"]
         )
-        keys2 = (
+        identifiers2 = (
             rules2.question_lists[0]["question_identifiers"]
             + rules2.question_lists[1]["question_identifiers"]
         )
-        assert keys1 == keys2
+        assert identifiers1 == identifiers2
 
     def test_add_default_question_lists(self):
         block = Block(

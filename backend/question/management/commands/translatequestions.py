@@ -39,7 +39,7 @@ class Command(BaseCommand):
                 set_attributes(question, ['text', 'explainer'])
                 question.save()
             for choice in Choice.objects.exclude(
-                choicelist__key__in=['ISO_COUNTRIES', 'ISO_LANGUAGES']
+                choicelist__identifier__in=['ISO_COUNTRIES', 'ISO_LANGUAGES']
             ):
                 set_attributes(choice, ['text'])
                 choice.save()
@@ -69,12 +69,12 @@ class Command(BaseCommand):
             )
         iso_country_choices = Choice.objects.filter(choicelist='ISO_COUNTRIES')
         for choice in iso_country_choices:
-            country_key = next(
-                (key for key in countries.keys() if key.lower() == choice.key)
+            country_identifier = next(
+                (key for key in countries.keys() if key.lower() == choice.identifier)
             )
-            if not country_key:
+            if not country_identifier:
                 continue
-            setattr(choice, 'text', countries[country_key])
+            setattr(choice, 'text', countries[country_identifier])
             choice.save()
         with open(f"{filepath}/{lang_code}/languages.json") as f:
             data = json.load(f)
@@ -86,12 +86,13 @@ class Command(BaseCommand):
             )
         iso_language_choices = Choice.objects.filter(choicelist='ISO_LANGUAGES')
         for choice in iso_language_choices:
-            language_key = next(
-                (key for key in languages.keys() if key.lower() == choice.key), None
+            language_identifier = next(
+                (key for key in languages.keys() if key.lower() == choice.identifier),
+                None,
             )
-            if not language_key:
+            if not language_identifier:
                 continue
-            setattr(choice, 'text', languages[language_key])
+            setattr(choice, 'text', languages[language_identifier])
             choice.save()
 
 

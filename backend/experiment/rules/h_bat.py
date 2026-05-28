@@ -94,9 +94,9 @@ class HBat(BaseRules, PracticeMixin):
             # we are out of valid sections, end experiment
             return None
 
-        key = "slower_or_faster"
+        identifier = "slower_or_faster"
         question = ButtonArrayQuestion(
-            key=key,
+            identifier=identifier,
             text=self.get_trial_question(),
             choices=[
                 {
@@ -111,7 +111,7 @@ class HBat(BaseRules, PracticeMixin):
                 },
             ],
             result_id=prepare_result(
-                key,
+                identifier,
                 session,
                 section=section,
                 expected_response=trial_condition,

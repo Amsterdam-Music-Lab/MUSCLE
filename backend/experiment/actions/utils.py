@@ -8,7 +8,7 @@ from django.db.models.query import QuerySet
 
 from session.models import Session, Result
 
-EXPERIMENT_KEY = "experiment"
+EXPERIMENT_IDENTIFIER = "experiment"
 
 
 def camelize(input_str: str) -> str:
@@ -36,7 +36,7 @@ def get_current_experiment_url(session: Session) -> str | None:
         Returns None if there is no experiment identifier.
     """
 
-    experiment_identifier = session.json_data.get(EXPERIMENT_KEY)
+    experiment_identifier = session.json_data.get(EXPERIMENT_IDENTIFIER)
     if not experiment_identifier:
         return None
 

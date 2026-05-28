@@ -62,7 +62,7 @@ class CongoSameDiffTest(TestCase):
 
     def test_next_round_practice_trial(self):
         congo_same_diff = CongoSameDiff()
-        congo_same_diff.counted_result_keys = []
+        congo_same_diff.counted_result_identifiers = []
 
         first_actions = congo_same_diff.next_round(self.session)
         self.assertEqual(len(first_actions), 2)
@@ -85,7 +85,7 @@ class CongoSameDiffTest(TestCase):
         # check that if there is no `practice_done` result with `given_answer=YES`, we get another practice round
         practice_action = congo_same_diff.next_round(self.session)
         self.assertIsInstance(practice_action, Trial)
-        self.assertIn('PRACTICE', practice_action.feedback_form.form[0].key)
+        self.assertIn('PRACTICE', practice_action.feedback_form.form[0].identifier)
 
     def test_next_round_non_practice_trial(self):
         congo_same_diff = CongoSameDiff()
@@ -102,7 +102,7 @@ class CongoSameDiffTest(TestCase):
             non_practice_action.feedback_form.form[0].text,
             'Is the third sound the SAME or DIFFERENT as the first two sounds?',
         )
-        self.assertIn('NORMAL', non_practice_action.feedback_form.form[0].key)
+        self.assertIn('NORMAL', non_practice_action.feedback_form.form[0].identifier)
 
     def test_get_next_trial(self):
         congo_same_diff = CongoSameDiff()

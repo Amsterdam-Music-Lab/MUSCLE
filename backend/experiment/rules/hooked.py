@@ -37,7 +37,7 @@ class Hooked(BaseRules):
     heard_before_time = 15  # response time for "Have you heard this song in previous rounds?"
     question_offset = 5  # how many rounds will be presented without questions
     questions = True
-    counted_result_keys = ["recognize", "heard_before"]
+    counted_result_identifiers = ["recognize", "heard_before"]
     play_method = "BUFFER"
 
     def __init__(self):
@@ -312,18 +312,18 @@ class Hooked(BaseRules):
             preload_message=_("Get ready!"),
         )
         # create Result object and save expected result to database
-        key = "heard_before"
+        identifier = "heard_before"
         form = Form(
             [
                 ButtonArrayQuestion(
-                    key=key,
+                    identifier=identifier,
                     choices=[
                         {"value": "new", "label": _("No"), "color": "colorNegative"},
                         {"value": "old", "label": _("Yes"), "color": "colorPositive"},
                     ],
                     text=_("Did you hear this song in previous rounds?"),
                     result_id=prepare_result(
-                        key,
+                        identifier,
                         session,
                         section=section,
                         expected_response=condition,
@@ -344,5 +344,5 @@ class Hooked(BaseRules):
     def get_score(self, session: Session, round_number: int) -> Score:
         config = {"show_section": True, "show_total_score": True}
         title = self.get_trial_title(session, round_number)
-        previous_result = session.last_result(self.counted_result_keys)
+        previous_result = session.last_result(self.counted_result_identifiers)
         return Score(session, config=config, title=title, result=previous_result)

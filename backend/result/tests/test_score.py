@@ -47,7 +47,7 @@ class ScoreTest(TestCase):
         action = {
             "form": [
                 {
-                    "key": "likert_test",
+                    "identifier": "likert_test",
                     "resultId": result.pk,
                     "view": "TEXT_RANGE",
                     "choices": ChoiceList.objects.get(pk="LIKERT_AGREE_7").to_dict(),
@@ -67,7 +67,7 @@ class ScoreTest(TestCase):
         view = {
             "form": [
                 {
-                    "key": "likert_test",
+                    "identifier": "likert_test",
                     "resultId": result.pk,
                     "view": "RADIOS",
                     "choices": [
@@ -97,7 +97,7 @@ class ScoreTest(TestCase):
         view = {
             "form": [
                 {
-                    "key": "correctness_test",
+                    "identifier": "correctness_test",
                     "resultId": result.pk,
                     "view": "BUTTON_ARRAY",
                     "value": value,
@@ -116,7 +116,9 @@ class ScoreTest(TestCase):
         )
         view = {
             "decision_time": 10,
-            "form": [{"key": "recognize", "resultId": result.pk, "value": result_type}],
+            "form": [
+                {"identifier": "recognize", "resultId": result.pk, "value": result_type}
+            ],
         }
         return self.make_request(view)
 
@@ -130,7 +132,9 @@ class ScoreTest(TestCase):
             json_data={"response_time": 15, "decision_time": 10},
         )
         view = {
-            "form": [{"key": "recognize", "resultId": result.pk, "value": result_type}],
+            "form": [
+                {"identifier": "recognize", "resultId": result.pk, "value": result_type}
+            ],
         }
         return self.make_request(view)
 
