@@ -64,6 +64,7 @@ class Session(models.Model):
         """
         self.finished_at = timezone.now()
         self.final_score = self.total_score()
+        self.save()
 
     def get_rounds_passed(self, apply_results_filter: bool = True) -> int:
         """Get number of rounds passed, measured by the number of results on this session,

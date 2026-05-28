@@ -8,8 +8,6 @@ from django.db.models.query import QuerySet
 
 from session.models import Session, Result
 
-EXPERIMENT_KEY = "experiment"
-
 
 def camelize(input_str: str) -> str:
     """convert a snake_case to camelCase string"""
@@ -36,13 +34,11 @@ def get_current_experiment_url(session: Session) -> str | None:
         Returns None if there is no experiment slug.
     """
     experiment = session.block.phase.experiment
-    if not experiment:
-        return None
 
     if not experiment.replayable:
-        blocks = experiment.associated_blocks
+        blocks = experiment.associated_blocks()
         played_sessions = (
-            Session.objects.filter(block__in=blocks)
+            Session.objects.filter(block__in=blocks, finished_at__isnull=False)
             .values_list("block")
             .distinct()
             .count()

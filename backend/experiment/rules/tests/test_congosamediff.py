@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 from django.test import TestCase
 
-from experiment.models import Block
+from experiment.models import Block, Experiment, Phase
 from participant.models import Participant
 from result.models import Result
 from section.models import Playlist, Section, Song
@@ -33,8 +33,10 @@ class CongoSameDiffTest(TestCase):
         self.playlist.csv = self.section_csv
         self.playlist._update_sections()
         self.participant = Participant.objects.create()
+        experiment = Experiment.objects.create(slug="congosamediff")
+        phase = Phase.objects.create(experiment=experiment)
         self.block = Block.objects.create(
-            slug="congosamediff", rules="CONGOSAMEDIFF", rounds=4
+            phase=phase, slug="congosamediff", rules="CONGOSAMEDIFF", rounds=4
         )
         self.session = Session.objects.create(
             block=self.block,

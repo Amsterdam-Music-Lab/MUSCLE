@@ -1,7 +1,7 @@
 from django.test import TestCase
 
-from experiment.actions.utils import EXPERIMENT_KEY, get_current_experiment_url, randomize_playhead
-from experiment.models import Block
+from experiment.actions.utils import get_current_experiment_url, randomize_playhead
+from experiment.models import Block, Experiment, Phase
 from participant.models import Participant
 from section.models import Playlist
 from session.models import Session
@@ -12,16 +12,29 @@ class TestActions(TestCase):
     def setUp(self) -> None:
         self.playlist = Playlist.objects.create(name='TestPlaylist')
         self.participant = Participant.objects.create()
-        self.block = Block.objects.create(slug="TestBlock")
+        self.experiment = Experiment.objects.create(slug="utils_test")
+        phase = Phase.objects.create(experiment=self.experiment)
+        self.block = Block.objects.create(phase=phase, slug="TestBlock")
         self.session = Session.objects.create(
             block=self.block, participant=self.participant, playlist=self.playlist)
 
-    def test_experiment_url(self):
-        self.assertEqual(get_current_experiment_url(self.session), None)
-        self.session.save_json_data({EXPERIMENT_KEY: 'superduperexperiment'})
-        self.assertEqual(get_current_experiment_url(self.session), '/superduperexperiment')
+    def test_get_current_experiment_url(self):
+        self.assertEqual(get_current_experiment_url(self.session), "/utils_test")
         self.participant.participant_id_url = 'participant42'
-        self.assertEqual(get_current_experiment_url(self.session), '/superduperexperiment?participant_id=participant42')
+        self.assertEqual(
+            get_current_experiment_url(self.session),
+            "/utils_test?participant_id=participant42",
+        )
+
+    def test_get_current_experiment_url_replayable(self):
+        new_session = Session.objects.create(
+            block=self.block, participant=Participant.objects.create()
+        )
+        new_session.finish()
+        self.assertIsNone(get_current_experiment_url(self.session))
+        self.experiment.replayable = True
+        self.experiment.save()
+        self.assertEqual(get_current_experiment_url(new_session), "/utils_test")
 
     def test_randomize_playhead(self):
         min_jitter = 5
