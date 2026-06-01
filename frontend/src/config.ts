@@ -1,5 +1,5 @@
 // Load experiment IDENTIFIER from hash, or default to env experiment identifier
-export const EXPERIMENT_identifier: string =
+export const EXPERIMENT_IDENTIFIER: string =
     document.location.hash.indexOf("identifier=") > -1
         ? document.location.hash.split("identifier=")[1]
         : import.meta.env.VITE_EXPERIMENT_IDENTIFIER;
