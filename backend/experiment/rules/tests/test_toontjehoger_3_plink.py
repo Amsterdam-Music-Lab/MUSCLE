@@ -31,7 +31,7 @@ class TestToontjeHoger3Plink(TestCase):
             "Golden Earring,Radar Love,0.0,1.0,toontjehoger/plink/2021-006.mp3,70s,vrolijk\n"
         ))
         playlist._update_sections()
-        experiment = Experiment.objects.create(slug="plink")
+        experiment = Experiment.objects.create(identifier="plink")
         phase = Phase.objects.create(experiment=experiment)
         block = Block.objects.create(
             phase=phase, identifier="test-th-plink", rules="TOONTJE_HOGER_3_PLINK", rounds=10

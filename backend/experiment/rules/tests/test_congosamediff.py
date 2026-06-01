@@ -33,7 +33,7 @@ class CongoSameDiffTest(TestCase):
         self.playlist.csv = self.section_csv
         self.playlist._update_sections()
         self.participant = Participant.objects.create()
-        experiment = Experiment.objects.create(slug="congosamediff")
+        experiment = Experiment.objects.create(identifier="congosamediff")
         phase = Phase.objects.create(experiment=experiment)
         self.block = Block.objects.create(
             phase=phase, identifier="congosamediff", rules="CONGOSAMEDIFF", rounds=4

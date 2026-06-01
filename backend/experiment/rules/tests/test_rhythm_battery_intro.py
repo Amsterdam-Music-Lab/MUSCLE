@@ -28,7 +28,7 @@ class RhythmBatteryIntroTest(TestCase):
             filename="not/to_be_found.mp3",
             tag=0
         )
-        experiment = Experiment.objects.create(slug="rhythm_battery_intro")
+        experiment = Experiment.objects.create(identifier="rhythm_battery_intro")
         phase = Phase.objects.create(experiment=experiment)
         self.block = Block.objects.create(
             phase=phase, identifier="TEST", rules="RHYTHM_BATTERY_INTRO"

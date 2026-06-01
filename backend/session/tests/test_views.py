@@ -9,7 +9,7 @@ from session.models import Session
 class SessionViewsTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        experiment = Experiment.objects.create(slug='myexperiment')
+        experiment = Experiment.objects.create(identifier='myexperiment')
         phase = Phase.objects.create(experiment=experiment)
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.playlist1 = Playlist.objects.create(name="First Playlist")

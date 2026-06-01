@@ -63,17 +63,23 @@ class Likert(BaseRules):
             return [self.get_trial(session, total_rounds)]
 
     def get_trial(self, session, total_rounds):
-        configured_question_key = session.block.rules_config.get("question_key")
-        question_key = configured_question_key or "likert"
-        played_sections = session.result_set.filter(question_key=question_key).values_list('section__id', flat=True)
+        configured_question_identifier = session.block.rules_config.get(
+            "question_identifier"
+        )
+        question_identifier = configured_question_identifier or "likert"
+        played_sections = session.result_set.filter(
+            question_identifier=question_identifier
+        ).values_list('section__id', flat=True)
         section = session.playlist.get_section(exclude={'pk__in': played_sections})
         playback = Autoplay(sections=[PlaybackSection(section)], show_animation=False)
-        question_key = configured_question_key or "likert"
-        if configured_question_key:
-            question = Question.objects.get(key=question_key).convert_to_action()
+        question_identifier = configured_question_identifier or "likert"
+        if configured_question_identifier:
+            question = Question.objects.get(
+                identifier=question_identifier
+            ).convert_to_action()
         else:
             question = TextRangeQuestion(
-                key=question_key,
+                identifier=question_identifier,
                 explainer=_("Rate from lowest to highest"),
                 choices=[
                     {"value": 1, "label": _("Lowest")},
@@ -84,7 +90,7 @@ class Likert(BaseRules):
                 ],
             )
         question.result_id = prepare_result(
-            question_key, session, scoring_rule="LIKERT", section=section
+            question_identifier, session, scoring_rule="LIKERT", section=section
         )
         form = Form(form=[question])
         return Trial(
