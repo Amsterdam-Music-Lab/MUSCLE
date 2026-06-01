@@ -5,6 +5,7 @@ from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.question import CheckBoxQuestion
 from experiment.actions.trial import Trial
+from experiment.actions.utils import get_experiment_url
 from result.utils import prepare_result
 from question.banks import get_question_bank
 from section.models import Section
@@ -66,6 +67,7 @@ class ThatsMySong(Hooked):
             session.save()
 
             # Return a score and final score action.
+            session.finish()
             return [
                 self.get_score(session, round_number),
                 Final(
@@ -76,7 +78,7 @@ class ThatsMySong(Hooked):
                     show_profile_link=True,
                     button=Button(
                         _("Play again"),
-                        link=self.get_play_again_url(session),
+                        link=get_experiment_url(session),
                     ),
                     logo={
                         "image": "/images/vumc_mcl_logo.png",

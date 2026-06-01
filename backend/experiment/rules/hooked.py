@@ -13,6 +13,7 @@ from experiment.actions.playlist import PlaylistSelection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
+from experiment.actions.utils import get_experiment_url
 from experiment.actions.wrappers import song_sync
 from question.banks import get_question_bank
 from result.utils import prepare_result
@@ -104,10 +105,7 @@ class Hooked(BaseRules):
         if round_number == session.block.rounds:
             # Finish session.
             session.finish()
-            session.save()
 
-            # Return a score and final score action.
-            total_score = session.total_score()
             return [
                 self.get_score(session, round_number),
                 Final(
@@ -117,7 +115,7 @@ class Hooked(BaseRules):
                     show_profile_link=True,
                     button=Button(
                         _("Play again"),
-                        link=self.get_play_again_url(session),
+                        link=get_experiment_url(session),
                     ),
                 ),
             ]

@@ -78,7 +78,6 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
     def get_final_round(self, session):
         # Finish session.
         session.finish()
-        session.save()
 
         # Score
         score = self.get_score(session, session.get_rounds_passed())

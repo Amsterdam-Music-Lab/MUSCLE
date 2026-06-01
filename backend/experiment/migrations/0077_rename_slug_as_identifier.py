@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('experiment', '0075_alter_block_options'),
+        ('experiment', '0076_experiment_replayable'),
     ]
 
     operations = [

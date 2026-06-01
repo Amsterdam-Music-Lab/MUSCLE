@@ -10,6 +10,7 @@ from experiment.actions.final import Final
 from experiment.actions.playback import MatchingPairs, PlaybackSection
 from experiment.actions.playlist import PlaylistSelection
 from experiment.actions.trial import Trial
+from experiment.actions.utils import get_experiment_url
 from result.utils import prepare_result
 from section.models import Section
 from session.models import Session
@@ -81,11 +82,12 @@ class MatchingPairsGame(BaseRules):
             return actions
         else:
             # final score saves the result from the cleared board into account
+            session.finish()
             score = Final(
                 session,
                 title="Score",
                 final_text="Can you score higher than your friends and family? Share and let them try!",
-                button=Button(_("Play again"), link=self.get_play_again_url(session)),
+                button=Button(_("Play again"), link=get_experiment_url(session)),
                 rank=self.rank(session, exclude_unfinished=False),
                 feedback_info=self.feedback_info(),
             )

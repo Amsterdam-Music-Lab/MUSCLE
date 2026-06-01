@@ -6,7 +6,7 @@ from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.info import Info
-from experiment.actions.utils import get_current_experiment_url
+from experiment.actions.utils import get_experiment_url
 from .toontjehoger_1_mozart import toontjehoger_ranks, ToontjeHoger1Mozart
 
 logger = logging.getLogger(__name__)
@@ -38,7 +38,6 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
     def get_final_round(self, session):
         # Finish session.
         session.finish()
-        session.save()
 
         # Answer explainer
         answer_explainer = self.get_answer_explainer(session, round=2)
@@ -73,7 +72,7 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
             heading="Het Mozart effect",
             button=Button(
                 "Terug naar ToontjeHogerKids",
-                link=get_current_experiment_url(session),
+                link=get_experiment_url(session),
             ),
         )
 

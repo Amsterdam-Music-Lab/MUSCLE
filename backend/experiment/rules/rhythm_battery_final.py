@@ -5,6 +5,7 @@ from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from question.banks import get_question_bank
+from session.models import Session
 from .base import BaseRules
 
 
@@ -50,12 +51,13 @@ class RhythmBatteryFinal(BaseRules):
             button=Button(_('Ok')),
         )
 
-    def next_round(self, session):
+    def next_round(self, session: Session):
         questions = self.get_profile_question_trials(session, None)
         if questions:
             return [self.get_intro_explainer(), *questions]
         else:
             rendered = render_to_string(self.debrief_form)
+            session.finish()
             return Final(
                 session,
                 title=_("Thank you very much for participating!"),
