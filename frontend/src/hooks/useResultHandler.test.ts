@@ -29,7 +29,7 @@ describe('useResultHandler', () => {
         );
 
         const mockResult = {
-            form: [{ id: 'q1', type: 'text', key: 'test_question', value: 'test', question: 'What is the average speed of a Swallow?', view: QuestionViews.BUTTON_ARRAY, choices: { 'slow': '1 km/h', 'fast': '42 km/h' } }],
+            form: [{ id: 'q1', type: 'text', identifier: 'test_question', value: 'test', question: 'What is the average speed of a Swallow?', view: QuestionViews.BUTTON_ARRAY, choices: { 'slow': '1 km/h', 'fast': '42 km/h' } }],
             decision_time: 1000,
             config: { trialType: 'A' },
         };

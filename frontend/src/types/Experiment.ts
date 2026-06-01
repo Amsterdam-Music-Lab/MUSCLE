@@ -19,7 +19,7 @@ export interface SocialMediaConfig {
 }
 
 export default interface Experiment {
-    slug: string;
+    identifier: string;
     name: string;
     description: string;
     dashboard: Block[];

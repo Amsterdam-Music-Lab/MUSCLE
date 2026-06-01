@@ -5,7 +5,7 @@ import { it, expect, describe } from 'vitest';
 import ExperimentAbout from './ExperimentAbout';
 
 const experiment = {
-    slug: "some_slug",
+    identifier: "some_identifier",
     backButtonText: "Terug",
     aboutContent: '## Hello World!\n\n**Lorem ipsum**',
     theme: {
@@ -25,7 +25,7 @@ describe('ExperimentAbout', () => {
         expect(screen.getByRole('contentinfo').innerHTML).toContain('Lorem ipsum');
     });
 
-    it('shows a "Terug" button with a link to the previous page based on a given slug', () => {
+    it('shows a "Terug" button with a link to the previous page based on a given identifier', () => {
 
         render(
             <ExperimentAbout {...experiment} />,
@@ -33,6 +33,6 @@ describe('ExperimentAbout', () => {
         )
 
         expect(screen.getByRole('link').innerHTML).toContain('Terug');
-        expect(screen.getByRole('link').getAttribute('href')).toBe('/some_slug');
+        expect(screen.getByRole('link').getAttribute('href')).toBe('/some_identifier');
     });
 })

@@ -1,8 +1,8 @@
-// Load experiment slug from hash, or default to env experiment slug
-export const EXPERIMENT_SLUG: string =
-    document.location.hash.indexOf("slug=") > -1
-        ? document.location.hash.split("slug=")[1]
-        : import.meta.env.VITE_EXPERIMENT_SLUG;
+// Load experiment IDENTIFIER from hash, or default to env experiment identifier
+export const EXPERIMENT_IDENTIFIER: string =
+    document.location.hash.indexOf("identifier=") > -1
+        ? document.location.hash.split("identifier=")[1]
+        : import.meta.env.VITE_EXPERIMENT_IDENTIFIER;
 
 
 // Base url the API
@@ -28,9 +28,9 @@ export const URLS = {
     about: "/about",
     profile: "/profile",
     storeProfile: "/profile/store",
-    block: "/block/:slug",
-    experimentAbout: "/:slug/about",
-    experiment: "/:slug/*",
+    block: "/block/:identifier",
+    experimentAbout: "/:identifier/about",
+    experiment: "/:identifier/*",
     internalRedirect: "/redirect/*",
     reloadParticipant: "/participant/reload/:id/:hash",
     theme: "/theme/:id",

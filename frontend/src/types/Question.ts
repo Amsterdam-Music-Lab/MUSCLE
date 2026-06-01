@@ -17,7 +17,7 @@ export interface Choice {
 }
 
 export default interface Question {
-    key: string;
+    identifier: string;
     text: string;
     view: QuestionViews;
     value?: string | number;

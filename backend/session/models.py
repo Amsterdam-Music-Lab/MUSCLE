@@ -69,20 +69,23 @@ class Session(models.Model):
 
     def get_rounds_passed(self, apply_results_filter: bool = True) -> int:
         """Get number of rounds passed, measured by the number of results on this session,
-        taking into account the `counted_result_keys` array that may be defined per rules file
+        taking into account the `counted_result_identifiers` array that may be defined per rules file
 
         Attributes:
-            counted_result_keys: array of the Result.question_key strings which should be taken into account for counting rounds; if empty, all results will be counted.
+            counted_result_identifiers: array of the Result.question_identifier strings which should be taken into account for counting rounds; if empty, all results will be counted.
 
         Returns:
-            number of results, filtered by `counted_result_keys`, if supplied
+            number of results, filtered by `counted_result_identifiers`, if supplied
         """
+
         results = self.result_set
-        filter_keys = (
-            self.block_rules().counted_result_keys if apply_results_filter else None
+        filter_identifiers = (
+            self.block_rules().counted_result_identifiers
+            if apply_results_filter
+            else None
         )
-        if filter_keys:
-            results = results.filter(question_key__in=filter_keys)
+        if filter_identifiers:
+            results = results.filter(question_identifier__in=filter_identifiers)
         return results.count()
 
     def get_used_song_ids(self, exclude: dict = {}) -> Iterable[int]:
@@ -113,87 +116,89 @@ class Session(models.Model):
         used_song_ids = self.get_used_song_ids()
         return list(set(song_ids) - set(used_song_ids))
 
-    def _filter_results(self, question_keys) -> QuerySet:
+    def _filter_results(self, question_identifiers) -> QuerySet:
         results = self.result_set
-        if question_keys:
-            results = results.filter(question_key__in=question_keys)
+        if question_identifiers:
+            results = results.filter(question_identifier__in=question_identifiers)
         return results.order_by("-created_at")
 
-    def last_result(self, question_keys: list[str] = []) -> Optional[Result]:
+    def last_result(self, question_identifiers: list[str] = []) -> Optional[Result]:
         """
-        Utility function to retrieve the last result, optionally filtering by relevant question keys.
+        Utility function to retrieve the last result, optionally filtering by relevant question identifiers.
         If more than one result needs to be processed, or for more advanced filtering,
         you can refer to the results on a session by `session.result_set` and query using the
         [Django's querying syntax](https://docs.djangoproject.com/en/4.2/topics/db/queries/)
 
         Attributes:
-            question_keys: array of Result.question_key strings to specify whish results should be taken into account; if empty, return last result, irrespective of its question_key
+            question_identifiers: array of Result.question_identifier strings to specify whish results should be taken into account; if empty, return last result, irrespective of its question_identifier
 
         Returns:
             last relevant Result object added to the database for this session
         """
-        results = self._filter_results(question_keys)
+        results = self._filter_results(question_identifiers)
         return results.first()
 
     def last_n_results(
-        self, question_keys: list[str] = [], n_results: int = 1
+        self, question_identifiers: list[str] = [], n_results: int = 1
     ) -> list[Result]:
         """Retrieve previous n results.
 
         Args:
-            question_keys: a list of question keys for which results should be retrieved, if empty, any results will be returned
+            question_identifiers: a list of question identifiers for which results should be retrieved, if empty, any results will be returned
             n_results: number of results to return
 
         Returns:
-            list of Result objects with the given question keys
+            list of Result objects with the given question identifiers
         """
-        results = self._filter_results(question_keys)
+        results = self._filter_results(question_identifiers)
         return list(results.order_by("-created_at")[:n_results])
 
-    def last_section(self, question_keys: list[str] = []) -> Union[Section, None]:
+    def last_section(
+        self, question_identifiers: list[str] = []
+    ) -> Union[Section, None]:
         """
-        Utility function to retrieve the last section played in the session, optinally filtering by result question keys.
+        Utility function to retrieve the last section played in the session, optinally filtering by result question identifiers.
         Uses `last_result` underneath.
 
         Attributes:
-            question_keys: array of the Result.question_key strings whish should be taken into account; if empty, return last section, irrespective of question_key
+            question_identifiers: array of the Result.question_identifier strings whish should be taken into account; if empty, return last section, irrespective of question_identifier
 
         Returns:
             Section tied to previous result, if that result has a score and section, else None
         """
-        result = self.last_result(question_keys)
+        result = self.last_result(question_identifiers)
         if result and result.section:
             return result.section
         return None
 
-    def last_score(self, question_keys: list[str] = []) -> float:
+    def last_score(self, question_identifiers: list[str] = []) -> float:
         """
-        Utility function to retrieve last score logged to the session, optionally filtering by result question keys.
+        Utility function to retrieve last score logged to the session, optionally filtering by result question identifiers.
         Uses `last_result` underneath.
 
         Attributes:
-            question_keys: array of the Result.question_key strings whish should be taken into account; if empty, return last score, irrespective of question_key
+            question_identifiers: array of the Result.question_identifier strings whish should be taken into account; if empty, return last score, irrespective of question_identifier
 
         Returns:
             score of last result, or return 0 if there are no results yet
         """
-        result = self.last_result(question_keys)
+        result = self.last_result(question_identifiers)
         if result:
             return result.score
         return 0
 
-    def last_song(self, question_keys: list[str] = []) -> str:
+    def last_song(self, question_identifiers: list[str] = []) -> str:
         """
-        Utility function to retrieve label (artist - name) of last song played in session, optionally filtering by result question keys.
+        Utility function to retrieve label (artist - name) of last song played in session, optionally filtering by result question identifiers.
         Uses `last_result` underneath.
 
         Attributes:
-            question_keys: array of the Result.question_key strings whish should be taken into account; if empty, return last played song, irrespective of question_key
+            question_identifiers: array of the Result.question_identifier strings whish should be taken into account; if empty, return last played song, irrespective of question_identifier
 
         Returns:
             artist and name of section tied to previous result, if available, or an empty string
         """
-        section = self.last_section(question_keys)
+        section = self.last_section(question_identifiers)
         if section:
             return section.song_label()
         return ""
@@ -226,7 +231,7 @@ class Session(models.Model):
     def rounds_complete(self) -> bool:
         """
         Attributes:
-            counted_result_keys: array of the Result.question_key strings which should be taken into account for counting rounds; if empty, all results will be counted.
+            counted_result_identifiers: array of the Result.question_identifier strings which should be taken into account for counting rounds; if empty, all results will be counted.
 
         Returns:
             True if there are results for each experiment round

@@ -9,13 +9,13 @@ from session.models import Session
 class SessionViewsTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        experiment = Experiment.objects.create(slug='myexperiment')
+        experiment = Experiment.objects.create(identifier='myexperiment')
         phase = Phase.objects.create(experiment=experiment)
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.playlist1 = Playlist.objects.create(name="First Playlist")
         cls.playlist2 = Playlist.objects.create(name="Second Playlist")
         cls.block = Block.objects.create(
-            phase=phase, slug="testviews", rules="RHYTHM_BATTERY_INTRO"
+            phase=phase, identifier="testviews", rules="RHYTHM_BATTERY_INTRO"
         )
         cls.block.playlists.add(cls.playlist1, cls.playlist2)
 

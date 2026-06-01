@@ -17,7 +17,7 @@ class FinalTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.experiment = Experiment.objects.create(
-            slug="final_countdown",
+            identifier="final_countdown",
             name="Final Countdown",
             name_en="Final CountDown",
             name_nl="Laatste Telaf",

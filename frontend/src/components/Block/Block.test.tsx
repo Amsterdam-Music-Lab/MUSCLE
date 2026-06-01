@@ -20,7 +20,7 @@ vi.mock('react-router-dom', async () => {
 });
 
 const blockObj = {
-    id: 24, slug: 'test', name: 'Test',
+    id: 24, identifier: 'test', name: 'Test',
     playlists: [{ id: 42, name: 'TestPlaylist' }],
     session_id: 42,
     loadingText: 'Patience!'
@@ -65,7 +65,7 @@ vi.mock('../../util/stores', () => ({
 describe('Block Component', () => {
 
     beforeEach(() => {
-        mockUseParams.mockReturnValue({ slug: 'test' });
+        mockUseParams.mockReturnValue({ identifier: 'test' });
     });
 
     afterEach(() => {
@@ -90,7 +90,7 @@ describe('Block Component', () => {
         render(
             <MemoryRouter initialEntries={['/block/test']}>
                 <Routes>
-                    <Route path="/block/:slug" element={<Block />} />
+                    <Route path="/block/:identifier" element={<Block />} />
                 </Routes>
             </MemoryRouter>
         );

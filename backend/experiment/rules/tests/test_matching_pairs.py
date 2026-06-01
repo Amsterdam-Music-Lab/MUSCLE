@@ -36,7 +36,9 @@ class MatchingPairsTest(TestCase):
         cls.playlist.csv = section_csv
         cls.playlist._update_sections()
         cls.participant = Participant.objects.create()
-        cls.block = Block.objects.create(rules="MATCHING_PAIRS", slug="mpairs", rounds=42)
+        cls.block = Block.objects.create(
+            rules="MATCHING_PAIRS", identifier="mpairs", rounds=42
+        )
         cls.session = Session.objects.create(block=cls.block, participant=cls.participant, playlist=cls.playlist)
         cls.rules = cls.session.block_rules()
 
@@ -70,7 +72,7 @@ class MatchingPairsTest(TestCase):
     def intermediate_score_request(self, data):
         request_data = {"json_data": json.dumps(data), **self.csrf_token, **self.session_data}
         self.client.post("/result/intermediate_score/", request_data)
-        result = Result.objects.filter(question_key="move").last()
+        result = Result.objects.filter(question_identifier="move").last()
         return result
 
     def test_intermediate_score(self):

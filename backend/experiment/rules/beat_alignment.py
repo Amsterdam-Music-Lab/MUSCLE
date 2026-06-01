@@ -140,10 +140,10 @@ class BeatAlignment(BaseRules):
         section = session.playlist.get_section(filter_by, song_ids=session.get_unused_song_ids())
         condition = section.song.name.split('_')[-1]
         expected_response = 'ON' if condition == 'on' else 'OFF'
-        key = 'aligned'
+        identifier = 'aligned'
         question = ButtonArrayQuestion(
             text=_("Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?"),
-            key=key,
+            identifier=identifier,
             choices=[
                 {
                     'value': 'ON',
@@ -157,7 +157,7 @@ class BeatAlignment(BaseRules):
                 },
             ],
             result_id=prepare_result(
-                key,
+                identifier,
                 session,
                 section=section,
                 expected_response=expected_response,

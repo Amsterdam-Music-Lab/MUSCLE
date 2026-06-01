@@ -38,7 +38,7 @@ const Checkboxes = ({ question, value, onChange }: CheckboxesProps) => {
                 <Checkbox
                     key={index}
                     // This prop does not exist on Checkbox
-                    name={question.key}
+                    name={question.identifier}
                     label={choice.label}
                     value={choice.value}
                     checked={values.includes(choice.value)}

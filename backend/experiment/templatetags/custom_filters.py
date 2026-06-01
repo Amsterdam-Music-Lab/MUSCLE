@@ -11,9 +11,9 @@ def get_langcode(formset):
     return langcodes
 
 
-@register.filter(name="get_block_slug")
-def get_block_slug(formset):
-    return formset.instance.slug
+@register.filter(name="get_block_identifier")
+def get_block_identifier(formset):
+    return formset.instance.identifier
 
 
 @register.filter(name="get_phase_blocks")

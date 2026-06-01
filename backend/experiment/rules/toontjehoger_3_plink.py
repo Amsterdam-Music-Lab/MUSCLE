@@ -183,10 +183,12 @@ class ToontjeHoger3Plink(BaseRules):
     def get_plink_trials(self, session: Session, section: Section, choices: dict, expected_response: str) -> list:
         plink_trials = []
         question1 = AutoCompleteQuestion(
-            key="plink",
+            identifier="plink",
             choices=choices,
             text="Noem de artiest en de titel van het nummer",
-            result_id=prepare_result("plink", session, section=section, expected_response=expected_response),
+            result_id=prepare_result(
+                "plink", session, section=section, expected_response=expected_response
+            ),
         )
         plink_trials.append(
             Trial(
@@ -232,9 +234,11 @@ class ToontjeHoger3Plink(BaseRules):
 
         question = RadiosQuestion(
             text="Wanneer is het nummer uitgebracht?",
-            key="time_period",
+            identifier="time_period",
             choices=period_choices,
-            result_id=prepare_result("era", session, section=section, expected_response=section.tag),
+            result_id=prepare_result(
+                "era", session, section=section, expected_response=section.tag
+            ),
         )
 
         return Trial(feedback_form=Form([question]))
@@ -248,9 +252,11 @@ class ToontjeHoger3Plink(BaseRules):
 
         question = RadiosQuestion(
             text="Welke emotie past bij dit nummer?",
-            key="emotion",
+            identifier="emotion",
             choices=emotion_choices,
-            result_id=prepare_result("emotion", session, section=section, expected_response=section.group),
+            result_id=prepare_result(
+                "emotion", session, section=section, expected_response=section.group
+            ),
         )
 
         return Trial(feedback_form=Form([question]))
@@ -259,11 +265,11 @@ class ToontjeHoger3Plink(BaseRules):
         """
         Calculate score, based on the data field
         """
-        if result.question_key == "plink":
+        if result.question_identifier == "plink":
             return (
                 self.SCORE_MAIN_CORRECT if result.expected_response == result.given_response else self.SCORE_MAIN_WRONG
             )
-        elif result.question_key == "era":
+        elif result.question_identifier == "era":
             result.session.save_json_data({"extra_questions_intro_shown": True})
             result.session.save()
             return (

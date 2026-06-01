@@ -18,47 +18,6 @@ from section.models import Song, Section
 from session.models import Session
 
 
-def slugify(text: str) -> str:
-    """Create a slug from given string
-
-    Args:
-        text: Input text (str)
-
-    Returns:
-        slug
-    """
-
-    non_url_safe = [
-        '"',
-        "#",
-        "$",
-        "%",
-        "&",
-        "+",
-        ",",
-        "/",
-        ":",
-        ";",
-        "=",
-        "?",
-        "@",
-        "[",
-        "\\",
-        "]",
-        "^",
-        "`",
-        "{",
-        "|",
-        "}",
-        "~",
-        "'",
-    ]
-    translate_table = {ord(char): "" for char in non_url_safe}
-    text = text.translate(translate_table)
-    text = "_".join(text.split())
-    return text.lower()
-
-
 def non_breaking_spaces(input_string: str) -> str:
     """Convert regular spaces to non breaking spacing on the given string
     Args:
@@ -106,7 +65,7 @@ def format_label(number: int, label_style: str) -> str:
 
 
 def consent_upload_path(instance: Experiment, filename: str) -> str:
-    """Generate path to save consent file based on experiment.slug and language
+    """Generate path to save consent file based on experiment.identifier and language
 
     Args:
         instance: Experiment instance to determine folder name
@@ -118,8 +77,9 @@ def consent_upload_path(instance: Experiment, filename: str) -> str:
     Note:
         Used by the Block model for uploading consent file
     """
+
     experiment = instance.experiment
-    folder_name = experiment.slug
+    folder_name = experiment.identifier
     language = instance.language
 
     join("consent", folder_name, f"{language}-{filename}")
@@ -139,18 +99,18 @@ def get_profiles_of_participants(
     return Result.objects.filter(participant__in=participants)
 
 
-def block_export_csv_results(block_slug: str) -> StringIO:
+def block_export_csv_results(block_identifier: str) -> StringIO:
     """export results and profiles in two csvs
     This export does not provide all data, but a selection of the variables
     expected to be of most interest for basic analyses
     """
-    this_block = Block.objects.get(slug=block_slug)
+    this_block = Block.objects.get(identifier=block_identifier)
     all_sessions = this_block.sessions.order_by("pk")
     all_results = get_results_of_sessions(all_sessions)
     result_output_keys = [
         "session__id",
         "participant__id",
-        "question_key",
+        "question_identifier",
         "created_at",
         "expected_response",
         "given_response",
@@ -170,7 +130,7 @@ def block_export_csv_results(block_slug: str) -> StringIO:
     profile_output_keys = [
         "participant__id",
         "participant__country_code",
-        "question_key",
+        "question_identifier",
         "created_at",
         "expected_response",
         "given_response",
@@ -186,14 +146,14 @@ def block_export_csv_results(block_slug: str) -> StringIO:
     return csv_buffer.getvalue()
 
 
-def get_block_csv_export_as_response(block_slug: str) -> HttpResponse:
+def get_block_csv_export_as_response(block_identifier: str) -> HttpResponse:
     '''Create a download response for the admin experimenter dashboard'''
-    csv_string = block_export_csv_results(block_slug)
+    csv_string = block_export_csv_results(block_identifier)
     response = HttpResponse(csv_string)
     response["Content-Type"] = "text/csv"
     response["Content-Disposition"] = (
         'attachment; filename="'
-        + block_slug
+        + block_identifier
         + "-"
         + timezone.now().isoformat()
         + '.csv"'
@@ -201,10 +161,10 @@ def get_block_csv_export_as_response(block_slug: str) -> HttpResponse:
     return response
 
 
-def block_export_json_results(block_slug: str) -> ZipFile:
+def block_export_json_results(block_identifier: str) -> ZipFile:
     """Export block JSON data as zip archive"""
 
-    this_block = Block.objects.get(slug=block_slug)
+    this_block = Block.objects.get(identifier=block_identifier)
     all_feedback = Feedback.objects.filter(block=this_block)
 
     # Collect data
@@ -255,14 +215,14 @@ def block_export_json_results(block_slug: str) -> ZipFile:
     return zip_buffer
 
 
-def get_block_json_export_as_response(block_slug: str) -> HttpResponse:
+def get_block_json_export_as_response(block_identifier: str) -> HttpResponse:
     '''Create a download response for the admin experimenter dashboard'''
-    zip_buffer = block_export_json_results(block_slug)
+    zip_buffer = block_export_json_results(block_identifier)
     response = HttpResponse(zip_buffer.getbuffer())
     response["Content-Type"] = "application/x-zip-compressed"
     response["Content-Disposition"] = (
         'attachment; filename="'
-        + block_slug
+        + block_identifier
         + "-"
         + timezone.now().isoformat()
         + '.zip"'

@@ -79,9 +79,11 @@ class BaseTest(unittest.TestCase):
 
         print("I agree button clicked")
 
-    def check_for_error(self, block_name, block_slug='[no slug provided]'):
+    def check_for_error(self, block_name, block_identifier='[no identifier provided]'):
         if "Error" in self.driver.find_element(By.TAG_NAME, "body").text:
-            raise Exception(f"Could not load {block_name} experiment, please check the server logs and make sure the slug ({block_slug}) is correct.")
+            raise Exception(
+                f"Could not load {block_name} experiment, please check the server logs and make sure the identifier ({block_identifier}) is correct."
+            )
 
     def take_screenshot(self, block_name, notes=""):
         current_time = time.strftime("%Y-%m-%d-%H-%M-%S")

@@ -161,10 +161,10 @@ class ToontjeHoger1Mozart(BaseRules):
         # --------------------
 
         # Question
-        key = "expected_shape"
+        identifier = "expected_shape"
         question = ButtonArrayQuestion(
             text=question,
-            key=key,
+            identifier=identifier,
             choices=[
                 {"value": "A", "label": "A", "color": "colorNeutral2"},
                 {"value": "B", "label": "B", "color": "colorNeutral1"},
@@ -173,7 +173,10 @@ class ToontjeHoger1Mozart(BaseRules):
                 {"value": "E", "label": "E", "color": "colorNeutral3"},
             ],
             result_id=prepare_result(
-                key, session, section=section, expected_response=expected_response
+                identifier,
+                session,
+                section=section,
+                expected_response=expected_response,
             ),
         )
         form = Form([question], submit_button=None)

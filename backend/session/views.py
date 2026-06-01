@@ -2,7 +2,6 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 
 from .models import Session
-from experiment.models import Experiment
 from experiment.serializers import serialize_actions
 from participant.utils import get_participant
 

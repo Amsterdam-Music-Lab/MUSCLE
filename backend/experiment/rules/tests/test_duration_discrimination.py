@@ -17,7 +17,7 @@ class DDITest(TestCase):
         cls.participant = Participant.objects.create()
         cls.playlist = Playlist.objects.get(name='DurationDiscrimination')
         cls.playlist._update_sections()
-        cls.block = Block.objects.get(slug="ddi")
+        cls.block = Block.objects.get(identifier="ddi")
         cls.session = Session.objects.create(
             block=cls.block,
             participant=cls.participant,
@@ -94,7 +94,7 @@ class AnisochronyTest(TestCase):
         cls.participant = Participant.objects.create()
         cls.playlist = Playlist.objects.get(name='Anisochrony')
         cls.playlist._update_sections()
-        cls.block = Block.objects.get(slug="anis")
+        cls.block = Block.objects.get(identifier="anis")
         cls.session = Session.objects.create(
             block=cls.block,
             participant=cls.participant,

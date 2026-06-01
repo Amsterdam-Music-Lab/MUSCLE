@@ -31,7 +31,7 @@ def get_experiment_url(session: Session) -> str | None:
         ```
 
     Note:
-        Returns None if there is no experiment slug.
+        Returns None if there is no experiment identifier.
     """
     experiment = session.block.phase.experiment
 
@@ -48,9 +48,9 @@ def get_experiment_url(session: Session) -> str | None:
 
     if session.participant.participant_id_url:
         participant_id_url = session.participant.participant_id_url
-        return f"/{experiment.slug}?participant_id={participant_id_url}"
+        return f"/{experiment.identifier}?participant_id={participant_id_url}"
     else:
-        return f"/{experiment.slug}"
+        return f"/{experiment.identifier}"
 
 
 def render_feedback_trivia(feedback, trivia) -> str:

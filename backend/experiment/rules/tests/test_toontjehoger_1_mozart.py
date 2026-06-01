@@ -23,7 +23,9 @@ class TestToontjeHoger1Mozart(TestCase):
             ),
         )
         playlist._update_sections()
-        block = Block.objects.create(slug="th-1-test", rules="TOONTJE_HOGER_1_MOZART", rounds=2)
+        block = Block.objects.create(
+            identifier="th-1-test", rules="TOONTJE_HOGER_1_MOZART", rounds=2
+        )
         session = Session.objects.create(block=block, participant=Participant.objects.create(), playlist=playlist)
         rules = block.get_rules()
         for round in range(block.rounds):
@@ -46,7 +48,9 @@ class TestToontjeHogerKids1Mozart(TestCase):
             'componist Mozart (gespeeld door Lucas en Arthur Jussen),Sonate voor twee pianos in D groot,0.0,14.0,toontjehoger_kids/mozart/fragment_b.mp3,0,2\n'
         ))
         playlist._update_sections()
-        block = Block.objects.create(slug="thk-1-test", rules="TOONTJE_HOGER_KIDS_1_MOZART", rounds=2)
+        block = Block.objects.create(
+            identifier="thk-1-test", rules="TOONTJE_HOGER_KIDS_1_MOZART", rounds=2
+        )
         session = Session.objects.create(block=block, participant=Participant.objects.create(), playlist=playlist)
         rules = block.get_rules()
         for round in range(block.rounds):

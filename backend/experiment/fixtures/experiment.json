@@ -3,7 +3,7 @@
     "model": "experiment.experiment",
     "pk": 2,
     "fields": {
-        "slug": "rhythm_battery",
+        "identifier": "rhythm_battery",
         "theme_config": null,
         "active": true
     }
@@ -12,7 +12,7 @@
     "model": "experiment.experiment",
     "pk": 3,
     "fields": {
-        "slug": "thkids",
+        "identifier": "thkids",
         "theme_config": null,
         "active": true
     }
@@ -21,7 +21,7 @@
     "model": "experiment.experiment",
     "pk": 4,
     "fields": {
-        "slug": "eurovision_2021",
+        "identifier": "eurovision_2021",
         "theme_config": null,
         "active": true
     }
@@ -30,7 +30,7 @@
     "model": "experiment.experiment",
     "pk": 5,
     "fields": {
-        "slug": "tunetwins",
+        "identifier": "tunetwins",
         "theme_config": null,
         "active": true
     }
@@ -39,7 +39,7 @@
     "model": "experiment.experiment",
     "pk": 7,
     "fields": {
-        "slug": "cat",
+        "identifier": "cat",
         "theme_config": null,
         "active": true
     }
@@ -48,7 +48,7 @@
     "model": "experiment.experiment",
     "pk": 8,
     "fields": {
-        "slug": "huang_2022",
+        "identifier": "huang_2022",
         "theme_config": null,
         "active": true
     }
@@ -57,7 +57,7 @@
     "model": "experiment.experiment",
     "pk": 9,
     "fields": {
-        "slug": "christmas_2020",
+        "identifier": "christmas_2020",
         "theme_config": null,
         "active": true
     }
@@ -66,7 +66,7 @@
     "model": "experiment.experiment",
     "pk": 10,
     "fields": {
-        "slug": "thats_my_song",
+        "identifier": "thats_my_song",
         "theme_config": null,
         "active": true
     }
@@ -75,7 +75,7 @@
     "model": "experiment.experiment",
     "pk": 11,
     "fields": {
-        "slug": "tunetwins_icmpc",
+        "identifier": "tunetwins_icmpc",
         "theme_config": null,
         "active": true
     }
@@ -84,7 +84,7 @@
     "model": "experiment.experiment",
     "pk": 12,
     "fields": {
-        "slug": "teletunes",
+        "identifier": "teletunes",
         "theme_config": null,
         "active": true
     }
@@ -93,7 +93,7 @@
     "model": "experiment.experiment",
     "pk": 13,
     "fields": {
-        "slug": "mpst",
+        "identifier": "mpst",
         "theme_config": null,
         "active": true
     }
@@ -102,7 +102,7 @@
     "model": "experiment.experiment",
     "pk": 14,
     "fields": {
-        "slug": "mpref",
+        "identifier": "mpref",
         "theme_config": null,
         "active": true
     }
@@ -111,7 +111,7 @@
     "model": "experiment.experiment",
     "pk": 15,
     "fields": {
-        "slug": "tunetwinsvisual",
+        "identifier": "tunetwinsvisual",
         "theme_config": null,
         "active": true
     }
@@ -120,7 +120,7 @@
     "model": "experiment.experiment",
     "pk": 16,
     "fields": {
-        "slug": "congo-same-diff",
+        "identifier": "congo-same-diff",
         "theme_config": null,
         "active": true
     }
@@ -129,7 +129,7 @@
     "model": "experiment.experiment",
     "pk": 17,
     "fields": {
-        "slug": "tunetwinsvisual2",
+        "identifier": "tunetwinsvisual2",
         "theme_config": null,
         "active": true
     }
@@ -138,7 +138,7 @@
     "model": "experiment.experiment",
     "pk": 18,
     "fields": {
-        "slug": "rhythm_outro",
+        "identifier": "rhythm_outro",
         "theme_config": null,
         "active": true
     }
@@ -330,7 +330,7 @@
         "phase": 8,
         "index": 0,
         "image": null,
-        "slug": "cat",
+        "identifier": "cat",
         "rounds": 70,
         "bonus_points": 0,
         "rules": "CATEGORIZATION",
@@ -347,7 +347,7 @@
         "phase": 15,
         "index": 0,
         "image": null,
-        "slug": "mpref",
+        "identifier": "mpref",
         "rounds": 64,
         "bonus_points": 0,
         "rules": "MUSICAL_PREFERENCES",
@@ -364,7 +364,7 @@
         "phase": 9,
         "index": 0,
         "image": null,
-        "slug": "huang_2022",
+        "identifier": "huang_2022",
         "rounds": 6,
         "bonus_points": 0,
         "rules": "HUANG_2022",
@@ -383,7 +383,7 @@
         "phase": 5,
         "index": 0,
         "image": null,
-        "slug": "eurovision_2021",
+        "identifier": "eurovision_2021",
         "rounds": 30,
         "bonus_points": 0,
         "rules": "EUROVISION_2020",
@@ -400,7 +400,7 @@
         "phase": 10,
         "index": 0,
         "image": null,
-        "slug": "christmas_2020",
+        "identifier": "christmas_2020",
         "rounds": 30,
         "bonus_points": 0,
         "rules": "KUIPER_2020",
@@ -417,7 +417,7 @@
         "phase": 11,
         "index": 0,
         "image": null,
-        "slug": "thats_my_song",
+        "identifier": "thats_my_song",
         "rounds": 15,
         "bonus_points": 0,
         "rules": "THATS_MY_SONG",
@@ -434,7 +434,7 @@
         "phase": 6,
         "index": 0,
         "image": null,
-        "slug": "tunetwins",
+        "identifier": "tunetwins",
         "rounds": 10,
         "bonus_points": 0,
         "rules": "MATCHING_PAIRS",
@@ -451,7 +451,7 @@
         "phase": 12,
         "index": 0,
         "image": null,
-        "slug": "tunetwins_icmpc",
+        "identifier": "tunetwins_icmpc",
         "rounds": 10,
         "bonus_points": 0,
         "rules": "MATCHING_PAIRS_ICMPC",
@@ -468,7 +468,7 @@
         "phase": 2,
         "index": 0,
         "image": null,
-        "slug": "hbat_bit",
+        "identifier": "hbat_bit",
         "rounds": 100,
         "bonus_points": 0,
         "rules": "H_BAT",
@@ -485,7 +485,7 @@
         "phase": 2,
         "index": 0,
         "image": null,
-        "slug": "anis",
+        "identifier": "anis",
         "rounds": 100,
         "bonus_points": 0,
         "rules": "ANISOCHRONY",
@@ -502,7 +502,7 @@
         "phase": 2,
         "index": 0,
         "image": null,
-        "slug": "bat",
+        "identifier": "bat",
         "rounds": 17,
         "bonus_points": 0,
         "rules": "BEAT_ALIGNMENT",
@@ -519,7 +519,7 @@
         "phase": 2,
         "index": 0,
         "image": null,
-        "slug": "ddi",
+        "identifier": "ddi",
         "rounds": 100,
         "bonus_points": 0,
         "rules": "DURATION_DISCRIMINATION",
@@ -536,7 +536,7 @@
         "phase": 2,
         "index": 0,
         "image": null,
-        "slug": "ddit",
+        "identifier": "ddit",
         "rounds": 100,
         "bonus_points": 0,
         "rules": "DURATION_DISCRIMINATION_TONE",
@@ -553,7 +553,7 @@
         "phase": 2,
         "index": 0,
         "image": null,
-        "slug": "hbat_bfit",
+        "identifier": "hbat_bfit",
         "rounds": 100,
         "bonus_points": 0,
         "rules": "H_BAT_BFIT",
@@ -570,7 +570,7 @@
         "phase": 2,
         "index": 0,
         "image": null,
-        "slug": "hbat_bst",
+        "identifier": "hbat_bst",
         "rounds": 100,
         "bonus_points": 0,
         "rules": "BST",
@@ -587,7 +587,7 @@
         "phase": 2,
         "index": 0,
         "image": null,
-        "slug": "rhdis",
+        "identifier": "rhdis",
         "rounds": 40,
         "bonus_points": 0,
         "rules": "RHYTHM_DISCRIMINATION",
@@ -604,7 +604,7 @@
         "phase": 13,
         "index": 0,
         "image": null,
-        "slug": "teletunes",
+        "identifier": "teletunes",
         "rounds": 30,
         "bonus_points": 0,
         "rules": "HOOKED_TELETUNES",
@@ -621,7 +621,7 @@
         "phase": 14,
         "index": 0,
         "image": null,
-        "slug": "mpst",
+        "identifier": "mpst",
         "rounds": 8,
         "bonus_points": 0,
         "rules": "MUSICAL_PREFERENCES",
@@ -638,7 +638,7 @@
         "phase": 16,
         "index": 0,
         "image": null,
-        "slug": "tunetwinsvisual",
+        "identifier": "tunetwinsvisual",
         "rounds": 10,
         "bonus_points": 0,
         "rules": "VISUAL_MATCHING_PAIRS",
@@ -655,7 +655,7 @@
         "phase": 17,
         "index": 0,
         "image": null,
-        "slug": "congo-same-diff",
+        "identifier": "congo-same-diff",
         "rounds": 4,
         "bonus_points": 0,
         "rules": "CONGOSAMEDIFF",
@@ -672,7 +672,7 @@
         "phase": 18,
         "index": 0,
         "image": null,
-        "slug": "tunetwinsvisual2",
+        "identifier": "tunetwinsvisual2",
         "rounds": 10,
         "bonus_points": 0,
         "rules": "MATCHING_PAIRS_LITE",
@@ -689,7 +689,7 @@
         "phase": 1,
         "index": 0,
         "image": null,
-        "slug": "rhythm_intro",
+        "identifier": "rhythm_intro",
         "rounds": 10,
         "bonus_points": 0,
         "rules": "RHYTHM_BATTERY_INTRO",
@@ -706,7 +706,7 @@
         "phase": 19,
         "index": 0,
         "image": null,
-        "slug": "rhythm_outro",
+        "identifier": "rhythm_outro",
         "rounds": 10,
         "bonus_points": 0,
         "rules": "RHYTHM_BATTERY_FINAL",
@@ -723,7 +723,7 @@
         "phase": 4,
         "index": 0,
         "image": null,
-        "slug": "thk_absolute",
+        "identifier": "thk_absolute",
         "rounds": 5,
         "bonus_points": 0,
         "rules": "TOONTJE_HOGER_KIDS_4_ABSOLUTE",
@@ -740,7 +740,7 @@
         "phase": 4,
         "index": 0,
         "image": null,
-        "slug": "thk_preverbal",
+        "identifier": "thk_preverbal",
         "rounds": 2,
         "bonus_points": 0,
         "rules": "TOONTJE_HOGER_KIDS_2_PREVERBAL",
@@ -757,7 +757,7 @@
         "phase": 4,
         "index": 0,
         "image": null,
-        "slug": "thk_mozart",
+        "identifier": "thk_mozart",
         "rounds": 2,
         "bonus_points": 0,
         "rules": "TOONTJE_HOGER_KIDS_1_MOZART",
@@ -774,7 +774,7 @@
         "phase": 4,
         "index": 0,
         "image": null,
-        "slug": "thk_tempo",
+        "identifier": "thk_tempo",
         "rounds": 5,
         "bonus_points": 0,
         "rules": "TOONTJE_HOGER_KIDS_5_TEMPO",
@@ -791,7 +791,7 @@
         "phase": 4,
         "index": 0,
         "image": null,
-        "slug": "thk_plink",
+        "identifier": "thk_plink",
         "rounds": 10,
         "bonus_points": 0,
         "rules": "TOONTJE_HOGER_KIDS_3_PLINK",
@@ -808,7 +808,7 @@
         "phase": 4,
         "index": 0,
         "image": null,
-        "slug": "thk_relative",
+        "identifier": "thk_relative",
         "rounds": 2,
         "bonus_points": 0,
         "rules": "TOONTJE_HOGER_KIDS_6_RELATIVE",

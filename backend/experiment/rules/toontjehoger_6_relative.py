@@ -122,16 +122,19 @@ class ToontjeHoger6Relative(BaseRules):
         expected_response = "NO"
 
         # Question
-        key = 'same_melody'
+        identifier = 'same_melody'
         question = ButtonArrayQuestion(
             text="Zijn deze twee melodieën hetzelfde?",
-            key=key,
+            identifier=identifier,
             choices=[
                 {"value": "YES", "label": "Ja", "color": "colorPositive"},
                 {"value": "NO", "label": "Nee", "color": "colorNegative"},
             ],
             result_id=prepare_result(
-                key, session, section=section1, expected_response=expected_response
+                identifier,
+                session,
+                section=section1,
+                expected_response=expected_response,
             ),
         )
         form = Form([question], submit_button=None)

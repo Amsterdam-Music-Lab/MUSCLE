@@ -49,11 +49,11 @@ class TwoAlternativeForced(Trial):
         playback = PlayButtons(
             sections=[PlaybackSection(section, color='colorNeutral2')], play_once=True
         )
-        key = "choice"
+        identifier = "choice"
         question = ButtonArrayQuestion(
-            key=key,
+            identifier=identifier,
             result_id=prepare_result(
-                key,
+                identifier,
                 session=session,
                 section=section,
                 expected_response=expected_response,
@@ -67,12 +67,12 @@ class TwoAlternativeForced(Trial):
 
 
 def boolean_question(
-    key: str,
+    identifier: str,
     text: str,
     result_id: int,
 ):
     return ButtonArrayQuestion(
-        key=key,
+        identifier=identifier,
         text=text,
         result_id=result_id,
         choices=ChoiceList.objects.get(pk='BOOLEAN_NEGATIVE_FIRST').to_dict(),
@@ -106,7 +106,7 @@ def song_sync(
         feedback_form=Form(
             [
                 boolean_question(
-                    key='recognize',
+                    identifier='recognize',
                     text='',
                     result_id=prepare_result(
                         "recognize",
@@ -149,7 +149,7 @@ def song_sync(
         feedback_form=Form(
             [
                 boolean_question(
-                    key="correct_place",
+                    identifier="correct_place",
                     text="",
                     result_id=prepare_result(
                         "correct_place",

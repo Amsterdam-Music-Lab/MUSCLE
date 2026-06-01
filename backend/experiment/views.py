@@ -29,11 +29,12 @@ class FeedbackListView(ListView):
         return super().get_queryset().filter(block__id=self.kwargs.get('block_id'))
 
 
-def get_block(request: HttpRequest, slug: str) -> JsonResponse:
-    """Get block data from active block with given :slug
+def get_block(request: HttpRequest, identifier: str) -> JsonResponse:
+    """Get block data from active block with given :identifier
     DO NOT modify session data here, it will break participant_id system
-       (/participant and /block/<slug> are called at the same time by the frontend)"""
-    block = get_object_or_404(Block, slug=slug)
+       (/participant and /block/<identifier> are called at the same time by the frontend)
+    """
+    block = get_object_or_404(Block, identifier=identifier)
     class_name = ""
     active_language = get_language()
 
@@ -67,11 +68,11 @@ def get_block(request: HttpRequest, slug: str) -> JsonResponse:
     return response
 
 
-def post_feedback(request, slug):
+def post_feedback(request, identifier):
     text = request.POST.get("feedback")
     if not text:
         return HttpResponseBadRequest()
-    block = get_object_or_404(Block, slug=slug)
+    block = get_object_or_404(Block, identifier=identifier)
     feedback = Feedback(text=text, block=block)
     feedback.save()
     return JsonResponse({"status": "ok"})
@@ -79,10 +80,10 @@ def post_feedback(request, slug):
 
 def get_experiment(
     request: HttpRequest,
-    slug: str,
+    identifier: str,
 ) -> JsonResponse:
     """
-    check which `Phase` objects are related to the `Experiment` with the given slug
+    check which `Phase` objects are related to the `Experiment` with the given identifier
     retrieve the phase with the lowest order (= current_phase)
     return the next block from the current_phase without a finished session
     except if Phase.dashboard = True,
@@ -90,7 +91,7 @@ def get_experiment(
     """
 
     try:
-        experiment = Experiment.objects.get(slug=slug, active=True)
+        experiment = Experiment.objects.get(identifier=identifier, active=True)
     except Experiment.DoesNotExist:
         raise Http404("Experiment does not exist or is not active")
     except Exception as e:
@@ -108,7 +109,7 @@ def get_experiment(
             {"error": "This experiment does not have phases and blocks configured"},
             status=500,
         )
-    times_played_key = 'f"{slug}-xplayed"'
+    times_played_key = 'f"{identifier}-xplayed"'
     times_played = request.session.get(times_played_key, 0)
     for phase in phases:
         serialized_phase = serialize_phase(phase, participant, times_played)
@@ -121,7 +122,7 @@ def get_experiment(
             )
     # if no phase was found, start from scratch with the minimum session count
     request.session[times_played_key] = _get_min_session_count(experiment, participant)
-    return get_experiment(request, slug)
+    return get_experiment(request, identifier)
 
 
 def _get_min_session_count(experiment: Experiment, participant: Participant) -> int:

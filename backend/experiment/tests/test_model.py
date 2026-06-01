@@ -26,12 +26,12 @@ class BlockModelTest(TestCase):
             background_image=background_image,
         )
         experiment = Experiment.objects.create(
-            slug="test-experiment", name="Experiment name"
+            identifier="test-experiment", name="Experiment name"
         )
         cls.phase = Phase.objects.create(experiment=experiment)
         cls.block = Block.objects.create(
             phase=cls.phase,
-            slug="test-block",
+            identifier="test-block",
             rounds=5,
             bonus_points=10,
             rules="QUESTIONNAIRE",
@@ -48,7 +48,7 @@ class BlockModelTest(TestCase):
 
     def test_block_str_without_content(self):
         block_no_content = Block.objects.create(
-            phase=self.phase, slug="test-block-no-content", rules="QUESTIONNAIRE"
+            phase=self.phase, identifier="test-block-no-content", rules="QUESTIONNAIRE"
         )
         self.assertEqual(str(block_no_content), "test-block-no-content")
 
@@ -76,7 +76,7 @@ class BlockModelTest(TestCase):
                     expected_response=1,
                     given_response=1,
                     score=question_score,
-                    question_key=f"test_question_{j + 1}",
+                    question_identifier=f"test_question_{j + 1}",
                 )
                 for j in range(amount_of_results)
             ]
@@ -95,7 +95,7 @@ class ExperimentModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.experiment = Experiment.objects.create(
-            slug="test-series",
+            identifier="test-series",
             name="Test Experiment",
             name_pt="Experimento de Prueba",
             description="Descripción de la experimento de prueba en español.",
@@ -105,6 +105,6 @@ class ExperimentModelTest(TestCase):
         self.assertEqual(str(self.experiment), "Test Experiment")
 
         experiment_no_content = Experiment.objects.create(
-            slug="test-series-no-content",
+            identifier="test-series-no-content",
         )
         self.assertEqual(str(experiment_no_content), "test-series-no-content")

@@ -64,7 +64,7 @@ class CategorizationRuleTest(TestCase):
         cls.playlist.csv = section_csv
         cls.playlist._update_sections()
         cls.participant = Participant.objects.create()
-        cls.block = Block.objects.create(rules='CATEGORIZATION', slug='cat')
+        cls.block = Block.objects.create(rules='CATEGORIZATION', identifier='cat')
         cls.session = Session.objects.create(
             block=cls.block,
             participant=cls.participant,

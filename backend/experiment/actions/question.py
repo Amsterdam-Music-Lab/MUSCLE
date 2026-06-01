@@ -8,7 +8,7 @@ class QuestionAction(BaseAction):
     A base object for question actions. Do not use direcly, use subtypes instead.
 
     Args:
-        key: a unique key with which the question is logged to the database
+        identifier: a unique identifier with which the question is logged to the database
         result_id: the identifier of the `Result` object associated with this question
         text: the text shown to the user
         explainer: optionally, an instruction for the user of how to use the shown widget
@@ -18,13 +18,13 @@ class QuestionAction(BaseAction):
 
     def __init__(
         self,
-        key: str,
+        identifier: str,
         result_id: int = None,
         text: str = '',
         explainer: str = '',
         view: str = '',
     ):
-        self.key = key
+        self.identifier = identifier
         self.text = text
         self.result_id = result_id
         self.explainer = explainer
@@ -92,7 +92,7 @@ class AutoCompleteQuestion(ChoiceQuestionAction):
     Example:
         ```python
         question = AutoCompleteQuestion(
-            key="color",
+            identifier="color",
             text="What's your favorite color?",
             choices=[
                 {"value": "red", "label": "Red"},
@@ -119,7 +119,7 @@ class ButtonArrayQuestion(ChoiceQuestionAction):
     Example:
         ```python
         question = ButtonArrayQuestion(
-            key="is_student",
+            identifier="is_student",
             text="Are you a student?",
             choices=[
                 {"value": "no", "label": _("Nope"), "color": "colorNegative"},
@@ -144,7 +144,7 @@ class CheckBoxQuestion(ChoiceQuestionAction):
     Example:
         ```python
         question = MultipleChoiceQuestion(
-            key="color",
+            identifier="color",
             text="What's your favorite color?",
             choices=[
                 {"value": "red", "label": "Red"},
@@ -175,7 +175,7 @@ class DropdownQuestion(ChoiceQuestionAction):
     Example:
         ```python
         question = DropdownQuestion(
-            key="color",
+            identifier="color",
             text="What's your favorite color?",
             choices=[
                 {"value": "red", "label": "Red"},
@@ -217,7 +217,7 @@ class RadiosQuestion(ChoiceQuestionAction):
     Example:
         ```python
         question = RadiosQuestion(
-            key="color",
+            identifier="color",
             text="What's your favorite color?",
             choices=[
                 {"value": "red", "label": "Red"},
@@ -243,7 +243,7 @@ class RangeQuestion(OpenQuestionAction):
     Example:
         ```python
         question = RangeQuestion(
-            key="age",
+            identifier="age",
             text="How old are you?",
             min_value=18,
             max_value=120,
@@ -267,7 +267,7 @@ class TextRangeQuestion(ChoiceQuestionAction):
     Example:
         ```python
         question = TextRangeQuestion(
-            key="satisfaction",
+            identifier="satisfaction",
             text="How satisfied are you with MUSCLE?",
             explainer="Please rate your satisfaction.",
             choices=[

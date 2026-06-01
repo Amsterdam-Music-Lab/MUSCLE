@@ -62,7 +62,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         title (str): The title displayed at the top of the final view. Defaults to a localized "Final score".
         final_text (Optional[str]): An optional concluding message (e.g., "Thanks for participating!").
         button (Optional[ButtonConfiguration]): Optional call-to-action button configuration. For example:
-                                            {"text": "Play again", "link": "/{experiment_slug}"}. If not provided, the `default_button` method is used.
+                                            {"text": "Play again", "link": "/{experiment_identifier}"}. If not provided, the `default_button` method is used.
         points (Optional[str]): The label for the score units (e.g., "points"). Defaults to a localized "points".
         rank (Optional[str]): The participant's rank (e.g., "GOLD"). If not provided, no rank is displayed.
         show_profile_link (bool): If True, display a link to the participant's profile.

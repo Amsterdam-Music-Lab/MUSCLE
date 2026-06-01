@@ -194,7 +194,7 @@ class MatchingPairs2025(MatchingPairsGame):
     ) -> tuple[str, str]:
         possible_conditions = self._get_possible_conditions(session)
         condition_results = session.participant.result_set.filter(
-            question_key='condition'
+            question_identifier='condition'
         ).order_by('score')
         if len(condition_results) == 11:
             # all conditions have been played, return the least played
@@ -218,7 +218,7 @@ class MatchingPairs2025(MatchingPairsGame):
         condition = f"{cond}_{difficulty}"
         Result.objects.create(
             participant=session.participant,
-            question_key="condition",
+            question_identifier="condition",
             given_response=condition,
             score=1,
         )
@@ -231,7 +231,7 @@ class MatchingPairs2025(MatchingPairsGame):
         )
         random.shuffle(songs)
         participant_results = session.participant.result_set.filter(
-            question_key='song', given_response__in=songs
+            question_identifier='song', given_response__in=songs
         ).order_by('score')
         if not participant_results.count():
             selected_songs = songs[:n_pairs]
@@ -250,7 +250,7 @@ class MatchingPairs2025(MatchingPairsGame):
         for song in selected_songs:
             result, created = Result.objects.get_or_create(
                 participant=session.participant,
-                question_key="song",
+                question_identifier="song",
                 given_response=song,
             )
             if created:

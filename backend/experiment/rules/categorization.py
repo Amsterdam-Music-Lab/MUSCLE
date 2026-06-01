@@ -27,7 +27,7 @@ class Categorization(BaseRules):
         self.question_lists = [
             {
                 "name": "Categorization",
-                "question_keys": [
+                "question_identifiers": [
                     "dgf_age",
                     "dgf_gender_reduced",
                     "dgf_native_language",
@@ -137,7 +137,7 @@ class Categorization(BaseRules):
                     profiles = session.participant.profile_results()
                     for profile in profiles:
                         # Delete failed_training tag from profile
-                        if profile.question_key == "failed_training":
+                        if profile.question_identifier == "failed_training":
                             profile.delete()
                     final_message = render_to_string("final/categorization_final.html")
                     final = Final(
@@ -197,7 +197,7 @@ class Categorization(BaseRules):
             profiles = session.participant.profile_results()
             for profile in profiles:
                 # Delete failed_training tag from profile
-                if profile.question_key == "failed_training":
+                if profile.question_identifier == "failed_training":
                     profile.delete()
             final_message = render_to_string("final/categorization_final.html")
             final = Final(
@@ -453,7 +453,7 @@ class Categorization(BaseRules):
 
 
 repeat_training_or_quit = ButtonArrayQuestion(
-    key="failed_training",
+    identifier="failed_training",
     text="You seem to have difficulties reacting correctly to the sound sequences. Is your audio on? If you want to give it another try, click on Ok.",
     choices=[
         {"value": "continued", "label": "OK", "color": "colorPositive"},

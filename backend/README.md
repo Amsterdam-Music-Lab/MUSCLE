@@ -12,8 +12,8 @@ The AML experiment server consists of:
 - Login to Django admin: http://localhost:8000/admin
 - Create a playlist with sections
 - Manually upload your sections to the `src/upload` folder
-- Create a new experiment with a unique slug and at least one playlist
-- Use the experiment slug to link the client to your experiment
+- Create a new experiment with a unique identifier and at least one playlist
+- Use the experiment identifier to link the client to your experiment
 
 ## Export data
 
@@ -27,10 +27,10 @@ The AML experiment server consists of:
 
 Alternately you can use the command line to export data:
 
-- Default: `./manage.py exportexperiment %slug%`
-  - %slug% is your experiment slug
-- With indented JSON: `./manage.py exportexperiment --indent=4 %slug%`
-- Output the results to a file: `./manage.py exportexperiment %slug% > my_data.json`
+- Default: `./manage.py exportexperiment %identifier%`
+  - %identifier% is your experiment identifier
+- With indented JSON: `./manage.py exportexperiment --indent=4 %identifier%`
+- Output the results to a file: `./manage.py exportexperiment %identifier% > my_data.json`
 
 ## Develop experiments
 

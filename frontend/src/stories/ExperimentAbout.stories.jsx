@@ -17,7 +17,7 @@ export default {
 };
 
 const TestData = {
-    slug: "my-experiment",
+    identifier: "my-experiment",
     name: "My Experiment",
     backButtonText: "Back",
     aboutContent: "<h1>This is some content for the about page</h1><div>With some more text</div>",

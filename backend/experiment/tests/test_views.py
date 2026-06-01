@@ -28,7 +28,7 @@ class TestExperimentViews(TestCase):
         cls.participant = Participant.objects.create()
         theme_config = create_theme_config()
         experiment = Experiment.objects.create(
-            slug="test_series",
+            identifier="test_series",
             theme_config=theme_config,
             name="Test Series",
             description="Test Description",
@@ -36,12 +36,18 @@ class TestExperimentViews(TestCase):
         )
         experiment.social_media_config = create_social_media_config(experiment)
         cls.introductory_phase = Phase.objects.create(experiment=experiment, index=1)
-        cls.block1 = Block.objects.create(slug="block1", phase=cls.introductory_phase)
+        cls.block1 = Block.objects.create(
+            identifier="block1", phase=cls.introductory_phase
+        )
         cls.intermediate_phase = Phase.objects.create(experiment=experiment, index=2)
-        cls.block2 = Block.objects.create(slug="block2", theme_config=theme_config, phase=cls.intermediate_phase)
-        cls.block3 = Block.objects.create(slug="block3", phase=cls.intermediate_phase)
+        cls.block2 = Block.objects.create(
+            identifier="block2", theme_config=theme_config, phase=cls.intermediate_phase
+        )
+        cls.block3 = Block.objects.create(
+            identifier="block3", phase=cls.intermediate_phase
+        )
         cls.final_phase = Phase.objects.create(experiment=experiment, index=3)
-        cls.block4 = Block.objects.create(slug="block4", phase=cls.final_phase)
+        cls.block4 = Block.objects.create(identifier="block4", phase=cls.final_phase)
 
     def setUp(self):
         session = self.client.session
@@ -51,17 +57,19 @@ class TestExperimentViews(TestCase):
     def test_get_experiment(self):
         # check that the correct block is returned correctly
         response = self.client.get("/experiment/test_series/")
-        self.assertEqual(response.json().get("nextBlock").get("slug"), "block1")
+        self.assertEqual(response.json().get("nextBlock").get("identifier"), "block1")
         # create session
         Session.objects.create(block=self.block1, participant=self.participant, finished_at=timezone.now())
         response = self.client.get("/experiment/test_series/")
-        self.assertIn(response.json().get("nextBlock").get("slug"), ("block2", "block3"))
+        self.assertIn(
+            response.json().get("nextBlock").get("identifier"), ("block2", "block3")
+        )
         self.assertEqual(response.json().get("dashboard"), [])
         Session.objects.create(block=self.block2, participant=self.participant, finished_at=timezone.now())
         Session.objects.create(block=self.block3, participant=self.participant, finished_at=timezone.now())
         response = self.client.get("/experiment/test_series/")
         response_json = response.json()
-        self.assertEqual(response_json.get("nextBlock").get("slug"), "block4")
+        self.assertEqual(response_json.get("nextBlock").get("identifier"), "block4")
         self.assertEqual(response_json.get("dashboard"), [])
         self.assertEqual(response_json.get("theme").get("name"), "test_theme")
         self.assertEqual(len(response_json["theme"]["header"]["score"]), 3)
@@ -76,14 +84,16 @@ class TestExperimentViews(TestCase):
         response = self.client.get("/experiment/test_series/")
         response_json = response.json()
         self.assertIsNotNone(response_json)
-        self.assertEqual(response_json.get("nextBlock").get("slug"), "block1")
+        self.assertEqual(response_json.get("nextBlock").get("identifier"), "block1")
         Session.objects.create(
             block=self.block1, participant=self.participant, finished_at=timezone.now()
         )
         response = self.client.get("/experiment/test_series/")
         response_json = response.json()
         self.assertIsNotNone(response_json)
-        self.assertIn(response_json.get("nextBlock").get("slug"), ("block2", "block3"))
+        self.assertIn(
+            response_json.get("nextBlock").get("identifier"), ("block2", "block3")
+        )
 
     def test_get_experiment_returning_participant(self):
         Session.objects.bulk_create(
@@ -101,7 +111,7 @@ class TestExperimentViews(TestCase):
             )
         )
         response = self.client.get("/experiment/test_series/")
-        self.assertEqual(response.json().get("nextBlock").get("slug"), "block1")
+        self.assertEqual(response.json().get("nextBlock").get("identifier"), "block1")
 
     def _get_session_objects(self, block_list: list[Block]) -> list[Session]:
         return [
@@ -118,20 +128,20 @@ class TestExperimentViews(TestCase):
 
     def test_experiment_inactive(self):
         # if Experiment is inactive, return 404
-        experiment = Experiment.objects.get(slug="test_series")
+        experiment = Experiment.objects.get(identifier="test_series")
         experiment.active = False
         experiment.save()
         response = self.client.get("/experiment/test_series/")
         self.assertEqual(response.status_code, 404)
 
     def test_experiment_has_no_phases(self):
-        Experiment.objects.create(slug="invalid_experiment")
+        Experiment.objects.create(identifier="invalid_experiment")
         response = self.client.get("/experiment/invalid_experiment/")
         self.assertEqual(response.status_code, 500)
 
     def test_experiment_without_social_media(self):
         experiment = Experiment.objects.create(
-            slug="no_social_media",
+            identifier="no_social_media",
             theme_config=create_theme_config(name="no_social_media"),
             name="Test Experiment",
             description="Test Description",
@@ -176,7 +186,7 @@ class TestExperimentViews(TestCase):
         """Test translations of experiment texts"""
 
         experiment = Experiment.objects.create(
-            slug="test_experiment_translated_content",
+            identifier="test_experiment_translated_content",
             name_en="Test Experiment Translation",
             description_en="Test experiment description in English.",
             name_nl="Probeersel",
@@ -217,14 +227,14 @@ class TestExperimentViews(TestCase):
     def test_get_block(self):
         # Create a block
         experiment = Experiment.objects.create(
-            slug="test-experiment",
+            identifier="test-experiment",
             name="Test Experiment",
             description="Test Description",
             consent=SimpleUploadedFile("test-consent.md", b"test consent"),
         )
         phase = Phase.objects.create(experiment=experiment)
         block = Block.objects.create(
-            slug="test-block",
+            identifier="test-block",
             image=Image.objects.create(file="test-image.jpg"),
             rules=RhythmBatteryIntro.ID,
             theme_config=create_theme_config("new-theme"),
@@ -249,7 +259,7 @@ class TestExperimentViews(TestCase):
 
         response = self.client.get("/experiment/block/test-block/")
 
-        self.assertEqual(response.json()["slug"], "test-block")
+        self.assertEqual(response.json()["identifier"], "test-block")
         self.assertEqual(response.json()["name"], "Test Block")
         self.assertEqual(response.json()["theme"]["name"], "new-theme")
         self.assertEqual(len(response.json()["theme"]["header"]["score"]), 3)
@@ -261,7 +271,7 @@ class TestExperimentViews(TestCase):
         self.client.post("/experiment/block/block1/feedback/", request)
         self.assertEqual(Feedback.objects.count(), 1)
         response = self.client.post(
-            "/experiment/block/nonexisting-slug/feedback/", request
+            "/experiment/block/nonexisting-identifier/feedback/", request
         )
         self.assertEqual(response.status_code, 404)
         self.assertEqual(Feedback.objects.count(), 1)

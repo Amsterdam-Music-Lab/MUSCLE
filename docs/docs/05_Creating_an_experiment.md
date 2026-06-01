@@ -10,7 +10,7 @@ To create any type of experiment, open the admin interface and click "Add" next 
 
 ## The Experiment form
 You will see an empty form:
-![Empty Experiment form](assets/images/ExperimentEmptyForm.png). First of all, enter a short name in the `slug` field. This will be the link under which the experiment can be accessed. The `slug` can only contain alphanumeric characters and underscores. After that, press "Save and continue editing".
+![Empty Experiment form](assets/images/ExperimentEmptyForm.png). First of all, enter a short name in the `identifier` field. This will be the link under which the experiment can be accessed. The `identifier` can only contain alphanumeric characters and underscores. After that, press "Save and continue editing".
 
 After that, you will see all options for the experiment:
 ![Experiment form](assets/images/ExperimentForm.png).
@@ -31,7 +31,7 @@ You can switch between different languages by clicking on the tabs above the tex
 You can change the background, fonts and logos used for the experiment here. For detailed information on this, see the [Custom Theme](07_Custom_theme.md) documentation.
 
 #### Active field
-This field of the Experiment form is a checkbox indicating whether the experiment is active. This will always be checked by default. If you uncheck it, a request to `localhost:3000/{myslug}` will give you a blank screen stating `Experiment not found`. That way, you can close an experiment from further responses.
+This field of the Experiment form is a checkbox indicating whether the experiment is active. This will always be checked by default. If you uncheck it, a request to `localhost:3000/{myidentifier}` will give you a blank screen stating `Experiment not found`. That way, you can close an experiment from further responses.
 
 #### Phases
 Phases (required): a phase of your experiment, which may contain one or more blocks. Note that every experiment needs to have at least one phase with one block configured.
@@ -47,7 +47,7 @@ This will show the following fields:
 
 #### Block form
 - Index: order in which block should appear in the phase (default=0, will be ignored when the phase's `randomize` checkbox is checked)
-- Slug: unique slug of the block
+- Identifier: unique identifier of the block
 
 The following two fields have tabs above them to allow entering texts in different languages:
 

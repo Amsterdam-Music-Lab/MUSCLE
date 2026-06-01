@@ -8,7 +8,7 @@ vi.mock("../../util/stores");
 describe('Playlist Component', () => {
     const playlist = { current: '42' };
     const block = {
-        slug: 'test-experiment',
+        identifier: 'test-experiment',
         playlists: [
             { id: '42', name: 'Playlist A' },
             { id: '43', name: 'Playlist B' }
