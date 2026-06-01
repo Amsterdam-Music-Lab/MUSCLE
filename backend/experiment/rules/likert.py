@@ -99,4 +99,5 @@ class Likert(BaseRules):
             title=_("Round %(round_number)d of %(total_rounds)d")
             % {'round_number': len(played_sections), 'total_rounds': total_rounds},
             response_time=section.duration,
+            listen_first=True,
         )
