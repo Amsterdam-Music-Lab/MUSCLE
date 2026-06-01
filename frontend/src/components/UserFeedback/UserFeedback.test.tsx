@@ -25,7 +25,7 @@ describe('UserFeedback', () => {
     it('renders the feedback form', () => {
         const { getByText, getByRole } = render(
             <UserFeedback
-                blockidentifier={mockBlockIdentifier}
+                blockIdentifier={mockBlockIdentifier}
                 participant={mockParticipant}
                 feedbackInfo={mockFeedbackInfo}
             />
@@ -39,7 +39,7 @@ describe('UserFeedback', () => {
     it('allows input to be entered', () => {
         const { getByRole } = render(
             <UserFeedback
-                blockidentifier={mockBlockIdentifier}
+                blockIdentifier={mockBlockIdentifier}
                 participant={mockParticipant}
                 feedbackInfo={mockFeedbackInfo}
             />
@@ -56,7 +56,7 @@ describe('UserFeedback', () => {
 
         const { getByText, getByRole, queryByText } = render(
             <UserFeedback
-                blockidentifier={mockBlockIdentifier}
+                blockIdentifier={mockBlockIdentifier}
                 participant={mockParticipant}
                 feedbackInfo={mockFeedbackInfo}
             />
