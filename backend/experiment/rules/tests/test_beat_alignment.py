@@ -2,7 +2,7 @@ from django.test import TestCase
 from experiment.models import Block, Experiment, Phase
 from result.models import Result
 from participant.models import Participant
-from participant.utils import PARTICIPANT_identifier
+from participant.utils import PARTICIPANT_KEY
 from section.models import Playlist
 from session.models import Session
 import json
@@ -53,7 +53,7 @@ class BeatAlignmentRuleTest(TestCase):
         participant.save()
 
         session = self.client.session
-        session.update({PARTICIPANT_identifier: participant.id})
+        session.update({PARTICIPANT_KEY: participant.id})
         session.save()
 
         block_response = self.client.get('/experiment/block/ba/')
@@ -68,7 +68,7 @@ class BeatAlignmentRuleTest(TestCase):
                 "loading_text",
                 "session_id",
             }
-            <= block_json.identifiers()
+            <= block_json.keys()
         )
         session_id = block_json['session_id']
         response = self.client.post(
@@ -89,7 +89,7 @@ class BeatAlignmentRuleTest(TestCase):
         participant_response = self.client.get('/participant/', **header)
         participant_json = self.load_json(participant_response)
         self.assertTrue(
-            {'id', 'hash', 'csrf_token', 'country'} <= participant_json.identifiers()
+            {'id', 'hash', 'csrf_token', 'country'} <= participant_json.keys()
         )
         csrf_token = participant_json['csrf_token']
 

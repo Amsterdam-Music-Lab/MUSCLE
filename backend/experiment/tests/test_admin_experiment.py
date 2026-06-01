@@ -68,7 +68,7 @@ class TestExperimentAdmin(TestCase):
             ExperimentAdmin.list_display,
             (
                 "experiment_name",
-                "identifier_link",
+                "url_link",
                 "remarks",
                 "active",
             ),
