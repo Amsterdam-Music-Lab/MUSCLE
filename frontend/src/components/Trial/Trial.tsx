@@ -134,6 +134,11 @@ const Trial = (props: TrialAction & SharedActionProps) => {
 
     return (
         <div role="presentation" className={classNames("aha__trial")}>
+            {html && (
+                <HTML
+                    body={html.body}
+                />
+            )}
             {playback && (
                 <Playback
                     {...playback}
@@ -145,11 +150,6 @@ const Trial = (props: TrialAction & SharedActionProps) => {
                     submitResult={makeResult}
                     startedPlaying={startTimer}
                     finishedPlaying={finishedPlaying}
-                />
-            )}
-            {html && (
-                <HTML
-                    body={html.body}
                 />
             )}
             {preloadReady && feedbackForm && (

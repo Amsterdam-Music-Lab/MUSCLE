@@ -1,5 +1,7 @@
 from typing import Optional
 
+from django.utils.translation import gettext as _
+
 from .base_action import BaseAction
 from .button import Button
 
@@ -30,7 +32,7 @@ class Info(BaseAction):
     def __init__(self, body, heading="", button: Optional[Button] = None):
         self.body = body
         self.heading = heading
-        self.button = button
+        self.button = button or self.default_button()
 
     def action(self):
         return {
@@ -39,3 +41,6 @@ class Info(BaseAction):
             "heading": self.heading,
             "button": self.button.action(),
         }
+
+    def default_button(self):
+        return Button(_("Continue"))
