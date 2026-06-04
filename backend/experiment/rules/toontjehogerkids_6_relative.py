@@ -8,7 +8,6 @@ from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.info import Info
 from experiment.actions.score import Score
-from experiment.actions.utils import get_experiment_url
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_6_relative import ToontjeHoger6Relative
 
@@ -87,9 +86,7 @@ class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
         info = Info(
             body=body,
             heading="Relatief gehoor",
-            button=Button(
-                "Terug naar ToontjeHogerKids", link=get_experiment_url(session)
-            ),
+            button=Button("Terug naar ToontjeHogerKids"),
         )
 
         return [*score, final, info]

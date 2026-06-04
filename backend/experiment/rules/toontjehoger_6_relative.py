@@ -12,7 +12,6 @@ from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
-from experiment.actions.utils import get_experiment_url
 from section.models import Playlist
 from session.models import Session
 from .base import BaseRules
@@ -185,7 +184,6 @@ class ToontjeHoger6Relative(BaseRules):
             heading="Relatief gehoor",
             button=Button(
                 "Terug naar ToontjeHoger",
-                link=get_experiment_url(session),
             ),
         )
 

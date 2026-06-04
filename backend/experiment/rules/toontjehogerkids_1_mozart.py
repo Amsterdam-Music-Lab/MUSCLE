@@ -6,7 +6,6 @@ from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.info import Info
-from experiment.actions.utils import get_experiment_url
 from .toontjehoger_1_mozart import toontjehoger_ranks, ToontjeHoger1Mozart
 
 logger = logging.getLogger(__name__)
@@ -72,7 +71,6 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
             heading="Het Mozart effect",
             button=Button(
                 "Terug naar ToontjeHogerKids",
-                link=get_experiment_url(session),
             ),
         )
 

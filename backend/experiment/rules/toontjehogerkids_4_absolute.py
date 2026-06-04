@@ -5,7 +5,6 @@ from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.info import Info
-from experiment.actions.utils import get_experiment_url
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_4_absolute import ToontjeHoger4Absolute
 
@@ -68,9 +67,7 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
         info = Info(
             body=body,
             heading="Absoluut gehoor",
-            button=Button(
-                "Terug naar ToontjeHogerKids", link=get_experiment_url(session)
-            ),
+            button=Button("Terug naar ToontjeHogerKids"),
         )
 
         return [*score, final, info]

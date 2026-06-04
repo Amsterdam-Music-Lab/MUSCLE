@@ -14,7 +14,6 @@ from experiment.actions.info import Info
 from experiment.actions.question import AutoCompleteQuestion, RadiosQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
-from experiment.actions.utils import get_experiment_url
 from experiment.utils import non_breaking_spaces
 from result.utils import prepare_result
 from section.models import Playlist, Section
@@ -311,7 +310,6 @@ class ToontjeHoger3Plink(BaseRules):
             heading="Muziekherkenning",
             button=Button(
                 "Terug naar ToontjeHoger",
-                link=get_experiment_url(session),
             ),
         )
 

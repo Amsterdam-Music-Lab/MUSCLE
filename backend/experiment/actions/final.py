@@ -61,8 +61,9 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         session (Session): The current session object associated with the participant.
         title (str): The title displayed at the top of the final view. Defaults to a localized "Final score".
         final_text (Optional[str]): An optional concluding message (e.g., "Thanks for participating!").
-        button (Optional[ButtonConfiguration]): Optional call-to-action button configuration. For example:
-                                            {"text": "Play again", "link": "/{experiment_identifier}"}. If not provided, the `default_button` method is used.
+        button (Optional[ButtonConfiguration]): Optional button configuration. For example:
+                                            {"text": "Play again", "link": "/{experiment_identifier}"}. If not provided, a default button with label "Next" will be rendered, unless the experiment is not replayable.
+                                            If the passed in button does not specify a link, `get_experiment_url` will be used to link back to the experiment, if it is replayable.
         points (Optional[str]): The label for the score units (e.g., "points"). Defaults to a localized "points".
         rank (Optional[str]): The participant's rank (e.g., "GOLD"). If not provided, no rank is displayed.
         show_profile_link (bool): If True, display a link to the participant's profile.
@@ -110,7 +111,7 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         self.session = session
         self.title = title
         self.final_text = final_text
-        self.button = button or self.default_button(session)
+        self.button = self.get_button(button, session)
         self.rank = rank
         self.show_profile_link = show_profile_link
         self.show_participant_link = show_participant_link
@@ -156,12 +157,15 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
 
         return response
 
-    def default_button(self, session: Session):
+    def get_button(self, button: Button, session: Session):
         """
         Render a button in the Final action if the link back to the experiment page is valid
         """
         button_link = get_experiment_url(session)
         if button_link:
+            if button:
+                button.link = button_link
+                return button
             return Button(label=_("Next"), link=button_link)
 
     def get_social_media_config(self, session: Session) -> Optional[SocialMediaConfigConfiguration]:

@@ -12,7 +12,6 @@ from experiment.actions.info import Info
 from experiment.actions.question import DropdownQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
-from experiment.actions.utils import get_experiment_url
 from experiment.utils import non_breaking_spaces
 from result.utils import prepare_result
 from section.models import Section
@@ -145,9 +144,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         info = Info(
             body=body,
             heading="Muziekherkenning",
-            button=Button(
-                "Terug naar ToontjeHogerKids", link=get_experiment_url(session)
-            ),
+            button=Button("Terug naar ToontjeHogerKids"),
         )
 
         return [score, final, info]

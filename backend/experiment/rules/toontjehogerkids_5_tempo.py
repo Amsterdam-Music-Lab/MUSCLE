@@ -9,7 +9,6 @@ from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.info import Info
 from experiment.actions.score import Score
-from experiment.actions.utils import get_experiment_url
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_5_tempo import ToontjeHoger5Tempo
 
@@ -125,9 +124,7 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
         info = Info(
             body=body,
             heading="Timing en tempo",
-            button=Button(
-                "Terug naar ToontjeHogerKids", link=get_experiment_url(session)
-            ),
+            button=Button("Terug naar ToontjeHogerKids"),
         )
 
         return [*score, final, info]
