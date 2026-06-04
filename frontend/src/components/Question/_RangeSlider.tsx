@@ -1,4 +1,4 @@
-import Slider from "react-rangeslider";
+import { useState } from "react";
 import classNames from "classnames";
 import { css } from '@emotion/react'
 
@@ -17,27 +17,34 @@ interface RangeProps {
 const RangeSlider = ({ choices, value, onChange, changePosition=false }: RangeProps) => {
 
     const theme = useBoundStore((state) => state.theme);
-    const sliderEmptyColor = theme["colorPrimary"];
-    const sliderActiveColor = theme["colorSecondary"]
+    const [thumbColor, setThumbColor] = useState(theme["colorPrimary"]);
+    const sliderBackground = "yellow"; //theme["colorText"];
 
     const keys = choices.map(choice => choice.value);
     const labels = choices.map(choice => choice.label);
 
     const emptyValue = value === "";
-    const sliderValue = !emptyValue ? keys.indexOf(value) : Math.round((keys.length - 1)/2);
+    let sliderValue = !emptyValue ? keys.indexOf(value) : Math.round((keys.length - 1)/2);
 
-    const onSliderChange = (index: number) => {
-        onChange(keys[index]);
+    const onSliderChange = (event) => {
+        setThumbColor(theme["colorSecondary"]);
+        sliderValue = event.currentTarget.value;
     };
     
     const sliderStyle = () => {
         return css`
-            .rangeslider__handle {
-                background: ${sliderActiveColor}
+            
+            .aha__slider {
+                background ${sliderBackground}
+            }
+
+            input[type=range]::-webkit-slider-thumb {
+                background-color: ${thumbColor};
             }
             
-            .empty div.rangeslider__handle {
-                background: ${sliderEmptyColor}
+            /* All the same stuff for Firefox */
+            input[type=range]::-moz-range-thumb {
+              background-color: ${thumbColor};
             }
         `
     }
@@ -52,19 +59,12 @@ const RangeSlider = ({ choices, value, onChange, changePosition=false }: RangePr
                 changePosition={changePosition}
             />
             <div className={classNames({ empty: emptyValue })} data-testid="range-slider">
-            {/* <input className="aha__slider" type="range"
-                value={sliderValue}
-                onChange={onSliderChange}
-                min={question.minValue}
-                max={question.maxValue}
-            /> */}
-            <Slider
-                value={sliderValue}
-                onChange={onSliderChange}
-                min={0}
-                max={keys.length-1}
-                tooltip={false}
-            />
+                <input className="aha__slider" type="range"
+                    // value={sliderValue}
+                    onChange={onSliderChange}
+                    min={0}
+                    max={labels.length - 1}
+                />
             </div>
 
             <RangeLimits

@@ -22,8 +22,10 @@
     
 
     input[type=range] {
-      -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+      appearance: none; /* Hides the slider so that custom slider can be made */
       width: 100%; /* Specific width is required for Firefox. */
+      height: 1em;
+      border-radius: 2em;
     }
     
     input[type=range]::-webkit-slider-thumb {
@@ -31,36 +33,31 @@
     }
     
     input[type=range]:focus {
-      outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+      outline: none; /* Removes the border. TODO: focus styling for accessibility */
     }
     
     input[type=range]::-ms-track {
       width: 100%;
       cursor: pointer;
-    
-      /* Hides the slider so custom styles can be added */
-      background: transparent;
-      border-radius: 20px;
-      border-color: transparent;
-      color: transparent;
     }
 
     input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
-      border: 1px solid #000000;
-      height: 30px;
-      width: 30px;
-      border-radius: 30px;
+      height: 2em;
+      width: 2em;
+      border-radius: 2em;
       cursor: pointer;
-      margin-top: -14px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+      box-shadow: 0 1px 3px #0006 inset, 0 -1px 3px #0006 inset;
+      background: radial-gradient(circle at 50% 50%, white 0%, white 30%, transparent 20%);
     }
 
     /* All the same stuff for Firefox */
     input[type=range]::-moz-range-thumb {
-      border: 1px solid #000000;
-      height: 30px;
-      width: 30px;
-      border-radius: 30px;
+      height: 2em;
+      width: 2em;
+      border-radius: 2em;
+      box-shadow: 0 1px 3px #0006 inset, 0 -1px 3px #0006 inset;
+      background: radial-gradient(circle at 50% 50%, white 0%, white 30%, transparent 20%);
       cursor: pointer;
     }
 
