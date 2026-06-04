@@ -157,10 +157,12 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
 
         return response
 
-    def get_button(self, button: Button, session: Session):
+    def get_button(self, button: Button, session: Session) -> Optional[Button]:
         """
         Render a button in the Final action if the link back to the experiment page is valid
         """
+        if button and not button.link is None:
+            return button
         button_link = get_experiment_url(session)
         if button_link:
             if button:

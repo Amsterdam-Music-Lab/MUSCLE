@@ -11,6 +11,7 @@ from experiment.actions.info import Info
 from experiment.actions.score import Score
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_5_tempo import ToontjeHoger5Tempo
+from .toontjehogerkids_1_mozart import get_info_button
 
 logger = logging.getLogger(__name__)
 
@@ -106,7 +107,7 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),
-            button=Button("Wat hebben we getest?"),
+            button=Button("Wat hebben we getest?", link=""),
         )
 
         # Info page
@@ -124,7 +125,7 @@ class ToontjeHogerKids5Tempo(ToontjeHoger5Tempo):
         info = Info(
             body=body,
             heading="Timing en tempo",
-            button=Button("Terug naar ToontjeHogerKids"),
+            button=get_info_button(session),
         )
 
         return [*score, final, info]

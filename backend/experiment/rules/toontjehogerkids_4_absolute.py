@@ -7,7 +7,7 @@ from experiment.actions.final import Final
 from experiment.actions.info import Info
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_4_absolute import ToontjeHoger4Absolute
-
+from .toontjehogerkids_1_mozart import get_info_button
 
 class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
     ID = "TOONTJE_HOGER_KIDS_4_ABSOLUTE"
@@ -46,7 +46,7 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),
-            button=Button("Wat hebben we getest?"),
+            button=Button("Wat hebben we getest?", link=""),
         )
 
         # Info page
@@ -67,7 +67,7 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
         info = Info(
             body=body,
             heading="Absoluut gehoor",
-            button=Button("Terug naar ToontjeHogerKids"),
+            button=get_info_button(session),
         )
 
         return [*score, final, info]

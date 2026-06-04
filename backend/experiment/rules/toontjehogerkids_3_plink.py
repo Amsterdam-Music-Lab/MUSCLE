@@ -18,7 +18,7 @@ from section.models import Section
 from session.models import Session
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_3_plink import ToontjeHoger3Plink
-
+from .toontjehogerkids_1_mozart import get_info_button
 
 logger = logging.getLogger(__name__)
 
@@ -125,7 +125,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),
-            button=Button("Wat hebben we getest?"),
+            button=Button("Wat hebben we getest?", link=""),
         )
 
         # Info page
@@ -142,9 +142,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
             },
         )
         info = Info(
-            body=body,
-            heading="Muziekherkenning",
-            button=Button("Terug naar ToontjeHogerKids"),
+            body=body, heading="Muziekherkenning", button=get_info_button(session)
         )
 
         return [score, final, info]
