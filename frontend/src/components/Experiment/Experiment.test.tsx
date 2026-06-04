@@ -5,9 +5,9 @@ import MockAdapter from "axios-mock-adapter";
 import axios from 'axios';
 
 import Experiment from './Experiment';
-let mock = new MockAdapter(axios);
+const mock = new MockAdapter(axios);
 
-let mockUseParams = vi.fn();
+const mockUseParams = vi.fn();
 
 vi.mock('react-router-dom', async () => {
     const actual = await vi.importActual('react-router-dom');
@@ -19,14 +19,14 @@ vi.mock('react-router-dom', async () => {
 
 const getBlock = (overrides = {}) => {
     return {
-        slug: 'some_slug',
+        identifier: 'some_identifier',
         name: 'Some Block',
         ...overrides
     };
 }
 
 const block1 = getBlock({
-    slug: 'some_slug',
+    identifier: 'some_identifier',
     name: 'Some Block'
 });
 
@@ -64,7 +64,7 @@ const blockWithAllProps = getBlock({ image: 'some_image.jpg', description: 'Some
 describe('Experiment', () => {
 
     beforeEach(() => {
-        mockUseParams.mockReturnValue({ slug: 'some_experiment' });
+        mockUseParams.mockReturnValue({ identifier: 'some_experiment' });
     });
 
     it('forwards to a single block if it receives an empty dashboard array', async () => {

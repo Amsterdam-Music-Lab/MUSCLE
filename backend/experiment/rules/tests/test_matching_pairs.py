@@ -2,6 +2,7 @@ import json
 
 from django.test import TestCase
 
+from experiment.actions.playback import PlaybackSection
 from experiment.models import Block
 from participant.models import Participant
 from result.models import Result
@@ -10,6 +11,8 @@ from session.models import Session
 
 
 class MatchingPairsTest(TestCase):
+    fixtures = ["choice_lists", "demographics"]
+
     @classmethod
     def setUpTestData(cls):
         section_csv = (
@@ -33,7 +36,9 @@ class MatchingPairsTest(TestCase):
         cls.playlist.csv = section_csv
         cls.playlist._update_sections()
         cls.participant = Participant.objects.create()
-        cls.block = Block.objects.create(rules="MATCHING_PAIRS", slug="mpairs", rounds=42)
+        cls.block = Block.objects.create(
+            rules="MATCHING_PAIRS", identifier="mpairs", rounds=42
+        )
         cls.session = Session.objects.create(block=cls.block, participant=cls.participant, playlist=cls.playlist)
         cls.rules = cls.session.block_rules()
 
@@ -67,7 +72,7 @@ class MatchingPairsTest(TestCase):
     def intermediate_score_request(self, data):
         request_data = {"json_data": json.dumps(data), **self.csrf_token, **self.session_data}
         self.client.post("/result/intermediate_score/", request_data)
-        result = Result.objects.filter(question_key="move").last()
+        result = Result.objects.filter(question_identifier="move").last()
         return result
 
     def test_intermediate_score(self):
@@ -76,10 +81,12 @@ class MatchingPairsTest(TestCase):
         self.session.participant = Participant.objects.get(pk=int(participant_info.get("id")))
         self.session.save()
         self.session_data = {"session_id": self.session.id}
-        sections = self.playlist.section_set.all()
+        sections = [
+            PlaybackSection(section) for section in self.playlist.section_set.all()
+        ]
         data = {
-            "first_card": {"id": sections[0].id},
-            "second_card": {"id": sections[1].id},
+            "first_card": {"link": sections[0].link},
+            "second_card": {"link": sections[1].link},
         }
         result = self.intermediate_score_request(data)
         assert result.score == 10
@@ -88,7 +95,7 @@ class MatchingPairsTest(TestCase):
         result = self.intermediate_score_request(data)
         assert result.score == 20
         assert result.given_response == "match"
-        data["second_card"] = {"id": sections[3].id, "seen": True}
+        data["second_card"] = {"link": sections[3].link, "seen": True}
         result = self.intermediate_score_request(data)
         assert result.score == -10
         assert result.given_response == "misremembered"

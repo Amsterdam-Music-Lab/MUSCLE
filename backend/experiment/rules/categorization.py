@@ -13,7 +13,6 @@ from experiment.actions.score import Score
 from experiment.actions.trial import Trial
 from experiment.actions.wrappers import TwoAlternativeForced
 from session.models import Session
-from theme.styles import ButtonStyle
 
 from .base import BaseRules
 
@@ -28,7 +27,7 @@ class Categorization(BaseRules):
         self.question_lists = [
             {
                 "name": "Categorization",
-                "question_keys": [
+                "question_identifiers": [
                     "dgf_age",
                     "dgf_gender_reduced",
                     "dgf_native_language",
@@ -73,7 +72,7 @@ class Categorization(BaseRules):
                     session.result_set.all().delete()
                     json_data = {"phase": "ABORTED", "training_rounds": json_data["training_rounds"]}
                     session.save_json_data(json_data)
-                    session.save()
+                    session.finish()
                     profile.delete()
                     final_message = render_to_string("final/categorization_final.html")
                     final = Final(
@@ -132,18 +131,13 @@ class Categorization(BaseRules):
                     # Clear group from session for reuse
                     end_data = {
                         "phase": "FAILED_TRAINING",
-                        "training_rounds": json_data["training_rounds"],
-                        "assigned_group": json_data["assigned_group"],
-                        "button_colors": json_data["button_colors"],
-                        "pair_colors": json_data["pair_colors"],
                     }
                     session.save_json_data(end_data)
-                    session.final_score = 0
-                    session.save()
+                    session.finish(final_score=0)
                     profiles = session.participant.profile_results()
                     for profile in profiles:
                         # Delete failed_training tag from profile
-                        if profile.question_key == "failed_training":
+                        if profile.question_identifier == "failed_training":
                             profile.delete()
                     final_message = render_to_string("final/categorization_final.html")
                     final = Final(
@@ -195,11 +189,6 @@ class Categorization(BaseRules):
             # final_score = sum([result.score for result in training_results])
             end_data = {
                 "phase": "FINISHED",
-                "training_rounds": json_data["training_rounds"],
-                "assigned_group": json_data["assigned_group"],
-                "button_colors": json_data["button_colors"],
-                "pair_colors": json_data["pair_colors"],
-                "group": json_data["group"],
             }
             session.save_json_data(end_data)
             session.finish()
@@ -208,7 +197,7 @@ class Categorization(BaseRules):
             profiles = session.participant.profile_results()
             for profile in profiles:
                 # Delete failed_training tag from profile
-                if profile.question_key == "failed_training":
+                if profile.question_identifier == "failed_training":
                     profile.delete()
             final_message = render_to_string("final/categorization_final.html")
             final = Final(
@@ -271,12 +260,11 @@ class Categorization(BaseRules):
             group = random.choice(["S1", "S2", "C1", "C2"])
         # Assign a random correct response color for 1A, 2A
         # Set expected resonse accordingly
-        ph = "___"  # placeholder
         colors = ['colorNeutral1', 'colorNeutral2']
         random.shuffle(colors)
         choices = [
-            {"value": "A", "label": ph, "color": colors[0]},
-            {"value": "B", "label": ph, "color": colors[1]},
+            {"value": "A", "label": "", "color": colors[0]},
+            {"value": "B", "label": "", "color": colors[1]},
         ]
         random.shuffle(choices)
         if group == "S1":
@@ -465,11 +453,10 @@ class Categorization(BaseRules):
 
 
 repeat_training_or_quit = ButtonArrayQuestion(
-    key="failed_training",
+    identifier="failed_training",
     text="You seem to have difficulties reacting correctly to the sound sequences. Is your audio on? If you want to give it another try, click on Ok.",
     choices=[
         {"value": "continued", "label": "OK", "color": "colorPositive"},
         {"value": "aborted", "label": "Exit", "color": "colorNegative"},
     ],
-    style=[ButtonStyle.LARGE_GAP, ButtonStyle.LARGE_TEXT],
 )

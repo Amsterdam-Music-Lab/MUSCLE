@@ -4,6 +4,7 @@ import json
 from django.utils.translation import gettext_lazy as _
 
 from .base import BaseRules
+from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.playback import MatchingPairs, PlaybackSection
@@ -27,7 +28,7 @@ class MatchingPairsGame(BaseRules):
         self.question_lists = [
             {
                 "name": "Demographics",
-                "question_keys": [
+                "question_identifiers": [
                     "dgf_gender_identity",
                     "dgf_generation",
                     "dgf_musical_experience",
@@ -80,25 +81,27 @@ class MatchingPairsGame(BaseRules):
             return actions
         else:
             # final score saves the result from the cleared board into account
+            session.finish()
             score = Final(
                 session,
                 title="Score",
                 final_text="Can you score higher than your friends and family? Share and let them try!",
-                button={"text": "Play again", "link": self.get_play_again_url(session)},
+                button=Button(_("Play again")),
                 rank=self.rank(session, exclude_unfinished=False),
                 feedback_info=self.feedback_info(),
             )
             return [score]
 
     def select_sections(self, session):
+        n_pairs = session.block.rules_config.get("n_pairs", self.num_pairs)
         json_data = session.json_data
         pairs = json_data.get("pairs", [])
-        if len(pairs) < self.num_pairs:
+        if len(pairs) < n_pairs:
             pairs = list(session.playlist.section_set.order_by().distinct("group").values_list("group", flat=True))
             random.seed(self.random_seed)
             random.shuffle(pairs)
-        selected_pairs = pairs[: self.num_pairs]
-        session.save_json_data({"pairs": pairs[self.num_pairs :]})
+        selected_pairs = pairs[:n_pairs]
+        session.save_json_data({"pairs": pairs[n_pairs:]})
         originals = session.playlist.section_set.filter(group__in=selected_pairs, tag="Original")
         degradations = json_data.get("degradations")
         if not degradations:

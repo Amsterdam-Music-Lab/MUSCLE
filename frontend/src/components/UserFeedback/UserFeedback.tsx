@@ -5,23 +5,22 @@ import Button from '../Button/Button';
 import HTML from '../HTML/HTML';
 import { FeedbackInfo } from '@/types/Block';
 import classNames from '@/util/classNames';
-import useBoundStore from "@/util/stores";
+import Participant from "@/types/Participant";
 
 interface UserFeedbackProps {
-    blockSlug: string;
-    participant: any;
+    blockIdentifier: string;
+    participant: Participant;
     feedbackInfo: FeedbackInfo;
     inline?: boolean;
 }
 
-const UserFeedback = ({ blockSlug, participant, feedbackInfo, inline = true }: UserFeedbackProps) => {
+const UserFeedback = ({ blockIdentifier, participant, feedbackInfo, inline = true }: UserFeedbackProps) => {
     const [value, setValue] = useState('');
     const [showForm, setShowForm] = useState(true);
-    const theme = useBoundStore((state) => state.theme);
 
     const giveFeedback = async () => {
         const data = {
-            blockSlug,
+            blockIdentifier,
             feedback: value,
             participant
         }

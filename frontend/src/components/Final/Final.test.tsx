@@ -19,11 +19,7 @@ vi.mock('../../util/stores', () => ({
     useBoundStore: vi.fn()
 }));
 
-vi.mock('../../API', () => ({
-    finalizeSession: vi.fn(),
-}));
-
-vi.mock('../../config', () => {
+vi.mock('../../API', () => {
     return {
         SILENT_MP3: '',
         API_ROOT: '',
@@ -49,10 +45,10 @@ describe('Final Component', () => {
         render(
             <BrowserRouter>
                 <Final
-                    block={{ slug: 'test-block' }}
+                    block={{ identifier: 'test-block' }}
                     participant="participant-id"
                     score={100}
-                    final_text="<p>Final Text</p>"
+                    finalText="<p>Final Text</p>"
                     rank={1}
                 />
             </BrowserRouter>
@@ -83,10 +79,10 @@ describe('Final Component', () => {
         render(
             <BrowserRouter>
                 <Final
-                    block={{ slug: 'test-block' }}
+                    block={{ identifier: 'test-block' }}
                     participant="participant-id"
                     score={100}
-                    final_text="<p>Final Text</p>"
+                    finalText="<p>Final Text</p>"
                 />
             </BrowserRouter>
         );
@@ -100,17 +96,17 @@ describe('Final Component', () => {
         mockNavigate = vi.fn();
 
         const mockActionTexts = {
-            all_experiments: 'All Blocks',
+            allExperiments: 'All Blocks',
             profile: 'Profile',
-            play_again: 'Play Again',
+            playAgain: 'Play Again',
         };
 
         render(
             <BrowserRouter>
                 <Final
-                    show_profile_link={true}
-                    final_text={'<p>Final Text</p>'}
-                    action_texts={mockActionTexts}
+                    showProfileLink={true}
+                    finalText={'<p>Final Text</p>'}
+                    actionTexts={mockActionTexts}
                 />
             </BrowserRouter>
         );
@@ -122,22 +118,6 @@ describe('Final Component', () => {
         fireEvent.click(profileLink)
 
         expect(mockNavigate).toHaveBeenCalledWith('/profile');
-    });
-
-    it('calls finalizeSession with correct arguments', () => {
-
-        API.finalizeSession = vi.fn()
-
-        render(
-            <BrowserRouter>
-                <Final
-                    participant="participant-id"
-                    session="session-id"
-                />
-            </BrowserRouter>
-        );
-
-        expect(API.finalizeSession).toHaveBeenCalledWith({ session: 1, participant: 'participant-id' });
     });
 
     it('Uses Link to navigate when button link is relative', () => {
@@ -191,7 +171,7 @@ describe('Final Component', () => {
                 <Final
                     rank={{ class: 'rank-class', text: 'Rank Text' }}
                     score={100}
-                    final_text="<p>Final Text</p>"
+                    finalText="<p>Final Text</p>"
                     percentile={50}
                 />
             </BrowserRouter>
@@ -204,10 +184,10 @@ describe('Final Component', () => {
         render(
             <BrowserRouter>
                 <Final
-                    block={{ slug: 'test-block' }}
+                    block={{ identifier: 'test-block' }}
                     participant="participant-id"
                     score={100}
-                    final_text="<p>Final Text</p>"
+                    finalText="<p>Final Text</p>"
                 />
             </BrowserRouter>
         );
@@ -218,10 +198,10 @@ describe('Final Component', () => {
         render(
             <BrowserRouter>
                 <Final
-                    block={{ slug: 'test-block' }}
+                    block={{ identifier: 'test-block' }}
                     participant="participant-id"
                     score={100}
-                    final_text="<p>Final Text</p>"
+                    finalText="<p>Final Text</p>"
                     percentile={150}
                 />
             </BrowserRouter>
@@ -233,10 +213,10 @@ describe('Final Component', () => {
         render(
             <BrowserRouter>
                 <Final
-                    block={{ slug: 'test-block' }}
+                    block={{ identifier: 'test-block' }}
                     participant="participant-id"
                     score={100}
-                    final_text="<p>Final Text</p>"
+                    finalText="<p>Final Text</p>"
                     percentile={75}
                 />
             </BrowserRouter>

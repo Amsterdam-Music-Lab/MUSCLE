@@ -1,11 +1,11 @@
 """
 Setup block data in the admin panel
 
-* Choose a slug for the block ('tafc')
+* Choose a identifier for the block ('tafc')
 
 * Upload sound files
     * Find the root directory name of the uploaded sound files. It is backend/upload on your local machine. On a server, ask the administrator.
-    * Create a new directory within the root directory, use slug 'tafc' for the name
+    * Create a new directory within the root directory, use identifier 'tafc' for the name
     * Copy files (sample_1.wav - sample_5.wav)
 
 * Create playlist:
@@ -23,13 +23,14 @@ Setup block data in the admin panel
 * Create experiment
     * Admin panel -> Blocks -> Add
     * Choose name: TwoAlternativeForced
-    * Slug: tafc
+    * Identifier: tafc
     * Rules: TwoAlternativeForced
     * Rounds: 5
     * Playlists: tafc
     * Save and continue editing
     * QUESTION SERIES -> Add rules' default and save
 """
+
 from django.db.models import Avg
 
 from .base import BaseRules
@@ -41,8 +42,7 @@ from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
 from experiment.actions.form import Form
 from result.utils import prepare_result
-from theme.styles import ButtonStyle, ColorScheme, TextStyle
-
+from session.models import Session
 
 class TwoAlternativeForced(BaseRules):
     ID = 'TWO_ALTERNATIVE_FORCED'
@@ -99,15 +99,11 @@ class TwoAlternativeForced(BaseRules):
 
         playback = PlayButtons(sections=[PlaybackSection(section)])
 
-        key = 'choice'
-        button_style = [
-            ButtonStyle.LARGE_GAP,
-            ButtonStyle.LARGE_TEXT,
-        ]
+        identifier = 'choice'
         question = ButtonArrayQuestion(
-            key=key,
+            identifier=identifier,
             result_id=prepare_result(
-                key,
+                identifier,
                 session=session,
                 section=section,
                 expected_response=expected_response,
@@ -118,7 +114,6 @@ class TwoAlternativeForced(BaseRules):
                 {"value": "A", "label": "Answer A", "color": "colorNeutral1"},
                 {"value": "B", "label": "Answer B", "color": "colorNeutral2"},
             ],
-            style=button_style,
         )
 
         feedback_form = Form([question], submit_button=None)
@@ -146,7 +141,7 @@ class TwoAlternativeForced(BaseRules):
 
         return feedback
 
-    def get_final_view(self, session):
+    def get_final_view(self, session: Session) -> Final:
         """
         Get Final view (action).
         """
@@ -172,13 +167,14 @@ class TwoAlternativeForced(BaseRules):
         else:
             rank = ranks['PLASTIC']
             final_text = "Congratulations! You did OK and won a plastic medal!"
-
+        final_score = round(score_percent)
+        session.finish(final_score=final_score)
         final = Final(
             session=session,
             final_text=final_text,
             rank=rank,
-            total_score=round(score_percent),
-            points='% correct'
+            total_score=final_score,
+            points='% correct',
         )
 
         return final

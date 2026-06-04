@@ -1,0 +1,41 @@
+name: Dump .env file
+
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:    # Allows manual triggering
+
+jobs:
+
+  production-env:
+    uses: ./.github/workflows/env-template.yml
+    secrets:
+      inherit
+    with:
+      runner: PRD
+      environment: Production
+  
+  acceptance-env:
+    uses: ./.github/workflows/env-template.yml
+    secrets:
+      inherit
+    with:
+      runner: ACC
+      environment: Acceptance
+  
+  test-env:
+    uses: ./.github/workflows/env-template.yml
+    secrets:
+      inherit
+    with:
+      runner: tst
+      environment: Test
+  
+  student-env:
+    uses: ./.github/workflows/env-template.yml
+    secrets:
+      inherit
+    with:
+      runner: STD
+      environment: Student

@@ -3,7 +3,6 @@ export enum QuestionViews {
     BUTTON_ARRAY = "BUTTON_ARRAY",
     CHECKBOXES = "CHECKBOXES",
     DROPDOWN = "DROPDOWN",
-    ICON_RANGE = "ICON_RANGE",
     NUMBER = "NUMBER",
     RADIOS = "RADIOS",
     RANGE = "RANGE",
@@ -11,18 +10,18 @@ export enum QuestionViews {
     TEXT_RANGE = "TEXT_RANGE",
 }
 
-interface Choice {
-    value: string;
+export interface Choice {
+    value: string | number;
     label: string;
     color?: string;
 }
 
 export default interface Question {
-    key: string;
+    identifier: string;
     text: string;
     view: QuestionViews;
-    value?: any;
-    style?: any;
+    value?: string | number;
+    style?: string;
     explainer?: string;
     expected_response?: string;
     choices?: Choice[];

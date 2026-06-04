@@ -23,12 +23,10 @@ const defaultArgs = {
         color: "colorNegative"
     },
     experiment: {
-        slug: "experiment-slug",
+        identifier: "experiment-identifier",
         theme: theme
     }
 };
-
-const getArgs = (args = {}) => ({ ...defaultArgs, ...args });
 
 export default {
     title: "Consent/Consent",

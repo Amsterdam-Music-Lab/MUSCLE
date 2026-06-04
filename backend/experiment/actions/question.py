@@ -2,42 +2,38 @@
 from typing import Any, List, Optional, TypedDict
 
 from experiment.actions.base_action import BaseAction
-from theme.styles import ColorScheme
 
 class QuestionAction(BaseAction):
     """
     A base object for question actions. Do not use direcly, use subtypes instead.
 
     Args:
-        key: a unique key with which the question is logged to the database
+        identifier: a unique identifier with which the question is logged to the database
         result_id: the identifier of the `Result` object associated with this question
         text: the text shown to the user
         explainer: optionally, an instruction for the user of how to use the shown widget
-        style: list of style classes for display in the frontend
         scoring_rule: the scoring rule with which to score the user's response
         view: the view (widget) shown to the user, set in the subclasses
     """
 
     def __init__(
         self,
-        key: str,
+        identifier: str,
         result_id: int = None,
         text: str = '',
         explainer: str = '',
-        style: list[str] = [],
         view: str = '',
     ):
-        self.key = key
+        self.identifier = identifier
         self.text = text
         self.result_id = result_id
         self.explainer = explainer
-        self.style = self._apply_style(style)
         self.view = view
 
 
 class Choice(TypedDict):
     """The structure of the dictionary for a question choice
-    Note that color (optional) is only shown in ButtonArrayQuestion and IconRangeQuestion
+    Note that color (optional) is only shown in ButtonArrayQuestion and TextRangeQuestion
     """
 
     value: str
@@ -96,7 +92,7 @@ class AutoCompleteQuestion(ChoiceQuestionAction):
     Example:
         ```python
         question = AutoCompleteQuestion(
-            key="color",
+            identifier="color",
             text="What's your favorite color?",
             choices=[
                 {"value": "red", "label": "Red"},
@@ -123,7 +119,7 @@ class ButtonArrayQuestion(ChoiceQuestionAction):
     Example:
         ```python
         question = ButtonArrayQuestion(
-            key="is_student",
+            identifier="is_student",
             text="Are you a student?",
             choices=[
                 {"value": "no", "label": _("Nope"), "color": "colorNegative"},
@@ -148,7 +144,7 @@ class CheckBoxQuestion(ChoiceQuestionAction):
     Example:
         ```python
         question = MultipleChoiceQuestion(
-            key="color",
+            identifier="color",
             text="What's your favorite color?",
             choices=[
                 {"value": "red", "label": "Red"},
@@ -179,7 +175,7 @@ class DropdownQuestion(ChoiceQuestionAction):
     Example:
         ```python
         question = DropdownQuestion(
-            key="color",
+            identifier="color",
             text="What's your favorite color?",
             choices=[
                 {"value": "red", "label": "Red"},
@@ -194,49 +190,21 @@ class DropdownQuestion(ChoiceQuestionAction):
         super().__init__(view="DROPDOWN", **kwargs)
 
 
-class IconRangeQuestion(ChoiceQuestionAction):
-    """A question showing a range slider with icons.
-
-    Args:
-        choices (dict): dictionary of answer options, the values identify icons
-
-    Example:
-        ```python
-        question = IconRangeQuestion(
-            key="satisfaction",
-            text="How satisfied are you with the service?",
-            choices=[
-                {"value": 1, "label": "fa-face-smile"},
-                {"value": 2, "label": "fa-face-meh"},
-                {"value": 3, "label": "fa-face-frown"}
-            [
-        )
-        ```
-    """
-
-    def __init__(self, **kwargs: Any) -> None:
-        super().__init__(view="ICON_RANGE", **kwargs)
-        self.style = self._apply_style([ColorScheme.GRADIENT_7])
-
-
 class NumberQuestion(OpenQuestionAction):
     """A question showing numeric input.
+    NOTE: cannot set min value to avoid input rejecting keyboard input
 
     Args:
-        min_value: Minimum allowed value
         max_value: Maximum allowed value
         **kwargs: Additional Question arguments
     """
 
     def __init__(
         self,
-        min_value: int = 0,
         max_value: int = 120,
         **kwargs: Any,
     ) -> None:
-        super().__init__(
-            min_value=min_value, max_value=max_value, view="NUMBER", **kwargs
-        )
+        super().__init__(min_value=0, max_value=max_value, view="NUMBER", **kwargs)
 
 
 class RadiosQuestion(ChoiceQuestionAction):
@@ -249,7 +217,7 @@ class RadiosQuestion(ChoiceQuestionAction):
     Example:
         ```python
         question = RadiosQuestion(
-            key="color",
+            identifier="color",
             text="What's your favorite color?",
             choices=[
                 {"value": "red", "label": "Red"},
@@ -275,7 +243,7 @@ class RangeQuestion(OpenQuestionAction):
     Example:
         ```python
         question = RangeQuestion(
-            key="age",
+            identifier="age",
             text="How old are you?",
             min_value=18,
             max_value=120,
@@ -299,7 +267,7 @@ class TextRangeQuestion(ChoiceQuestionAction):
     Example:
         ```python
         question = TextRangeQuestion(
-            key="satisfaction",
+            identifier="satisfaction",
             text="How satisfied are you with MUSCLE?",
             explainer="Please rate your satisfaction.",
             choices=[

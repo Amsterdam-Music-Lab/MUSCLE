@@ -34,7 +34,7 @@ const AutoComplete = ({ question, value, onChange }: AutoCompleteProps) => {
                 <Select
                     options={options}
                     tabIndex={0}
-                    name={question.key}
+                    name={question.identifier}
                     value={options.find((option) => option.value === value)}
                     onChange={(choice) => onChange(choice.value)}
                     onBlur={scrollToTop}

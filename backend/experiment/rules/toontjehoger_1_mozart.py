@@ -13,17 +13,15 @@ from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
-from experiment.actions.utils import get_current_experiment_url
-from experiment.models import Session
 from result.utils import prepare_result
-from theme.styles import ColorScheme
+from session.models import Session
 from .base import BaseRules
 
 
 logger = logging.getLogger(__name__)
 
 
-def toontjehoger_ranks(session):
+def toontjehoger_ranks(session: Session):
     score = session.final_score
     if score < 25:
         return "PLASTIC"
@@ -93,7 +91,7 @@ class ToontjeHoger1Mozart(BaseRules):
     def get_task_explainer(self):
         return "Welke vorm ontstaat er na het afknippen van de hoekjes?"
 
-    def get_answer_explainer(self, session, round):
+    def get_answer_explainer(self, session: Session, round):
         last_result = session.last_result()
 
         correct_answer_given = last_result.score > 0
@@ -119,7 +117,7 @@ class ToontjeHoger1Mozart(BaseRules):
         )
         return [info]
 
-    def get_score(self, session):
+    def get_score(self, session: Session):
         # Feedback message
         last_result = session.last_result()
         section = last_result.section
@@ -150,26 +148,22 @@ class ToontjeHoger1Mozart(BaseRules):
         # Listen
         playback = Autoplay(sections=[PlaybackSection(section)], show_animation=True)
 
-        listen_config = {
-            "auto_advance": True,
-            "show_continue_button": False,
-            "response_time": section.duration,
-        }
-
         listen = Trial(
-            config=listen_config,
             playback=playback,
             title=self.TITLE,
+            auto_advance=True,
+            response_time=section.duration,
+            continue_button=None,
         )
 
         # Step 2
         # --------------------
 
         # Question
-        key = "expected_shape"
+        identifier = "expected_shape"
         question = ButtonArrayQuestion(
             text=question,
-            key=key,
+            identifier=identifier,
             choices=[
                 {"value": "A", "label": "A", "color": "colorNeutral2"},
                 {"value": "B", "label": "B", "color": "colorNeutral1"},
@@ -178,9 +172,11 @@ class ToontjeHoger1Mozart(BaseRules):
                 {"value": "E", "label": "E", "color": "colorNeutral3"},
             ],
             result_id=prepare_result(
-                key, session, section=section, expected_response=expected_response
+                identifier,
+                session,
+                section=section,
+                expected_response=expected_response,
             ),
-            style=[ColorScheme.TOONTJEHOGER],
         )
         form = Form([question], submit_button=None)
 
@@ -210,10 +206,9 @@ class ToontjeHoger1Mozart(BaseRules):
         score = self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
         return score
 
-    def get_final_round(self, session):
+    def get_final_round(self, session: Session):
         # Finish session.
         session.finish()
-        session.save()
 
         # Answer explainer
         answer_explainer = self.get_answer_explainer(session, round=2)
@@ -231,7 +226,7 @@ class ToontjeHoger1Mozart(BaseRules):
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),
-            button={"text": "Wat hebben we getest?"},
+            button=Button("Wat hebben we getest?"),
         )
 
         # Info page
@@ -241,7 +236,6 @@ class ToontjeHoger1Mozart(BaseRules):
             heading="Het Mozart effect",
             button=Button(
                 "Terug naar ToontjeHoger",
-                link=get_current_experiment_url(session),
             ),
         )
 

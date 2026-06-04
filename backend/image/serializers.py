@@ -19,5 +19,6 @@ def serialize_image(image: Image) -> dict:
         'target': image.target,
         'tags': image.tags,
         'title': image.title,
+        'backgroundColor': image.background_color,
         'description': image.description,
     }

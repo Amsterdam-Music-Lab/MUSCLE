@@ -5,13 +5,14 @@ import Button from "../Button/Button";
 import IButton from "@/types/Button";
 import IQuestion from "@/types/Question";
 import { QuestionViews } from "@/types/Question";
+import { OnResultParams } from "@/hooks/useResultHandler";
 
 interface FeedbackFormProps {
     formActive: boolean;
     form: IQuestion[];
     submitButton: IButton;
     skipButton: IButton;
-    submitResult: () => void;
+    submitResult: (result: OnResultParams) => void;
 }
 
 /** FeedbackForm */

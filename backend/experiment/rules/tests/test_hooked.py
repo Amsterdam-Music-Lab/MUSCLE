@@ -24,6 +24,13 @@ class HookedTest(TestCase):
     fixtures = [
         "playlist",
         "experiment",
+        "choice_lists",
+        "demographics",
+        "goldsmiths_msi",
+        "musicgens",
+        "stomp",
+        "tipi",
+        "vanderbilt",
     ]
 
     @classmethod
@@ -84,12 +91,12 @@ class HookedTest(TestCase):
     def test_hooked(self):
         n_rounds = 18
         experiment = Experiment.objects.create(
-            slug="HOOKED", name="Hooked", description="Test Hooked"
+            identifier="HOOKED", name="Hooked", description="Test Hooked"
         )
         SocialMediaConfig.objects.create(experiment=experiment, url="https://app.amsterdammusiclab.nl/hooked")
         phase = Phase.objects.create(experiment=experiment)
         block = Block.objects.create(
-            slug="Hooked", rules="HOOKED", rounds=n_rounds, phase=phase
+            identifier="Hooked", rules="HOOKED", rounds=n_rounds, phase=phase
         )
         session = Session.objects.create(block=block, participant=self.participant, playlist=self.playlist)
         rules = session.block_rules()
@@ -108,8 +115,16 @@ class HookedTest(TestCase):
                 self.assertEqual(len([p for p in plan if p == "new"]), 3)
                 self.assertEqual(len([p for p in plan if p == "old"]), 3)
                 self.assertEqual(len(actions), 5)
-                self.assertEqual(session.result_set.filter(question_key="recognize").count(), 1)
-                self.assertEqual(session.result_set.filter(question_key="correct_place").count(), 1)
+                self.assertEqual(
+                    session.result_set.filter(question_identifier="recognize").count(),
+                    1,
+                )
+                self.assertEqual(
+                    session.result_set.filter(
+                        question_identifier="correct_place"
+                    ).count(),
+                    1,
+                )
             elif i == 1:
                 self.assertEqual(len(actions), 4)
                 score_action = actions[0]
@@ -117,8 +132,16 @@ class HookedTest(TestCase):
                 self.assertIsNotNone(score_action.last_song)
                 # the session.last_song method returns the song related to the most recent result, without filtering
                 self.assertNotEqual(score_action.last_song, session.last_song())
-                self.assertEqual(session.result_set.filter(question_key="recognize").count(), 2)
-                self.assertEqual(session.result_set.filter(question_key="correct_place").count(), 2)
+                self.assertEqual(
+                    session.result_set.filter(question_identifier="recognize").count(),
+                    2,
+                )
+                self.assertEqual(
+                    session.result_set.filter(
+                        question_identifier="correct_place"
+                    ).count(),
+                    2,
+                )
             elif i == rules.question_offset:
                 self.assertEqual(len(actions), 5)
                 self.assertEqual(self.participant.result_set.count(), 1)
@@ -130,7 +153,12 @@ class HookedTest(TestCase):
                 # we have a score, heard_before trial, and a question trial
                 self.assertEqual(len(actions), 3)
                 # at least one heard_before result should have been created
-                self.assertGreater(session.result_set.filter(question_key="heard_before").count(), 0)
+                self.assertGreater(
+                    session.result_set.filter(
+                        question_identifier="heard_before"
+                    ).count(),
+                    0,
+                )
             elif i == n_rounds:
                 # final round
                 self.assertEqual(type(actions[0]), Score)
@@ -147,7 +175,9 @@ class HookedTest(TestCase):
 
     def _run_eurovision(self, session_type):
         n_rounds = 6
-        block = Block.objects.create(slug="Test-Eurovision", rules="EUROVISION_2020", rounds=n_rounds)
+        block = Block.objects.create(
+            identifier="Test-Eurovision", rules="EUROVISION_2020", rounds=n_rounds
+        )
 
         session = Session.objects.create(block=block, participant=self.participant, playlist=self.playlist)
         rules = session.block_rules()
@@ -167,9 +197,15 @@ class HookedTest(TestCase):
             elif i >= heard_before_offset:
                 plan = session.json_data.get("plan")
                 song_sync_sections = list(
-                    session.result_set.filter(question_key="recognize").values_list("section", flat=True)
+                    session.result_set.filter(
+                        question_identifier="recognize"
+                    ).values_list("section", flat=True)
                 )
-                heard_before_section = session.result_set.filter(question_key="heard_before").last().section
+                heard_before_section = (
+                    session.result_set.filter(question_identifier="heard_before")
+                    .last()
+                    .section
+                )
                 song_sync_songs = [Section.objects.get(pk=section).song for section in song_sync_sections]
                 if plan[i] == "old":
                     if session_type == "same":
@@ -193,7 +229,7 @@ class HookedTest(TestCase):
         self.assertEqual(Result.objects.count(), 0)
         n_rounds = 6
         block = Block.objects.create(
-            slug="Test-Christmas", rules="KUIPER_2020", rounds=n_rounds
+            identifier="Test-Christmas", rules="KUIPER_2020", rounds=n_rounds
         )
         playlist = Playlist.objects.create(name="Test-Christmas")
         playlist.csv = (
@@ -241,7 +277,9 @@ class HookedTest(TestCase):
             if i == heard_before_offset - 1:
                 played_sections = session.json_data.get("played_sections")
                 song_sync_sections = list(
-                    session.result_set.filter(question_key="recognize").values_list("section", flat=True)
+                    session.result_set.filter(
+                        question_identifier="recognize"
+                    ).values_list("section", flat=True)
                 )
                 self.assertEqual(len(song_sync_sections), 4)
                 self.assertEqual(len(played_sections), 1)
@@ -249,9 +287,15 @@ class HookedTest(TestCase):
             elif i in range(heard_before_offset, n_rounds):
                 plan = session.json_data.get("plan")
                 song_sync_sections = list(
-                    session.result_set.filter(question_key="recognize").values_list("section", flat=True)
+                    session.result_set.filter(
+                        question_identifier="recognize"
+                    ).values_list("section", flat=True)
                 )
-                heard_before_section = session.result_set.filter(question_key="heard_before").last().section
+                heard_before_section = (
+                    session.result_set.filter(question_identifier="heard_before")
+                    .last()
+                    .section
+                )
                 if plan[i] == "old":
                     if session_type == "same":
                         self.assertIn(heard_before_section.id, song_sync_sections)
@@ -266,8 +310,8 @@ class HookedTest(TestCase):
                     self.assertNotIn(heard_before_section, song_sync_sections)
 
     def test_thats_my_song(self):
-        tms_keys = get_question_bank('VANDERBILT_FIXED')
-        block = Block.objects.get(slug="thats_my_song")
+        tms_identifiers = get_question_bank('VANDERBILT_FIXED')
+        block = Block.objects.get(identifier="thats_my_song")
         block.add_default_question_lists()
         playlist = Playlist.objects.get(name="ThatsMySong")
         playlist._update_sections()
@@ -285,36 +329,42 @@ class HookedTest(TestCase):
             elif i == 0:
                 self.assertEqual(len(actions), 2)
                 self.assertEqual(
-                    actions[1].feedback_form.form[0].key, "playlist_decades"
+                    actions[1].feedback_form.form[0].identifier, "playlist_decades"
                 )
-                result = Result.objects.get(session=session, question_key="playlist_decades")
+                result = Result.objects.get(
+                    session=session, question_identifier="playlist_decades"
+                )
                 result.given_response = "1960s,1970s,1980s"
                 result.save()
             elif i == 1:
                 assert session.result_set.count() == 3
                 assert session.json_data.get("plan") is not None
                 assert len(actions) == 3
-                assert actions[0].feedback_form.form[0].key == "recognize"
-                assert actions[2].feedback_form.form[0].key == "correct_place"
+                assert actions[0].feedback_form.form[0].identifier == "recognize"
+                assert actions[2].feedback_form.form[0].identifier == "correct_place"
             else:
                 assert actions[0].view == "SCORE"
                 if i < rules.question_offset + 1:
                     assert len(actions) == 4
-                    assert actions[1].feedback_form.form[0].key == "recognize"
+                    assert actions[1].feedback_form.form[0].identifier == "recognize"
                 elif i < heard_before_offset + 1:
                     assert len(actions) == 5
-                    assert actions[1].feedback_form.form[0].key in tms_keys
+                    assert (
+                        actions[1].feedback_form.form[0].identifier in tms_identifiers
+                    )
                 elif i == heard_before_offset + 1:
                     assert len(actions) == 3
                     assert actions[1].view == "EXPLAINER"
-                    assert actions[2].feedback_form.form[0].key == "heard_before"
+                    assert actions[2].feedback_form.form[0].identifier == "heard_before"
                 else:
                     assert len(actions) == 3
-                    assert actions[1].feedback_form.form[0].key in tms_keys
-                    assert actions[2].feedback_form.form[0].key == "heard_before"
+                    assert (
+                        actions[1].feedback_form.form[0].identifier in tms_identifiers
+                    )
+                    assert actions[2].feedback_form.form[0].identifier == "heard_before"
 
     def test_hooked_china(self):
-        block = Block.objects.get(slug="huang_2022")
+        block = Block.objects.get(identifier="huang_2022")
         block.add_default_question_lists()
         playlist = Playlist.objects.get(name="Cantpop")
         playlist._update_sections()
@@ -327,7 +377,7 @@ class HookedTest(TestCase):
         Section.objects.create(playlist=playlist, song=song, filename=SimpleUploadedFile("some_audio.wav", b""))
         actions = rules.next_round(session)
         self.assertIsInstance(actions[0], Trial)
-        self.assertEqual(actions[0].feedback_form.form[0].key, "audio_check1")
+        self.assertEqual(actions[0].feedback_form.form[0].identifier, "audio_check1")
 
         # check that question trials are as expected
         question_trials = rules.get_profile_question_trials(session, None)
@@ -335,7 +385,7 @@ class HookedTest(TestCase):
             'questions__count'
         ]
         self.assertEqual(len(question_trials), n_total_questions)
-        keys = [q.feedback_form.form[0].key for q in question_trials]
-        questions = rules.question_lists[0]["question_keys"][0:3]
+        identifiers = [q.feedback_form.form[0].identifier for q in question_trials]
+        questions = rules.question_lists[0]["question_identifiers"][0:3]
         for question in questions:
-            self.assertIn(question, keys)
+            self.assertIn(question, identifiers)

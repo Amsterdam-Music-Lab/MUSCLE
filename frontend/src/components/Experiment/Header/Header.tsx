@@ -1,33 +1,35 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-
 import Social from "../../Social/Social"
 import HTML from '@/components/HTML/HTML';
 import { ScoreDisplayConfig } from "@/types/Theme";
 import Rank from "@/components/Rank/Rank";
 import { SocialMediaConfig } from "@/types/Experiment";
+import { styleButton, styleButtonOutline } from "@/util/stylingHelpers";
 
 interface HeaderProps {
     description: string;
-    nextBlockSlug: string | undefined;
+    nextBlockIdentifier: string | undefined;
     nextBlockButtonText: string;
-    experimentSlug: string;
+    experimentIdentifier: string;
     aboutButtonText: string;
     totalScore: number;
     scoreDisplayConfig?: ScoreDisplayConfig;
     socialMediaConfig?: SocialMediaConfig;
+    buttonColor: string;
 }
 
 export const Header: React.FC<HeaderProps> = ({
     description,
-    nextBlockSlug,
+    nextBlockIdentifier,
     nextBlockButtonText,
     aboutButtonText,
-    experimentSlug,
+    experimentIdentifier,
     totalScore,
     scoreDisplayConfig,
-    socialMediaConfig
+    socialMediaConfig,
+    buttonColor
 }) => {
 
     return (
@@ -35,8 +37,8 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="intro">
                 <HTML body={description} innerClassName="" />
                 <nav className="actions">
-                    {nextBlockSlug && <a className="btn btn-lg btn-primary" href={`/block/${nextBlockSlug}`}>{nextBlockButtonText}</a>}
-                    {aboutButtonText && <Link className="btn btn-lg btn-outline-primary" to={`/${experimentSlug}/about`}>{aboutButtonText}</Link>}
+                    {nextBlockIdentifier && <a className="btn btn-lg" css={styleButton(buttonColor)} href={`/block/${nextBlockIdentifier}`}>{nextBlockButtonText}</a>}
+                    {aboutButtonText && <Link className="btn btn-lg" css={styleButtonOutline(buttonColor)} to={`/${experimentIdentifier}/about`}>{aboutButtonText}</Link>}
                 </nav>
             </div>
             {scoreDisplayConfig && totalScore !== 0 && (

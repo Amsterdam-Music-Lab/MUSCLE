@@ -3,7 +3,9 @@ from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import UploadedFile
 from django.db import models
 from django.db.models.fields.files import ImageFieldFile
-from .validators import validate_image_file
+
+from theme.models import COLOR_CHOICES
+from image.validators import validate_image_file
 
 TARGET_CHOICES = (
     ("_self", "Self"),
@@ -11,7 +13,6 @@ TARGET_CHOICES = (
     ("_parent", "Parent"),
     ("_top", "Top"),
 )
-
 
 class SVGAndImageFieldFile(ImageFieldFile):
     """
@@ -68,6 +69,13 @@ class Image(models.Model):
     file = SVGAndImageField(upload_to="%Y/%m/%d/", validators=[validate_image_file], help_text="Uploaded image file.")
     title = models.CharField(max_length=255, help_text="Title of the image.")
     description = models.TextField(blank=True, default="", help_text="Description of the image.")
+    background_color = models.CharField(
+        max_length=32,
+        blank=True,
+        default="",
+        help_text="Show color from current theme (e.g. `colorPositive`) as image background",
+        choices=COLOR_CHOICES,
+    )
     alt = models.CharField(max_length=255, blank=True, default="", help_text="Alternative text for the image.")
     href = models.URLField(blank=True, default="", help_text="URL that the image links to.")
     rel = models.CharField(max_length=255, blank=True, default="", help_text="Relationship attribute for the link.")

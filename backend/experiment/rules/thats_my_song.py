@@ -1,5 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
+from experiment.actions.button import Button
 from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.question import CheckBoxQuestion
@@ -19,12 +20,12 @@ class ThatsMySong(Hooked):
         self.question_lists = [
             {
                 "name": "VANDERBILT_FIXED",
-                "question_keys": get_question_bank('VANDERBILT_FIXED'),
+                "question_identifiers": get_question_bank('VANDERBILT_FIXED'),
                 "randomize": False,
             },
             {
                 "name": "VANDERBILT_RANDOM",
-                "question_keys": get_question_bank('VANDERBILT_RANDOM'),
+                "question_identifiers": get_question_bank('VANDERBILT_RANDOM'),
                 "randomize": True,
             },
         ]
@@ -65,6 +66,7 @@ class ThatsMySong(Hooked):
             session.save()
 
             # Return a score and final score action.
+            session.finish()
             return [
                 self.get_score(session, round_number),
                 Final(
@@ -73,10 +75,9 @@ class ThatsMySong(Hooked):
                     + " For more information about this experiment, visit the Vanderbilt University Medical Center Music Cognition Lab.",
                     rank=self.rank(session),
                     show_profile_link=True,
-                    button={
-                        "text": _("Play again"),
-                        "link": self.get_play_again_url(session),
-                    },
+                    button=Button(
+                        _("Play again"),
+                    ),
                     logo={
                         "image": "/images/vumc_mcl_logo.png",
                         "link": "https://www.vumc.org/music-cognition-lab/welcome",
@@ -86,10 +87,15 @@ class ThatsMySong(Hooked):
 
         if round_number == 0:
             # get list of trials for demographic questions (first 2 questions)
-            if session.result_set.filter(question_key="playlist_decades").count() == 0:
+            if (
+                session.result_set.filter(
+                    question_identifier="playlist_decades"
+                ).count()
+                == 0
+            ):
                 actions = [self.get_intro_explainer()]
                 question = CheckBoxQuestion(
-                    key="playlist_decades",
+                    identifier="playlist_decades",
                     text=_("Choose two or more decades of music"),
                     choices=[
                         {"value": "1960s", "label": "1960s"},

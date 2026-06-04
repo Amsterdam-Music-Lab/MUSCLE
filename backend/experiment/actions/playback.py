@@ -65,11 +65,6 @@ class ImagePlaybackSection(PlaybackSection):
         super().__init__(**kwargs)
         self.image = image
 
-    def action(self) -> ImagePlaybackSectionAction:
-        serialized = super().action()
-        serialized['image'] = self.image.__dict__
-        return serialized
-
 
 class Playback(BaseAction):
     """Base class for different kinds of audio players.
@@ -101,7 +96,6 @@ class Playback(BaseAction):
         self.mute = mute
         self.resume_play = resume_play
         self.show_animation = show_animation
-        self.style = self._apply_style(style)
 
     def action(self):
         serialized = super().action()

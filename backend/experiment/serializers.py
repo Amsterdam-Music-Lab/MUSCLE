@@ -32,16 +32,16 @@ def serialize_experiment(experiment: Experiment) -> dict:
     """
 
     serialized = {
-        "slug": experiment.slug,
+        "identifier": experiment.identifier,
         "name": experiment.name,
-        "description": experiment.description,
+        "description": formatter(experiment.description, filter_name="markdown"),
     }
 
     if experiment.consent:
         serialized["consent"] = Consent(experiment.consent).action()
 
-    if experiment.theme_config:
-        serialized["theme"] = serialize_theme(experiment.theme_config)
+    theme = experiment.theme_config or ThemeConfig()
+    serialized["theme"] = serialize_theme(theme)
 
     if experiment.about_content:
         serialized["aboutContent"] = formatter(
@@ -113,6 +113,14 @@ def serialize_phase(phase: Phase, participant: Participant, times_played: int) -
     }
 
 
+def get_theme_config(block_object: Block):
+    return (
+        block_object.theme_config
+        or block_object.phase.experiment.theme_config
+        or ThemeConfig()
+    )
+
+
 def serialize_block(block_object: Block, language: str = "en") -> dict:
     """Serialize block
 
@@ -123,13 +131,9 @@ def serialize_block(block_object: Block, language: str = "en") -> dict:
     Returns:
         Block info for a participant
     """
-    theme = (
-        block_object.theme_config
-        or block_object.phase.experiment.theme_config
-        or ThemeConfig()
-    )
+    theme = get_theme_config(block_object)
     return {
-        "slug": block_object.slug,
+        "identifier": block_object.identifier,
         "name": block_object.name,
         "description": block_object.description,
         "image": serialize_image(block_object.image) if block_object.image else None,
@@ -147,7 +151,8 @@ def get_upcoming_block(phase: Phase, participant: Participant, times_played: int
     """
     blocks = list(phase.blocks.all())
 
-    shuffle(blocks)
+    if phase.randomize:
+        shuffle(blocks)
     finished_session_counts = [get_finished_session_count(block, participant) for block in blocks]
 
     min_session_count = min(finished_session_counts)

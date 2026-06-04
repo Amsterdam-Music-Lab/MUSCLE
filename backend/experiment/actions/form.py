@@ -17,12 +17,12 @@ class Form(BaseAction):
         ```python
         form = Form([
             TextQuestion(
-                key="name",
+                identifier="name",
                 text="What's your name?",
                 explainer="Please enter your full name.",
             ),
             ButtonArrayQuestion(
-                key="is_student",
+                identifier="is_student",
                 text="Are you a student?",
                 choices=[{'value': 'YES', 'text': _('YES'), {'value': 'NO', 'label': _('NO')}],
             ),
@@ -42,6 +42,8 @@ class Form(BaseAction):
 
     def action(self) -> Dict[str, Any]:
         serialized_form = [question.action() for question in self.form]
+        if not all([question.get('isSkippable') for question in serialized_form]):
+            self.skip_button = None
         return {
             "form": serialized_form,
             "submitButton": self.submit_button.action() if self.submit_button else None,

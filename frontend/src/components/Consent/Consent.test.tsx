@@ -5,11 +5,6 @@ import { saveAs } from 'file-saver';
 import { vi, Mock, expect, it, describe, } from 'vitest';
 import { buttonColorOptions } from "@/types/Button";
 
-global.Blob = vi.fn().mockImplementation((content, options) => ({
-    content,
-    options
-}));
-
 global.URL.createObjectURL = vi.fn();
 
 vi.mock('file-saver', () => ({
@@ -22,7 +17,7 @@ vi.mock('../../API', () => ({
 }));
 
 const mockExperiment = {
-    slug: 'test-experiment',
+    identifier: 'test-experiment',
     name: 'Test',
     theme: {colorGrey: '#abacab', colorNeutral1: '#fabacc', colorNegative: '#fa5577'},
 };

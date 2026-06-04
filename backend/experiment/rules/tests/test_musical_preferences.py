@@ -10,7 +10,7 @@ from session.models import Session
 
 
 class MusicalPreferencesTest(TestCase):
-    fixtures = ["playlist", "experiment"]
+    fixtures = ["playlist", "experiment", "choice_lists", "choices_general"]
 
     @classmethod
     def setUpTestData(cls):
@@ -28,7 +28,7 @@ class MusicalPreferencesTest(TestCase):
         audiocheck_playlist = Playlist.objects.get(name="AudioSetup")
         audiocheck_playlist._update_sections()
 
-        cls.block = Block.objects.get(slug="mpref")
+        cls.block = Block.objects.get(identifier="mpref")
         cls.block.playlists.add(cls.playlist)
         cls.session = Session.objects.create(
             block=cls.block, participant=cls.participant, playlist=cls.playlist
@@ -39,11 +39,16 @@ class MusicalPreferencesTest(TestCase):
         actions = rules.next_round(self.session)
         self.assertEqual(len(actions), 2)
         self.assertIsInstance(actions[1], Trial)
-        self.assertEqual(actions[1].feedback_form.form[0].key, "audio_check1")
+        self.assertEqual(actions[1].feedback_form.form[0].identifier, "audio_check1")
 
     def test_preferred_songs(self):
         for index, section in enumerate(list(self.playlist.section_set.all())):
-            Result.objects.create(question_key="like_song", score=5 - index, section=section, session=self.session)
+            Result.objects.create(
+                question_identifier="like_song",
+                score=5 - index,
+                section=section,
+                session=self.session,
+            )
         mp = MusicalPreferences()
         preferred_sections = mp.get_preferred_songs(self.session.result_set.order_by("?"), 3)
         assert preferred_sections[0]["artist"] == "SuperArtist"
@@ -55,16 +60,32 @@ class MusicalPreferencesTest(TestCase):
         # Create 3 results with a section
         for index, section in enumerate(list(self.playlist.section_set.all())):
             if index < 3:
-                Result.objects.create(question_key="like_song", score=5 - index, section=section, session=self.session)
+                Result.objects.create(
+                    question_identifier="like_song",
+                    score=5 - index,
+                    section=section,
+                    session=self.session,
+                )
 
         other_session = Session.objects.create(block=self.block, participant=self.participant, playlist=self.playlist)
 
         for i in range(10):
-            Result.objects.create(question_key="like_song", score=5 - i, section=None, session=other_session)
+            Result.objects.create(
+                question_identifier="like_song",
+                score=5 - i,
+                section=None,
+                session=other_session,
+            )
         mp = MusicalPreferences()
 
         # Go to the last round (top_all = ... caused the error)
-        for i in range(self.session.block.rounds + 1):
+        for i in range(3, self.session.block.rounds + 1):
             actions = mp.next_round(self.session)
-            if i == self.session.block.rounds + 1:
+            if i == mp.preference_offset:
+                self.assertIn('Love', actions[0].html.body[:30])
+            elif i == mp.knowledge_offset:
+                self.assertIn('Knowledge', actions[0].html.body[:30])
+            elif i == self.session.block.rounds:
+                self.assertIn('Connection', actions[0].html.body[:30])
+            else:
                 self.assertIsNotNone(actions)

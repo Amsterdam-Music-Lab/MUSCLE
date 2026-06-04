@@ -8,11 +8,12 @@ import classNames from "classnames";
 import IButton from "@/types/Button";
 import Participant from "@/types/Participant";
 import { styleButton } from "@/util/stylingHelpers";
+import Experiment from "@/types/Experiment";
 
 export interface ConsentProps {
     title: string;
     text: string;
-    experiment: any;
+    experiment: Experiment;
     participant: Pick<Participant, 'csrf_token'>;
     onNext: () => void;
     confirmButton: IButton;
@@ -21,12 +22,12 @@ export interface ConsentProps {
 
 /** Consent is an experiment view that shows the consent text, and handles agreement/stop actions */
 const Consent = ({ title, text, experiment, participant, onNext, confirmButton, denyButton }: ConsentProps) => {
-    const [consent, loadingConsent] = useConsent(experiment.slug);
+    const [consent, loadingConsent] = useConsent(experiment.identifier);
     const urlQueryString = window.location.search;
 
     // Listen for consent, and auto advance if already given
     useEffect(() => {
-        if (consent || (new URLSearchParams(urlQueryString).get("participant_id"))) {
+        if ( consent ) {
             onNext();
         }
     }, [consent, onNext, urlQueryString]);
@@ -70,7 +71,7 @@ const Consent = ({ title, text, experiment, participant, onNext, confirmButton, 
 
     // Show consent
     return (
-        <div className={classNames("aha__consent")}>
+        <div className={classNames("aha__consent")} style={{background: experiment.theme.colorText, color: experiment.theme.colorBackground}}>
             <div className="aha__consent-header d-flex">
                 <div className="flex-fill">
                     <h3>{title}</h3>

@@ -8,7 +8,6 @@ interface DropDownProps {
 
 /** DropDown is a question view for selecting a single option from a dropdown list */
 const DropDown = ({ question, value, onChange }: DropDownProps) => {
-
     const choices = question.choices;
 
     if (!choices || choices.length <= 0) {
@@ -21,7 +20,7 @@ const DropDown = ({ question, value, onChange }: DropDownProps) => {
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 tabIndex={0}
-                name={question.key}
+                name={question.identifier}
             >
                 <option value=""></option>
                 {choices.map((choice, index) => (

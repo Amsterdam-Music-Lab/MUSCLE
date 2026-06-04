@@ -14,6 +14,7 @@ from experiment.serializers import serialize_actions
 
 
 class Speech2SongTest(TestCase):
+    fixtures = ["choice_lists", "demographics"]
 
     @classmethod
     def setUpTestData(cls):
@@ -32,7 +33,8 @@ class Speech2SongTest(TestCase):
         cls.playlist._update_sections()
         cls.participant = Participant.objects.create()
         cls.block = Block.objects.create(
-            rules='SPEECH_TO_SONG', slug='s2s', rounds=16)
+            rules='SPEECH_TO_SONG', identifier='s2s', rounds=16
+        )
         cls.session = Session.objects.create(
             block=cls.block,
             participant=cls.participant,
@@ -52,10 +54,10 @@ class Speech2SongTest(TestCase):
     def test_repeated_presentation(self):
         section = self.playlist.section_set.first()
         Result.objects.create(
-            question_key='speech2song',
+            question_identifier='speech2song',
             session=self.session,
             section=section,
-            score=2
+            score=2,
         )
         actions = self.session.block_rules().next_repeated_representation(self.session, True)
         self.assertEqual(type(actions), list)

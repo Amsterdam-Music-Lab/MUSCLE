@@ -4,8 +4,22 @@ import { describe, it, expect, vi } from 'vitest';
 import Checkboxes from './_Checkboxes';
 import Question from '@/types/Question';
 
+vi.mock('../../util/stores', () => ({
+    __esModule: true,
+    default: (fn: (state: any) => any) => {
+        const state = {
+            theme: {
+                colorPrimary: "#d843e2", colorSecondary: "#39d7b8"
+            }
+        };
+
+        return fn(state);
+    },
+    useBoundStore: vi.fn()
+}));
+
 const mockQuestion: Question = {
-    key: 'test-checkboxes',
+    identifier: 'test-checkboxes',
     text: 'Testing Checkboxes',
     choices: [
         {value: 'option1', label: 'First Option'},
@@ -73,7 +87,7 @@ describe('Checkboxes', () => {
 
     it('throws an error when no choices are provided', () => {
         const invalidQuestion: Question = {
-            key: 'invalid-checkboxes',
+            identifier: 'invalid-checkboxes',
             choices: []
         };
 
@@ -81,7 +95,7 @@ describe('Checkboxes', () => {
             .toThrow('Checkboxes question must have choices');
 
         const noChoicesQuestion: Question = {
-            key: 'invalid-checkboxes',
+            identifier: 'invalid-checkboxes',
         };
 
         expect(() => render(<Checkboxes question={noChoicesQuestion} value="" onChange={() => { }} />))

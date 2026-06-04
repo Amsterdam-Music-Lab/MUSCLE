@@ -4,8 +4,22 @@ import { describe, it, expect, vi } from 'vitest';
 import Radios from './_Radios';
 import Question from '@/types/Question';
 
+vi.mock('../../util/stores', () => ({
+    __esModule: true,
+    default: (fn: (state: any) => any) => {
+        const state = {
+            theme: {
+                colorPrimary: "#d843e2", colorSecondary: "#39d7b8"
+            }
+        };
+
+        return fn(state);
+    },
+    useBoundStore: vi.fn()
+}));
+
 const mockQuestion: Question = {
-    key: 'test-radios',
+    identifier: 'test-radios',
     choices: [
         {value: '1', label: 'First Option'},
         {value: '2', label: 'Second Option'},

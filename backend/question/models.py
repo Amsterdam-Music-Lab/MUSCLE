@@ -3,22 +3,21 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.actions import question
 from experiment.actions.question import QuestionAction
-from theme.models import ThemeConfig
-
+from theme.models import COLOR_CHOICES
 
 class Question(models.Model):
     """Model for question asked during experiment
 
     Attributes:
-        key (slug): Unique identifier
+        identifier (slug): Unique identifier
         text (str): Question text
         from_python (bool): whether this Question was added through a Python fixture (not editable)
         explainer (str): Question explainer text
         is_skippable (bool): If question can be skipped during experiment
-        type (str): Question type {"AutoCompleteQuestion", "ButtonArrayQuestion", "CheckboxQuestion", "DropdownQuestion", "IconRangeQuestion", "NumberQuestion", "RadiosQuestion", "RangeQuestion", "TextQuestion", "TextRangeQuestion"}
+        type (str): Question type {"AutoCompleteQuestion", "ButtonArrayQuestion", "CheckboxQuestion", "DropdownQuestion", "NumberQuestion", "RadiosQuestion", "RangeQuestion", "TextQuestion", "TextRangeQuestion"}
         profile_scoring_rule (str): Profile scoring rule {"", "LIKERT", "REVERSE_LIKERT", "CATEGORIES_TO_LIKERT"} (ChoiceQuestion, LikertQuestion)
-        min_value (float): Minimal value (NumberQuestion)
-        max_value (float): Maximal value (NumberQuestion)
+        min_value (float): Minimal value (RangeQuestion)
+        max_value (float): Maximal value (NumberQuestion, RangeQuestion)
         max_length (int): Maximal length (TextQuestion)
         min_values (int): Minimum number of values to choose (CheckboxQuestion)
     """
@@ -34,9 +33,6 @@ class Question(models.Model):
             "Checkboxes: Present choices as checkboxes (multiple options)"
         )
         DROPDOWN = "DropdownQuestion", _("Dropdown: Present choices in a dropdown menu")
-        ICON_RANGE = "IconRangeQuestion", _(
-            "Icon Range: Present choices as a range slider with icons"
-        )
         NUMBER = "NumberQuestion", _(
             "Number: Present a number field to select a number"
         )
@@ -47,7 +43,7 @@ class Question(models.Model):
             "Text Range: Present choices as a range slider with text"
         )
 
-    key = models.SlugField(primary_key=True, max_length=128)
+    identifier = models.SlugField(primary_key=True, max_length=128)
     text = models.CharField(max_length=1024)
     explainer = models.TextField(blank=True, default="")
     from_python = models.BooleanField(default=False, editable=False)
@@ -79,7 +75,7 @@ class Question(models.Model):
     min_values = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
-        return "(" + self.key + ") " + self.text
+        return "(" + self.identifier + ") " + self.text
 
     def convert_to_action(self) -> QuestionAction:
         """convert this Question instance to a serializable `experiment.question.action`"""
@@ -87,10 +83,10 @@ class Question(models.Model):
         if self.choices:
             choices = self.choices.to_dict()
             question_action = question_type(
-                key=self.key, text=self.text, choices=choices
+                identifier=self.identifier, text=self.text, choices=choices
             )
         else:
-            question_action = question_type(key=self.key, text=self.text)
+            question_action = question_type(identifier=self.identifier, text=self.text)
         optional_fields = [
             'min_value',
             'max_value',
@@ -112,42 +108,38 @@ class Question(models.Model):
             setattr(question_action, field, getattr(self, field))
 
     class Meta:
-        ordering = ["key"]
+        ordering = ["identifier"]
 
 
 class ChoiceList(models.Model):
     """A resusable list of choices for a question
 
     Attributes:
-        key (str): the key by which this choice list can be identified
+        identifier (str): unique itentifier of this choice list
         from_python (bool): whether this ChoiceList was added through a Python fixture (not editable)
     """
 
-    key = models.SlugField(max_length=64, primary_key=True)
+    identifier = models.SlugField(max_length=64, primary_key=True)
     from_python = models.BooleanField(default=False, editable=False)
 
     def to_dict(self):
         return [
-            {'value': choice.key, 'label': choice.text, 'color': choice.color}
+            {'value': choice.identifier, 'label': choice.text, 'color': choice.color}
             for choice in self.choices.all()
         ]
-
-
-def validate_color(value: str):
-    return value in ThemeConfig.valid_colors()
 
 
 class Choice(models.Model):
     """Choice objects are tied to Questions via ChoiceLists.
 
     Attributes:
-        key (slug): Unique identifier
+        identifier (slug): Unique identifier
         text (str): Choice text
         index (int): Index of choice within Question
         choicelist (ChoiceList): ChoiceList that the Choice is associated with
     """
 
-    key = models.SlugField(max_length=128)
+    identifier = models.SlugField(max_length=128)
     text = models.CharField()
     index = models.PositiveIntegerField(default=0)
     choicelist = models.ForeignKey(
@@ -160,12 +152,12 @@ class Choice(models.Model):
         blank=True,
         default="",
         help_text="Description of color in current theme, e.g. `colorPositive`",
-        validators=[validate_color],
+        choices=COLOR_CHOICES,
     )
 
     class Meta:
         ordering = ["index"]
-        unique_together = ["key", "choicelist"]
+        unique_together = ["identifier", "choicelist"]
 
 
 class QuestionList(models.Model):
@@ -181,7 +173,7 @@ class QuestionList(models.Model):
 
     name = models.CharField(default="", max_length=128)
     block = models.ForeignKey('experiment.Block', on_delete=models.CASCADE)
-    index = models.PositiveIntegerField()  # index of QuestionList within Block
+    index = models.PositiveIntegerField(default=0)
     questions = models.ManyToManyField(Question, through="QuestionInList")
     randomize = models.BooleanField(default=False)
 
@@ -190,12 +182,12 @@ class QuestionList(models.Model):
         unique_together = ["name", "block"]
         verbose_name_plural = "Question Lists"
 
+    def get_questions(self):
+        return self.questions.order_by('question_in_list')
+
     def __str__(self):
-        return _(
-            "QuestionList %(qs_name)s of block with slug %(block_slug)s: %(n_questions)i questions"
-        ) % {
-            'qs_name': self.name,
-            'block_slug': self.block.slug,
+        return _("%(qs_name)s: %(n_questions)i questions") % {
+            'qs_name': self.name or f"{self.block.identifier}({self.index})",
             'n_questions': self.questions.count() if self.pk else 0,
         }
 
@@ -210,7 +202,9 @@ class QuestionInList(models.Model):
     """
 
     questionlist = models.ForeignKey(QuestionList, on_delete=models.CASCADE)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    question = models.ForeignKey(
+        Question, on_delete=models.CASCADE, related_name="question_in_list"
+    )
     index = models.PositiveIntegerField(default=0)
 
     class Meta:

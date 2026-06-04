@@ -6,7 +6,7 @@ import { expect, describe, it } from 'vitest';
 
 const getProps = (overrides = {}) => ({
     question: {
-        "key": "know_song",
+        "identifier": "know_song",
         "view": QuestionViews.BUTTON_ARRAY,
         "explainer": "",
         "question": "1. Do you know this song?",

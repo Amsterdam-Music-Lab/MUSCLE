@@ -1,1495 +1,1495 @@
 # choices associated with `ISO_COUNTRIES` choice list
 - model: question.choice
   fields:
-    key: af
+    identifier: af
     text: Afghanistan
     index: 0
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ax
+    identifier: ax
     text: Åland Islands
     index: 1
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: al
+    identifier: al
     text: Albania
     index: 2
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: dz
+    identifier: dz
     text: Algeria
     index: 3
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: as
+    identifier: as
     text: American Samoa
     index: 4
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ad
+    identifier: ad
     text: Andorra
     index: 5
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ao
+    identifier: ao
     text: Angola
     index: 6
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ai
+    identifier: ai
     text: Anguilla
     index: 7
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: aq
+    identifier: aq
     text: Antarctica
     index: 8
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ag
+    identifier: ag
     text: Antigua and Barbuda
     index: 9
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ar
+    identifier: ar
     text: Argentina
     index: 10
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: am
+    identifier: am
     text: Armenia
     index: 11
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: aw
+    identifier: aw
     text: Aruba
     index: 12
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: au
+    identifier: au
     text: Australia
     index: 13
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: at
+    identifier: at
     text: Austria
     index: 14
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: az
+    identifier: az
     text: Azerbaijan
     index: 15
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: bs
+    identifier: bs
     text: Bahamas
     index: 16
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: bh
+    identifier: bh
     text: Bahrain
     index: 17
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: bd
+    identifier: bd
     text: Bangladesh
     index: 18
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: bb
+    identifier: bb
     text: Barbados
     index: 19
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: by
+    identifier: by
     text: Belarus
     index: 20
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: be
+    identifier: be
     text: Belgium
     index: 21
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: bz
+    identifier: bz
     text: Belize
     index: 22
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: bj
+    identifier: bj
     text: Benin
     index: 23
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: bm
+    identifier: bm
     text: Bermuda
     index: 24
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: bt
+    identifier: bt
     text: Bhutan
     index: 25
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: bo
+    identifier: bo
     text: Bolivia), Plurinational State of
     index: 26
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: bq
+    identifier: bq
     text: Bonaire), Sint Eustatius and Saba
     index: 27
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ba
+    identifier: ba
     text: Bosnia and Herzegovina
     index: 28
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: bw
+    identifier: bw
     text: Botswana
     index: 29
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: bv
+    identifier: bv
     text: Bouvet Island
     index: 30
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: br
+    identifier: br
     text: Brazil
     index: 31
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: io
+    identifier: io
     text: British Indian Ocean Territory
     index: 32
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: bn
+    identifier: bn
     text: Brunei Darussalam
     index: 33
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: bg
+    identifier: bg
     text: Bulgaria
     index: 34
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: bf
+    identifier: bf
     text: Burkina Faso
     index: 35
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: bi
+    identifier: bi
     text: Burundi
     index: 36
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: kh
+    identifier: kh
     text: Cambodia
     index: 37
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: cm
+    identifier: cm
     text: Cameroon
     index: 38
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ca
+    identifier: ca
     text: Canada
     index: 39
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: cv
+    identifier: cv
     text: Cape Verde
     index: 40
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ky
+    identifier: ky
     text: Cayman Islands
     index: 41
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: cf
+    identifier: cf
     text: Central African Republic
     index: 42
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: td
+    identifier: td
     text: Chad
     index: 43
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: cl
+    identifier: cl
     text: Chile
     index: 44
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: cn
+    identifier: cn
     text: China
     index: 45
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: cx
+    identifier: cx
     text: Christmas Island
     index: 46
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: cc
+    identifier: cc
     text: Cocos (Keeling) Islands
     index: 47
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: co
+    identifier: co
     text: Colombia
     index: 48
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: km
+    identifier: km
     text: Comoros
     index: 49
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: cg
+    identifier: cg
     text: Congo
     index: 50
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: cd
+    identifier: cd
     text: Congo), the Democratic Republic of the
     index: 51
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ck
+    identifier: ck
     text: Cook Islands
     index: 52
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: cr
+    identifier: cr
     text: Costa Rica
     index: 53
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ci
+    identifier: ci
     text: Côte d'Ivoire
     index: 54
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: hr
+    identifier: hr
     text: Croatia
     index: 55
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: cu
+    identifier: cu
     text: Cuba
     index: 56
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: cw
+    identifier: cw
     text: Curaçao
     index: 57
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: cy
+    identifier: cy
     text: Cyprus
     index: 58
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: cz
+    identifier: cz
     text: Czech Republic
     index: 59
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: dk
+    identifier: dk
     text: Denmark
     index: 60
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: dj
+    identifier: dj
     text: Djibouti
     index: 61
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: dm
+    identifier: dm
     text: Dominica
     index: 62
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: do
+    identifier: do
     text: Dominican Republic
     index: 63
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ec
+    identifier: ec
     text: Ecuador
     index: 64
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: eg
+    identifier: eg
     text: Egypt
     index: 65
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: sv
+    identifier: sv
     text: El Salvador
     index: 66
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: gq
+    identifier: gq
     text: Equatorial Guinea
     index: 67
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: er
+    identifier: er
     text: Eritrea
     index: 68
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ee
+    identifier: ee
     text: Estonia
     index: 69
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: et
+    identifier: et
     text: Ethiopia
     index: 70
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: fk
+    identifier: fk
     text: Falkland Islands (Malvinas)
     index: 71
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: fo
+    identifier: fo
     text: Faroe Islands
     index: 72
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: fj
+    identifier: fj
     text: Fiji
     index: 73
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: fi
+    identifier: fi
     text: Finland
     index: 74
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: fr
+    identifier: fr
     text: France
     index: 75
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: gf
+    identifier: gf
     text: French Guiana
     index: 76
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: pf
+    identifier: pf
     text: French Polynesia
     index: 77
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: tf
+    identifier: tf
     text: French Southern Territories
     index: 78
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ga
+    identifier: ga
     text: Gabon
     index: 79
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: gm
+    identifier: gm
     text: Gambia
     index: 80
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ge
+    identifier: ge
     text: Georgia
     index: 81
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: de
+    identifier: de
     text: Germany
     index: 82
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: gh
+    identifier: gh
     text: Ghana
     index: 83
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: gi
+    identifier: gi
     text: Gibraltar
     index: 84
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: gr
+    identifier: gr
     text: Greece
     index: 85
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: gl
+    identifier: gl
     text: Greenland
     index: 86
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: gd
+    identifier: gd
     text: Grenada
     index: 87
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: gp
+    identifier: gp
     text: Guadeloupe
     index: 88
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: gu
+    identifier: gu
     text: Guam
     index: 89
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: gt
+    identifier: gt
     text: Guatemala
     index: 90
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: gg
+    identifier: gg
     text: Guernsey
     index: 91
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: gn
+    identifier: gn
     text: Guinea
     index: 92
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: gw
+    identifier: gw
     text: Guinea-Bissau
     index: 93
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: gy
+    identifier: gy
     text: Guyana
     index: 94
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ht
+    identifier: ht
     text: Haiti
     index: 95
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: hm
+    identifier: hm
     text: Heard Island and McDonald Islands
     index: 96
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: va
+    identifier: va
     text: Holy See (Vatican City State)
     index: 97
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: hn
+    identifier: hn
     text: Honduras
     index: 98
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: hk
+    identifier: hk
     text: Hong Kong
     index: 99
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: hu
+    identifier: hu
     text: Hungary
     index: 100
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: is
+    identifier: is
     text: Iceland
     index: 101
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: in
+    identifier: in
     text: India
     index: 102
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: id
+    identifier: id
     text: Indonesia
     index: 103
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ir
+    identifier: ir
     text: Iran), Islamic Republic of
     index: 104
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: iq
+    identifier: iq
     text: Iraq
     index: 105
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ie
+    identifier: ie
     text: Ireland
     index: 106
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: im
+    identifier: im
     text: Isle of Man
     index: 107
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: il
+    identifier: il
     text: Israel
     index: 108
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: it
+    identifier: it
     text: Italy
     index: 109
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: jm
+    identifier: jm
     text: Jamaica
     index: 110
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: jp
+    identifier: jp
     text: Japan
     index: 111
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: je
+    identifier: je
     text: Jersey
     index: 112
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: jo
+    identifier: jo
     text: Jordan
     index: 113
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: kz
+    identifier: kz
     text: Kazakhstan
     index: 114
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ke
+    identifier: ke
     text: Kenya
     index: 115
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ki
+    identifier: ki
     text: Kiribati
     index: 116
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: kp
+    identifier: kp
     text: Korea), Democratic People's Republic of
     index: 117
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: kr
+    identifier: kr
     text: Korea), Republic of
     index: 118
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: kw
+    identifier: kw
     text: Kuwait
     index: 119
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: kg
+    identifier: kg
     text: Kyrgyzstan
     index: 120
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: la
+    identifier: la
     text: Lao People's Democratic Republic
     index: 121
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: lv
+    identifier: lv
     text: Latvia
     index: 122
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: lb
+    identifier: lb
     text: Lebanon
     index: 123
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ls
+    identifier: ls
     text: Lesotho
     index: 124
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: lr
+    identifier: lr
     text: Liberia
     index: 125
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ly
+    identifier: ly
     text: Libya
     index: 126
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: li
+    identifier: li
     text: Liechtenstein
     index: 127
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: lt
+    identifier: lt
     text: Lithuania
     index: 128
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: lu
+    identifier: lu
     text: Luxembourg
     index: 129
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: mo
+    identifier: mo
     text: Macao
     index: 130
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: mk
+    identifier: mk
     text: Macedonia), the Former Yugoslav Republic of
     index: 131
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: mg
+    identifier: mg
     text: Madagascar
     index: 132
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: mw
+    identifier: mw
     text: Malawi
     index: 133
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: my
+    identifier: my
     text: Malaysia
     index: 134
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: mv
+    identifier: mv
     text: Maldives
     index: 135
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ml
+    identifier: ml
     text: Mali
     index: 136
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: mt
+    identifier: mt
     text: Malta
     index: 137
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: mh
+    identifier: mh
     text: Marshall Islands
     index: 138
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: mq
+    identifier: mq
     text: Martinique
     index: 139
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: mr
+    identifier: mr
     text: Mauritania
     index: 140
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: mu
+    identifier: mu
     text: Mauritius
     index: 141
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: yt
+    identifier: yt
     text: Mayotte
     index: 142
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: mx
+    identifier: mx
     text: Mexico
     index: 143
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: fm
+    identifier: fm
     text: Micronesia), Federated States of
     index: 144
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: md
+    identifier: md
     text: Moldova), Republic of
     index: 145
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: mc
+    identifier: mc
     text: Monaco
     index: 146
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: mn
+    identifier: mn
     text: Mongolia
     index: 147
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: me
+    identifier: me
     text: Montenegro
     index: 148
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ms
+    identifier: ms
     text: Montserrat
     index: 149
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ma
+    identifier: ma
     text: Morocco
     index: 150
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: mz
+    identifier: mz
     text: Mozambique
     index: 151
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: mm
+    identifier: mm
     text: Myanmar
     index: 152
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: na
+    identifier: na
     text: Namibia
     index: 153
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: nr
+    identifier: nr
     text: Nauru
     index: 154
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: np
+    identifier: np
     text: Nepal
     index: 155
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: nl
+    identifier: nl
     text: Netherlands
     index: 156
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: nc
+    identifier: nc
     text: New Caledonia
     index: 157
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: nz
+    identifier: nz
     text: New Zealand
     index: 158
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ni
+    identifier: ni
     text: Nicaragua
     index: 159
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ne
+    identifier: ne
     text: Niger
     index: 160
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ng
+    identifier: ng
     text: Nigeria
     index: 161
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: nu
+    identifier: nu
     text: Niue
     index: 162
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: nf
+    identifier: nf
     text: Norfolk Island
     index: 163
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: mp
+    identifier: mp
     text: Northern Mariana Islands
     index: 164
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: 'no'
+    identifier: 'no'
     text: Norway
     index: 165
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: om
+    identifier: om
     text: Oman
     index: 166
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: pk
+    identifier: pk
     text: Pakistan
     index: 167
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: pw
+    identifier: pw
     text: Palau
     index: 168
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ps
+    identifier: ps
     text: Palestine), State of
     index: 169
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: pa
+    identifier: pa
     text: Panama
     index: 170
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: pg
+    identifier: pg
     text: Papua New Guinea
     index: 171
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: py
+    identifier: py
     text: Paraguay
     index: 172
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: pe
+    identifier: pe
     text: Peru
     index: 173
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ph
+    identifier: ph
     text: Philippines
     index: 174
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: pn
+    identifier: pn
     text: Pitcairn
     index: 175
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: pl
+    identifier: pl
     text: Poland
     index: 176
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: pt
+    identifier: pt
     text: Portugal
     index: 177
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: pr
+    identifier: pr
     text: Puerto Rico
     index: 178
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: qa
+    identifier: qa
     text: Qatar
     index: 179
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: re
+    identifier: re
     text: Réunion
     index: 180
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ro
+    identifier: ro
     text: Romania
     index: 181
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ru
+    identifier: ru
     text: Russian Federation
     index: 182
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: rw
+    identifier: rw
     text: Rwanda
     index: 183
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: bl
+    identifier: bl
     text: Saint Barthélemy
     index: 184
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: sh
+    identifier: sh
     text: Saint Helena), Ascension and Tristan da Cunha
     index: 185
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: kn
+    identifier: kn
     text: Saint Kitts and Nevis
     index: 186
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: lc
+    identifier: lc
     text: Saint Lucia
     index: 187
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: mf
+    identifier: mf
     text: Saint Martin (French part)
     index: 188
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: pm
+    identifier: pm
     text: Saint Pierre and Miquelon
     index: 189
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: vc
+    identifier: vc
     text: Saint Vincent and the Grenadines
     index: 190
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ws
+    identifier: ws
     text: Samoa
     index: 191
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: sm
+    identifier: sm
     text: San Marino
     index: 192
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: st
+    identifier: st
     text: Sao Tome and Principe
     index: 193
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: sa
+    identifier: sa
     text: Saudi Arabia
     index: 194
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: sn
+    identifier: sn
     text: Senegal
     index: 195
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: rs
+    identifier: rs
     text: Serbia
     index: 196
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: sc
+    identifier: sc
     text: Seychelles
     index: 197
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: sl
+    identifier: sl
     text: Sierra Leone
     index: 198
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: sg
+    identifier: sg
     text: Singapore
     index: 199
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: sx
+    identifier: sx
     text: Sint Maarten (Dutch part)
     index: 200
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: sk
+    identifier: sk
     text: Slovakia
     index: 201
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: si
+    identifier: si
     text: Slovenia
     index: 202
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: sb
+    identifier: sb
     text: Solomon Islands
     index: 203
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: so
+    identifier: so
     text: Somalia
     index: 204
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: za
+    identifier: za
     text: South Africa
     index: 205
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: gs
+    identifier: gs
     text: South Georgia and the South Sandwich Islands
     index: 206
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ss
+    identifier: ss
     text: South Sudan
     index: 207
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: es
+    identifier: es
     text: Spain
     index: 208
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: lk
+    identifier: lk
     text: Sri Lanka
     index: 209
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: sd
+    identifier: sd
     text: Sudan
     index: 210
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: sr
+    identifier: sr
     text: Suriname
     index: 211
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: sj
+    identifier: sj
     text: Svalbard and Jan Mayen
     index: 212
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: sz
+    identifier: sz
     text: Swaziland
     index: 213
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: se
+    identifier: se
     text: Sweden
     index: 214
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ch
+    identifier: ch
     text: Switzerland
     index: 215
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: sy
+    identifier: sy
     text: Syrian Arab Republic
     index: 216
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: tw
+    identifier: tw
     text: Taiwan), Province of China
     index: 217
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: tj
+    identifier: tj
     text: Tajikistan
     index: 218
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: tz
+    identifier: tz
     text: Tanzania), United Republic of
     index: 219
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: th
+    identifier: th
     text: Thailand
     index: 220
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: tl
+    identifier: tl
     text: Timor-Leste
     index: 221
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: tg
+    identifier: tg
     text: Togo
     index: 222
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: tk
+    identifier: tk
     text: Tokelau
     index: 223
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: to
+    identifier: to
     text: Tonga
     index: 224
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: tt
+    identifier: tt
     text: Trinidad and Tobago
     index: 225
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: tn
+    identifier: tn
     text: Tunisia
     index: 226
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: tr
-    text: Turkey
+    identifier: tr
+    text: Turidentifier
     index: 227
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: tm
+    identifier: tm
     text: Turkmenistan
     index: 228
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: tc
+    identifier: tc
     text: Turks and Caicos Islands
     index: 229
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: tv
+    identifier: tv
     text: Tuvalu
     index: 230
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ug
+    identifier: ug
     text: Uganda
     index: 231
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ua
+    identifier: ua
     text: Ukraine
     index: 232
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ae
+    identifier: ae
     text: United Arab Emirates
     index: 233
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: gb
+    identifier: gb
     text: United Kingdom
     index: 234
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: us
+    identifier: us
     text: United States
     index: 235
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: um
+    identifier: um
     text: United States Minor Outlying Islands
     index: 236
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: uy
+    identifier: uy
     text: Uruguay
     index: 237
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: uz
+    identifier: uz
     text: Uzbekistan
     index: 238
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: vu
+    identifier: vu
     text: Vanuatu
     index: 239
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ve
+    identifier: ve
     text: Venezuela), Bolivarian Republic of
     index: 240
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: vn
+    identifier: vn
     text: Viet Nam
     index: 241
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: vg
+    identifier: vg
     text: Virgin Islands), British
     index: 242
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: vi
+    identifier: vi
     text: Virgin Islands), U.S.
     index: 243
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: wf
+    identifier: wf
     text: Wallis and Futuna
     index: 244
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: eh
+    identifier: eh
     text: Western Sahara
     index: 245
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: ye
+    identifier: ye
     text: Yemen
     index: 246
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: zm
+    identifier: zm
     text: Zambia
     index: 247
     choicelist: ISO_COUNTRIES
 - model: question.choice
   fields:
-    key: zw
+    identifier: zw
     text: Zimbabwe
     index: 248
     choicelist: ISO_COUNTRIES

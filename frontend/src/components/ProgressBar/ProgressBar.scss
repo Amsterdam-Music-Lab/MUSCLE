@@ -7,7 +7,6 @@ $progress-height-md: 24px; // Increased to accommodate text
 $progress-height-lg: 32px; // Increased to accommodate text
 $progress-border-radius: .5rem;
 $progress-background: $gray-900;
-$progress-fill-color: $pink;
 $transition-duration: 0.3s;
 
 .aml__progress-bar {
@@ -25,7 +24,6 @@ $transition-duration: 0.3s;
     }
 
     &-fill {
-        background-color: $progress-fill-color;
         height: 100%;
         border-radius: $progress-border-radius;
         transition: width $transition-duration ease-in-out;

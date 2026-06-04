@@ -12,6 +12,8 @@ from section.models import Playlist, Song
 from session.models import Session
 
 class MatchingPairs2025Test(TestCase):
+    fixtures = ["choice_lists", "demographics"]
+
     @classmethod
     def setUpTestData(cls):
         cls.playlist = Playlist.objects.create(name="TestMatchingPairs2025")
@@ -19,9 +21,14 @@ class MatchingPairs2025Test(TestCase):
         cls.playlist._update_sections()
         cls.playlist.save()
         cls.participant = Participant.objects.create()
-        cls.exp = Experiment.objects.create(slug="matching_pairs_2025")
+        cls.exp = Experiment.objects.create(identifier="matching_pairs_2025")
         cls.phase = Phase.objects.create(experiment=cls.exp)
-        cls.block = Block.objects.create(rules="MATCHING_PAIRS_2025", slug="mpairs-2025", rounds=42, phase=cls.phase)
+        cls.block = Block.objects.create(
+            rules="MATCHING_PAIRS_2025",
+            identifier="mpairs-2025",
+            rounds=42,
+            phase=cls.phase,
+        )
         cls.session = Session.objects.create(block=cls.block, participant=cls.participant, playlist=cls.playlist)
         cls.rules = cls.session.block_rules()
 
@@ -68,7 +75,7 @@ class MatchingPairs2025Test(TestCase):
         for cond in conditions:
             result, _created = Result.objects.get_or_create(
                 participant=self.session.participant,
-                question_key="condition",
+                question_identifier="condition",
                 given_response=f"{cond[0]}_{cond[1]}",
             )
             result.score = score
@@ -108,7 +115,7 @@ class MatchingPairs2025Test(TestCase):
         for song in songs:
             result, _created = Result.objects.get_or_create(
                 participant=self.session.participant,
-                question_key="song",
+                question_identifier="song",
                 given_response=song,
             )
             result.score = score
@@ -184,6 +191,13 @@ class MatchingPairs2025Test(TestCase):
         original_groups = {s.song for s in original_sections}
         self.assertEqual(frequency_groups, original_groups)
 
+    def test_override_num_pairs_with_rules_config(self):
+        n_pairs = 5
+        self.block.rules_config = {"n_pairs": n_pairs}
+        self.block.save()
+        sections = self.rules._select_sections(self.session)
+        self.assertEqual(len(sections), n_pairs * 2)
+
     def test_select_sections_unplayed(self):
         """test that we get preferably unplayed songs"""
         session = Session.objects.create(
@@ -252,7 +266,7 @@ class MatchingPairs2025Test(TestCase):
 
     def test_has_played_before_returns_false(self):
         """Test that _has_played_before returns False when there are no previous results."""
-        experiment = Experiment.objects.create(slug="dummy_experiment")
+        experiment = Experiment.objects.create(identifier="dummy_experiment")
         phase = Phase.objects.create(experiment=experiment)
 
         session = Session.objects.create(block=self.block, participant=self.participant, playlist=self.playlist)
@@ -274,7 +288,9 @@ class MatchingPairs2025Test(TestCase):
         self.assertTrue(self.rules._has_played_before(session))
 
     def test_get_final_actions(self):
-        mp_block = Block.objects.create(phase=self.phase, rules="MATCHING_PAIRS_2025", slug="mpairs-2025-2")
+        mp_block = Block.objects.create(
+            phase=self.phase, rules="MATCHING_PAIRS_2025", identifier="mpairs-2025-2"
+        )
         session = Session.objects.create(participant=self.participant, block=mp_block, final_score=100)
         final_action = self.rules._get_final_actions(session)[0]
         self.assertIsInstance(final_action, Final)
@@ -291,7 +307,7 @@ class PlaythroughSimulationTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.exp = Experiment.objects.create(slug="matching_pairs_2025")
+        cls.exp = Experiment.objects.create(identifier="matching_pairs_2025")
         cls.phase = Phase.objects.create(experiment=cls.exp)
         cls.ch_playlist = Playlist.objects.get(name="MP2.0 - CH")
         cls.ch_playlist._update_sections()
@@ -300,7 +316,10 @@ class PlaythroughSimulationTest(TestCase):
         cls.tv_playlist = Playlist.objects.get(name="MP2.0 - TV")
         cls.tv_playlist._update_sections()
         cls.block = Block.objects.create(
-            rules="MATCHING_PAIRS_2025", slug="mpairs-2025", rounds=1, phase=cls.phase
+            rules="MATCHING_PAIRS_2025",
+            identifier="mpairs-2025",
+            rounds=1,
+            phase=cls.phase,
         )
         cls.participant = Participant.objects.create()
         cls.rules = cls.block.get_rules()
@@ -318,7 +337,7 @@ class PlaythroughSimulationTest(TestCase):
                 actions = self.rules.next_round(session)
                 self.assertNotEqual(len(actions), 0)
             song_results = Result.objects.filter(
-                participant=self.participant, question_key='song'
+                participant=self.participant, question_identifier='song'
             )
             average_plays = song_results.aggregate(Avg('score'))['score__avg']
             # check that all songs have been played equally frequently, give or take 1
@@ -326,7 +345,7 @@ class PlaythroughSimulationTest(TestCase):
                 self.assertAlmostEqual(song_result.score, average_plays, delta=1)
             song_results.delete()
             condition_results = Result.objects.filter(
-                participant=self.participant, question_key='condition'
+                participant=self.participant, question_identifier='condition'
             )
             average_conditions = condition_results.aggregate(Avg('score'))['score__avg']
             # check that all conditions have been played equally frequently, give or take 1

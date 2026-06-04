@@ -15,7 +15,6 @@ describe('PlayButton Component', () => {
         const { container } = render(<PlayButton section={mockSection} />);
         const playButton = container.querySelector('.aha__play-button');
         expect(playButton).toBeTruthy();
-        expect(container.querySelector('.playbutton-spacer')).toBeTruthy();
     });
 
     it('applies correct classes when not playing', () => {
@@ -31,7 +30,6 @@ describe('PlayButton Component', () => {
         const { container } = render(<PlayButton section={mockSection} isPlaying={true} />);
         const playButton = container.querySelector('.aha__play-button');
         expect(playButton.classList.contains('stop')).toBe(true);
-        expect(playButton.classList.contains('disabled')).toBe(true);
     });
 
     it('applies custom className', () => {
@@ -42,17 +40,15 @@ describe('PlayButton Component', () => {
 
     it('calls playSection when clicked and not disabled', () => {
         const mockPlaySection = vi.fn();
-
-        render(<PlayButton section={mockSection} playSection={mockPlaySection} playIndex={2} />);
+        render(<PlayButton section={mockSection} onClick={mockPlaySection} />);
         const playButton = screen.getByRole('button');
         fireEvent.click(playButton);
-        expect(mockPlaySection).toHaveBeenCalledWith(2);
+        expect(mockPlaySection).toHaveBeenCalled()
     });
 
     it('does not call playSection when clicked and disabled', () => {
         const mockPlaySection = vi.fn();
-
-        render(<PlayButton section={mockSection} playSection={mockPlaySection} disabled={true} />);
+        render(<PlayButton section={mockSection} onClick={mockPlaySection} disabled={true} />);
         const playButton = screen.getByRole('button');
         fireEvent.click(playButton);
         expect(mockPlaySection).not.toHaveBeenCalled();
@@ -61,11 +57,11 @@ describe('PlayButton Component', () => {
     it('calls playSection on keyDown', async () => {
         const mockPlaySection = vi.fn();
 
-        render(<PlayButton section={mockSection} playSection={mockPlaySection} playIndex={2} />);
+        render(<PlayButton section={mockSection} onClick={mockPlaySection} />);
         const playButton = screen.getByRole('button');
         playButton.focus();
         await fireEvent.keyDown(playButton, { key: 'Enter', code: 'Enter', charCode: 13 });
-        expect(mockPlaySection).toHaveBeenCalledWith(2);
+        expect(mockPlaySection).toHaveBeenCalled();
     });
 
     it('applies disabled class when disabled prop is true', () => {

@@ -31,3 +31,11 @@ class Info(BaseAction):
         self.body = body
         self.heading = heading
         self.button = button
+
+    def action(self):
+        return {
+            "view": self.view,
+            "body": self.body,
+            "heading": self.heading,
+            "button": self.button.action(),
+        }

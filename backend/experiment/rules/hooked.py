@@ -8,7 +8,7 @@ from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.form import Form
-from experiment.actions.playback import Autoplay
+from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.playlist import PlaylistSelection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
@@ -18,7 +18,6 @@ from question.banks import get_question_bank
 from result.utils import prepare_result
 from section.models import Section
 from session.models import Session
-from theme.styles import ColorScheme, ButtonStyle
 
 
 logger = logging.getLogger(__name__)
@@ -38,35 +37,35 @@ class Hooked(BaseRules):
     heard_before_time = 15  # response time for "Have you heard this song in previous rounds?"
     question_offset = 5  # how many rounds will be presented without questions
     questions = True
-    counted_result_keys = ["recognize", "heard_before"]
+    counted_result_identifiers = ["recognize", "heard_before"]
     play_method = "BUFFER"
 
     def __init__(self):
         self.question_lists = [
             {
                 "name": "DEMOGRAPHICS",
-                "question_keys": get_question_bank('DEMOGRAPHICS')
+                "question_identifiers": get_question_bank('DEMOGRAPHICS')
                 + ["msi_39_best_instrument"],
                 "randomize": True,
             },  # 1. Demographic questions (7 questions)
             {
                 "name": "MSI_FG_GENERAL",
-                "question_keys": get_question_bank('MSI_FG_GENERAL'),
+                "question_identifiers": get_question_bank('MSI_FG_GENERAL'),
                 "randomize": True,
             },  # 2. General music sophistication
             {
                 "name": "MSI_ALL",
-                "question_keys": get_question_bank('MSI_ALL'),
+                "question_identifiers": get_question_bank('MSI_ALL'),
                 "randomize": True,
             },  # 3. Complete music sophistication (20 questions)
             {
                 "name": "STOMP20",
-                "question_keys": get_question_bank('STOMP20'),
+                "question_identifiers": get_question_bank('STOMP20'),
                 "randomize": True,
             },  # 4. STOMP (20 questions)
             {
                 "name": "TIPI",
-                "question_keys": get_question_bank('TIPI'),
+                "question_identifiers": get_question_bank('TIPI'),
                 "randomize": True,
             },  # 5. TIPI (10 questions)
         ]
@@ -105,10 +104,7 @@ class Hooked(BaseRules):
         if round_number == session.block.rounds:
             # Finish session.
             session.finish()
-            session.save()
 
-            # Return a score and final score action.
-            total_score = session.total_score()
             return [
                 self.get_score(session, round_number),
                 Final(
@@ -116,10 +112,9 @@ class Hooked(BaseRules):
                     final_text=self.final_score_message(session),
                     rank=self.rank(session),
                     show_profile_link=True,
-                    button={
-                        "text": _("Play again"),
-                        "link": self.get_play_again_url(session),
-                    },
+                    button=Button(
+                        _("Play again"),
+                    ),
                 ),
             ]
 
@@ -188,7 +183,7 @@ class Hooked(BaseRules):
         n_old_new_correct = 0
 
         for result in session.result_set.all():
-            if result.question_key == "recognize":
+            if result.question_identifier == "recognize":
                 if result.given_response == "yes":
                     n_sync_guessed += 1
                     json_data = result.json_data
@@ -308,27 +303,28 @@ class Hooked(BaseRules):
         condition = plan[round_number]
         section = self.select_heard_before_section(session, condition)
         playback = Autoplay(
-            sections=[section], show_animation=True, preload_message=_("Get ready!")
+            sections=[PlaybackSection(section)],
+            show_animation=True,
+            preload_message=_("Get ready!"),
         )
         # create Result object and save expected result to database
-        key = "heard_before"
+        identifier = "heard_before"
         form = Form(
             [
                 ButtonArrayQuestion(
-                    key=key,
+                    identifier=identifier,
                     choices=[
                         {"value": "new", "label": _("No"), "color": "colorNegative"},
                         {"value": "old", "label": _("Yes"), "color": "colorPositive"},
                     ],
                     text=_("Did you hear this song in previous rounds?"),
                     result_id=prepare_result(
-                        key,
+                        identifier,
                         session,
                         section=section,
                         expected_response=condition,
                         scoring_rule="REACTION_TIME",
                     ),
-                    style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST, ButtonStyle.LARGE_GAP],
                 )
             ]
         )
@@ -344,5 +340,5 @@ class Hooked(BaseRules):
     def get_score(self, session: Session, round_number: int) -> Score:
         config = {"show_section": True, "show_total_score": True}
         title = self.get_trial_title(session, round_number)
-        previous_result = session.last_result(self.counted_result_keys)
+        previous_result = session.last_result(self.counted_result_identifiers)
         return Score(session, config=config, title=title, result=previous_result)

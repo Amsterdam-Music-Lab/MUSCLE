@@ -2,6 +2,7 @@ import { useRef } from "react";
 
 import { useParticipantLink } from "../../API";
 import Loading from "../Loading/Loading";
+import Button from "../Button/Button";
 
 interface ParticipantLinkProps {
     participantIDOnly?: boolean;
@@ -42,9 +43,8 @@ const ParticipantLink = ({ participantIDOnly = false }: ParticipantLinkProps) =>
         <div className="aha__participant_link">
             <div className="copy">
                 <input ref={linkInput} value={formatLink(link.url)} readOnly data-testid="participant-link" />
-                <button onClick={copyLink} onKeyDown={copyLink} data-testid="copy-button">
-                    {link.copy_message}
-                </button>
+                <Button label={link.copy_message} onClick={copyLink} color="colorSecondary" data-testid="copy-button"/>
+                    
             </div>
         </div>
     )

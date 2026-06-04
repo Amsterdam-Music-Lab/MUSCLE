@@ -32,7 +32,7 @@ def correctness_score(result: Result, data: ScoringData) -> int:
         result: the result to be scored
         data: the participant's response
     """
-    if result.expected_response == None:
+    if result.expected_response is None:
         raise ScoringError(
             "`expected_response` not defined but needed for `correctness_score`"
         )
@@ -57,7 +57,7 @@ def boolean_score(result: Result, data: ScoringData) -> int:
 
 def _score_likert(data: LikertData) -> tuple[list[str], int]:
     """Return the choices of the Likert question as a list, return index of selected value in that list"""
-    choices = [choice.get('value') for choice in data.get('choices')]
+    choices = [str(choice.get('value')) for choice in data.get('choices')]
     return choices, choices.index(str(data.get('value')))
 
 
@@ -94,23 +94,23 @@ def reaction_time_score(result: Result, data: ScoringData) -> float:
         data: the participant's response
     """
     expected_response = result.expected_response
-    if expected_response == None:
+    if expected_response is None:
         raise ScoringError(
             "`expected_response` not defined but needed for `reaction_time_score`"
         )
     json_data = result.json_data
-    if json_data == None:
+    if json_data is None:
         raise ScoringError(
             "No `json_data` defined but needed for `reaction_time_score`"
         )
     if expected_response and json_data:
         time = json_data.get('decision_time')
-        if time == None:
+        if time is None:
             raise ScoringError(
                 "No `decision_time` sent from frontend, but needed for `reaction_time_score`"
             )
         timeout = json_data.get('response_time')
-        if timeout == None:
+        if timeout is None:
             raise ScoringError(
                 "No `response_time` defined, but needed for `reaction_time_score`"
             )
@@ -135,12 +135,12 @@ def song_sync_recognition_score(result: Result, data: ScoringData) -> float:
     json_data = result.json_data
     if json_data:
         time = json_data.get('decision_time')
-        if time == None:
+        if time is None:
             raise ScoringError(
                 "No `decision_time` sent from the frontend but needed for `song_sync_recognition_score`"
             )
         timeout = json_data.get('response_time')
-        if timeout == None:
+        if timeout is None:
             raise ValueError(
                 "No `response_time` defined, but needed for `song_sync_recognition_score`"
             )

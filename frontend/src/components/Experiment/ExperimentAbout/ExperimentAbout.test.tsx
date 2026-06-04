@@ -4,14 +4,20 @@ import { it, expect, describe } from 'vitest';
 
 import ExperimentAbout from './ExperimentAbout';
 
+const experiment = {
+    identifier: "some_identifier",
+    backButtonText: "Terug",
+    aboutContent: '## Hello World!\n\n**Lorem ipsum**',
+    theme: {
+        colorPrimary: "#d843e2", colorSecondary: "#39d7b8"
+    }
+}
+
 describe('ExperimentAbout', () => {
 
     it('shows the about page content', () => {
-
-        const content = '## Hello World!\n\n**Lorem ipsum**';
-
         render(
-            <ExperimentAbout content={content} />,
+            <ExperimentAbout {...experiment} />,
             { wrapper: Router }
         );
 
@@ -19,16 +25,14 @@ describe('ExperimentAbout', () => {
         expect(screen.getByRole('contentinfo').innerHTML).toContain('Lorem ipsum');
     });
 
-    it('shows a "Terug" button with a link to the previous page based on a given slug', () => {
-
-        const content = '## Hello World!\n\n**Lorem ipsum**';
+    it('shows a "Terug" button with a link to the previous page based on a given identifier', () => {
 
         render(
-            <ExperimentAbout content={content} slug="some_slug" backButtonText="Terug" />,
+            <ExperimentAbout {...experiment} />,
             { wrapper: Router }
         )
 
         expect(screen.getByRole('link').innerHTML).toContain('Terug');
-        expect(screen.getByRole('link').getAttribute('href')).toBe('/some_slug');
+        expect(screen.getByRole('link').getAttribute('href')).toBe('/some_identifier');
     });
 })

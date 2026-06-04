@@ -1,4 +1,4 @@
-const { useEffect, useRef } = require("react");
+import { useEffect, useRef } from "react";
 
 const usePrevious = (value, initialValue) => {
     const ref = useRef(initialValue);

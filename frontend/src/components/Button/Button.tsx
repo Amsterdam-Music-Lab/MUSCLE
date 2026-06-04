@@ -9,7 +9,7 @@ import useBoundStore from "@/util/stores";
 
 interface ButtonProps {
     label: string;
-    color: string;
+    color?: string;
     link?: string;
     onClick: (value?: string | boolean) => void;
     className?: string;
@@ -73,9 +73,7 @@ const Button = ({
         return url && url.startsWith("/");
     }
 
-    const buttonIsLink = !onClick && link;
-
-    if (buttonIsLink) {
+    if (link) {
         
          // If the button has a relative link, it will render a Link component
         if (isRelativeUrl(link)) {
@@ -98,14 +96,14 @@ const Button = ({
         return (
             <button
                 className={classNames({ disabled }, className, padding, "aha__button btn btn-lg")}
-                onClick={(e) => {
+                onClick={() => {
                     clickOnceGuard();
                 }}
                 disabled={disabled}
                 style={style}
                 css={styleButton(colorValue)}
                 tabIndex={0}
-                onKeyUp={(e) => {
+                onKeyDown={() => {
                     clickOnceGuard();
                 }}
                 type="button"

@@ -3,7 +3,7 @@ import IImage from "@/types/Image";
 import Theme from "@/types/Theme";
 
 export default interface Block {
-    slug: string;
+    identifier: string;
     name: string;
     description: string;
     image?: IImage;

@@ -10,7 +10,7 @@ To create any type of experiment, open the admin interface and click "Add" next 
 
 ## The Experiment form
 You will see an empty form:
-![Empty Experiment form](assets/images/ExperimentEmptyForm.png). First of all, enter a short name in the `slug` field. This will be the link under which the experiment can be accessed. The `slug` can only contain alphanumeric characters and underscores. After that, press "Save and continue editing".
+![Empty Experiment form](assets/images/ExperimentEmptyForm.png). First of all, enter a short name in the `identifier` field. This will be the link under which the experiment can be accessed. The `identifier` can only contain alphanumeric characters and underscores. After that, press "Save and continue editing".
 
 After that, you will see all options for the experiment:
 ![Experiment form](assets/images/ExperimentForm.png).
@@ -24,6 +24,7 @@ The top fields in the experiment form allow you to enter various texts in differ
 - Social media message: message with which participants can post their results to social media. The placeholders `{points}` and `{experiment_name}` will be filled out automatically when a participant clicks the button. Note that not all social media platforms support setting the message from a share button; Facebook for instance doesn't allow this. See `Social Media Config` below for more sharing options.
 - Disclaimer: a notice in the footer about who is behind the experiment (only shown to participants in *dashboard mode* if a `ThemeConfig` is linked)
 - Privacy: privacy notice in the footer about treatment of the data (only shown to participants in *dashboard mode* if a `ThemeConfig` is linked)
+- Replayable: set a checkmark here if a participant should get the option to replay the experiment after finishing all blocks in the experiment.
 
 You can switch between different languages by clicking on the tabs above the text fields, or switch all tabs simultaneously by selecting a language from the drop down menu at the top of the form. The available languages can be configured through the `LANGUAGES` setting in Django.
 
@@ -31,7 +32,7 @@ You can switch between different languages by clicking on the tabs above the tex
 You can change the background, fonts and logos used for the experiment here. For detailed information on this, see the [Custom Theme](07_Custom_theme.md) documentation.
 
 #### Active field
-This field of the Experiment form is a checkbox indicating whether the experiment is active. This will always be checked by default. If you uncheck it, a request to `localhost:3000/{myslug}` will give you a blank screen stating `Experiment not found`. That way, you can close an experiment from further responses.
+This field of the Experiment form is a checkbox indicating whether the experiment is active. This will always be checked by default. If you uncheck it, a request to `localhost:3000/{myidentifier}` will give you a blank screen stating `Experiment not found`. That way, you can close an experiment from further responses.
 
 #### Phases
 Phases (required): a phase of your experiment, which may contain one or more blocks. Note that every experiment needs to have at least one phase with one block configured.
@@ -47,7 +48,7 @@ This will show the following fields:
 
 #### Block form
 - Index: order in which block should appear in the phase (default=0, will be ignored when the phase's `randomize` checkbox is checked)
-- Slug: unique slug of the block
+- Identifier: unique identifier of the block
 
 The following two fields have tabs above them to allow entering texts in different languages:
 
@@ -60,7 +61,8 @@ Other fields:
 - Rounds (optional): how many rounds should be presented to the participant (*used in some, but not all rulesets!*)
 - Bonus points (optional): bonus points to be awarded to the participant under given conditions (*used by very few rulesets*)
 - Playlists (optional): select one or more playlists to be associated with the block (*note that some rulesets require a very specific format for the playlist, this will be checked when you save the experiment, and may generate warnings*)
-- ThemeConfig (optional): You can change background, fonts and logos used for the block here, which will override the ThemeConfig of the experiment while this block is being played.
+- Rules config (optional): some rules files specify to read information from this field, to customize, e.g., which Explainers or Questions will be used at specific stages of the block.
+- ThemeConfig (optional): you can change background, fonts and logos used for the block here, which will override the ThemeConfig of the experiment while this block is being played.
 
 ![Configuring a Block](assets/images/ExperimentBlock.png)
 

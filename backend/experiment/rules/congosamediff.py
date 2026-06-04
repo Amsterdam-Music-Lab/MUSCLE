@@ -2,10 +2,10 @@ import itertools
 import re
 
 from django.utils.translation import gettext_lazy as _
-from experiment.actions.wrappers import final_action_with_optional_button
 from section.models import Playlist, Section
 from session.models import Session
 from experiment.actions.explainer import Explainer
+from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
@@ -18,12 +18,11 @@ class CongoSameDiff(BaseRules):
     """ A micro-PROMS inspired experiment block that tests the participant's ability to distinguish between different sounds. """
     ID = 'CONGOSAMEDIFF'
     contact_email = 'aml.tunetwins@gmail.com'
-    counted_result_keys = ['samediff_NORMAL']
+    counted_result_identifiers = ['samediff_NORMAL']
 
     def next_round(self, session: Session):
         practice_done = session.result_set.filter(
-            question_key='practice_done',
-            given_response='YES'
+            question_identifier='practice_done', given_response='YES'
         ).exists()
 
         if practice_done:
@@ -66,7 +65,7 @@ class CongoSameDiff(BaseRules):
         else:
             # practice is not done yet;
             # load the practice trials, count all results
-            self.counted_result_keys = []
+            self.counted_result_identifiers = []
             round_number = session.get_rounds_passed(apply_results_filter=False)
             practice_trials_subset = session.playlist.section_set.filter(
                 tag__contains='practice'
@@ -103,12 +102,12 @@ class CongoSameDiff(BaseRules):
 
     def get_practice_done_view(self, session: Session):
 
-        key = 'practice_done'
-        result_pk = prepare_result(key, session, expected_response=key)
+        identifier = 'practice_done'
+        result_pk = prepare_result(identifier, session, expected_response=identifier)
 
         question = ButtonArrayQuestion(
             text="Did the participant complete the practice round correctly?",
-            key=key,
+            identifier=identifier,
             choices=[
                 {"value": "YES", "label": "Yes, continue", "color": "colorPositive"},
                 {
@@ -142,8 +141,8 @@ class CongoSameDiff(BaseRules):
         section_tag = section.tag if section.tag else 'no_tag'
         section_group = section.group if section.group else 'no_group'
 
-        # define a key, by which responses to this trial can be found in the database
-        key = f'samediff_{practice_label}'
+        # define a identifier, by which responses to this trial can be found in the database
+        identifier = f'samediff_{practice_label}'
 
         # set artist field as expected_response in the results
         expected_response = section.filename
@@ -156,16 +155,21 @@ class CongoSameDiff(BaseRules):
                 {"value": 'PROBABLY_SAME', "label": _('PROBABLY SAME')},
                 {"value": 'PROBABLY_DIFFERENT', "label": _('PROBABLY DIFFERENT')},
                 {"value": 'DEFINITELY_DIFFERENT', "label": _('DEFINITELY DIFFERENT')},
-                {"value": 'I_DONT_KNOW', "value": _('I DON’T KNOW')},
+                {"value": 'I_DONT_KNOW', "label": _('I DON’T KNOW')},
             ],
-            key=key,
+            identifier=identifier,
             result_id=prepare_result(
-                key, session, section=section, expected_response=expected_response
+                identifier,
+                session,
+                section=section,
+                expected_response=expected_response,
             ),
         )
         form = Form([question])
         playback = PlayButtons(sections=[PlaybackSection(section)], play_once=False)
-        block_name = session.block.slug if session.block else "Musicality Battery Block"
+        block_name = (
+            session.block.identifier if session.block else "Musicality Battery Block"
+        )
         view = Trial(
             playback=playback,
             feedback_form=form,
@@ -178,11 +182,9 @@ class CongoSameDiff(BaseRules):
     def get_final_round(self, session: Session):
         # Finish session
         session.finish()
-        session.save()
-
-        return final_action_with_optional_button(
-            title=_('End'),
-            session=session,
+        return Final(
+            session,
+            title=_("End"),
             final_text=_('Thank you for participating!'),
         )
 
@@ -209,7 +211,9 @@ class CongoSameDiff(BaseRules):
                 errors.append(f'Section {file_name} should have a group value containing only digits')
             # the section song name should not be empty
             if not section.song.name:
-                errors.append(f'Section {file_name} should have a name that will be used for the result key')
+                errors.append(
+                    f'Section {file_name} should have a name that will be used for the result identifier'
+                )
 
         # It also needs at least one section with the tag 'practice'
         if not sections.filter(tag__contains='practice').exists():

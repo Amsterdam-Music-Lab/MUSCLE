@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import Reload from './Reload';
 import { API_BASE_URL } from "@/config";
 
-let mockUseLocation = vi.fn();
+const mockUseLocation = vi.fn();
 
 // Mock the useLocation hook
 vi.mock('react-router-dom', async () => {

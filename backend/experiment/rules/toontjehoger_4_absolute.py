@@ -14,12 +14,10 @@ from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
-from experiment.actions.utils import get_current_experiment_url
 from experiment.utils import format_label, non_breaking_spaces
 from result.utils import prepare_result
 from section.models import Playlist
 from session.models import Session
-from theme.styles import ColorScheme
 from .base import BaseRules
 from .toontjehoger_1_mozart import toontjehoger_ranks
 
@@ -31,8 +29,7 @@ class ToontjeHoger4Absolute(BaseRules):
     TITLE = ""
     SCORE_CORRECT = 20
     SCORE_WRONG = 0
-    # number of songs (each with a,b,c version) in the playlist
-    PLAYLIST_ITEMS = 13
+    N_ROUNDS = 5
 
     def get_intro_explainer(self):
         return Explainer(
@@ -73,12 +70,12 @@ class ToontjeHoger4Absolute(BaseRules):
 
     def get_round(self, session: Session):
         # Get available section groups
-        results = session.result_set.all()
-        available_groups = list(map(str, range(1, self.PLAYLIST_ITEMS)))
-        for result in results:
-            available_groups.remove(result.section.group)
-
-        # Get sections
+        previous_groups = session.result_set.values_list("section__group", flat=True)
+        available_groups = (
+            session.playlist.section_set.exclude(group__in=previous_groups)
+            .values_list("group", flat=True)
+            .distinct()
+        )
 
         # Original (A)
         section1 = session.playlist.get_section(
@@ -101,7 +98,7 @@ class ToontjeHoger4Absolute(BaseRules):
 
         # Player
         playback = PlayButtons(
-            [
+            sections=[
                 PlaybackSection(
                     section,
                     label=format_label(i, "alphabetic"),
@@ -112,21 +109,20 @@ class ToontjeHoger4Absolute(BaseRules):
         )
 
         # Question
-        key = 'pitch'
+        identifier = 'pitch'
         question = ButtonArrayQuestion(
             text=self.get_trial_question(),
-            key=key,
+            identifier=identifier,
             choices=[
                 {"value": "A", "label": "A", "color": "colorNeutral2"},
                 {"value": "B", "label": "B", "color": "colorNeutral1"},
             ],
             result_id=prepare_result(
-                key,
+                identifier,
                 session,
                 section=section1,
                 expected_response="A" if sections[0].id == section1.id else "B",
             ),
-            style=[ColorScheme.NEUTRAL_INVERTED],
         )
         form = Form([question], submit_button=None)
 
@@ -163,11 +159,10 @@ class ToontjeHoger4Absolute(BaseRules):
         score = Score(session, config=config, feedback=feedback)
         return [score]
 
-    def get_final_round(self, session):
+    def get_final_round(self, session: Session):
 
         # Finish session.
         session.finish()
-        session.save()
 
         # Score
         score = self.get_score(session)
@@ -183,7 +178,7 @@ class ToontjeHoger4Absolute(BaseRules):
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),
-            button={'text': 'Wat hebben we getest?'}
+            button=Button('Wat hebben we getest?'),
         )
 
         # Info page
@@ -194,47 +189,43 @@ class ToontjeHoger4Absolute(BaseRules):
             heading="Absoluut gehoor",
             button=Button(
                 "Terug naar ToontjeHoger",
-                link=get_current_experiment_url(session),
             ),
         )
 
         return [*score, final, info]
 
     def validate_playlist_groups(self, groups):
-        integer_groups = []
-        integer_pattern = re.compile(r'^-?\d+$')
-        for group in groups:
-            if not integer_pattern.match(str(group)):
-                return ["Groups in playlist sections should be numbers. This playlist has groups: {}".format(groups)]
-
-            integer_groups.append(int(group))
-
-        # Check if the groups are sequential and unique
-        integer_groups.sort()
-        if integer_groups != list(range(1, len(groups) + 1)):
-            return ['Groups in playlist sections should be sequential numbers starting from 1 to the number of items in the playlist ({}). E.g. "1, 2, 3, ... {}"'.format(self.PLAYLIST_ITEMS, self.PLAYLIST_ITEMS)]
-
+        group_count = groups.count()
+        if group_count < self.N_ROUNDS:
+            return [
+                f"There should be at least {self.N_ROUNDS} distinct groups in the playlist. This playlist has only {group_count} groups"
+            ]
         return []
 
     def validate_playlist(self, playlist: Playlist):
+        """validate that there are at least 5 different groups (different piece for each round)
+        for each group, validate there are tags a/b/c
+        """
         errors = super().validate_playlist(playlist)
 
         # Get group values from sections, ordered by group
-        groups = list(playlist.section_set.values_list(
-            'group', flat=True).distinct())
+        groups = playlist.section_set.values_list('group', flat=True).distinct()
 
         # Check if the groups are sequential and unique
         errors += self.validate_playlist_groups(groups)
 
-        # Check if the tags are 'a', 'b' or 'c'
-        tags = list(
-            playlist.section_set
-            .values_list('tag', flat=True)
-            .distinct()
-            .order_by('tag')
-        )
+        for group in groups:
+            # Check if the tags are 'a', 'b' or 'c'
+            tags = list(
+                playlist.section_set.filter(group=group)
+                .values_list('tag', flat=True)
+                .distinct()
+                .order_by('tag')
+            )
 
-        if tags != ['a', 'b', 'c']:
-            errors.append("Tags in playlist sections should be 'a', 'b' or 'c'. This playlist has tags: {}".format(tags))
+            if tags != ['a', 'b', 'c']:
+                errors.append(
+                    f"Tags for each group should be 'a', 'b' or 'c'. Group {group} has tags: {tags}"
+                )
 
         return errors

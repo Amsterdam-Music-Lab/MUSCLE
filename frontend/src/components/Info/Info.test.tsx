@@ -1,5 +1,5 @@
-import { describe, test, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, test, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
 import Info from './Info';
 
 describe('Info Component', () => {

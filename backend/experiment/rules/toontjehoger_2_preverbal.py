@@ -14,11 +14,10 @@ from experiment.actions.playback import PlayButtons, ImagePlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
-from experiment.actions.utils import get_current_experiment_url
 from experiment.utils import format_label
 from result.utils import prepare_result
 from section.models import Playlist
-from theme.styles import ColorScheme
+from session.models import Session
 from .base import BaseRules
 
 logger = logging.getLogger(__name__)
@@ -149,17 +148,16 @@ class ToontjeHoger2Preverbal(BaseRules):
 
     def get_round1(self, session):
         # Question
-        key = 'expected_spectrogram'
+        identifier = 'expected_spectrogram'
         question = ButtonArrayQuestion(
             text=self.get_round1_question(),
-            key=key,
+            identifier=identifier,
             choices=[
                 {"value": "A", "label": "A", "color": "colorNeutral2"},
                 {"value": "B", "label": "B", "color": "colorNeutral1"},
                 {"value": "C", "label": "C", "color": "colorSecondary"},
             ],
-            result_id=prepare_result(key, session, expected_response="C"),
-            style=[ColorScheme.NEUTRAL_INVERTED],
+            result_id=prepare_result(identifier, session, expected_response="C"),
         )
         form = Form([question], submit_button=None)
 
@@ -204,7 +202,7 @@ class ToontjeHoger2Preverbal(BaseRules):
         # Player
         sections = [
             ImagePlaybackSection(
-                sectionA,
+                section=sectionA,
                 label=format_label(0, "alphabetic"),
                 color="colorNeutral2",
                 image={
@@ -213,7 +211,7 @@ class ToontjeHoger2Preverbal(BaseRules):
                 },
             ),
             ImagePlaybackSection(
-                sectionB,
+                section=sectionB,
                 label=format_label(1, "alphabetic"),
                 color="colorNeutral1",
                 image={
@@ -222,9 +220,9 @@ class ToontjeHoger2Preverbal(BaseRules):
                 },
             ),
             ImagePlaybackSection(
-                sectionC,
+                section=sectionC,
                 label=format_label(2, "alphabetic"),
-                color="colorNeutral3",
+                color="colorSecondary",
                 image={
                     "link": "/images/experiments/toontjehoger/spectrogram-human.webp",
                     "label": "Mens",
@@ -232,7 +230,7 @@ class ToontjeHoger2Preverbal(BaseRules):
             ),
         ]
         playback = PlayButtons(
-            sections,
+            sections=sections,
         )
 
         trial = Trial(
@@ -261,7 +259,7 @@ class ToontjeHoger2Preverbal(BaseRules):
         # Player
         sections = [
             ImagePlaybackSection(
-                sectionA,
+                section=sectionA,
                 label=format_label(0, 'alphabetic'),
                 image={
                     "link": "/images/experiments/toontjehoger/spectrogram-baby-french.webp"
@@ -269,7 +267,7 @@ class ToontjeHoger2Preverbal(BaseRules):
                 color='colorNeutral2',
             ),
             ImagePlaybackSection(
-                sectionA,
+                section=sectionA,
                 label=format_label(1, 'alphabetic'),
                 image={
                     "link": "/images/experiments/toontjehoger/spectrogram-baby-german.webp"
@@ -278,20 +276,19 @@ class ToontjeHoger2Preverbal(BaseRules):
             ),
         ]
         playback = PlayButtons(
-            sections,
+            sections=sections,
         )
 
         # Question
-        key = 'baby'
+        identifier = 'baby'
         question = ButtonArrayQuestion(
             text=self.get_round_2_question(),
-            key=key,
+            identifier=identifier,
             choices=[
                 {"value": "A", "label": "A", "color": "colorNeutral2"},
                 {"value": "B", "label": "B", "color": "colorNeutral1"},
             ],
-            result_id=prepare_result(key, session, expected_response="A"),
-            style=[ColorScheme.NEUTRAL_INVERTED],
+            result_id=prepare_result(identifier, session, expected_response="A"),
         )
         form = Form([question])
 
@@ -305,11 +302,9 @@ class ToontjeHoger2Preverbal(BaseRules):
     def calculate_score(self, result, data):
         return self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
 
-    def get_final_round(self, session):
-
+    def get_final_round(self, session: Session):
         # Finish session.
         session.finish()
-        session.save()
 
         # Score
         score = self.get_score(session, session.get_rounds_passed())
@@ -317,11 +312,12 @@ class ToontjeHoger2Preverbal(BaseRules):
         # Final
         final_text = "Goed gedaan! Je hebt beide vragen correct beantwoord!" if session.final_score >= 2 * \
             self.SCORE_CORRECT else "Dat bleek toch even lastig!"
+        session.finish()
         final = Final(
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),
-            button={'text': 'Wat hebben we getest?'}
+            button=Button('Wat hebben we getest?'),
         )
 
         # Info page
@@ -332,7 +328,6 @@ class ToontjeHoger2Preverbal(BaseRules):
             heading="Het eerste luisteren",
             button=Button(
                 "Terug naar ToontjeHoger",
-                link=get_current_experiment_url(session),
             ),
         )
 

@@ -14,6 +14,10 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='experiment',
             name='slug',
-            field=models.SlugField(max_length=64, unique=True, validators=[experiment.validators.experiment_slug_validator]),
+            field=models.SlugField(
+                max_length=64,
+                unique=True,
+                validators=[experiment.validators.identifier_validator],
+            ),
         ),
     ]

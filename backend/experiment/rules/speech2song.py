@@ -28,7 +28,7 @@ class Speech2Song(BaseRules):
         self.question_lists = [
             {
                 "name": "Question series Speech2Song",
-                "question_keys": [
+                "question_identifiers": [
                     'dgf_age',
                     'dgf_gender_identity',
                     'dgf_country_of_origin_open',
@@ -161,7 +161,6 @@ class Speech2Song(BaseRules):
         else:
             # Finish session
             session.finish()
-            session.save()
             # Return a score and final score action
             return Final(
                 title=_('End of experiment'),
@@ -203,37 +202,45 @@ class Speech2Song(BaseRules):
             question = question_speech(session, section)
         else:
             question = question_sound(session, section)
-        return Trial(playback=None, feedback_form=Form([question]))
+        return Trial(playback=None, feedback_form=Form([question], skip_button=None))
 
 
 def question_speech(session, section):
-    key = 'speech2song'
+    identifier = 'speech2song'
     return RadiosQuestion(
-        key=key,
+        identifier=identifier,
         text=_('Does this sound like song or speech to you?'),
         choices=[
-            _('sounds exactly like speech'),
-            _('sounds somewhat like speech'),
-            _('sounds neither like speech nor like song'),
-            _('sounds somewhat like song'),
-            _('sounds exactly like song')],
-        result_id=prepare_result(key, session, section=section, scoring_rule='LIKERT')
+            {"value": 1, "label": _('sounds exactly like speech')},
+            {"value": 2, "label": _('sounds somewhat like speech')},
+            {"value": 3, "label": _('sounds neither like speech nor like song')},
+            {"value": 4, "label": _('sounds somewhat like song')},
+            {"value": 5, "label": _('sounds exactly like song')},
+        ],
+        result_id=prepare_result(
+            identifier, session, section=section, scoring_rule='LIKERT'
+        ),
     )
 
 
 def question_sound(session, section):
-    key = 'sound2music'
+    identifier = 'sound2music'
     return RadiosQuestion(
-        key=key,
-        text=_(
-            'Does this sound like music or an environmental sound to you?'),
+        identifier=identifier,
+        text=_('Does this sound like music or an environmental sound to you?'),
         choices=[
-            _('sounds exactly like an environmental sound'),
-            _('sounds somewhat like an environmental sound'),
-            _('sounds neither like an environmental sound nor like music'),
-            _('sounds somewhat like music'),
-            _('sounds exactly like music')],
-        result_id=prepare_result(key, session, section=section, scoring_rule='LIKERT'),
+            {"value": 1, "label": _('sounds exactly like an environmental sound')},
+            {"value": 2, "label": _('sounds somewhat like an environmental sound')},
+            {
+                "value": 3,
+                "label": _('sounds neither like an environmental sound nor like music'),
+            },
+            {"value": 4, "label": _('sounds somewhat like music')},
+            {"value": 5, "label": _('sounds exactly like music')},
+        ],
+        result_id=prepare_result(
+            identifier, session, section=section, scoring_rule='LIKERT'
+        ),
     )
 
 

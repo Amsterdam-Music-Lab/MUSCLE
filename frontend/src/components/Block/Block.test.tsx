@@ -3,10 +3,13 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import Block from './Block';
 import * as API from '../../API';
+import type useBoundStore from '../../util/stores';
+
+type StoreSelector = Parameters<typeof useBoundStore>[0];
 
 vi.mock("../../util/stores");
 
-let mockUseParams = vi.fn();
+const mockUseParams = vi.fn();
 
 vi.mock('react-router-dom', async () => {
     const actual = await vi.importActual('react-router-dom');
@@ -17,7 +20,7 @@ vi.mock('react-router-dom', async () => {
 });
 
 const blockObj = {
-    id: 24, slug: 'test', name: 'Test',
+    id: 24, identifier: 'test', name: 'Test',
     playlists: [{ id: 42, name: 'TestPlaylist' }],
     session_id: 42,
     loadingText: 'Patience!'
@@ -42,7 +45,7 @@ vi.mock('../../API', () => ({
 
 vi.mock('../../util/stores', () => ({
     __esModule: true,
-    default: (fn: any) => {
+    default: ((fn: StoreSelector) => {
         const state = {
             session: mockSessionStore,
             participant: mockParticipantStore,
@@ -54,15 +57,15 @@ vi.mock('../../util/stores', () => ({
             setCurrentAction: vi.fn(),
         };
 
-        return fn(state);
-    },
+        return fn(state as any);
+    }) as unknown as typeof useBoundStore,
     useBoundStore: vi.fn()
 }));
 
 describe('Block Component', () => {
 
     beforeEach(() => {
-        mockUseParams.mockReturnValue({ slug: 'test' });
+        mockUseParams.mockReturnValue({ identifier: 'test' });
     });
 
     afterEach(() => {
@@ -87,7 +90,7 @@ describe('Block Component', () => {
         render(
             <MemoryRouter initialEntries={['/block/test']}>
                 <Routes>
-                    <Route path="/block/:slug" element={<Block />} />
+                    <Route path="/block/:identifier" element={<Block />} />
                 </Routes>
             </MemoryRouter>
         );

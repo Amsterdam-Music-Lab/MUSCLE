@@ -23,7 +23,7 @@ vi.mock("../HTML/HTML", () => ({
 
 const feedbackForm = {
     form: [{
-        key: 'test_question',
+        identifier: 'test_question',
         view: QuestionViews.BUTTON_ARRAY,
         question: ['What is the average speed of a Swallow?'],
         choices: { 'slow': '1 km/h', 'fast': '42 km/h' },
@@ -146,7 +146,7 @@ describe('Trial', () => {
                     decision_time: expect.any(Number),
                     form: expect.arrayContaining([
                         expect.objectContaining({
-                            key: 'test_question',
+                            identifier: 'test_question',
                             value: 'TIMEOUT'
                         })
                     ])

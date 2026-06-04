@@ -32,7 +32,7 @@ const Radios = ({ question, value, onChange }: RadiosProps) => {
                 <Radio
                     key={index}
                     // This prop does not exist on Radio
-                    name={question.key}
+                    name={question.identifier}
                     label={choice.label}
                     value={choice.value}
                     checked={value === choice.value}

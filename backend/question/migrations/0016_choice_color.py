@@ -2,10 +2,7 @@
 
 from django.db import migrations, models
 import question.models
-from question.management.commands.updatequestions import update_choices
 
-def choices_with_color(app, schema_editor):
-    update_choices()
 
 class Migration(migrations.Migration):
 
@@ -17,9 +14,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='choice',
             name='color',
-            field=models.CharField(blank=True, default='', help_text='Description of color in current theme, e.g. `colorPositive`', max_length=32, validators=[question.models.validate_color]),
+            field=models.CharField(
+                blank=True,
+                default='',
+                help_text='Description of color in current theme, e.g. `colorPositive`',
+                max_length=32,
+            ),
         ),
-        migrations.RunPython(
-            choices_with_color
-        )
     ]

@@ -20,7 +20,6 @@ describe('Circle', () => {
         // mock requestAnimationFrame
         let time = 0
         vi.spyOn(window, 'requestAnimationFrame').mockImplementation(
-            // @ts-expect-error
             (cb) => {
                 // we can then use fake timers to preserve the async nature of this call
 
@@ -28,6 +27,7 @@ describe('Circle', () => {
                     time = time + 16 // 16 ms
                     cb(time)
                 }, 0)
+                return 0;
             })
 
         Timer.mockReset();

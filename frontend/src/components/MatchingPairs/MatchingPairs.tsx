@@ -10,6 +10,7 @@ import { Card } from "@/types/Section";
 import Session from "@/types/Session";
 import Participant from "@/types/Participant";
 import { ScoreFeedbackDisplay } from "@/types/Playback";
+import { OnResultParams } from "@/hooks/useResultHandler";
 
 export const SCORE_FEEDBACK_DISPLAY: { [key: string]: ScoreFeedbackDisplay } = {
     SMALL_BOTTOM_RIGHT: 'small-bottom-right',
@@ -23,7 +24,7 @@ interface MatchingPairsProps {
     showAnimation: boolean;
     finishedPlaying: () => void;
     scoreFeedbackDisplay?: ScoreFeedbackDisplay;
-    submitResult: (result: any) => void;
+    submitResult: (result: OnResultParams) => void;
     view: string;
 }
 
@@ -61,7 +62,7 @@ const MatchingPairs = ({
     })));
 
     // Check if the user is in between turns to show the hidden overlay
-    const inBetweenTurns = Boolean(score && (firstCard && secondCard) || sections.filter(s => s.turned).length === 2);
+    const inBetweenTurns = Boolean((score && (firstCard && secondCard)) || sections.filter(s => s.turned).length === 2);
 
     const columnCount = sections.length > 6 ? 4 : 3;
 
@@ -112,6 +113,24 @@ const MatchingPairs = ({
             return section;
         }));
     };
+
+    const getFeedbackColor = () => {
+        let color;
+        switch(feedbackClass) {
+            case 'fblucky':
+                color = 'colorNeutral1';
+                break;
+            case 'fbmemory':
+                color = 'colorPositive';
+                break;
+            case 'fbmisrembered':
+                color = 'colorNegative';
+                break;
+            default:
+                color = 'colorGrey';
+        }
+        return block.theme[color]
+    }
 
     const checkMatchingPairs = async (index: number) => {
 
@@ -167,6 +186,7 @@ const MatchingPairs = ({
 
     const finishTurn = () => {
         setStartOfTurn(performance.now());
+        playSection(-1);
         finishedPlaying();
 
         const updatedSections = sections.map(section => {
@@ -208,6 +228,7 @@ const MatchingPairs = ({
                         score={score}
                         total={total}
                         feedbackClass={feedbackClass}
+                        feedbackColor={getFeedbackColor()}
                         feedbackText={feedbackText}
                         scoreFeedbackDisplay={scoreFeedbackDisplay}
                     />}
@@ -245,6 +266,7 @@ interface ScoreFeedbackProps {
     score: number | null;
     feedbackText: string;
     feedbackClass: string;
+    feedbackColor: string;
     total: number;
 }
 
@@ -253,6 +275,7 @@ const ScoreFeedback = ({
     score,
     feedbackText,
     feedbackClass,
+    feedbackColor,
     total,
 }: ScoreFeedbackProps) => {
     return (
@@ -263,7 +286,7 @@ const ScoreFeedback = ({
             )}
         >
             <div className="col-6 align-self-start">
-                <div className={classNames("matching-pairs__feedback", feedbackClass)}>
+                <div className={classNames("matching-pairs__feedback", feedbackClass)} style={{color: feedbackColor}}>
                     {score} <br /> {feedbackText}
                 </div>
             </div>

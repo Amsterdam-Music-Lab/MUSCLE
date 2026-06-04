@@ -10,11 +10,11 @@ from section.models import Section
 from experiment.actions.button import Button
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
 from experiment.actions.utils import get_average_difference, render_feedback_trivia
-from experiment.actions.wrappers import final_action_with_optional_button
 from experiment.rules.util.staircasing import register_turnpoint
 from result.models import Result
 from result.utils import prepare_result
@@ -102,10 +102,10 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
         except Section.DoesNotExist:
             return None
         question_text = self.get_question_text()
-        key = self.task_description.replace(" ", "_")
+        identifier = self.task_description.replace(" ", "_")
         question = ButtonArrayQuestion(
             text=question_text,
-            key=key,
+            identifier=identifier,
             choices=[
                 {
                     'value': self.first_condition,
@@ -119,7 +119,7 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
                 },
             ],
             result_id=prepare_result(
-                key, session, section=section, expected_response=trial_condition
+                identifier, session, section=section, expected_response=trial_condition
             ),
         )
 
@@ -170,15 +170,14 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
     def get_introduction(self):
         return _('In this test you will hear two time durations for each trial, which are marked by two tones.')
 
-    def finalize_block(self, session):
+    def finalize_block(self, session: Session) -> Final:
         ''' After 8 turnpoints, finalize experiment
         Give participant feedback
         '''
         difference = get_average_difference(session, 4, self.start_diff)
         final_text = self.get_final_text(difference)
         session.finish()
-        session.save()
-        return final_action_with_optional_button(session, final_text)
+        return Final(session, title=_("End"), final_text=final_text)
 
     def get_final_text(self, difference):
         percentage = round(difference / 6000, 2)

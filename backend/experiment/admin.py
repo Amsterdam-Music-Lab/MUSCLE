@@ -5,9 +5,9 @@ from django.contrib import admin, messages
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db import models
 from django.db.models.query import QuerySet
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.urls import path, reverse
 from django.utils.html import format_html, format_html_join
 
 from inline_actions.admin import InlineActionsModelAdminMixin
@@ -27,7 +27,7 @@ from experiment.forms import (
 from experiment.widgets import MarkdownPreviewTextInput
 from question.admin import QuestionListInline
 from question.models import QuestionList, QuestionInList
-from .utils import get_block_json_export_as_repsonse
+from .utils import get_block_csv_export_as_response, get_block_json_export_as_response
 
 
 class FeedbackAdmin(admin.ModelAdmin):
@@ -106,7 +106,7 @@ class SocialMediaConfigInline(admin.StackedInline):
 class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
     list_display = (
         "experiment_name",
-        "slug_link",
+        "url_link",
         "remarks",
         "active",
     )
@@ -129,6 +129,21 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
         models.TextField: {"widget": MarkdownPreviewTextInput},
     }
 
+    def get_urls(self):
+        urls = super().get_urls()
+        create_phase_url = path(
+            "<path:object_id>/change/phase/create/",
+            self.create_phase,
+            name="experiment_experiment_create_phase",
+        )
+        return [create_phase_url, *urls]
+
+    def create_phase(self, request, object_id):
+        experiment = Experiment.objects.get(pk=object_id)
+        phase_count = Phase.objects.filter(experiment=experiment).count()
+        phase = Phase.objects.create(experiment=experiment, index=phase_count)
+        return JsonResponse({"created": phase.id})
+
     def experiment_name(self, obj):
         return obj.name or "<Unnamed>"
 
@@ -146,56 +161,62 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
     def redirect_to_overview(self):
         return redirect(reverse("admin:experiment_experiment_changelist"))
 
-    def slug_link(self, obj):
+    def url_link(self, obj):
         dev_mode = settings.DEBUG is True
-        url = f"http://localhost:3000/{obj.slug}" if dev_mode else f"/{obj.slug}"
+        url = (
+            f"http://localhost:3000/{obj.identifier}"
+            if dev_mode
+            else f"/{obj.identifier}"
+        )
 
         return format_html(
             '<a href="{}" target="_blank" rel="noopener noreferrer" title="Open {} experiment group in new tab" >{}</a>',
             url,
-            obj.slug,
-            obj.slug,
+            obj.identifier,
+            obj.identifier,
         )
 
-    slug_link.short_description = "Slug"
+    url_link.short_description = "Identifier"
 
     def duplicate(self, request, obj, parent_obj=None):
         """Duplicate an experiment"""
 
         if "_duplicate" in request.POST:
-            # Get slug from the form
-            extension = request.POST.get("slug-extension")
+            # Get identifier from the form
+            extension = request.POST.get("identifier-extension")
             if extension == "":
                 extension = "copy"
 
-            # Validate slug
+            # Validate identifier
             if not extension.isalnum():
                 messages.add_message(
                     request,
                     messages.ERROR,
-                    f"{extension} is nog a valid slug extension. Only alphanumeric characters are allowed.",
+                    f"{extension} is nog a valid identifier extension. Only alphanumeric characters are allowed.",
                 )
             if extension.lower() != extension:
                 messages.add_message(
                     request,
                     messages.ERROR,
-                    f"{extension} is nog a valid slug extension. Only lowercase characters are allowed.",
+                    f"{extension} is nog a valid identifier extension. Only lowercase characters are allowed.",
                 )
-            # Check for duplicate slugs
-            if Experiment.objects.filter(slug=f"{obj.slug}-{extension}").exists():
+            # Check for duplicate identifiers
+            if Experiment.objects.filter(
+                identifier=f"{obj.identifier}-{extension}"
+            ).exists():
                 messages.add_message(
                     request,
                     messages.ERROR,
-                    f"An experiment with slug: {obj.slug}-{extension} already exists. Please choose a different slug extension.",
+                    f"An experiment with identifier: {obj.identifier}-{extension} already exists. Please choose a different identifier extension.",
                 )
-            extended_blog_slugs = [
-                f"{block.slug}-{extension}" for block in obj.associated_blocks()
+            extended_blog_identifiers = [
+                f"{block.identifier}-{extension}" for block in obj.associated_blocks()
             ]
-            if Block.objects.filter(slug__in=extended_blog_slugs).exists():
+            if Block.objects.filter(identifier__in=extended_blog_identifiers).exists():
                 messages.add_message(
                     request,
                     messages.ERROR,
-                    f"A block with slug: {block.slug}-{extension} already exists. Please choose a different slug extension.",
+                    f"A block with identifier: {block.identifier}-{extension} already exists. Please choose a different identifier extension.",
                 )
             # Return to form with error messages
             if len(messages.get_messages(request)) != 0:
@@ -212,7 +233,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
             exp_copy = obj
             exp_copy.pk = None
             exp_copy._state.adding = True
-            exp_copy.slug = f"{obj.slug}-{extension}"
+            exp_copy.identifier = f"{obj.identifier}-{extension}"
             exp_copy.save()
 
             # Duplicate phases
@@ -233,7 +254,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
                     block_copy = block
                     block_copy.pk = None
                     block_copy._state.adding = True
-                    block_copy.slug = f"{block.slug}-{extension}"
+                    block_copy.identifier = f"{block.identifier}-{extension}"
                     block_copy.phase = phase_copy
                     block_copy.save()
                     block_copy.playlists.set(these_playlists)
@@ -276,16 +297,20 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
     def experimenter_dashboard(self, request, obj, parent_obj=None):
         """Open researchers dashboard for an experiment"""
 
-        if "_export" in request.POST:
-            block_slug = request.POST.get("export-block")
-            return get_block_json_export_as_repsonse(block_slug)
+        if "_export_json" in request.POST:
+            block_identifier = request.POST.get("export-block")
+            return get_block_json_export_as_response(block_identifier)
+
+        if "_export_csv" in request.POST:
+            block_identifier = request.POST.get("export-block")
+            return get_block_csv_export_as_response(block_identifier)
 
         annotated_blocks = self._annotate_blocks(obj.associated_blocks())
         stats = self._generate_stats(annotated_blocks)
 
         blocks = annotated_blocks.values(
             "id",
-            "slug",
+            "identifier",
             "name",
             "participants",
             "n_feedback",

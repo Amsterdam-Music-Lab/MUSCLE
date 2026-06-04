@@ -9,16 +9,16 @@ from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.html import HTML
 from experiment.actions.playback import Autoplay, PlaybackSection
-from experiment.actions.question import ButtonArrayQuestion, IconRangeQuestion
+from experiment.actions.question import ButtonArrayQuestion, TextRangeQuestion
 from experiment.actions.redirect import Redirect
 from experiment.actions.trial import Trial
 from experiment.actions.wrappers import boolean_question
+from experiment.serializers import get_theme_config
 from question.models import ChoiceList
 from result.utils import prepare_result
 from result.models import Result
 from section.models import Section
 from session.models import Session
-from theme.styles import ColorScheme
 
 from .base import BaseRules
 from .huang_2022 import get_test_playback
@@ -36,7 +36,7 @@ class MusicalPreferences(BaseRules):
     preference_offset = 21  # after this many rounds rounds, show information with the participant's preferences
     knowledge_offset = 42  # after this many rounds, show additionally how many songs the participant knows
     contact_email = "musicexp_china@163.com"
-    counted_result_keys = ["like_song"]
+    counted_result_identifiers = ["like_song"]
 
     know_score = {"yes": 2, "unsure": 1, "no": 0}
 
@@ -44,7 +44,7 @@ class MusicalPreferences(BaseRules):
         self.question_lists = [
             {
                 "name": "Musical Preferences",
-                "question_keys": [
+                "question_identifiers": [
                     "msi_38_listen_music",
                     "dgf_genre_preference_zh",
                     "dgf_gender_identity_zh",
@@ -66,6 +66,7 @@ class MusicalPreferences(BaseRules):
     def next_round(self, session: Session):
         round_number = session.get_rounds_passed()
         actions = []
+        theme = get_theme_config(session.block)
         if round_number == 0:
             last_result = session.last_result()
             if last_result:
@@ -118,13 +119,13 @@ class MusicalPreferences(BaseRules):
                         )
                         actions = [explainer]
                 else:
-                    if last_result.question_key == "audio_check1":
+                    if last_result.question_identifier == "audio_check1":
                         playback = get_test_playback()
                         html = HTML(body=render_to_string("html/huang_2022/audio_check.html"))
                         form = Form(
                             form=[
                                 ButtonArrayQuestion(
-                                    key="audio_check2",
+                                    identifier="audio_check2",
                                     choices=[
                                         {
                                             "value": "no",
@@ -140,7 +141,6 @@ class MusicalPreferences(BaseRules):
                                     result_id=prepare_result(
                                         "audio_check2", session, scoring_rule="BOOLEAN"
                                     ),
-                                    style=[ColorScheme.BOOLEAN_NEGATIVE_FIRST],
                                 )
                             ],
                             submit_button=None,
@@ -163,7 +163,7 @@ class MusicalPreferences(BaseRules):
                 form = Form(
                     form=[
                         boolean_question(
-                            key="audio_check1",
+                            identifier="audio_check1",
                             text="",
                             result_id=prepare_result(
                                 "audio_check1", session, scoring_rule="BOOLEAN"
@@ -182,7 +182,7 @@ class MusicalPreferences(BaseRules):
                     ),
                 ]
         if round_number == self.preference_offset:
-            like_results = session.result_set.filter(question_key="like_song")
+            like_results = session.result_set.filter(question_identifier="like_song")
             feedback = Trial(
                 html=HTML(
                     body=render_to_string(
@@ -190,15 +190,20 @@ class MusicalPreferences(BaseRules):
                         {
                             "unlocked": _("Love unlocked"),
                             "n_songs": round_number,
-                            "top_participant": self.get_preferred_songs(like_results, 3),
+                            "top_participant": self.get_preferred_songs(
+                                like_results, 3
+                            ),
+                            "card_background_color": theme.color_neutral2,
                         },
                     )
                 )
             )
             actions = [feedback]
         elif round_number == self.knowledge_offset:
-            like_results = session.result_set.filter(question_key="like_song")
-            known_songs = session.result_set.filter(question_key="know_song", score=2).count()
+            like_results = session.result_set.filter(question_identifier="like_song")
+            known_songs = session.result_set.filter(
+                question_identifier="know_song", score=2
+            ).count()
             feedback = Trial(
                 html=HTML(
                     body=render_to_string(
@@ -206,17 +211,24 @@ class MusicalPreferences(BaseRules):
                         {
                             "unlocked": _("Knowledge unlocked"),
                             "n_songs": round_number - 1,
-                            "top_participant": self.get_preferred_songs(like_results, 3),
+                            "top_participant": self.get_preferred_songs(
+                                like_results, 3
+                            ),
                             "n_known_songs": known_songs,
+                            "card_background_color": theme.color_neutral2,
                         },
                     )
                 )
             )
             actions = [feedback]
         elif round_number == session.block.rounds:
-            like_results = session.result_set.filter(question_key="like_song")
-            known_songs = session.result_set.filter(question_key="know_song", score=2).count()
-            all_results = Result.objects.filter(question_key="like_song", section_id__isnull=False)
+            like_results = session.result_set.filter(question_identifier="like_song")
+            known_songs = session.result_set.filter(
+                question_identifier="know_song", score=2
+            ).count()
+            all_results = Result.objects.filter(
+                question_identifier="like_song", section_id__isnull=False
+            )
             top_participant = self.get_preferred_songs(like_results, 3)
             top_all = self.get_preferred_songs(all_results, 3)
             feedback = Trial(
@@ -229,34 +241,32 @@ class MusicalPreferences(BaseRules):
                             "top_participant": top_participant,
                             "n_known_songs": known_songs,
                             "top_all": top_all,
+                            "card_background_color": theme.color_neutral2,
                         },
                     )
                 )
             )
-            session.finish()
-            session.save()
-            return [feedback, self.get_final_view(session, top_participant, known_songs, round_number, top_all)]
+            return [feedback, self.get_final_view(session)]
         section = session.playlist.get_section(song_ids=session.get_unused_song_ids())
-        like_key = "like_song"
-        likert = IconRangeQuestion(
+        like_identifier = "like_song"
+        likert = TextRangeQuestion(
             text=_("2. How much do you like this song?"),
-            key=like_key,
+            identifier=like_identifier,
             choices=ChoiceList.objects.get(pk='LIKERT_ICONS_7').to_dict(),
             result_id=prepare_result(
-                like_key, session, section=section, scoring_rule="LIKERT"
+                like_identifier, session, section=section, scoring_rule="LIKERT"
             ),
         )
-        know_key = "know_song"
+        know_identifier = "know_song"
         know = ButtonArrayQuestion(
             text=_("1. Do you know this song?"),
-            key=know_key,
+            identifier=know_identifier,
             choices=[
                 {"value": "yes", "label": "fa-check", "color": "colorPositive"},
                 {"value": "unsure", "label": "fa-question", "color": "colorNeutral1"},
                 {"value": "no", "label": "fa-xmark", "color": "colorNegative"},
             ],
-            result_id=prepare_result(know_key, session, section=section),
-            style=[ColorScheme.BOOLEAN],
+            result_id=prepare_result(know_identifier, session, section=section),
         )
         playback = Autoplay(sections=[PlaybackSection(section)])
         form = Form([know, likert])
@@ -271,13 +281,14 @@ class MusicalPreferences(BaseRules):
         return actions
 
     def calculate_score(self, result, data):
-        if data.get("key") == "know_song":
+        if data.get("identifier") == "know_song":
             return self.know_score.get(data.get("value"))
         else:
             return super().calculate_score(result, data)
 
-    def get_final_view(self, session, top_participant, known_songs, n_songs, top_all):
+    def get_final_view(self, session: Session):
         # finalize block
+        session.finish()
         view = Final(
             session,
             title=_("End"),

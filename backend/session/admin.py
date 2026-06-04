@@ -13,7 +13,7 @@ class ResultInline(admin.TabularInline):
     raw_id_fields = ("section",)
 
     fields = [
-        'question_key',
+        'question_identifier',
         'created_at',
         'section',
         'expected_response',

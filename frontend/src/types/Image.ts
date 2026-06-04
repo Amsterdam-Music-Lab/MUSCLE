@@ -6,4 +6,5 @@ export default interface Image {
     href: string;
     rel: string;
     target: '_blank' | '_self' | '_parent' | '_top' | string;
+    backgroundColor: string;
 }

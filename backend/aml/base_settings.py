@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "inline_actions",
     "django_markup",
     "corsheaders",
+    "action",
     "experiment",
     "image",
     "participant",
@@ -134,6 +135,7 @@ LANGUAGES = [
     ("nl", _("Dutch")),
     ("pt", _("Portuguese")),
     ("zh-hans", _("Chinese")),
+    ("tr", _("Turkish")),
 ]
 MODELTRANSLATION_LANGUAGES = [lang[0] for lang in LANGUAGES]
 MODELTRANSLATION_FALLBACK_LANGUAGES = ('en', 'nl')

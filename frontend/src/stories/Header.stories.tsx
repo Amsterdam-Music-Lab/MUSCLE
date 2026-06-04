@@ -13,9 +13,9 @@ export default {
 function getHeaderData(overrides = {}) {
     return {
         description: "<h1>Experiment ABC</h1><p>This is the experiment description</p>",
-        nextBlockSlug: '/th1-mozart',
+        nextBlockIdentifier: '/th1-mozart',
         nextBlockButtonText: 'Volgende experiment',
-        experimentSlug: '/thkids',
+        experimentIdentifier: '/thkids',
         aboutButtonText: 'Over ons',
         totalScore: 420,
         scoreDisplayConfig: {

@@ -17,7 +17,7 @@ const Input = ({ type, value, validateChange }: InputProps) => {
     }, []);
 
     // Input validation
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = () => {
 
         if (!input.current) {
             return;

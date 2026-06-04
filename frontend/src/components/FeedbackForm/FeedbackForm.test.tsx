@@ -5,15 +5,29 @@ import { QuestionViews } from "@/types/Question";
 
 import FeedbackForm from "./FeedbackForm";
 
+vi.mock('../../util/stores', () => ({
+    __esModule: true,
+    default: (fn: (state: any) => any) => {
+        const state = {
+            theme: {
+                colorPrimary: "#d843e2", colorSecondary: "#39d7b8"
+            }
+        };
+
+        return fn(state);
+    },
+    useBoundStore: vi.fn()
+}));
+
 
 const radiosQuestion = {
-    key: 'test_question',
+    identifier: 'test_question',
     view: QuestionViews.RADIOS,
     text: 'What is the average speed of a Swallow?',
     choices: [{ value: 'slow', label: '1 km/h' }, { value: 'fast', label: '42 km/h' }]
 }
 const buttonsQuestion = {
-    key: 'test_question2',
+    identifier: 'test_question2',
     view: QuestionViews.BUTTON_ARRAY,
     text: 'An African or European swallow?',
     choices: [{ value: 'undecided', label: 'uh'}, { value: 'torn', label: 'what?' }]

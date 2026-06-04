@@ -488,7 +488,7 @@
   fields:
     text: I have never been complimented for my talents as a musical performer.
     explainer: ''
-    type: RadiosQuestion
+    type: TextRangeQuestion
     profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
@@ -497,7 +497,7 @@
     text: To what extent do you agree that you see yourself as someone who is
       sophisticated in art, music, or literature?
     explainer: ''
-    type: RadiosQuestion
+    type: TextRangeQuestion
     profile_scoring_rule: LIKERT
     choices: LIKERT_AGREE_6
 - model: question.question

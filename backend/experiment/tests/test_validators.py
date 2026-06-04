@@ -1,43 +1,49 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from experiment.validators import block_slug_validator
-
+from experiment.validators import identifier_validator
 
 class ExperimentValidatorsTest(TestCase):
-    def test_valid_slug(self):
-        # Test a valid lowercase slug
-        slug = 'testslug'
+
+    def test_valid_identifier(self):
+        # Test a valid lowercase identifier
+        identifier = 'testidentifier'
         try:
-            block_slug_validator(slug)
+            identifier_validator(identifier)
         except ValidationError:
-            self.fail(f"Unexpected ValidationError raised for slug: {slug}")
+            self.fail(f"Unexpected ValidationError raised for identifier: {identifier}")
 
-    def test_disallowed_slug(self):
-        # Test a disallowed slug
-        slug = 'admin'
+    def test_disallowed_identifier(self):
+        # Test a disallowed identifier
+        identifier = 'admin'
         with self.assertRaises(ValidationError) as cm:
-            block_slug_validator(slug)
-        self.assertEqual(str(cm.exception.messages[0]), 'The slug cannot start with "admin".')
+            identifier_validator(identifier)
+        self.assertEqual(
+            str(cm.exception.messages[0]), 'The identifier cannot start with "admin".'
+        )
 
-    def test_uppercase_slug(self):
-        # Test an uppercase slug
-        slug = 'TestSlug'
+    def test_uppercase_identifier(self):
+        # Test an uppercase identifier
+        identifier = 'TestIdentifier'
         with self.assertRaises(ValidationError) as cm:
-            block_slug_validator(slug)
-        self.assertEqual(str(cm.exception.messages[0]), 'Slugs must be lowercase.')
+            identifier_validator(identifier)
+        self.assertEqual(
+            str(cm.exception.messages[0]), 'Identifiers must be lowercase.'
+        )
 
     def test_disallowed_prefix(self):
         # Test a disallowed prefix
-        slug = 'admin-test'
+        identifier = 'admin-test'
         with self.assertRaises(ValidationError) as cm:
-            block_slug_validator(slug)
-        self.assertEqual(str(cm.exception.messages[0]), 'The slug cannot start with "admin".')
+            identifier_validator(identifier)
+        self.assertEqual(
+            str(cm.exception.messages[0]), 'The identifier cannot start with "admin".'
+        )
 
     def test_valid_prefix(self):
         # Test a valid prefix
-        slug = 'test-admin'
+        identifier = 'test-admin'
         try:
-            block_slug_validator(slug)
+            identifier_validator(identifier)
         except ValidationError:
-            self.fail(f"Unexpected ValidationError raised for slug: {slug}")
+            self.fail(f"Unexpected ValidationError raised for identifier: {identifier}")

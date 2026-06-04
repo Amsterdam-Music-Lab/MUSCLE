@@ -16,7 +16,7 @@ class Result(models.Model):
         participant (Optional[Participant]): participant for which this result will be registered
         section (Optional[Section]): a section tied to the result, usually applicable for Trials with Playback
         created_at (datetime): a timestamp, set automatically at creation time
-        question_key (str): a description by which to identify the result during analysis
+        question_identifier (str): a description by which to identify the result during analysis
         expected_response (str): if there is a correct response for a given Trial, it can be logged here
         given_response (str): set as a result of the participant's response
         comment (str): optional comment to help analysis
@@ -37,8 +37,8 @@ class Result(models.Model):
     )
 
     created_at = models.DateTimeField(default=timezone.now)
-    # Key of the question e.g.: AGE
-    question_key = models.CharField(max_length=64, default='')
+    # Identifier of the question e.g.: AGE
+    question_identifier = models.CharField(max_length=64, default='')
     expected_response = models.CharField(max_length=100, blank=True, null=True)
     given_response = models.CharField(max_length=100, blank=True, null=True)
     comment = models.CharField(max_length=100, default='')

@@ -17,11 +17,11 @@ axios.defaults.withCredentials = true;
 // API endpoints
 export const URLS = {
     block: {
-        get: (slug: string) => "/experiment/block/" + slug + "/",
-        feedback: (slug: string) => "/experiment/block/" + slug + "/feedback/",
+        get: (identifier: string) => "/experiment/block/" + identifier + "/",
+        feedback: (identifier: string) => "/experiment/block/" + identifier + "/feedback/",
     },
     experiment: {
-        get: (slug: string) => `/experiment/${slug}/`
+        get: (identifier: string) => `/experiment/${identifier}/`
     },
     participant: {
         current: "/participant/",
@@ -37,20 +37,18 @@ export const URLS = {
         consent: "/result/consent/"
     },
     session: {
-        create: "/session/create/",
         next_round: (id: string) => "/session/" + id + "/next_round/",
-        finalize: (id: string) => "/session/" + id + "/finalize/"
     },
     theme: {
         get: (id: string) => `/theme/${id}`,
     }
 };
 
-export const useBlock = (slug: string): [IBlock | null, boolean] =>
-    useGet<IBlock>(API_BASE_URL + URLS.block.get(slug));
+export const useBlock = (identifier: string): [IBlock | null, boolean] =>
+    useGet<IBlock>(API_BASE_URL + URLS.block.get(identifier));
 
-export const useExperiment = (slug: string) => {
-    const data = useGet<Experiment>(API_BASE_URL + URLS.experiment.get(slug));
+export const useExperiment = (identifier: string) => {
+    const data = useGet<Experiment>(API_BASE_URL + URLS.experiment.get(identifier));
     return data;
 }
 
@@ -62,8 +60,8 @@ export const useParticipantLink = () =>
 
 type ConsentResponse = boolean | null;
 
-export const useConsent = (slug: string) =>
-    useGet<ConsentResponse>(API_BASE_URL + URLS.result.get('consent_' + slug));
+export const useConsent = (identifier: string) =>
+    useGet<ConsentResponse>(API_BASE_URL + URLS.result.get('consent_' + identifier));
 
 interface CreateConsentParams {
     experiment: IExperiment;
@@ -78,7 +76,7 @@ export const createConsent = async ({ experiment, participant }: CreateConsentPa
             qs.stringify({
                 json_data: JSON.stringify(
                     {
-                        key: "consent_" + experiment.slug,
+                        identifier: "consent_" + experiment.identifier,
                         value: true,
                     }
                 ),
@@ -234,14 +232,14 @@ export const shareParticipant = async ({ email, participant }: ShareParticipantP
 };
 
 interface PostFeedbackParams {
-    blockSlug: string;
+    blockIdentifier: string;
     feedback: string;
     participant: Participant;
 }
 
 // Collect user feedback
-export const postFeedback = async ({ blockSlug, feedback, participant }: PostFeedbackParams) => {
-    const endpoint = API_BASE_URL + URLS.block.feedback(blockSlug)
+export const postFeedback = async ({ blockIdentifier, feedback, participant }: PostFeedbackParams) => {
+    const endpoint = API_BASE_URL + URLS.block.feedback(blockIdentifier)
     try {
         const response = await axios.post(
             endpoint,

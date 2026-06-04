@@ -2,6 +2,20 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, fireEvent, screen } from '@testing-library/react';
 import Range from './_Range';
 
+vi.mock('../../util/stores', () => ({
+    __esModule: true,
+    default: (fn: (state: any) => any) => {
+        const state = {
+            theme: {
+                colorPrimary: "#d843e2", colorSecondary: "#39d7b8"
+            }
+        };
+
+        return fn(state);
+    },
+    useBoundStore: vi.fn()
+}));
+
 describe('Range component', () => {
     const defaultProps = {
         question: {
@@ -20,7 +34,7 @@ describe('Range component', () => {
     });
 
     it('displays arrow icon when value is empty', () => {
-        render(<Range {...defaultProps} value={undefined} />);
+        render(<Range {...defaultProps} value="" />);
         expect(screen.getByText('↔')).toBeTruthy();
     });
 
@@ -32,7 +46,7 @@ describe('Range component', () => {
     });
 
     it('uses middle value when value prop is empty', () => {
-        render(<Range {...defaultProps} value={undefined} />);
+        render(<Range {...defaultProps} value="" />);
         const slider = document.querySelector('.rangeslider-horizontal') as HTMLElement;
         expect(slider.attributes['aria-valuenow'].value).toBe('50');
     });

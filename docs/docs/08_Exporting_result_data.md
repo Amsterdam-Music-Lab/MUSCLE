@@ -86,7 +86,7 @@ Contains a list of all the sessions that were logged by running this block.
     - `finished_at`: Timestamp logged on finishing the `Session`. (Set in the timezone of the server)
     This will be set to `null` if the `Participant` hasn't completed the `Session`.
     - `json_data`:
-        - `experiment`: Slug of the experiment that this block is a part of.
+        - `experiment`: Identifier of the experiment that this block is a part of.
         - The rest of the data varies per `Block` type and generally contains configuration data sent by the backend, that is used while running this `Block` of the experiment. During the `Session` this data can be changed by the backend to log information on the progress of this `Block` and/or the user's actions. This data can then be used to dynamically alter the course of the `Session`.
     *e.g., The user can only continue to a next stage, when certain training trials have been completed successfully.*
     - `final_score`: The final score calculated upon completion of the `Session`. Unfinished sessions will have a value of `0,0`
@@ -132,14 +132,14 @@ A list of `Result` objects containing the participant's anwers to the profile qu
             "participant": 425,
             "section": null,
             "created_at": "2024-07-20T14:28:13.227Z",
-            "question_key": "dgf_generation",
+            "question_identifier": "dgf_generation",
             "expected_response": null,
             "given_response": "gen_x",
             "comment": "",
             "score": null,
             "scoring_rule": "",
             "json_data": {
-                "key": "dgf_generation",
+                "identifier": "dgf_generation",
                 "view": "RADIOS",
                 "style": "neutral",
                 "value": "gen_x",
@@ -175,7 +175,7 @@ A list of `Result` objects containing the participant's anwers to the profile qu
     - `participant`: Foreign key `fk` relates to the `Participant` object. (`participant.pk`)
     - `Section`: Not used for profile (`Participant`) results.
     - `created_at`: Timestamp logged on creation of this `Result` object. (Set in the timezone of the server)
-    - `question_key`: Unique identifier for this question.
+    - `question_identifier`: Unique identifier for this question.
     - `expected_response`: Not used for profile (`Participant`) results.
     - `given_response`: Participant's response to the question.
     - `comment`: Optional comment, sent by the backend.
@@ -200,14 +200,14 @@ A list of session `Result` objects containing the participant's responses to the
             "participant": null,
             "section": 44,
             "created_at": "2024-07-22T10:29:57.720Z",
-            "question_key": "choice",
+            "question_identifier": "choice",
             "expected_response": "B",
             "given_response": "B",
             "comment": "testing",
             "score": 1.0,
             "scoring_rule": "CORRECTNESS",
             "json_data": {
-                "key": "choice",
+                "identifier": "choice",
                 "view": "BUTTON_ARRAY",
                 "style": {
                     "neutral": true,
@@ -247,7 +247,7 @@ A list of session `Result` objects containing the participant's responses to the
     - `Participant`: Not used for trial `Session` results.
     - `section`: Foreign key `fk` relates to the `Section` object used for this trial. (`Section.pk`)
     - `created_at`: Timestamp logged on creation of this `Result` object.
-    - `question_key`: Unique identifier for the `Question` type in this trial.
+    - `question_identifier`: Unique identifier for the `Question` type in this trial.
     - `expected_response`: The expected/correct response to this trial.
     - `given_response`: Participant's response to this trial.
     - `comment`: Optional comment, sent by the backend.

@@ -5,7 +5,7 @@ import AutoComplete from './_AutoComplete';
 import Question from '@/types/Question';
 
 const mockQuestion: Question = {
-    key: 'test-autocomplete',
+    identifier: 'test-autocomplete',
     choices: [
         {value: 'option1', label: 'First Option'},
         {value: 'option2', label: 'Second Option'},
@@ -75,14 +75,14 @@ describe('AutoComplete', () => {
 
     it('throws an error if question has no choices', () => {
         const mockQuestionNoChoices: Question = {
-            key: 'test-autocomplete',
+            identifier: 'test-autocomplete',
             choices: {}
         };
 
         expect(() => render(<AutoComplete question={mockQuestionNoChoices} value="" onChange={() => { }} />)).toThrowError();
 
         const mockQuestionNoChoices2: Question = {
-            key: 'test-autocomplete',
+            identifier: 'test-autocomplete',
         };
 
         expect(() => render(<AutoComplete question={mockQuestionNoChoices2} value="" onChange={() => { }} />)).toThrowError();

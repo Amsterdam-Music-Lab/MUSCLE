@@ -18,44 +18,47 @@ class SerializerTest(TestCase):
     fixtures = [
         "playlist",
         "experiment",
+        "choice_lists",
+        "demographics",
+        "goldsmiths_msi",
     ]
 
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create()
-        cls.experiment = Experiment.objects.get(slug="rhythm_battery")
+        cls.experiment = Experiment.objects.get(identifier="rhythm_battery")
         cls.phase1 = Phase.objects.create(experiment=cls.experiment)
-        block = Block.objects.get(slug="rhythm_intro")
+        block = Block.objects.get(identifier="rhythm_intro")
         block.phase = cls.phase1
         block.save()
         cls.phase2 = Phase.objects.create(
             experiment=cls.experiment, index=1, randomize=True
         )
-        block = Block.objects.get(slug="ddi")
+        block = Block.objects.get(identifier="ddi")
         block.phase = cls.phase2
         block.save()
-        block = Block.objects.get(slug="hbat_bit")
+        block = Block.objects.get(identifier="hbat_bit")
         block.phase = cls.phase2
         block.save()
-        block = Block.objects.get(slug="rhdis")
+        block = Block.objects.get(identifier="rhdis")
         block.phase = cls.phase2
         block.save()
         cls.phase3 = Phase.objects.create(experiment=cls.experiment, index=2)
-        block = Block.objects.get(slug="rhythm_outro")
+        block = Block.objects.get(identifier="rhythm_outro")
         block.phase = cls.phase3
         block.save()
 
     def test_serialize_phase(self):
         phase = serialize_phase(self.phase1, self.participant, 0)
         self.assertIsNotNone(phase)
-        next_block_slug = phase.get("nextBlock").get("slug")
+        next_block_identifier = phase.get("nextBlock").get("identifier")
         self.assertEqual(phase.get("dashboard"), [])
-        self.assertEqual(next_block_slug, "rhythm_intro")
+        self.assertEqual(next_block_identifier, "rhythm_intro")
         self.assertEqual(phase.get("accumulatedScore"), 0)
         self.assertEqual(phase.get("playedSessions"), 0)
         Session.objects.create(
             participant=self.participant,
-            block=Block.objects.get(slug=next_block_slug),
+            block=Block.objects.get(identifier=next_block_identifier),
             finished_at=timezone.now(),
         )
         phase = serialize_phase(self.phase1, self.participant, 0)
@@ -65,18 +68,18 @@ class SerializerTest(TestCase):
         blocks = list(self.phase2.blocks.all())
         Session.objects.create(
             participant=self.participant,
-            block=Block.objects.get(slug=blocks[0].slug),
-            final_score=10
+            block=Block.objects.get(identifier=blocks[0].identifier),
+            final_score=10,
         )
         Session.objects.create(
             participant=self.participant,
-            block=Block.objects.get(slug=blocks[1].slug),
-            final_score=10
+            block=Block.objects.get(identifier=blocks[1].identifier),
+            final_score=10,
         )
         Session.objects.create(
             participant=self.participant,
-            block=Block.objects.get(slug='rhythm_intro'),
-            final_score=10
+            block=Block.objects.get(identifier='rhythm_intro'),
+            final_score=10,
         )
         phase_info = get_session_info(blocks, self.participant)
         self.assertEqual(phase_info.get('playedSessions'), 2)
@@ -84,9 +87,9 @@ class SerializerTest(TestCase):
 
     def test_upcoming_block(self):
         block = get_upcoming_block(self.phase1, self.participant, 0)
-        self.assertEqual(block.get("slug"), "rhythm_intro")
+        self.assertEqual(block.get("identifier"), "rhythm_intro")
         Session.objects.create(
-            block=Block.objects.get(slug=block.get("slug")),
+            block=Block.objects.get(identifier=block.get("identifier")),
             participant=self.participant,
             finished_at=timezone.now(),
         )
@@ -95,9 +98,9 @@ class SerializerTest(TestCase):
         for i in range(3):
             block = get_upcoming_block(self.phase2, self.participant, 0)
             self.assertIsNotNone(block)
-            self.assertIn(block.get("slug"), ["ddi", "hbat_bit", "rhdis"])
+            self.assertIn(block.get("identifier"), ["ddi", "hbat_bit", "rhdis"])
             Session.objects.create(
-                block=Block.objects.get(slug=block.get("slug")),
+                block=Block.objects.get(identifier=block.get("identifier")),
                 participant=self.participant,
                 finished_at=timezone.now(),
             )
@@ -109,7 +112,7 @@ class SerializerTest(TestCase):
     def test_serialize_block(self):
         # Create a block
         block = Block.objects.create(
-            slug="test-block",
+            identifier="test-block",
             image=Image.objects.create(
                 title="Test",
                 description="",
@@ -138,7 +141,7 @@ class SerializerTest(TestCase):
         serialized_block = serialize_block(block, participant)
 
         # Assert the serialized data
-        self.assertEqual(serialized_block["slug"], "test-block")
+        self.assertEqual(serialized_block["identifier"], "test-block")
         self.assertEqual(serialized_block["name"], "Test Block")
         self.assertEqual(serialized_block["description"], "This is a test block")
         self.assertEqual(
@@ -149,6 +152,7 @@ class SerializerTest(TestCase):
                 "file": f"{settings.BASE_URL}/upload/test-image.jpg",
                 "href": "https://www.example.com",
                 "alt": "Test",
+                "backgroundColor": "",
                 "rel": "",
                 "target": "_self",
                 "tags": [],
@@ -158,7 +162,7 @@ class SerializerTest(TestCase):
 
     def test_serialize_block_without_theme_config(self):
         block = Block.objects.create(
-            slug="test-block",
+            identifier="test-block",
             phase=self.phase1,
             name="Test Block",
             description="This is a test block",
