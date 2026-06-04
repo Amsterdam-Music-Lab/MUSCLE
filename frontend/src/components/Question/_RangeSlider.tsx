@@ -52,6 +52,12 @@ const RangeSlider = ({ choices, value, onChange, changePosition=false }: RangePr
                 changePosition={changePosition}
             />
             <div className={classNames({ empty: emptyValue })} data-testid="range-slider">
+            {/* <input className="aha__slider" type="range"
+                value={sliderValue}
+                onChange={onSliderChange}
+                min={question.minValue}
+                max={question.maxValue}
+            /> */}
             <Slider
                 value={sliderValue}
                 onChange={onSliderChange}
