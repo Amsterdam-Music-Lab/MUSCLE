@@ -19,46 +19,47 @@
         }
     }
 
-    
-
     input[type=range] {
-      appearance: none; /* Hides the slider so that custom slider can be made */
-      width: 100%; /* Specific width is required for Firefox. */
-      height: 1em;
-      border-radius: 2em;
+        appearance: none; /* Hides the slider so that custom slider can be made */
+        width: 100%; /* Specific width is required for Firefox. */
+        height: 1em;
+        border-radius: 2em;
+        
+        &.disabled {
+            opacity: .3;
+        }
     }
     
     input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none;
+        -webkit-appearance: none;
     }
     
     input[type=range]:focus {
-      outline: none; /* Removes the border. TODO: focus styling for accessibility */
+        outline: none; /* Removes the border. TODO: focus styling for accessibility */
     }
     
     input[type=range]::-ms-track {
-      width: 100%;
-      cursor: pointer;
+        width: 100%;
+        cursor: pointer;
     }
 
     input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      height: 2em;
-      width: 2em;
-      border-radius: 2em;
-      cursor: pointer;
-      box-shadow: 0 1px 3px #0006 inset, 0 -1px 3px #0006 inset;
-      background: radial-gradient(circle at 50% 50%, white 0%, white 30%, transparent 20%);
+        -webkit-appearance: none;
+        height: 2em;
+        width: 2em;
+        border-radius: 2em;
+        cursor: pointer;
+        box-shadow: 0 1px 3px #0006 inset, 0 -1px 3px #0006 inset;
+        background: radial-gradient(circle at 50% 50%, white 0%, white 30%, transparent 20%);
     }
 
     /* All the same stuff for Firefox */
     input[type=range]::-moz-range-thumb {
-      height: 2em;
-      width: 2em;
-      border-radius: 2em;
-      box-shadow: 0 1px 3px #0006 inset, 0 -1px 3px #0006 inset;
-      background: radial-gradient(circle at 50% 50%, white 0%, white 30%, transparent 20%);
-      cursor: pointer;
+        height: 2em;
+        width: 2em;
+        border-radius: 2em;
+        box-shadow: 0 1px 3px #0006 inset, 0 -1px 3px #0006 inset;
+        background: radial-gradient(circle at 50% 50%, white 0%, white 30%, transparent 20%);
+        cursor: pointer;
     }
-
 }

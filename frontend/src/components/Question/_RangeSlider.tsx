@@ -18,24 +18,22 @@ const RangeSlider = ({ choices, value, onChange, changePosition=false }: RangePr
 
     const theme = useBoundStore((state) => state.theme);
     const [thumbColor, setThumbColor] = useState(theme["colorPrimary"]);
-    const sliderBackground = "yellow"; //theme["colorText"];
+    const sliderBackground = theme["colorText"];
 
     const keys = choices.map(choice => choice.value);
     const labels = choices.map(choice => choice.label);
 
     const emptyValue = value === "";
-    let sliderValue = !emptyValue ? keys.indexOf(value) : Math.round((keys.length - 1)/2);
+    const sliderValue = !emptyValue ? keys.indexOf(value) : Math.round((keys.length - 1)/2);
 
     const onSliderChange = (event) => {
         setThumbColor(theme["colorSecondary"]);
-        sliderValue = event.currentTarget.value;
     };
     
     const sliderStyle = () => {
         return css`
-            
             .aha__slider {
-                background ${sliderBackground}
+                background-color: ${sliderBackground};
             }
 
             input[type=range]::-webkit-slider-thumb {
@@ -44,7 +42,7 @@ const RangeSlider = ({ choices, value, onChange, changePosition=false }: RangePr
             
             /* All the same stuff for Firefox */
             input[type=range]::-moz-range-thumb {
-              background-color: ${thumbColor};
+                background-color: ${thumbColor};
             }
         `
     }
@@ -60,10 +58,10 @@ const RangeSlider = ({ choices, value, onChange, changePosition=false }: RangePr
             />
             <div className={classNames({ empty: emptyValue })} data-testid="range-slider">
                 <input className="aha__slider" type="range"
-                    // value={sliderValue}
                     onChange={onSliderChange}
                     min={0}
                     max={labels.length - 1}
+                    // value={value}
                 />
             </div>
 
