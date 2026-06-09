@@ -964,7 +964,7 @@ msgstr ""
 
 #: experiment/rules/likert.py:103
 msgid "Round %(round_number)d of %(total_rounds)d"
-msgstr "Ronde %(rounde_number)d van %(total_rounds)d"
+msgstr "Ronde %(round_number)d van %(total_rounds)d"
 
 #: experiment/rules/matching_pairs.py:48
 msgid ""
