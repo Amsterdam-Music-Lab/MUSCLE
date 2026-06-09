@@ -1518,38 +1518,6 @@ msgstr ""
 msgid "Back"
 msgstr "Terug"
 
-#: experiment/standards/isced_education.py:4
-msgid "Primary school"
-msgstr ""
-
-#: experiment/standards/isced_education.py:5
-msgid "Vocational qualification at about 16 years of age (GCSE)"
-msgstr "VMBO (of gelijkwaardig)"
-
-#: experiment/standards/isced_education.py:6
-msgid "Secondary diploma (A-levels/high school)"
-msgstr "HAVO/VWO/Gymnasium (of gelijkwaardig)"
-
-#: experiment/standards/isced_education.py:7
-msgid "Post-16 vocational course"
-msgstr "MBO (of gelijkwaardig)"
-
-#: experiment/standards/isced_education.py:8
-msgid "Associate's degree or 2-year professional diploma"
-msgstr "Associate degree opleiding (of gelijkwaardig)"
-
-#: experiment/standards/isced_education.py:9
-msgid "Bachelor or equivalent"
-msgstr "HBO of WO bacheloropleiding (of gelijkwaardig)"
-
-#: experiment/standards/isced_education.py:10
-msgid "Master or equivalent"
-msgstr "HBO of WO masteropleiding (of gelijkwaardig)"
-
-#: experiment/standards/isced_education.py:11
-msgid "Doctoral degree or equivalent"
-msgstr "Doctoraal/PhD (of gelijkwaardig)"
-
 #: experiment/templates/admin/experiment/block/submit_line.html:4
 msgid "Save"
 msgstr ""
@@ -2888,84 +2856,6 @@ msgstr "Nog geen punten!"
 
 #~ msgid "How much do you agree or disagree?"
 #~ msgstr "In hoeverre ben je het hiermee eens of oneens?"
-
-#~ msgid "Completely Disagree"
-#~ msgstr "Helemaal mee oneens"
-
-#~ msgid "Strongly Disagree"
-#~ msgstr "Zeer mee oneens"
-
-#~ msgid "Disagree"
-#~ msgstr "Mee oneens"
-
-#~ msgid "Neither Agree nor Disagree"
-#~ msgstr "Niet mee eens of oneens"
-
-#~ msgid "Agree"
-#~ msgstr "Mee eens"
-
-#~ msgid "Strongly Agree"
-#~ msgstr "Zeer mee eens"
-
-#~ msgid "Completely Agree"
-#~ msgstr "Helemaal mee eens"
-
-#~ msgid "Have not (yet) completed any school qualification"
-#~ msgstr "Geen diploma"
-
-#~ msgid "Not applicable"
-#~ msgstr "Niet van toepassing"
-
-#~ msgid "With which gender do you currently most identify?"
-#~ msgstr "Met welke gender identificeer je je het meest?"
-
-#~ msgid "Man"
-#~ msgstr "Man"
-
-#~ msgid "Transgender man"
-#~ msgstr "Transgender man"
-
-#~ msgid "Transgender woman"
-#~ msgstr "Transgender vrouw"
-
-#~ msgid "Woman"
-#~ msgstr "Vrouw"
-
-#~ msgid "Non-conforming or questioning"
-#~ msgstr "Non-conform"
-
-#~ msgid "Intersex or two-spirit"
-#~ msgstr "Intersekse of two-spirit"
-
-#~ msgid "Prefer not to answer"
-#~ msgstr "Zeg ik liever niet"
-
-#~ msgid "Still at School"
-#~ msgstr "Nog op school"
-
-#~ msgid "At University"
-#~ msgstr "Studerend (mbo, hbo of universiteit)"
-
-#~ msgid "In Full-time employment"
-#~ msgstr "Voltijds in loondienst"
-
-#~ msgid "In Part-time employment"
-#~ msgstr "Parttime in loondienst"
-
-#~ msgid "Self-employed"
-#~ msgstr "Eigen baas/zzp'er"
-
-#~ msgid "Homemaker/full time parent"
-#~ msgstr "Huisman/huisvrouw/full time ouder"
-
-#~ msgid "Unemployed"
-#~ msgstr "Werkloos"
-
-#~ msgid "Retired"
-#~ msgstr "Gepensioneerd"
-
-#~ msgid "yes"
-#~ msgstr "Ja"
 
 #~ msgid "Music is kind of an addiction for me - I couldn't live without it."
 #~ msgstr "Muziek is een soort verslaving voor mij, ik zou niet zonder kunnen."
