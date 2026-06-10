@@ -65,6 +65,7 @@ def duplicate_question(modeladmin, request, queryset):
             identifier__regex=rf'^{question.identifier}(_\d+)*$'
         ).count()
         question.identifier = f"{question.identifier}_{n_questions}"
+        question.from_python = False
         question.save()
 
 class QuestionAdmin(TabbedTranslationAdmin):
