@@ -4,7 +4,7 @@ from django.utils.translation import gettext as _
 
 from experiment.actions.info import Info
 from experiment.actions.html import HTML
-from experiment.actions.playback import Autoplay, PlaybackSection
+from experiment.actions.playback import Autoplay, ImagePlaybackSection
 from experiment.actions.form import Form
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
@@ -23,7 +23,7 @@ class Speech2SongKids(BaseRules):
         return Info(
             body=body
         )
-    
+
     def next_round(self, session: Session):
         if not session.json_data.get("has_seen_intro"):
             return self.get_intro_explainer(session)
@@ -36,16 +36,41 @@ class Speech2SongKids(BaseRules):
             identifier = "speech_or_song"
             result_id = prepare_result(identifier, session=session, section=section)
             return Trial(
-                html=HTML(body='<div style="display: flex; flex-direction: row; justify-content: center;"><img src="http://localhost:8000/upload/2026/06/02/Melodieplaneet.png" style="width:80%"><img src="http://localhost:8000/upload/2026/06/02/Spraakplaneet.png" style="width:80%"></div>'),
-                playback=Autoplay(sections=[PlaybackSection(section)]),
-                feedback_form=Form(form=[ButtonArrayQuestion(
-                    identifier=identifier,
-                    choices=[
-                        {"value": "music", "label": "🎵", "color": "colorNeutral1"},
-                        {"value": "speech", "label": "💬", "color": "colorNeutral2"}
+                html=HTML(
+                    body='<div style="display: flex; flex-direction: row; justify-content: center;"><img src="http://localhost:8000/upload/2026/06/02/Melodieplaneet.png" style="width:80%"><img src="http://localhost:8000/upload/2026/06/02/Spraakplaneet.png" style="width:80%"></div>'
+                ),
+                playback=Autoplay(
+                    sections=[
+                        ImagePlaybackSection(
+                            section=section,
+                            image={
+                                "link": "http://localhost:8000/upload/2026/06/10/1.gif",
+                                "label": "Alien1",
+                            },
+                        )
                     ],
-                    result_id=result_id
-                )]),
+                    show_animation=False,
+                ),
+                feedback_form=Form(
+                    form=[
+                        ButtonArrayQuestion(
+                            identifier=identifier,
+                            choices=[
+                                {
+                                    "value": "music",
+                                    "label": "🎵",
+                                    "color": "colorNeutral1",
+                                },
+                                {
+                                    "value": "speech",
+                                    "label": "💬",
+                                    "color": "colorNeutral2",
+                                },
+                            ],
+                            result_id=result_id,
+                        )
+                    ]
+                ),
                 response_time=section.duration,
-                listen_first=True
+                listen_first=True,
             )
