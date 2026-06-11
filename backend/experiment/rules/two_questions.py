@@ -91,8 +91,8 @@ class TwoQuestions(BaseRules):
             session,
             section=section,
             scoring_rule=(
-                getattr(question1, 'scoring_rule')
-                if hasattr(question1, 'scoring_rule')
+                getattr(question1, "scoring_rule", "LIKERT")
+                if hasattr(question1, "scoring_rule")
                 else "LIKERT"
             ),
         )
@@ -107,8 +107,8 @@ class TwoQuestions(BaseRules):
             session,
             section=section,
             scoring_rule=(
-                getattr(question2, 'scoring_rule')
-                if hasattr(question2, 'scoring_rule')
+                getattr(question2, "scoring_rule", "LIKERT")
+                if hasattr(question2, "scoring_rule")
                 else "LIKERT"
             ),
         )
