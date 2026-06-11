@@ -28,7 +28,9 @@ class TwoQuestions(BaseRules):
             "intro_explainer", "explainer_fallback_dummy"
         )
         try:
-            Explainer.objects.get(identifier=explainer_identifier).convert_to_action()
+            return Explainer.objects.get(
+                identifier=explainer_identifier
+            ).convert_to_action()
         except:
             return ExplainerAction(
                 instruction="Default question",
