@@ -115,6 +115,7 @@ def block_export_csv_results(block_identifier: str) -> StringIO:
         "expected_response",
         "given_response",
         "score",
+        "section__id",
         "section__song__name",
         "section__song__artist",
         "section__tag",
