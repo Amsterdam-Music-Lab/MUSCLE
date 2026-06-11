@@ -85,7 +85,10 @@ class TwoQuestions(BaseRules):
         else:
             question1 = self.get_fallback_question(question1_identifier)
         question1.result_id = prepare_result(
-            question1_identifier, session, section=section
+            question1_identifier,
+            session,
+            section=section,
+            scoring_rule="LIKERT",
         )
         if question2_identifier is not "question2_default":
             question2 = Question.objects.get(
@@ -94,7 +97,10 @@ class TwoQuestions(BaseRules):
         else:
             question2 = self.get_fallback_question(question2_identifier)
         question2.result_id = prepare_result(
-            question2_identifier, session, section=section
+            question2_identifier,
+            session,
+            section=section,
+            scoring_rule="LIKERT",
         )
         form = Form(form=[question1, question2])
         return Trial(
