@@ -24,10 +24,12 @@ class TwoQuestions(BaseRules):
 
     def get_intro_explainer(self, session: Session):
         """Explain the game"""
-        explainer_identifier = session.block.rules_config.get('intro_explainer')
-        if explainer_identifier:
-            return Explainer.objects.get(identifier=explainer_identifier).convert_to_action()
-        else:
+        explainer_identifier = session.block.rules_config.get(
+            "intro_explainer", "explainer_fallback_dummy"
+        )
+        try:
+            Explainer.objects.get(identifier=explainer_identifier).convert_to_action()
+        except:
             return ExplainerAction(
                 instruction="Default question",
                 steps=[
@@ -68,39 +70,47 @@ class TwoQuestions(BaseRules):
 
     def get_trial(self, session, total_rounds):
         question1_identifier = session.block.rules_config.get(
-            "question1_identifier", "question1_default"
+            "question1_identifier", "question1_fallback_dummy"
         )
         played_sections = session.result_set.filter(
             question_identifier=question1_identifier
         ).values_list('section__id', flat=True)
         question2_identifier = session.block.rules_config.get(
-            "question2_identifier", "question2_default"
+            "question2_identifier", "question2_fallback_dummy"
         )
         section = session.playlist.get_section(exclude={'pk__in': played_sections})
         playback = Autoplay(sections=[PlaybackSection(section)], show_animation=False)
-        if question1_identifier is not "question1_default":
+        try:
             question1 = Question.objects.get(
                 identifier=question1_identifier
             ).convert_to_action()
-        else:
+        except:
             question1 = self.get_fallback_question(question1_identifier)
         question1.result_id = prepare_result(
             question1_identifier,
             session,
             section=section,
-            scoring_rule="LIKERT",
+            scoring_rule=(
+                getattr(question1, 'scoring_rule')
+                if hasattr(question1, 'scoring_rule')
+                else "LIKERT"
+            ),
         )
-        if question2_identifier is not "question2_default":
+        try:
             question2 = Question.objects.get(
                 identifier=question2_identifier
             ).convert_to_action()
-        else:
+        except:
             question2 = self.get_fallback_question(question2_identifier)
         question2.result_id = prepare_result(
             question2_identifier,
             session,
             section=section,
-            scoring_rule="LIKERT",
+            scoring_rule=(
+                getattr(question2, 'scoring_rule')
+                if hasattr(question2, 'scoring_rule')
+                else "LIKERT"
+            ),
         )
         form = Form(form=[question1, question2])
         return Trial(
@@ -115,7 +125,7 @@ class TwoQuestions(BaseRules):
     def get_fallback_question(self, question_identifier: str) -> TextRangeQuestion:
         return TextRangeQuestion(
             identifier=question_identifier,
-            explainer=_("Rate from lowest to highest"),
+            text=_("Rate from lowest to highest"),
             choices=[
                 {"value": 1, "label": _("Lowest")},
                 {"value": 2, "label": _("Low")},
