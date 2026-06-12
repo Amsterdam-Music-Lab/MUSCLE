@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/config/frontend.ts:89
+#: src/config/frontend.ts:88
 msgid ""
 "\n"
 "How good are you in memorizing music? \n"
@@ -58,8 +58,12 @@ msgstr "{turnScore} punten"
 #~ msgstr "**Nodig je vrienden uit om mee te spelen!** Laat ze deze QR-code scannen."
 
 #: src/config/frontend.ts:63
-msgid "**Think you've got a good ear? See how your friends compare!** Share your results and have them scan the QR code to take the challenge."
+msgid "**See how your friends compare!** Share your results and have them scan the QR code to take the challenge."
 msgstr ""
+
+#: src/config/frontend.ts:63
+#~ msgid "**Think you've got a good ear? See how your friends compare!** Share your results and have them scan the QR code to take the challenge."
+#~ msgstr ""
 
 #: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:54
 msgid "+{turnScore} points"
@@ -77,7 +81,7 @@ msgstr "+{turnScore} punten"
 #~ msgid "⚠️ This game is still in development: we are currently beta testing. If you run into any issues or have suggestions, **please share your feedback using the feedback button** that will appear in the bottom-right corner shortly."
 #~ msgstr "⚠️ Dit spel is nog in ontwikkeling: we zijn momenteel aan het testen. Loop je tegen problemen aan of heb je suggesties? **Deel je feedback via de feedbackknop** die binnenkort rechtsonder verschijnt."
 
-#: src/config/frontend.ts:172
+#: src/config/frontend.ts:171
 msgid "🎉 Amazing! You've finished the game!"
 msgstr "🎉 Geweldig! Je hebt het spel uitgespeeld!"
 
@@ -109,7 +113,7 @@ msgstr "Terug"
 msgid "Bronze"
 msgstr "Brons"
 
-#: src/config/frontend.ts:169
+#: src/config/frontend.ts:168
 msgid "Can you collect them all?"
 msgstr "Kan je ze allemaal verzamelen?"
 
@@ -229,7 +233,7 @@ msgstr "Nee, dat is geen match... "
 msgid "Not quite, try again!"
 msgstr "Bijna, probeer het opnieuw!"
 
-#: src/config/frontend.ts:125
+#: src/config/frontend.ts:124
 msgid "Note:"
 msgstr "NB:"
 
@@ -254,15 +258,15 @@ msgid "Platinum"
 msgstr "Platina"
 
 #: src/components/views/FinalView/FinalView.tsx:183
-#: src/config/frontend.ts:156
+#: src/config/frontend.ts:155
 msgid "Play another game!"
 msgstr "Speel nog een spel!"
 
-#: src/config/frontend.ts:165
+#: src/config/frontend.ts:164
 msgid "Play on and collect 'm all..."
 msgstr "Speel verder en verzamel ze allemaal..."
 
-#: src/config/frontend.ts:173
+#: src/config/frontend.ts:172
 msgid "Play on? Let's start another round of games..."
 msgstr "Verder spelen? Begin met een nieuwe ronde..."
 
@@ -298,7 +302,7 @@ msgstr "Zilver"
 msgid "Skip"
 msgstr "Overslaan"
 
-#: src/config/frontend.ts:140
+#: src/config/frontend.ts:139
 msgid "Start the game!"
 msgstr "Begin het spel!"
 
@@ -312,10 +316,10 @@ msgid "Submit more feedback"
 msgstr "Verstuur meer feedback"
 
 #: src/config/frontend.ts:83
-msgid "Take a screenshot or share your score!"
-msgstr ""
+#~ msgid "Take a screenshot or share your score!"
+#~ msgstr ""
 
-#: src/config/frontend.ts:114
+#: src/config/frontend.ts:113
 msgid "Test Your Musical Memory!"
 msgstr "Test je muzikale geheugen!"
 
@@ -323,7 +327,7 @@ msgstr "Test je muzikale geheugen!"
 #~ msgid "The first load may take a while due to the amount of content, but later runs will be smoother."
 #~ msgstr "De eerste keer dat je speelt, kan het laden even duren, maar daarna zal het spel soepeler verlopen."
 
-#: src/config/frontend.ts:128
+#: src/config/frontend.ts:127
 msgid "The first load may take a while due to the amount of content, but later runs will be smoother. The difficulty of game levels is randomized. After collecting all the stars, you will receive a total score and see how you rank among players worldwide."
 msgstr ""
 
@@ -351,11 +355,11 @@ msgstr "Helaas kun je niet deelnemen aan dit experiment als je geen toestemming 
 msgid "Well done!"
 msgstr "Goed gedaan!"
 
-#: src/config/frontend.ts:168
+#: src/config/frontend.ts:167
 msgid "Woohoo! You've earned your first star! 💫"
 msgstr "Wohoo! Je hebt je eerste ster verdiend! 💫"
 
-#: src/config/frontend.ts:164
+#: src/config/frontend.ts:163
 msgid "Yay, you've earned a star! 💫"
 msgstr "Yay, je hebt een ster verdiend! 💫"
 

@@ -131,7 +131,7 @@ class MatchingPairs2025(MatchingPairsGame):
             final = _(
                 "### Result Analysis\n"
                 "Your mean score is **%(mean)d** (%(total)i points/%(n_sessions)i).  \n\n"
-                "The average score was **36.25** for Dutch participants and **44,86** for US participants.  \n"
+                "The average score was **36.25** for Dutch participants and **44.86** for US participants.  \n"
             ) % {"mean": mean, "total": session_total, "n_sessions": n_sessions}
             if percentile >= 90:
                 title.update({"header": _("Razor-Sharp Recognition")})
