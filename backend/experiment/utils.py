@@ -109,6 +109,7 @@ def block_export_csv_results(block_identifier: str) -> StringIO:
     all_results = get_results_of_sessions(all_sessions)
     result_output_keys = [
         "session__id",
+        "session__final_score",
         "participant__id",
         "question_identifier",
         "created_at",
@@ -122,22 +123,28 @@ def block_export_csv_results(block_identifier: str) -> StringIO:
         "section__group",
     ]
     results_output = list(
-        all_results.annotate(participant__id=F("session__participant")).values(
+        all_results.annotate(participant__id=F("session_participant")).values(
             *result_output_keys
         )
     )
     all_participants = get_participants_of_sessions(all_sessions)
-    all_profiles = get_profiles_of_participants(all_participants)
+    question_identifiers = []
+    question_lists = this_block.questionlist_set.all()
+    for ql in question_lists:
+        question_identifiers.extend(ql.questions.values_list("identifier", flat=True))
+    relevant_profiles = get_profiles_of_participants(all_participants).filter(
+        question_identifier__in=question_identifiers
+    )
     profile_output_keys = [
         "participant__id",
-        "participant__country_code",
         "question_identifier",
-        "created_at",
-        "expected_response",
         "given_response",
         "score",
     ]
-    profiles_output = list(all_profiles.values(*profile_output_keys))
+    profiles_output = list(relevant_profiles.values(*profile_output_keys))
+    for participant in list(all_participants):
+
+        
     combined_output = [*results_output, *profiles_output]
     fieldnames = list(set([*profile_output_keys, *result_output_keys]))
     csv_buffer = StringIO()
