@@ -51,7 +51,7 @@ class TwoQuestions(BaseRules):
             )
 
     def next_round(self, session: Session):
-        round_number = session.get_rounds_passed()
+        round_number = session.result_set.count() / 2
         total_rounds = session.playlist.section_set.count()
         if round_number == 0:
             return [
