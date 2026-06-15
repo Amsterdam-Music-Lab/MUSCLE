@@ -70,7 +70,7 @@
     text: Pieces of music rarely evoke emotions for me.
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_10_sing_with_recording
@@ -87,7 +87,7 @@
       if I know the tune.
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_12_performance_diff
@@ -105,7 +105,7 @@
       way or by a different performer.
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_14_never_complimented
@@ -113,7 +113,7 @@
     text: I have never been complimented for my talents as a musical performer.
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_15_internet_search_music
@@ -138,7 +138,7 @@
       tune.
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_18_out_of_beat
@@ -171,7 +171,7 @@
     text: I don’t spend much of my disposable income on music.
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_22_out_of_tune
@@ -187,7 +187,7 @@
     text: When I sing, I have no idea whether I’m in tune or not.
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_24_music_addiction
@@ -204,7 +204,7 @@
       wrong notes.
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_26_genre
@@ -220,7 +220,7 @@
     text: I would not consider myself a musician.
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_28_track_new
