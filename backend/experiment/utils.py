@@ -1,6 +1,6 @@
-from csv import DictWriter
 from io import BytesIO, StringIO
 from os.path import join
+from typing import Union
 from zipfile import ZipFile
 
 from django.db.models.query import QuerySet
@@ -8,6 +8,7 @@ from django.db.models import F
 from django.core import serializers
 from django.http import HttpResponse
 from django.utils import timezone
+import pandas as pd
 import roman
 
 
@@ -99,7 +100,7 @@ def get_profiles_of_participants(
     return Result.objects.filter(participant__in=participants)
 
 
-def block_export_csv_results(block_identifier: str) -> StringIO:
+def block_generate_results_data_frame(block_identifier: str) -> pd.DataFrame:
     """export results and profiles in two csvs
     This export does not provide all data, but a selection of the variables
     expected to be of most interest for basic analyses
@@ -111,6 +112,7 @@ def block_export_csv_results(block_identifier: str) -> StringIO:
         "session__id",
         "session__final_score",
         "participant__id",
+        "participant__country_code",
         "question_identifier",
         "created_at",
         "expected_response",
@@ -122,9 +124,11 @@ def block_export_csv_results(block_identifier: str) -> StringIO:
         "section__tag",
         "section__group",
     ]
-    results_output = list(
-        all_results.annotate(participant__id=F("session_participant")).values(
-            *result_output_keys
+    results_output = pd.DataFrame(
+        list(
+            all_results.annotate(participant__id=F("session__participant")).values(
+                *result_output_keys
+            )
         )
     )
     all_participants = get_participants_of_sessions(all_sessions)
@@ -137,21 +141,78 @@ def block_export_csv_results(block_identifier: str) -> StringIO:
     )
     profile_output_keys = [
         "participant__id",
+        "participant__country_code",
         "question_identifier",
         "given_response",
         "score",
     ]
-    profiles_output = list(relevant_profiles.values(*profile_output_keys))
-    for participant in list(all_participants):
+    profiles_output = pd.DataFrame(list(relevant_profiles.values(*profile_output_keys)))
+    if profiles_output.empty:
+        return results_output
+    wide_profiles = profiles_output.pivot(
+        index="participant__id",
+        columns="question_identifier",
+        values=["given_response", "score"],
+    )
+    wide_profiles.columns = [
+        ".".join(map(str, reversed(col)))
+        for col in wide_profiles.columns.to_flat_index()
+    ]
+    wide_profiles = wide_profiles.reset_index()
+    if results_output.empty:
+        return wide_profiles
+    return pd.merge(results_output, wide_profiles, on="participant__id")
 
-        
-    combined_output = [*results_output, *profiles_output]
-    fieldnames = list(set([*profile_output_keys, *result_output_keys]))
+
+def block_export_csv_results(block_identifier: str) -> StringIO:
     csv_buffer = StringIO()
-    writer = DictWriter(csv_buffer, fieldnames=fieldnames, lineterminator="\n")
-    writer.writeheader()
-    writer.writerows(combined_output)
+    results_df = block_generate_results_data_frame(block_identifier)
+    results_df.to_csv(csv_buffer)
     return csv_buffer.getvalue()
+
+
+def get_block_csv_export_as_response(block_identifier: str) -> HttpResponse:
+    '''Create a download response for the admin experimenter dashboard'''
+    csv_string = block_export_csv_results(block_identifier)
+    response = HttpResponse(csv_string)
+    response["Content-Type"] = "text/csv"
+    response["Content-Disposition"] = (
+        'attachment; filename="'
+        + block_identifier
+        + "-"
+        + timezone.now().isoformat()
+        + '.csv"'
+    )
+    return response
+
+
+def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
+    experiment = Experiment.objects.get(identifier=experiment_identifier)
+    block_identifiers = experiment.associated_blocks().values_list(
+        "identifier", flat=True
+    )
+    data_frames = [
+        block_generate_results_data_frame(block_id) for block_id in block_identifiers
+    ]
+    combination = pd.concat(data_frames)
+    breakpoint()
+    wide_format = combination.pivot_table(
+        index=["section__id", "session__id"],
+        values=["given_response", "score"],
+        aggfunc=agg_func,
+    )
+    breakpoint()
+    csv_buffer = StringIO()
+    data_frames.to_csv(csv_buffer)
+    return csv_buffer.getvalue()
+
+
+def agg_func(input_value: Union[list, str, int]) -> str:
+    """return the first response by a participant"""
+    if type(input_value) is pd.Series:
+        return input_value.values[0]
+    else:
+        return input_value
 
 
 def get_block_csv_export_as_response(block_identifier: str) -> HttpResponse:

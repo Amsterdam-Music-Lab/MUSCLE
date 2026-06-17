@@ -7,6 +7,7 @@ from django.test import TestCase, Client
 from experiment.utils import (
     block_export_csv_results,
     block_export_json_results,
+    experiment_export_csv_results,
     format_label,
     get_block_csv_export_as_response,
     get_block_json_export_as_response,
@@ -14,9 +15,10 @@ from experiment.utils import (
 
 from experiment.models import Experiment, Phase, Block, Feedback
 from participant.models import Participant
-from session.models import Session
+from question.models import Question, QuestionList
 from result.models import Result
-
+from section.models import Playlist, Section, Song
+from session.models import Session
 
 class TestExperimentUtils(TestCase):
 
@@ -27,38 +29,63 @@ class TestExperimentUtils(TestCase):
         self.assertEqual(label, 'IV')
 
 
-class TestBlockExport(TestCase):
-    fixtures = ["playlist", "experiment"]
+class TestExport(TestCase):
 
     @classmethod
     def setUpTestData(cls):
         experiment = Experiment.objects.create(
             identifier="test-experiment", name="Test Experiment"
         )
-        phase = Phase.objects.create(experiment=experiment)
+        cls.phase = Phase.objects.create(experiment=experiment)
         cls.participant = Participant.objects.create(unique_hash=42)
-        cls.block = Block.objects.get(identifier="huang_2022")
-        cls.block.phase = phase
+        cls.playlist = Playlist.objects.create(name="TestPlaylist")
+        Section.objects.bulk_create(
+            [
+                Section(
+                    filename=f"section_{i}",
+                    song=Song.objects.create(artist=f"artist_{i}", name=f"name_{i}"),
+                    playlist=cls.playlist,
+                )
+                for i in range(5)
+            ]
+        )
+        cls.block = Block.objects.create(
+            identifier="test-block", rules="LIKERT", phase=cls.phase
+        )
+        Question.objects.bulk_create(
+            [Question("test_profile_" + str(i)) for i in range(5)]
+        )
+        question_list = QuestionList.objects.create(block=cls.block)
+        question_list.questions.add(*Question.objects.all())
         for playlist in cls.block.playlists.all():
             playlist._update_sections()
         cls.session = Session.objects.create(
-            block=cls.block,
-            participant=cls.participant,
+            block=cls.block, participant=cls.participant, playlist=cls.playlist
         )
-
-        for i in range(5):
-            Result.objects.create(
-                session=Session.objects.first(),
-                expected_response=i,
-                given_response=i,
-                question_identifier="test_question_" + str(i),
-            )
-            Result.objects.create(
-                participant=cls.participant,
-                question_identifier=i,
-                given_response=i,
-            )
-
+        # create session results
+        Result.objects.bulk_create(
+            [
+                Result(
+                    session=cls.session,
+                    expected_response=i,
+                    given_response=i,
+                    section=Section.objects.get(filename="section_" + str(i)),
+                    question_identifier="test_question",
+                )
+                for i in range(5)
+            ]
+        )
+        # create profile results
+        Result.objects.bulk_create(
+            [
+                Result(
+                    participant=cls.participant,
+                    question_identifier="test_profile_" + str(i),
+                    given_response=i,
+                )
+                for i in range(5)
+            ]
+        )
         Feedback.objects.create(
             block=cls.block,
             text="Lorem",
@@ -74,7 +101,31 @@ class TestBlockExport(TestCase):
     def test_block_csv_export(self):
         csv_output = block_export_csv_results(self.block.identifier)
         reader = csv.DictReader(csv_output.split("\n"))
-        self.assertEqual(len([r for r in reader]), 10)
+        rows = [r for r in reader]
+        session_results_count = Result.objects.filter(session__isnull=False).count()
+        self.assertEqual(len(rows), session_results_count)
+        self.assertIn("test_profile_1.score", rows[0])
+        profile_results_count = Result.objects.filter(participant__isnull=False).count()
+        self.assertGreater(
+            len(
+                rows[0].split(","),
+            ),
+            profile_results_count * 2,
+        )
+
+    def test_block_csv_export_without_profile_results(self):
+        Result.objects.exclude(participant__isnull=True).delete()
+        csv_output = block_export_csv_results(self.block.identifier)
+        reader = csv.DictReader(csv_output.split("\n"))
+        rows = [r for r in reader]
+        self.assertIsNone(rows[0].get("test_profile_0.score"))
+
+    def test_block_csv_export_without_session_results(self):
+        Result.objects.exclude(session__isnull=True).delete()
+        csv_output = block_export_csv_results(self.block.identifier)
+        reader = csv.DictReader(csv_output.split("\n"))
+        rows = [r for r in reader]
+        self.assertEqual(len(rows), 1)
 
     def test_block_csv_export_admin(self):
         response = get_block_csv_export_as_response(self.block.identifier)
@@ -82,6 +133,24 @@ class TestBlockExport(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIsNotNone(response.content)
         self.assertEqual(response["content-type"], "text/csv")
+
+    def test_experiment_csv_export(self):
+        block = Block.objects.create(
+            identifier="test-block-2", rules="LIKERT", phase=self.phase
+        )
+        session = Session.objects.create(block=block, participant=self.participant)
+        Result.objects.bulk_create(
+            [
+                Result(
+                    session=session,
+                    section=Section.objects.get(filename="section_" + str(i)),
+                    question_identifier="test_question2",
+                )
+                for i in range(5)
+            ]
+        )
+        csv_output = experiment_export_csv_results("test-experiment")
+        self.assertIsNotNone(csv_output)
 
     def test_block_json_export(self):
         zip_buffer = block_export_json_results(self.block.identifier)
