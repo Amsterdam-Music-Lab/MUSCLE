@@ -195,15 +195,44 @@ def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
         block_generate_results_data_frame(block_id) for block_id in block_identifiers
     ]
     combination = pd.concat(data_frames)
-    breakpoint()
-    wide_format = combination.pivot_table(
-        index=["section__id", "session__id"],
-        values=["given_response", "score"],
-        aggfunc=agg_func,
+    keys_of_interest = [
+        "score",
+        "given_response",
+        "section__id",
+        "participant__id",
+        "question_identifier",
+    ]
+    section_data = (
+        (
+            combination[keys_of_interest]
+            .groupby(
+                ["section__id", "question_identifier", "participant__id"], dropna=False
+            )
+            .agg(agg_func)
+        )
+        .unstack("question_identifier")
+        .reset_index()
     )
-    breakpoint()
+    section_data.columns = [
+        ".".join(map(str, reversed(col))).strip(".")
+        for col in section_data.columns.to_flat_index()
+    ]
+    merged = section_data.merge(
+        combination.drop(
+            [
+                "session__id",
+                "session__final_score",
+                "created_at",
+                "given_response",
+                "expected_response",
+                "score",
+            ],
+            axis=1,
+        ),
+        on=["participant__id", "section__id"],
+    )
     csv_buffer = StringIO()
-    data_frames.to_csv(csv_buffer)
+    merged.to_csv(csv_buffer)
     return csv_buffer.getvalue()
 
 

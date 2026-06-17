@@ -69,6 +69,7 @@ class TestExport(TestCase):
                     session=cls.session,
                     expected_response=i,
                     given_response=i,
+                    score=i,
                     section=Section.objects.get(filename="section_" + str(i)),
                     question_identifier="test_question",
                 )
@@ -145,12 +146,17 @@ class TestExport(TestCase):
                     session=session,
                     section=Section.objects.get(filename="section_" + str(i)),
                     question_identifier="test_question2",
+                    given_response=i + 10,
+                    score=i + 10,
                 )
                 for i in range(5)
             ]
         )
         csv_output = experiment_export_csv_results("test-experiment")
-        self.assertIsNotNone(csv_output)
+        reader = csv.DictReader(csv_output.split("\n"))
+        rows = [r for r in reader]
+        self.assertIn("test_question2.score", rows[0])
+        self.assertEqual(len(rows), 5)
 
     def test_block_json_export(self):
         zip_buffer = block_export_json_results(self.block.identifier)
