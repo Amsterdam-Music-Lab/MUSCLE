@@ -49,77 +49,12 @@
         font-weight: 600;
         margin: 2rem 0px 2rem 0px;
     }
-    .pop-up {
-        background-color: var(--body-bg);
-        box-shadow: 0px 0px 10px var(--body-quiet-color);
-        position: fixed;
-        padding: 2rem;
-        border-style: solid;
-        border-color: var(--body-quiet-color);
-        border-width: 1px;
-        border-radius: 1px;
-        overflow-y: scroll;
-        z-index: 1;
-    }
-    .popup::backdrop {
-        background-color: rgba(0, 0, 0, 0.25);
-    }
-    .pop-up-big {
-        top: 4.2rem;
-        width: calc(80vw - 34px);
-        height: 80vh;
-    }
-    .pop-up-small {
-        top: 6.2rem;
-        width: calc(76vw - 51px);
-        height: 70vh;
-        z-index: 1;
-    }
-    .button-full {
-        width: 100%;
-    }
-    .badge {
-        padding: 0.25rem 0.4rem;
-        font-size: 75%;
-        font-weight: 700;
-        line-height: 1;
-        text-align: center;
-        white-space: nowrap;
-        vertical-align: baseline;
-        border-radius: 0.25rem;
-    }
-    .badge-white {
-        background: var(--button-fg);
-        color: var(--button-bg);
-    }
-    .feedback-list {
-        margin-top: 4rem;
-    }
-    .feedback-row {
-        width: 66%;
-        margin: 1rem auto 0px auto;
-        padding: 1rem;
-        border-radius: 1rem;
-        background-color: var(--darkened-bg);
-    }
-    .feedback-list h2 {
-        font-size: 0.875rem;
-        color: var(--body-fg);
-        font-weight: 600;
-        text-align: center;
-    }
-    .feedback-row h3 {
-        color: var(--body-fg);
-        font-weight: 600;
-        text-align: left;
-        margin-bottom: 1rem;
-    }
 </style>
 
 <h1>
     Blocks in Experiment: <a href="{% url 'admin:experiment_experiment_change' experiment.id %}" target="_blank">{{ experiment }}</a>
 </h1>
-<div class="experiment-stats">
+<p class="experiment-stats">
 <!-- Show stats on participants, sessions and feedback -->
 <h3>
     Total participants: {{ stats.participant_count }} 
@@ -130,11 +65,13 @@
 <h3>
     Total feedback: {{ stats.feedback_count }}
 </h3>
+</p>
+<div>
 {% if stats.session_count <= 600 %}
 <form action="" method="post">
-    {% csrf_token %}
-    <input type="hidden" name="export-experiment" maxlength="128" id="export-experiment" value="{{ experiment.identifier }}">
-    <input type="submit" name="_export_experiment_csv" value="Export CSV of whole experiment" />
+    {% csrf_token %}{% render_inline_action_fields %}
+    <input type="hidden" name="export-experiment" maxlength="128" id="export-experiment" value="{{ experiment.identifier }}"/>
+    <button class="button" type="submit" name="_export_experiment_csv">Export CSV of whole experiment</button>
 </form>
 {% endif %}
 </div>
@@ -210,8 +147,8 @@
                 <form action="" method="post">
                     {% csrf_token %}{% render_inline_action_fields %}
                     <input type="hidden" name="export-block" maxlength="128" id="export-block" value="{{ block.identifier }}">
-                    <input type="submit" name="_export_json" value="Export JSON" />
-                    {% if block.n_sessions <= 200 %}<input type="submit" name="_export_csv" value="Export CSV" />{% endif %}
+                    <button class="button" type="submit" name="_export_json">Export JSON</button>
+                    {% if block.n_sessions <= 200 %}<button class="button" type="submit" name="_export_csv">Export CSV</button>{% endif %}
                 </form>
             </td>
         </tr>
