@@ -148,7 +148,7 @@
                     {% csrf_token %}{% render_inline_action_fields %}
                     <input type="hidden" name="export-block" maxlength="128" id="export-block" value="{{ block.identifier }}">
                     <button class="button" type="submit" name="_export_json">Export JSON</button>
-                    {% if block.n_sessions <= 200 %}<button class="button" type="submit" name="_export_csv">Export CSV</button>{% endif %}
+                    {% if block.n_sessions <= 300 %}<button class="button" type="submit" name="_export_csv">Export CSV</button>{% endif %}
                 </form>
             </td>
         </tr>
