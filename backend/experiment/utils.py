@@ -205,7 +205,7 @@ def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
             "participant__id",
             "question_identifier",
         ]
-        section_data = (
+        section_responses = (
             combination[keys_of_interest]
             .dropna(
                 subset=["question_identifier", "given_response", "section__id"],
@@ -219,10 +219,26 @@ def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
             .unstack("question_identifier")
             .reset_index()
         )
-        section_data.columns = [
+        section_responses.columns = [
             ".".join(map(str, reversed(col))).strip(".")
-            for col in section_data.columns.to_flat_index()
+            for col in section_responses.columns.to_flat_index()
         ]
+        section_metadata = (
+            combination[
+                [
+                    "section__id",
+                    "section__song__artist",
+                    "section__song__name",
+                    "section__tag",
+                    "section__group",
+                ]
+            ]
+            .dropna(subset=["section__id"])
+            .drop_duplicates(subset=["section__id"])
+        )
+        section_data = section_responses.merge(
+            section_metadata, on="section__id", how="left"
+        )
         profile_columns = [
             col for col in combination.columns if ".given_response" in col
         ]
@@ -234,6 +250,10 @@ def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
                         "question_identifier",
                         "section__id",
                         "session__id",
+                        "section__tag",
+                        "section__group",
+                        "section__song__name",
+                        "section__song__artist",
                         "session__final_score",
                         "created_at",
                         "given_response",
@@ -246,10 +266,7 @@ def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
             )
             output = section_data.merge(
                 profile_data,
-                on=[
-                    "participant__id",
-                ],
-                how="left",
+                on="participant__id",
             )
         else:
             output = section_data
