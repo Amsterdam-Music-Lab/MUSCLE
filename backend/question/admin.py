@@ -1,4 +1,5 @@
 from copy import deepcopy
+import logging
 
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
@@ -12,7 +13,10 @@ from question.models import (
     QuestionInList,
 )
 from question.forms import QuestionForm, QuestionListForm
+from result.models import Result
+from result.utils import apply_scoring_rule
 
+logger = logging.getLogger(__name__)
 
 class QuestionInListInline(admin.TabularInline):
     model = QuestionInList
@@ -68,10 +72,25 @@ def duplicate_question(modeladmin, request, queryset):
         question.from_python = False
         question.save()
 
+
+@admin.action(description=_("Rescore selected questions"))
+def rescore_question(modeladmin, request, queryset):
+    """After updating the scoring_rule of a question, rescore all results of that question"""
+    for question in queryset:
+        results = Result.objects.filter(question_identifier=question.identifier).all()
+        for result in results:
+            result.scoring_rule = question.profile_scoring_rule
+            try:
+                result.score = apply_scoring_rule(result, result.json_data)
+            except:
+                logger.error(f"Could not rescore result {result.pk}: data not defined")
+            result.save()
+
+
 class QuestionAdmin(TabbedTranslationAdmin):
 
     form = QuestionForm
-    actions = [duplicate_question]
+    actions = [duplicate_question, rescore_question]
     change_form_template = 'question_change.html'
 
     class Media:
