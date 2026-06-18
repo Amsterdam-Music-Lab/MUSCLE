@@ -39,26 +39,26 @@ class TestExport(TestCase):
         cls.phase = Phase.objects.create(experiment=experiment)
         cls.participant = Participant.objects.create(unique_hash=42)
         cls.playlist = Playlist.objects.create(name="TestPlaylist")
+        cls.block = Block.objects.create(
+            identifier="test-block", rules="LIKERT", phase=cls.phase
+        )
+        cls.block.playlists.add(cls.playlist)
+        song = Song.objects.create(artist="artist", name="name")
         Section.objects.bulk_create(
             [
                 Section(
                     filename=f"section_{i}",
-                    song=Song.objects.create(artist=f"artist_{i}", name=f"name_{i}"),
+                    song=song,
                     playlist=cls.playlist,
                 )
                 for i in range(5)
             ]
-        )
-        cls.block = Block.objects.create(
-            identifier="test-block", rules="LIKERT", phase=cls.phase
         )
         Question.objects.bulk_create(
             [Question("test_profile_" + str(i)) for i in range(5)]
         )
         question_list = QuestionList.objects.create(block=cls.block)
         question_list.questions.add(*Question.objects.all())
-        for playlist in cls.block.playlists.all():
-            playlist._update_sections()
         cls.session = Session.objects.create(
             block=cls.block, participant=cls.participant, playlist=cls.playlist
         )
@@ -70,7 +70,7 @@ class TestExport(TestCase):
                     expected_response=i,
                     given_response=i,
                     score=i,
-                    section=Section.objects.get(filename="section_" + str(i)),
+                    section=Section.objects.get(filename=f"section_{i}"),
                     question_identifier="test_question",
                 )
                 for i in range(5)
@@ -81,7 +81,7 @@ class TestExport(TestCase):
             [
                 Result(
                     participant=cls.participant,
-                    question_identifier="test_profile_" + str(i),
+                    question_identifier=f"test_profile_{i}",
                     given_response=i,
                 )
                 for i in range(5)
@@ -109,7 +109,7 @@ class TestExport(TestCase):
         profile_results_count = Result.objects.filter(participant__isnull=False).count()
         self.assertGreater(
             len(
-                rows[0].split(","),
+                rows[0].keys(),
             ),
             profile_results_count * 2,
         )
@@ -155,7 +155,8 @@ class TestExport(TestCase):
         csv_output = experiment_export_csv_results("test-experiment")
         reader = csv.DictReader(csv_output.split("\n"))
         rows = [r for r in reader]
-        self.assertIn("test_question2.score", rows[0])
+        response_keys = [key for key in rows[0].keys() if ".given_response" in key]
+        self.assertEqual(len(response_keys), 7)
         self.assertEqual(len(rows), 5)
 
     def test_block_json_export(self):
@@ -177,24 +178,29 @@ class TestExport(TestCase):
             self.assertEqual(Participant.objects.first().unique_hash, "42")
 
             these_profiles = json.loads(test_zip.read("profiles.json").decode("utf-8"))
-            self.assertEqual(len(these_profiles), 5)
+            self.assertEqual(
+                len(these_profiles),
+                Result.objects.filter(participant__isnull=False).count(),
+            )
 
             these_results = json.loads(test_zip.read("results.json").decode("utf-8"))
-            self.assertEqual(len(these_results), 5)
+            self.assertEqual(
+                len(these_results),
+                Result.objects.filter(participant__isnull=False).count(),
+            )
 
             these_sections = json.loads(test_zip.read("sections.json").decode("utf-8"))
-            self.assertEqual(len(these_sections), 1000)
+            self.assertEqual(len(these_sections), Section.objects.count())
 
             these_sessions = json.loads(test_zip.read("sessions.json").decode("utf-8"))
-
             self.assertEqual(len(these_sessions), 1)
-            self.assertEqual(these_sessions[0]["fields"]["block"], 4)
+            self.assertEqual(these_sessions[0]["fields"]["block"], self.block.id)
 
             these_songs = json.loads(test_zip.read("songs.json").decode("utf-8"))
-            self.assertEqual(len(these_songs), 100)
+            self.assertEqual(len(these_songs), Song.objects.count())
 
             this_feedback = json.loads(test_zip.read("feedback.json").decode("utf-8"))
-            self.assertEqual(len(this_feedback), 2)
+            self.assertEqual(len(this_feedback), Feedback.objects.count())
 
     def test_block_json_export_admin(self):
         response = get_block_json_export_as_response(self.block.identifier)

@@ -8,6 +8,7 @@ from django.db.models import F
 from django.core import serializers
 from django.http import HttpResponse
 from django.utils import timezone
+import numpy as np
 import pandas as pd
 import roman
 
@@ -195,31 +196,37 @@ def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
         block_generate_results_data_frame(block_id) for block_id in block_identifiers
     ]
     combination = pd.concat(data_frames)
-    keys_of_interest = [
-        "score",
-        "given_response",
-        "section__id",
-        "participant__id",
-        "question_identifier",
-    ]
-    section_data = (
-        (
-            combination[keys_of_interest]
-            .groupby(
-                ["section__id", "question_identifier", "participant__id"], dropna=False
+    if any(combination.section__id):
+        # if we have section_ids defined, aggregate data by section_id
+        keys_of_interest = [
+            "score",
+            "given_response",
+            "section__id",
+            "participant__id",
+            "question_identifier",
+        ]
+        section_data = (
+            (
+                combination[keys_of_interest]
+                .groupby(
+                    ["section__id", "question_identifier", "participant__id"],
+                    dropna=False,
+                )
+                .agg(agg_func)
             )
-            .agg(agg_func)
+            .unstack("question_identifier")
+            .reset_index()
         )
-        .unstack("question_identifier")
-        .reset_index()
-    )
-    section_data.columns = [
-        ".".join(map(str, reversed(col))).strip(".")
-        for col in section_data.columns.to_flat_index()
-    ]
-    merged = section_data.merge(
-        combination.drop(
+        section_data.columns = [
+            ".".join(map(str, reversed(col))).strip(".")
+            for col in section_data.columns.to_flat_index()
+        ]
+        profile_columns = [
+            col for col in combination.columns if ".given_response" in col
+        ]
+        profile_data = combination.dropna(subset=profile_columns, how="all").drop(
             [
+                "question_identifier",
                 "session__id",
                 "session__final_score",
                 "created_at",
@@ -228,12 +235,39 @@ def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
                 "score",
             ],
             axis=1,
-        ),
-        on=["participant__id", "section__id"],
-    )
+        )
+        output = section_data.merge(
+            profile_data,
+            how="inner",
+            on=["participant__id", "section__id"],
+        )
+    else:
+        output = combination
     csv_buffer = StringIO()
-    merged.to_csv(csv_buffer)
+    output.fillna(value=np.nan).drop_duplicates().to_csv(csv_buffer)
     return csv_buffer.getvalue()
+
+
+def block_export_csv_results(block_identifier: str) -> StringIO:
+    csv_buffer = StringIO()
+    results_df = block_generate_results_data_frame(block_identifier)
+    results_df.to_csv(csv_buffer)
+    return csv_buffer.getvalue()
+
+
+def get_experiment_csv_export_as_response(experiment_identifier: str) -> HttpResponse:
+    '''Create a download response for the admin experimenter dashboard'''
+    csv_string = experiment_export_csv_results(experiment_identifier)
+    response = HttpResponse(csv_string)
+    response["Content-Type"] = "text/csv"
+    response["Content-Disposition"] = (
+        'attachment; filename="'
+        + experiment_identifier
+        + "-"
+        + timezone.now().isoformat()
+        + '.csv"'
+    )
+    return response
 
 
 def agg_func(input_value: Union[list, str, int]) -> str:

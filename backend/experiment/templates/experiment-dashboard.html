@@ -130,6 +130,10 @@
 <h3>
     Total feedback: {{ stats.feedback_count }}
 </h3>
+<form action="" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="export-experiment" maxlength="128" id="export-experiment" value="{{ experiment.identifier }}">
+    <input type="submit" name="_export_experiment_csv" value="Export CSV of whole experiment" />
 </p>
 
 <!-- Blocks table -->
@@ -199,7 +203,7 @@
             </td>
 
             <td class="table-export">
-                <!-- Export results for this block as JSON -->
+                <!-- Export results for this block as JSON or CSV-->
                 <form action="" method="post">
                     {% csrf_token %}{% render_inline_action_fields %}
                     <input type="hidden" name="export-block" maxlength="128" id="export-block" value="{{ block.identifier }}">
