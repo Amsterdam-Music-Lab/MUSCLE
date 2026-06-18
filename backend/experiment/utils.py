@@ -227,23 +227,27 @@ def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
             col for col in combination.columns if ".given_response" in col
         ]
         if profile_columns:
-            profile_data = combination.dropna(subset=profile_columns, how="all").drop(
-                [
-                    "question_identifier",
-                    "session__id",
-                    "session__final_score",
-                    "created_at",
-                    "given_response",
-                    "expected_response",
-                    "score",
-                ],
-                axis=1,
+            profile_data = (
+                combination.dropna(subset=profile_columns, how="all")
+                .drop(
+                    [
+                        "question_identifier",
+                        "section__id",
+                        "session__id",
+                        "session__final_score",
+                        "created_at",
+                        "given_response",
+                        "expected_response",
+                        "score",
+                    ],
+                    axis=1,
+                )
+                .drop_duplicates()
             )
             output = section_data.merge(
                 profile_data,
                 on=[
                     "participant__id",
-                    "section__id",
                 ],
                 how="left",
             )
