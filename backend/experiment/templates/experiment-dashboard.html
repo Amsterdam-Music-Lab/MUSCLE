@@ -119,7 +119,7 @@
 <h1>
     Blocks in Experiment: <a href="{% url 'admin:experiment_experiment_change' experiment.id %}" target="_blank">{{ experiment }}</a>
 </h1>
-<p class="experiment-stats">
+<div class="experiment-stats">
 <!-- Show stats on participants, sessions and feedback -->
 <h3>
     Total participants: {{ stats.participant_count }} 
@@ -130,11 +130,14 @@
 <h3>
     Total feedback: {{ stats.feedback_count }}
 </h3>
+{% if stats.session_count <= 600 %}
 <form action="" method="post">
     {% csrf_token %}
     <input type="hidden" name="export-experiment" maxlength="128" id="export-experiment" value="{{ experiment.identifier }}">
     <input type="submit" name="_export_experiment_csv" value="Export CSV of whole experiment" />
-</p>
+</form>
+{% endif %}
+</div>
 
 <!-- Blocks table -->
 <table>
@@ -208,7 +211,7 @@
                     {% csrf_token %}{% render_inline_action_fields %}
                     <input type="hidden" name="export-block" maxlength="128" id="export-block" value="{{ block.identifier }}">
                     <input type="submit" name="_export_json" value="Export JSON" />
-                    {% if block.n_sessions <= 100 %}<input type="submit" name="_export_csv" value="Export CSV" />{% endif %}
+                    {% if block.n_sessions <= 200 %}<input type="submit" name="_export_csv" value="Export CSV" />{% endif %}
                 </form>
             </td>
         </tr>
