@@ -207,7 +207,10 @@ def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
         ]
         section_data = (
             combination[keys_of_interest]
-            .dropna(subset="question_identifier")
+            .dropna(
+                subset=["question_identifier", "given_response", "section__id"],
+                how="any",
+            )
             .groupby(
                 ["section__id", "question_identifier", "participant__id"],
                 dropna=False,
@@ -242,6 +245,7 @@ def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
                     "participant__id",
                     "section__id",
                 ],
+                how="left",
             )
         else:
             output = section_data
