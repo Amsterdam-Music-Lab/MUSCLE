@@ -217,7 +217,6 @@ def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
             .unstack("question_identifier")
             .reset_index()
         )
-        breakpoint()
         section_data.columns = [
             ".".join(map(str, reversed(col))).strip(".")
             for col in section_data.columns.to_flat_index()
