@@ -206,14 +206,12 @@ def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
             "question_identifier",
         ]
         section_data = (
-            (
-                combination[keys_of_interest]
-                .groupby(
-                    ["section__id", "question_identifier", "participant__id"],
-                    dropna=False,
-                )
-                .agg(agg_func)
+            combination[keys_of_interest]
+            .groupby(
+                ["section__id", "question_identifier", "participant__id"],
+                dropna=False,
             )
+            .agg(agg_func)
             .unstack("question_identifier")
             .reset_index()
         )
@@ -228,6 +226,7 @@ def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
             profile_data = combination.dropna(subset=profile_columns, how="all").drop(
                 [
                     "question_identifier",
+                    "section__id",
                     "session__id",
                     "session__final_score",
                     "created_at",
@@ -237,17 +236,13 @@ def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
                 ],
                 axis=1,
             )
-            output = section_data.merge(
-                profile_data,
-                how="inner",
-                on=["participant__id", "section__id"],
-            )
+            output = section_data.merge(profile_data, on=["participant__id"])
         else:
             output = section_data
     else:
         output = combination
     csv_buffer = StringIO()
-    output.fillna(value=np.nan).drop_duplicates().to_csv(csv_buffer)
+    output.drop_duplicates().to_csv(csv_buffer)
     return csv_buffer.getvalue()
 
 
