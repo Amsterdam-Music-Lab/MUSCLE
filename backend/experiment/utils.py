@@ -217,6 +217,7 @@ def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
             .unstack("question_identifier")
             .reset_index()
         )
+        breakpoint()
         section_data.columns = [
             ".".join(map(str, reversed(col))).strip(".")
             for col in section_data.columns.to_flat_index()
@@ -224,23 +225,26 @@ def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
         profile_columns = [
             col for col in combination.columns if ".given_response" in col
         ]
-        profile_data = combination.dropna(subset=profile_columns, how="all").drop(
-            [
-                "question_identifier",
-                "session__id",
-                "session__final_score",
-                "created_at",
-                "given_response",
-                "expected_response",
-                "score",
-            ],
-            axis=1,
-        )
-        output = section_data.merge(
-            profile_data,
-            how="inner",
-            on=["participant__id", "section__id"],
-        )
+        if profile_columns:
+            profile_data = combination.dropna(subset=profile_columns, how="all").drop(
+                [
+                    "question_identifier",
+                    "session__id",
+                    "session__final_score",
+                    "created_at",
+                    "given_response",
+                    "expected_response",
+                    "score",
+                ],
+                axis=1,
+            )
+            output = section_data.merge(
+                profile_data,
+                how="inner",
+                on=["participant__id", "section__id"],
+            )
+        else:
+            output = section_data
     else:
         output = combination
     csv_buffer = StringIO()
