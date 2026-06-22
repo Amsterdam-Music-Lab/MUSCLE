@@ -135,7 +135,63 @@ class TestExport(TestCase):
         self.assertIsNotNone(response.content)
         self.assertEqual(response["content-type"], "text/csv")
 
-    def test_experiment_csv_export(self):
+    def test_experiment_csv_export_same_session(self):
+        self.create_same_session_results()
+        rows = self.get_rows_from_csv()
+        response_keys = [key for key in rows[0].keys() if ".given_response" in key]
+        self.assertEqual(len(response_keys), self.get_expected_results_count())
+        self.assertEqual(len(rows), Section.objects.count())
+
+    def create_same_session_results(self):
+        Result.objects.bulk_create(
+            [
+                Result(
+                    session=self.session,
+                    section=Section.objects.get(filename="section_" + str(i)),
+                    question_identifier="test_question2",
+                    given_response=i + 10,
+                    score=i + 10,
+                )
+                for i in range(5)
+            ]
+        )
+
+    def test_experiment_csv_export_another_session(self):
+        self.create_another_session_results()
+        rows = self.get_rows_from_csv()
+        response_keys = [key for key in rows[0].keys() if ".given_response" in key]
+        self.assertEqual(len(response_keys), self.get_expected_results_count())
+        self.assertEqual(len(rows), Section.objects.count())
+        # test that the value from the first session by this participant is used
+        self.assertEqual(rows[2].get("given_response", 1))
+
+    def create_another_session_results(self):
+        # create another set of results with same identifier on another session on self.block
+        same_block_session = Session.objects.create(
+            block=self.block, participant=self.participant
+        )
+        Result.objects.bulk_create(
+            [
+                Result(
+                    session=same_block_session,
+                    section=Section.objects.get(filename="section_" + str(i)),
+                    question_identifier="test_question",
+                    given_response=i + 30,
+                    score=i + 30,
+                )
+                for i in range(5)
+            ]
+        )
+
+    def test_experiment_csv_export_another_block(self):
+        self.create_another_block_results()
+        rows = self.get_rows_from_csv()
+        response_keys = [key for key in rows[0].keys() if ".given_response" in key]
+        self.assertEqual(len(response_keys), self.get_expected_results_count())
+        self.assertEqual(len(rows), Section.objects.count())
+
+    def create_another_block_results(self):
+        # create extra results for the test sections on another block & session
         block = Block.objects.create(
             identifier="test-block-2", rules="LIKERT", phase=self.phase
         )
@@ -152,12 +208,72 @@ class TestExport(TestCase):
                 for i in range(5)
             ]
         )
+
+    def test_experiment_csv_export_another_participant(self):
+        new_participant = Participant.objects.create()
+        self.create_another_participant_results(new_participant)
+        rows = self.get_rows_from_csv()
+        response_keys = [key for key in rows[0].keys() if ".given_response" in key]
+        self.assertEqual(len(response_keys), self.get_expected_results_count())
+        self.assertEqual(len(rows), Section.objects.count() * 2)
+
+    def create_another_participant_results(self, participant: Participant):
+        # create another set of results for another participant
+        new_session = Session.objects.create(block=self.block, participant=participant)
+        Result.objects.bulk_create(
+            [
+                Result(
+                    session=new_session,
+                    section=Section.objects.get(filename="section_" + str(i)),
+                    question_identifier="test_question",
+                    given_response=i + 40,
+                    score=i + 40,
+                )
+                for i in range(5)
+            ]
+        )
+
+    def create_another_participant_profile_results(self, participant: Participant):
+        Result.objects.bulk_create(
+            [
+                Result(
+                    participant=participant,
+                    question_identifier=f"test_profile_{i}",
+                    given_response=i + 10,
+                    score=i + 10,
+                )
+                for i in range(5)
+            ]
+        )
+
+    def test_experiment_csv_export_with_all_scenarios(self):
+        self.create_same_session_results()
+        self.create_another_session_results()
+        self.create_another_block_results()
+        new_participant = Participant.objects.create()
+        self.create_another_participant_results(new_participant)
+        self.create_another_participant_profile_results(new_participant)
+        rows = self.get_rows_from_csv()
+        response_keys = [key for key in rows[0].keys() if ".given_response" in key]
+        self.assertEqual(len(response_keys), self.get_expected_results_count())
+        self.assertEqual(len(rows), Section.objects.count() * 2)
+
+    def get_expected_results_count(self):
+        return (
+            Result.objects.filter(question_identifier__startswith="test_profile")
+            .order_by("question_identifier")
+            .distinct("question_identifier")
+            .count()
+            + Result.objects.filter(question_identifier__startswith="test_question")
+            .order_by("question_identifier")
+            .distinct("question_identifier")
+            .count()
+        )
+
+    def get_rows_from_csv(self):
         csv_output = experiment_export_csv_results("test-experiment")
         reader = csv.DictReader(csv_output.split("\n"))
-        rows = [r for r in reader]
-        response_keys = [key for key in rows[0].keys() if ".given_response" in key]
-        self.assertEqual(len(response_keys), 7)
-        self.assertEqual(len(rows), 5)
+        return [r for r in reader]
 
     def test_block_json_export(self):
         zip_buffer = block_export_json_results(self.block.identifier)

@@ -162,7 +162,7 @@ def block_generate_results_data_frame(block_identifier: str) -> pd.DataFrame:
     wide_profiles = wide_profiles.reset_index()
     if results_output.empty:
         return wide_profiles
-    return pd.merge(results_output, wide_profiles, on="participant__id")
+    return pd.merge(results_output, wide_profiles, how="left", on="participant__id")
 
 
 def block_export_csv_results(block_identifier: str) -> StringIO:
@@ -267,6 +267,7 @@ def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
             output = section_data.merge(
                 profile_data,
                 on="participant__id",
+                how="left",
             )
         else:
             output = section_data
