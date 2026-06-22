@@ -209,13 +209,13 @@ def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
             combination[keys_of_interest]
             .dropna(
                 subset=["question_identifier", "given_response", "section__id"],
-                how="any",
+                how="all",
             )
             .groupby(
                 ["section__id", "question_identifier", "participant__id"],
                 dropna=False,
             )
-            .agg(agg_func)
+            .agg("first")
             .unstack("question_identifier")
             .reset_index()
         )
@@ -262,7 +262,8 @@ def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
                     ],
                     axis=1,
                 )
-                .drop_duplicates()
+                .groupby("participant__id")
+                .agg("first")
             )
             output = section_data.merge(
                 profile_data,
@@ -298,14 +299,6 @@ def get_experiment_csv_export_as_response(experiment_identifier: str) -> HttpRes
         + '.csv"'
     )
     return response
-
-
-def agg_func(input_value: Union[list, str, int]) -> str:
-    """return the first response by a participant"""
-    if type(input_value) is pd.Series:
-        return input_value.values[0]
-    else:
-        return input_value
 
 
 def get_block_csv_export_as_response(block_identifier: str) -> HttpResponse:

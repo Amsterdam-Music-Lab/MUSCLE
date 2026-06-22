@@ -163,7 +163,7 @@ class TestExport(TestCase):
         self.assertEqual(len(response_keys), self.get_expected_results_count())
         self.assertEqual(len(rows), Section.objects.count())
         # test that the value from the first session by this participant is used
-        self.assertEqual(rows[2].get("given_response", 1))
+        self.assertEqual(int(rows[1].get("test_question.given_response")), 1)
 
     def create_another_session_results(self):
         # create another set of results with same identifier on another session on self.block
