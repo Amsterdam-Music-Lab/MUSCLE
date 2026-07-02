@@ -154,63 +154,77 @@
   fields:
     identifier: '1'
     text: Completely Disagree
+    text_en: Completely Disagree
     text_nl: Helemaal mee oneens
     text_zh_hans: 完全不同意
     text_de: Stimme ganz und gar nicht zu
+    text_jp: 全くあてはまらない
     index: 0
     choicelist: LIKERT_AGREE_7
 - model: question.choice
   fields:
     identifier: '2'
     text: Strongly Disagree
+    text_en: Strongly Disagree
     text_nl: Zeer mee oneens
     text_zh_hans: 非常不同意
     text_de: Stimme nicht zu
+    text_jp: ほとんどあてはまらない
     index: 1
     choicelist: LIKERT_AGREE_7
 - model: question.choice
   fields:
     identifier: '3'
     text: Disagree
+    text_en: Disagree
     text_nl: Mee oneens
     text_zh_hans: 不同意
     text_de: Stimme eher nicht zu
+    text_jp: あまりあてはまらない
     index: 2
     choicelist: LIKERT_AGREE_7
 - model: question.choice
   fields:
     identifier: '4'
     text: Neither Agree nor Disagree
+    text_en: Neither Agree nor Disagree
     text_nl: Niet mee eens of oneens
     text_zh_hans: 即不同意也不反对
     text_de: Weder noch
+    text_jp: どちらでもない
     index: 3
     choicelist: LIKERT_AGREE_7
 - model: question.choice
   fields:
     identifier: '5'
     text: Agree
+    text_en: Agree
     text_nl: Mee eens
     text_zh_hans: 同意
     text_de: Stimme eher zu
+    text_jp: わりとあてはまる
     index: 4
     choicelist: LIKERT_AGREE_7
 - model: question.choice
   fields:
     identifier: '6'
     text: Strongly Agree
+    text_en: Strongly Agree
     text_nl: Zeer mee eens
     text_zh_hans: 非常同意
     text_de: Stimme zu
+    text_jp: よくあてはまる
     index: 5
     choicelist: LIKERT_AGREE_7
 - model: question.choice
   fields:
     identifier: '7'
     text: Completely Agree
+    text_en: Completely Agree
     text_nl: Helemaal mee eens
     text_zh_hans: 完全同意
     text_de: Stimme voll und ganz zu
+    text_jp: 実によくあてはまる
     index: 6
     choicelist: LIKERT_AGREE_7
 - model: question.choice

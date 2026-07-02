@@ -51,127 +51,133 @@
   fields:
     identifier: 11+
     text: 11 or more
+    text_en: 11 or more
     text_nl: 11 of meer
     text_zh_hans: 11或以上
     text_de: 11 oder mehr
+    text_jp: 11 かそれ以上
     index: 6
     choicelist: GMSI_ATTENDED_EVENTS
 - model: question.choice
   fields:
     identifier: 0-15
     text: 0-15 min
+    text_en: 0-15 min
     text_zh_hans: 0-15分钟
+    text_jp: 0-15 分 
     index: 0
     choicelist: GMSI_DAILY_MUSIC_LISTENING
 - model: question.choice
   fields:
     identifier: 15-30
     text: 15-30 min
+    text_en: 15-30 min
     text_zh_hans: 15-30分钟
+    text_jp: 15-30 分
     index: 1
     choicelist: GMSI_DAILY_MUSIC_LISTENING
 - model: question.choice
   fields:
     identifier: 30-60
     text: 30-60 min
-    text_zh_hans: 40-60分钟
+    text_en: 30-60 min
+    text_zh_hans: 30-60分钟
+    text_jp: 30-60 分
     index: 2
     choicelist: GMSI_DAILY_MUSIC_LISTENING
 - model: question.choice
   fields:
     identifier: 60-90
     text: 60-90 min
+    text_en: 60-90 min
     text_zh_hans: 60-90分钟
+    text_jp: 60-90 分
     index: 3
     choicelist: GMSI_DAILY_MUSIC_LISTENING
 - model: question.choice
   fields:
     identifier: 2h
     text: 2 hrs
+    text_en: 2 hrs
     text_nl: 2 uur
     text_zh_hans: 2小时
     text_de: 2 Std
+    text_jp: 2 時間 
     index: 4
     choicelist: GMSI_DAILY_MUSIC_LISTENING
 - model: question.choice
   fields:
     identifier: 2-3h
     text: 2-3 hrs
+    text_en: 2-3 hrs
     text_nl: 2-3 uur
     text_zh_hans: 2-3小时
     text_de: 2-3 Std
+    text_jp: 2-3 時間
     index: 5
     choicelist: GMSI_DAILY_MUSIC_LISTENING
 - model: question.choice
   fields:
     identifier: 4h+
     text: 4 hrs or more
+    text_en: 4 hrs or more
     text_nl: 4 uur of langer
     text_zh_hans: 4小时或以上
     text_de: 4 Std oder mehr
+    text_jp: 4 時間 かそれ以上
     index: 6
     choicelist: GMSI_DAILY_MUSIC_LISTENING
 - model: question.choice
   fields:
     identifier: '0'
-    text: 0 hours
-    text_nl: 0 uur
+    text: 0
     text_zh_hans: 0小时
-    text_de: 0
     index: 0
     choicelist: GMSI_HOURS_DAILY_PRACTICE
 - model: question.choice
   fields:
     identifier: '0.5'
-    text: 0.5 hours
-    text_nl: 0.5 uur
+    text: 0.5
     text_zh_hans: 0.5小时
-    text_de: 0.5
     index: 1
     choicelist: GMSI_HOURS_DAILY_PRACTICE
 - model: question.choice
   fields:
     identifier: '1'
-    text: 1 hour
-    text_nl: 1 uur
+    text: 1
     text_zh_hans: 1小时
-    text_de: 1
     index: 2
     choicelist: GMSI_HOURS_DAILY_PRACTICE
 - model: question.choice
   fields:
     identifier: '1.5'
-    text: 1.5 hours
-    text_nl: 1.5 uur
+    text: 1.5
     text_zh_hans: 1.5小时
-    text_de: 1.5
     index: 3
     choicelist: GMSI_HOURS_DAILY_PRACTICE
 - model: question.choice
   fields:
     identifier: '2'
-    text: 2 hours
-    text_nl: 2 uur
+    text: 2
     text_zh_hans: 2小时
-    text_de: 2
     index: 4
     choicelist: GMSI_HOURS_DAILY_PRACTICE
 - model: question.choice
   fields:
     identifier: 3-4
-    text: 3-4 hours
-    text_nl: 3-4 uur
+    text: 3-4
     text_zh_hans: 3-4小时
-    text_de: 3-4
     index: 5
     choicelist: GMSI_HOURS_DAILY_PRACTICE
 - model: question.choice
   fields:
     identifier: 5+
-    text: 5 or more hours
-    text_nl: 5 of meer uur
+    text: 5 or more
+    text_en: 5 or more
+    text_nl: 5 of meer
     text_zh_hans: 5小时或以上
     text_de: 5 oder mehr
+    text_jp: 5 かそれ以上
     index: 6
     choicelist: GMSI_HOURS_DAILY_PRACTICE
 - model: question.choice
@@ -214,6 +220,9 @@
   fields:
     identifier: 6+
     text: 6 or more
+    text_en: 6 or more
+    text_de: 6 oder mehr
+    text_jp: 6 かそれ以上
     index: 6
     choicelist: GMSI_N_INSTRUMENTS
 - model: question.choice
@@ -256,71 +265,58 @@
   fields:
     identifier: 10+
     text: 10 or more
+    text_en: 10 or more
     text_nl: 10 of meer
     text_zh_hans: 10或以上
     text_de: 10 oder mehr
+    text_jp: 10 かそれ以上
     index: 6
     choicelist: GMSI_YEARS_INSTRUMENTAL_TRAINING
 - model: question.choice
   fields:
     identifier: '0'
-    text: 0 years
-    text_nl: 0 jaar
-    text_zh_hans: 0年
-    text_de: 0
+    text: 0
     index: 0
     choicelist: GMSI_YEARS_PRACTICED
 - model: question.choice
   fields:
     identifier: '1'
-    text: 1 year
-    text_nl: 1 jaar
-    text_zh_hans: 1年
-    text_de: 1
+    text: 1
     index: 1
     choicelist: GMSI_YEARS_PRACTICED
 - model: question.choice
   fields:
     identifier: '2'
-    text: 2 years
-    text_nl: 2 jaar
-    text_zh_hans: 2年
-    text_de: 2
+    text: 2
     index: 2
     choicelist: GMSI_YEARS_PRACTICED
 - model: question.choice
   fields:
     identifier: '3'
-    text: 3 years
-    text_nl: 3 jaar
-    text_zh_hans: 3年
-    text_de: 3
+    text: 3
     index: 3
     choicelist: GMSI_YEARS_PRACTICED
 - model: question.choice
   fields:
     identifier: 4-5
-    text: 4–5 years
-    text_nl: 4-5 jaar
-    text_zh_hans: 4-5年
-    text_de: 4-5
+    text: 4-5
     index: 4
     choicelist: GMSI_YEARS_PRACTICED
 - model: question.choice
   fields:
     identifier: 6-9
-    text: 6–9 years
-    text_nl: 6-9 jaar
-    text_zh_hans: 6-9年
-    text_de: 6-9
+    text: 6-9
     index: 5
     choicelist: GMSI_YEARS_PRACTICED
 - model: question.choice
   fields:
     identifier: 10+
-    text: 10 or more years
-    text_nl: 10 of meer jaar
+    text: 10 or more
+    text_en: 10 or more
+    text_nl: 10 of meer
     text_zh_hans: 10年或以上
+    text_de: 10 oder mehr
+    text_jp: 10 かそれ以上
     index: 6
     choicelist: GMSI_YEARS_PRACTICED
 - model: question.choice
@@ -363,8 +359,10 @@
   fields:
     identifier: 7+
     text: 7 or more
+    text_en: 7 or more
     text_nl: 7 of meer
     text_zh_hans: 7或以上
     text_de: 7 oder mehr
+    text_jp: 7 かそれ以上
     index: 6
     choicelist: GMSI_YEARS_THEORY_TRAINING
