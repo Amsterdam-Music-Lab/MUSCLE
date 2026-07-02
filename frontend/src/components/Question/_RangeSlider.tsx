@@ -24,10 +24,17 @@ const RangeSlider = ({ choices, value, onChange, changePosition=false }: RangePr
     const labels = choices.map(choice => choice.label);
 
     const emptyValue = value === "";
-    const sliderValue = !emptyValue ? keys.indexOf(value) : Math.round((keys.length - 1)/2);
+    const sliderValue = emptyValue ? Math.round((keys.length - 1) / 2) : keys.indexOf(value);
 
     const onSliderChange = (event) => {
+        const nextIndex = Number(event.target.value);
+        const nextValue = keys[nextIndex];
+
         setThumbColor(theme["colorSecondary"]);
+
+        if (nextValue !== undefined) {
+            onChange(nextValue);
+        }
     };
     
     const sliderStyle = () => {
@@ -61,7 +68,7 @@ const RangeSlider = ({ choices, value, onChange, changePosition=false }: RangePr
                     onChange={onSliderChange}
                     min={0}
                     max={labels.length - 1}
-                    // value={value}
+                    value={sliderValue}
                 />
             </div>
 
