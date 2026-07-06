@@ -3,6 +3,8 @@
   pk: dgf_age
   fields:
     text: What is your age?
+    text_nl: Wat is je leeftijd?
+    text_zh_hans: 您的年龄是？
     explainer: ''
     type: NumberQuestion
     max_value: 120
@@ -11,8 +13,10 @@
 - model: question.question
   pk: dgf_country_of_origin
   fields:
-    text: In which country did you spend the most formative years of your childhood
-      and youth?
+    text: In which country did you spend the most formative years of your childhood and youth?
+    text_nl: In welk land heeft u de vormende jaren van uw jeugd doorgebracht?
+    text_zh_hans: 您在哪个国家度过了童年和青年时代最有成长性的时期？
+    text_de: 'Das Land, in dem Sie die wichtigsten Jahre ihrer Kindheit und Jugend verbracht haben:'
     explainer: ''
     type: DropdownQuestion
     profile_scoring_rule: ''
@@ -20,8 +24,10 @@
 - model: question.question
   pk: dgf_country_of_origin_open
   fields:
-    text: In which country did you spend the most formative years of your childhood
-      and youth?
+    text: In which country did you spend the most formative years of your childhood and youth?
+    text_nl: In welk land heeft u de vormende jaren van uw jeugd doorgebracht?
+    text_zh_hans: 您在哪个国家度过了童年和青年时代最有成长性的时期？
+    text_de: 'Das Land, in dem Sie die wichtigsten Jahre ihrer Kindheit und Jugend verbracht haben:'
     explainer: ''
     type: TextQuestion
     profile_scoring_rule: ''
@@ -30,6 +36,9 @@
   pk: dgf_country_of_residence
   fields:
     text: In which country do you currently reside?
+    text_nl: In welk land woont u tegenwoordig?
+    text_zh_hans: 您目前所在的国家：
+    text_de: 'Das Land, indem Sie gegenwärtig wohnen:'
     explainer: ''
     type: DropdownQuestion
     profile_scoring_rule: ''
@@ -38,6 +47,9 @@
   pk: dgf_country_of_residence_open
   fields:
     text: In which country do you currently reside?
+    text_nl: In welk land woont u tegenwoordig?
+    text_zh_hans: 您目前所在的国家：
+    text_de: 'Das Land, indem Sie gegenwärtig wohnen:'
     explainer: ''
     type: TextQuestion
     profile_scoring_rule: ''
@@ -46,6 +58,9 @@
   pk: dgf_education
   fields:
     text: What is the highest educational qualification that you have attained?
+    text_nl: Wat is uw hoogste afgeronde opleiding?
+    text_zh_hans: 您所获得的最高学历：
+    text_de: Welchen höchsten Ausbildungsabschluss haben Sie?
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''
@@ -54,6 +69,9 @@
   pk: dgf_education_gold_msi
   fields:
     text: What is the highest educational qualification that you have attained?
+    text_nl: Wat is uw hoogste afgeronde opleiding?
+    text_zh_hans: 您所获得的最高学历：
+    text_de: Welchen höchsten Ausbildungsabschluss haben Sie?
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''
@@ -62,6 +80,8 @@
   pk: dgf_gender_identity
   fields:
     text: With which gender do you currently most identify?
+    text_nl: Met welke gender identificeer je je het meest?
+    text_zh_hans: 您目前对自己的性别认识?
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''
@@ -70,6 +90,8 @@
   pk: dgf_gender_reduced
   fields:
     text: What is your gender?
+    text_nl: Wat is je geslacht?
+    text_de: 'Geschlecht:'
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''
@@ -78,6 +100,7 @@
   pk: dgf_generation
   fields:
     text: When were you born?
+    text_zh_hans: 您的出生日期是？
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''
@@ -86,6 +109,8 @@
   pk: dgf_genre_preference
   fields:
     text: To which group of musical genres do you currently listen most?
+    text_nl: Naar welk muziekgenre luistert u meestal?
+    text_zh_hans: 以下哪种音乐类型是您目前最常听的？
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''
@@ -93,8 +118,9 @@
 - model: question.question
   pk: dgf_highest_qualification_expectation
   fields:
-    text: If you are still in education, what is the highest qualification you
-      expect to obtain?
+    text: If you are still in education, what is the highest qualification you expect to obtain?
+    text_nl: Als u nog in opleiding bent, op welk opleidingsniveau denkt u dan te eindigen?
+    text_zh_hans: 如果您还在接受教育，您期望获得的最高学历是？
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''
@@ -103,6 +129,7 @@
   pk: dgf_musical_experience
   fields:
     text: 'Please select your level of musical experience:'
+    text_pt: 'Por favor indique a sua experiência prévia:'
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''
@@ -119,6 +146,8 @@
   pk: dgf_occupational_status
   fields:
     text: Occupational status
+    text_nl: Dagelijkse bezigheden
+    text_zh_hans: 您的职业状况
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''
@@ -127,6 +156,8 @@
   pk: lang_exposure
   fields:
     text: 'Please rate your previous experience:'
+    text_zh_hans: 请为您先前的语言经历打分：
+    text_pt: 'Por favor indique a sua experiência prévia:'
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''
@@ -135,6 +166,8 @@
   pk: lang_mother
   fields:
     text: What is your mother tongue?
+    text_zh_hans: 您的母语是什么？
+    text_pt: Qual é a sua língua materna
     explainer: ''
     type: TextQuestion
     profile_scoring_rule: ''
@@ -143,6 +176,8 @@
   pk: lang_second
   fields:
     text: What is your second language, if applicable?
+    text_zh_hans: 如果有的话，您的第二语言是什么？
+    text_pt: Qual é a sua segunda língua, se houver?
     explainer: You can skip this question
     type: TextQuestion
     profile_scoring_rule: ''
@@ -152,6 +187,8 @@
   pk: lang_third
   fields:
     text: What is your third language, if applicable?
+    text_zh_hans: 如果有的话，您的第三语言是什么？
+    text_pt: Qual é a sua terceira língua, se houver?
     explainer: You can skip this question
     type: TextQuestion
     profile_scoring_rule: ''
@@ -185,8 +222,8 @@
 - model: question.question
   pk: dgf_region_of_origin_zh
   fields:
-    text: In which region did you spend the most formative years of your childhood
-      and youth?
+    text: In which region did you spend the most formative years of your childhood and youth?
+    text_zh_hans: 您的童年与青少年时期在哪个地区/省/市度过的？
     explainer: ''
     type: DropdownQuestion
     profile_scoring_rule: ''
@@ -195,6 +232,7 @@
   pk: dgf_region_of_residence_zh
   fields:
     text: In which region do you currently reside?
+    text_zh_hans: 您目前所在的地区/省/市或国家：
     explainer: ''
     type: DropdownQuestion
     profile_scoring_rule: ''

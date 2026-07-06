@@ -3,6 +3,10 @@
   pk: msi_01_music_activities
   fields:
     text: I spend a lot of my free time doing music-related activities.
+    text_nl: Ik besteed veel van mijn vrije tijd aan muziekgerelateerde activiteiten.
+    text_zh_hans: 我闲暇时花很多时间进行与音乐相关的活动。
+    text_de: Ich beschäftige mich in meiner Freizeit viel mit musikbezogenen Aktivitäten.
+    text_ja: 自由時間のほとんどを、音楽に関することに使う
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -11,6 +15,10 @@
   pk: msi_02_shivers
   fields:
     text: I sometimes choose music that can trigger shivers down my spine.
+    text_nl: Soms kies ik voor muziek waarvan ik rillingen over mijn rug kan krijgen.
+    text_zh_hans: 我有时会听让我起鸡皮疙瘩的音乐。
+    text_de: Ich suche oft Musik aus, bei der ich eine Gänsehaut bekomme.
+    text_ja: ゾクゾクするような（もしくは⿃肌が⽴つような）⾳楽を聴きたいと思うことがある
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -19,6 +27,10 @@
   pk: msi_03_writing
   fields:
     text: I enjoy writing about music, for example on blogs and forums.
+    text_nl: Ik schrijf graag over muziek, bijvoorbeeld op blogs of fora.
+    text_zh_hans: 我乐于在网上（如微博或论坛）发表有关音乐的文字。
+    text_de: Ich schreibe gerne über Musik, z. B. in Internetblogs oder Foren.
+    text_ja: インターネットのブログや掲⽰板に⾳楽に関する情報を書くのが楽しい
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -27,6 +39,10 @@
   pk: msi_04_sing_along
   fields:
     text: If somebody starts singing a song I don’t know, I can usually join in.
+    text_nl: Als iemand een lied begint te zingen dat ik niet ken, kan ik meestal meezingen.
+    text_zh_hans: 如果有人唱起我没听过的歌，我通常能够跟着一起唱。
+    text_de: Wenn jemand anderes ein Lied singt, welches ich nicht kenne, kann ich normalerweise mitsingen.
+    text_ja: 知らないメロディーを誰かが歌い始めた時、たいていの場合は⼀緒に歌うことができる
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -35,6 +51,10 @@
   pk: msi_05_good_singer
   fields:
     text: I am able to judge whether someone is a good singer or not.
+    text_nl: Ik kan beoordelen of iemand goed kan zingen of niet.
+    text_zh_hans: 我能判断某人是不是好歌手。
+    text_de: Ich kann beurteilen, ob jemand gut singt oder nicht.
+    text_ja: 歌っている⼈がうまいかどうか、的確に判断ができる
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -43,6 +63,10 @@
   pk: msi_06_song_first_time
   fields:
     text: I usually know when I’m hearing a song for the first time.
+    text_nl: Meestal weet ik of ik een nummer voor de eerste keer hoor.
+    text_zh_hans: 我通常能分辨出自己是否第一次听到某首歌曲。
+    text_de: Meistens weiß ich, ob ich ein Lied zum ersten Mal höre.
+    text_ja:  聴こえてきた曲が初めて聴く曲かどうかがすぐにわかる
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -51,6 +75,10 @@
   pk: msi_07_from_memory
   fields:
     text: I can sing or play music from memory.
+    text_nl: Ik kan muziek uit mijn hoofd zingen of spelen.
+    text_zh_hans: 我可以凭记忆唱歌或演奏音乐。
+    text_de: Ich kann auswendig singen oder Musik spielen.
+    text_ja: 暗譜で演奏することができる（歌を含む）
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -58,8 +86,11 @@
 - model: question.question
   pk: msi_08_intrigued_styles
   fields:
-    text: I’m intrigued by musical styles I’m not familiar with and want to find
-      out more.
+    text: I’m intrigued by musical styles I’m not familiar with and want to find out more.
+    text_nl: Ik ben geïntrigeerd door muziekstijlen die ik niet goed ken en wil daar meer over weten."
+    text_zh_hans: 我对自己不熟悉的音乐风格充满好奇心，并且想要深入了解它。
+    text_de: Ich bin fasziniert von Musikstilen, mit denen ich nicht vertraut bin, und möchte mehr darüber erfahren.
+    text_ja: 馴染みのない⾳楽を⽿にすると、それについてもっと知りたいと思う
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -68,14 +99,22 @@
   pk: msi_09_rarely_emotions
   fields:
     text: Pieces of music rarely evoke emotions for me.
+    text_nl: Muziek roept zelden emoties bij mij op.
+    text_zh_hans: 音乐作品很少能唤起我的情感。
+    text_de: Musikstücke rufen selten Gefühle in mir hervor.
+    text_ja: ⾳楽を聴いてもほとんど感情が揺さぶられない
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_10_sing_with_recording
   fields:
     text: I am able to hit the right notes when I sing along with a recording.
+    text_nl: Ik kan de juiste tonen treffen als ik meezing met een opname.
+    text_zh_hans: 跟着原声歌曲唱歌时，我能够把音唱准。
+    text_de: Ich bin in der Lage, die richtigen Töne zu treffen, wenn ich zu einer Aufnahme mitsinge. 
+    text_ja: 知っている曲のメロディーにぴったり合わせて歌うことができる
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -83,17 +122,23 @@
 - model: question.question
   pk: msi_11_spot_mistakes
   fields:
-    text: I find it difficult to spot mistakes in a performance of a song even
-      if I know the tune.
+    text: I find it difficult to spot mistakes in a performance of a song even if I know the tune.
+    text_nl: Ik vind het moeilijk om fouten op te merken in de uitvoering van een nummer, ook al ken ik de melodie.
+    text_zh_hans: 即使我知道曲调，我也很难发现歌曲表演中的失误。
+    text_de: Ich finde es schwierig Fehler festzustellen, die ein Sänger macht, selbst wenn ich das Lied kenne. 
+    text_ja: 知っている曲をアーティストがどこか間違って演奏しても、なかなか気づけない
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_12_performance_diff
   fields:
-    text: I can compare and discuss differences between two performances or versions
-      of the same piece of music.
+    text: I can compare and discuss differences between two performances or versions of the same piece of music.
+    text_nl: Ik kan twee uitvoeringen of versies van hetzelfde muziekstuk vergelijken en de verschillen bespreken.
+    text_zh_hans: 我能够比较或讨论同一首乐曲的两种演出版本。
+    text_de: Ich kann zwei Interpretationen oder Versionen desselben Musikstücks miteinander vergleichen und über die Unterschiede diskutieren.
+    text_ja: 同じ曲の違う演奏を聴いたとき、その違いについて⽐べたり話すことができる
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -101,24 +146,35 @@
 - model: question.question
   pk: msi_13_trouble_recognising
   fields:
-    text: I have trouble recognising a familiar song when played in a different
-      way or by a different performer.
+    text: I have trouble recognising a familiar song when played in a different way or by a different performer.
+    text_nl: Ik vind het moeilijk een bekend nummer te herkennen als het op een andere manier of door een andere artiest wordt uitgevoerd.
+    text_zh_hans: 如果我熟悉的歌曲以不同的方式或由不同的表演者演奏，我很难认出这首歌。
+    text_de: Es fällt mir schwer, ein bekanntes Lied zu erkennen, wenn es auf eine andere Weise oder von einem anderen Interpreten gespielt oder gesungen wird.
+    text_ja: よく知っている曲でも、いつもと違うやり⽅で演奏されたり別の⼈が演奏していると、その曲だとわからないことがある
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_14_never_complimented
   fields:
     text: I have never been complimented for my talents as a musical performer.
+    text_nl: Ik heb nog nooit complimenten gekregen voor mijn talenten als muzikant.
+    text_zh_hans: 从来没有人称赞过我在音乐表演方面有天分。
+    text_de: Ich bin noch nie für meine musikalischen Fähigkeiten gelobt worden.
+    text_ja: ⾃分の⾳楽的才能や⾳楽演奏を褒められたことがない
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_15_internet_search_music
   fields:
     text: I often read or search the internet for things related to music.
+    text_nl: Ik lees vaak dingen die te maken hebben met muziek of zoek ernaar op internet.
+    text_zh_hans: 我经常在网上阅读或搜索与音乐相关的东西。
+    text_de: Ich lese oder suche oft im Internet nach Dingen, die mit Musik zu tun haben. 
+    text_ja: よく、⾳楽に関連した情報をインターネットで検索したり読んだりする
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -127,6 +183,10 @@
   pk: msi_16_motivate
   fields:
     text: I often pick certain music to motivate or excite me.
+    text_nl: Ik kies vaak bepaalde muziek om mijzelf te motiveren of te prikkelen.
+    text_zh_hans: 我通常选择特定的音乐来激励我或使我兴奋。
+    text_de: Ich suche häufig eine bestimmte Musik aus, um mich zu motivieren oder zu begeistern.
+    text_ja: やる気を出すために、特定の⾳楽をかけることがよくある
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -134,16 +194,23 @@
 - model: question.question
   pk: msi_17_not_sing_harmony
   fields:
-    text: I am not able to sing in harmony when somebody is singing a familiar
-      tune.
+    text: I am not able to sing in harmony when somebody is singing a familiar tune.
+    text_nl: Ik kan niet harmonieus meezingen als iemand een bekend liedje zingt.
+    text_zh_hans: 即使有人唱着熟悉的曲调时，我也无法和声。
+    text_de: Wenn jemand anders ein Lied singt, das ich kenne, kann ich eine zweite Stimme dazu singen.
+    text_ja: 誰かが私の知っている曲を歌っていても、ハモるのはとても難しい
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_18_out_of_beat
   fields:
     text: I can tell when people sing or play out of time with the beat.
+    text_nl: Ik kan het horen als iemand uit de maat zingt of speelt.
+    text_zh_hans: 如果有人唱歌或演奏时没对到拍子,我可以听出来。
+    text_de: Ich kann beurteilen, ob jemand nicht im Rhythmus mit der Musik singt oder spielt.
+    text_ja: 他の⼈の歌や演奏が本来のビートからずれていることがわかる
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -152,6 +219,10 @@
   pk: msi_19_identify_special
   fields:
     text: I am able to identify what is special about a given musical piece.
+    text_nl: Ik kan onderscheiden wat er bijzonder is aan een bepaald muziekstuk.
+    text_zh_hans: 我能发现某一首音乐作品的特殊之处。
+    text_de: Ich kann identifizieren, was das Besondere an einem bestimmten Musikstück ist.
+    text_ja: .聴こえてきた曲の特徴を説明することができる
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -159,8 +230,11 @@
 - model: question.question
   pk: msi_20_talk_emotions
   fields:
-    text: I am able to talk about the emotions that a piece of music evokes for
-      me.
+    text: I am able to talk about the emotions that a piece of music evokes for me.
+    text_nl: Ik kan praten over de emoties die een muziekstuk bij mij oproept.
+    text_zh_hans: 我能够表达出由一段音乐所唤起的情感。
+    text_de: Ich bin in der Lage, über meine Gefühle, die durch Musik hervorgerufen werden, zu sprechen.
+    text_ja: ⾳楽を聴いたときに湧き上がる感情について話すことができる
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -169,14 +243,22 @@
   pk: msi_21_spend_income
   fields:
     text: I don’t spend much of my disposable income on music.
+    text_nl: Ik geef maar een klein deel van mijn vrij besteedbaar inkomen uit aan muziek. 
+    text_zh_hans: 我的可支配收入很少花在音乐上。
+    text_de: Ich gebe nicht viel Geld meines verfügbaren Einkommens für Musik aus.
+    text_ja: ⾃由に使えるお⾦を、⾳楽のためには使わない
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_22_out_of_tune
   fields:
     text: I can tell when people sing or play out of tune.
+    text_nl: Ik kan het horen wanneer iemand vals zingt of speelt.
+    text_zh_hans: 如果有人唱歌或演奏走音了,我能够听得出来。
+    text_de: Ich kann beurteilen, ob jemand falsch oder richtig singt oder spielt.
+    text_ja: 他の⼈の歌や、演奏の⾳が外れているかどうかわかる
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -185,14 +267,22 @@
   pk: msi_23_no_idea_in_tune
   fields:
     text: When I sing, I have no idea whether I’m in tune or not.
+    text_nl: Als ik zing, heb ik geen idee of ik zuiver zing of niet.
+    text_zh_hans: 我不知道我唱歌音准不准。
+    text_de: Wenn ich singe, habe ich keine Ahnung, ob ich richtig oder falsch singe.
+    text_ja: ⾃分が歌っているときに、⾳の⾼さがあっているかどうか⾃信がない
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_24_music_addiction
   fields:
-    text: 'Music is kind of an addiction for me: I couldn’t live without it.'
+    text: Music is kind of an addiction for me - I couldn’t live without it.
+    text_nl: Muziek is een soort verslaving voor mij, ik zou niet zonder kunnen.
+    text_zh_hans: 我算是对音乐上瘾——没有音乐我活不下去。
+    text_de: Musik ist für mich eine Art von Sucht - ohne sie könnte ich nicht leben. 
+    text_ja: ⾳楽は私にとって⼀種の中毒で、⾳楽なしでは⽣きていけない
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -200,16 +290,23 @@
 - model: question.question
   pk: msi_25_sing_public
   fields:
-    text: I don’t like singing in public because I’m afraid that I would sing
-      wrong notes.
+    text: I don’t like singing in public because I’m afraid that I would sing wrong notes.
+    text_nl: Ik houd er niet van om in het openbaar te zingen, want ik ben bang dat ik de verkeerde noten zing.
+    text_zh_hans: 我不喜欢在公开场合唱歌，因为我怕我会唱错。
+    text_de: Ich singe nicht gerne in der Öffentlichkeit, weil ich Angst habe, falsche Töne zu treffen. 
+    text_ja: ⾳を外してしまうかもしれないので、⼈前で歌うのは嫌いだ
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_26_genre
   fields:
     text: When I hear a piece of music I can usually identify its genre.
+    text_nl: Als ik een muziekstuk hoor, weet ik meestal wel welk genre het is.
+    text_zh_hans: 当我听到一首音乐时，我通常能确定它的流派（类型）。
+    text_de: Wenn ich ein Musikstück höre, kann ich normalerweise die Stilrichtung erkennen.
+    text_ja: ⼤抵の場合は、聴いた⾳楽のジャンルがわかる
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -218,15 +315,22 @@
   pk: msi_27_consider_musician
   fields:
     text: I would not consider myself a musician.
+    text_nl: Ik zou mezelf geen muzikant of musicus noemen.
+    text_zh_hans: 我不认为自己是一个音乐家。
+    text_de: Ich würde mich selbst nicht als Musiker/-in bezeichnen.
+    text_ja: 私は⾳楽家ではない
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_28_track_new
   fields:
-    text: ' I keep track of new music that I come across (e.g. new artists or
-      recordings).'
+    text: I keep track of new music that I come across (e.g. new artists or recordings).
+    text_nl: Ik ben alert op nieuwe muziek die ik tegenkom (bijvoorbeeld nieuwe artiesten of opnames).
+    text_zh_hans: 我会关注听到过的新音乐（比如新的艺术家或唱片）。
+    text_de: Ich halte mich auf dem Laufenden, was neue Musik angeht (z. B. neue Künstler oder Aufnahmen).
+    text_ja: 新しいアーティストや曲の流⾏を知っている
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -234,8 +338,11 @@
 - model: question.question
   pk: msi_29_sing_after_hearing
   fields:
-    text: After hearing a new song two or three times, I can usually sing it by
-      myself.
+    text: After hearing a new song two or three times, I can usually sing it by myself.
+    text_nl: Als ik een nieuw nummer twee of drie keer gehoord heb, kan ik het meestal wel alleen zingen.
+    text_zh_hans: 一首新歌听了两三遍后，我通常能自己唱出来。
+    text_de: Wenn ich einen Song zwei- oder dreimal gehört habe, kann ich ihn meistens alleine singen.
+    text_ja: 知らない歌でも２、３回聴けば歌うことができる
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -244,6 +351,10 @@
   pk: msi_30_sing_back
   fields:
     text: I only need to hear a new tune once and I can sing it back hours later.
+    text_nl: Ik hoef een nieuwe melodie maar één keer te horen, en dan kan ik die uren later zo zingen.
+    text_zh_hans: 新曲调我只需要听一次，就能在几小时后将它唱出来。
+    text_de: Ich brauche eine neue Melodie nur einmal zu hören, dann kann ich sie auch Stunden später noch singen.
+    text_ja: 知らない曲でも⼀回聴けば、数時間あとでも歌うことができる
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -252,6 +363,10 @@
   pk: msi_31_memories
   fields:
     text: Music can evoke my memories of past people and places.
+    text_nl: Muziek kan bij mij herinneringen oproepen aan mensen en plaatsen van vroeger.
+    text_zh_hans: 音乐可以唤起我对过去的人和地方的回忆。
+    text_de: Musik kann bei mir Erinnerungen an Personen und Orte hervorrufen.
+    text_ja: ⾳楽を聴いて、特定の⼈や場所を思い出すことがある
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -259,8 +374,11 @@
 - model: question.question
   pk: msi_32_practice_years
   fields:
-    text: I engaged in regular, daily practice of a musical instrument (including
-      voice) for _ years.
+    text: I engaged in regular, daily practice of a musical instrument (including voice) for _ years.
+    text_nl: 'Ik heb vrijwel dagelijks geoefend op een instrument (stem inbegrepen) gedurende _ jaren'
+    text_zh_hans: '我（曾经）每日规律地练习乐器（包括唱歌）持续:'
+    text_de: Ich habe regelmäßig und täglich ein Instrument (einschließlich Gesang) für _ Jahre geübt.
+    text_ja: 私はここ＿＿年間、⽇常的・定期的に楽器（歌を含む）の練習をしている
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: LIKERT
@@ -268,8 +386,11 @@
 - model: question.question
   pk: msi_33_practice_daily
   fields:
-    text: At the peak of my interest, I practised my primary instrument for _
-      hours per day.
+    text: At the peak of my interest, I practised my primary instrument for _ hours per day.
+    text_nl: 'Op het hoogtepunt van mijn muziekstudie studeerde ik op mijn hoofdinstrument _ uren per dag.'
+    text_zh_hans: '在我对音乐最有兴趣时， 我每天都会练习主要乐器达到:'
+    text_de: An dem Höhepunkt meines Interesses habe ich mein Hauptinstrument _ Stunden pro Tag geübt.
+    text_ja: 興味が最も⾼かった時期には、メインの楽器（歌を含む）を⼀⽇に＿＿時間練習した
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: LIKERT
@@ -277,8 +398,11 @@
 - model: question.question
   pk: msi_34_attended_events
   fields:
-    text: I have attended _ live music events as an audience member in the past
-      twelve months.
+    text: I have attended _ live music events as an audience member in the past twelve months.
+    text_nl: Hoeveel live-muziekoptredens of muziektheatervoorstellingen heb je bezocht als toehoorder in de afgelopen 12 maanden?
+    text_zh_hans: 过去12个月以来， 您以观众身份参加了几场现场音乐活动？
+    text_de: Ich habe _ Live-Events als Zuschauer innerhalb der letzten 12 Monate besucht.
+    text_ja: この１２ヶ⽉の間に＿＿回の⽣演奏イベントを聴きに⾏った
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: LIKERT
@@ -287,6 +411,10 @@
   pk: msi_35_theory_training
   fields:
     text: I have had formal training in music theory for _ years.
+    text_nl: Ik heb _ jaar muziektheorieles gehad.
+    text_zh_hans: 我接受过正式的音乐理论培训__年。
+    text_de: Ich habe _ Jahre Unterricht in Musiktheorie (außerhalb der Schule) erhalten.
+    text_ja: ⾳楽理論の訓練を＿＿年間受けた
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: LIKERT
@@ -294,8 +422,11 @@
 - model: question.question
   pk: msi_36_instrumental_training
   fields:
-    text: I have had _ years of formal training on a musical instrument (including
-      voice) during my lifetime.
+    text: I have had _ years of formal training on a musical instrument (including voice) during my lifetime.
+    text_nl: Ik heb _ jaren les gehad in het bespelen van een instrument (stem inbegrepen) tijdens mijn leven.
+    text_zh_hans: 在我的人生中，我接受过__年的正规乐器训练（包括声乐)。
+    text_de: Ich habe _ Jahre Musikunterricht auf einem Instrument (einschließlich Gesang) in meinem bisherigen Leben gehabt.
+    text_ja: これまでに楽器（歌も含む）の正式な訓練を＿＿年間受けた
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: LIKERT
@@ -304,6 +435,10 @@
   pk: msi_37_play_instruments
   fields:
     text: How many musical instruments can you play?
+    text_nl: Hoeveel muziekinstrumenten kun je bespelen?
+    text_zh_hans: 您能弹奏的乐器有几种：
+    text_de: Ich kann _ verschiedene Instrumente spielen.
+    text_ja: 私は＿＿種類の楽器を演奏できる
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: LIKERT
@@ -312,6 +447,10 @@
   pk: msi_38_listen_music
   fields:
     text: I listen attentively to music for _ per day.
+    text_nl: I luister _ per dag aandachtig naar muziek.
+    text_zh_hans: 我每天专心聆听音乐___。
+    text_de: Ich höre jeden Tag aufmerksam Musik für
+    text_ja: ⼀⽇のうち、集中して⾳楽を聴く時間の⻑さはたいてい＿＿分（時間）である
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: LIKERT
@@ -320,6 +459,10 @@
   pk: msi_39_best_instrument
   fields:
     text: 'The instrument I play best, including voice (or none), is:'
+    text_nl: 'Het instrument dat ik het best bespeel (stem inbegrepen) is:'
+    text_zh_hans: 我演奏的最好的乐器，包括声乐（或没有），是：
+    text_de: 'Das Instrument (einschließlich Gesang), welches ich am besten spiele ist:'
+    text_ja: 私がもっとも得意な楽器は＿＿である
     explainer: ''
     type: TextQuestion
     profile_scoring_rule: ''

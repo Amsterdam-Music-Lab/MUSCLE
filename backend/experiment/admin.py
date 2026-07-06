@@ -27,8 +27,11 @@ from experiment.forms import (
 from experiment.widgets import MarkdownPreviewTextInput
 from question.admin import QuestionListInline
 from question.models import QuestionList, QuestionInList
-from .utils import get_block_csv_export_as_response, get_block_json_export_as_response
-
+from .utils import (
+    get_block_csv_export_as_response,
+    get_block_json_export_as_response,
+    get_experiment_csv_export_as_response,
+)
 
 class FeedbackAdmin(admin.ModelAdmin):
     model = Feedback
@@ -304,6 +307,10 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
         if "_export_csv" in request.POST:
             block_identifier = request.POST.get("export-block")
             return get_block_csv_export_as_response(block_identifier)
+
+        if "_export_experiment_csv" in request.POST:
+            experiment_identifier = request.POST.get("export-experiment")
+            return get_experiment_csv_export_as_response(experiment_identifier)
 
         annotated_blocks = self._annotate_blocks(obj.associated_blocks())
         stats = self._generate_stats(annotated_blocks)

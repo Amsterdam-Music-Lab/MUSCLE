@@ -69,7 +69,7 @@ class Question(models.Model):
 
     # applicable for AUTOCOMPLETE, BUTTON_ARRAY, CHECKBOXES, DROPDOWN, ICON_RANGE, RADIOS, TEXT_RANGE
     choices = models.ForeignKey(
-        'question.ChoiceList', null=True, on_delete=models.SET_NULL
+        'question.ChoiceList', null=True, blank=True, on_delete=models.SET_NULL
     )
     # only applicable for CHECKBOXES
     min_values = models.IntegerField(blank=True, null=True)

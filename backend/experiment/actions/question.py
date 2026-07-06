@@ -12,7 +12,6 @@ class QuestionAction(BaseAction):
         result_id: the identifier of the `Result` object associated with this question
         text: the text shown to the user
         explainer: optionally, an instruction for the user of how to use the shown widget
-        scoring_rule: the scoring rule with which to score the user's response
         view: the view (widget) shown to the user, set in the subclasses
     """
 
