@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('question', '0023_rename_key_as_identifier'),
+        ('question', '0024_question_choices_blank'),
     ]
 
     operations = [
