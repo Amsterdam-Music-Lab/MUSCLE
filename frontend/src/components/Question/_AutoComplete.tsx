@@ -1,11 +1,5 @@
-import Question from "@/types/Question";
+import { QuestionProps } from "@/types/Question";
 import Select from "react-select";
-
-interface AutoCompleteProps {
-    question: Question;
-    value: string;
-    onChange: (value: string) => void;
-}
 
 // When using Safari iOS the browser may scroll the page when using the react-select Select.
 // Therefore we scroll back to top when the select is blurred
@@ -14,7 +8,7 @@ const scrollToTop = () => {
 };
 
 // AutoComplete is a question view for selecting a single option from a dropdown list with autocompletion
-const AutoComplete = ({ question, value, onChange }: AutoCompleteProps) => {
+const AutoComplete = ({ question, value, onChange, disabled }: QuestionProps) => {
 
     const choices = question.choices;
 
@@ -38,6 +32,7 @@ const AutoComplete = ({ question, value, onChange }: AutoCompleteProps) => {
                     value={options.find((option) => option.value === value)}
                     onChange={(choice) => onChange(choice.value)}
                     onBlur={scrollToTop}
+                    isDisabled={disabled}
                 />
             </div>
         </div>

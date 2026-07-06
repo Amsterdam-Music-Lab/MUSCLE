@@ -16,6 +16,10 @@
     .question {
         flex-grow: 1;
         width: 100%;
+
+        &.disabled {
+            opacity: .3;
+        }
     }
 
     h3 {

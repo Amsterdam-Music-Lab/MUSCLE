@@ -11,10 +11,11 @@ interface RangeProps {
     choices: Choice[];
     value: string | number;
     onChange: (value: string) => void;
+    disabled: boolean;
     changePosition?: boolean;
 }
 
-const RangeSlider = ({ choices, value, onChange, changePosition=false }: RangeProps) => {
+const RangeSlider = ({ choices, value, onChange, disabled, changePosition=false }: RangeProps) => {
 
     const theme = useBoundStore((state) => state.theme);
     const [thumbColor, setThumbColor] = useState(theme["colorPrimary"]);
@@ -69,6 +70,7 @@ const RangeSlider = ({ choices, value, onChange, changePosition=false }: RangePr
                     min={0}
                     max={labels.length - 1}
                     value={sliderValue}
+                    disabled={disabled}
                 />
             </div>
 

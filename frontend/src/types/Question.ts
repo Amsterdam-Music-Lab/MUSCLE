@@ -31,3 +31,10 @@ export default interface Question {
     maxLength?: number;
     resultId?: number;
 }
+
+export interface QuestionProps {
+    question: Question;
+    value: string | number;
+    onChange: (value: string | number | boolean) => void;
+    disabled: boolean;
+}
