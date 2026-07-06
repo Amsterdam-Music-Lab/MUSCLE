@@ -2931,10 +2931,6 @@ msgstr "待业中"
 msgid "Retired"
 msgstr "已退休"
 
-#: question/demographics.py:130
-msgid "What is your gender?"
-msgstr ""
-
 #: question/demographics.py:141
 msgid "Please select your level of musical experience:"
 msgstr "请为您先前的语言经历打分："
