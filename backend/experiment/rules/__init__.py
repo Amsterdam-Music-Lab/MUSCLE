@@ -35,6 +35,7 @@ from .toontjehogerkids_3_plink import ToontjeHogerKids3Plink
 from .toontjehogerkids_4_absolute import ToontjeHogerKids4Absolute
 from .toontjehogerkids_5_tempo import ToontjeHogerKids5Tempo
 from .toontjehogerkids_6_relative import ToontjeHogerKids6Relative
+from .two_questions import TwoQuestions
 
 # Rules available to this application
 # If you create new Rules, add them to the list
@@ -78,4 +79,5 @@ BLOCK_RULES = {
     ToontjeHogerKids4Absolute.ID: ToontjeHogerKids4Absolute,
     ToontjeHogerKids5Tempo.ID: ToontjeHogerKids5Tempo,
     ToontjeHogerKids6Relative.ID: ToontjeHogerKids6Relative,
+    TwoQuestions.ID: TwoQuestions,
 }

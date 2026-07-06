@@ -105,7 +105,7 @@
     text_jp: ⾳楽を聴いてもほとんど感情が揺さぶられない
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_10_sing_with_recording
@@ -129,7 +129,7 @@
     text_jp: 知っている曲をアーティストがどこか間違って演奏しても、なかなか気づけない
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_12_performance_diff
@@ -153,7 +153,7 @@
     text_jp: よく知っている曲でも、いつもと違うやり⽅で演奏されたり別の⼈が演奏していると、その曲だとわからないことがある
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_14_never_complimented
@@ -165,7 +165,7 @@
     text_jp: ⾃分の⾳楽的才能や⾳楽演奏を褒められたことがない
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_15_internet_search_music
@@ -201,7 +201,7 @@
     text_jp: 誰かが私の知っている曲を歌っていても、ハモるのはとても難しい
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_18_out_of_beat
@@ -249,7 +249,7 @@
     text_jp: ⾃由に使えるお⾦を、⾳楽のためには使わない
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_22_out_of_tune
@@ -273,7 +273,7 @@
     text_jp: ⾃分が歌っているときに、⾳の⾼さがあっているかどうか⾃信がない
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_24_music_addiction
@@ -297,7 +297,7 @@
     text_jp: ⾳を外してしまうかもしれないので、⼈前で歌うのは嫌いだ
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_26_genre
@@ -321,7 +321,7 @@
     text_jp: 私は⾳楽家ではない
     explainer: ''
     type: TextRangeQuestion
-    profile_scoring_rule: LIKERT_REVERSED
+    profile_scoring_rule: REVERSE_LIKERT
     choices: LIKERT_AGREE_7
 - model: question.question
   pk: msi_28_track_new
