@@ -18,7 +18,6 @@ const defaultArgs = {
         choices: [{value: 1, label: "Choice 1", color: "colorNeutral1"}, {value: 2, label: "Choice 2", color: "colorNeutral2"}, {value: 3, label: "Choice 3", color: "colorNeutral3"}],
     },
     onChange: () => { },
-    id: 0,
     active: true,
     style: {},
 };
@@ -54,7 +53,7 @@ export const Disabled = {
 export const CategorizationWithHiddenText = {
     args: getArgs({
         question: {
-            key: "choice",
+            identifier: "choice",
             view: "BUTTON_ARRAY",
             explainer: "",
             question: "",
@@ -78,7 +77,7 @@ export const CategorizationWithHiddenTextDisabled = {
     args: getArgs({
         disabled: true,
         question: {
-            key: "choice",
+            identifier: "choice",
             view: "BUTTON_ARRAY",
             explainer: "",
             text: "",
@@ -99,7 +98,7 @@ export const CategorizationWithHiddenTextDisabled = {
 
 export const BooleanColorScheme = {
     args: getArgs({question: {
-        key: "truth",
+        identifier: "truth",
         choices: [
             {value: "true", label: "True", color: "colorPositive"},
             {value: "false", label: "False", color: "colorNegative"}

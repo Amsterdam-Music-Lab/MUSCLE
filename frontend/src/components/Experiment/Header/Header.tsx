@@ -10,9 +10,9 @@ import { styleButton, styleButtonOutline } from "@/util/stylingHelpers";
 
 interface HeaderProps {
     description: string;
-    nextBlockSlug: string | undefined;
+    nextBlockIdentifier: string | undefined;
     nextBlockButtonText: string;
-    experimentSlug: string;
+    experimentIdentifier: string;
     aboutButtonText: string;
     totalScore: number;
     scoreDisplayConfig?: ScoreDisplayConfig;
@@ -22,10 +22,10 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({
     description,
-    nextBlockSlug,
+    nextBlockIdentifier,
     nextBlockButtonText,
     aboutButtonText,
-    experimentSlug,
+    experimentIdentifier,
     totalScore,
     scoreDisplayConfig,
     socialMediaConfig,
@@ -37,8 +37,8 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="intro">
                 <HTML body={description} innerClassName="" />
                 <nav className="actions">
-                    {nextBlockSlug && <a className="btn btn-lg" css={styleButton(buttonColor)} href={`/block/${nextBlockSlug}`}>{nextBlockButtonText}</a>}
-                    {aboutButtonText && <Link className="btn btn-lg" css={styleButtonOutline(buttonColor)} to={`/${experimentSlug}/about`}>{aboutButtonText}</Link>}
+                    {nextBlockIdentifier && <a className="btn btn-lg" css={styleButton(buttonColor)} href={`/block/${nextBlockIdentifier}`}>{nextBlockButtonText}</a>}
+                    {aboutButtonText && <Link className="btn btn-lg" css={styleButtonOutline(buttonColor)} to={`/${experimentIdentifier}/about`}>{aboutButtonText}</Link>}
                 </nav>
             </div>
             {scoreDisplayConfig && totalScore !== 0 && (

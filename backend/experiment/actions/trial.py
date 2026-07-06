@@ -31,13 +31,13 @@ class Trial(BaseAction):  # pylint: disable=too-few-public-methods
 
     Example:
         ```python
-        key = 'test_trial'
+        identifier = 'test_trial'
         section = session.playlist.get_section()
         question = BooleanQuestion(
             text=_(
                 "Do you like this song?"),
-            key=key,
-            result_id=prepare_result(key, session, section=section),
+            identifier=identifier,
+            result_id=prepare_result(identifier, session, section=section),
         )
         form = Form([question])
         playback = Autoplay(sections=[PlaybackSection(section)])

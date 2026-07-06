@@ -2,11 +2,11 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
 from experiment.actions.utils import (
     get_average_difference_level_based,
     render_feedback_trivia,
 )
-from experiment.actions.wrappers import final_action_with_optional_button
 
 from session.models import Session
 
@@ -88,5 +88,4 @@ class BST(HBat):
         trivia = _("A march and a waltz are very common meters in Western music, but in other cultures, much more complex meters also exist!")
         final_text = render_feedback_trivia(feedback, trivia)
         session.finish()
-        session.save()
-        return final_action_with_optional_button(session, final_text)
+        return Final(session, title=_("End"), final_text=final_text)

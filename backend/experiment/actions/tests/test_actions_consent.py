@@ -27,7 +27,7 @@ class ConsentTest(TestCase):
     @override_settings(MEDIA_ROOT=here)
     def test_uploaded_markdown_rendering(self):
         experiment = Experiment.objects.create(
-            slug="MARKDOWN",
+            identifier="MARKDOWN",
             consent=SimpleUploadedFile(
                 "consent.md", b"#test", content_type="text/html"
             ),
@@ -38,7 +38,7 @@ class ConsentTest(TestCase):
     @override_settings(MEDIA_ROOT=here)
     def test_uploaded_html_rendering(self):
         experiment = Experiment.objects.create(
-            slug="HTML",
+            identifier="HTML",
             consent=SimpleUploadedFile(
                 "consent.html", b"<h1>test</h1>", content_type="text/html"
             ),
@@ -49,7 +49,7 @@ class ConsentTest(TestCase):
     @override_settings(MEDIA_ROOT=here)
     def test_template_language_rendering(self):
         experiment = Experiment.objects.create(
-            slug="TEMPLATE",
+            identifier="TEMPLATE",
             consent=SimpleUploadedFile(
                 "template.html",
                 b"{% load i18n %}{% blocktranslate %}<p>test</p>{% endblocktranslate %}",

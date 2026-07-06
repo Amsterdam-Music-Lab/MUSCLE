@@ -16,7 +16,7 @@ class RhythmDiscriminationTest(TestCase):
         cls.participant = Participant.objects.create()
         cls.playlist = Playlist.objects.get(name="RhythmDiscrimination")
         cls.playlist._update_sections()
-        cls.block = Block.objects.get(slug="rhdis")
+        cls.block = Block.objects.get(identifier="rhdis")
         cls.session = Session.objects.create(block=cls.block, participant=cls.participant, playlist=cls.playlist)
 
     def test_get_next_trial(self):
@@ -136,16 +136,16 @@ class RhythmDiscriminationTest(TestCase):
 
         return next_round
 
-    def _get_block_info(self, block_slug):
+    def _get_block_info(self, block_identifier):
         """Get block information"""
         block_response = self.client.get(
-            f"/experiment/rhythm_battery/block/{block_slug}/"
+            f"/experiment/rhythm_battery/block/{block_identifier}/"
         )
         block_json = self.load_json_or_fail(block_response)
 
         self.assertTrue(
             {
-                "slug",
+                "identifier",
                 "class_name",
                 "rounds",
                 "playlists",
@@ -168,7 +168,7 @@ class RhythmDiscriminationTest(TestCase):
             "/result/score/",
             {
                 "session_id": session_id,
-                "json_data": '{"decision_time":2,"form":[{"key":"same","value":"%s","resultId":%s}]}'
+                "json_data": '{"decision_time":2,"form":[{"identifier":"same","value":"%s","resultId":%s}]}'
                 % (expected_response, result_id),
                 "csrfmiddlewaretoken": csrf_token,
             },

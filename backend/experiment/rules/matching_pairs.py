@@ -28,7 +28,7 @@ class MatchingPairsGame(BaseRules):
         self.question_lists = [
             {
                 "name": "Demographics",
-                "question_keys": [
+                "question_identifiers": [
                     "dgf_gender_identity",
                     "dgf_generation",
                     "dgf_musical_experience",
@@ -81,11 +81,12 @@ class MatchingPairsGame(BaseRules):
             return actions
         else:
             # final score saves the result from the cleared board into account
+            session.finish()
             score = Final(
                 session,
                 title="Score",
                 final_text="Can you score higher than your friends and family? Share and let them try!",
-                button=Button(_("Play again"), link=self.get_play_again_url(session)),
+                button=Button(_("Play again")),
                 rank=self.rank(session, exclude_unfinished=False),
                 feedback_info=self.feedback_info(),
             )

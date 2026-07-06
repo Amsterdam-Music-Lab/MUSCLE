@@ -19,7 +19,7 @@ def get_python_defined_questions():
     for fixture in glob('/server/question/fixtures/[!choice]*.yaml'):
         with open(fixture, 'r') as f:
             questions = [obj.object for obj in serializers.deserialize('yaml', f)]
-            keys.extend([q.key for q in questions])
+            keys.extend([q.identifier for q in questions])
     return keys
 
 

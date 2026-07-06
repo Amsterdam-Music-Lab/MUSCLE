@@ -12,14 +12,13 @@ from experiment.actions.info import Info
 from experiment.actions.question import DropdownQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
-from experiment.actions.utils import get_current_experiment_url
 from experiment.utils import non_breaking_spaces
 from result.utils import prepare_result
 from section.models import Section
 from session.models import Session
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_3_plink import ToontjeHoger3Plink
-
+from .toontjehogerkids_1_mozart import get_info_button
 
 logger = logging.getLogger(__name__)
 
@@ -92,10 +91,12 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
     def get_plink_trials(self, session: Session, section: Section, choices: dict, expected_response: str) -> list:
         next_round = []
         question1 = DropdownQuestion(
-            key="plink",
+            identifier="plink",
             choices=choices,
             text="Kies de artiest en de titel van het nummer",
-            result_id=prepare_result("plink", session, section=section, expected_response=expected_response),
+            result_id=prepare_result(
+                "plink", session, section=section, expected_response=expected_response
+            ),
         )
         next_round.append(
             Trial(
@@ -114,7 +115,6 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
     def get_final_round(self, session):
         # Finish session.
         session.finish()
-        session.save()
 
         # Score
         score = self.get_score_view(session)
@@ -125,7 +125,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),
-            button=Button("Wat hebben we getest?"),
+            button=Button("Wat hebben we getest?", link=""),
         )
 
         # Info page
@@ -142,11 +142,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
             },
         )
         info = Info(
-            body=body,
-            heading="Muziekherkenning",
-            button=Button(
-                "Terug naar ToontjeHogerKids", link=get_current_experiment_url(session)
-            ),
+            body=body, heading="Muziekherkenning", button=get_info_button(session)
         )
 
         return [score, final, info]

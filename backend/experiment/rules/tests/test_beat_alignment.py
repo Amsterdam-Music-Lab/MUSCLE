@@ -33,12 +33,12 @@ class BeatAlignmentRuleTest(TestCase):
         playlist.csv = csv
         playlist._update_sections()
         experiment = Experiment.objects.create(
-            slug="bat_test", name="Beat Alignment Test"
+            identifier="bat_test", name="Beat Alignment Test"
         )
         phase = Phase.objects.create(experiment=experiment)
         # rules is BeatAlignment.ID in beat_alignment.py
         cls.block = Block.objects.create(
-            phase=phase, rules="BEAT_ALIGNMENT", slug="ba", rounds=13
+            phase=phase, rules="BEAT_ALIGNMENT", identifier="ba", rounds=13
         )
         cls.block.playlists.add(playlist)
 
@@ -61,7 +61,7 @@ class BeatAlignmentRuleTest(TestCase):
         block_json = self.load_json(block_response)
         self.assertTrue(
             {
-                "slug",
+                "identifier",
                 "class_name",
                 "rounds",
                 "playlists",
@@ -88,15 +88,18 @@ class BeatAlignmentRuleTest(TestCase):
         header = {'HTTP_USER_AGENT': "Test device with test browser"}
         participant_response = self.client.get('/participant/', **header)
         participant_json = self.load_json(participant_response)
-        self.assertTrue({'id', 'hash', 'csrf_token', 'country'}
-                        <= participant_json.keys())
+        self.assertTrue(
+            {'id', 'hash', 'csrf_token', 'country'} <= participant_json.keys()
+        )
         csrf_token = participant_json['csrf_token']
 
         consent_response = self.client.get('/result/consent_ba/')
         # returns 204 if no consent has been given so far
         self.assertEqual(consent_response.status_code, 204)
-        data = {"json_data": "{\"key\":\"consent_ba\",\"value\":true}",
-                "csrfmiddlewaretoken": csrf_token}
+        data = {
+            "json_data": "{\"identifier\":\"consent_ba\",\"value\":true}",
+            "csrfmiddlewaretoken": csrf_token,
+        }
         consent_response = self.client.post('/result/consent/', data)
         consent_json = self.load_json(consent_response)
         self.assertTrue(consent_json['status'], 'ok')

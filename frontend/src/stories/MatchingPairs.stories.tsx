@@ -16,7 +16,7 @@ const StoreDecorator = (Story) => {
     const theme =  {colorPrimary:  '#d843e2', colorSecondary: '#39d7b8', colorPositive: '#39d7b8', colorNegative: '#fa5577', colorNeutral1: '#ffb14c', colorGrey: "#bbb"};
     setSession({ id: 1 });
     setParticipant({ id: 1, csrf_token: "123" });
-    setBlock({slug: 'test', theme: theme});
+    setBlock({identifier: 'test', theme: theme});
     setTheme(theme);
 
     return (

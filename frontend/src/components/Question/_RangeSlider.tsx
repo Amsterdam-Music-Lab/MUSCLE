@@ -1,4 +1,4 @@
-import Slider from "react-rangeslider";
+import { useState } from "react";
 import classNames from "classnames";
 import { css } from '@emotion/react'
 
@@ -11,33 +11,46 @@ interface RangeProps {
     choices: Choice[];
     value: string | number;
     onChange: (value: string) => void;
+    disabled: boolean;
     changePosition?: boolean;
 }
 
-const RangeSlider = ({ choices, value, onChange, changePosition=false }: RangeProps) => {
+const RangeSlider = ({ choices, value, onChange, disabled, changePosition=false }: RangeProps) => {
 
     const theme = useBoundStore((state) => state.theme);
-    const sliderEmptyColor = theme["colorPrimary"];
-    const sliderActiveColor = theme["colorSecondary"]
+    const [thumbColor, setThumbColor] = useState(theme["colorPrimary"]);
+    const sliderBackground = theme["colorText"];
 
     const keys = choices.map(choice => choice.value);
     const labels = choices.map(choice => choice.label);
 
     const emptyValue = value === "";
-    const sliderValue = !emptyValue ? keys.indexOf(value) : Math.round((keys.length - 1)/2);
+    const sliderValue = emptyValue ? Math.round((keys.length - 1) / 2) : keys.indexOf(value);
 
-    const onSliderChange = (index: number) => {
-        onChange(keys[index]);
+    const onSliderChange = (event) => {
+        const nextIndex = Number(event.target.value);
+        const nextValue = keys[nextIndex];
+
+        setThumbColor(theme["colorSecondary"]);
+
+        if (nextValue !== undefined) {
+            onChange(nextValue);
+        }
     };
     
     const sliderStyle = () => {
         return css`
-            .rangeslider__handle {
-                background: ${sliderActiveColor}
+            .aha__slider {
+                background-color: ${sliderBackground};
+            }
+
+            input[type=range]::-webkit-slider-thumb {
+                background-color: ${thumbColor};
             }
             
-            .empty div.rangeslider__handle {
-                background: ${sliderEmptyColor}
+            /* All the same stuff for Firefox */
+            input[type=range]::-moz-range-thumb {
+                background-color: ${thumbColor};
             }
         `
     }
@@ -52,13 +65,13 @@ const RangeSlider = ({ choices, value, onChange, changePosition=false }: RangePr
                 changePosition={changePosition}
             />
             <div className={classNames({ empty: emptyValue })} data-testid="range-slider">
-            <Slider
-                value={sliderValue}
-                onChange={onSliderChange}
-                min={0}
-                max={keys.length-1}
-                tooltip={false}
-            />
+                <input className="aha__slider" type="range"
+                    onChange={onSliderChange}
+                    min={0}
+                    max={labels.length - 1}
+                    value={sliderValue}
+                    disabled={disabled}
+                />
             </div>
 
             <RangeLimits

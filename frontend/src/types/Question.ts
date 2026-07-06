@@ -17,7 +17,7 @@ export interface Choice {
 }
 
 export default interface Question {
-    key: string;
+    identifier: string;
     text: string;
     view: QuestionViews;
     value?: string | number;
@@ -30,4 +30,11 @@ export default interface Question {
     maxValue?: number;
     maxLength?: number;
     resultId?: number;
+}
+
+export interface QuestionProps {
+    question: Question;
+    value: string | number;
+    onChange: (value: string | number | boolean) => void;
+    disabled: boolean;
 }

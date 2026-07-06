@@ -74,6 +74,7 @@ const Trial = (props: TrialAction & SharedActionProps) => {
             await onResult(
                 {
                     decision_time: getAndStoreDecisionTime(),
+                    response_time: responseTime,
                     audio_latency_ms: getAudioLatency(),
                     form,
                 },

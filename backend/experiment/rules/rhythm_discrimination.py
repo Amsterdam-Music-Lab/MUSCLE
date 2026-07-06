@@ -5,12 +5,12 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
 from experiment.actions.utils import render_feedback_trivia
-from experiment.actions.wrappers import final_action_with_optional_button
 
 from result.utils import prepare_result
 from section.models import Playlist
@@ -132,9 +132,9 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
         expected_response = (
             self.first_condition if condition["group"] == "0" else self.second_condition
         )
-        key = "same_or_different"
+        identifier = "same_or_different"
         question = ButtonArrayQuestion(
-            key=key,
+            identifier=identifier,
             text=_("Is the third rhythm the SAME or DIFFERENT?"),
             choices=[
                 {
@@ -149,7 +149,7 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
                 },
             ],
             result_id=prepare_result(
-                key,
+                identifier,
                 session,
                 expected_response=expected_response,
                 scoring_rule="CORRECTNESS",
@@ -271,7 +271,7 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
             instruction=instruction, steps=[], button=Button(_("Next fragment"))
         )
 
-    def finalize_block(self, session):
+    def finalize_block(self, session: Session):
         # we had 4 practice trials and 60 experiment trials
         percentage = (
             sum([res.score for res in session.result_set.all()])
@@ -289,7 +289,8 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
             to hear the rhythm really well."
         )
         final_text = render_feedback_trivia(feedback, trivia)
-        return final_action_with_optional_button(session, final_text)
+        session.finish()
+        return Final(session, title=_("End"), final_text=final_text)
 
     def practice_successful(self, session: Session) -> bool:
         """Check if practice was successful: at least two answers correct"""

@@ -1,4 +1,5 @@
 from copy import deepcopy
+import logging
 
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
@@ -12,7 +13,10 @@ from question.models import (
     QuestionInList,
 )
 from question.forms import QuestionForm, QuestionListForm
+from result.models import Result
+from result.utils import apply_scoring_rule
 
+logger = logging.getLogger(__name__)
 
 class QuestionInListInline(admin.TabularInline):
     model = QuestionInList
@@ -37,10 +41,10 @@ class ChoiceInline(TranslationTabularInline):
 def duplicate_choice_list(modeladmin, request, queryset):
     for choice_list in queryset:
         n_choice_lists = ChoiceList.objects.filter(
-            key__regex=rf'^{choice_list.key}(_\d+)*$'
+            identifier__regex=rf'^{choice_list.identifier}(_\d+)*$'
         ).count()
         new_choice_list = ChoiceList.objects.create(
-            key=f"{choice_list.key}_{n_choice_lists}"
+            identifier=f"{choice_list.identifier}_{n_choice_lists}"
         )
         choices = choice_list.choices.all()
         for choice in choices:
@@ -59,18 +63,34 @@ class ChoiceListAdmin(TabbedTranslationAdmin):
 
 @admin.action(description=_("Duplicate selected questions"))
 def duplicate_question(modeladmin, request, queryset):
-    """duplicate questions, appending an integer to the key depending on the number of previous copies"""
+    """duplicate questions, appending an integer to the identifier depending on the number of previous copies"""
     for question in queryset:
         n_questions = Question.objects.filter(
-            key__regex=rf'^{question.key}(_\d+)*$'
+            identifier__regex=rf'^{question.identifier}(_\d+)*$'
         ).count()
-        question.key = f"{question.key}_{n_questions}"
+        question.identifier = f"{question.identifier}_{n_questions}"
+        question.from_python = False
         question.save()
+
+
+@admin.action(description=_("Rescore selected questions"))
+def rescore_question(modeladmin, request, queryset):
+    """After updating the scoring_rule of a question, rescore all results of that question"""
+    for question in queryset:
+        results = Result.objects.filter(question_identifier=question.identifier).all()
+        for result in results:
+            result.scoring_rule = question.profile_scoring_rule
+            try:
+                result.score = apply_scoring_rule(result, result.json_data)
+            except:
+                logger.error(f"Could not rescore result {result.pk}: data not defined")
+            result.save()
+
 
 class QuestionAdmin(TabbedTranslationAdmin):
 
     form = QuestionForm
-    actions = [duplicate_question]
+    actions = [duplicate_question, rescore_question]
     change_form_template = 'question_change.html'
 
     class Media:

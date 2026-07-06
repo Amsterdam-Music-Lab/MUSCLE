@@ -13,7 +13,6 @@ from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
-from experiment.actions.utils import get_current_experiment_url
 from result.utils import prepare_result
 from session.models import Session
 from .base import BaseRules
@@ -161,10 +160,10 @@ class ToontjeHoger1Mozart(BaseRules):
         # --------------------
 
         # Question
-        key = "expected_shape"
+        identifier = "expected_shape"
         question = ButtonArrayQuestion(
             text=question,
-            key=key,
+            identifier=identifier,
             choices=[
                 {"value": "A", "label": "A", "color": "colorNeutral2"},
                 {"value": "B", "label": "B", "color": "colorNeutral1"},
@@ -173,7 +172,10 @@ class ToontjeHoger1Mozart(BaseRules):
                 {"value": "E", "label": "E", "color": "colorNeutral3"},
             ],
             result_id=prepare_result(
-                key, session, section=section, expected_response=expected_response
+                identifier,
+                session,
+                section=section,
+                expected_response=expected_response,
             ),
         )
         form = Form([question], submit_button=None)
@@ -207,7 +209,6 @@ class ToontjeHoger1Mozart(BaseRules):
     def get_final_round(self, session: Session):
         # Finish session.
         session.finish()
-        session.save()
 
         # Answer explainer
         answer_explainer = self.get_answer_explainer(session, round=2)
@@ -235,7 +236,6 @@ class ToontjeHoger1Mozart(BaseRules):
             heading="Het Mozart effect",
             button=Button(
                 "Terug naar ToontjeHoger",
-                link=get_current_experiment_url(session),
             ),
         )
 

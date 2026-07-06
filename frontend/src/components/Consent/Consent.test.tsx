@@ -17,7 +17,7 @@ vi.mock('../../API', () => ({
 }));
 
 const mockExperiment = {
-    slug: 'test-experiment',
+    identifier: 'test-experiment',
     name: 'Test',
     theme: {colorGrey: '#abacab', colorNeutral1: '#fabacc', colorNegative: '#fa5577'},
 };

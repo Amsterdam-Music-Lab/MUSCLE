@@ -1,17 +1,12 @@
 import classNames from "classnames";
 import { css } from '@emotion/react'
 
-import Question from "@/types/Question";
+import { QuestionProps } from "@/types/Question";
 import useBoundStore from "@/util/stores";
 
-interface CheckboxesProps {
-    question: Question;
-    value: string;
-    onChange: (value: string) => void;
-}
 
 /** Checkboxes is a question view for selecting multiple options from a list */
-const Checkboxes = ({ question, value, onChange }: CheckboxesProps) => {
+const Checkboxes = ({ question, value, onChange, disabled }: QuestionProps) => {
 
     const choices = question.choices;
 
@@ -38,12 +33,13 @@ const Checkboxes = ({ question, value, onChange }: CheckboxesProps) => {
                 <Checkbox
                     key={index}
                     // This prop does not exist on Checkbox
-                    name={question.key}
+                    name={question.identifier}
                     label={choice.label}
                     value={choice.value}
                     checked={values.includes(choice.value)}
                     onChange={onToggle}
                     color={choice.color || 'colorNeutral2'}
+                    disabled={disabled}
                 />
             ))}
         </div>
@@ -56,10 +52,11 @@ interface CheckboxProps {
     color?: string;
     checked: boolean;
     onChange: (value: string) => void;
+    disabled: boolean;
 }
 
 /** Checkbox is a single checkbox */
-const Checkbox = ({ label, value, checked, onChange, color}: CheckboxProps) => {
+const Checkbox = ({ label, value, checked, onChange, color, disabled}: CheckboxProps) => {
     const theme = useBoundStore((state) => state.theme);
     const checkBoxColor = theme[color] || '';
 
@@ -101,6 +98,7 @@ const Checkbox = ({ label, value, checked, onChange, color}: CheckboxProps) => {
             tabIndex={0}
             onKeyDown={handleKeyPress}
             css={styleCheckBox(checkBoxColor)}
+            disabled={disabled}
         >
             <i></i>
             <span>{label}</span>

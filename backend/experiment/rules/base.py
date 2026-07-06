@@ -24,7 +24,7 @@ class BaseRules(object):
     """Base class for other rules classes"""
 
     contact_email = settings.CONTACT_MAIL
-    counted_result_keys = []
+    counted_result_identifiers = []
 
     def feedback_info(self) -> FeedbackInfo:
         """
@@ -61,33 +61,6 @@ class BaseRules(object):
             return scoring_rule(result, data)
         return None
 
-    def get_play_again_url(self, session: Session) -> str:
-        """Get the url to play the experiment again
-
-        Args:
-            session: current session
-        """
-        participant_id_url_param = (
-            f"?participant_id={session.participant.participant_id_url}"
-            if session.participant.participant_id_url
-            else ""
-        )
-        return f"/block/{session.block.slug}{participant_id_url_param}"
-
-    def get_experiment_url(self, session: Session) -> str:
-        """
-        return the experiment url. Defaults to experiment.slug
-
-        Args:
-            session: current session
-        """
-        participant_id_url_param = (
-            f"?participant_id={session.participant.participant_id_url}"
-            if session.participant.participant_id_url
-            else ""
-        )
-        return f"/{session.block.phase.experiment.slug}{participant_id_url_param}"
-
     def get_profile_question_trials(
         self, session: Session, n_questions: int = 1
     ) -> list[Trial]:
@@ -105,7 +78,9 @@ class BaseRules(object):
         if n_questions is None:
             n_questions = sum(ql.questions.count() for ql in question_lists)
         for ql in question_lists:
-            questions = ql.questions.order_by("?") if ql.randomize else ql.questions
+            questions = (
+                ql.questions.order_by("?") if ql.randomize else ql.get_questions()
+            )
             question_iterator = get_unanswered_questions(
                 session.participant, questions.all()
             )
@@ -113,7 +88,7 @@ class BaseRules(object):
                 try:
                     question_obj = next(question_iterator)
                     profile_result = prepare_profile_result(
-                        question_obj.key, session.participant
+                        question_obj.identifier, session.participant
                     )
                     question = question_obj.convert_to_action()
                     question.result_id = profile_result.id

@@ -10,14 +10,15 @@ from participant.models import Participant
 from result.models import Result
 from session.models import Session
 
+from experiment.actions.button import Button
 from experiment.actions.final import Final
-
+from experiment.actions.utils import get_experiment_url
 
 class FinalTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.experiment = Experiment.objects.create(
-            slug="final_countdown",
+            identifier="final_countdown",
             name="Final Countdown",
             name_en="Final CountDown",
             name_nl="Laatste Telaf",
@@ -85,7 +86,19 @@ class FinalTest(TestCase):
         final = Final(self.session)
         final.final_text = 'plain text'
         serialized = final.action()
-        self.assertEqual(serialized.get('final_text'), '<center>plain text</center>')
+        self.assertEqual(serialized.get('finalText'), '<center>plain text</center>')
         final.final_text = '<p>wrapped text</p>'
         serialized = final.action()
-        self.assertEqual(serialized.get('final_text'), final.final_text)
+        self.assertEqual(serialized.get('finalText'), final.final_text)
+
+    def test_final_get_button_no_arguments(self):
+        final = Final(self.session)
+        self.assertIsNotNone(final.button)
+
+    def test_final_get_button_with_text(self):
+        final = Final(self.session, button=Button("Next!"))
+        self.assertEqual(final.button.link, get_experiment_url(self.session))
+
+    def test_final_get_button_with_link_and_text(self):
+        final = Final(self.session, button=Button("Next!", link="/my/fancy/link/"))
+        self.assertEqual(final.button.link, "/my/fancy/link/")

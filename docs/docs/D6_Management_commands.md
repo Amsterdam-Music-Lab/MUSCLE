@@ -9,7 +9,7 @@ You can run management commands, such as dump the database or compile the playli
 
 - to export block data to json:
 
-`scripts/manage exportblock block_slug`
+`scripts/manage exportblock {block_identifier}`
 
 ## Important Django management commands:
 - Update translation strings in .po file: - `scripts/manage makemessages -l nl` or `python manage.py makemessages --all`

@@ -31,7 +31,7 @@
     }
 
 </style>
-<h1>Duplicate experiment with slug: {{exp.slug}}</h1>
+<h1>Duplicate experiment with identifier: {{exp.identifier}}</h1>
 <p>The following objects will be duplicated:</p>
 <ul>
     <li>Experiment</li>
@@ -50,10 +50,10 @@
 <form action="" method="post">
     {% csrf_token %}{% render_inline_action_fields %}
 
-    <label for="slug-extension">Enter an extension to add to the slugs in the duplicated experiment:</label>
-    <input type="text" name="slug-extension" maxlength="128" id="slug-extension" autocapitalize="off"><br>
+    <label for="identifier-extension">Enter an extension to add to the identifiers in the duplicated experiment:</label>
+    <input type="text" name="identifier-extension" maxlength="128" id="identifier-extension" autocapitalize="off"><br>
 
-    <p class="help">E.g. entering 'copy' here will add '-copy' to the existing Experiment and Block slugs.</p>
+    <p class="help">E.g. entering 'copy' here will add '-copy' to the existing Experiment and Block identifiers.</p>
 
     <input type="submit" name="_duplicate" value="Duplicate" id="duplicate" /><br>
     <input type="submit" name="_back" value="Go back" id="back-button" />

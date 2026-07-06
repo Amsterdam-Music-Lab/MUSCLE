@@ -65,7 +65,7 @@ function getFinalData(overrides = {}) {
                 '<p>Please contact us at <a href="mailto:info@example.com">info@example.com</a></p>',
         },
         block: {
-            slug: "test",
+            identifier: "test",
         },
         participant: "test",
         onNext: () => { alert("Next"); },

@@ -17,24 +17,28 @@ def get_playlist():
     return playlist
 
 class TestToontjeHoger6Relative(TestCase):
-    
+
     def test_th_6_initializes(self):
         rules = ToontjeHoger6Relative()
         self.assertEqual(rules.ID, "TOONTJE_HOGER_6_RELATIVE")
 
     def test_can_play_through_th_6(self):
-        block = Block.objects.create(slug="test-th-6", rules="TOONTJE_HOGER_6_RELATIVE", rounds=2)
+        block = Block.objects.create(
+            identifier="test-th-6", rules="TOONTJE_HOGER_6_RELATIVE", rounds=2
+        )
         session = Session.objects.create(block=block, participant=Participant.objects.create(), playlist=get_playlist())
         rules = session.block_rules()
         for round in range(block.rounds):
             self.assertIsNotNone(rules.next_round(session))
-    
+
     def test_thk_6_initializes(self):
         rules = ToontjeHogerKids6Relative()
         self.assertEqual(rules.ID, "TOONTJE_HOGER_KIDS_6_RELATIVE")
 
     def test_can_play_through_thk_6(self):
-        block = Block.objects.create(slug="test-thk-6", rules="TOONTJE_HOGER_KIDS_6_RELATIVE", rounds=2)
+        block = Block.objects.create(
+            identifier="test-thk-6", rules="TOONTJE_HOGER_KIDS_6_RELATIVE", rounds=2
+        )
         session = Session.objects.create(block=block, participant=Participant.objects.create(), playlist=get_playlist())
         rules = session.block_rules()
         for round in range(block.rounds):

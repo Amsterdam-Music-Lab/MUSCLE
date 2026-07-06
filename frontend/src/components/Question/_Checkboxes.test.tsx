@@ -19,7 +19,7 @@ vi.mock('../../util/stores', () => ({
 }));
 
 const mockQuestion: Question = {
-    key: 'test-checkboxes',
+    identifier: 'test-checkboxes',
     text: 'Testing Checkboxes',
     choices: [
         {value: 'option1', label: 'First Option'},
@@ -87,7 +87,7 @@ describe('Checkboxes', () => {
 
     it('throws an error when no choices are provided', () => {
         const invalidQuestion: Question = {
-            key: 'invalid-checkboxes',
+            identifier: 'invalid-checkboxes',
             choices: []
         };
 
@@ -95,7 +95,7 @@ describe('Checkboxes', () => {
             .toThrow('Checkboxes question must have choices');
 
         const noChoicesQuestion: Question = {
-            key: 'invalid-checkboxes',
+            identifier: 'invalid-checkboxes',
         };
 
         expect(() => render(<Checkboxes question={noChoicesQuestion} value="" onChange={() => { }} />))

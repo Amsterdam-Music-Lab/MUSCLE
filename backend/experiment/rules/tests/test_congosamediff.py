@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 from django.test import TestCase
 
-from experiment.models import Block
+from experiment.models import Block, Experiment, Phase
 from participant.models import Participant
 from result.models import Result
 from section.models import Playlist, Section, Song
@@ -33,8 +33,10 @@ class CongoSameDiffTest(TestCase):
         self.playlist.csv = self.section_csv
         self.playlist._update_sections()
         self.participant = Participant.objects.create()
+        experiment = Experiment.objects.create(identifier="congosamediff")
+        phase = Phase.objects.create(experiment=experiment)
         self.block = Block.objects.create(
-            slug="congosamediff", rules="CONGOSAMEDIFF", rounds=4
+            phase=phase, identifier="congosamediff", rules="CONGOSAMEDIFF", rounds=4
         )
         self.session = Session.objects.create(
             block=self.block,
@@ -53,8 +55,8 @@ class CongoSameDiffTest(TestCase):
         Result.objects.create(
             session=self.session,
             participant=self.participant,
-            question_key='practice_done',
-            given_response='YES'
+            question_identifier='practice_done',
+            given_response='YES',
         )
         with patch.object(self.session, 'get_rounds_passed', return_value=2):
             final_action = congo_same_diff.next_round(self.session)
@@ -62,7 +64,7 @@ class CongoSameDiffTest(TestCase):
 
     def test_next_round_practice_trial(self):
         congo_same_diff = CongoSameDiff()
-        congo_same_diff.counted_result_keys = []
+        congo_same_diff.counted_result_identifiers = []
 
         first_actions = congo_same_diff.next_round(self.session)
         self.assertEqual(len(first_actions), 2)
@@ -85,15 +87,15 @@ class CongoSameDiffTest(TestCase):
         # check that if there is no `practice_done` result with `given_answer=YES`, we get another practice round
         practice_action = congo_same_diff.next_round(self.session)
         self.assertIsInstance(practice_action, Trial)
-        self.assertIn('PRACTICE', practice_action.feedback_form.form[0].key)
+        self.assertIn('PRACTICE', practice_action.feedback_form.form[0].identifier)
 
     def test_next_round_non_practice_trial(self):
         congo_same_diff = CongoSameDiff()
         Result.objects.create(
             session=self.session,
             participant=self.participant,
-            question_key='practice_done',
-            given_response='YES'
+            question_identifier='practice_done',
+            given_response='YES',
         )
 
         non_practice_action = congo_same_diff.next_round(self.session)
@@ -102,7 +104,7 @@ class CongoSameDiffTest(TestCase):
             non_practice_action.feedback_form.form[0].text,
             'Is the third sound the SAME or DIFFERENT as the first two sounds?',
         )
-        self.assertIn('NORMAL', non_practice_action.feedback_form.form[0].key)
+        self.assertIn('NORMAL', non_practice_action.feedback_form.form[0].identifier)
 
     def test_get_next_trial(self):
         congo_same_diff = CongoSameDiff()

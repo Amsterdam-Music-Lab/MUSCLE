@@ -63,8 +63,8 @@ class QuestionListForm(ModelForm):
         n_questions_in_list = QuestionInList.objects.filter(
             questionlist=instance
         ).count()
-        for index, key in enumerate(PRESET_BANKS.get(bank_key)):
-            question_obj = Question.objects.get(key=key)
+        for index, identifier in enumerate(PRESET_BANKS.get(bank_key)):
+            question_obj = Question.objects.get(identifier=identifier)
             QuestionInList.objects.bulk_create(
                 [
                     QuestionInList(

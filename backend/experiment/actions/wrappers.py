@@ -4,12 +4,10 @@ from typing import Optional
 from django.utils.translation import gettext as _
 
 from .button import Button
-from .final import Final
 from .form import Form
 from .question import Choice
 from .playback import Autoplay, PlayButtons, PlaybackSection
 from .trial import Trial
-from .utils import get_current_experiment_url
 
 from experiment.actions.utils import randomize_playhead
 from experiment.actions.question import ButtonArrayQuestion
@@ -51,11 +49,11 @@ class TwoAlternativeForced(Trial):
         playback = PlayButtons(
             sections=[PlaybackSection(section, color='colorNeutral2')], play_once=True
         )
-        key = "choice"
+        identifier = "choice"
         question = ButtonArrayQuestion(
-            key=key,
+            identifier=identifier,
             result_id=prepare_result(
-                key,
+                identifier,
                 session=session,
                 section=section,
                 expected_response=expected_response,
@@ -69,12 +67,12 @@ class TwoAlternativeForced(Trial):
 
 
 def boolean_question(
-    key: str,
+    identifier: str,
     text: str,
     result_id: int,
 ):
     return ButtonArrayQuestion(
-        key=key,
+        identifier=identifier,
         text=text,
         result_id=result_id,
         choices=ChoiceList.objects.get(pk='BOOLEAN_NEGATIVE_FIRST').to_dict(),
@@ -108,7 +106,7 @@ def song_sync(
         feedback_form=Form(
             [
                 boolean_question(
-                    key='recognize',
+                    identifier='recognize',
                     text='',
                     result_id=prepare_result(
                         "recognize",
@@ -151,7 +149,7 @@ def song_sync(
         feedback_form=Form(
             [
                 boolean_question(
-                    key="correct_place",
+                    identifier="correct_place",
                     text="",
                     result_id=prepare_result(
                         "correct_place",
@@ -174,37 +172,3 @@ def song_sync(
         title=title,
     )
     return [recognize, silence, correct_place]
-
-def final_action_with_optional_button(session, final_text="", title=_("End"), button_text=_("Continue")) -> Final:
-    """
-    Description: Create a final action with an optional button to proceed to the next block, if available.
-
-    Args:
-        session (Session): The current session.
-        final_text (str): The text to display in the final action.
-        title (str): The title for the final action screen.
-        button_text (str): The text displayed on the continuation button.
-
-    Returns:
-        (Final): The final action with an optional button.
-
-    Example:
-        ```python
-        action = final_action_with_optional_button(my_session, final_text="Complete!")
-        ```
-    """
-    redirect_url = get_current_experiment_url(session)
-
-    if redirect_url:
-        return Final(
-            title=title,
-            session=session,
-            final_text=final_text,
-            button=Button(button_text, link=redirect_url),
-        )
-    else:
-        return Final(
-            title=title,
-            session=session,
-            final_text=final_text,
-        )

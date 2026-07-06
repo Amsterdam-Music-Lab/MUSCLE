@@ -17,12 +17,12 @@ class HookedTeleTunes(Hooked):
         self.question_lists = [
             {
                 "name": "DEMOGRAPHICS",
-                "question_keys": get_question_bank('DEMOGRAPHICS'),
+                "question_identifiers": get_question_bank('DEMOGRAPHICS'),
                 "randomize": True,
             },  # 1. Demographic questions (7 questions)
             {
-                "name": "MUSICGENS_17_W_VARIANTS",
-                "question_keys": get_question_bank('MUSICGENS_17_W_VARIANTS'),
+                "name": "MUSICGENS",
+                "question_identifiers": get_question_bank('MUSICGENS'),
                 "randomize": True,
             },  # 2. Musicgens questions with variants
         ]

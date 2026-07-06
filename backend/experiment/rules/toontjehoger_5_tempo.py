@@ -14,7 +14,6 @@ from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
-from experiment.actions.utils import get_current_experiment_url
 from experiment.utils import format_label, non_breaking_spaces
 from result.utils import prepare_result
 from section.models import Playlist, Song
@@ -123,16 +122,16 @@ class ToontjeHoger5Tempo(BaseRules):
         )
 
         # Question
-        key = "pitch"
+        identifier = "pitch"
         question = ButtonArrayQuestion(
             text=self.get_trial_question(),
-            key=key,
+            identifier=identifier,
             choices=[
                 {"value": "A", "label": "A", "color": "colorNegative2"},
                 {"value": "B", "label": "B", "color": "colorNegative1"},
             ],
             result_id=prepare_result(
-                key,
+                identifier,
                 session,
                 section=section_original,
                 expected_response="A" if sections[0].id == section_original.id else "B",
@@ -206,10 +205,9 @@ class ToontjeHoger5Tempo(BaseRules):
         score = Score(session, config=config, feedback=feedback)
         return [score]
 
-    def get_final_round(self, session):
+    def get_final_round(self, session: Session):
         # Finish session.
         session.finish()
-        session.save()
 
         # Score
         score = self.get_score(session)
@@ -235,7 +233,6 @@ class ToontjeHoger5Tempo(BaseRules):
             heading="Timing en tempo",
             button=Button(
                 "Terug naar ToontjeHoger",
-                link=get_current_experiment_url(session),
             ),
         )
 

@@ -12,7 +12,7 @@ class ResultTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
-        cls.block = Block.objects.create(rules='QUESTIONNAIRE', slug='test')
+        cls.block = Block.objects.create(rules='QUESTIONNAIRE', identifier='test')
         cls.session = Session.objects.create(
             block=cls.block,
             participant=cls.participant,
@@ -24,8 +24,7 @@ class ResultTest(TestCase):
         session['participant_id'] = self.participant.id
         session.save()
         self.result = Result.objects.create(
-            question_key="speed_swallow",
-            participant=self.participant
+            question_identifier="speed_swallow", participant=self.participant
         )
 
     def test_json_data(self):
@@ -47,5 +46,5 @@ class ResultTest(TestCase):
 
     def test_clean(self):
         with self.assertRaises(ValidationError):
-            result = Result.objects.create(question_key="will_fail")
+            result = Result.objects.create(question_identifier="will_fail")
             result.clean()

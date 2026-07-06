@@ -24,7 +24,7 @@ class BlockForm(ModelForm):
         self.fields["rules"] = ChoiceField(choices=sorted(choices))
 
     def clean_playlists(self):
-        # Check if there is a rulesid selected and key exists
+        # Check if there is a rulesid selected and identifier exists
         if "rules" not in self.cleaned_data:
             return self.cleaned_data["playlists"]
 
@@ -56,7 +56,7 @@ class BlockForm(ModelForm):
         model = Block
         fields = [
             "index",
-            "slug",
+            "identifier",
             "rules",
             "name",
             "description",
@@ -72,9 +72,9 @@ class BlockForm(ModelForm):
             "image": _(
                 "An image that will be displayed on the experiment page and as a meta image in search engines."
             ),
-            "slug": _(
-                "The slug is used to identify the block in the URL so you can access it on the web as follows: app.amsterdammusiclab.nl/{experiment-slug}/block/{slug} <br>\
-            It must be unique within its experiment, lowercase and contain only letters, numbers, and hyphens. Nor can it start with any of the following reserved words: admin, server, block, participant, result, section, session, static."
+            "identifier": _(
+                "The identifier is used to identify the block in the URL so you can access it on the web as follows: app.amsterdammusiclab.nl/{identifier} <br>\
+            It must be unique, lowercase and contain only letters, numbers, and hyphens. Nor can it start with any of the following reserved words: admin, server, block, participant, result, section, session, static."
             ),
             "rules_config": _(
                 "This field can be used to enter dictionaries to configure behaviour of rules. Refer to the rules files' source code for possible settings."

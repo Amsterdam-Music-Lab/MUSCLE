@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from .base import BaseRules
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
@@ -13,7 +14,6 @@ from experiment.actions.trial import Trial
 from experiment.actions.utils import (
     render_feedback_trivia,
 )
-from experiment.actions.wrappers import final_action_with_optional_button
 from result.utils import prepare_result
 from section.models import Playlist
 
@@ -61,7 +61,6 @@ class BeatAlignment(BaseRules):
         if session.rounds_complete():
             # Finish session
             session.finish()
-            session.save()
             percentage = int(
                 (sum([r.score for r in session.result_set.all()]) / session.block.rounds) * 100)
             feedback = _('Well done! You’ve answered {} percent correctly!').format(
@@ -69,7 +68,7 @@ class BeatAlignment(BaseRules):
             trivia = _('In the UK, over 140.000 people did \
                 this test when it was first developed?')
             final_text = render_feedback_trivia(feedback, trivia)
-            return final_action_with_optional_button(session, final_text)
+            return Final(session, title=_("End"), final_text=final_text)
 
         # Practice rounds
         if not session.json_data.get("done_practice"):
@@ -141,10 +140,10 @@ class BeatAlignment(BaseRules):
         section = session.playlist.get_section(filter_by, song_ids=session.get_unused_song_ids())
         condition = section.song.name.split('_')[-1]
         expected_response = 'ON' if condition == 'on' else 'OFF'
-        key = 'aligned'
+        identifier = 'aligned'
         question = ButtonArrayQuestion(
             text=_("Are the beeps ALIGNED TO THE BEAT or NOT ALIGNED TO THE BEAT?"),
-            key=key,
+            identifier=identifier,
             choices=[
                 {
                     'value': 'ON',
@@ -158,7 +157,7 @@ class BeatAlignment(BaseRules):
                 },
             ],
             result_id=prepare_result(
-                key,
+                identifier,
                 session,
                 section=section,
                 expected_response=expected_response,

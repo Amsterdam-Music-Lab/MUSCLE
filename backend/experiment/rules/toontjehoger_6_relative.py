@@ -12,7 +12,6 @@ from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
-from experiment.actions.utils import get_current_experiment_url
 from section.models import Playlist
 from session.models import Session
 from .base import BaseRules
@@ -122,16 +121,19 @@ class ToontjeHoger6Relative(BaseRules):
         expected_response = "NO"
 
         # Question
-        key = 'same_melody'
+        identifier = 'same_melody'
         question = ButtonArrayQuestion(
             text="Zijn deze twee melodieën hetzelfde?",
-            key=key,
+            identifier=identifier,
             choices=[
                 {"value": "YES", "label": "Ja", "color": "colorPositive"},
                 {"value": "NO", "label": "Nee", "color": "colorNegative"},
             ],
             result_id=prepare_result(
-                key, session, section=section1, expected_response=expected_response
+                identifier,
+                session,
+                section=section1,
+                expected_response=expected_response,
             ),
         )
         form = Form([question], submit_button=None)
@@ -156,11 +158,10 @@ class ToontjeHoger6Relative(BaseRules):
     def calculate_score(self, result, data):
         return self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
 
-    def get_final_round(self, session):
+    def get_final_round(self, session: Session):
 
         # Finish session.
         session.finish()
-        session.save()
 
         # Score
         score = self.get_score(session)
@@ -183,7 +184,6 @@ class ToontjeHoger6Relative(BaseRules):
             heading="Relatief gehoor",
             button=Button(
                 "Terug naar ToontjeHoger",
-                link=get_current_experiment_url(session),
             ),
         )
 

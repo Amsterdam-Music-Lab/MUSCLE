@@ -14,24 +14,23 @@ import TextRange from "./_TextRange";
 
 import IQuestion, { QuestionViews } from "@/types/Question";
 
-export interface QuestionProps {
+interface FormProps {
     question: IQuestion;
-    onChange: (value: string | number | boolean, id: number) => void;
-    id: number;
-    disabled?: boolean;
+    onChange: (value: string | number) => void;
+    disabled: boolean;
 }
 
 /** Question is a block view that shows a question and handles storing the answer */
 const Question = ({
     question,
     onChange,
-    id,
     disabled = false,
-}: QuestionProps) => {
+}: FormProps) => {
+
     const [value, setValue] = useState(question.value || "");
 
-    const registerChange = (newValue: string | number | boolean) => {
-        onChange(newValue, id);
+    const registerChange = (newValue: string | number) => {
+        onChange(newValue);
         setValue(newValue);
     };
 
@@ -74,7 +73,7 @@ const Question = ({
                 <p className="explainer">{question.explainer}</p>
             )}
             <h3 className={classNames(question.style)}>{question.text}</h3>
-            <div className="question">{render(question.view)}</div>
+            <div className={classNames("question", {disabled: disabled})}>{render(question.view)}</div>
         </div>
     );
 };

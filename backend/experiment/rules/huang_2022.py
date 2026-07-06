@@ -36,12 +36,12 @@ class Huang2022(Hooked):
         self.question_lists = [
             {
                 "name": "MSI_ALL",
-                "question_keys": get_question_bank('MSI_ALL'),
+                "question_identifiers": get_question_bank('MSI_ALL'),
                 "randomize": False,
             },
             {
                 "name": "Demographics and other",
-                "question_keys": [
+                "question_identifiers": [
                     'msi_39_best_instrument',
                     'dgf_genre_preference_zh',
                     'dgf_generation',
@@ -86,7 +86,7 @@ class Huang2022(Hooked):
                 form = Form(
                     form=[
                         boolean_question(
-                            key='audio_check1',
+                            identifier='audio_check1',
                             text="",
                             result_id=prepare_result(
                                 'audio_check1', session, scoring_rule='BOOLEAN'
@@ -106,13 +106,13 @@ class Huang2022(Hooked):
             else:
                 if last_result.score == 0:
                     # user indicated they couldn't hear the music
-                    if last_result.question_key == 'audio_check1':
+                    if last_result.question_identifier == 'audio_check1':
                         playback = get_test_playback()
                         html = HTML(body=render_to_string('html/huang_2022/audio_check.html'))
                         form = Form(
                             form=[
                                 ButtonArrayQuestion(
-                                    key='audio_check2',
+                                    identifier='audio_check2',
                                     choices=[
                                         {
                                             "value": "no",
@@ -235,9 +235,8 @@ class Huang2022(Hooked):
                     return [self.finalize(session)]
         return actions
 
-    def finalize(self, session):
+    def finalize(self, session: Session) -> Final:
         session.finish()
-        session.save()
         return Final(
             session=session,
             final_text=self.final_score_message(session),

@@ -3,13 +3,14 @@ from django.utils.translation import gettext_lazy as _
 from .base import BaseRules
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
+from experiment.actions.final import Final
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
-from experiment.actions.wrappers import final_action_with_optional_button
 from question.models import ChoiceList
 from result.utils import prepare_result
+from session.models import Session
 
 boolean_and_middle_choices = [
     {
@@ -28,7 +29,7 @@ boolean_and_middle_choices = [
 class RhythmBatteryIntro(BaseRules):
     ID = 'RHYTHM_BATTERY_INTRO'
 
-    def next_round(self, session):
+    def next_round(self, session: Session):
         round_number = session.get_rounds_passed()
         playback = None
         feedback_form = None
@@ -53,12 +54,14 @@ class RhythmBatteryIntro(BaseRules):
             )
             actions.append(self.get_intro_explainer())
             actions.append(explainer)
-            key = 'quiet_room'
-            result_pk = prepare_result(key, session, expected_response=key)
+            identifier = 'quiet_room'
+            result_pk = prepare_result(
+                identifier, session, expected_response=identifier
+            )
             feedback_form = Form(
                 [
                     ButtonArrayQuestion(
-                        key=key,
+                        identifier=identifier,
                         text=_("Are you in a quiet room?"),
                         choices=boolean_and_middle_choices,
                         result_id=result_pk,
@@ -67,12 +70,14 @@ class RhythmBatteryIntro(BaseRules):
                 submit_button=None,
             )
         elif round_number == 1:
-            key = 'internet_connection'
-            result_pk = prepare_result(key, session, expected_response=key)
+            identifier = 'internet_connection'
+            result_pk = prepare_result(
+                identifier, session, expected_response=identifier
+            )
             feedback_form = Form(
                 [
                     ButtonArrayQuestion(
-                        key='internet_connection',
+                        identifier='internet_connection',
                         text=_("Do you have a stable internet connection?"),
                         choices=boolean_and_middle_choices,
                         result_id=result_pk,
@@ -81,12 +86,14 @@ class RhythmBatteryIntro(BaseRules):
                 submit_button=None,
             )
         elif round_number == 2:
-            key = 'headphones'
-            result_pk = prepare_result(key, session, expected_response=key)
+            identifier = 'headphones'
+            result_pk = prepare_result(
+                identifier, session, expected_response=identifier
+            )
             feedback_form = Form(
                 [
                     ButtonArrayQuestion(
-                        key=key,
+                        identifier=identifier,
                         text=_("Are you wearing headphones?"),
                         choices=ChoiceList.objects.get(pk="BOOLEAN").to_dict(),
                         result_id=result_pk,
@@ -95,12 +102,14 @@ class RhythmBatteryIntro(BaseRules):
                 submit_button=None,
             )
         elif round_number == 3:
-            key = 'notifications_off'
-            result_pk = prepare_result(key, session, expected_response=key)
+            identifier = 'notifications_off'
+            result_pk = prepare_result(
+                identifier, session, expected_response=identifier
+            )
             feedback_form = Form(
                 [
                     ButtonArrayQuestion(
-                        key=key,
+                        identifier=identifier,
                         text=_(
                             "Do you have sound notifications from other devices turned off?"
                         ),
@@ -127,13 +136,11 @@ class RhythmBatteryIntro(BaseRules):
             )
             message = _(
                 "Please keep the eventual sound level the same over the course of the experiment.")
+            session.finish()
             actions = [
                 Trial(playback, feedback_form),
-                final_action_with_optional_button(
-                    session, message)
+                Final(session, final_text=message),
             ]
-            session.finish()
-            session.save()
             return actions
 
         view = Trial(playback, feedback_form=feedback_form)

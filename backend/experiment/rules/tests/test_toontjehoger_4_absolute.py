@@ -138,7 +138,7 @@ class TestToontjeHoger4Absolute(TestCase):
         )
         playlist._update_sections()
         block = Block.objects.create(
-            slug='test-th-4', rules="TOONTJE_HOGER_4_ABSOLUTE", rounds=5
+            identifier='test-th-4', rules="TOONTJE_HOGER_4_ABSOLUTE", rounds=5
         )
         session = Session.objects.create(
             block=block, participant=Participant.objects.create(), playlist=playlist

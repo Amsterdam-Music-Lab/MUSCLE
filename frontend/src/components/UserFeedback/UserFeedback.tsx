@@ -8,21 +8,21 @@ import classNames from '@/util/classNames';
 import Participant from "@/types/Participant";
 
 interface UserFeedbackProps {
-    experimentSlug: string;
-    blockSlug: string;
+    experimentIdentifier: string;
+    blockIdentifier: string;
     participant: Participant;
     feedbackInfo: FeedbackInfo;
     inline?: boolean;
 }
 
-const UserFeedback = ({ experimentSlug, blockSlug, participant, feedbackInfo, inline = true }: UserFeedbackProps) => {
+const UserFeedback = ({ experimentIdentifier, blockIdentifier, participant, feedbackInfo, inline = true }: UserFeedbackProps) => {
     const [value, setValue] = useState('');
     const [showForm, setShowForm] = useState(true);
 
     const giveFeedback = async () => {
         const data = {
-            experimentSlug,
-            blockSlug,
+            experimentIdentifier,
+            blockIdentifier,
             feedback: value,
             participant
         }

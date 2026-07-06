@@ -307,7 +307,7 @@ class PracticeMixin(object):
         total_rounds = self.n_practice_rounds * math.ceil(
             round_number / self.n_practice_rounds
         )
-        key = self.task_description.replace(" ", "_") + "_practice"
+        identifier = self.task_description.replace(" ", "_") + "_practice"
         question = ButtonArrayQuestion(
             text=_(
                 "Is the second tone %(first_condition)s or %(second_condition)s than the first tone?"
@@ -316,7 +316,7 @@ class PracticeMixin(object):
                 "first_condition": self.first_condition_i18n,
                 "second_condition": self.second_condition_i18n,
             },
-            key=key,
+            identifier=identifier,
             choices=[
                 {
                     "value": self.first_condition,
@@ -330,7 +330,7 @@ class PracticeMixin(object):
                 },
             ],
             result_id=prepare_result(
-                key,
+                identifier,
                 session,
                 section=section,
                 expected_response=expected_response,

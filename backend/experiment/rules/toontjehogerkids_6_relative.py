@@ -8,9 +8,9 @@ from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import Final
 from experiment.actions.info import Info
 from experiment.actions.score import Score
-from experiment.actions.utils import get_current_experiment_url
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_6_relative import ToontjeHoger6Relative
+from .toontjehogerkids_1_mozart import get_info_button
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +59,6 @@ class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
     def get_final_round(self, session):
         # Finish session.
         session.finish()
-        session.save()
 
         # Score
         score = self.get_score(session)
@@ -70,7 +69,7 @@ class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),
-            button=Button("Wat hebben we getest?"),
+            button=Button("Wat hebben we getest?", link=""),
         )
 
         # Info page
@@ -88,9 +87,7 @@ class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
         info = Info(
             body=body,
             heading="Relatief gehoor",
-            button=Button(
-                "Terug naar ToontjeHogerKids", link=get_current_experiment_url(session)
-            ),
+            button=get_info_button(session),
         )
 
         return [*score, final, info]

@@ -11,7 +11,7 @@ export default {
 
 const getDefaultFeedbackForm = (overrides = {}) => ({
     form: [{
-        key: "know_song",
+        identifier: "know_song",
         view: "BUTTON_ARRAY",
         explainer: "",
         question: "1. Do you know this song?",
@@ -22,7 +22,7 @@ const getDefaultFeedbackForm = (overrides = {}) => ({
         ],
     },
     {
-        key: "like_song",
+        identifier: "like_song",
         view: "ICON_RANGE",
         explainer: "",
         question: "2. How much do you like this song?",

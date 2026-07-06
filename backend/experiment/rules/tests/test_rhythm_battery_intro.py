@@ -2,7 +2,7 @@ from django.test import TestCase
 from section.models import Section, Song, Playlist as PlaylistModel
 from participant.models import Participant
 from session.models import Session
-from experiment.models import Block
+from experiment.models import Block, Experiment, Phase
 from experiment.rules.rhythm_battery_intro import RhythmBatteryIntro
 from experiment.actions.explainer import Explainer
 from experiment.actions.final import Final
@@ -28,7 +28,11 @@ class RhythmBatteryIntroTest(TestCase):
             filename="not/to_be_found.mp3",
             tag=0
         )
-        self.block = Block.objects.create(slug="TEST", rules="RHYTHM_BATTERY_INTRO")
+        experiment = Experiment.objects.create(identifier="rhythm_battery_intro")
+        phase = Phase.objects.create(experiment=experiment)
+        self.block = Block.objects.create(
+            phase=phase, identifier="TEST", rules="RHYTHM_BATTERY_INTRO"
+        )
         participant = Participant.objects.create()
         self.session = Session.objects.create(
             block=Block.objects.first(),
@@ -44,7 +48,7 @@ class RhythmBatteryIntroTest(TestCase):
         self.assertIsInstance(actions[2], Trial)
         self.assertIsInstance(actions[2].feedback_form, Form)
         self.assertEqual(len(actions[2].feedback_form.form), 1)
-        self.assertEqual(actions[2].feedback_form.form[0].key, 'quiet_room')
+        self.assertEqual(actions[2].feedback_form.form[0].identifier, 'quiet_room')
 
     def test_next_round_last_time(self):
         listening_conditions = RhythmBatteryIntro()

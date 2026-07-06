@@ -12,9 +12,9 @@ class QuestionListFormTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        experiment = Experiment.objects.create(slug='test_experiment')
+        experiment = Experiment.objects.create(identifier='test_experiment')
         phase = Phase.objects.create(experiment=experiment)
-        cls.block = Block.objects.create(phase=phase, slug='test_block')
+        cls.block = Block.objects.create(phase=phase, identifier='test_block')
 
     def test_add_from_question_bank(self):
         self.assertEqual(QuestionInList.objects.count(), 0)

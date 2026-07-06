@@ -14,16 +14,16 @@ class SessionUtilsTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
-        cls.block = Block.objects.create(rules='QUESTIONNAIRE', slug='test')
+        cls.block = Block.objects.create(rules='QUESTIONNAIRE', identifier='test')
         cls.session = Session.objects.create(
             block=cls.block,
             participant=cls.participant,
         )
-        # create results with various question_keys, and scores from 0 to 9
-        keys = ['a', 'a', 'b', 'b', 'b', 'b', 'c', 'c', 'c', 'd']
+        # create results with various question_identifiers, and scores from 0 to 9
+        identifiers = ['a', 'a', 'b', 'b', 'b', 'b', 'c', 'c', 'c', 'd']
         Result.objects.bulk_create(
             [
-                Result(session=cls.session, question_key=keys[i], score=i)
+                Result(session=cls.session, question_identifier=identifiers[i], score=i)
                 for i in range(n_results)
             ]
         )

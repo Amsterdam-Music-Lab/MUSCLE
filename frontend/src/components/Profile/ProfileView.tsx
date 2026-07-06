@@ -11,7 +11,7 @@ export interface ProfileViewProps {
         points: string;
     };
     scores: {
-        block_slug: string;
+        block_identifier: string;
         block_name: string;
         score: number;
         date: string;
@@ -54,8 +54,8 @@ export const ProfileView = (data: ProfileViewProps) => {
                                 <h4>
                                     <Link
                                         to={URLS.block.replace(
-                                            ":slug",
-                                            score.block_slug
+                                            ":identifier",
+                                            score.block_identifier
                                         )}
                                     >
                                         {score.block_name}

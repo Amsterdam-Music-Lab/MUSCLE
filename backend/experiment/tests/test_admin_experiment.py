@@ -31,14 +31,14 @@ class TestExperimentAdmin(TestCase):
     @classmethod
     def setUpTestData(self):
         self.experiment = Experiment.objects.create(
-            slug="TEST",
+            identifier="TEST",
             name="test",
             description="test description very long like the tea of oolong and the song of the bird in the morning",
         )
         phase = Phase.objects.create(experiment=self.experiment)
         participant = Participant.objects.create()
-        block1 = Block.objects.create(phase=phase, slug='testslug')
-        block2 = Block.objects.create(phase=phase, slug='testslug2')
+        block1 = Block.objects.create(phase=phase, identifier='testidentifier')
+        block2 = Block.objects.create(phase=phase, identifier='testidentifier2')
         # create 6 sessions, 3 for each block
         Session.objects.bulk_create(
             [
@@ -68,7 +68,7 @@ class TestExperimentAdmin(TestCase):
             ExperimentAdmin.list_display,
             (
                 "experiment_name",
-                "slug_link",
+                "url_link",
                 "remarks",
                 "active",
             ),
@@ -105,16 +105,18 @@ class PhaseInlineTemplateTest(TestCase):
         self.client.login(username='admin', password='pass')
 
     def test_phase_inline_template_renders_blocks(self):
-        experiment = Experiment.objects.create(slug="inline-test", name="Inline Test")
+        experiment = Experiment.objects.create(
+            identifier="inline-test", name="Inline Test"
+        )
         phase = Phase.objects.create(
             index=1, randomize=False, dashboard=True, experiment=experiment
         )
-        block = Block.objects.create(slug="block-inline", phase=phase)
+        block = Block.objects.create(identifier="block-inline", phase=phase)
 
         url = reverse("admin:experiment_experiment_change", args=[experiment.pk])
         response = self.client.get(url)
         self.assertContains(response, "Blocks")
-        self.assertContains(response, block.slug)
+        self.assertContains(response, block.identifier)
         self.assertContains(response, 'add/?phase_id=%s' % phase.pk)
 
 
@@ -122,7 +124,7 @@ class TestDuplicateExperiment(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.experiment = Experiment.objects.create(
-            slug="original",
+            identifier="original",
             name_en="original experiment",
             name_nl="origineel experiment",
         )
@@ -137,7 +139,7 @@ class TestDuplicateExperiment(TestCase):
         cls.theme = ThemeConfig.objects.create(name='test_theme')
 
         cls.block1 = Block.objects.create(
-            slug="block1",
+            identifier="block1",
             phase=cls.first_phase,
             index=1,
             name_en="First block",
@@ -147,7 +149,7 @@ class TestDuplicateExperiment(TestCase):
             theme_config=cls.theme,
         )
         cls.block2 = Block.objects.create(
-            slug="block2",
+            identifier="block2",
             phase=cls.first_phase,
             index=2,
             name_en="Second block",
@@ -157,7 +159,7 @@ class TestDuplicateExperiment(TestCase):
             theme_config=cls.theme,
         )
         cls.block3 = Block.objects.create(
-            slug="block3",
+            identifier="block3",
             phase=cls.second_phase,
             index=1,
             name_en="Third block",
@@ -167,7 +169,7 @@ class TestDuplicateExperiment(TestCase):
             theme_config=cls.theme,
         )
         cls.block4 = Block.objects.create(
-            slug="block4",
+            identifier="block4",
             phase=cls.second_phase,
             index=2,
             name_en="Fourth block",
@@ -196,8 +198,7 @@ class TestDuplicateExperiment(TestCase):
 
     def test_duplicate_experiment(self):
         request = MockRequest()
-        request.POST = {"_duplicate": "",
-                        "slug-extension": "duplitest"}
+        request.POST = {"_duplicate": "", "identifier-extension": "duplitest"}
         response = self.admin.duplicate(request, self.experiment)
 
         new_exp = Experiment.objects.last()
@@ -206,19 +207,19 @@ class TestDuplicateExperiment(TestCase):
         all_phases = Phase.objects.all()
 
         all_blocks = Block.objects.all()
-        new_block1 = Block.objects.get(slug="block1-duplitest")
+        new_block1 = Block.objects.get(identifier="block1-duplitest")
         self.assertIsNotNone(new_block1)
 
         all_question_lists = QuestionList.objects.all()
         all_questions = Question.objects.all()
 
         self.assertEqual(all_experiments.count(), 2)
-        self.assertEqual(new_exp.slug, 'original-duplitest')
+        self.assertEqual(new_exp.identifier, 'original-duplitest')
 
         self.assertEqual(all_phases.count(), 4)
 
         self.assertEqual(all_blocks.count(), 8)
-        block4duplicate = Block.objects.get(slug='block4-duplitest')
+        block4duplicate = Block.objects.get(identifier='block4-duplitest')
         self.assertIsNotNone(block4duplicate)
         self.assertEqual(block4duplicate.theme_config.name, 'test_theme')
 

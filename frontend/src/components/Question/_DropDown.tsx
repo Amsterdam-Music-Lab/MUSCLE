@@ -1,13 +1,7 @@
-import Question from "@/types/Question";
-
-interface DropDownProps {
-    question: Question;
-    value: string;
-    onChange: (value: string) => void;
-}
+import { QuestionProps } from "@/types/Question";
 
 /** DropDown is a question view for selecting a single option from a dropdown list */
-const DropDown = ({ question, value, onChange }: DropDownProps) => {
+const DropDown = ({ question, value, onChange, disabled }: QuestionProps) => {
     const choices = question.choices;
 
     if (!choices || choices.length <= 0) {
@@ -20,7 +14,8 @@ const DropDown = ({ question, value, onChange }: DropDownProps) => {
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 tabIndex={0}
-                name={question.key}
+                name={question.identifier}
+                disabled={disabled}
             >
                 <option value=""></option>
                 {choices.map((choice, index) => (

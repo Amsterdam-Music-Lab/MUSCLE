@@ -22,12 +22,12 @@ export interface ConsentProps {
 
 /** Consent is an experiment view that shows the consent text, and handles agreement/stop actions */
 const Consent = ({ title, text, experiment, participant, onNext, confirmButton, denyButton }: ConsentProps) => {
-    const [consent, loadingConsent] = useConsent(experiment.slug);
+    const [consent, loadingConsent] = useConsent(experiment.identifier);
     const urlQueryString = window.location.search;
 
     // Listen for consent, and auto advance if already given
     useEffect(() => {
-        if (consent || (new URLSearchParams(urlQueryString).get("participant_id"))) {
+        if ( consent ) {
             onNext();
         }
     }, [consent, onNext, urlQueryString]);

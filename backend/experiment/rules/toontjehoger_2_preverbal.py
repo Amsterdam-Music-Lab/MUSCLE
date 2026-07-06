@@ -14,10 +14,10 @@ from experiment.actions.playback import PlayButtons, ImagePlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
-from experiment.actions.utils import get_current_experiment_url
 from experiment.utils import format_label
 from result.utils import prepare_result
 from section.models import Playlist
+from session.models import Session
 from .base import BaseRules
 
 logger = logging.getLogger(__name__)
@@ -148,16 +148,16 @@ class ToontjeHoger2Preverbal(BaseRules):
 
     def get_round1(self, session):
         # Question
-        key = 'expected_spectrogram'
+        identifier = 'expected_spectrogram'
         question = ButtonArrayQuestion(
             text=self.get_round1_question(),
-            key=key,
+            identifier=identifier,
             choices=[
                 {"value": "A", "label": "A", "color": "colorNeutral2"},
                 {"value": "B", "label": "B", "color": "colorNeutral1"},
                 {"value": "C", "label": "C", "color": "colorSecondary"},
             ],
-            result_id=prepare_result(key, session, expected_response="C"),
+            result_id=prepare_result(identifier, session, expected_response="C"),
         )
         form = Form([question], submit_button=None)
 
@@ -280,15 +280,15 @@ class ToontjeHoger2Preverbal(BaseRules):
         )
 
         # Question
-        key = 'baby'
+        identifier = 'baby'
         question = ButtonArrayQuestion(
             text=self.get_round_2_question(),
-            key=key,
+            identifier=identifier,
             choices=[
                 {"value": "A", "label": "A", "color": "colorNeutral2"},
                 {"value": "B", "label": "B", "color": "colorNeutral1"},
             ],
-            result_id=prepare_result(key, session, expected_response="A"),
+            result_id=prepare_result(identifier, session, expected_response="A"),
         )
         form = Form([question])
 
@@ -302,11 +302,9 @@ class ToontjeHoger2Preverbal(BaseRules):
     def calculate_score(self, result, data):
         return self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
 
-    def get_final_round(self, session):
-
+    def get_final_round(self, session: Session):
         # Finish session.
         session.finish()
-        session.save()
 
         # Score
         score = self.get_score(session, session.get_rounds_passed())
@@ -314,6 +312,7 @@ class ToontjeHoger2Preverbal(BaseRules):
         # Final
         final_text = "Goed gedaan! Je hebt beide vragen correct beantwoord!" if session.final_score >= 2 * \
             self.SCORE_CORRECT else "Dat bleek toch even lastig!"
+        session.finish()
         final = Final(
             session=session,
             final_text=final_text,
@@ -329,7 +328,6 @@ class ToontjeHoger2Preverbal(BaseRules):
             heading="Het eerste luisteren",
             button=Button(
                 "Terug naar ToontjeHoger",
-                link=get_current_experiment_url(session),
             ),
         )
 

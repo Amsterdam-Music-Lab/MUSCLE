@@ -23,7 +23,7 @@ const defaultArgs = {
         color: "colorNegative"
     },
     experiment: {
-        slug: "experiment-slug",
+        identifier: "experiment-identifier",
         theme: theme
     }
 };

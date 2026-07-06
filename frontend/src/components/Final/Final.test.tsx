@@ -45,7 +45,7 @@ describe('Final Component', () => {
         render(
             <BrowserRouter>
                 <Final
-                    block={{ slug: 'test-block' }}
+                    block={{ identifier: 'test-block' }}
                     participant="participant-id"
                     score={100}
                     finalText="<p>Final Text</p>"
@@ -79,7 +79,7 @@ describe('Final Component', () => {
         render(
             <BrowserRouter>
                 <Final
-                    block={{ slug: 'test-block' }}
+                    block={{ identifier: 'test-block' }}
                     participant="participant-id"
                     score={100}
                     finalText="<p>Final Text</p>"
@@ -184,7 +184,7 @@ describe('Final Component', () => {
         render(
             <BrowserRouter>
                 <Final
-                    block={{ slug: 'test-block' }}
+                    block={{ identifier: 'test-block' }}
                     participant="participant-id"
                     score={100}
                     finalText="<p>Final Text</p>"
@@ -198,7 +198,7 @@ describe('Final Component', () => {
         render(
             <BrowserRouter>
                 <Final
-                    block={{ slug: 'test-block' }}
+                    block={{ identifier: 'test-block' }}
                     participant="participant-id"
                     score={100}
                     finalText="<p>Final Text</p>"
@@ -213,7 +213,7 @@ describe('Final Component', () => {
         render(
             <BrowserRouter>
                 <Final
-                    block={{ slug: 'test-block' }}
+                    block={{ identifier: 'test-block' }}
                     participant="participant-id"
                     score={100}
                     finalText="<p>Final Text</p>"

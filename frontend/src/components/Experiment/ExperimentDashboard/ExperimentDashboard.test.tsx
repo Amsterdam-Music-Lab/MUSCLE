@@ -8,7 +8,7 @@ import Block from '@/types/Block';
 const getExperiment = (overrides = {}) => {
     return {
         id: 1,
-        slug: 'some_slug',
+        identifier: 'some_identifier',
         name: 'Some Experiment',
         description: 'Some description',
         image: {},
@@ -18,13 +18,13 @@ const getExperiment = (overrides = {}) => {
 
 const experiment1 = getExperiment({
     id: 1,
-    slug: 'some_slug',
+    identifier: 'some_identifier',
     name: 'Some Experiment',
     description: null,
 });
 const experiment2 = getExperiment({
     id: 2,
-    slug: 'another_slug',
+    identifier: 'another_identifier',
     name: 'Another Experiment',
     description: 'Some description',
 });
@@ -81,7 +81,7 @@ describe('ExperimentDashboard', () => {
         });
     });
 
-    it('links to the experiment with the correct slug', async () => {
+    it('links to the experiment with the correct identifier', async () => {
         render(
             <MemoryRouter>
                 <ExperimentDashboard experiment={experimentWithDashboard} />
@@ -89,11 +89,11 @@ describe('ExperimentDashboard', () => {
         );
         await waitFor(() => {
             expect(screen.getByRole('menu')).toBeTruthy();
-            expect(screen.getByRole('menu').querySelector('a').getAttribute('href')).toBe('/block/some_slug');
+            expect(screen.getByRole('menu').querySelector('a').getAttribute('href')).toBe('/block/some_identifier');
         });
     });
 
-    it('links to the experiment with the correct slug and participant id if the participand id url is present', async () => {
+    it('links to the experiment with the correct identifier and participant id if the participand id url is present', async () => {
         render(
             <MemoryRouter>
                 <ExperimentDashboard experiment={experimentWithDashboard} participantIdUrl="some_id" />
@@ -101,7 +101,7 @@ describe('ExperimentDashboard', () => {
         );
         await waitFor(() => {
             expect(screen.getByRole('menu')).toBeTruthy();
-            expect(screen.getByRole('menu').querySelector('a').getAttribute('href')).toBe('/block/some_slug?participant_id=some_id');
+            expect(screen.getByRole('menu').querySelector('a').getAttribute('href')).toBe('/block/some_identifier?participant_id=some_id');
         });
     });
 

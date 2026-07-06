@@ -28,7 +28,7 @@ import { Round } from "@/types/Round";
 // - Implements participant_id as URL parameter, e.g. http://localhost:3000/bat?participant_id=johnsmith34
 //   Empty URL parameter "participant_id" is the same as no URL parameter at all
 const Block = () => {
-    const { experimentSlug, blockSlug } = useParams();
+    const { experimentIdentifier, blockIdentifier } = useParams();
     const startState = { view: "LOADING" } as Action;
     // Stores
     const setError = useBoundStore(state => state.setError);
@@ -50,7 +50,7 @@ const Block = () => {
     const playlist = useRef(null);
 
     // API hooks
-    const [block, loadingBlock] = useBlock(experimentSlug!, blockSlug!);
+    const [block, loadingBlock] = useBlock(experimentIdentifier!, blockIdentifier!);
 
     const loadingText = block ? block.loading_text : "";
     const className = block ? block.class_name : "";
@@ -228,7 +228,7 @@ const Block = () => {
             className={classNames(
                 "aha__block",
                 !loadingBlock && block
-                    ? "block-" + block.slug
+                    ? "block-" + block.identifier
                     : ""
             )}
             data-testid="block-wrapper"
@@ -248,7 +248,7 @@ const Block = () => {
                         {block?.feedback_info?.show_float_button && (
                             <FloatingActionButton>
                                 <UserFeedback
-                                    blockSlug={block.slug}
+                                    blockIdentifier={block.identifier}
                                     participant={participant}
                                     feedbackInfo={block.feedback_info}
                                     inline={false} />

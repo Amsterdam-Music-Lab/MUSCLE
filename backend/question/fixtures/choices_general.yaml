@@ -1,280 +1,351 @@
 # Choices for Boolean and Likert questions
 - model: question.choice
   fields:
-    key: 'yes'
-    text: 'Yes'
+    identifier: 'yes'
+    text: Yes
+    text_nl: Ja
+    text_zh_hans: 是
+    text_de: Ja
     index: 0
     choicelist: BOOLEAN
     color: 'colorPositive'
 - model: question.choice
   fields:
-    key: 'no'
-    text: 'No'
+    identifier: 'no'
+    text: No
+    text_nl: Nee
+    text_zh_hans: 否
+    text_de: Nein
     index: 1
     choicelist: BOOLEAN
     color: 'colorNegative'
 - model: question.choice
   fields:
-    key: 'no'
-    text: 'No'
+    identifier: 'no'
+    text: No
+    text_nl: Nee
+    text_zh_hans: 否
+    text_de: Nein
     index: 0
     choicelist: BOOLEAN_NEGATIVE_FIRST
     color: 'colorNegative'
 - model: question.choice
   fields:
-    key: 'yes'
-    text: 'Yes'
+    identifier: 'yes'
+    text: Yes
+    text_nl: Ja
+    text_zh_hans: 是
+    text_de: Ja
     index: 1
     choicelist: BOOLEAN_NEGATIVE_FIRST
     color: 'colorPositive'
 - model: question.choice
   fields:
-    key: '1'
-    text: 'Yes'
+    identifier: '1'
+    text: Yes
+    text_nl: Ja
+    text_zh_hans: 是
+    text_de: Ja
     index: 0
     choicelist: BOOLEAN_UNDECIDED
     color: 'colorPositive'
 - model: question.choice
   fields:
-    key: '0'
-    text: 'No'
+    identifier: '0'
+    text: No
+    text_nl: Nee
+    text_zh_hans: 否
+    text_de: Nein
     index: 1
     choicelist: BOOLEAN_UNDECIDED
     color: 'colorNegative'
 - model: question.choice
   fields:
-    key: '-1'
+    identifier: '-1'
     text: I'm not sure
+    text_nl: Ik weet het niet zeker
+    text_zh_hans: 完全没接触过
+    text_de: Ich bin mir nicht sicher
     index: 2
     choicelist: BOOLEAN_UNDECIDED
     color: 'colorNeutral1'
 - model: question.choice
   fields:
-    key: '1'
+    identifier: '1'
     text: Strongly Disagree
+    text_nl: Zeer mee oneens
+    text_zh_hans: 非常不同意
+    text_de: Stimme ganz und gar nicht zu
     index: 0
     choicelist: LIKERT_AGREE_5
 - model: question.choice
   fields:
-    key: '2'
+    identifier: '2'
     text: Disagree
+    text_nl: Mee oneens
+    text_zh_hans: 不同意
+    text_de: Stimme nicht zu
     index: 1
     choicelist: LIKERT_AGREE_5
 - model: question.choice
   fields:
-    key: '3'
+    identifier: '3'
     text: Neither Agree nor Disagree
+    text_nl: Niet mee eens of oneens
+    text_zh_hans: 即不同意也不反对
+    text_de: Weder noch
     index: 2
     choicelist: LIKERT_AGREE_5
 - model: question.choice
   fields:
-    key: '4'
+    identifier: '4'
     text: Agree
+    text_nl: Mee eens
+    text_zh_hans: 同意
+    text_de: Stimme zu
     index: 3
     choicelist: LIKERT_AGREE_5
 - model: question.choice
   fields:
-    key: '5'
+    identifier: '5'
     text: Strongly Agree
+    text_nl: Zeer mee eens
+    text_zh_hans: 完全同意
+    text_de: Stimme vollständig zu
     index: 4
     choicelist: LIKERT_AGREE_5
 - model: question.choice
   fields:
-    key: '1'
+    identifier: '1'
     text: Agree strongly
     index: 0
     choicelist: LIKERT_AGREE_6
 - model: question.choice
   fields:
-    key: '2'
+    identifier: '2'
     text: Agree moderately
     index: 1
     choicelist: LIKERT_AGREE_6
 - model: question.choice
   fields:
-    key: '3'
+    identifier: '3'
     text: Agree slightly
     index: 2
     choicelist: LIKERT_AGREE_6
 - model: question.choice
   fields:
-    key: '4'
+    identifier: '4'
     text: Disagree slightly
     index: 3
     choicelist: LIKERT_AGREE_6
 - model: question.choice
   fields:
-    key: '5'
+    identifier: '5'
     text: Disagree moderately
     index: 4
     choicelist: LIKERT_AGREE_6
 - model: question.choice
   fields:
-    key: '6'
+    identifier: '6'
     text: Disagree strongly
     index: 5
     choicelist: LIKERT_AGREE_6
 - model: question.choice
   fields:
-    key: '1'
+    identifier: '1'
     text: Completely Disagree
+    text_en: Completely Disagree
+    text_nl: Helemaal mee oneens
+    text_zh_hans: 完全不同意
+    text_de: Stimme ganz und gar nicht zu
+    text_ja: 全くあてはまらない
     index: 0
     choicelist: LIKERT_AGREE_7
 - model: question.choice
   fields:
-    key: '2'
+    identifier: '2'
     text: Strongly Disagree
+    text_en: Strongly Disagree
+    text_nl: Zeer mee oneens
+    text_zh_hans: 非常不同意
+    text_de: Stimme nicht zu
+    text_ja: ほとんどあてはまらない
     index: 1
     choicelist: LIKERT_AGREE_7
 - model: question.choice
   fields:
-    key: '3'
+    identifier: '3'
     text: Disagree
+    text_en: Disagree
+    text_nl: Mee oneens
+    text_zh_hans: 不同意
+    text_de: Stimme eher nicht zu
+    text_ja: あまりあてはまらない
     index: 2
     choicelist: LIKERT_AGREE_7
 - model: question.choice
   fields:
-    key: '4'
+    identifier: '4'
     text: Neither Agree nor Disagree
+    text_en: Neither Agree nor Disagree
+    text_nl: Niet mee eens of oneens
+    text_zh_hans: 即不同意也不反对
+    text_de: Weder noch
+    text_ja: どちらでもない
     index: 3
     choicelist: LIKERT_AGREE_7
 - model: question.choice
   fields:
-    key: '5'
+    identifier: '5'
     text: Agree
+    text_en: Agree
+    text_nl: Mee eens
+    text_zh_hans: 同意
+    text_de: Stimme eher zu
+    text_ja: わりとあてはまる
     index: 4
     choicelist: LIKERT_AGREE_7
 - model: question.choice
   fields:
-    key: '6'
+    identifier: '6'
     text: Strongly Agree
+    text_en: Strongly Agree
+    text_nl: Zeer mee eens
+    text_zh_hans: 非常同意
+    text_de: Stimme zu
+    text_ja: よくあてはまる
     index: 5
     choicelist: LIKERT_AGREE_7
 - model: question.choice
   fields:
-    key: '7'
+    identifier: '7'
     text: Completely Agree
+    text_en: Completely Agree
+    text_nl: Helemaal mee eens
+    text_zh_hans: 完全同意
+    text_de: Stimme voll und ganz zu
+    text_ja: 実によくあてはまる
     index: 6
     choicelist: LIKERT_AGREE_7
 - model: question.choice
   fields:
-    key: '1'
+    identifier: '1'
     text: Never
     index: 0
     choicelist: LIKERT_FREQUENCY_6
 - model: question.choice
   fields:
-    key: '2'
+    identifier: '2'
     text: Not very often
     index: 1
     choicelist: LIKERT_FREQUENCY_6
 - model: question.choice
   fields:
-    key: '3'
+    identifier: '3'
     text: Occasionally
     index: 2
     choicelist: LIKERT_FREQUENCY_6
 - model: question.choice
   fields:
-    key: '4'
+    identifier: '4'
     text: Sometimes
     index: 3
     choicelist: LIKERT_FREQUENCY_6
 - model: question.choice
   fields:
-    key: '5'
+    identifier: '5'
     text: Very often
     index: 4
     choicelist: LIKERT_FREQUENCY_6
 - model: question.choice
   fields:
-    key: '6'
+    identifier: '6'
     text: Always
     index: 5
     choicelist: LIKERT_FREQUENCY_6
 - model: question.choice
   fields:
-    key: '1'
+    identifier: '1'
     text: fa-face-grin-hearts
     index: 0
     choicelist: LIKERT_ICONS_7
     color: 'colorPrimary'
 - model: question.choice
   fields:
-    key: '2'
+    identifier: '2'
     text: fa-face-grin
     index: 1
     choicelist: LIKERT_ICONS_7
 - model: question.choice
   fields:
-    key: '3'
+    identifier: '3'
     text: fa-face-smile
     index: 2
     choicelist: LIKERT_ICONS_7
 - model: question.choice
   fields:
-    key: '4'
+    identifier: '4'
     text: fa-face-meh
     index: 3
     choicelist: LIKERT_ICONS_7
 - model: question.choice
   fields:
-    key: '5'
+    identifier: '5'
     text: fa-face-frown
     index: 4
     choicelist: LIKERT_ICONS_7
 - model: question.choice
   fields:
-    key: '6'
+    identifier: '6'
     text: fa-face-frown-open
     index: 5
     choicelist: LIKERT_ICONS_7
 - model: question.choice
   fields:
-    key: '7'
+    identifier: '7'
     text: fa-face-angry
     index: 6
     choicelist: LIKERT_ICONS_7
     color: 'colorNeutral2'
 - model: question.choice
   fields:
-    key: '1'
+    identifier: '1'
     text: Dislike Strongly
     index: 0
     choicelist: LIKERT_PREFERENCE_7
 - model: question.choice
   fields:
-    key: '2'
+    identifier: '2'
     text: Dislike Moderately
     index: 1
     choicelist: LIKERT_PREFERENCE_7
 - model: question.choice
   fields:
-    key: '3'
+    identifier: '3'
     text: Dislike a Little
     index: 2
     choicelist: LIKERT_PREFERENCE_7
 - model: question.choice
   fields:
-    key: '4'
+    identifier: '4'
     text: Neither Like nor Dislike
     index: 3
     choicelist: LIKERT_PREFERENCE_7
 - model: question.choice
   fields:
-    key: '5'
+    identifier: '5'
     text: Like a Little
     index: 4
     choicelist: LIKERT_PREFERENCE_7
 - model: question.choice
   fields:
-    key: '6'
+    identifier: '6'
     text: Like Moderately
     index: 5
     choicelist: LIKERT_PREFERENCE_7
 - model: question.choice
   fields:
-    key: '7'
+    identifier: '7'
     text: Like Strongly
     index: 6
     choicelist: LIKERT_PREFERENCE_7

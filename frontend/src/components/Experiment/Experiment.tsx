@@ -18,9 +18,9 @@ import Redirect from "@/components/Redirect/Redirect";
 import useHeadDataFromExperiment from "@/hooks/useHeadDataFromExperiment";
 
 const Experiment = () => {
-    const { slug } = useParams();
+    const { identifier } = useParams();
 
-    const [experiment, loadingExperiment] = useExperiment(slug!) as [IExperiment, boolean];
+    const [experiment, loadingExperiment] = useExperiment(identifier!) as [IExperiment, boolean];
     const [hasShownConsent, setHasShownConsent] = useState(false);
     const participant = useBoundStore((state) => state.participant);
     const setTheme = useBoundStore((state) => state.setTheme);
@@ -42,7 +42,7 @@ const Experiment = () => {
         setHasShownConsent(true);
     }
 
-    const getBlockHref = (experimentSlug: string, blockSlug: string) => `/${experimentSlug}/block/${blockSlug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
+    const getBlockHref = (experimentIdentifier: string, blockIdentifier: string) => `/${experimentIdentifier}/block/${blockIdentifier}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     if (loadingExperiment) {
         return (
@@ -71,7 +71,7 @@ const Experiment = () => {
     }
 
     if (!displayDashboard && nextBlock) {
-        return <Redirect to={getBlockHref(slug, nextBlock.slug)} />
+        return <Redirect to={getBlockHref(identifier, nextBlock.identifier)} />
     }
 
     return (
@@ -79,7 +79,7 @@ const Experiment = () => {
             <Routes>
                 <Route
                     path={'/about'}
-                    element={<ExperimentAbout experiment={experiment} />}
+                    element={<ExperimentAbout {...experiment} />}
                 />
                 <Route
                     path={'*'}

@@ -6,7 +6,7 @@ from experiment.models import Block, Experiment, Phase
 class BlockFormTest(TestCase):
     def test_form_fields(self):
         form = BlockForm()
-        self.assertIn("slug", form.fields)
+        self.assertIn("identifier", form.fields)
         self.assertIn('rules', form.fields)
         self.assertIn('rounds', form.fields)
         self.assertIn('bonus_points', form.fields)

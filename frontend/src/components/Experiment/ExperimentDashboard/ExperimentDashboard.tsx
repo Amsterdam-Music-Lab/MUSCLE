@@ -19,20 +19,20 @@ export const ExperimentDashboard: React.FC<ExperimentDashboardProps> = ({ experi
     const { nextBlockButtonText, aboutButtonText } = experiment.theme?.header || { nextBlockButtonText: "", aboutButtonText: "" };
 
     const scoreDisplayConfig = experiment.theme?.header?.score;
-    const nextBlockSlug = experiment.nextBlock?.slug;
+    const nextBlockIdentifier = experiment.nextBlock?.identifier;
     const showHeader = experiment.theme?.header;
     const socialMediaConfig = experiment.socialMediaConfig;
     const primaryColor = experiment.theme?.colorPrimary || '';
 
-    const getBlockHref = (slug: string) => `/block/${slug}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
+    const getBlockHref = (identifier: string) => `/block/${identifier}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     return (
         <div className="aha__dashboard">
             <Logo />
             {showHeader && (
                 <Header
-                    nextBlockSlug={nextBlockSlug}
-                    experimentSlug={experiment.slug}
+                    nextBlockIdentifier={nextBlockIdentifier}
+                    experimentIdentifier={experiment.identifier}
                     totalScore={totalScore}
                     description={description}
                     scoreDisplayConfig={scoreDisplayConfig}
@@ -46,9 +46,9 @@ export const ExperimentDashboard: React.FC<ExperimentDashboardProps> = ({ experi
             <div role="menu" className="dashboard toontjehoger">
                 <ul>
                     {dashboard.map((block: IBlock) => (
-                        <li key={block.slug}>
-                            <Link to={getBlockHref(block.slug)} role="menuitem">
-                                <ImageOrPlaceholder imagePath={block.image?.file} alt={block.image?.alt ?? block.description} />
+                        <li key={block.identifier}>
+                            <Link to={getBlockHref(block.identifier)} role="menuitem">
+                                <ImageOrPlaceholder imagePath={block.image?.file} alt={block.image?.alt ?? block.description} backgroundColor={block.image && block.image.backgroundColor? experiment.theme[block.image?.backgroundColor] : null}/>
                                 <h3>{block.name}</h3>
                                 <p>{block.description}</p>
                             </Link>
@@ -61,10 +61,10 @@ export const ExperimentDashboard: React.FC<ExperimentDashboardProps> = ({ experi
     );
 }
 
-const ImageOrPlaceholder = ({ imagePath, alt }: { imagePath?: string, alt: string }) => {
+const ImageOrPlaceholder = ({ imagePath, alt, backgroundColor }: { imagePath?: string, alt: string, backgroundColor?: string }) => {
     const imgSrc = imagePath ?? null;
 
-    return imgSrc ? <img src={imgSrc} alt={alt} /> : <div className="placeholder" />;
+    return imgSrc ? <img src={imgSrc} alt={alt} style={{backgroundColor: backgroundColor}}/> : <div className="placeholder" />;
 }
 
 export default ExperimentDashboard;

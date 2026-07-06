@@ -19,14 +19,14 @@ vi.mock('react-router-dom', async () => {
 
 const getBlock = (overrides = {}) => {
     return {
-        slug: 'some_slug',
+        identifier: 'some_identifier',
         name: 'Some Block',
         ...overrides
     };
 }
 
 const block1 = getBlock({
-    slug: 'some_slug',
+    identifier: 'some_identifier',
     name: 'Some Block'
 });
 
@@ -64,7 +64,7 @@ const blockWithAllProps = getBlock({ image: 'some_image.jpg', description: 'Some
 describe('Experiment', () => {
 
     beforeEach(() => {
-        mockUseParams.mockReturnValue({ slug: 'some_experiment' });
+        mockUseParams.mockReturnValue({ identifier: 'some_experiment' });
     });
 
     it('forwards to a single block if it receives an empty dashboard array', async () => {

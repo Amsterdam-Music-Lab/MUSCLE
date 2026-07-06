@@ -6,7 +6,7 @@ import DropDown from './_DropDown';
 import Question from '@/types/Question';
 
 const mockQuestion: Question = {
-    key: 'test-dropdown',
+    identifier: 'test-dropdown',
     choices: [
         {value: 'option1', label: 'First Option'},
         {value: 'option2', label: 'Second Option'},
@@ -56,7 +56,7 @@ describe('DropDown', () => {
 
     it('throws an error when no choices are provided', () => {
         const invalidQuestion: Question = {
-            key: 'invalid-dropdown',
+            identifier: 'invalid-dropdown',
             choices: []
         };
 

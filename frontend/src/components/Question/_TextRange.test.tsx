@@ -19,7 +19,7 @@ vi.mock('../../util/stores', () => ({
 
 describe('TextRange Component', () => {
     const mockQuestion: Question = {
-        key: 'test',
+        identifier: 'test',
         text: 'Test Question',
         explainer: 'Test Explainer',
         view: QuestionViews.TEXT_RANGE,
@@ -36,11 +36,11 @@ describe('TextRange Component', () => {
             <TextRange question={mockQuestion} value="" onChange={() => { }} />
         );
 
-        const slider = document.querySelector('.rangeslider');
+        const slider = document.querySelector('.aha__slider');
         expect(slider).toBeTruthy();
-        expect(slider?.getAttribute('aria-valuemin')).toBe('0');
-        expect(slider?.getAttribute('aria-valuenow')).toBe('1');
-        expect(slider?.getAttribute('aria-valuemax')).toBe('2');
+        expect(slider?.getAttribute('min')).toBe('0');
+        expect(slider?.getAttribute('value')).toBe('1');
+        expect(slider?.getAttribute('max')).toBe('2');
     });
 
     it('renders correctly with a min, max and current value', () => {
@@ -48,11 +48,11 @@ describe('TextRange Component', () => {
             <TextRange question={mockQuestion} value="3" onChange={() => { }} />
         );
 
-        const slider = document.querySelector('.rangeslider');
+        const slider = document.querySelector('.aha__slider');
         expect(slider).toBeTruthy();
-        expect(slider?.getAttribute('aria-valuemin')).toBe('0');
-        expect(slider?.getAttribute('aria-valuenow')).toBe('2');
-        expect(slider?.getAttribute('aria-valuemax')).toBe('2');
+        expect(slider?.getAttribute('min')).toBe('0');
+        expect(slider?.getAttribute('value')).toBe('2');
+        expect(slider?.getAttribute('max')).toBe('2');
 
         render(
             <TextRange question={mockQuestion} value="3" onChange={() => { }} />
