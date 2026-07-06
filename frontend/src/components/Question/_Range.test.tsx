@@ -24,6 +24,7 @@ describe('Range component', () => {
         },
         value: 50,
         onChange: vi.fn(),
+        disabled: false
     };
 
     it('renders correctly with given props', () => {
@@ -40,15 +41,15 @@ describe('Range component', () => {
 
     it('calls onChange when slider value changes', () => {
         render(<Range {...defaultProps} />);
-        const slider = document.querySelector('.rangeslider-horizontal') as HTMLElement;
-        fireEvent.mouseDown(slider, { clientX: 75 });
+        const slider = document.querySelector('.aha__slider') as HTMLElement;
+        fireEvent.change(slider, { target: { value: '75' } });
         expect(defaultProps.onChange).toHaveBeenCalled();
     });
 
     it('uses middle value when value prop is empty', () => {
         render(<Range {...defaultProps} value="" />);
-        const slider = document.querySelector('.rangeslider-horizontal') as HTMLElement;
-        expect(slider.attributes['aria-valuenow'].value).toBe('50');
+        const slider = document.querySelector('.aha__slider') as HTMLElement;
+        expect(slider.getAttribute('value')).toBe('50');
     });
 
     it('throws an error when minValue or maxValue is not provided', () => {

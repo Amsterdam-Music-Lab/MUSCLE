@@ -1,14 +1,8 @@
 import classNames from "classnames";
 import { css } from '@emotion/react'
 
-import Question from "@/types/Question";
+import { QuestionProps } from "@/types/Question";
 import useBoundStore from "@/util/stores";
-
-interface RadiosProps {
-    question: Question;
-    value: string;
-    onChange: (value: string) => void;
-}
 
 interface RadioProps {
     label: string;
@@ -16,10 +10,11 @@ interface RadioProps {
     checked: boolean;
     onChange: (value: string) => void;
     color?: string;
+    disabled: boolean;
 }
 
 /** Radios is a question view for selecting a single option from a list */
-const Radios = ({ question, value, onChange }: RadiosProps) => {
+const Radios = ({ question, value, onChange, disabled }: QuestionProps) => {
     const choices = question.choices;
 
     if (!choices || choices.length <= 0) {
@@ -36,6 +31,7 @@ const Radios = ({ question, value, onChange }: RadiosProps) => {
                     label={choice.label}
                     value={choice.value}
                     checked={value === choice.value}
+                    disabled={disabled}
                     onChange={onChange}
                     role="radio"
                     color={choice.color || 'colorPositive'}
@@ -46,7 +42,7 @@ const Radios = ({ question, value, onChange }: RadiosProps) => {
 };
 
 /** Radio is a single option in a Radios question */
-const Radio = ({ label, value, checked, onChange, color }: RadioProps) => {
+const Radio = ({ label, value, checked, onChange, color, disabled }: RadioProps) => {
         const theme = useBoundStore((state) => state.theme);
         const radioColor = theme[color] || "";
         const styleRadio = (radioColor: string) => {
@@ -82,6 +78,7 @@ const Radio = ({ label, value, checked, onChange, color }: RadioProps) => {
             aria-checked={checked}
             onKeyDown={() => onChange(value)}
             css={styleRadio(radioColor)}
+            disabled={disabled}
         >
             <i></i>
             <span>{label}</span>

@@ -1,14 +1,9 @@
-import Question from "@/types/Question";
+import { QuestionProps } from "@/types/Question";
 import RangeSlider from "./_RangeSlider";
 
-interface RangeProps {
-    question: Question;
-    value: number;
-    onChange: (value: string) => void;
-}
 
 /** Range is a question view that makes you select a value within the given range, using a slider */
-const Range = ({ question, value, onChange }: RangeProps) => {
+const Range = ({ question, value, disabled, onChange }: QuestionProps) => {
     if (question.minValue == null || question.maxValue == null || question.maxValue <= question.minValue) {
         throw new Error('valid minValue and maxValue are required for the Range component');
     }
@@ -27,6 +22,7 @@ const Range = ({ question, value, onChange }: RangeProps) => {
                 choices={choices}
                 value={value}
                 onChange={onChange}
+                disabled={disabled}
             />
         </div>
     );

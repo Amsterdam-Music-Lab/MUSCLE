@@ -6,7 +6,7 @@ interface InputProps {
     validateChange: (value: string | number) => void;
 }
 
-/** Number is a question view that lets you input a number */
+/** Input that can have either number or text type */
 const Input = ({ type, value, validateChange }: InputProps) => {
     const input = useRef<HTMLInputElement>(null);
 

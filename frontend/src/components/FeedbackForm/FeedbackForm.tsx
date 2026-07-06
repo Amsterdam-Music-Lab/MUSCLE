@@ -62,10 +62,9 @@ const FeedbackForm = ({
                 {form.map((_question, index) => (
                     <Question
                         key={index}
-                        id={index}
                         disabled={!formActive}
                         question={form[index]}
-                        onChange={onChange}
+                        onChange={(value) => onChange(value, index)}
                     />
                 ))}
                 {/* Continue button */}
