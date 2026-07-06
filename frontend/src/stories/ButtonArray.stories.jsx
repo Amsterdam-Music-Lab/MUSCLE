@@ -18,7 +18,6 @@ const defaultArgs = {
         choices: [{value: 1, label: "Choice 1", color: "colorNeutral1"}, {value: 2, label: "Choice 2", color: "colorNeutral2"}, {value: 3, label: "Choice 3", color: "colorNeutral3"}],
     },
     onChange: () => { },
-    id: 0,
     active: true,
     style: {},
 };

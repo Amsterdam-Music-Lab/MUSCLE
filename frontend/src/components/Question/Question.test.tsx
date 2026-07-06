@@ -20,7 +20,6 @@ describe('Question Component', () => {
             style: {}
         },
         onChange: mockOnChange,
-        id: 42,
     };
 
     const getProps = (props = {}) => ({ ...defaultProps, ...props });
@@ -46,7 +45,7 @@ describe('Question Component', () => {
         render(<Question {...defaultProps} />);
         const input = screen.getByRole('textbox');
         fireEvent.change(input, { target: { value: 'New Value' } });
-        expect(mockOnChange).toHaveBeenCalledWith('New Value', 42);
+        expect(mockOnChange).toHaveBeenCalledWith('New Value');
     });
 
     it('applies classNames if question.style is defined', () => {
