@@ -12,23 +12,17 @@ from section.models import Playlist, Song
 from session.models import Session
 
 class MatchingPairs2025Test(TestCase):
-    fixtures = ["choice_lists", "demographics"]
+    fixtures = ["choice_lists", "demographics", "matching_pairs_2025"]
 
     @classmethod
     def setUpTestData(cls):
-        cls.playlist = Playlist.objects.create(name="TestMatchingPairs2025")
+        cls.playlist = Playlist.objects.get(name="MP2.0 - CH")
         cls.playlist.csv = cls.create_section_csv()
         cls.playlist._update_sections()
-        cls.playlist.save()
-        cls.participant = Participant.objects.create()
-        cls.exp = Experiment.objects.create(identifier="matching_pairs_2025")
-        cls.phase = Phase.objects.create(experiment=cls.exp)
-        cls.block = Block.objects.create(
-            rules="MATCHING_PAIRS_2025",
-            identifier="mpairs-2025",
-            rounds=42,
-            phase=cls.phase,
+        cls.block = Block.objects.get(
+            identifier="tt-ch",
         )
+        cls.participant = Participant.objects.create()
         cls.session = Session.objects.create(block=cls.block, participant=cls.participant, playlist=cls.playlist)
         cls.rules = cls.session.block_rules()
 
@@ -282,16 +276,15 @@ class MatchingPairs2025Test(TestCase):
             block=self.block, participant=self.participant, playlist=self.playlist
         )
         Result.objects.create(session=previous_session)
-
-        session = Session.objects.create(block=self.block, participant=self.participant, playlist=self.playlist)
-
+        session = Session.objects.create(
+            block=self.block, participant=self.participant, playlist=self.playlist
+        )
         self.assertTrue(self.rules._has_played_before(session))
 
     def test_get_final_actions(self):
-        mp_block = Block.objects.create(
-            phase=self.phase, rules="MATCHING_PAIRS_2025", identifier="mpairs-2025-2"
+        session = Session.objects.create(
+            participant=self.participant, block=self.block, final_score=100
         )
-        session = Session.objects.create(participant=self.participant, block=mp_block, final_score=100)
         final_action = self.rules._get_final_actions(session)[0]
         self.assertIsInstance(final_action, Final)
         self.assertEqual(final_action.total_score, 100)
@@ -303,23 +296,18 @@ class MatchingPairs2025Test(TestCase):
 
 @skip("This test simulates repeated playthroughs, comment this line out to run")
 class PlaythroughSimulationTest(TestCase):
-    fixtures = ['playlist']
+    fixtures = ['choice_lists', 'demographics', 'matching_pairs_2025']
 
     @classmethod
     def setUpTestData(cls):
-        cls.exp = Experiment.objects.create(identifier="matching_pairs_2025")
-        cls.phase = Phase.objects.create(experiment=cls.exp)
         cls.ch_playlist = Playlist.objects.get(name="MP2.0 - CH")
         cls.ch_playlist._update_sections()
         cls.rc_playlist = Playlist.objects.get(name="MP2.0 - RC")
         cls.rc_playlist._update_sections()
         cls.tv_playlist = Playlist.objects.get(name="MP2.0 - TV")
         cls.tv_playlist._update_sections()
-        cls.block = Block.objects.create(
-            rules="MATCHING_PAIRS_2025",
-            identifier="mpairs-2025",
-            rounds=1,
-            phase=cls.phase,
+        cls.block = Block.objects.get(
+            identifier="tt-ch",
         )
         cls.participant = Participant.objects.create()
         cls.rules = cls.block.get_rules()

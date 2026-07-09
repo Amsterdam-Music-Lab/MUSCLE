@@ -10,12 +10,18 @@ from session.models import Session
 
 
 class MusicalPreferencesTest(TestCase):
-    fixtures = ["playlist", "experiment", "choice_lists", "choices_general"]
+    fixtures = [
+        "choice_lists",
+        "demographics",
+        "goldsmiths_msi",
+        "questions_china",
+        "musical_preferences",
+    ]
 
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create()
-        cls.playlist = Playlist.objects.create(name="MusicalPrefences")
+        cls.playlist = Playlist.objects.create(name="MusicalPreferences")
         csv = (
             "SuperArtist,SuperSong,0.0,10.0,bat/artist1.mp3,0,0,0\n"
             "SuperArtist,MehSong,0.0,10.0,bat/artist2.mp3,0,0,0\n"
@@ -27,9 +33,7 @@ class MusicalPreferencesTest(TestCase):
         cls.playlist._update_sections()
         audiocheck_playlist = Playlist.objects.get(name="AudioSetup")
         audiocheck_playlist._update_sections()
-
         cls.block = Block.objects.get(identifier="mpref")
-        cls.block.playlists.add(cls.playlist)
         cls.session = Session.objects.create(
             block=cls.block, participant=cls.participant, playlist=cls.playlist
         )

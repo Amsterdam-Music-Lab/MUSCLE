@@ -11,13 +11,12 @@ class TestModelBlock(TestCase):
         "goldsmiths_msi",
         "musicgens",
         "vanderbilt",
+        "thats_my_song",
     ]
 
     @classmethod
     def setUpTestData(cls):
-        cls.block = Block.objects.create(
-            rules="THATS_MY_SONG", identifier="hooked", rounds=42
-        )
+        cls.block = Block.objects.get(identifier="thats_my_song")
 
     def test_separate_rules_instance(self):
         rules1 = self.block.get_rules()
@@ -33,15 +32,10 @@ class TestModelBlock(TestCase):
         assert identifiers1 == identifiers2
 
     def test_add_default_question_lists(self):
-        block = Block(
-            name='test question list',
-            identifier='test_question_list',
-            rules='RHYTHM_BATTERY_FINAL',
-        )
-        block.save()  # triggers `add_default_question_lists` method
-        created_lists = QuestionList.objects.filter(block=block)
+        self.block.save()  # triggers `add_default_question_lists` method
+        created_lists = QuestionList.objects.filter(block=self.block)
         n_lists = created_lists.count()
-        expected_n = len(block.get_rules().question_lists)
+        expected_n = len(self.block.get_rules().question_lists)
         self.assertEqual(
             n_lists,
             expected_n,
@@ -51,8 +45,8 @@ class TestModelBlock(TestCase):
             0,
         )
         # test that question series aren't created more than once
-        block.save()
-        created_series = QuestionList.objects.filter(block=block)
+        self.block.save()
+        created_series = QuestionList.objects.filter(block=self.block)
         self.assertEqual(created_series.count(), n_lists)
 
 
@@ -78,19 +72,25 @@ class TestModelExperiment(TestCase):
         Block.objects.bulk_create(
             [
                 Block(
-                    rules="THATS_MY_SONG", identifier="hooked", rounds=42, phase=phase1
+                    rules="THATS_MY_SONG",
+                    identifier="hooked",
+                    rounds=42,
+                    phase=phase1,
+                    experiment=experiment,
                 ),
                 Block(
                     rules="THATS_MY_SONG",
                     identifier="unhinged",
                     rounds=42,
                     phase=phase2,
+                    experiment=experiment,
                 ),
                 Block(
                     rules="THATS_MY_SONG",
                     identifier="derailed",
                     rounds=42,
                     phase=phase2,
+                    experiment=experiment,
                 ),
             ]
         )

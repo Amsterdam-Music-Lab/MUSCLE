@@ -1,5 +1,5 @@
 from django.test import TestCase
-from experiment.models import Block, Experiment, Phase
+from experiment.models import Block
 from result.models import Result
 from participant.models import Participant
 from participant.utils import PARTICIPANT_KEY
@@ -9,38 +9,13 @@ import json
 
 
 class BeatAlignmentRuleTest(TestCase):
+    fixtures = ["choice_lists", "goldsmiths_msi", "demographics", "rhythm_tests"]
 
     @classmethod
     def setUpTestData(cls):
-        # ex* are practice rounds. No actual mp3 files are present or tested
-        csv = ("Artist 1,Name 1,0.0,10.0,bat/artist1.mp3,0,0,0\n"
-               "Artist 2,Name 2,0.0,10.0,bat/artist2.mp3,0,0,0\n"
-               "Artist 3,Name 3,0.0,10.0,bat/artist3.mp3,0,0,0\n"
-               "Artist 4,Name 4,0.0,10.0,bat/artist4.mp3,0,0,0\n"
-               "Artist 5,Name 5,0.0,10.0,bat/artist5.mp3,0,0,0\n"
-               "Artist 6,Name 6,0.0,10.0,bat/artist6.mp3,0,0,0\n"
-               "Artist 7,Name 7,0.0,10.0,bat/artist7.mp3,0,0,0\n"
-               "Artist 8,Name 8,0.0,10.0,bat/artist8.mp3,0,0,0\n"
-               "Artist 9,Name 9,0.0,10.0,bat/artist9.mp3,0,0,0\n"
-               "Artist 10,Name 10,0.0,10.0,bat/artist10.mp3,0,0,0\n"
-               "Artist 11,Name 10,0.0,10.0,bat/artist11.mp3,0,0,0\n"
-               "Artist 12,Name 10,0.0,10.0,bat/artist12.mp3,0,0,0\n"
-               "Artist 1,ex1 Name 1,0.0,10.0,bat/exartist1.mp3,0,0,0\n"
-               "Artist 2,ex2 Name 2,0.0,10.0,bat/exartist2.mp3,0,0,0\n"
-               "Artist 3,ex3_Name 3,0.0,10.0,bat/exartist3.mp3,0,0,0\n")
-
-        playlist = Playlist.objects.create(name='TestBAT')
-        playlist.csv = csv
+        playlist = Playlist.objects.get(name="BAT")
         playlist._update_sections()
-        experiment = Experiment.objects.create(
-            identifier="bat_test", name="Beat Alignment Test"
-        )
-        phase = Phase.objects.create(experiment=experiment)
-        # rules is BeatAlignment.ID in beat_alignment.py
-        cls.block = Block.objects.create(
-            phase=phase, rules="BEAT_ALIGNMENT", identifier="ba", rounds=13
-        )
-        cls.block.playlists.add(playlist)
+        cls.block = Block.objects.get(identifier="bat")
 
     def load_json(self, response):
         '''Asserts response status 200 OK, asserts content type json, loads and returns response.content json in a dictionary'''
@@ -56,7 +31,7 @@ class BeatAlignmentRuleTest(TestCase):
         session.update({PARTICIPANT_KEY: participant.id})
         session.save()
 
-        block_response = self.client.get('/experiment/bat_test/block/ba/')
+        block_response = self.client.get('/experiment/rhythm_battery/block/bat/')
 
         block_json = self.load_json(block_response)
         self.assertTrue(

@@ -9,7 +9,7 @@ from session.models import Session
 
 
 class RhythmDiscriminationTest(TestCase):
-    fixtures = ["playlist", "experiment"]
+    fixtures = ["choice_lists", "goldsmiths_msi", "demographics", "rhythm_tests"]
 
     @classmethod
     def setUpTestData(cls):

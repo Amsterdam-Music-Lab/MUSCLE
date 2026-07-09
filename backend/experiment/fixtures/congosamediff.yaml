@@ -1,0 +1,29 @@
+- model: experiment.experiment
+  pk: 71
+  fields:
+    identifier: congo-same-diff
+    active: true
+- model: experiment.phase
+  pk: 71
+  fields:
+    experiment: 71
+- model: experiment.block
+  fields:
+    phase: 71
+    experiment: 71
+    index: 0
+    identifier: congo-same-diff
+    rounds: 4
+    bonus_points: 0
+    rules: CONGOSAMEDIFF
+    playlists:
+    - 71
+- model: section.playlist
+  pk: 71
+  fields:
+    name: CongoSameDiff
+    csv: |
+      Dave,melody_3,0.0,20.0,CongoSameDiff/melody_1_interval.wav,melody_3,diff
+      Dave,melody_4,0.0,20.0,CongoSameDiff/melody_1_same.wav,melody_4,same
+      Dave,practice_melody_1,0.0,20.0,CongoSameDiff/melody_1_scale.wav,practice_melody_1,diff
+      Dave,practice_melody_2,0.0,20.0,CongoSameDiff/melody_1_contour.wav,practice_melody_2,diff

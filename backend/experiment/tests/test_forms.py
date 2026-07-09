@@ -1,3 +1,4 @@
+from django.db.utils import IntegrityError
 from django.test import TestCase
 
 from experiment.forms import BlockForm, BLOCK_RULES
@@ -18,15 +19,15 @@ class BlockFormTest(TestCase):
         expected_choices.append(("", "---------"))
         self.assertEqual(form.fields['rules'].choices, sorted(expected_choices))
 
-    def test_clean_slug(self):
-        experiment = Experiment.objects.create(slug="test")
+    def test_identifier_experiment_unique(self):
+        experiment = Experiment.objects.create(identifier="test")
         phase = Phase.objects.create(experiment=experiment)
 
-        Block.objects.create(phase=phase, slug="test1")
+        Block.objects.create(phase=phase, identifier="test1")
         block2 = Block.objects.create(phase=phase)
 
         form_data = {
-            "slug": "test1",
+            "identifier": "test1",
             "name": "Test Block",
             "index": 1,
             "rules": "QUESTIONNAIRE",
@@ -34,6 +35,7 @@ class BlockFormTest(TestCase):
             "bonus_points": 0,
         }
         form = BlockForm(form_data, instance=block2)
-        self.assertFalse(form.is_valid())
-        self.assertIn("slug", form.errors.keys())
-        self.assertIn("not unique", form.errors.get("slug")[0])
+        with self.assertRaises(IntegrityError) as ie:
+            form.save()
+        exception_obj = ie.exception
+        self.assertIn("unique constraint", str(exception_obj))

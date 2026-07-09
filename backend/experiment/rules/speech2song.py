@@ -162,12 +162,13 @@ class Speech2Song(BaseRules):
             # Finish session
             session.finish()
             # Return a score and final score action
-            return Final(
-                title=_('End of experiment'),
-                session=session,
-                final_text=_(
-                    'Thank you for contributing your time to science!')
-            )
+            return [
+                Final(
+                    title=_('End of experiment'),
+                    session=session,
+                    final_text=_('Thank you for contributing your time to science!'),
+                )
+            ]
         if rounds_passed % 2 == 1:
             # even round: single representation (first round are questions only)
             actions.extend(self.next_single_representation(

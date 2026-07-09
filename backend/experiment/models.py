@@ -188,7 +188,7 @@ class Block(models.Model):
 
     def save(self, *args, **kwargs):
         self.experiment = self.phase.experiment
-        self.add_default_question_lists()
+        # self.add_default_question_lists()
         super().save(*args, **kwargs)
 
     def __str__(self):
