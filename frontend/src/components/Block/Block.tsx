@@ -29,7 +29,6 @@ import { Round } from "@/types/Round";
 //   Empty URL parameter "participant_id" is the same as no URL parameter at all
 const Block = () => {
     const { experimentIdentifier, identifier } = useParams();
-    console.log(experimentIdentifier, identifier);
     const startState = { view: "LOADING" } as Action;
     // Stores
     const setError = useBoundStore(state => state.setError);
