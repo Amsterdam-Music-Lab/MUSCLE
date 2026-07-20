@@ -1,10 +1,13 @@
-import AutoPlay from '../components/Playback/Autoplay';
+import AutoPlay from './Autoplay';
+
+import music from "../../stories/assets/music.ogg";
 
 export default {
     title: 'Playback/AutoPlay',
     component: AutoPlay,
     argTypes: {
         instruction: { control: 'text' },
+        sections: { control: 'array' }, 
         showAnimation: { control: 'boolean' },
         playSection: { action: 'playSection' },
         startedPlaying: { action: 'startedPlaying' },
@@ -29,6 +32,9 @@ Default.args = {
     showAnimation: true,
     responseTime: 50,
     className: '',
+    sections: Array.from(new Array(1), (_) => { return {
+        link: music,
+    }}),
 };
 
 export const WithoutAnimation = Template.bind({});
