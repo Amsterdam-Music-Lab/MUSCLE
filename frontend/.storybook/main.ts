@@ -17,7 +17,7 @@ const config = {
         return mergeConfig(config, {});
     },
 
-    staticDirs: ["../public", "../src/stories/assets"],
+    staticDirs: ["../public"],
 
     env: {
         VITE_API_ROOT: "http://localhost:8000",
