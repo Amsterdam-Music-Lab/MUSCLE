@@ -7,7 +7,6 @@ const meta: Meta<typeof Histogram> = {
     parameters: {
         layout: "fullscreen",
     },
-    tags: ["autodocs"],
 };
 
 export const Default = {

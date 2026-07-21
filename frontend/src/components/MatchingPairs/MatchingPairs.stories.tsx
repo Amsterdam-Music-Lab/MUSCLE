@@ -3,10 +3,6 @@ import useBoundStore from "@/util/stores";
 import MatchingPairs, { SCORE_FEEDBACK_DISPLAY } from "./MatchingPairs";
 import { API_BASE_URL } from '@/config';
 import { URLS } from '@/API';
-import Cat01 from "./assets/images/cat-01.webp";
-import Cat02 from "./assets/images/cat-02.webp";
-import Cat03 from "./assets/images/cat-03.webp";
-import music from "./assets/music.ogg";
 
 const StoreDecorator = (Story) => {
     const setSession = useBoundStore((state) => state.setSession);
@@ -46,7 +42,7 @@ export default {
 const getDefaultArgs = (overrides = {}, nSections = 8) => ({
     playSection: () => { },
     sections: Array.from(new Array(nSections), (_) => { return {
-        link: music,
+        link: "http://localhost:6006/audio/music.ogg",
         turned: false,
         lucky: false,
         memory: false,
@@ -130,27 +126,27 @@ export const WithShowAnimation = {
 export const VisualMatchingPairs = {
     args: getDefaultArgs({sections: [
         {
-            link: `http://localhost:6006${Cat01}`,
+            link: "http://localhost:6006/images/experiments/visual-matching-pairs/chimp.jpg",
             playMethod: 'NOAUDIO'
         },
         {
-            link: `http://localhost:6006${Cat02}`,
+            link: "http://localhost:6006/images/experiments/visual-matching-pairs/elephant.jpg",
             playMethod: 'NOAUDIO'
         },
         {
-            link: `http://localhost:6006${Cat03}`,
+            link: "http://localhost:6006/images/experiments/visual-matching-pairs/panther.jpg",
             playMethod: 'NOAUDIO'
         },
         {
-            link: `http://localhost:6006${Cat02}`,
+            link: "http://localhost:6006/images/experiments/visual-matching-pairs/elephant.jpg",
             playMethod: 'NOAUDIO'
         },
         {
-            link: `http://localhost:6006${Cat01}`,
+            link: "http://localhost:6006/images/experiments/visual-matching-pairs/chimp.jpg",
             playMethod: 'NOAUDIO'
         },
         {
-            link: `http://localhost:6006${Cat03}`,
+            link: "http://localhost:6006/images/experiments/visual-matching-pairs/panther.jpg",
             playMethod: 'NOAUDIO'
         },
     ]}),

@@ -1,7 +1,5 @@
 import AutoPlay from './Autoplay';
 
-import music from "../../stories/assets/music.ogg";
-
 export default {
     title: 'Playback/AutoPlay',
     component: AutoPlay,
@@ -33,7 +31,7 @@ Default.args = {
     responseTime: 50,
     className: '',
     sections: Array.from(new Array(1), (_) => { return {
-        link: music,
+        link:  "http://localhost:6006/audio/music.ogg",
     }}),
 };
 

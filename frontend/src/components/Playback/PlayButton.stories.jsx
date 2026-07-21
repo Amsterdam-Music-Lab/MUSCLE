@@ -1,6 +1,5 @@
 import PlayButton from "../PlayBack/PlayButton";
 import useBoundStore from "@/util/stores";
-import music from "./assets/music.ogg";
 
 export default {
     title: "Playback/PlayButton",
@@ -24,8 +23,8 @@ const SharedDecorator = (Story) => {
 };
 
 const defaultArgs = {
-    playSection: () => {},
-    section: { link: music, label: 'LABEL', color: 'colorPrimary', playMethod: 'EXTERNAL', playFrom: 0.0 },
+    onClick: () => {},
+    section: { link: "http://localhost:6006/audio/music.ogg", label: 'LABEL', color: 'colorPrimary', playMethod: 'EXTERNAL', playFrom: 0.0 },
     view: 'BUTTON',
     isPlaying: false,
 }
@@ -50,7 +49,7 @@ export const Playing = {
 export const ChangedColor = {
     args: getArgs({
         isPlaying: false,
-        section: { link: music, label: 'LABEL', color: 'colorNeutral1', playMethod: 'EXTERNAL', playFrom: 0.0 }
+        section: { link: "http://localhost:6006/audio/music.ogg", label: 'LABEL', color: 'colorNeutral1', playMethod: 'EXTERNAL', playFrom: 0.0 }
     }),
     decorators: [SharedDecorator],
 };

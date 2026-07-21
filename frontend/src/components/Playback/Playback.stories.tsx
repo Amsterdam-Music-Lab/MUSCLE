@@ -1,7 +1,6 @@
 import Playback, { PlaybackProps } from "./Playback";
 import { AUTOPLAY } from "../../types/Playback";
 
-import audio from "./assets/music.ogg";
 import useBoundStore from "@/util/stores";
 import { StoryFn } from "@storybook/react";
 
@@ -24,7 +23,7 @@ const createCommonDecorator = (playMethod: "BUFFER" | "EXTERNAL") => (Story: Sto
             showAnimation: true,
             preloadMessage: "Loading audio...",
             instruction: "Click the button to play the audio.",
-            sections: [{ link: audio, color: 'colorPrimary', playMethod, playFrom: 0.0 }],
+            sections: [{ link: "http://localhost:6006/audio/music.ogg", color: 'colorPrimary', playMethod, playFrom: 0.0 }],
             mute: false,
             resumePlay: false,
         }
@@ -47,7 +46,7 @@ const createPlaybackArgs = (playMethod: "BUFFER" | "EXTERNAL"): PlaybackProps =>
     instruction: "Click the button to play the audio.",
     sections: [
         {
-            link: audio,
+            link: "http://localhost:6006/audio/music.ogg",
             label: "",
             playMethod,
             playFrom: 0.0,

@@ -1,7 +1,5 @@
 import Playback from "./Preload";
 
-import audio from "./assets/audio.wav";
-
 export default {
     title: "Playback/Preload",
     component: Playback,
@@ -17,7 +15,7 @@ export const Default = {
         duration: 0,
         sections: [
             {
-                link: audio,
+                link: "http://localhost:6006/audio/music.ogg",
                 playMethod: "EXTERNAL"
             },
         ],
