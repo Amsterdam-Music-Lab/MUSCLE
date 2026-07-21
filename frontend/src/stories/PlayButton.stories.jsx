@@ -1,4 +1,4 @@
-import PlayButton from "../components/PlayBack/PlayButton";
+import PlayButton from "./PlayButton";
 import useBoundStore from "@/util/stores";
 import music from "./assets/music.ogg";
 
