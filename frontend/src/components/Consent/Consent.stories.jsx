@@ -1,4 +1,4 @@
-import Consent from "../components/Consent/Consent";
+import Consent from "./Consent";
 import useBoundStore from "@/util/stores";
 
 const theme = { colorPositive: '#00b612', colorNegative: '#fa5577', colorGrey: '#bdbebf'};

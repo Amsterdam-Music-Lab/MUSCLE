@@ -1,4 +1,4 @@
-import ProgressBar from "../components/ProgressBar/ProgressBar";
+import ProgressBar from "./ProgressBar";
 import useBoundStore from "@/util/stores";
 
 export default {

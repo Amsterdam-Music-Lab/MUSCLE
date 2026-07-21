@@ -1,6 +1,6 @@
 import { BrowserRouter as Router } from "react-router-dom";
 
-import ExperimentDashboard from "../components/Experiment/ExperimentDashboard/ExperimentDashboard";
+import ExperimentDashboard from "./ExperimentDashboard";
 
 export default {
     title: "Experiment/ExperimentDashboard",

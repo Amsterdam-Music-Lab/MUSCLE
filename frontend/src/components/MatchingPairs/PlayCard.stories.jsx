@@ -1,9 +1,8 @@
-import PlayCard from "../components/MatchingPairs/PlayCard";
-import catImage from "./assets/images/cat-01.webp";
+import PlayCard from "./PlayCard";
 import useBoundStore from "@/util/stores";
 
 export default {
-    title: "Playback/PlayCard",
+    title: "MatchingPairs/PlayCard",
     component: PlayCard,
     parameters: {
         layout: "fullscreen",
@@ -15,7 +14,7 @@ const getDefaultArgs = (overrides = {}) => ({
     registerUserClicks: () => void 0,
     playing: true,
     section: {
-        link: "/section/32/78165/",
+        link: "http://localhost:6006/audio/music.ogg",
         color: "colorPrimary",
     },
     showAnimation: true,
@@ -49,7 +48,7 @@ export const Default = {
 export const Turned = {
     args: getDefaultArgs({
         section: {
-            link: "/section/32/78165/",
+            link: "http://localhost:6006/audio/music.ogg",
             turned: true,
         },
     }),
@@ -59,7 +58,7 @@ export const Turned = {
 export const Seen = {
     args: getDefaultArgs({
         section: {
-            link: "/section/32/78165/",
+            link: "http://localhost:6006/audio/music.ogg",
             seen: true,
         },
     }),
@@ -69,7 +68,7 @@ export const Seen = {
 export const Memory = {
     args: getDefaultArgs({
         section: {
-            link: "/section/32/78165/",
+            link: "http://localhost:6006/audio/music.ogg",
             memory: true,
         },
     }),
@@ -79,7 +78,7 @@ export const Memory = {
 export const Lucky = {
     args: getDefaultArgs({
         section: {
-            link: "/section/32/78165/",
+            link: "http://localhost:6006/audio/music.ogg",
             lucky: true,
         },
     }),
@@ -111,8 +110,9 @@ export const Playing = {
         playing: true,
         showAnimation: true,
         section: {
-            link: "/section/32/78165/",
+            link: "http://localhost:6006/audio/music.ogg",
             turned: true,
+            playMethod: 'EXTERNAL'
         },
     }),
     decorators: [DefaultDecorator],
@@ -124,7 +124,7 @@ export const VisualMatchingPairs = {
         registerUserClicks: () => alert("Registered"),
         playing: false,
         section: {
-            link: `http://localhost:6006${catImage}`,
+            link: "http://localhost:6006/images/experiments/visual-matching-pairs/panther.jpg",
             turned: true,
             playMethod: 'NOAUDIO'
         },

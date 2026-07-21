@@ -1,4 +1,4 @@
-import Circle from "../components/Circle/Circle";
+import Circle from "./Circle";
 
 export default {
     title: "Circle/Circle",

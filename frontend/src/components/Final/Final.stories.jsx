@@ -1,6 +1,6 @@
 import { BrowserRouter as Router } from "react-router-dom";
 
-import Final from "../components/Final/Final";
+import Final from "./Final";
 import useBoundStore from "@/util/stores";
 
 const StoreDecorator = (Story) => {

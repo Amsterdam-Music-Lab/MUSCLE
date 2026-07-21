@@ -1,4 +1,4 @@
-import Playlist from "../components/Playlist/Playlist";
+import Playlist from "./Playlist";
 
 export default {
     title: "Playlist/Playlist",

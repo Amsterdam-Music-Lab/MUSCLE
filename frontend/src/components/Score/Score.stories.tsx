@@ -1,6 +1,6 @@
 import { BrowserRouter as Router } from "react-router-dom";
 
-import Score from "../components/Score/Score";
+import Score from "./Score";
 
 export default {
   title: "Score/Score",

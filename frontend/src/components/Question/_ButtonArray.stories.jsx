@@ -1,4 +1,4 @@
-import ButtonArray from "../components/Question/_ButtonArray";
+import ButtonArray from "./_ButtonArray";
 import useBoundStore from "@/util/stores";
 
 export default {

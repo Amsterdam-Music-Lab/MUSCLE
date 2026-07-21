@@ -1,6 +1,6 @@
 import { BrowserRouter as Router } from "react-router-dom";
 
-import ProfileView from "../components/Profile/ProfileView";
+import ProfileView from "./ProfileView";
 
 export default {
     title: "Profile/ProfileView",
