@@ -64,7 +64,7 @@ jobs:
       RUNNER_TRACKING_ID: ""
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Log progress
         run: |
           echo Deploying branch ${{ github.ref }} with commit ${{ github.sha }} to tunetwins environment
@@ -95,56 +95,30 @@ jobs:
       - name: Check logs
         run: podman compose -f docker-compose-deploy.yml logs
 
+  write-env-test:
+    name: Write test environment file
+    # this job runs only on commits to the develop branch or when manually triggered for a branch other than main
+    if: github.ref == 'refs/heads/develop' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main' && github.ref != 'refs/heads/tunetwins' && !startsWith(github.ref, 'refs/tags'))
+    uses: ./.github/workflows/env-template.yml
+    with:
+      runner: tst
+      environment: Test
+    secrets: inherit
+  
   deploy-test:
+    # this job runs only on commits to the develop branch or when manually triggered for a branch other than main
+    if: github.ref == 'refs/heads/develop' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main' && github.ref != 'refs/heads/tunetwins' && !startsWith(github.ref, 'refs/tags'))
     name: Deploy to test environment
     environment: Test
     runs-on: tst
-
-    # this job runs only on commits to the develop branch or when manually triggered for a branch other than main
-    if: github.ref == 'refs/heads/develop' || (github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main' && github.ref != 'refs/heads/tunetwins' && !startsWith(github.ref, 'refs/tags'))
+    needs: write-env-test
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
-      # Variables
-      HOST_DATA: ${{ vars.HOST_DATA }}
-      AML_ALLOWED_HOSTS: ${{ vars.AML_ALLOWED_HOSTS }}
-      AML_CORS_ORIGIN_WHITELIST: ${{ vars.AML_CORS_ORIGIN_WHITELIST }}
-      CSRF_TRUSTED_ORIGINS: ${{ vars.CSRF_TRUSTED_ORIGINS }}
-      AML_DEBUG: ${{ vars.AML_DEBUG }}
-      AML_LOCATION_PROVIDER: ${{ vars.AML_LOCATION_PROVIDER }}
-      AML_SUBPATH: ${{ vars.AML_SUBPATH }}
-      DJANGO_SETTINGS_MODULE: ${{ vars.DJANGO_SETTINGS_MODULE }}
-      SENTRY_ENVIRONMENT: "test"
-      SQL_DATABASE: ${{ vars.SQL_DATABASE }}
-      SQL_HOST: ${{ vars.SQL_HOST }}
-      SQL_PORT: ${{ vars.SQL_PORT }}
-      FRONTEND_API_ROOT: ${{ vars.FRONTEND_API_ROOT }}
-      FRONTEND_EXPERIMENT_IDENTIFIER: ${{ vars.FRONTEND_EXPERIMENT_IDENTIFIER }}
-      FRONTEND_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
-      FRONTEND_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
-      FRONTEND_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
-      FRONTEND_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
-      FRONTEND_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
-      FRONTEND_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
-      FRONTEND_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
-      FRONTEND_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
-      FRONTEND_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
-
-      # Secrets
-      AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
-      SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-      SQL_USER: ${{ secrets.SQL_USER }}
-      SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
-      FRONTEND_SENTRY_DSN: ${{ secrets.FRONTEND_SENTRY_DSN }}
-      DJANGO_SUPERUSER_USERNAME: ${{ secrets.DJANGO_SUPERUSER_USERNAME }}
-      DJANGO_SUPERUSER_PASSWORD: ${{ secrets.DJANGO_SUPERUSER_PASSWORD }}
-      DJANGO_SUPERUSER_EMAIL: ${{ secrets.DJANGO_SUPERUSER_EMAIL }}
-
       # Prevent podman services from exiting after startup
       RUNNER_TRACKING_ID: ""
 
     steps:
-      - uses: actions/checkout@v4
       - name: Log progress
         run: |
           echo Deploying branch ${{ github.ref }} with commit ${{ github.sha }} to test environment
@@ -174,69 +148,42 @@ jobs:
         run: podman compose -f docker-compose-deploy.yml ps
       - name: Check logs
         run: podman compose -f docker-compose-deploy.yml logs
-
+  
   backup-acceptance:
     name: Backup acceptance database before deployment
-    # this job runs only on commits to the main branch, or when manually triggered for the main branch
-    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
     uses: ./.github/workflows/db-backup-template.yml
     secrets:
       inherit
     with:
       runner: ACC
       environment: Acceptance
+    # this job runs only on commits to the main branch, or when manually triggered for the main branch
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+  
+  write-env-acceptance:
+    name: Write acceptance env file
+    # this job runs only on commits to the main branch, or when manually triggered for the main branch
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    uses: ./.github/workflows/env-template.yml
+    with:
+      runner: ACC
+      environment: Acceptance
+    secrets: inherit
 
   deploy-acceptance:
     name: Deploy to acceptance environment
-    environment: Acceptance
-    runs-on: ACC
-    needs: backup-acceptance
-
     # this job runs only on commits to the main branch, or when manually triggered for the main branch
     if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    environment: Acceptance
+    runs-on: ACC
+    needs: [write-env-acceptance, backup-acceptance]
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
-        # Variables
-        AML_ALLOWED_HOSTS: ${{ vars.AML_ALLOWED_HOSTS }}
-        AML_CORS_ORIGIN_WHITELIST: ${{ vars.AML_CORS_ORIGIN_WHITELIST }}
-        CSRF_TRUSTED_ORIGINS: ${{ vars.CSRF_TRUSTED_ORIGINS }}
-        AML_DEBUG: ${{ vars.AML_DEBUG }}
-        AML_LOCATION_PROVIDER: ${{ vars.AML_LOCATION_PROVIDER }}
-        AML_SUBPATH: ${{ vars.AML_SUBPATH }}
-        DJANGO_SETTINGS_MODULE: ${{ vars.DJANGO_SETTINGS_MODULE }}
-        HOST_DATA: ${{ vars.HOST_DATA }}
-        SENTRY_ENVIRONMENT: "acceptance"
-        SQL_DATABASE: ${{ vars.SQL_DATABASE }}
-        SQL_HOST: ${{ vars.SQL_HOST }}
-        SQL_PORT: ${{ vars.SQL_PORT }}
-        FRONTEND_API_ROOT: ${{ vars.FRONTEND_API_ROOT }}
-        FRONTEND_EXPERIMENT_IDENTIFIER: ${{ vars.FRONTEND_EXPERIMENT_IDENTIFIER }}
-        FRONTEND_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
-        FRONTEND_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
-        FRONTEND_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
-        FRONTEND_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
-        FRONTEND_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
-        FRONTEND_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
-        FRONTEND_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
-        FRONTEND_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
-        FRONTEND_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
-
-        # Secrets
-        AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
-        SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-        SQL_USER: ${{ secrets.SQL_USER }}
-        SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
-        FRONTEND_SENTRY_DSN: ${{ secrets.FRONTEND_SENTRY_DSN }}
-        DJANGO_SUPERUSER_USERNAME: ${{ secrets.DJANGO_SUPERUSER_USERNAME }}
-        DJANGO_SUPERUSER_PASSWORD: ${{ secrets.DJANGO_SUPERUSER_PASSWORD }}
-        DJANGO_SUPERUSER_EMAIL: ${{ secrets.DJANGO_SUPERUSER_EMAIL }}
-
         # Prevent podman services from exiting after startup
         RUNNER_TRACKING_ID: ""
 
     steps:
-      - uses: actions/checkout@v4
       - name: Build Podman images
         run: podman compose -f docker-compose-deploy.yml build
       - name: Shut down running containers
@@ -264,16 +211,26 @@ jobs:
       - name: Check logs
         run: podman compose -f docker-compose-deploy.yml logs
 
-  backup-production:
-    name: Backup production database before deployment
+  write-env-production:
+    name: Write production env file
+    uses: ./.github/workflows/env-template.yml
+    with:
+      runner: PRD
+      environment: Production
+    secrets: inherit
     # this job runs only on tags or when a release is created, or when manually triggered for a tag
     if: startsWith(github.ref, 'refs/tags') || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags'))
+  
+  backup-production:
+    name: Backup production database before deployment
     secrets:
       inherit
     uses: ./.github/workflows/db-backup-template.yml
     with:
       runner: PRD
       environment: Production
+    # this job runs only on tags or when a release is created, or when manually triggered for a tag
+    if: startsWith(github.ref, 'refs/tags') || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags'))
 
   deploy-production:
     name: Deploy to production environment
@@ -286,45 +243,9 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
-      # Variables
-      AML_ALLOWED_HOSTS: ${{ vars.AML_ALLOWED_HOSTS }}
-      AML_CORS_ORIGIN_WHITELIST: ${{ vars.AML_CORS_ORIGIN_WHITELIST }}
-      CSRF_TRUSTED_ORIGINS: ${{ vars.CSRF_TRUSTED_ORIGINS }}
-      AML_DEBUG: ${{ vars.AML_DEBUG }}
-      AML_LOCATION_PROVIDER: ${{ vars.AML_LOCATION_PROVIDER }}
-      AML_SUBPATH: ${{ vars.AML_SUBPATH }}
-      DJANGO_SETTINGS_MODULE: ${{ vars.DJANGO_SETTINGS_MODULE }}
-      SENTRY_ENVIRONMENT: "production"
-      SQL_DATABASE: ${{ vars.SQL_DATABASE }}
-      SQL_HOST: ${{ vars.SQL_HOST }}
-      SQL_PORT: ${{ vars.SQL_PORT }}
-      HOST_DATA: ${{ vars.HOST_DATA }}
-      FRONTEND_API_ROOT: ${{ vars.FRONTEND_API_ROOT }}
-      FRONTEND_EXPERIMENT_IDENTIFIER: ${{ vars.FRONTEND_EXPERIMENT_IDENTIFIER }}
-      FRONTEND_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
-      FRONTEND_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
-      FRONTEND_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
-      FRONTEND_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
-      FRONTEND_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
-      FRONTEND_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
-      FRONTEND_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
-      FRONTEND_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
-      FRONTEND_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
-      FRONTEND_PLAUSIBLE_DOMAIN: ${{ vars.FRONTEND_PLAUSIBLE_DOMAIN || '' }}
-
-      # Secrets
-      AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
-      SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-      SQL_USER: ${{ secrets.SQL_USER }}
-      SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
-      FRONTEND_SENTRY_DSN: ${{ secrets.FRONTEND_SENTRY_DSN }}
-      DJANGO_SUPERUSER_USERNAME: ${{ secrets.DJANGO_SUPERUSER_USERNAME }}
-      DJANGO_SUPERUSER_PASSWORD: ${{ secrets.DJANGO_SUPERUSER_PASSWORD }}
-      DJANGO_SUPERUSER_EMAIL: ${{ secrets.DJANGO_SUPERUSER_EMAIL }}
       # Prevent runner from exiting containers after startup
       RUNNER_TRACKING_ID: ""
     steps:
-      - uses: actions/checkout@v4
       - name: Build Podman images
         run: podman compose -f docker-compose-deploy.yml build
       - name: Shut down running containers
@@ -350,52 +271,29 @@ jobs:
       - name: Check Podman images
         run: podman compose -f docker-compose-deploy.yml ps
   
-  deploy-student:
-    name: Deploy main branch to student server
-    environment: Student
-    runs-on: STD
-
+  write-env-student:
+    name: Write student env file
     # this job runs on push to main, or when triggered for main
     if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    uses: ./.github/workflows/env-template.yml
+    with:
+      runner: STD
+      environment: Student
+    secrets: inherit
+  
+  deploy-student:
+    name: Deploy main branch to student server
+    # this job runs on push to main, or when triggered for main
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    environment: Student
+    runs-on: STD
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     env:
       # Variables
-      AML_ALLOWED_HOSTS: ${{ vars.AML_ALLOWED_HOSTS }}
-      AML_CORS_ORIGIN_WHITELIST: ${{ vars.AML_CORS_ORIGIN_WHITELIST }}
-      CSRF_TRUSTED_ORIGINS: ${{ vars.CSRF_TRUSTED_ORIGINS }}
-      AML_DEBUG: ${{ vars.AML_DEBUG }}
-      AML_LOCATION_PROVIDER: ${{ vars.AML_LOCATION_PROVIDER }}
-      AML_SUBPATH: ${{ vars.AML_SUBPATH }}
-      DJANGO_SETTINGS_MODULE: ${{ vars.DJANGO_SETTINGS_MODULE }}
-      HOST_DATA: ${{ vars.HOST_DATA }}
-      SQL_DATABASE: ${{ vars.SQL_DATABASE }}
-      SQL_HOST: ${{ vars.SQL_HOST }}
-      SQL_PORT: ${{ vars.SQL_PORT }}
-      FRONTEND_API_ROOT: ${{ vars.FRONTEND_API_ROOT }}
-      FRONTEND_EXPERIMENT_IDENTIFIER: ${{ vars.FRONTEND_EXPERIMENT_IDENTIFIER }}
-      FRONTEND_AML_HOME: ${{ vars.FRONTEND_AML_HOME }}
-      FRONTEND_HTML_PAGE_TITLE: ${{ vars.FRONTEND_HTML_PAGE_TITLE }}
-      FRONTEND_HTML_FAVICON: ${{ vars.FRONTEND_HTML_FAVICON || '' }}
-      FRONTEND_LOGO_URL: ${{ vars.FRONTEND_LOGO_URL || '' }}
-      FRONTEND_HTML_OG_DESCRIPTION: ${{ vars.FRONTEND_HTML_OG_DESCRIPTION || '' }}
-      FRONTEND_HTML_OG_IMAGE: ${{ vars.FRONTEND_HTML_OG_IMAGE || '' }}
-      FRONTEND_HTML_OG_TITLE: ${{ vars.FRONTEND_HTML_OG_TITLE || '' }}
-      FRONTEND_HTML_OG_URL: ${{ vars.FRONTEND_HTML_OG_URL || '' }}
-      FRONTEND_HTML_BODY_CLASS: ${{ vars.FRONTEND_HTML_BODY_CLASS || '' }}
-      FRONTEND_PLAUSIBLE_DOMAIN: ${{ vars.FRONTEND_PLAUSIBLE_DOMAIN || '' }}
-
-      # Secrets
-      AML_SECRET_KEY: ${{ secrets.AML_SECRET_KEY }}
-      SQL_USER: ${{ secrets.SQL_USER }}
-      SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
-      DJANGO_SUPERUSER_USERNAME: ${{ secrets.DJANGO_SUPERUSER_USERNAME }}
-      DJANGO_SUPERUSER_PASSWORD: ${{ secrets.DJANGO_SUPERUSER_PASSWORD }}
-      DJANGO_SUPERUSER_EMAIL: ${{ secrets.DJANGO_SUPERUSER_EMAIL }}
       # Prevent podman services from exiting after startup
       RUNNER_TRACKING_ID: ""
     steps:
-      - uses: actions/checkout@v4
       - name: Build Podman images
         run: podman-compose -f docker-compose-deploy.yml build
       - name: Shut down running containers
@@ -413,16 +311,11 @@ jobs:
     name: E2E tests on acceptance environment
     runs-on: ACC
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/tags/*' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
-
     # needs to happen after the deployment to the acceptance environment
     needs: deploy-acceptance
-
     env:
       BASE_URL: "https://acc.amsterdammusiclab.nl"
-
     steps:
-
-      - uses: actions/checkout@v4
       - name: Run E2E tests
         run: cd e2e && bash run-tests
 
@@ -433,12 +326,9 @@ jobs:
 
     # needs to happen after the deployment to the production environment
     needs: deploy-production
-
     env:
       BASE_URL: "https://app.amsterdammusiclab.nl"
 
     steps:
-
-        - uses: actions/checkout@v4
         - name: Run smoke tests
           run: cd e2e && bash run-tests --smoke

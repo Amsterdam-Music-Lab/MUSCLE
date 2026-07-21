@@ -14,7 +14,7 @@ jobs:
     name: Test Frontend
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Run Frontend Tests
         run: sudo docker compose --env-file .env-github-actions run client yarn test:ci
 
@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Generate Frontend Coverage Report (XML) and Badge
         run: |
           sudo docker compose --env-file .env-github-actions run client yarn test:ci
@@ -58,5 +58,5 @@ jobs:
     name: Lint Frontend
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: sudo docker compose --env-file .env-github-actions run client yarn lint
