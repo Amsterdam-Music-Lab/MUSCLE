@@ -2575,7 +2575,6 @@ __metadata:
     react: "npm:^19.2.4"
     react-dom: "npm:19.2.4"
     react-helmet: "npm:^6.1.0"
-    react-rangeslider: "npm:^2.2.0"
     react-router: "npm:^7.15.1"
     react-router-dom: "npm:^7.13.0"
     react-select: "npm:^5.4.0"
@@ -2954,7 +2953,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:^2.2.3, classnames@npm:^2.2.6, classnames@npm:^2.3.2":
+"classnames@npm:^2.2.6, classnames@npm:^2.3.2":
   version: 2.5.1
   resolution: "classnames@npm:2.5.1"
   checksum: 10c0/afff4f77e62cea2d79c39962980bf316bacb0d7c49e13a21adaadb9221e1c6b9d3cdb829d8bb1b23c406f4e740507f37e1dcf506f7e3b7113d17c5bab787aa69
@@ -4278,13 +4277,13 @@ __metadata:
   linkType: hard
 
 "js-yaml@npm:^4.1.1":
-  version: 4.2.0
-  resolution: "js-yaml@npm:4.2.0"
+  version: 4.3.0
+  resolution: "js-yaml@npm:4.3.0"
   dependencies:
     argparse: "npm:^2.0.1"
   bin:
     js-yaml: bin/js-yaml.js
-  checksum: 10c0/1916456c118746603b067d74bbcbb0445d9a1d5e474ad4ae775e7b20525bed902e01d9d97dd0c81fcd8d4f596162309d0eb057f4aa38f3e9647f14075e9dea45
+  checksum: 10c0/058b30473d6915ca5b4feb11e2f7d4d97242f98d00a798ed48dd90b46b7c640398afe9128c5db22c5300f8c6528fe2a174b9a93f351a70ebc28c6203938d8bff
   languageName: node
   linkType: hard
 
@@ -5335,18 +5334,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-rangeslider@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "react-rangeslider@npm:2.2.0"
-  dependencies:
-    classnames: "npm:^2.2.3"
-    resize-observer-polyfill: "npm:^1.4.2"
-  peerDependencies:
-    react: ^0.14.0 || ^15.0.0
-  checksum: 10c0/a511ad26833ca272ad8d833e914a3882d2fe02ef3092335e8d20f373da9c85e0a296798cc2bf1a96ade4330fca9e57953b3a9850529034e6518c756961bff3ba
-  languageName: node
-  linkType: hard
-
 "react-refresh@npm:^0.18.0":
   version: 0.18.0
   resolution: "react-refresh@npm:0.18.0"
@@ -5509,13 +5496,6 @@ __metadata:
   version: 1.0.0
   resolution: "requires-port@npm:1.0.0"
   checksum: 10c0/b2bfdd09db16c082c4326e573a82c0771daaf7b53b9ce8ad60ea46aa6e30aaf475fe9b164800b89f93b748d2c234d8abff945d2551ba47bf5698e04cd7713267
-  languageName: node
-  linkType: hard
-
-"resize-observer-polyfill@npm:^1.4.2":
-  version: 1.5.1
-  resolution: "resize-observer-polyfill@npm:1.5.1"
-  checksum: 10c0/5e882475067f0b97dc07e0f37c3e335ac5bc3520d463f777cec7e894bb273eddbfecb857ae668e6fb6881fd6f6bb7148246967172139302da50fa12ea3a15d95
   languageName: node
   linkType: hard
 
