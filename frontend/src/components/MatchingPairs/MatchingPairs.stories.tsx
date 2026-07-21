@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw'
 import useBoundStore from "@/util/stores";
-import MatchingPairs, { SCORE_FEEDBACK_DISPLAY } from "../components/MatchingPairs/MatchingPairs";
+import MatchingPairs, { SCORE_FEEDBACK_DISPLAY } from "./MatchingPairs";
 import { API_BASE_URL } from '@/config';
 import { URLS } from '@/API';
 import Cat01 from "./assets/images/cat-01.webp";

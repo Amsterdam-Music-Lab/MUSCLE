@@ -1,4 +1,4 @@
-import Playback from "../components/Preload/Preload";
+import Playback from "./Preload";
 
 import audio from "./assets/audio.wav";
 

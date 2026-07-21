@@ -1,4 +1,4 @@
-import PlayCard from "../components/MatchingPairs/PlayCard";
+import PlayCard from "./PlayCard";
 import catImage from "./assets/images/cat-01.webp";
 import useBoundStore from "@/util/stores";
 

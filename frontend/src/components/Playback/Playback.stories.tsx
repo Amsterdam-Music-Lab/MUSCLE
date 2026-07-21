@@ -1,5 +1,5 @@
-import Playback, { PlaybackProps } from "../components/Playback/Playback";
-import { AUTOPLAY } from "../types/Playback";
+import Playback, { PlaybackProps } from "./Playback";
+import { AUTOPLAY } from "../../types/Playback";
 
 import audio from "./assets/music.ogg";
 import useBoundStore from "@/util/stores";

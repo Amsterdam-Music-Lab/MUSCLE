@@ -1,6 +1,6 @@
 import { BrowserRouter as Router } from "react-router-dom";
 
-import Rank from "../components/Rank/Rank";
+import Rank from "./Rank";
 
 export default {
     title: "Rank/Rank",

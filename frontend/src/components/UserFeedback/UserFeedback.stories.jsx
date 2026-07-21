@@ -1,4 +1,4 @@
-import UserFeedback from "../components/UserFeedback/UserFeedback";
+import UserFeedback from "./UserFeedback";
 
 export default {
     title: "UserFeedback/UserFeedback",

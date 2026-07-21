@@ -1,4 +1,4 @@
-import Button from "../components/Button/Button";
+import Button from "./Button";
 import useBoundStore from "@/util/stores";
 
 const ButtonDecorator = (Story) => {
