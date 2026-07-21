@@ -1,4 +1,4 @@
-import CountDown from "../components/CountDown/CountDown";
+import CountDown from "./CountDown";
 
 export default {
     title: "CountDown/CountDown",

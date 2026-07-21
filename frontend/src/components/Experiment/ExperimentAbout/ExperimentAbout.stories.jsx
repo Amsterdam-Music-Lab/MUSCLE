@@ -1,6 +1,6 @@
 import { BrowserRouter as Router } from "react-router-dom";
 
-import ExperimentAbout from "../components/Experiment/ExperimentAbout/ExperimentAbout";
+import ExperimentAbout from "./ExperimentAbout";
 
 export default {
     title: "Experiment/ExperimentAbout",

@@ -1,6 +1,6 @@
 import { BrowserRouter as Router } from "react-router-dom";
 
-import ScoreCounter from "../components/ScoreCounter/ScoreCounter";
+import ScoreCounter from "./ScoreCounter";
 
 export default {
   title: "Score/ScoreCounter",

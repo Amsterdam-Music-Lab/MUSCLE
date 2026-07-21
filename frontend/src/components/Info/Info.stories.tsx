@@ -1,4 +1,4 @@
-import Info from "../components/Info/Info";
+import Info from "./Info";
 import useBoundStore from "@/util/stores";
 
 const StoreDecorator = (Story) => {

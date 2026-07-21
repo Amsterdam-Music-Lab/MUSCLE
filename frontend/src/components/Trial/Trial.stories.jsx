@@ -1,4 +1,4 @@
-import Trial from "../components/Trial/Trial";
+import Trial from "./Trial";
 import useBoundStore from "@/util/stores";
 
 export default {

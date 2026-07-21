@@ -1,4 +1,4 @@
-import Explainer from "../components/Explainer/Explainer";
+import Explainer from "./Explainer";
 import useBoundStore from "@/util/stores";
 
 export default {
