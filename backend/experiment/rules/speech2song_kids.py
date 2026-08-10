@@ -1,6 +1,8 @@
+from os.path import join
 import random
 
 from django.utils.translation import gettext as _
+from django.conf import settings
 
 from experiment.actions.info import Info
 from experiment.actions.html import HTML
@@ -8,6 +10,7 @@ from experiment.actions.playback import Autoplay, ImagePlaybackSection
 from experiment.actions.form import Form
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
+from image.models import Image
 from result.utils import prepare_result
 from session.models import Session
 from .base import BaseRules
@@ -31,8 +34,21 @@ class Speech2SongKids(BaseRules):
             previous_section = session.last_section()
             if previous_section and previous_section.tag == "single":
                 section = session.playlist.get_section({"song": previous_section.song, "tag": "repeated"})
+                this_image = session.json_data.get("current_image")
+                image = Image.objects.get(tags__contains=[this_image, "long"])
             else:
-                section = session.playlist.get_section({"song__id__in": session.get_unused_song_ids(), "tag": "single"})
+                section = session.playlist.get_section(
+                    {"song__id__in": session.get_unused_song_ids(), "tag": "single"}
+                )
+                available_images = session.json_data.get("available_images", [])
+                if not len(available_images):
+                    available_images = [str(item + 1) for item in range(2)]
+                random.shuffle(available_images)
+                this_image = available_images.pop()
+                image = Image.objects.get(tags__contains=[this_image, 'short'])
+                session.save_json_data(
+                    {"available_images": available_images, "current_image": this_image}
+                )
             identifier = "speech_or_song"
             result_id = prepare_result(identifier, session=session, section=section)
             return Trial(
@@ -44,8 +60,8 @@ class Speech2SongKids(BaseRules):
                         ImagePlaybackSection(
                             section=section,
                             image={
-                                "link": "http://localhost:8000/upload/2026/06/10/1.gif",
-                                "label": "Alien1",
+                                "link": f"{settings.BASE_URL}{settings.MEDIA_URL}{str(image.file)}",
+                                "label": image.title,
                             },
                         )
                     ],
