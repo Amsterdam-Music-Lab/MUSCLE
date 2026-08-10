@@ -1,4 +1,3 @@
-from os.path import join
 import random
 
 from django.utils.translation import gettext as _
@@ -18,6 +17,7 @@ from .base import BaseRules
 class Speech2SongKids(BaseRules):
     """ Rules for a speech-to-song experiment """
     ID = 'SPEECH_TO_SONG_KIDS'
+    available_images = [str(item + 1) for item in range(20)]
 
     def get_intro_explainer(self, session: Session):
         video = "https://player.vimeo.com/video/1012736887?h=bac11b4075"
@@ -42,7 +42,7 @@ class Speech2SongKids(BaseRules):
                 )
                 available_images = session.json_data.get("available_images", [])
                 if not len(available_images):
-                    available_images = [str(item + 1) for item in range(2)]
+                    available_images = self.available_images
                 random.shuffle(available_images)
                 this_image = available_images.pop()
                 image = Image.objects.get(tags__contains=[this_image, 'short'])
