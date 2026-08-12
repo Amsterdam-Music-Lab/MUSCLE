@@ -262,9 +262,21 @@ class MusicalPreferences(BaseRules):
             text=_("1. Do you know this song?"),
             identifier=know_identifier,
             choices=[
-                {"value": "yes", "label": "✔", "color": "colorPositive"},
-                {"value": "unsure", "label": "?", "color": "colorNeutral1"},
-                {"value": "no", "label": "𝗫", "color": "colorNegative"},
+                {
+                    "value": "yes",
+                    "label": f"{settings.BASE_URL}{settings.STATIC_URL}images/musical_preferences/check-lg.svg",
+                    "color": "colorPositive",
+                },
+                {
+                    "value": "unsure",
+                    "label": f"{settings.BASE_URL}{settings.STATIC_URL}images/musical_preferences/x-lg.svg",
+                    "color": "colorNeutral1",
+                },
+                {
+                    "value": "no",
+                    "label": f"{settings.BASE_URL}{settings.STATIC_URL}images/musical_preferences/question-lg.svg",
+                    "color": "colorNegative",
+                },
             ],
             result_id=prepare_result(know_identifier, session, section=section),
         )
