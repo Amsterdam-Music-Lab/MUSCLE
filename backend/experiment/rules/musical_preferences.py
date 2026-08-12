@@ -262,9 +262,9 @@ class MusicalPreferences(BaseRules):
             text=_("1. Do you know this song?"),
             identifier=know_identifier,
             choices=[
-                {"value": "yes", "label": "fa-check", "color": "colorPositive"},
-                {"value": "unsure", "label": "fa-question", "color": "colorNeutral1"},
-                {"value": "no", "label": "fa-xmark", "color": "colorNegative"},
+                {"value": "yes", "label": "✔", "color": "colorPositive"},
+                {"value": "unsure", "label": "?", "color": "colorNeutral1"},
+                {"value": "no", "label": "𝗫", "color": "colorNegative"},
             ],
             result_id=prepare_result(know_identifier, session, section=section),
         )

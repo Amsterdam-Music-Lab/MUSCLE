@@ -224,15 +224,7 @@ class IconRangeTest(TestCase):
         self.assertEqual(self.likert_question_icon.view, 'TEXT_RANGE')
         self.assertEqual(
             [choice.get('label') for choice in self.likert_question_icon.choices],
-            [
-                'fa-face-grin-hearts',
-                'fa-face-grin',
-                'fa-face-smile',
-                'fa-face-meh',
-                'fa-face-frown',
-                'fa-face-frown-open',
-                'fa-face-angry',
-            ],
+            ['😍', '😀', '🙂', '😑', '😕', '😧', '😠'],
         )
 
     def test_action_method(self):
@@ -243,13 +235,5 @@ class IconRangeTest(TestCase):
         self.assertIn('choices', action_result)
         self.assertEqual(
             [choice.get('label') for choice in action_result['choices']],
-            [
-                'fa-face-grin-hearts',
-                'fa-face-grin',
-                'fa-face-smile',
-                'fa-face-meh',
-                'fa-face-frown',
-                'fa-face-frown-open',
-                'fa-face-angry',
-            ],
+            ['😍', '😀', '🙂', '😑', '😕', '😧', '😠'],
         )

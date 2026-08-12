@@ -266,44 +266,44 @@
 - model: question.choice
   fields:
     identifier: '1'
-    text: fa-face-grin-hearts
+    text: 😍
     index: 0
     choicelist: LIKERT_ICONS_7
     color: 'colorPrimary'
 - model: question.choice
   fields:
     identifier: '2'
-    text: fa-face-grin
+    text: 😀
     index: 1
     choicelist: LIKERT_ICONS_7
 - model: question.choice
   fields:
     identifier: '3'
-    text: fa-face-smile
+    text: 🙂
     index: 2
     choicelist: LIKERT_ICONS_7
 - model: question.choice
   fields:
     identifier: '4'
-    text: fa-face-meh
+    text: 😑
     index: 3
     choicelist: LIKERT_ICONS_7
 - model: question.choice
   fields:
     identifier: '5'
-    text: fa-face-frown
+    text: 😕
     index: 4
     choicelist: LIKERT_ICONS_7
 - model: question.choice
   fields:
     identifier: '6'
-    text: fa-face-frown-open
+    text: 😧
     index: 5
     choicelist: LIKERT_ICONS_7
 - model: question.choice
   fields:
     identifier: '7'
-    text: fa-face-angry
+    text: 😠
     index: 6
     choicelist: LIKERT_ICONS_7
     color: 'colorNeutral2'

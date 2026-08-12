@@ -84,7 +84,7 @@ const Score = ({
                             <h3>{score_message}</h3>
                         </div>
                     ) : (
-                        <span className={`fa-solid ${icon}`}></span>
+                        <span>{icon}</span>
                     )}
                 </div>
             </div>

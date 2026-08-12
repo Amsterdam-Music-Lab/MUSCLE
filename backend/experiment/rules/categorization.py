@@ -392,11 +392,11 @@ class Categorization(BaseRules):
         last_score = session.last_score()
 
         if session.last_result().given_response == "TIMEOUT":
-            icon = "fa-question"
+            icon = "?"
         elif last_score == 1:
-            icon = "fa-face-smile"
+            icon = "☺︎"
         elif last_score == 0:
-            icon = "fa-face-frown"
+            icon = "☹︎"
         else:
             raise ValueError(f"invalid last score: {last_score}")
 
