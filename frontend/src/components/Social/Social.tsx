@@ -3,6 +3,9 @@ import {
     FacebookShareButton, TwitterShareButton, WeiboShareButton, WhatsappShareButton
 } from 'react-share'
 import ISocial from "@/types/Social";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFacebookF, faXTwitter, faWeibo, faWhatsapp } from '@fortawesome/free-brands-svg-icons'
+import { faClipboard, faShareNodes } from '@fortawesome/free-solid-svg-icons'
 
 export interface SocialProps {
     social: ISocial
@@ -43,7 +46,7 @@ const Social = ({ social }: SocialProps) => {
                     title={social.content}
                     hashtag={social.tags[0]}
                 >
-                    <i className="fa-brands fa-facebook-f fa-2x"></i>
+                    <FontAwesomeIcon icon={faFacebookF} />
                 </FacebookShareButton>
             )}
             {social.channels.includes('whatsapp') && (
@@ -51,7 +54,7 @@ const Social = ({ social }: SocialProps) => {
                     url={social.url}
                     title={social.content}
                 >
-                    <i className="fa-brands fa-whatsapp fa-2x"></i>
+                    <FontAwesomeIcon icon={faWhatsapp} alt="whatsapp"/>
                 </WhatsappShareButton>
             )}
             {social.channels.includes('twitter') && (
@@ -60,7 +63,7 @@ const Social = ({ social }: SocialProps) => {
                     title={social.content}
                     hashtags={social.tags}
                 >
-                    <i className="fa-brands fa-x-twitter fa-2x"></i>
+                    <FontAwesomeIcon icon={faXTwitter} alt="X" />
                 </TwitterShareButton>
             )}
             {social.channels.includes('weibo') && (
@@ -68,17 +71,17 @@ const Social = ({ social }: SocialProps) => {
                     url={social.url}
                     title={social.content}
                 >
-                    <i className="fa-brands fa-weibo fa-2x"></i>
+                    <FontAwesomeIcon icon="faWeibo" alt="weibo"/>
                 </WeiboShareButton>
             )}
             {showShare.current && social.channels.includes('share') && (
                 <div onClick={() => shareContent(social.content, social.url)} data-testid="navigator-share">
-                    <i className="fa-solid fa-share-nodes fa-2x"></i>
+                    <FontAwesomeIcon icon={faShareNodes} alt="share options"/>
                 </div>
             )}
             {social.channels.includes('clipboard') && (
                 <div onClick={() => copyToClipboard(social.url)} data-testid="clipboard-share">
-                    <i className="fa-solid fa-clipboard fa-2x"></i>
+                    <FontAwesomeIcon icon={faClipboard} alt="clipboard" />
                 </div>
             )}
         </div>

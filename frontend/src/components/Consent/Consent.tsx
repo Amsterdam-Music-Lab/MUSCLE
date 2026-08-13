@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { saveAs } from 'file-saver';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faDownload } from '@fortawesome/free-solid-svg-icons'
 
 import Button from "../Button/Button";
 import Loading from "../Loading/Loading";
@@ -78,11 +80,12 @@ const Consent = ({ title, text, experiment, participant, onNext, confirmButton, 
                 </div>
                 <div className="flex-end">
                     <button
-                        className="btn fa-solid fa-download font-weight-bold"
+                        className="btn font-weight-bold"
                         data-testid="download-button"
                         onClick={onDownload}
                         css={styleButton(experiment.theme.colorGrey)}
                     >
+                        <FontAwesomeIcon icon={faDownload} alt="Download"/>
                     </button>
                 </div>
             </div>

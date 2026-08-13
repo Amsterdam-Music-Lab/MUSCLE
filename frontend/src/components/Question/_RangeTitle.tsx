@@ -36,9 +36,9 @@ const RangeTitle = ({ choices, sliderValue, emptyValue, changePosition = false }
         <div>
             <h4 className="current-value" style={{ position: 'relative', left: changePosition ? `${position}%` : '0%' }}>
                 {emptyValue ? (
-                    renderLabel("↔", "fa-2x")
+                    renderLabel("↔")
                 ) : (
-                    <span style={{color: labelColor || "white"}}> {renderLabel(choices[sliderValue].label, "fa-2x")}</span>
+                    <span style={{color: labelColor || "white"}}> {renderLabel(choices[sliderValue].label)}</span>
                 )
                 }
             </h4>

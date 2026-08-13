@@ -211,7 +211,7 @@ export const IconRange = {
             icon: "🌎",
             view: "TEXT_RANGE",
             value: "",
-            choices: [{value: "globe", label: "fa-globe", color: "colorPrimary"}, {value: "pencil", label: "fa-pencil"}, {value: "bike", label: "fa-bicycle", color: "colorSecondary"}],
+            choices: [{value: "globe", label: "🌍", color: "colorPrimary"}, {value: "pencil", label: "✏️"}, {value: "bike", label: "🚲", color: "colorSecondary"}],
             minValue: 1,
             maxValue: 42,
             style: {},
