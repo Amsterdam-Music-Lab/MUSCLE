@@ -3,6 +3,7 @@ import classNames from "classnames";
 import Circle from "../Circle/Circle";
 import Button from "../Button/Button";
 import { Score as ScoreAction } from "@/types/Action";
+import useBoundStore from "@/util/stores";
 
 export interface ScoreProps extends ScoreAction {
     onNext: () => void;
@@ -25,6 +26,7 @@ const Score = ({
     // Use a ref to prevent doing multiple increments
     // when the render is skipped
     const scoreValue = useRef(0);
+    const theme = useBoundStore((state) => state.theme);
 
     useEffect(() => {
 
@@ -84,7 +86,7 @@ const Score = ({
                             <h3>{score_message}</h3>
                         </div>
                     ) : (
-                        <span>{icon}</span>
+                        <div style={{ color: theme.colorText }} className="score-icon" dangerouslySetInnerHTML={{ __html: icon }}/>
                     )}
                 </div>
             </div>
