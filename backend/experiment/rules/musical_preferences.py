@@ -32,8 +32,8 @@ class MusicalPreferences(BaseRules):
 
     ID = "MUSICAL_PREFERENCES"
     default_consent_file = "consent/consent_musical_preferences.html"
-    preference_offset = 21  # after this many rounds rounds, show information with the participant's preferences
-    knowledge_offset = 42  # after this many rounds, show additionally how many songs the participant knows
+    preference_offset = 3  # after this many rounds rounds, show information with the participant's preferences
+    knowledge_offset = 6  # after this many rounds, show additionally how many songs the participant knows
     contact_email = "musicexp_china@163.com"
     counted_result_identifiers = ["like_song"]
 

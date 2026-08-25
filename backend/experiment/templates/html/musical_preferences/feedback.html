@@ -1,9 +1,14 @@
 {% load i18n %}
+<style>
+    .card {
+        background-color: {{card_background_color}}
+    }
+</style>
 <h2 class="title">{{unlocked}}</h2>  
-<div class="card mb-3" style="background-color:'{{card_background_color}}';">
+<div class="card mb-3">
     <div class="row no-gutters">
         <div class="col">
-            ❤️
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" alt="image-heart" height="8em" viewBox="0 0 512 512"><!--!Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M241 87.1l15 20.7 15-20.7C296 52.5 336.2 32 378.9 32 452.4 32 512 91.6 512 165.1l0 2.6c0 112.2-139.9 242.5-212.9 298.2-12.4 9.4-27.6 14.1-43.1 14.1s-30.8-4.6-43.1-14.1C139.9 410.2 0 279.9 0 167.7l0-2.6C0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1z"/></svg>
         </div>
         <div class="col-8">
             <div class="card-body">
@@ -19,10 +24,10 @@
         </div>
     </div>
 </div>
-<div class="card mb-3 bg-blue {% if n_known_songs == None %}is-greyed-out{% endif %}">
+<div class="card mb-3 {% if n_known_songs == None %}is-greyed-out{% endif %}">
     <div class="row no-gutters">
         <div class="col">     
-            💡
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" alt="image-insight" height="8em" viewBox="0 0 384 512"><!--!Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M292.9 384c7.3-22.3 21.9-42.5 38.4-59.9 32.7-34.4 52.7-80.9 52.7-132.1 0-106-86-192-192-192S0 86 0 192c0 51.2 20 97.7 52.7 132.1 16.5 17.4 31.2 37.6 38.4 59.9l201.7 0zM288 432l-192 0 0 16c0 44.2 35.8 80 80 80l32 0c44.2 0 80-35.8 80-80l0-16zM184 112c-39.8 0-72 32.2-72 72 0 13.3-10.7 24-24 24s-24-10.7-24-24c0-66.3 53.7-120 120-120 13.3 0 24 10.7 24 24s-10.7 24-24 24z"/></svg>
         </div>
         <div class="col-8">
             <div class="card-body">
@@ -36,7 +41,7 @@
 <div class="card bg-blue {% if not top_all %}is-greyed-out{% endif %}">
     <div class="row no-gutters">
         <div class="col">
-            👥
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" alt="image-connection" height="8em" viewBox="0 0 576 512"><!--!Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M64 128a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM0 464c0-97.2 78.8-176 176-176s176 78.8 176 176l0 6c0 23.2-18.8 42-42 42L42 512c-23.2 0-42-18.8-42-42l0-6zM432 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm0 240c79.5 0 144 64.5 144 144l0 22.4c0 23-18.6 41.6-41.6 41.6l-144.8 0c6.6-12.5 10.4-26.8 10.4-42l0-6c0-51.5-17.4-98.9-46.5-136.7 22.6-14.7 49.6-23.3 78.5-23.3z"/></svg>
         </div>
         <div class="col-8">
             <div class="card-body">
