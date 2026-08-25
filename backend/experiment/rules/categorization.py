@@ -394,9 +394,9 @@ class Categorization(BaseRules):
         if session.last_result().given_response == "TIMEOUT":
             icon = "?"
         elif last_score == 1:
-            icon = "☺︎"
+            icon = render_to_string("images/categorization/face-smile-solid.svg")
         elif last_score == 0:
-            icon = "☹︎"
+            icon = render_to_string("images/categorization/face-frown-solid.svg")
         else:
             raise ValueError(f"invalid last score: {last_score}")
 

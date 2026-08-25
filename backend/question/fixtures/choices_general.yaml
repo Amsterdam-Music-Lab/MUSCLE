@@ -266,50 +266,6 @@
 - model: question.choice
   fields:
     identifier: '1'
-    text: 😍
-    index: 0
-    choicelist: LIKERT_ICONS_7
-    color: 'colorPrimary'
-- model: question.choice
-  fields:
-    identifier: '2'
-    text: 😀
-    index: 1
-    choicelist: LIKERT_ICONS_7
-- model: question.choice
-  fields:
-    identifier: '3'
-    text: 🙂
-    index: 2
-    choicelist: LIKERT_ICONS_7
-- model: question.choice
-  fields:
-    identifier: '4'
-    text: 😑
-    index: 3
-    choicelist: LIKERT_ICONS_7
-- model: question.choice
-  fields:
-    identifier: '5'
-    text: 😕
-    index: 4
-    choicelist: LIKERT_ICONS_7
-- model: question.choice
-  fields:
-    identifier: '6'
-    text: 😧
-    index: 5
-    choicelist: LIKERT_ICONS_7
-- model: question.choice
-  fields:
-    identifier: '7'
-    text: 😠
-    index: 6
-    choicelist: LIKERT_ICONS_7
-    color: 'colorNeutral2'
-- model: question.choice
-  fields:
-    identifier: '1'
     text: Dislike Strongly
     index: 0
     choicelist: LIKERT_PREFERENCE_7

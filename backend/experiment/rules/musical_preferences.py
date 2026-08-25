@@ -14,7 +14,6 @@ from experiment.actions.redirect import Redirect
 from experiment.actions.trial import Trial
 from experiment.actions.wrappers import boolean_question
 from experiment.serializers import get_theme_config
-from question.models import ChoiceList
 from result.utils import prepare_result
 from result.models import Result
 from section.models import Section
@@ -155,7 +154,6 @@ class MusicalPreferences(BaseRules):
                     else:
                         # participant had persistent audio problems, finish session and redirect
                         session.finish()
-                        session.save()
                         return Redirect(settings.HOMEPAGE)
             else:
                 playback = get_test_playback()
@@ -252,7 +250,52 @@ class MusicalPreferences(BaseRules):
         likert = TextRangeQuestion(
             text=_("2. How much do you like this song?"),
             identifier=like_identifier,
-            choices=ChoiceList.objects.get(pk='LIKERT_ICONS_7').to_dict(),
+            choices=[
+                {
+                    "value": "love",
+                    "label": render_to_string(
+                        "images/musical_preferences/face-grin-hearts-solid.svg"
+                    ),
+                    "color": "colorPrimary",
+                },
+                {
+                    "value": "like a lot",
+                    "label": render_to_string(
+                        "images/musical_preferences/face-grin-solid.svg"
+                    ),
+                },
+                {
+                    "value": "like",
+                    "label": render_to_string(
+                        "images/musical_preferences/face-smile-solid.svg"
+                    ),
+                },
+                {
+                    "value": "neutral",
+                    "label": render_to_string(
+                        "images/musical_preferences/face-meh-solid.svg"
+                    ),
+                },
+                {
+                    "value": "dislike",
+                    "label": render_to_string(
+                        "images/musical_preferences/face-frown-solid.svg"
+                    ),
+                },
+                {
+                    "value": "dislike a lot",
+                    "label": render_to_string(
+                        "images/musical_preferences/face-frown-open-solid.svg"
+                    ),
+                },
+                {
+                    "value": "hate",
+                    "label": render_to_string(
+                        "images/musical_preferences/face-angry-solid.svg"
+                    ),
+                    "color": "colorNeutral2",
+                },
+            ],
             result_id=prepare_result(
                 like_identifier, session, section=section, scoring_rule="LIKERT"
             ),
@@ -264,17 +307,26 @@ class MusicalPreferences(BaseRules):
             choices=[
                 {
                     "value": "yes",
-                    "label": f"{settings.BASE_URL}{settings.STATIC_URL}images/musical_preferences/check-lg.svg",
+                    "label": render_to_string(
+                        "images/musical_preferences/check-solid.svg",
+                        {"text_color": theme.color_text},
+                    ),
                     "color": "colorPositive",
                 },
                 {
                     "value": "unsure",
-                    "label": f"{settings.BASE_URL}{settings.STATIC_URL}images/musical_preferences/x-lg.svg",
+                    "label": render_to_string(
+                        "images/musical_preferences/question-solid.svg",
+                        {"text_color": theme.color_text},
+                    ),
                     "color": "colorNeutral1",
                 },
                 {
                     "value": "no",
-                    "label": f"{settings.BASE_URL}{settings.STATIC_URL}images/musical_preferences/question-lg.svg",
+                    "label": render_to_string(
+                        "images/musical_preferences/xmark-solid.svg",
+                        {"text_color": theme.color_text},
+                    ),
                     "color": "colorNegative",
                 },
             ],

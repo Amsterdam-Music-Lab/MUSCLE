@@ -21,9 +21,6 @@
   pk: LIKERT_FREQUENCY_6
   fields: {}
 - model: question.choicelist
-  pk: LIKERT_ICONS_7
-  fields: {}
-- model: question.choicelist
   pk: LIKERT_PREFERENCE_7
   fields: {}
 # choice lists for demographic questions
