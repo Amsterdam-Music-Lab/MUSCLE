@@ -9,7 +9,7 @@ export default defineConfig({
             jsxImportSource: "@emotion/react",
         }), 
         tsconfigPaths(),
-        analyzer()
+        analyzer({analyzerMode: "static"})
     ],
     server: {
         host: '0.0.0.0',
