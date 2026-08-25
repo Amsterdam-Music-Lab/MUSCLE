@@ -1,17 +1,15 @@
-import { useState } from "react";
-
+import { lazy, useState } from "react";
 import classNames from "classnames";
 
-import AutoComplete from "./_AutoComplete";
-import ButtonArray from "./_ButtonArray";
-import Checkboxes from "./_Checkboxes";
-import DropDown from "./_DropDown";
-import Number from "./_Number";
-import Radios from "./_Radios";
-import Range from "./_Range";
-import String from "./_String";
-import TextRange from "./_TextRange";
-
+const AutoComplete = lazy(() => import("./_AutoComplete"));
+const ButtonArray = lazy(() => import("./_ButtonArray"));
+const Checkboxes = lazy(() => import("./_Checkboxes"));
+const DropDown = lazy(() => import("./_DropDown"));
+const Number = lazy(() => import("./_Number"));
+const Radios = lazy(() => import("./_Radios"));
+const Range = lazy(() => import("./_Range"));
+const String = lazy(() => import("./_String"));
+const TextRange = lazy(() => import("./_TextRange"));
 import IQuestion, { QuestionViews } from "@/types/Question";
 
 interface FormProps {

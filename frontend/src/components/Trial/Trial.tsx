@@ -1,12 +1,12 @@
-import { useState, useRef, useCallback } from "react";
+import { lazy, useState, useRef, useCallback } from "react";
 import classNames from "classnames";
 
-import { getAudioLatency, getCurrentTime, getTimeSince } from "@/util/time";
-import FeedbackForm from "../FeedbackForm/FeedbackForm";
-import HTML from "../HTML/HTML";
-import Playback from "../Playback/Playback";
 import Button from "../Button/Button";
+const FeedbackForm = lazy(() => import("@/components/FeedbackForm/FeedbackForm"));
+const HTML = lazy(() => import("@/components/HTML/HTML"));
+const Playback = lazy(() => import("@/components/Playback/Playback"));
 import { SharedActionProps, TrialAction } from "@/types/Action";
+import { getAudioLatency, getCurrentTime, getTimeSince } from "@/util/time";
 
 /**
  * Trial is a block view to present information to the user and/or collect user feedback
