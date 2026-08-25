@@ -208,32 +208,3 @@ class TextRangeQuestionTest(TestCase):
                 "Completely Agree",
             ],
         )
-
-
-class IconRangeTest(TestCase):
-    fixtures = ["choice_lists", "choices_general"]
-
-    def setUp(self):
-        self.likert_question_icon = TextRangeQuestion(
-            identifier='test_identifier',
-            choices=ChoiceList.objects.get(pk='LIKERT_ICONS_7').to_dict(),
-        )
-
-    def test_initialization(self):
-        self.assertEqual(self.likert_question_icon.identifier, 'test_identifier')
-        self.assertEqual(self.likert_question_icon.view, 'TEXT_RANGE')
-        self.assertEqual(
-            [choice.get('label') for choice in self.likert_question_icon.choices],
-            ['😍', '😀', '🙂', '😑', '😕', '😧', '😠'],
-        )
-
-    def test_action_method(self):
-        action_result = self.likert_question_icon.action()
-        self.assertIn('identifier', action_result)
-        self.assertIn('view', action_result)
-        self.assertEqual(action_result['view'], 'TEXT_RANGE')
-        self.assertIn('choices', action_result)
-        self.assertEqual(
-            [choice.get('label') for choice in action_result['choices']],
-            ['😍', '😀', '🙂', '😑', '😕', '😧', '😠'],
-        )

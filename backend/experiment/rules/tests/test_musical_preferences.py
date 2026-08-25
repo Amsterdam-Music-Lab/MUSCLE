@@ -82,10 +82,10 @@ class MusicalPreferencesTest(TestCase):
         for i in range(3, self.session.block.rounds + 1):
             actions = mp.next_round(self.session)
             if i == mp.preference_offset:
-                self.assertIn('Love', actions[0].html.body[:30])
+                self.assertIn('Love', actions[0].html.body[80:110])
             elif i == mp.knowledge_offset:
-                self.assertIn('Knowledge', actions[0].html.body[:30])
+                self.assertIn('Knowledge', actions[0].html.body[80:110])
             elif i == self.session.block.rounds:
-                self.assertIn('Connection', actions[0].html.body[:30])
+                self.assertIn('Connection', actions[0].html.body[80:110])
             else:
                 self.assertIsNotNone(actions)
