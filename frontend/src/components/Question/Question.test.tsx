@@ -41,9 +41,9 @@ describe('Question Component', () => {
         expect(screen.getByText('This is an explainer')).toBeTruthy();
     });
 
-    it('calls onChange when the value changes', () => {
+    it('calls onChange when the value changes', async () => {
         render(<Question {...defaultProps} />);
-        const input = screen.getByRole('textbox');
+        const input = await screen.findByRole('textbox');
         fireEvent.change(input, { target: { value: 'New Value' } });
         expect(mockOnChange).toHaveBeenCalledWith('New Value');
     });
@@ -55,7 +55,7 @@ describe('Question Component', () => {
         expect(container.querySelector('.some-style')).toBeTruthy();
     });
 
-    it('disables the input when disabled prop is true', () => {
+    it('disables the input when disabled prop is true', async () => {
         const props = getProps({
             disabled: true,
             question: {
@@ -68,7 +68,7 @@ describe('Question Component', () => {
             }
         });
         render(<Question {...props} />);
-        const input = screen.getByTestId('toggle-button-1');
+        const input = await screen.findByTestId('toggle-button-1');
         expect(input).toBeTruthy();
         expect(input.attributes.getNamedItem('disabled')).toBeTruthy();
     });

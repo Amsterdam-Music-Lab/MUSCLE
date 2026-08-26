@@ -1,11 +1,13 @@
-import { lazy, useState, useRef, useCallback } from "react";
+import { lazy, Suspense, useState, useRef, useCallback } from "react";
 import classNames from "classnames";
 
-import Button from "../Button/Button";
+import Button from "@/components/Button/Button";
+import Loading from "@/components/Loading/Loading";
 const FeedbackForm = lazy(() => import("@/components/FeedbackForm/FeedbackForm"));
 const HTML = lazy(() => import("@/components/HTML/HTML"));
 const Playback = lazy(() => import("@/components/Playback/Playback"));
 import { SharedActionProps, TrialAction } from "@/types/Action";
+import { BreakRoundOn } from "@/types/Trial";
 import { getAudioLatency, getCurrentTime, getTimeSince } from "@/util/time";
 
 /**
@@ -134,6 +136,7 @@ const Trial = (props: TrialAction & SharedActionProps) => {
 
     return (
         <div role="presentation" className={classNames("aha__trial")}>
+            <Suspense fallback={<Loading/>}>
             {playback && (
                 <Playback
                     {...playback}
@@ -171,6 +174,7 @@ const Trial = (props: TrialAction & SharedActionProps) => {
                     />
                 </div>
             )}
+            </Suspense>
         </div>
     );
 };

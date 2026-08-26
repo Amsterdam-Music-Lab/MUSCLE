@@ -1,6 +1,7 @@
-import { lazy, useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import classNames from "classnames";
 
+import Loading from "@/components/Loading/Loading";
 const AutoComplete = lazy(() => import("./_AutoComplete"));
 const ButtonArray = lazy(() => import("./_ButtonArray"));
 const Checkboxes = lazy(() => import("./_Checkboxes"));
@@ -71,7 +72,11 @@ const Question = ({
                 <p className="explainer">{question.explainer}</p>
             )}
             <h3 className={classNames(question.style)}>{question.text}</h3>
-            <div className={classNames("question", {disabled: disabled})}>{render(question.view)}</div>
+            <div className={classNames("question", {disabled: disabled})}>
+                <Suspense fallback={<Loading/>}>
+                    {render(question.view)}
+                </Suspense>
+            </div>
         </div>
     );
 };

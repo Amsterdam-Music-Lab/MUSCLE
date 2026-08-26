@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment } from '@fortawesome/free-solid-svg-icons'
 
 import classNames from '@/util/classNames';
-import useBoundStore from "@/util/stores";
 
 type Position = 'bottom-left' | 'bottom-right' | 'top-left' | 'top-right' | 'center-left' | 'center-right';
 
@@ -21,7 +20,6 @@ const FloatingActionButton = ({
 }: FloatingActionButtonProps): JSX.Element => {
 
     const [expanded, setExpanded] = React.useState(false);
-    const theme = useBoundStore((state) => state.theme);
 
     /**
      * The getPositionClassNames function generates CSS class names based on the provided position string for a floating action button.

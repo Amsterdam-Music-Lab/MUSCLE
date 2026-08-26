@@ -48,28 +48,30 @@ describe('Trial', () => {
         vi.clearAllMocks();
     });
 
-    it("renders itself", () => {
+    it("renders itself", async () => {
         render(<Trial
             onNext={mockOnNext}
             onResult={mockOnResult}
             feedbackForm={feedbackForm}
             {...defaultConfig}
         />);
-        expect(screen.queryByRole('presentation')).toBeTruthy();
+        const presentationElement = await screen.findByRole("presentation");
+        expect(presentationElement).toBeTruthy();
     });
 
-    it("renders Playback component when playback prop is provided", () => {
+    it("renders Playback component when playback prop is provided", async () => {
         render(<Trial
-            playback={{ somePlaybackProp: true }}
+            playback={{ resumePlay: true }}
             feedbackForm={feedbackForm}
             {...defaultConfig}
             onNext={mockOnNext}
             onResult={mockOnResult}
         />);
-        expect(screen.getByTestId('mock-playback')).toBeTruthy();
+        const playbackElement = await screen.findByTestId('mock-playback')
+        expect(playbackElement).toBeTruthy();
     });
 
-    it("renders HTML component when html prop is provided", () => {
+    it("renders HTML component when html prop is provided", async () => {
         const htmlBody = "Test HTML content";
         render(<Trial
             html={{ body: htmlBody }}
@@ -78,7 +80,7 @@ describe('Trial', () => {
             onNext={mockOnNext}
             onResult={mockOnResult}
         />);
-        const htmlComponent = screen.getByTestId('mock-html');
+        const htmlComponent = await screen.findByTestId('mock-html');
         expect(htmlComponent).toBeTruthy();
         expect(htmlComponent.textContent).toBe(htmlBody);
     });

@@ -1,4 +1,4 @@
-import { lazy, useState } from "react";
+import { Suspense, lazy, useState } from "react";
 import {
     Route,
     Routes,
@@ -65,7 +65,9 @@ const Experiment = () => {
         }
         return (
             <DefaultPage className='aha__consent-wrapper' title={experiment.name}>
-                <Consent {...attrs} />
+                <Suspense fallback={<Loading />}>
+                    <Consent {...attrs} />
+                </Suspense>
             </DefaultPage>
         )
     }
@@ -87,11 +89,13 @@ const Experiment = () => {
                 />
             </Routes>
             {experiment.theme?.footer && (
-                <Footer
-                    disclaimer={experiment.disclaimer}
-                    logos={experiment.theme.footer.logos}
-                    privacy={experiment.privacy}
-                />
+                <Suspense fallback={<Loading />}>
+                    <Footer
+                        disclaimer={experiment.disclaimer}
+                        logos={experiment.theme.footer.logos}
+                        privacy={experiment.privacy}
+                    />
+                </Suspense>
             )}
         </div>
     )

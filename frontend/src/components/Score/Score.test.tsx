@@ -5,6 +5,20 @@ import { vi, describe, expect, it } from 'vitest';
 
 vi.useFakeTimers();
 
+vi.mock('@/util/stores', () => ({
+    __esModule: true,
+    default: (fn: (state: any) => any) => {
+        const state = {
+            theme: {
+                colorPositive: "#d843e2", colorNegative: "#39d7b8", colorGrey: "#bdbebf"
+            }
+        };
+
+        return fn(state);
+    },
+    useBoundStore: vi.fn()
+}));
+
 const makeDefaultScoreProps = (overrides = {}) => ({
     last_song: 'Test Song',
     score: 10,
@@ -12,7 +26,7 @@ const makeDefaultScoreProps = (overrides = {}) => ({
     total_score: 50,
     texts: { score: 'Score' },
     button: {label: 'Next'},
-    icon: 'fa-icon',
+    icon: '<svg></svg>',
     feedback: 'Well done!',
     timer: null,
     onNext: vi.fn(),

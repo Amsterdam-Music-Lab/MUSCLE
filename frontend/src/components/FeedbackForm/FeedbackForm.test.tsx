@@ -43,7 +43,7 @@ const defaultProps = {
 
 describe('FeedbackForm', () => {
 
-    it('renders a heading and a form with the selected question view', () => {
+    it('renders a heading and a form with the selected question view', async () => {
         const form = [
             radiosQuestion
         ];
@@ -51,7 +51,7 @@ describe('FeedbackForm', () => {
             {...defaultProps}
             form={form}
         />)
-        const heading = screen.getByRole('heading');
+        const heading = await screen.findByRole('heading');
         expect(heading).toBeTruthy();
         expect(heading.textContent).toBe('What is the average speed of a Swallow?');
         expect(screen.queryByRole('form')).toBeTruthy();

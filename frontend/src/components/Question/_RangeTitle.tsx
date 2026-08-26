@@ -1,6 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowsLeftRight } from '@fortawesome/free-solid-svg-icons'
-
 import { Choice } from "@/types/Question";
 import { renderLabel } from "@/util/label";
 import { getGradientColor } from "@/util/gradient";
@@ -38,9 +35,7 @@ const RangeTitle = ({ choices, sliderValue, emptyValue, changePosition = false }
     return (
         <div>
             <h4 className="current-value" style={{ position: 'relative', left: changePosition ? `${position}%` : '0%' }}>
-                {emptyValue ? (
-                    <FontAwesomeIcon icon={faArrowsLeftRight} />
-                ) : (
+                {emptyValue ? renderLabel('↔') : (
                     <span style={{color: labelColor || "white"}}> {renderLabel(choices[sliderValue].label)}</span>
                 )
                 }
