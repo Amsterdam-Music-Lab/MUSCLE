@@ -8,12 +8,12 @@ from question.utils import get_unanswered_questions
 
 
 class UtilsTestCase(TestCase):
-    fixtures = ['choice_lists', 'demographics']
+    fixtures = ['choice_lists', 'demographics', 'testing']
 
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
-        block = Block.objects.create(rules='RHYTHM_BATTERY_INTRO', identifier='test')
+        block = Block.objects.get(identifier='test-block')
         cls.result = Result.objects.create(
             participant=cls.participant,
             question_identifier='dgf_gender_identity',

@@ -142,12 +142,19 @@ class Block(models.Model):
         theme_config (theme.ThemeConfig): Theme settings
         rules_config (dict): a dictionary containing extra settings for the rules coupled to the block
     """
-
-    phase = models.ForeignKey(Phase, on_delete=models.CASCADE, related_name="blocks", blank=True, null=True)
-    identifier = models.SlugField(
-        db_index=True, max_length=64, unique=True, validators=[identifier_validator]
+    experiment = models.ForeignKey(
+        Experiment,
+        on_delete=models.CASCADE,
+        related_name="blocks",
     )
-    index = models.IntegerField(default=0, help_text="Index of the block in the phase. Lower numbers come first.")
+    phase = models.ForeignKey(Phase, on_delete=models.CASCADE, related_name="blocks")
+    identifier = models.SlugField(
+        db_index=True, max_length=64, validators=[identifier_validator]
+    )
+    index = models.IntegerField(
+        default=0,
+        help_text="Index of the block in the phase. Lower numbers come first.",
+    )
 
     name = models.CharField(max_length=64, blank=True, default="")
     description = models.TextField(blank=True, default="")
@@ -172,6 +179,17 @@ class Block(models.Model):
 
     class Meta:
         ordering = ["index"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["experiment", "identifier"],
+                name="unique_block_identifier_per_experiment",
+            )
+        ]
+
+    def save(self, *args, **kwargs):
+        self.experiment = self.phase.experiment
+        # self.add_default_question_lists()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name if self.name else self.identifier
@@ -267,11 +285,6 @@ class Block(models.Model):
                 question=question_obj,
                 index=i + 1,
             )
-
-    def save(self, **kwargs):
-        super().save(**kwargs)  # Call the "real" save() method.
-        self.add_default_question_lists()
-
 
 class Feedback(models.Model):
     """A model for adding feedback to an experiment block

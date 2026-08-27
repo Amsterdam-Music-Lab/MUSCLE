@@ -1,0 +1,248 @@
+- model: experiment.experiment
+  pk: 11
+  fields:
+    name: ToontjeHoger
+    identifier: toontjehoger
+    active: true
+- model: experiment.phase
+  pk: 11
+  fields:
+    experiment: 11
+    dashboard: true
+- model: experiment.block
+  fields:
+    phase: 11
+    experiment: 11
+    index: 0
+    image: null
+    identifier: th_mozart
+    rounds: 2
+    bonus_points: 0
+    rules: TOONTJE_HOGER_1_MOZART
+    playlists:
+    - 11
+- model: experiment.block
+  fields:
+    phase: 11
+    experiment: 11
+    index: 0
+    image: null
+    identifier: th_preverbal
+    rounds: 2
+    bonus_points: 0
+    rules: TOONTJE_HOGER_2_PREVERBAL
+    playlists:
+    - 12
+- model: experiment.block
+  fields:
+    phase: 11
+    experiment: 11
+    index: 0
+    image: null
+    identifier: th_plink
+    rounds: 10
+    bonus_points: 0
+    rules: TOONTJE_HOGER_3_PLINK
+    playlists:
+    - 13
+- model: experiment.block
+  fields:
+    phase: 11
+    experiment: 11
+    index: 0
+    image: null
+    identifier: th_absolute
+    rounds: 5
+    bonus_points: 0
+    rules: TOONTJE_HOGER_4_ABSOLUTE
+    playlists:
+    - 14
+- model: experiment.block
+  fields:
+    phase: 11
+    experiment: 11
+    index: 0
+    image: null
+    identifier: th_tempo
+    rounds: 5
+    bonus_points: 0
+    rules: TOONTJE_HOGER_5_TEMPO
+    theme_config: null
+    playlists:
+    - 15
+- model: experiment.block
+  fields:
+    phase: 11
+    experiment: 11
+    index: 0
+    image: null
+    identifier: th_relative
+    rounds: 2
+    bonus_points: 0
+    rules: TOONTJE_HOGER_6_RELATIVE
+    playlists:
+    - 16
+- model: section.playlist
+  pk: 11
+  fields:
+    name: Toontje Hoger 1 - Mozart
+    csv: |
+      Tomaso Albinoni,"Adagio in G mineur (uitgevoerd door het Prague Baroque Orchestra, onder leiding van Trevor Pinnock)",0.0,26.0,/toontjehoger/mozart/fragment_a.mp3,0,1
+      Wolfgang Amadeus Mozart,"Sonate voor twee pianos in D groot, KV 448 (uitgevoerd door Lucas en Arthur Jussen)",0.0,28.0,/toontjehoger/mozart/fragment_b.mp3,0,2
+- model: section.playlist
+  pk: 12
+  fields:
+    name: Toontje Hoger 2 - Preverbal
+    csv: |
+      AML,Duitse baby,0.0,1.0,/toontjehoger/preverbal/4_duitse_baby.mp3,b,2
+      AML,Franse baby,0.0,1.0,/toontjehoger/preverbal/5_franse_baby.mp3,a,2
+      AML,Mens,0.0,1.0,/toontjehoger/preverbal/1_mens.mp3,c,1
+      AML,Trompet,0.0,1.0,/toontjehoger/preverbal/3_trompet.mp3,a,1
+      AML,Walvis,0.0,1.0,/toontjehoger/preverbal/2_walvis.mp3,b,1
+- model: section.playlist
+  pk: 13
+  fields:
+    name: Toontje Hoger 3 - Plink
+    csv: |
+      Billy Joel,Piano Man,0.0,1.0,toontjehoger/plink/2021-005.mp3,0,70s;vrolijk
+      Boudewijn de Groot,Avond,0.0,1.0,toontjehoger/plink/2021-010.mp3,0,90s;tederheid
+      Bruce Springsteen,The River,0.0,1.0,toontjehoger/plink/2021-016.mp3,0,80s;droevig
+      Coldplay,Fix You,0.0,1.0,toontjehoger/plink/2021-011.mp3,0,00s;tederheid
+      Danny Vera,Roller Coaster,0.0,1.0,toontjehoger/plink/2021-002.mp3,0,10s;tederheid
+      David Bowie,Heroes,0.0,1.0,toontjehoger/plink/2021-024.mp3,0,70s;vrolijk
+      Deep Purple,Child In Time,0.0,1.0,toontjehoger/plink/2021-015.mp3,0,70s;boosheid
+      Di-rect,Soldier On,0.0,1.0,toontjehoger/plink/2021-014.mp3,0,20s;tederheid
+      Dire Straits,Brothers In Arms,0.0,1.0,toontjehoger/plink/2021-018.mp3,0,80s;angst
+      Dire Straits,Sultans Of Swing,0.0,1.0,toontjehoger/plink/2021-025.mp3,0,70s;vrolijk
+      Disturbed,The Sound Of Silence,0.0,1.0,toontjehoger/plink/2021-019.mp3,0,10s;droevig
+      Eagles,Hotel California,0.0,1.0,toontjehoger/plink/2021-004.mp3,0,70s;droevig
+      Golden Earring,Radar Love,0.0,1.0,toontjehoger/plink/2021-006.mp3,0,70s;vrolijk
+      Guns N' Roses,November Rain,0.0,1.0,toontjehoger/plink/2021-017.mp3,0,90s;droevig
+      Led Zeppelin,Stairway To Heaven,0.0,1.0,toontjehoger/plink/2021-007.mp3,0,70s;tederheid
+      Metallica,Nothing Else Matters,0.0,1.0,toontjehoger/plink/2021-008.mp3,0,90s;droevig
+      Miss Montreal,Door De Wind,0.0,1.0,toontjehoger/plink/2021-020.mp3,0,20s;angst
+      Pearl Jam,Black,0.0,1.0,toontjehoger/plink/2021-009.mp3,0,90s;droevig
+      Pink Floyd,Comfortably Numb,0.0,1.0,toontjehoger/plink/2021-022.mp3,0,70s;droevig
+      Pink Floyd,Wish You Were Here,0.0,1.0,toontjehoger/plink/2021-013.mp3,0,70s;droevig
+      Prince & The Revolution,Purple Rain,0.0,1.0,toontjehoger/plink/2021-021.mp3,0,80s;tederheid
+      Procol Harum,A Whiter Shade Of Pale,0.0,1.0,toontjehoger/plink/2021-003.mp3,0,60s;droevig
+      Queen,Bohemian Rhapsody,0.0,1.0,toontjehoger/plink/2021-001.mp3,0,70s;droevig
+      Queen,Love Of My Life,0.0,1.0,toontjehoger/plink/2021-012.mp3,0,70s;tederheid
+      Toto,Africa,0.0,1.0,toontjehoger/plink/2021-023.mp3,0,80s;vrolijk
+- model: section.playlist
+  pk: 14
+  fields:
+    name: Toontje Hoger 4 - Absolute
+    csv: |
+      AML,Breaking Bad,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item13_b.mp3,b,13
+      AML,Breaking Bad,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item13_c.mp3,c,13
+      AML,Breaking Bad,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item13_a.mp3,a,13
+      AML,De wereld draait door,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item3_b.mp3,b,3
+      AML,De wereld draait door,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item3_a.mp3,a,3
+      AML,De wereld draait door,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item3_c.mp3,c,3
+      AML,ER,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item11_b.mp3,b,11
+      AML,ER,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item11_c.mp3,c,11
+      AML,ER,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item11_a.mp3,a,11
+      AML,Friends,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item4_c.mp3,c,4
+      AML,Friends,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item4_b.mp3,b,4
+      AML,Friends,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item4_a.mp3,a,4
+      AML,Game of Thrones,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item5_c.mp3,c,5
+      AML,Game of Thrones,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item5_b.mp3,b,5
+      AML,Game of Thrones,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item5_a.mp3,a,5
+      AML,het NOS Journaal,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item8_b.mp3,b,8
+      AML,het NOS Journaal,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item8_c.mp3,c,8
+      AML,het NOS Journaal,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item8_a.mp3,a,8
+      AML,NOS Studio Sport,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item7_c.mp3,c,7
+      AML,NOS Studio Sport,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item7_a.mp3,a,7
+      AML,NOS Studio Sport,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item7_b.mp3,b,7
+      AML,Sesamstraat,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item6_b.mp3,b,6
+      AML,Sesamstraat,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item6_c.mp3,c,6
+      AML,Sesamstraat,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item6_a.mp3,a,6
+      AML,Star Wars,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item1_a.mp3,a,1
+      AML,Star Wars,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item1_c.mp3,c,1
+      AML,Star Wars,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item1_b.mp3,b,1
+      AML,Stranger Things,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item9_b.mp3,b,9
+      AML,Stranger Things,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item9_c.mp3,c,9
+      AML,Stranger Things,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item9_a.mp3,a,9
+      AML,The Walking Dead,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item12_c.mp3,c,12
+      AML,The Walking Dead,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item12_b.mp3,b,12
+      AML,The Walking Dead,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item12_a.mp3,a,12
+      AML,Viva la vida van Coldplay,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item2_b.mp3,b,2
+      AML,Viva la vida van Coldplay,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item2_c.mp3,c,2
+      AML,Viva la vida van Coldplay,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item2_a.mp3,a,2
+      AML,Wie is de Mol,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item10_b.mp3,b,10
+      AML,Wie is de Mol,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item10_c.mp3,c,10
+      AML,Wie is de Mol,0.0,1.0,/toontjehoger/absolute/4_Toonhoogte_Item10_a.mp3,a,10
+- model: section.playlist
+  pk: 15
+  fields:
+    name: Toontje Hoger 5 - Tempo
+    csv: |
+      Ahmad Jamal,Dolphin Dance,0.0,1.0,/toontjehoger/tempo/J1_P1_OR_153.mp3,J1_P1_OR,or
+      Ahmad Jamal,Dolphin Dance,0.0,1.0,/toontjehoger/tempo/J1_P2_CH_120.mp3,J1_P2_CH,ch
+      Arthur Rubinstein,"L. v. Beethoven, Piano Sonata No. 14, Op. 17, no. 2. Allegretto",0.0,1.0,/toontjehoger/tempo/C3_P2_OR_56.mp3,C3_P2_OR,or
+      Arthur Rubinstein,"L. v. Beethoven, Piano Sonata No. 14, Op. 17, no. 2. Allegretto",0.0,1.0,/toontjehoger/tempo/C3_P1_CH_75.mp3,C3_P1_CH,ch
+      Bert van de Brink,All the things you are,0.0,1.0,/toontjehoger/tempo/J5_P1_CH_140.mp3,J5_P1_CH,ch
+      Bert van de Brink,All the things you are,0.0,1.0,/toontjehoger/tempo/J5_P2_OR_108.mp3,J5_P2_OR,or
+      Bill Evans,Blue in Green,0.0,1.0,/toontjehoger/tempo/J2_P2_OR_67.mp3,J2_P2_OR,or
+      Bill Evans,Blue in Green,0.0,1.0,/toontjehoger/tempo/J2_P1_CH_55.mp3,J2_P1_CH,ch
+      Claudio Arrau,"F. Chopin, Grande Valse Brillante, op. 18",0.0,1.0,/toontjehoger/tempo/C4_P2_OR_70.mp3,C4_P2_OR,or
+      Claudio Arrau,"F. Chopin, Grande Valse Brillante, op. 18",0.0,1.0,/toontjehoger/tempo/C4_P1_CH_88.mp3,C4_P1_CH,ch
+      Claudio Arrau,"R. Schumann, Kinderszenen, Träumerei",0.0,1.0,/toontjehoger/tempo/C5_P1_OR_70.mp3,C5_P1_OR,or
+      Claudio Arrau,"R. Schumann, Kinderszenen, Träumerei",0.0,1.0,/toontjehoger/tempo/C5_P2_CH_87.mp3,C5_P2_CH,ch
+      Dread Zeppelin,Stairway to Heaven,0.0,1.0,/toontjehoger/tempo/R4_P2_OR_86.mp3,R4_P2_OR,or
+      Dread Zeppelin,Stairway to Heaven,0.0,1.0,/toontjehoger/tempo/R4_P1_CH_66.mp3,R4_P1_CH,ch
+      Duke Ellington,Caravan,0.0,1.0,/toontjehoger/tempo/J3_P1_OR_96.mp3,J3_P1_OR,or
+      Duke Ellington,Caravan,0.0,1.0,/toontjehoger/tempo/J3_P2_OR_114.mp3,J3_P2_OR,or
+      Duke Ellington,Caravan,0.0,1.0,/toontjehoger/tempo/J3_P2_CH_114.mp3,J3_P2_CH,ch
+      Duke Ellington,Caravan,0.0,1.0,/toontjehoger/tempo/J3_P1_CH_96.mp3,J3_P1_CH,ch
+      Glenn Gould,"J. S. Bach, English Suite No. 3, BWV 808, Allemande",0.0,1.0,/toontjehoger/tempo/C1_P1_CH_70.mp3,C1_P1_CH,ch
+      Glenn Gould,"J. S. Bach, English Suite No. 3, BWV 808, Allemande",0.0,1.0,/toontjehoger/tempo/C1_P2_OR_87.mp3,C1_P2_OR,or
+      Glenn Gould,"J. S. Bach, WTC II, BWV 880, Fugue 11",0.0,1.0,/toontjehoger/tempo/C2_P2_OR_135.mp3,C2_P2_OR,or
+      Glenn Gould,"J. S. Bach, WTC II, BWV 880, Fugue 11",0.0,1.0,/toontjehoger/tempo/C2_P1_CH_102.mp3,C2_P1_CH,ch
+      Herbie Hancock,Dolphin Dance,0.0,1.0,/toontjehoger/tempo/J1_P1_CH_153.mp3,J1_P1_CH,ch
+      Herbie Hancock,Dolphin Dance,0.0,1.0,/toontjehoger/tempo/J1_P2_OR_120.mp3,J1_P2_OR,or
+      Iggy Pop,Now I Wanna Be Your Dog,0.0,1.0,/toontjehoger/tempo/R5_P2_OR_155.mp3,R5_P2_OR,or
+      Iggy Pop,Now I Wanna Be Your Dog,0.0,1.0,/toontjehoger/tempo/R5_P1_CH_123.mp3,R5_P1_CH,ch
+      Iron Butterfly,In a Gadda da Vida,0.0,1.0,/toontjehoger/tempo/R3_P2_OR_115.mp3,R3_P2_OR,or
+      Iron Butterfly,In a Gadda da Vida,0.0,1.0,/toontjehoger/tempo/R3_P1_CH_140.mp3,R3_P1_CH,ch
+      Jimi Hendrix,Killing Floor,0.0,1.0,/toontjehoger/tempo/R1_P1_CH_156.mp3,R1_P1_CH,ch
+      Jimi Hendrix,Killing Floor,0.0,1.0,/toontjehoger/tempo/R1_P2_OR_137.mp3,R1_P2_OR,or
+      Keith Jarrett,All the things you are,0.0,1.0,/toontjehoger/tempo/J5_P2_CH_108.mp3,J5_P2_CH,ch
+      Keith Jarrett,All the things you are,0.0,1.0,/toontjehoger/tempo/J5_P1_OR_140.mp3,J5_P1_OR,or
+      Miles Davis,Blue in Green,0.0,1.0,/toontjehoger/tempo/J2_P2_CH_67.mp3,J2_P2_CH,ch
+      Miles Davis,Blue in Green,0.0,1.0,/toontjehoger/tempo/J2_P1_OR_55.mp3,J2_P1_OR,or
+      Muse,Muscle Museum,0.0,1.0,/toontjehoger/tempo/R2_P2_CH_138.mp3,R2_P2_CH,ch
+      Muse,Muscle Museum,0.0,1.0,/toontjehoger/tempo/R2_P1_OR_161.mp3,R2_P1_OR,or
+      Muse,Muscle Museum,0.0,1.0,/toontjehoger/tempo/R2_P1_CH_161.mp3,R2_P1_CH,ch
+      Muse,Muscle Museum,0.0,1.0,/toontjehoger/tempo/R2_P2_OR_138.mp3,R2_P2_OR,or
+      Phil Woods,Au Privave,0.0,1.0,/toontjehoger/tempo/J4_P1_CH_90.mp3,J4_P1_CH,ch
+      Phil Woods,Au Privave,0.0,1.0,/toontjehoger/tempo/J4_P2_OR_113.mp3,J4_P2_OR,or
+      Rosalyn Tureck,"J. S. Bach, WTC II, BWV 880, Fugue 11",0.0,1.0,/toontjehoger/tempo/C2_P1_OR_102.mp3,C2_P1_OR,or
+      Rosalyn Tureck,"J. S. Bach, WTC II, BWV 880, Fugue 11",0.0,1.0,/toontjehoger/tempo/C2_P2_CH_135.mp3,C2_P2_CH,ch
+      Slayer,In a Gadda da Vida,0.0,1.0,/toontjehoger/tempo/R3_P1_OR_140.mp3,R3_P1_OR,or
+      Slayer,In a Gadda da Vida,0.0,1.0,/toontjehoger/tempo/R3_P2_CH_115.mp3,R3_P2_CH,ch
+      Stanley Jordon,Stairway to Heaven,0.0,1.0,/toontjehoger/tempo/R4_P2_CH_86.mp3,R4_P2_CH,ch
+      Stanley Jordon,Stairway to Heaven,0.0,1.0,/toontjehoger/tempo/R4_P1_OR_66.mp3,R4_P1_OR,or
+      Sviatoslav Richter,"J. S. Bach, English Suite No. 3, BWV 808, Allemande",0.0,1.0,/toontjehoger/tempo/C1_P1_OR_70.mp3,C1_P1_OR,or
+      Sviatoslav Richter,"J. S. Bach, English Suite No. 3, BWV 808, Allemande",0.0,1.0,/toontjehoger/tempo/C1_P2_CH_87.mp3,C1_P2_CH,ch
+      The Jimi Hendrix Experience,Killing Floor,0.0,1.0,/toontjehoger/tempo/R1_P1_OR_156.mp3,R1_P1_OR,or
+      The Jimi Hendrix Experience,Killing Floor,0.0,1.0,/toontjehoger/tempo/R1_P2_CH_137.mp3,R1_P2_CH,ch
+      The Stooges,Now I Wanna Be Your Dog,0.0,1.0,/toontjehoger/tempo/R5_P1_OR_123.mp3,R5_P1_OR,or
+      The Stooges,Now I Wanna Be Your Dog,0.0,1.0,/toontjehoger/tempo/R5_P2_CH_155.mp3,R5_P2_CH,ch
+      Vladimir Ashkenazy,"F. Chopin, Grande Valse Brillante, op. 18",0.0,1.0,/toontjehoger/tempo/C4_P1_OR_88.mp3,C4_P1_OR,or
+      Vladimir Ashkenazy,"F. Chopin, Grande Valse Brillante, op. 18",0.0,1.0,/toontjehoger/tempo/C4_P2_CH_70.mp3,C4_P2_CH,ch
+      Vladimir Ashkenazy,"L. v. Beethoven, Piano Sonata No. 14, Op. 17, no. 2. Allegretto",0.0,1.0,/toontjehoger/tempo/C3_P2_CH_56.mp3,C3_P2_CH,ch
+      Vladimir Ashkenazy,"L. v. Beethoven, Piano Sonata No. 14, Op. 17, no. 2. Allegretto",0.0,1.0,/toontjehoger/tempo/C3_P1_OR_75.mp3,C3_P1_OR,or
+      Vladimir Horowitz,"R. Schumann, Kinderszenen, Träumerei",0.0,1.0,/toontjehoger/tempo/C5_P2_OR_87.mp3,C5_P2_OR,or
+      Vladimir Horowitz,"R. Schumann, Kinderszenen, Träumerei",0.0,1.0,/toontjehoger/tempo/C5_P1_CH_70.mp3,C5_P1_CH,ch
+      Wes Montgomery,Au Privave,0.0,1.0,/toontjehoger/tempo/J4_P1_OR_90.mp3,J4_P1_OR,or
+      Wes Montgomery,Au Privave,0.0,1.0,/toontjehoger/tempo/J4_P2_CH_113.mp3,J4_P2_CH,ch
+- model: section.playlist
+  pk: 16
+  fields:
+    name: Toontje Hoger 6 - Relative
+    csv: |
+      AML,Fragment A,0.0,1.0,/toontjehoger/relative/relative_a.mp3,a,0
+      AML,Fragment B,0.0,1.0,/toontjehoger/relative/relative_b.mp3,b,0
+      AML,Fragment C,0.0,1.0,/toontjehoger/relative/relative_c.mp3,c,0

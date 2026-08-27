@@ -10,11 +10,12 @@ n_results = 10
 
 
 class SessionUtilsTest(TestCase):
+    fixtures = ["testing"]
 
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
-        cls.block = Block.objects.create(rules='QUESTIONNAIRE', identifier='test')
+        cls.block = Block.objects.get(identifier='test-block')
         cls.session = Session.objects.create(
             block=cls.block,
             participant=cls.participant,

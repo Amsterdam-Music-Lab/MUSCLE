@@ -15,13 +15,7 @@ from session.models import Session
 
 
 class SerializerTest(TestCase):
-    fixtures = [
-        "playlist",
-        "experiment",
-        "choice_lists",
-        "demographics",
-        "goldsmiths_msi",
-    ]
+    fixtures = ["choice_lists", "demographics", "goldsmiths_msi", "rhythm_tests"]
 
     @classmethod
     def setUpTestData(cls):

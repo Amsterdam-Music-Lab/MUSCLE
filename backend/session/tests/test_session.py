@@ -1,5 +1,3 @@
-import json
-
 from django.test import TestCase
 from django.utils import timezone
 
@@ -13,20 +11,17 @@ from session.models import Session
 class SessionTest(TestCase):
     fixtures = [
         "choice_lists",
-        "demographics",
-        "goldsmiths_msi",
-        "musicgens",
-        "stomp",
-        "tipi",
         "vanderbilt",
+        "musicgens",
+        "demographics",
+        "testing",
+        "thats_my_song",
     ]
 
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
-        cls.block = Block.objects.create(
-            rules='RHYTHM_BATTERY_INTRO', identifier='test'
-        )
+        cls.block = Block.objects.get(identifier='test-block')
         cls.playlist = Playlist.objects.create(
             name='Test playlist'
         )
@@ -57,9 +52,9 @@ class SessionTest(TestCase):
             finished_at=timezone.now()
         )
         rank = finished_session.percentile_rank({'finished_at__isnull': False})
-        assert rank == 75.0
+        self.assertEqual(rank, 75.0)
         rank = finished_session.percentile_rank({})
-        assert rank == 62.5
+        self.assertEqual(rank, 62.5)
 
     def test_last_result(self):
         result = self.session.last_result()
@@ -93,9 +88,9 @@ class SessionTest(TestCase):
             score=0,
         )
         last_section = self.session.last_section()
-        assert last_section
+        self.assertIsNotNone(last_section)
         last_song = self.session.last_song()
-        assert last_song == 'Beavis - Butthead'
+        self.assertEqual(last_song, 'Beavis - Butthead')
 
     def test_last_score(self):
         for i in range(10):
@@ -117,7 +112,7 @@ class SessionTest(TestCase):
             ),
             1,
         )
-        new_block = Block.objects.create(rules='HOOKED', identifier='hooked_test')
+        new_block = Block.objects.get(identifier='thats_my_song')
         new_playlist = Playlist.objects.create(name='another_test')
         new_session = Session.objects.create(block=new_block, playlist=new_playlist, participant=self.participant)
         self.assertEqual(
