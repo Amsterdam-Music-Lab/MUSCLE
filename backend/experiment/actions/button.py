@@ -19,7 +19,7 @@ class Button(BaseAction):
 
     """
 
-    def __init__(self, label: str, color: str = "colorPrimary", link: str = ''):
+    def __init__(self, label: str, color: str = "colorPrimary", link: str = None):
         self.label = label
         self.color = self.validate_color(color)
         self.link = link

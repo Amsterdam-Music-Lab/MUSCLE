@@ -14,7 +14,7 @@ jobs:
     name: Test Backend
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Run Backend Tests
         run: sudo docker compose --env-file .env-github-actions run server bash -c "uv run coverage run manage.py test"
       - name: Generate Backend Coverage Report (Inline)
@@ -57,7 +57,7 @@ jobs:
     name: Lint Backend
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Lint Backend
         continue-on-error: false
         run: sudo docker compose --env-file .env-github-actions run server bash -c "uv run ruff check"

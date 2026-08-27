@@ -14,7 +14,6 @@ from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
-from experiment.actions.utils import get_experiment_url
 from experiment.utils import format_label, non_breaking_spaces
 from result.utils import prepare_result
 from section.models import Playlist, Song
@@ -234,7 +233,6 @@ class ToontjeHoger5Tempo(BaseRules):
             heading="Timing en tempo",
             button=Button(
                 "Terug naar ToontjeHoger",
-                link=get_experiment_url(session),
             ),
         )
 

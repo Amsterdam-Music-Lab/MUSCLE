@@ -57,7 +57,11 @@ class Likert(BaseRules):
         elif round_number == total_rounds:
             session.finish()
             return [
-                Final(session, title=_("End of experiment"), final_text=_("Thank you for participating!"))
+                Final(
+                    session,
+                    title=_("End of this part"),
+                    final_text=_("Thank you for your responses!"),
+                )
             ]
         else:
             return [self.get_trial(session, total_rounds)]
@@ -99,4 +103,5 @@ class Likert(BaseRules):
             title=_("Round %(round_number)d of %(total_rounds)d")
             % {'round_number': len(played_sections), 'total_rounds': total_rounds},
             response_time=section.duration,
+            listen_first=True,
         )

@@ -30,4 +30,4 @@ class Questionnaire(BaseRules):
             return actions
 
         session.finish()
-        return Redirect(f"../{get_experiment_url(session)}")
+        return Redirect(get_experiment_url(session))

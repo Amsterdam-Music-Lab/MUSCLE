@@ -6,6 +6,18 @@ The actions that can be used by experiments are formalized in `backend/experimen
 An Explainer presents some information to participants of an experiment. They can include a number of Steps, which may or may not be numbered.
 [Preview](https://amsterdam-music-lab.github.io/MUSCLE/storybook/?path=/story/explainer--default)
 
+Explainers can also be added through the admin interface.
+![Add an explainer](assets/images/addExplainer.png)
+
+Enter the folloiwng:
+- identifier
+- an instruction to your users
+- optionally a timer after which the screen will advance to the next action
+- whether steps should be numbered
+
+You can add steps and order them by the index field (lower comes first).
+![Configuring a Block](assets/images/ExplainerForm.png)
+
 ## 2. Playlist
 If there are multiple playlist tied to an experiment, the Playlist widget lets participants select one of them for use in the experiment.
 

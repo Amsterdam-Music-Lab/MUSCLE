@@ -24,6 +24,7 @@ The top fields in the experiment form allow you to enter various texts in differ
 - Social media message: message with which participants can post their results to social media. The placeholders `{points}` and `{experiment_name}` will be filled out automatically when a participant clicks the button. Note that not all social media platforms support setting the message from a share button; Facebook for instance doesn't allow this. See `Social Media Config` below for more sharing options.
 - Disclaimer: a notice in the footer about who is behind the experiment (only shown to participants in *dashboard mode* if a `ThemeConfig` is linked)
 - Privacy: privacy notice in the footer about treatment of the data (only shown to participants in *dashboard mode* if a `ThemeConfig` is linked)
+- Replayable: set a checkmark here if a participant should get the option to replay the experiment after finishing all blocks in the experiment.
 
 You can switch between different languages by clicking on the tabs above the text fields, or switch all tabs simultaneously by selecting a language from the drop down menu at the top of the form. The available languages can be configured through the `LANGUAGES` setting in Django.
 
@@ -60,7 +61,8 @@ Other fields:
 - Rounds (optional): how many rounds should be presented to the participant (*used in some, but not all rulesets!*)
 - Bonus points (optional): bonus points to be awarded to the participant under given conditions (*used by very few rulesets*)
 - Playlists (optional): select one or more playlists to be associated with the block (*note that some rulesets require a very specific format for the playlist, this will be checked when you save the experiment, and may generate warnings*)
-- ThemeConfig (optional): You can change background, fonts and logos used for the block here, which will override the ThemeConfig of the experiment while this block is being played.
+- Rules config (optional): some rules files specify to read information from this field, to customize, e.g., which Explainers or Questions will be used at specific stages of the block.
+- ThemeConfig (optional): you can change background, fonts and logos used for the block here, which will override the ThemeConfig of the experiment while this block is being played.
 
 ![Configuring a Block](assets/images/ExperimentBlock.png)
 

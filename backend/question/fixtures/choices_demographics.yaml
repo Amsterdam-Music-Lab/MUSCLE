@@ -3,210 +3,304 @@
   fields:
     identifier: isced-1
     text: Primary school
+    text_zh_hans: 小学
     index: 0
     choicelist: ATTAINED_EDUCATION
 - model: question.choice
   fields:
     identifier: isced-2
     text: Vocational qualification at about 16 years of age (GCSE)
+    text_nl: VMBO (of gelijkwaardig)
+    text_zh_hans: 初中/中专
+    text_de: Hauptschulabschluss
     index: 1
     choicelist: ATTAINED_EDUCATION
 - model: question.choice
   fields:
     identifier: isced-3
     text: Secondary diploma (A-levels/high school)
+    text_nl: HAVO/VWO/Gymnasium (of gelijkwaardig)
+    text_zh_hans: 高中
+    text_de: Fachhochschulreife / Abitur
     index: 2
     choicelist: ATTAINED_EDUCATION
 - model: question.choice
   fields:
     identifier: isced-4
     text: Post-16 vocational course
+    text_nl: MBO (of gelijkwaardig)
+    text_zh_hans: 职高
+    text_de: Abschluss einer beruflich-betrieblichen Berufsausbildung (Lehre)
     index: 3
     choicelist: ATTAINED_EDUCATION
 - model: question.choice
   fields:
     identifier: isced-5
     text: Associate's degree or 2-year professional diploma
+    text_nl: Associate degree opleiding (of gelijkwaardig)
+    text_zh_hans: 大专或成人本科
+    text_de: Abschluss an einer Meister-, Technikerschule, Berufs- oder Fachakademie
     index: 4
     choicelist: ATTAINED_EDUCATION
 - model: question.choice
   fields:
     identifier: isced-6
     text: Bachelor or equivalent
+    text_nl: HBO of WO bacheloropleiding (of gelijkwaardig)
+    text_zh_hans: 本科或同等学历(大专)
+    text_de: Bachelor an (Fach-)Hochschule
     index: 5
     choicelist: ATTAINED_EDUCATION
 - model: question.choice
   fields:
     identifier: isced-7
     text: Master or equivalent
+    text_nl: HBO of WO masteropleiding (of gelijkwaardig)
+    text_zh_hans: 硕士研究生或同等学历
+    text_de: Fachhochschulabschluss (z. B. Diplom, Master)
     index: 6
     choicelist: ATTAINED_EDUCATION
 - model: question.choice
   fields:
     identifier: isced-8
     text: Doctoral degree or equivalent
+    text_nl: Doctoraal/PhD (of gelijkwaardig)
+    text_zh_hans: 博士研究生或同等学历
+    text_de: Promotion
     index: 7
     choicelist: ATTAINED_EDUCATION
 - model: question.choice
   fields:
     identifier: none
     text: Have not (yet) completed any school qualification
+    text_nl: Geen diploma
+    text_zh_hans: 尚未取得任何学历
+    text_de: Kein Abschluss
     index: 8
     choicelist: ATTAINED_EDUCATION
 - model: question.choice
   fields:
     identifier: isced-1
     text: Primary school
+    text_zh_hans: 小学
     index: 0
     choicelist: EXPECTED_EDUCATION
 - model: question.choice
   fields:
     identifier: isced-2
     text: Vocational qualification at about 16 years of age (GCSE)
+    text_nl: VMBO (of gelijkwaardig)
+    text_zh_hans: 初中/中专
+    text_de: Hauptschulabschluss
     index: 1
     choicelist: EXPECTED_EDUCATION
 - model: question.choice
   fields:
     identifier: isced-3
     text: Secondary diploma (A-levels/high school)
+    text_nl: HAVO/VWO/Gymnasium (of gelijkwaardig)
+    text_zh_hans: 高中
+    text_de: Fachhochschulreife / Abitur
     index: 2
     choicelist: EXPECTED_EDUCATION
 - model: question.choice
   fields:
     identifier: isced-4
     text: Post-16 vocational course
+    text_nl: MBO (of gelijkwaardig)
+    text_zh_hans: 职高
+    text_de: Abschluss einer beruflich-betrieblichen Berufsausbildung (Lehre)
     index: 3
     choicelist: EXPECTED_EDUCATION
 - model: question.choice
   fields:
     identifier: isced-5
     text: Associate's degree or 2-year professional diploma
+    text_nl: Associate degree opleiding (of gelijkwaardig)
+    text_zh_hans: 大专或成人本科
+    text_de: Abschluss an einer Meister-, Technikerschule, Berufs- oder Fachakademie
     index: 4
     choicelist: EXPECTED_EDUCATION
 - model: question.choice
   fields:
     identifier: isced-6
     text: Bachelor or equivalent
+    text_nl: HBO of WO bacheloropleiding (of gelijkwaardig)
+    text_zh_hans: 本科或同等学历(大专)
+    text_de: Bachelor an (Fach-)Hochschule
     index: 5
     choicelist: EXPECTED_EDUCATION
 - model: question.choice
   fields:
     identifier: isced-7
     text: Master or equivalent
+    text_nl: HBO of WO masteropleiding (of gelijkwaardig)
+    text_zh_hans: 硕士研究生或同等学历
+    text_de: Fachhochschulabschluss (z. B. Diplom, Master)
     index: 6
     choicelist: EXPECTED_EDUCATION
 - model: question.choice
   fields:
     identifier: isced-8
     text: Doctoral degree or equivalent
+    text_nl: Doctoraal/PhD (of gelijkwaardig)
+    text_zh_hans: 博士研究生或同等学历
+    text_de: Promotion
     index: 7
     choicelist: EXPECTED_EDUCATION
 - model: question.choice
   fields:
     identifier: none
     text: Not applicable
+    text_nl: Niet van toepassing
+    text_zh_hans: 不适用
+    text_de: Nicht zutreffend
     index: 8
     choicelist: EXPECTED_EDUCATION
 - model: question.choice
   fields:
     identifier: M
     text: Male
+    text_nl: Man
+    text_zh_hans: 男性
+    text_de: Männlich
     index: 0
     choicelist: GENDER_REDUCED
 - model: question.choice
   fields:
     identifier: F
     text: Female
+    text_nl: Vrouw
+    text_zh_hans: 女性
+    text_de: Weiblich
     index: 1
     choicelist: GENDER_REDUCED
 - model: question.choice
   fields:
     identifier: X
     text: Other
+    text_nl: Non-binair
+    text_de: Nichtbinär
     index: 2
     choicelist: GENDER_REDUCED
 - model: question.choice
   fields:
     identifier: U
     text: Undisclosed
+    text_nl: Zeg ik liever niet
+    text_zh_hans: 我选择不回答
+    text_de: Keine Angabe
     index: 3
     choicelist: GENDER_REDUCED
 - model: question.choice
   fields:
     identifier: male
     text: 'Man'
+    text_nl: Man
+    text_zh_hans: 男性
+    text_de: Männlich
     index: 0
     choicelist: GENDER_COMPLETE
 - model: question.choice
   fields:
     identifier: trans_male
     text: 'Transgender man'
+    text_nl: Transgender man
+    text_zh_hans: 跨性别男性
+    text_de: Transgeschlechtlicher Mann
     index: 1
     choicelist: GENDER_COMPLETE
 - model: question.choice
   fields:
     identifier: trans_female
     text: 'Transgender woman'
+    text_nl: Transgender vrouw
+    text_zh_hans: 跨性别女性
+    text_de: Transgeschlechtliche Frau
     index: 2
     choicelist: GENDER_COMPLETE
 - model: question.choice
   fields:
     identifier: female
     text: 'Woman'
+    text_nl: Vrouw
+    text_zh_hans: 女性
+    text_de: Weiblich
     index: 3
     choicelist: GENDER_COMPLETE
 - model: question.choice
   fields:
     identifier: non_conforming
     text: 'Non-conforming or questioning'
+    text_nl: Non-conform
+    text_zh_hans: 没有符合的或在质疑中
+    text_de: Nonkonform
     index: 4
     choicelist: GENDER_COMPLETE
 - model: question.choice
   fields:
     identifier: intersex
     text: 'Intersex or two-spirit'
+    text_nl: Intersekse of two-spirit
+    text_zh_hans: 双性
+    text_de: Intergeschlechtlich
     index: 5
     choicelist: GENDER_COMPLETE
 - model: question.choice
   fields:
     identifier: non_answer
-    text: 'Prefer not to answer'
+    text: Prefer not to answer
+    text_nl: Zeg ik liever niet
+    text_zh_hans: 我选择不回答
+    text_de: Keine Angabe
     index: 6
     choicelist: GENDER_COMPLETE
 - model: question.choice
   fields:
     identifier: silent
     text: 1945 or earlier
+    text_nl: 1945 of eerder
+    text_zh_hans: （早于）1945年
+    text_de: 1945 oder eher
     index: 0
     choicelist: GENERATION
 - model: question.choice
   fields:
     identifier: boomer
     text: 1946–1964
+    text_zh_hans: 1946-1964年之间
     index: 1
     choicelist: GENERATION
 - model: question.choice
   fields:
     identifier: gen_x
     text: 1965-1980
+    text_zh_hans: 1965-1980年之间
     index: 2
     choicelist: GENERATION
 - model: question.choice
   fields:
     identifier: millenial
     text: 1981–1996
+    text_zh_hans: 1981-1996年之间
     index: 3
     choicelist: GENERATION
 - model: question.choice
   fields:
     identifier: gen_z
     text: 1997 or later
+    text_nl: 1997 of later
+    text_zh_hans: （晚于）1997年
+    text_de: 1997 oder später
     index: 4
     choicelist: GENERATION
 - model: question.choice
   fields:
     identifier: isced-2
     text: Vocational qualification at about 16 years of age (GCSE)
+    text_nl: VMBO (of gelijkwaardig)
+    text_zh_hans: 初中/中专
+    text_de: Hauptschulabschluss
     index: 0
     choicelist: ISCED_EDUCATION_LEVELS_GOLDSMITHS
 - model: question.choice
@@ -219,6 +313,9 @@
   fields:
     identifier: isced-4
     text: Post-16 vocational course
+    text_nl: MBO (of gelijkwaardig)
+    text_zh_hans: 职高
+    text_de: Abschluss einer beruflich-betrieblichen Berufsausbildung (Lehre)
     index: 2
     choicelist: ISCED_EDUCATION_LEVELS_GOLDSMITHS
 - model: question.choice
@@ -231,48 +328,67 @@
   fields:
     identifier: isced-6
     text: Bachelor or equivalent
+    text_nl: HBO of WO bacheloropleiding (of gelijkwaardig)
+    text_zh_hans: 本科或同等学历(大专)
+    text_de: Bachelor an (Fach-)Hochschule
     index: 4
     choicelist: ISCED_EDUCATION_LEVELS_GOLDSMITHS
 - model: question.choice
   fields:
     identifier: isced-7
     text: Master or equivalent
+    text_nl: HBO of WO masteropleiding (of gelijkwaardig)
+    text_zh_hans: 硕士研究生或同等学历
+    text_de: Fachhochschulabschluss (z. B. Diplom, Master)
     index: 5
     choicelist: ISCED_EDUCATION_LEVELS_GOLDSMITHS
 - model: question.choice
   fields:
     identifier: isced-8
     text: Doctoral degree or equivalent
+    text_nl: Doctoraal/PhD (of gelijkwaardig)
+    text_zh_hans: 博士研究生或同等学历
+    text_de: Promotion
     index: 6
     choicelist: ISCED_EDUCATION_LEVELS_GOLDSMITHS
 - model: question.choice
   fields:
     identifier: fluent
     text: fluent
+    text_zh_hans: 流利
+    text_pt: fluente
     index: 0
     choicelist: LANG_EXPOSURE
 - model: question.choice
   fields:
     identifier: intm
     text: intermediate
+    text_zh_hans: 中等
+    text_pt: intermediário
     index: 1
     choicelist: LANG_EXPOSURE
 - model: question.choice
   fields:
     identifier: beginner
     text: beginner
+    text_zh_hans: 初学者
+    text_pt: iniciante
     index: 2
     choicelist: LANG_EXPOSURE
 - model: question.choice
   fields:
     identifier: some_exp
     text: some exposure
+    text_zh_hans: 有一点接触
+    text_pt: alguma exposição
     index: 3
     choicelist: LANG_EXPOSURE
 - model: question.choice
   fields:
     identifier: no_exp
     text: no exposure
+    text_zh_hans: 完全没接触过
+    text_pt: nenhuma exposição
     index: 4
     choicelist: LANG_EXPOSURE
 - model: question.choice
@@ -303,12 +419,14 @@
   fields:
     identifier: mellow
     text: Dance/Electronic/New Age
+    text_zh_hans: 舞曲/电子乐/新潮音乐
     index: 0
     choicelist: MUSIC_GENRE
 - model: question.choice
   fields:
     identifier: unpretentious
     text: Pop/Country/Religious
+    text_zh_hans: 流行音乐/民谣/乡村音乐
     index: 1
     choicelist: MUSIC_GENRE
 - model: question.choice
@@ -321,72 +439,102 @@
   fields:
     identifier: intense
     text: Rock/Punk/Metal
+    text_zh_hans: 摇滚乐/重金属/朋克
     index: 3
     choicelist: MUSIC_GENRE
 - model: question.choice
   fields:
     identifier: contemporary
     text: Hip-hop/R&B/Funk
+    text_zh_hans: 嘻哈饶舌/R&B/Funk（放克）
     index: 4
     choicelist: MUSIC_GENRE
 - model: question.choice
   fields:
     identifier: student
     text: Still at School
+    text_nl: Nog op school
+    text_zh_hans: 在校学生
+    text_de: Schüler:in
     index: 0
     choicelist: OCCUPATIONAL_STATUS
 - model: question.choice
   fields:
     identifier: higher education
     text: At University
+    text_nl: Studerend (mbo, hbo of universiteit)
+    text_zh_hans: 大学生
+    text_de: Student:in
     index: 1
     choicelist: OCCUPATIONAL_STATUS
 - model: question.choice
   fields:
     identifier: full-time
     text: In Full-time employment
+    text_nl: Voltijds in loondienst
+    text_zh_hans: 全职工作中
+    text_de: In Vollzeitbeschäftigung
     index: 2
     choicelist: OCCUPATIONAL_STATUS
 - model: question.choice
   fields:
     identifier: part-time
     text: In Part-time employment
+    text_nl: Parttime in loondienst
+    text_zh_hans: 兼职工作中
+    text_de: In Teilzeitbeschäftigung
     index: 3
     choicelist: OCCUPATIONAL_STATUS
 - model: question.choice
   fields:
     identifier: flexible work
     text: Self-employed
+    text_nl: Eigen baas/zzp'er
+    text_zh_hans: 自营职业者
+    text_de: Selbstständig
     index: 4
     choicelist: OCCUPATIONAL_STATUS
 - model: question.choice
   fields:
     identifier: family
     text: Homemaker/full time parent
+    text_nl: Huisman/huisvrouw/full time ouder
+    text_zh_hans: 全职父母
+    text_de: Hausmann/Hausfrau/Vollzeit Elternteil
     index: 5
     choicelist: OCCUPATIONAL_STATUS
 - model: question.choice
   fields:
     identifier: unemployment
     text: Unemployed
+    text_nl: Werkloos
+    text_zh_hans: 待业中
+    text_de: Arbeitslos
     index: 6
     choicelist: OCCUPATIONAL_STATUS
 - model: question.choice
   fields:
     identifier: retirement
     text: Retired
+    text_nl: Gepensioneerd
+    text_zh_hans: 已退休
+    text_de: Rentner:in
     index: 7
     choicelist: OCCUPATIONAL_STATUS
 - model: question.choice
   fields:
     identifier: isced-1
     text: Primary school
+    text_zh_hans: 小学
     index: 0
     choicelist: ZH_EDUCATION
 - model: question.choice
   fields:
     identifier: isced-2
     text: Vocational qualification at about 16 years of age (GCSE)
+    text_nl: VMBO (of gelijkwaardig)
+    text_zh_hans: 初中/中专
+    text_de: Hauptschulabschluss
     index: 1
     choicelist: ZH_EDUCATION
 - model: question.choice
@@ -399,98 +547,47 @@
   fields:
     identifier: isced-4
     text: Post-16 vocational course
+    text_nl: MBO (of gelijkwaardig)
+    text_zh_hans: 职高
+    text_de: Abschluss einer beruflich-betrieblichen Berufsausbildung (Lehre)
     index: 3
     choicelist: ZH_EDUCATION
 - model: question.choice
   fields:
     identifier: isced-6
     text: Bachelor or equivalent
+    text_nl: HBO of WO bacheloropleiding (of gelijkwaardig)
+    text_zh_hans: 本科或同等学历(大专)
+    text_de: Bachelor an (Fach-)Hochschule
     index: 4
     choicelist: ZH_EDUCATION
 - model: question.choice
   fields:
     identifier: isced-7
     text: Master or equivalent
+    text_nl: HBO of WO masteropleiding (of gelijkwaardig)
+    text_zh_hans: 硕士研究生或同等学历
+    text_de: Fachhochschulabschluss (z. B. Diplom, Master)
     index: 5
     choicelist: ZH_EDUCATION
 - model: question.choice
   fields:
     identifier: isced-8
     text: Doctoral degree or equivalent
+    text_nl: Doctoraal/PhD (of gelijkwaardig)
+    text_zh_hans: 博士研究生或同等学历
+    text_de: Promotion
     index: 6
     choicelist: ZH_EDUCATION
 - model: question.choice
   fields:
     identifier: none
     text: Have not (yet) completed any school qualification
+    text_nl: Geen diploma
+    text_zh_hans: 尚未取得任何学历
+    text_de: Kein Abschluss
     index: 7
     choicelist: ZH_EDUCATION
-- model: question.choice
-  fields:
-    identifier: male
-    text: 男
-    index: 0
-    choicelist: ZH_GENDER
-- model: question.choice
-  fields:
-    identifier: female
-    text: 女
-    index: 1
-    choicelist: ZH_GENDER
-- model: question.choice
-  fields:
-    identifier: other
-    text: 其他
-    index: 2
-    choicelist: ZH_GENDER
-- model: question.choice
-  fields:
-    identifier: no_answer
-    text: 不想回答
-    index: 3
-    choicelist: ZH_GENDER
-- model: question.choice
-  fields:
-    identifier: unpretentious
-    text: Pop/Country/Religious
-    index: 0
-    choicelist: ZH_GENRE
-- model: question.choice
-  fields:
-    identifier: Chinese artistic
-    text: Folk/Mountain songs
-    index: 1
-    choicelist: ZH_GENRE
-- model: question.choice
-  fields:
-    identifier: sophisticated
-    text: Western classical music/Jazz/Opera/Musical
-    index: 2
-    choicelist: ZH_GENRE
-- model: question.choice
-  fields:
-    identifier: classical
-    text: Chinese opera
-    index: 3
-    choicelist: ZH_GENRE
-- model: question.choice
-  fields:
-    identifier: intense
-    text: Rock/Punk/Metal
-    index: 4
-    choicelist: ZH_GENRE
-- model: question.choice
-  fields:
-    identifier: mellow
-    text: Dance/Electronic/New Age
-    index: 5
-    choicelist: ZH_GENRE
-- model: question.choice
-  fields:
-    identifier: contemporary
-    text: Hip-hop/R&B/Funk
-    index: 6
-    choicelist: ZH_GENRE
 - model: question.choice
   fields:
     identifier: HD

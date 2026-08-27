@@ -21,8 +21,8 @@ class HookedTeleTunes(Hooked):
                 "randomize": True,
             },  # 1. Demographic questions (7 questions)
             {
-                "name": "MUSICGENS_17_W_VARIANTS",
-                "question_identifiers": get_question_bank('MUSICGENS_17_W_VARIANTS'),
+                "name": "MUSICGENS",
+                "question_identifiers": get_question_bank('MUSICGENS'),
                 "randomize": True,
             },  # 2. Musicgens questions with variants
         ]

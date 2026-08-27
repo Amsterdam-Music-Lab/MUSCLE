@@ -33,6 +33,13 @@ class TestActions(TestCase):
         self.experiment.save()
         self.assertEqual(get_experiment_url(self.session), "/utils_test")
 
+    def test_get_experiment_url_independent_of_other_participant(self):
+        new_session = Session.objects.create(
+            participant=Participant.objects.create(), block=self.block
+        )
+        new_session.finish()
+        self.assertEqual(get_experiment_url(self.session), "/utils_test")
+
     def test_randomize_playhead(self):
         min_jitter = 5
         max_jitter = 10

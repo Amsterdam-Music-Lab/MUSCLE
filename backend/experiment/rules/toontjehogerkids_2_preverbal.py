@@ -10,6 +10,7 @@ from experiment.actions.info import Info
 from experiment.actions.score import Score
 from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_2_preverbal import ToontjeHoger2Preverbal
+from .toontjehogerkids_1_mozart import get_info_button
 
 logger = logging.getLogger(__name__)
 
@@ -88,7 +89,7 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),
-            button=Button("Wat hebben we getest?"),
+            button=Button("Wat hebben we getest?", link=""),
         )
 
         # Info page
@@ -104,9 +105,7 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
             },
         )
         info = Info(
-            body=body,
-            heading="Het eerste luisteren",
-            button=Button("Terug naar ToontjeHogerKids", link="/collection/thkids"),
+            body=body, heading="Het eerste luisteren", button=get_info_button(session)
         )
 
         return [*score, final, info]

@@ -1,12 +1,14 @@
-import { useState, useRef, useCallback } from "react";
+import { lazy, Suspense, useState, useRef, useCallback } from "react";
 import classNames from "classnames";
 
-import { getAudioLatency, getCurrentTime, getTimeSince } from "@/util/time";
-import FeedbackForm from "../FeedbackForm/FeedbackForm";
-import HTML from "../HTML/HTML";
-import Playback from "../Playback/Playback";
-import Button from "../Button/Button";
+import Button from "@/components/Button/Button";
+import Loading from "@/components/Loading/Loading";
+const FeedbackForm = lazy(() => import("@/components/FeedbackForm/FeedbackForm"));
+const HTML = lazy(() => import("@/components/HTML/HTML"));
+const Playback = lazy(() => import("@/components/Playback/Playback"));
 import { SharedActionProps, TrialAction } from "@/types/Action";
+import { BreakRoundOn } from "@/types/Trial";
+import { getAudioLatency, getCurrentTime, getTimeSince } from "@/util/time";
 
 /**
  * Trial is a block view to present information to the user and/or collect user feedback
@@ -134,11 +136,7 @@ const Trial = (props: TrialAction & SharedActionProps) => {
 
     return (
         <div role="presentation" className={classNames("aha__trial")}>
-            {html && (
-                <HTML
-                    body={html.body}
-                />
-            )}
+            <Suspense fallback={<Loading/>}>
             {playback && (
                 <Playback
                     {...playback}
@@ -150,6 +148,11 @@ const Trial = (props: TrialAction & SharedActionProps) => {
                     submitResult={makeResult}
                     startedPlaying={startTimer}
                     finishedPlaying={finishedPlaying}
+                />
+            )}
+            {html && (
+                <HTML
+                    body={html.body}
                 />
             )}
             {preloadReady && feedbackForm && (
@@ -171,6 +174,7 @@ const Trial = (props: TrialAction & SharedActionProps) => {
                     />
                 </div>
             )}
+            </Suspense>
         </div>
     );
 };

@@ -1,6 +1,6 @@
-from csv import DictWriter
 from io import BytesIO, StringIO
 from os.path import join
+from typing import Union
 from zipfile import ZipFile
 
 from django.db.models.query import QuerySet
@@ -8,6 +8,8 @@ from django.db.models import F
 from django.core import serializers
 from django.http import HttpResponse
 from django.utils import timezone
+import numpy as np
+import pandas as pd
 import roman
 
 
@@ -99,7 +101,7 @@ def get_profiles_of_participants(
     return Result.objects.filter(participant__in=participants)
 
 
-def block_export_csv_results(block_identifier: str) -> StringIO:
+def block_generate_results_data_frame(block_identifier: str) -> pd.DataFrame:
     """export results and profiles in two csvs
     This export does not provide all data, but a selection of the variables
     expected to be of most interest for basic analyses
@@ -109,25 +111,7 @@ def block_export_csv_results(block_identifier: str) -> StringIO:
     all_results = get_results_of_sessions(all_sessions)
     result_output_keys = [
         "session__id",
-        "participant__id",
-        "question_identifier",
-        "created_at",
-        "expected_response",
-        "given_response",
-        "score",
-        "section__song__name",
-        "section__song__artist",
-        "section__tag",
-        "section__group",
-    ]
-    results_output = list(
-        all_results.annotate(participant__id=F("session__participant")).values(
-            *result_output_keys
-        )
-    )
-    all_participants = get_participants_of_sessions(all_sessions)
-    all_profiles = get_profiles_of_participants(all_participants)
-    profile_output_keys = [
+        "session__final_score",
         "participant__id",
         "participant__country_code",
         "question_identifier",
@@ -135,15 +119,186 @@ def block_export_csv_results(block_identifier: str) -> StringIO:
         "expected_response",
         "given_response",
         "score",
+        "section__id",
+        "section__song__name",
+        "section__song__artist",
+        "section__tag",
+        "section__group",
     ]
-    profiles_output = list(all_profiles.values(*profile_output_keys))
-    combined_output = [*results_output, *profiles_output]
-    fieldnames = list(set([*profile_output_keys, *result_output_keys]))
+    results_output = pd.DataFrame(
+        list(
+            all_results.annotate(participant__id=F("session__participant")).values(
+                *result_output_keys
+            )
+        )
+    )
+    all_participants = get_participants_of_sessions(all_sessions)
+    question_identifiers = []
+    question_lists = this_block.questionlist_set.all()
+    for ql in question_lists:
+        question_identifiers.extend(ql.questions.values_list("identifier", flat=True))
+    relevant_profiles = get_profiles_of_participants(all_participants).filter(
+        question_identifier__in=question_identifiers
+    )
+    profile_output_keys = [
+        "participant__id",
+        "participant__country_code",
+        "question_identifier",
+        "given_response",
+        "score",
+    ]
+    profiles_output = pd.DataFrame(list(relevant_profiles.values(*profile_output_keys)))
+    if profiles_output.empty:
+        return results_output
+    wide_profiles = profiles_output.pivot(
+        index="participant__id",
+        columns="question_identifier",
+        values=["given_response", "score"],
+    )
+    wide_profiles.columns = [
+        ".".join(map(str, reversed(col)))
+        for col in wide_profiles.columns.to_flat_index()
+    ]
+    wide_profiles = wide_profiles.reset_index()
+    if results_output.empty:
+        return wide_profiles
+    return pd.merge(results_output, wide_profiles, how="left", on="participant__id")
+
+
+def block_export_csv_results(block_identifier: str) -> StringIO:
     csv_buffer = StringIO()
-    writer = DictWriter(csv_buffer, fieldnames=fieldnames, lineterminator="\n")
-    writer.writeheader()
-    writer.writerows(combined_output)
+    results_df = block_generate_results_data_frame(block_identifier)
+    results_df.to_csv(csv_buffer)
     return csv_buffer.getvalue()
+
+
+def get_block_csv_export_as_response(block_identifier: str) -> HttpResponse:
+    '''Create a download response for the admin experimenter dashboard'''
+    csv_string = block_export_csv_results(block_identifier)
+    response = HttpResponse(csv_string)
+    response["Content-Type"] = "text/csv"
+    response["Content-Disposition"] = (
+        'attachment; filename="'
+        + block_identifier
+        + "-"
+        + timezone.now().isoformat()
+        + '.csv"'
+    )
+    return response
+
+
+def experiment_export_csv_results(experiment_identifier: str) -> StringIO:
+    experiment = Experiment.objects.get(identifier=experiment_identifier)
+    block_identifiers = experiment.associated_blocks().values_list(
+        "identifier", flat=True
+    )
+    data_frames = [
+        block_generate_results_data_frame(block_id) for block_id in block_identifiers
+    ]
+    combination = pd.concat(data_frames)
+    if any(combination.section__id):
+        # if we have section_ids defined, aggregate data by section_id
+        keys_of_interest = [
+            "score",
+            "given_response",
+            "section__id",
+            "participant__id",
+            "question_identifier",
+        ]
+        section_responses = (
+            combination[keys_of_interest]
+            .dropna(
+                subset=["question_identifier", "given_response", "section__id"],
+                how="all",
+            )
+            .groupby(
+                ["section__id", "question_identifier", "participant__id"],
+                dropna=False,
+            )
+            .agg("first")
+            .unstack("question_identifier")
+            .reset_index()
+        )
+        section_responses.columns = [
+            ".".join(map(str, reversed(col))).strip(".")
+            for col in section_responses.columns.to_flat_index()
+        ]
+        section_metadata = (
+            combination[
+                [
+                    "section__id",
+                    "section__song__artist",
+                    "section__song__name",
+                    "section__tag",
+                    "section__group",
+                ]
+            ]
+            .dropna(subset=["section__id"])
+            .drop_duplicates(subset=["section__id"])
+        )
+        section_data = section_responses.merge(
+            section_metadata, on="section__id", how="left"
+        )
+        profile_columns = [
+            col for col in combination.columns if ".given_response" in col
+        ]
+        if profile_columns:
+            profile_data = (
+                combination.dropna(subset=profile_columns, how="all")
+                .drop(
+                    [
+                        "question_identifier",
+                        "section__id",
+                        "session__id",
+                        "section__tag",
+                        "section__group",
+                        "section__song__name",
+                        "section__song__artist",
+                        "session__final_score",
+                        "created_at",
+                        "given_response",
+                        "expected_response",
+                        "score",
+                    ],
+                    axis=1,
+                )
+                .groupby("participant__id")
+                .agg("first")
+            )
+            output = section_data.merge(
+                profile_data,
+                on="participant__id",
+                how="left",
+            )
+        else:
+            output = section_data
+    else:
+        output = combination
+    csv_buffer = StringIO()
+    output.drop_duplicates().to_csv(csv_buffer)
+    return csv_buffer.getvalue()
+
+
+def block_export_csv_results(block_identifier: str) -> StringIO:
+    csv_buffer = StringIO()
+    results_df = block_generate_results_data_frame(block_identifier)
+    results_df.to_csv(csv_buffer)
+    return csv_buffer.getvalue()
+
+
+def get_experiment_csv_export_as_response(experiment_identifier: str) -> HttpResponse:
+    '''Create a download response for the admin experimenter dashboard'''
+    csv_string = experiment_export_csv_results(experiment_identifier)
+    response = HttpResponse(csv_string)
+    response["Content-Type"] = "text/csv"
+    response["Content-Disposition"] = (
+        'attachment; filename="'
+        + experiment_identifier
+        + "-"
+        + timezone.now().isoformat()
+        + '.csv"'
+    )
+    return response
 
 
 def get_block_csv_export_as_response(block_identifier: str) -> HttpResponse:

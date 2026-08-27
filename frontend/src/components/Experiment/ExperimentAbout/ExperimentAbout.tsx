@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { css } from '@emotion/react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 import HTML from '../../HTML/HTML';
 import IExperiment from "@/types/Experiment";
@@ -45,7 +47,7 @@ export const ExperimentAbout: React.FC<IExperiment> = ({ aboutContent, backButto
     return (
         <div className="container">
             <Link className="btn btn-lg mt-3" css={styleButtonOutline(theme?.colorPrimary || '')} to={`/${identifier}`}>
-                <i className="fas fa-arrow-left mr-2"></i>
+                <FontAwesomeIcon icon={faArrowLeft} alt="BackButtonIcon"/>
                 {backButtonText}
             </Link>
             <div className="col-12 mt-3" role="contentinfo" style={{color: theme?.colorText}} css={styleAboutText(theme?.colorPrimary || '')}>

@@ -1,17 +1,17 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { renderLabel } from "./label";
 
 import { describe, it, expect } from 'vitest';
 
 describe('renderLabel', () => {
 
-    it('renders FontAwesome label correctly', () => {
-        const { container } = render(renderLabel('fa-user', 'fa-lg'));
-        expect(container.querySelector('span.fa-solid.fa-user.fa-lg')).not.toBeNull();
+    it('renders html label correctly', () => {
+        render(renderLabel('<div>Some content</div>'));
+        expect(screen.getByText("Some content")).not.toBeNull();
     });
 
-    it('returns non-FontAwesome label as is', () => {
-        const label = 'NonFontAwesomeLabel';
+    it('returns string label as is', () => {
+        const label = 'StringLabel';
         const { getByText } = render(renderLabel(label));
 
         const labelElement = getByText(label)

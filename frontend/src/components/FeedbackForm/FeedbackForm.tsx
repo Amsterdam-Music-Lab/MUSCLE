@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import Question from "../Question/Question";
-import Button from "../Button/Button";
+import Question from "@/components/Question/Question";
+import Button from "@/components/Button/Button";
 import IButton from "@/types/Button";
 import IQuestion from "@/types/Question";
 import { QuestionViews } from "@/types/Question";
@@ -62,10 +62,9 @@ const FeedbackForm = ({
                 {form.map((_question, index) => (
                     <Question
                         key={index}
-                        id={index}
                         disabled={!formActive}
                         question={form[index]}
-                        onChange={onChange}
+                        onChange={(value) => onChange(value, index)}
                     />
                 ))}
                 {/* Continue button */}

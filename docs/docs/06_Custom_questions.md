@@ -10,7 +10,7 @@ Choice lists are collections of answer options for multiple choice questions, fo
 However, you can add custom choice lists through the admin interface by clicking "Add":
 <img width="500" alt="Choice List" src="../assets/images/ChoiceList.png">
 
-To create a choice list, you need to provide a descriptive identifier. Note that the identifier can only contain letters, numbers, and underscores. You can then proceed to add choices. For each choice, a identifier and a display text, which can be translated in all configured languages, should be entered.
+To create a choice list, you need to provide a descriptive identifier. Note that the identifier can only contain letters, numbers, and underscores. You can then proceed to add choices. For each choice, add an identifier (unique for the given ChoiceList) and a display text, which can be translated in all configured languages.
 
 ## Question Lists
 Question Lists are sets of questions you can attach to a given block in your experiment. If you click "Add", you will see the following form:

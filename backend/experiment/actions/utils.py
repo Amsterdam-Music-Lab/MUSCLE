@@ -38,7 +38,11 @@ def get_experiment_url(session: Session) -> str | None:
     if not experiment.replayable:
         blocks = experiment.associated_blocks()
         played_sessions = (
-            Session.objects.filter(block__in=blocks, finished_at__isnull=False)
+            Session.objects.filter(
+                block__in=blocks,
+                finished_at__isnull=False,
+                participant=session.participant,
+            )
             .values_list("block")
             .distinct()
             .count()
