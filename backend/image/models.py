@@ -1,5 +1,3 @@
-from os.path import join
-
 from django.contrib.postgres.fields import ArrayField
 from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import UploadedFile
