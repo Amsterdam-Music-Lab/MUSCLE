@@ -87,7 +87,7 @@ const App = () => {
                         {/* Store profile */}
                         <Route
                             path={URLS.storeProfile}
-                            element={StoreProfile}
+                            element={<StoreProfile />}
                         />
                     </Routes>
                 </ConditionalRender>

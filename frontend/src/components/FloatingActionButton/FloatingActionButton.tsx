@@ -1,27 +1,25 @@
 
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faComment } from '@fortawesome/free-solid-svg-icons'
+
 import classNames from '@/util/classNames';
-import useBoundStore from "@/util/stores";
 
 type Position = 'bottom-left' | 'bottom-right' | 'top-left' | 'top-right' | 'center-left' | 'center-right';
 
 interface FloatingActionButtonProps {
     children: React.ReactNode;
-    /** Font Awesome icon class name (e.g. 'fa-comment') */
-    icon?: string;
     position?: Position;
     className?: string;
 }
 
 const FloatingActionButton = ({
     children,
-    icon = 'fa-comment',
     position = 'center-right', // 'bottom-left', 'bottom-right', 'top-left', 'top-right', 'center-left', 'center-right' (default)
     className,
 }: FloatingActionButtonProps): JSX.Element => {
 
     const [expanded, setExpanded] = React.useState(false);
-    const theme = useBoundStore((state) => state.theme);
 
     /**
      * The getPositionClassNames function generates CSS class names based on the provided position string for a floating action button.
@@ -49,11 +47,7 @@ const FloatingActionButton = ({
                 className='floating-action-button__toggle-button'
                 onClick={() => setExpanded(!expanded)}
             >
-                <i
-                    style={{color: theme?.colorBackground}}
-                    data-testid="floating-action-button__icon"
-                    className={`floating-action-button__icon fa ${expanded ? 'fa-times' : icon}`}
-                />
+                <FontAwesomeIcon data-testid="floating-action-button__icon" icon={faComment} />
             </button>
             <div
                 data-testid="floating-action-button__content"

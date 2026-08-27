@@ -42,7 +42,7 @@ describe("CountDown", () => {
         expect(mockTimer).not.toHaveBeenCalled();
     });
 
-    it("should update the countdown value as the timer progresses", async () => {
+    it("should update the countdown value as the timer progresses", () => {
         let onTickCallback: (time: number) => void;
         MockedTimer.mockImplementation(({ onTick }) => {
             onTickCallback = onTick;
@@ -51,26 +51,26 @@ describe("CountDown", () => {
 
         render(<CountDown duration={10} running={true} />);
 
-        await waitFor(() => {
+        waitFor(() => {
             const score = screen.getByText("10");
             expect(document.body.contains(score)).toBe(true);
         });
 
         // Simulate timer ticks
         onTickCallback!(5);
-        await waitFor(() => {
+        waitFor(() => {
             const score = screen.getByText("5");
             expect(document.body.contains(score)).toBe(true);
         });
 
         onTickCallback!(9.5);
-        await waitFor(() => {
+        waitFor(() => {
             const score = screen.getByText("1");
             expect(document.body.contains(score)).toBe(true);
         });
     });
 
-    it("should display 0 when the timer finishes", async () => {
+    it("should display 0 when the timer finishes", () => {
         let onFinishCallback: () => void;
         MockedTimer.mockImplementation(({ onFinish }) => {
             onFinishCallback = onFinish;
@@ -79,14 +79,14 @@ describe("CountDown", () => {
 
         render(<CountDown duration={10} running={true} />);
 
-        await waitFor(() => {
+        waitFor(() => {
             const score = screen.getByText("10");
             expect(document.body.contains(score)).toBe(true);
         });
 
         // Simulate timer finish
         onFinishCallback!();
-        await waitFor(() => {
+        waitFor(() => {
             const score = screen.getByText("0");
             expect(document.body.contains(score)).toBe(true);
         });

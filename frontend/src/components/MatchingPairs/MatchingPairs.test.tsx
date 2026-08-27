@@ -89,13 +89,12 @@ describe('MatchingPairs Component', () => {
         render(<MatchingPairs {...baseProps} sections={mockSections} setPlayerIndex={vi.fn()} />);
         const cards = screen.getAllByRole('button');
 
-        await waitFor(() => expect(screen.getByTestId('overlay').style.display).toBe('none'));
+        waitFor(() => expect(screen.getByTestId('overlay').style.display).toBe('none'));
 
         fireEvent.click(cards[0]);
         fireEvent.click(cards[1]);
 
-        await new Promise(r => setTimeout(r, 1));
-        expect(screen.getByTestId('overlay').style.display).toBe('block')
+        waitFor(() => expect(screen.getByTestId('overlay').style.display).toBe('block'));
     });
 
     test('calls scoreIntermediateResult after each turn', async () => {
@@ -109,11 +108,10 @@ describe('MatchingPairs Component', () => {
         fireEvent.click(cards[2]);
         await new Promise(r => setTimeout(r, 1));
 
-
         fireEvent.click(screen.getByTestId('overlay'));
         await new Promise(r => setTimeout(r, 1));
 
-        await waitFor(() => screen.getByText('Pick a card'));
+        waitFor(() => screen.getByText('Pick a card'));
         expect(spy).toHaveBeenCalled();
 
         // cleanup spy

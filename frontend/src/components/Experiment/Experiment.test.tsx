@@ -5,6 +5,8 @@ import MockAdapter from "axios-mock-adapter";
 import axios from 'axios';
 
 import Experiment from './Experiment';
+import { API_BASE_URL } from "@/config";
+
 const mock = new MockAdapter(axios);
 
 const mockUseParams = vi.fn();
@@ -67,14 +69,14 @@ describe('Experiment', () => {
         mockUseParams.mockReturnValue({ identifier: 'some_experiment' });
     });
 
-    it('forwards to a single block if it receives an empty dashboard array', async () => {
+    it('forwards to a single block if it receives an empty dashboard array', () => {
         mock.onGet().replyOnce(200, { dashboard: [], nextBlock: block1 });
 
         render(
             <MemoryRouter>
                 <Experiment />
             </MemoryRouter>);
-        await waitFor(() => {
+        waitFor(() => {
             expect(screen.queryByRole('menu')).toBeFalsy();
         })
     });
@@ -130,24 +132,25 @@ describe('Experiment', () => {
 
     it('shows consent first if available', async () => {
         mock.onGet().replyOnce(200, { consent: {text: '<p>This is our consent form!</p>'}, dashboard: [blockWithAllProps], nextBlock: block1, theme});
+        mock.onGet(API_BASE_URL + 'result/*').replyOnce(200, true)
         render(
             <MemoryRouter>
                 <Experiment />
             </MemoryRouter>
         );
-        await waitFor(() => {
+        waitFor(() => {
             expect(document.querySelector('.consent-text')).not.toBeNull();
         })
     });
 
-    it('shows a footer if a theme with footer is available', async () => {
+    it('shows a footer if a theme with footer is available', () => {
         mock.onGet().replyOnce(200, { dashboard: [blockWithAllProps], nextBlock: block1, theme });
         render(
             <MemoryRouter>
                 <Experiment />
             </MemoryRouter>
         );
-        await waitFor(() => {
+        waitFor(() => {
             expect(document.querySelector('.aha__footer')).not.toBeNull();
         })
     })

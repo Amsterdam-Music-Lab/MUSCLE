@@ -25,22 +25,24 @@ admin.site.site_title = "AML Admin"
 admin.site.index_title = "Welcome to AML Admin"
 
 # Urls patterns
-urlpatterns = [
-    path('experiment/', include('experiment.urls')),
-    path('question/', include('question.urls')),
-    path('participant/', include('participant.urls')),
-    path('result/', include('result.urls')),
-    path('section/', include('section.urls')),
-    path('session/', include('session.urls')),
-    path('theme/', include('theme.urls')),
-    path('admin_interface/', include('admin_interface.urls')),
-    path('admin/', admin.site.urls),
-    path("i18n/", include("django.conf.urls.i18n")),
-
-    # Sentry debug (uncomment to test Sentry)
-    # path('sentry-debug/', lambda request: 1 / 0),
-
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns = (
+    [
+        path('experiment/', include('experiment.urls')),
+        path('question/', include('question.urls')),
+        path('participant/', include('participant.urls')),
+        path('result/', include('result.urls')),
+        path('section/', include('section.urls')),
+        path('session/', include('session.urls')),
+        path('theme/', include('theme.urls')),
+        path('admin_interface/', include('admin_interface.urls')),
+        path('admin/', admin.site.urls),
+        path("i18n/", include("django.conf.urls.i18n")),
+        # Sentry debug (uncomment to test Sentry)
+        # path('sentry-debug/', lambda request: 1 / 0),
+    ]
+    + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+)
 #   ^ The static helper function only works in debug mode
 # (https://docs.djangoproject.com/en/3.0/howto/static-files/)
 
