@@ -20,6 +20,7 @@ from .rhythm_battery_final import RhythmBatteryFinal
 from .rhythm_battery_intro import RhythmBatteryIntro
 from .rhythm_discrimination import RhythmDiscrimination
 from .speech2song import Speech2Song
+from .speech2song_kids import Speech2SongKids
 from .tele_tunes import HookedTeleTunes
 from .thats_my_song import ThatsMySong
 from .toontjehoger_1_mozart import ToontjeHoger1Mozart
@@ -66,6 +67,7 @@ BLOCK_RULES = {
     RhythmDiscrimination.ID: RhythmDiscrimination,
     TwoAlternativeForced.ID: TwoAlternativeForced,
     Speech2Song.ID: Speech2Song,
+    Speech2SongKids.ID: Speech2SongKids,
     ThatsMySong.ID: ThatsMySong,
     ToontjeHoger1Mozart.ID: ToontjeHoger1Mozart,
     ToontjeHoger2Preverbal.ID: ToontjeHoger2Preverbal,

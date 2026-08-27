@@ -40,6 +40,7 @@ const AutoPlay = ({ instruction, sections, showAnimation, playSection, startedPl
                         setRunning(false);
                         finishedPlaying();
                     }}
+                    strokeWidth={sections[0].image? 0 : 7}
                 />
                 <div className="circle-content">
                     {showAnimation
@@ -50,9 +51,16 @@ const AutoPlay = ({ instruction, sections, showAnimation, playSection, startedPl
                                 <Histogram running={running} bars={7}/>
                             </div>
                         </div>
-                        : <div className="stationary">
-                            <span className="fa-solid fa-headphones fa-6x"></span>
-                        </div>
+                        : 
+                        <>
+                            {sections[0].image?
+                                <img src={sections[0].image!.link}></img>
+                                :
+                                <div className="stationary">
+                                    <span className="fa-solid fa-headphones fa-6x"></span>
+                                </div>
+                            }
+                        </>
                     }
                 </div>
             </div>
