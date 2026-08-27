@@ -59,7 +59,7 @@ describe('Trial', () => {
         expect(presentationElement).toBeTruthy();
     });
 
-    it("renders Playback component when playback prop is provided", async () => {
+    it("renders Playback component when playback prop is provided", () => {
         render(<Trial
             playback={{ resumePlay: true }}
             feedbackForm={feedbackForm}
@@ -67,11 +67,13 @@ describe('Trial', () => {
             onNext={mockOnNext}
             onResult={mockOnResult}
         />);
-        const playbackElement = await screen.findByTestId('mock-playback')
-        expect(playbackElement).toBeTruthy();
+        waitFor(() => {
+            const playbackElement = screen.getByTestId('mock-playback')
+            expect(playbackElement).toBeTruthy();
+        });
     });
 
-    it("renders HTML component when html prop is provided", async () => {
+    it("renders HTML component when html prop is provided", () => {
         const htmlBody = "Test HTML content";
         render(<Trial
             html={{ body: htmlBody }}
@@ -80,9 +82,11 @@ describe('Trial', () => {
             onNext={mockOnNext}
             onResult={mockOnResult}
         />);
-        const htmlComponent = await screen.findByTestId('mock-html');
-        expect(htmlComponent).toBeTruthy();
-        expect(htmlComponent.textContent).toBe(htmlBody);
+        waitFor(() => {
+            const htmlComponent = screen.getByTestId('mock-html');
+            expect(htmlComponent).toBeTruthy();
+            expect(htmlComponent.textContent).toBe(htmlBody);
+        });
     });
 
     it("renders FeedbackForm when feedback_form prop is provided", () => {
@@ -105,7 +109,7 @@ describe('Trial', () => {
         expect(screen.getByText('Continue')).toBeTruthy();
     });
 
-    it("calls onResult when FeedbackForm submits result", async () => {
+    it("calls onResult when FeedbackForm submits result", () => {
         render(<Trial
             onNext={mockOnNext}
             onResult={mockOnResult}
@@ -113,13 +117,12 @@ describe('Trial', () => {
             {...defaultConfig}
         />);
         fireEvent.click(screen.getByTestId('mock-feedback-form'));
-        await waitFor(() => {
+        waitFor(() => {
             expect(mockOnResult).toHaveBeenCalled();
         });
     });
 
     it("calls finishedPlaying when Playback component finishes", () => {
-        const config = { ...defaultConfig, auto_advance: true };
         render(<Trial
             playback={{ view: 'AUTOPLAY' }}
             onNext={mockOnNext}
@@ -131,17 +134,17 @@ describe('Trial', () => {
         expect(screen.getByTestId('mock-feedback-form')).toBeTruthy();
     });
 
-    it("auto-advances after specified timer when autoAdvance is true", async () => {
+    it("auto-advances after specified timer when autoAdvance is true", () => {
         render(<Trial
             playback={{ view: 'BUTTON' }}
             onNext={mockOnNext}
             onResult={mockOnResult}
             feedbackForm={feedbackForm}
             autoAdvance={true}
-            responseTime={0.2}
+            responseTime={0.1}
             />);
         fireEvent.click(screen.getByTestId('mock-playback'));
-        await waitFor(() => {
+        waitFor(() => {
             expect(mockOnResult).toHaveBeenCalled();
             expect(mockOnResult).toHaveBeenCalledWith(
                 expect.objectContaining({

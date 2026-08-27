@@ -58,48 +58,48 @@ const experimentWithTheme = {
 
 describe('ExperimentDashboard', () => {
 
-    it('shows a dashboard of multiple experiments if it receives an array', async () => {
+    it('shows a dashboard of multiple experiments if it receives an array', () => {
         render(
             <MemoryRouter>
                 <ExperimentDashboard experiment={experimentWithDashboard} />
             </MemoryRouter>
         );
-        await waitFor(() => {
+        waitFor(() => {
             expect(screen.getByRole('menu')).toBeTruthy();
         });
     });
 
-    it('shows a placeholder if an experiment has no image', async () => {
+    it('shows a placeholder if an experiment has no image', () => {
         render(
             <MemoryRouter>
                 <ExperimentDashboard experiment={experimentWithDashboard} />
             </MemoryRouter>
         );
-        await waitFor(() => {
+        waitFor(() => {
             expect(screen.getByRole('menu')).toBeTruthy();
             expect(screen.getByRole('menu').querySelector('.placeholder')).toBeTruthy();
         });
     });
 
-    it('links to the experiment with the correct identifier', async () => {
+    it('links to the experiment with the correct identifier', () => {
         render(
             <MemoryRouter>
                 <ExperimentDashboard experiment={experimentWithDashboard} />
             </MemoryRouter>
         );
-        await waitFor(() => {
+        waitFor(() => {
             expect(screen.getByRole('menu')).toBeTruthy();
             expect(screen.getByRole('menu').querySelector('a').getAttribute('href')).toBe('/block/some_identifier');
         });
     });
 
-    it('links to the experiment with the correct identifier and participant id if the participand id url is present', async () => {
+    it('links to the experiment with the correct identifier and participant id if the participand id url is present', () => {
         render(
             <MemoryRouter>
                 <ExperimentDashboard experiment={experimentWithDashboard} participantIdUrl="some_id" />
             </MemoryRouter>
         );
-        await waitFor(() => {
+        waitFor(() => {
             expect(screen.getByRole('menu')).toBeTruthy();
             expect(screen.getByRole('menu').querySelector('a').getAttribute('href')).toBe('/block/some_identifier?participant_id=some_id');
         });

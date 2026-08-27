@@ -1,4 +1,4 @@
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import Question from './Question';
 import { QuestionViews } from '@/types/Question';
@@ -41,11 +41,13 @@ describe('Question Component', () => {
         expect(screen.getByText('This is an explainer')).toBeTruthy();
     });
 
-    it('calls onChange when the value changes', async () => {
+    it('calls onChange when the value changes', () => {
         render(<Question {...defaultProps} />);
-        const input = await screen.findByRole('textbox');
-        fireEvent.change(input, { target: { value: 'New Value' } });
-        expect(mockOnChange).toHaveBeenCalledWith('New Value');
+        waitFor(() => {
+            const input = screen.getByRole('textbox');
+            fireEvent.change(input, { target: { value: 'New Value' } });
+            expect(mockOnChange).toHaveBeenCalledWith('New Value');
+        });
     });
 
     it('applies classNames if question.style is defined', () => {
@@ -55,7 +57,7 @@ describe('Question Component', () => {
         expect(container.querySelector('.some-style')).toBeTruthy();
     });
 
-    it('disables the input when disabled prop is true', async () => {
+    it('disables the input when disabled prop is true', () => {
         const props = getProps({
             disabled: true,
             question: {
@@ -68,8 +70,11 @@ describe('Question Component', () => {
             }
         });
         render(<Question {...props} />);
-        const input = await screen.findByTestId('toggle-button-1');
-        expect(input).toBeTruthy();
-        expect(input.attributes.getNamedItem('disabled')).toBeTruthy();
+        
+        waitFor(() => {
+            const input = screen.getByTestId('toggle-button-1');
+            expect(input).toBeTruthy();
+            expect(input.attributes.getNamedItem('disabled')).toBeTruthy();
+        });
     });
 });
