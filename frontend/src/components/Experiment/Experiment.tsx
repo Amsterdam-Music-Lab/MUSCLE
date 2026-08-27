@@ -16,6 +16,7 @@ import ExperimentDashboard from "./ExperimentDashboard/ExperimentDashboard";
 import IExperiment from "@/types/Experiment";
 import Redirect from "@/components/Redirect/Redirect";
 import useHeadDataFromExperiment from "@/hooks/useHeadDataFromExperiment";
+import { getBlockHref } from "@/API";
 
 const Experiment = () => {
     const { identifier } = useParams();
@@ -41,8 +42,6 @@ const Experiment = () => {
     const onNext = () => {
         setHasShownConsent(true);
     }
-
-    const getBlockHref = (experimentIdentifier: string, identifier: string) => `/${experimentIdentifier}/block/${identifier}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     if (loadingExperiment) {
         return (
@@ -71,7 +70,7 @@ const Experiment = () => {
     }
 
     if (!displayDashboard && nextBlock) {
-        return <Redirect to={getBlockHref(experiment.identifier, nextBlock.identifier)} />
+        return <Redirect to={getBlockHref(experiment.identifier, nextBlock.identifier, participantIdUrl)} />
     }
 
     return (

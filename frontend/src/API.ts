@@ -231,3 +231,6 @@ export const postFeedback = async ({ experimentIdentifier, blockIdentifier, feed
         return null;
     }
 }
+
+
+export const getBlockHref = (experimentIdentifier: string, blockIdentifier: string, participantIdUrl: string | undefined) => `/${experimentIdentifier}/block/${blockIdentifier}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
