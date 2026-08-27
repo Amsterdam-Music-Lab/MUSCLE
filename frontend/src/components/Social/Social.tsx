@@ -46,7 +46,7 @@ const Social = ({ social }: SocialProps) => {
                     title={social.content}
                     hashtag={social.tags[0]}
                 >
-                    <FontAwesomeIcon icon={faFacebookF} />
+                    <FontAwesomeIcon icon={faFacebookF}/>
                 </FacebookShareButton>
             )}
             {social.channels.includes('whatsapp') && (
@@ -54,7 +54,7 @@ const Social = ({ social }: SocialProps) => {
                     url={social.url}
                     title={social.content}
                 >
-                    <FontAwesomeIcon icon={faWhatsapp} alt="whatsapp"/>
+                    <FontAwesomeIcon icon={faWhatsapp}/>
                 </WhatsappShareButton>
             )}
             {social.channels.includes('twitter') && (
@@ -63,7 +63,7 @@ const Social = ({ social }: SocialProps) => {
                     title={social.content}
                     hashtags={social.tags}
                 >
-                    <FontAwesomeIcon icon={faXTwitter} alt="X" />
+                    <FontAwesomeIcon icon={faXTwitter}/>
                 </TwitterShareButton>
             )}
             {social.channels.includes('weibo') && (
@@ -71,17 +71,17 @@ const Social = ({ social }: SocialProps) => {
                     url={social.url}
                     title={social.content}
                 >
-                    <FontAwesomeIcon icon="faWeibo" alt="weibo"/>
+                    <FontAwesomeIcon icon={faWeibo}/>
                 </WeiboShareButton>
             )}
             {showShare.current && social.channels.includes('share') && (
                 <div onClick={() => shareContent(social.content, social.url)} data-testid="navigator-share">
-                    <FontAwesomeIcon icon={faShareNodes} alt="share options"/>
+                    <FontAwesomeIcon icon={faShareNodes}/>
                 </div>
             )}
             {social.channels.includes('clipboard') && (
                 <div onClick={() => copyToClipboard(social.url)} data-testid="clipboard-share">
-                    <FontAwesomeIcon icon={faClipboard} alt="clipboard" />
+                    <FontAwesomeIcon icon={faClipboard} />
                 </div>
             )}
         </div>

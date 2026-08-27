@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import classNames from "classnames";
 import Circle from "../Circle/Circle";
 import Button from "../Button/Button";
-import { Score as ScoreAction } from "@/types/Action";
+import { ScoreAction } from "@/types/Action";
 import useBoundStore from "@/util/stores";
 import { animateScoreBackground } from "@/util/stylingHelpers";
 
