@@ -1,0 +1,184 @@
+- model: experiment.experiment
+  pk: 21
+  fields:
+    name: ToontjeHogerKids
+    identifier: thk
+    active: true
+- model: experiment.phase
+  pk: 21
+  fields:
+    experiment: 21
+    dashboard: true
+- model: experiment.block
+  fields:
+    phase: 21
+    experiment: 21
+    index: 0
+    image: null
+    identifier: thk_mozart
+    rounds: 2
+    bonus_points: 0
+    rules: TOONTJE_HOGER_KIDS_1_MOZART
+    playlists:
+    - 21
+- model: experiment.block
+  fields:
+    phase: 21
+    experiment: 21
+    index: 0
+    image: null
+    identifier: thk_preverbal
+    rounds: 2
+    bonus_points: 0
+    rules: TOONTJE_HOGER_KIDS_2_PREVERBAL
+    playlists:
+    - 22
+- model: experiment.block
+  fields:
+    phase: 21
+    experiment: 21
+    index: 0
+    image: null
+    identifier: thk_plink
+    rounds: 10
+    bonus_points: 0
+    rules: TOONTJE_HOGER_KIDS_3_PLINK
+    playlists:
+    - 23
+- model: experiment.block
+  fields:
+    phase: 21
+    experiment: 21
+    index: 0
+    image: null
+    identifier: thk_absolute
+    rounds: 5
+    bonus_points: 0
+    rules: TOONTJE_HOGER_KIDS_4_ABSOLUTE
+    playlists:
+    - 24
+- model: experiment.block
+  fields:
+    phase: 21
+    experiment: 21
+    index: 0
+    image: null
+    identifier: thk_tempo
+    rounds: 5
+    bonus_points: 0
+    rules: TOONTJE_HOGER_KIDS_5_TEMPO
+    theme_config: null
+    playlists:
+    - 25
+- model: experiment.block
+  fields:
+    phase: 21
+    experiment: 21
+    index: 0
+    image: null
+    identifier: thk_relative
+    rounds: 2
+    bonus_points: 0
+    rules: TOONTJE_HOGER_KIDS_6_RELATIVE
+    playlists:
+    - 26
+- model: section.playlist
+  pk: 21
+  fields:
+    name: THK_Mozart
+    csv: |
+      componist Albinoni (gespeeld door het Praags Barokorkest met dirigent Trevor Pinnock),Adagio in G mineur,0.0,12.0,toontjehoger_kids/mozart/fragment_a.mp3,0,1
+      componist Mozart (gespeeld door Lucas en Arthur Jussen),Sonate voor twee pianos in D groot,0.0,14.0,toontjehoger_kids/mozart/fragment_b.mp3,0,2
+- model: section.playlist
+  pk: 22
+  fields:
+    name: THK_Preverbal
+    csv: |
+      AML,Duitse baby,0.0,1.0,/toontjehoger/preverbal/4_duitse_baby.mp3,b,2
+      AML,Franse baby,0.0,1.0,/toontjehoger/preverbal/5_franse_baby.mp3,a,2
+      AML,Mens,0.0,1.0,/toontjehoger/preverbal/1_mens.mp3,c,1
+      AML,Trompet,0.0,1.0,/toontjehoger/preverbal/3_trompet.mp3,a,1
+      AML,Walvis,0.0,1.0,/toontjehoger/preverbal/2_walvis.mp3,b,1
+- model: section.playlist
+  pk: 23
+  fields:
+    name: THK_Plink
+    csv: |
+      Adele,Hello,0.0,1.0,toontjehoger_kids/plink/2024-003.mp3,0,60s;droevig
+      Flemming,Alles Op Gevoel,0.0,1.0,toontjehoger_kids/plink/2024-006.mp3,0,70s;vrolijk
+      Frozen,Laat Het Los,0.0,1.0,toontjehoger_kids/plink/2024-011.mp3,0,00s;tederheid
+      Joost Klein,Europapa,0.0,1.0,toontjehoger_kids/plink/2024-007.mp3,0,70s;tederheid
+      K3,De 3 Biggetjes,0.0,1.0,toontjehoger_kids/plink/2024-001.mp3,0,70s;droevig
+      Kinderen Voor Kinderen,Daba Die Daba Daa,0.0,1.0,toontjehoger_kids/plink/2024-002.mp3,0,10s;tederheid
+      Mariah Carey,All I Want For Christmas,0.0,1.0,toontjehoger_kids/plink/2024-010.mp3,0,90s;tederheid
+      Meau,Stukje Van Mij,0.0,1.0,toontjehoger_kids/plink/2024-005.mp3,0,70s;vrolijk
+      Pinkfong,Baby Shark,0.0,1.0,toontjehoger_kids/plink/2024-008.mp3,0,90s;droevig
+      S10,De Diepte,0.0,1.0,toontjehoger_kids/plink/2024-004.mp3,0,70s;droevig
+      Snelle,Schuur,0.0,1.0,toontjehoger_kids/plink/2024-014.mp3,0,20s;tederheid
+      Snollebollekes,Links Rechts,0.0,1.0,toontjehoger_kids/plink/2024-009.mp3,0,90s;droevig
+      Super Mario Bros.,de intro,0.0,1.0,toontjehoger_kids/plink/2024-013.mp3,0,70s;droevig
+      The Tokens,The Lion Sleeps Tonight (Wimoweh),0.0,1.0,toontjehoger_kids/plink/2024-012.mp3,0,70s;tederheid
+- model: section.playlist
+  pk: 24
+  fields:
+    name: THK_Absolute
+    csv: |
+      AML,De regels van Floor,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item1_a.mp3,a,1
+      AML,De regels van Floor,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item1_c.mp3,c,1
+      AML,De regels van Floor,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item1_b.mp3,b,1
+      AML,Freeks Jungle School,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item2_a.mp3,a,2
+      AML,Freeks Jungle School,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item2_b.mp3,b,2
+      AML,Freeks Jungle School,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item2_c.mp3,c,2
+      AML,Harry Potter,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item10_b.mp3,b,10
+      AML,Harry Potter,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item10_c.mp3,c,10
+      AML,Harry Potter,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item10_a.mp3,a,10
+      AML,Heel Holland Bakt,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item3_c.mp3,c,3
+      AML,Heel Holland Bakt,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item3_a.mp3,a,3
+      AML,Heel Holland Bakt,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item3_b.mp3,b,3
+      AML,het Jeugdjournaal,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item4_b.mp3,b,4
+      AML,het Jeugdjournaal,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item4_c.mp3,c,4
+      AML,het Jeugdjournaal,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item4_a.mp3,a,4
+      AML,Het Klokhuis,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item5_c.mp3,c,5
+      AML,Het Klokhuis,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item5_a.mp3,a,5
+      AML,Het Klokhuis,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item5_b.mp3,b,5
+      AML,het Sinterklaasjournaal,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item9_b.mp3,b,9
+      AML,het Sinterklaasjournaal,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item9_a.mp3,a,9
+      AML,het Sinterklaasjournaal,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item9_c.mp3,c,9
+      AML,MeesKees,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item6_a.mp3,a,6
+      AML,MeesKees,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item6_c.mp3,c,6
+      AML,MeesKees,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item6_b.mp3,b,6
+      AML,Peppa Pig,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item7_c.mp3,c,7
+      AML,Peppa Pig,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item7_a.mp3,a,7
+      AML,Peppa Pig,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item7_b.mp3,b,7
+      AML,Sesamstraat,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item8_a.mp3,a,8
+      AML,Sesamstraat,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item8_c.mp3,c,8
+      AML,Sesamstraat,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item8_b.mp3,b,8
+      AML,Spongebob,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item11_b.mp3,b,11
+      AML,Spongebob,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item11_c.mp3,c,11
+      AML,Spongebob,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item11_a.mp3,a,11
+      AML,Wie is de Mol,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item12_c.wav,c,12
+      AML,Wie is de Mol,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item12_b.wav,b,12
+      AML,Wie is de Mol,0.0,1.0,toontjehoger_kids/absolute/4_Toonhoogte_Item12_a.wav,a,12
+- model: section.playlist
+  pk: 25
+  fields:
+    name: THK_Tempo
+    csv: |
+      Bert Kaempfert,Afrikaan Beat,0.0,1.0,/toontjehoger_kids/tempo/P1_OR.mp3,P1_OR,or
+      Bert Kaempfert,Afrikaan Beat,0.0,1.0,/toontjehoger_kids/tempo/P1_CH.mp3,P1_CH,ch
+      Kinderen Voor Kinderen,Pasapas,0.0,1.0,/toontjehoger_kids/tempo/P2_OR.mp3,P2_OR,or
+      Kinderen Voor Kinderen,Pasapas,0.0,1.0,/toontjehoger_kids/tempo/P2_CH.mp3,P2_CH,ch
+      Quincy Jones, Soul Bossa Nova,0.0,1.0,/toontjehoger_kids/tempo/P3_CH.mp3,P3_CH,ch
+      Quincy Jones, Soul Bossa Nova,0.0,1.0,/toontjehoger_kids/tempo/P3_OR.mp3,P3_OR,or
+      Rossini,Wilhelm Tell Overture,0.0,1.0,/toontjehoger_kids/tempo/P4_OR.mp3,P4_OR,or
+      Rossini,Wilhelm Tell Overture,0.0,1.0,/toontjehoger_kids/tempo/P4_CH.mp3,P4_CH,ch
+      Starwars, Imperial March,0.0,1.0,/toontjehoger_kids/tempo/P5_OR.mp3,P5_OR,or
+      Starwars, Imperial March,0.0,1.0,/toontjehoger_kids/tempo/P5_CH.mp3,P5_CH,ch
+- model: section.playlist
+  pk: 26
+  fields:
+    name: THK_Relative
+    csv: |
+      AML,Fragment A,0.0,1.0,/toontjehoger/relative/relative_a.mp3,a,0
+      AML,Fragment B,0.0,1.0,/toontjehoger/relative/relative_b.mp3,b,0
+      AML,Fragment C,0.0,1.0,/toontjehoger/relative/relative_c.mp3,c,0

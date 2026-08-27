@@ -1,7 +1,4 @@
 from django.test import TestCase
-from experiment.models import Block
-from session.models import Session
-from participant.models import Participant
 from section.models import Playlist
 from ..base import BaseRules
 

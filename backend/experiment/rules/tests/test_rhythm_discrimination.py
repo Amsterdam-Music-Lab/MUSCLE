@@ -9,7 +9,7 @@ from session.models import Session
 
 
 class RhythmDiscriminationTest(TestCase):
-    fixtures = ["playlist", "experiment"]
+    fixtures = ["choice_lists", "goldsmiths_msi", "demographics", "rhythm_tests"]
 
     @classmethod
     def setUpTestData(cls):
@@ -138,7 +138,9 @@ class RhythmDiscriminationTest(TestCase):
 
     def _get_block_info(self, block_identifier):
         """Get block information"""
-        block_response = self.client.get(f"/experiment/block/{block_identifier}/")
+        block_response = self.client.get(
+            f"/experiment/rhythm_battery/block/{block_identifier}/"
+        )
         block_json = self.load_json_or_fail(block_response)
 
         self.assertTrue(

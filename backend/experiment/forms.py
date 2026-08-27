@@ -1,4 +1,4 @@
-from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.forms import (
     CheckboxSelectMultiple,
     ChoiceField,
@@ -48,18 +48,22 @@ class BlockForm(ModelForm):
 
         return playlists
 
+    def clean_slug(self):
+        print("phase", self.instance.phase)
+        return self.cleaned_data.get("slug")
+
     class Meta:
         model = Block
         fields = [
             "index",
             "identifier",
+            "rules",
             "name",
             "description",
             "image",
             "rounds",
             "bonus_points",
             "playlists",
-            "rules",
             "rules_config",
             "theme_config",
         ]

@@ -257,7 +257,7 @@ class TestExperimentViews(TestCase):
             [Session(block=block, participant=participant, finished_at=timezone.now()) for index in range(3)]
         )
 
-        response = self.client.get("/experiment/block/test-block/")
+        response = self.client.get("/experiment/test-experiment/block/test-block/")
 
         self.assertEqual(response.json()["identifier"], "test-block")
         self.assertEqual(response.json()["name"], "Test Block")
@@ -268,15 +268,17 @@ class TestExperimentViews(TestCase):
 
     def test_post_feedback(self):
         request = {"feedback": "I have a lot of feedback here"}
-        self.client.post("/experiment/block/block1/feedback/", request)
+        self.client.post("/experiment/test_series/block/block1/feedback/", request)
         self.assertEqual(Feedback.objects.count(), 1)
         response = self.client.post(
-            "/experiment/block/nonexisting-identifier/feedback/", request
+            "/experiment/test_series/block/nonexisting-identifier/feedback/", request
         )
         self.assertEqual(response.status_code, 404)
         self.assertEqual(Feedback.objects.count(), 1)
         request = {"feedback": ""}
-        response = self.client.post("/experiment/block/block1/feedback/", request)
+        response = self.client.post(
+            "/experiment/test_series/block/block1/feedback/", request
+        )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(Feedback.objects.count(), 1)
 

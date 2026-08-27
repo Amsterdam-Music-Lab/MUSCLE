@@ -5,6 +5,7 @@ import Experiment from "@/types/Experiment";
 import Header from "@/components/Experiment/Header/Header";
 import Logo from "@/components/Logo/Logo";
 import IBlock from "@/types/Block";
+import { getBlockHref } from "@/API";
 
 
 interface ExperimentDashboardProps {
@@ -23,8 +24,6 @@ export const ExperimentDashboard: React.FC<ExperimentDashboardProps> = ({ experi
     const showHeader = experiment.theme?.header;
     const socialMediaConfig = experiment.socialMediaConfig;
     const primaryColor = experiment.theme?.colorPrimary || '';
-
-    const getBlockHref = (identifier: string) => `/block/${identifier}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     return (
         <div className="aha__dashboard">
@@ -47,7 +46,7 @@ export const ExperimentDashboard: React.FC<ExperimentDashboardProps> = ({ experi
                 <ul>
                     {dashboard.map((block: IBlock) => (
                         <li key={block.identifier}>
-                            <Link to={getBlockHref(block.identifier)} role="menuitem">
+                            <Link to={getBlockHref(experiment.identifier, block.identifier, participantIdUrl)} role="menuitem">
                                 <ImageOrPlaceholder imagePath={block.image?.file} alt={block.image?.alt ?? block.description} backgroundColor={block.image && block.image.backgroundColor? experiment.theme[block.image?.backgroundColor] : null}/>
                                 <h3>{block.name}</h3>
                                 <p>{block.description}</p>

@@ -15,7 +15,7 @@ const ExperimentDashboard = lazy(() => import("@/components/Experiment/Experimen
 import IExperiment from "@/types/Experiment";
 import useHeadDataFromExperiment from "@/hooks/useHeadDataFromExperiment";
 import useBoundStore from "@/util/stores";
-import { useExperiment } from "@/API";
+import { getBlockHref, useExperiment } from "@/API";
 
 const Experiment = () => {
     const { identifier } = useParams();
@@ -41,8 +41,6 @@ const Experiment = () => {
     const onNext = () => {
         setHasShownConsent(true);
     }
-
-    const getBlockHref = (identifier: string) => `/block/${identifier}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;
 
     if (loadingExperiment) {
         return (
@@ -73,7 +71,7 @@ const Experiment = () => {
     }
 
     if (!displayDashboard && nextBlock) {
-        return <Redirect to={getBlockHref(nextBlock.identifier)} />
+        return <Redirect to={getBlockHref(experiment.identifier, nextBlock.identifier, participantIdUrl)} />
     }
 
     return (
