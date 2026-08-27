@@ -337,9 +337,9 @@ class ThatsMySongTest(TestCase):
                 assert len(actions) == 2
                 assert actions[1].view == "FINAL"
             elif i == 0:
-                self.assertEqual(len(actions), 2)
+                self.assertEqual(len(actions), 3)
                 self.assertEqual(
-                    actions[1].feedback_form.form[0].identifier, "playlist_decades"
+                    actions[2].feedback_form.form[0].identifier, "playlist_decades"
                 )
                 result = Result.objects.get(
                     session=session, question_identifier="playlist_decades"

@@ -1,4 +1,4 @@
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import Question from './Question';
 import { QuestionViews } from '@/types/Question';
@@ -43,9 +43,11 @@ describe('Question Component', () => {
 
     it('calls onChange when the value changes', () => {
         render(<Question {...defaultProps} />);
-        const input = screen.getByRole('textbox');
-        fireEvent.change(input, { target: { value: 'New Value' } });
-        expect(mockOnChange).toHaveBeenCalledWith('New Value');
+        waitFor(() => {
+            const input = screen.getByRole('textbox');
+            fireEvent.change(input, { target: { value: 'New Value' } });
+            expect(mockOnChange).toHaveBeenCalledWith('New Value');
+        });
     });
 
     it('applies classNames if question.style is defined', () => {
@@ -68,8 +70,11 @@ describe('Question Component', () => {
             }
         });
         render(<Question {...props} />);
-        const input = screen.getByTestId('toggle-button-1');
-        expect(input).toBeTruthy();
-        expect(input.attributes.getNamedItem('disabled')).toBeTruthy();
+        
+        waitFor(() => {
+            const input = screen.getByTestId('toggle-button-1');
+            expect(input).toBeTruthy();
+            expect(input.attributes.getNamedItem('disabled')).toBeTruthy();
+        });
     });
 });

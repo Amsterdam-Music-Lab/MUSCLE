@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from experiment.actions.button import Button
 from experiment.actions.final import Final
 from experiment.actions.form import Form
+from experiment.actions.playlist import PlaylistSelection
 from experiment.actions.question import CheckBoxQuestion
 from experiment.actions.trial import Trial
 from result.utils import prepare_result
@@ -93,7 +94,10 @@ class ThatsMySong(Hooked):
                 ).count()
                 == 0
             ):
-                actions = [self.get_intro_explainer()]
+                actions = [
+                    self.get_intro_explainer(),
+                    PlaylistSelection(session.block.playlists.all()),
+                ]
                 question = CheckBoxQuestion(
                     identifier="playlist_decades",
                     text=_("Choose two or more decades of music"),

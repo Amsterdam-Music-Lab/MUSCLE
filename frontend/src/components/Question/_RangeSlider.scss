@@ -2,20 +2,29 @@
 
     .current-value {
         text-align: center;
+
+        .label-image {
+            width: 2em;
+            margin-left: 46%
+        }
     }
 
     .limits {
-        margin-top: -4px;
+        height: auto;
         color: $gray;
-        font-size: 14px;
         .max {
             float: right;
         }
         .labels {
-            margin-left: 7px;
-            margin-right: 7px;
-            display: flex;
-            justify-content: space-between;
+            margin-left: 1em;
+            margin-right: 1em;
+        }
+        .label-image {
+            display: inline-block;
+            svg {
+                width: 1.5em;
+                height: auto;
+            }
         }
     }
 

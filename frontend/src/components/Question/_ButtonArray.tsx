@@ -1,6 +1,6 @@
 import classNames from "classnames";
 
-import { renderLabel } from "../../util/label";
+import { renderLabel } from "@/util/label";
 import { styleButton } from "@/util/stylingHelpers";
 import useBoundStore from "@/util/stores";
 import Question from "@/types/Question";

@@ -1,13 +1,14 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { lazy, Suspense, useState, useEffect, useRef, useCallback } from "react";
 
 import * as audio from "../../util/audio";
 import * as webAudio from "../../util/webAudio";
 import { playAudio, pauseAudio } from "../../util/audioControl";
 
-import AutoPlay from "./Autoplay";
-import MultiPlayer from "./MultiPlayer";
-import MatchingPairs from "../MatchingPairs/MatchingPairs";
-import Preload from "../Preload/Preload";
+const AutoPlay = lazy(() => import("./Autoplay"));
+const MultiPlayer = lazy(() => import("./MultiPlayer"));
+const MatchingPairs = lazy(() => import("../MatchingPairs/MatchingPairs"));
+import Loading from "@/components/Loading/Loading";
+import Preload from "@/components/Preload/Preload";
 import { AUTOPLAY, BUTTON, MATCHINGPAIRS, PRELOAD, PlaybackAction, PlaybackView } from "@/types/Playback";
 import { OnResultParams } from "@/hooks/useResultHandler";
 
@@ -207,7 +208,9 @@ const Playback = ({
 
     return (
         <div className="aha__playback">
-            <div className="playback"> {render(view)} </div>{" "}
+            <Suspense fallback={<Loading/>}>
+                <div className="playback"> {render(view)} </div>{" "}
+            </Suspense>
         </div>
     );
 };

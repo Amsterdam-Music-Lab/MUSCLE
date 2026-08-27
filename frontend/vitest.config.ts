@@ -14,8 +14,6 @@ export default defineConfig({
       reporter: ["text", "json-summary"],
       exclude: [
         'node_modules/**',
-        'storybook-static/**',
-        'src/stories/**',
         'src/config/**',
         'src/**/*.stories.{js,jsx,ts,tsx}',
         'src/index.tsx',

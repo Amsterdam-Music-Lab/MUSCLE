@@ -1,3 +1,5 @@
+import { RefObject } from "react";
+
 import Social from "@/types/Social";
 import Block, { FeedbackInfo } from "@/types/Block";
 import IButton from  "@/types/Button";
@@ -5,7 +7,7 @@ import Participant from "@/types/Participant";
 import { PlaybackAction } from "./Playback";
 import Question from "./Question";
 import { BreakRoundOn } from "./Trial";
-import { MutableRefObject } from "react";
+import { OnResultParams } from "@/hooks/useResultHandler";
 
 export interface SharedActionProps {
   block: Block;
@@ -99,7 +101,7 @@ export interface FinalAction {
 export interface PlaylistAction {
   view: "PLAYLIST";
   instruction: string;
-  playlist: MutableRefObject<string>;
+  playlist: RefObject<string>;
 }
 
 export interface RedirectAction {
@@ -111,6 +113,31 @@ export interface LoadingAction {
   view: "LOADING";
   duration?: number;
   loadingText?: string;
+}
+
+interface HTMLAction {
+  body: string | TrustedHTML;
+  innerClassName?: string;
+}
+
+interface FormAction {
+  formActive: boolean;
+  form: Question[];
+  submitButton: IButton;
+  skipButton: IButton;
+  submitResult: (result: OnResultParams) => void;
+}
+
+export interface TrialAction {
+  view: "TRIAL";
+  playback: PlaybackAction,
+  html: HTMLAction,
+  feedbackForm: FormAction,
+  responseTime: number,
+  listenFirst: boolean,
+  autoAdvance: boolean,
+  continueButton: IButton,
+  breakRoundOn: BreakRoundOn,
 }
 
 export type Action = ( 

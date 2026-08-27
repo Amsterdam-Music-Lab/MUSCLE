@@ -1,22 +1,21 @@
-import { useState } from "react";
+import { Suspense, lazy, useState } from "react";
 import {
     Route,
     Routes,
     useParams
 } from "react-router-dom";
 
-import useBoundStore from "../../util/stores";
-import { useExperiment } from "@/API";
-import Consent from "../Consent/Consent";
-import Footer from "../Footer/Footer";
-import DefaultPage from "../Page/DefaultPage";
-import Loading from "../Loading/Loading";
-import ExperimentAbout from "./ExperimentAbout/ExperimentAbout";
-import ExperimentDashboard from "./ExperimentDashboard/ExperimentDashboard";
-import IExperiment from "@/types/Experiment";
+import DefaultPage from "@/components/Page/DefaultPage";
+import Loading from "@/components/Loading/Loading";
 import Redirect from "@/components/Redirect/Redirect";
+const Consent = lazy(() => import("@/components/Consent/Consent"));
+const Footer = lazy(() => import("@/components/Footer/Footer"));
+const ExperimentAbout = lazy(() => import("@/components/Experiment/ExperimentAbout/ExperimentAbout"));
+const ExperimentDashboard = lazy(() => import("@/components/Experiment/ExperimentDashboard/ExperimentDashboard"));
+import IExperiment from "@/types/Experiment";
 import useHeadDataFromExperiment from "@/hooks/useHeadDataFromExperiment";
-import { getBlockHref } from "@/API";
+import useBoundStore from "@/util/stores";
+import { getBlockHref, useExperiment } from "@/API";
 
 const Experiment = () => {
     const { identifier } = useParams();
@@ -64,7 +63,9 @@ const Experiment = () => {
         }
         return (
             <DefaultPage className='aha__consent-wrapper' title={experiment.name}>
-                <Consent {...attrs} />
+                <Suspense fallback={<Loading />}>
+                    <Consent {...attrs} />
+                </Suspense>
             </DefaultPage>
         )
     }
@@ -86,11 +87,13 @@ const Experiment = () => {
                 />
             </Routes>
             {experiment.theme?.footer && (
-                <Footer
-                    disclaimer={experiment.disclaimer}
-                    logos={experiment.theme.footer.logos}
-                    privacy={experiment.privacy}
-                />
+                <Suspense fallback={<Loading />}>
+                    <Footer
+                        disclaimer={experiment.disclaimer}
+                        logos={experiment.theme.footer.logos}
+                        privacy={experiment.privacy}
+                    />
+                </Suspense>
             )}
         </div>
     )
