@@ -21,10 +21,10 @@ class TestInfo(unittest.TestCase):
         info = Info(body="<p>Only Body</p>")
         self.assertEqual(info.body, "<p>Only Body</p>")
         self.assertEqual(info.heading, "")
-        self.assertIsNone(info.button)
+        self.assertEqual(info.button.label, "Continue")
 
     def test_initialization_default_values(self):
         info = Info(body="<p>Body</p>", heading="Heading")
         self.assertEqual(info.body, "<p>Body</p>")
         self.assertEqual(info.heading, "Heading")
-        self.assertIsNone(info.button)
+        self.assertEqual(info.button.label, "Continue")
