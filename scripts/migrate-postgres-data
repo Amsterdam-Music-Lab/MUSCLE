@@ -1,0 +1,116 @@
+#!/bin/bash
+set -e
+
+# ----------------------------------------------------------------------------
+# Step 0: Shut down all running containers for the project.
+#
+echo "Shutting down all project containers..."
+docker compose down
+
+# ----------------------------------------------------------------------------
+# Step 1: Run 'docker compose up db' to capture version error output.
+#
+echo "Running 'docker compose up db' to capture version error output..."
+LOGS=$(docker compose up db 2>&1)
+echo "$LOGS"
+
+# ----------------------------------------------------------------------------
+# Remove any lingering database container so the volume isn’t in use.
+#
+echo "Removing any lingering 'db' container from docker compose..."
+docker compose rm -f db || true
+
+# ----------------------------------------------------------------------------
+# Step 2: Extract PostgreSQL version numbers from the logs.
+#
+OLD_VERSION=$(echo "$LOGS" | grep -oP 'initialized by PostgreSQL version \K\d+')
+NEW_VERSION=$(echo "$LOGS" | grep -oP 'this version \K\d+')
+
+# Remove any trailing whitespace or carriage returns.
+OLD_VERSION=$(echo "$OLD_VERSION" | tr -d '\r' | xargs)
+NEW_VERSION=$(echo "$NEW_VERSION" | tr -d '\r' | xargs)
+
+if [ -z "$OLD_VERSION" ] || [ -z "$NEW_VERSION" ]; then
+  echo "Error: Could not detect PostgreSQL versions from the logs."
+  exit 1
+fi
+
+echo "Detected migration from PostgreSQL $OLD_VERSION to PostgreSQL $NEW_VERSION"
+
+# ----------------------------------------------------------------------------
+# Step 3: Start a temporary container running the old PostgreSQL version.
+#
+echo "Starting a temporary PostgreSQL $OLD_VERSION container for data dump..."
+docker run --name pg_old -d \
+  -v muscle_db_data:/var/lib/postgresql/data \
+  postgres:"$OLD_VERSION"
+
+# ----------------------------------------------------------------------------
+# Step 4: Wait until PostgreSQL inside the container is ready.
+#
+echo "Waiting for PostgreSQL to be ready..."
+until docker exec pg_old pg_isready -U muscle > /dev/null 2>&1; do
+  sleep 1
+done
+
+# ----------------------------------------------------------------------------
+# Step 5: Dump the database using the running container (user "muscle").
+#
+echo "Dumping the database from PostgreSQL $OLD_VERSION..."
+docker exec pg_old pg_dumpall -U muscle > migration-dump.sql
+
+# Verify that the dump file exists on the host.
+if [ ! -f migration-dump.sql ]; then
+  echo "Error: migration-dump.sql was not created."
+  exit 1
+fi
+echo "Dump file created: $(realpath migration-dump.sql)"
+
+# ----------------------------------------------------------------------------
+# Step 6: Stop and remove the temporary old PostgreSQL container.
+#
+echo "Stopping and removing the temporary PostgreSQL $OLD_VERSION container..."
+docker stop pg_old > /dev/null
+docker rm pg_old > /dev/null
+
+# ----------------------------------------------------------------------------
+# Step 7: Remove the old volume so that a new one can be created.
+#
+echo "Removing old volume 'muscle_db_data'..."
+docker volume rm muscle_db_data
+
+# ----------------------------------------------------------------------------
+# Step 8: Restore the dump using a temporary container running the new PostgreSQL version.
+#
+# Use an absolute path for the dump file.
+echo "Starting temporary new PostgreSQL $NEW_VERSION container for restore..."
+docker run --name pg_new -d \
+  -e POSTGRES_HOST_AUTH_METHOD=trust \
+  -v muscle_db_data:/var/lib/postgresql/data \
+  postgres:"$NEW_VERSION"
+
+echo "Waiting for PostgreSQL to be ready..."
+until docker exec pg_new pg_isready -U postgres > /dev/null 2>&1; do
+  sleep 1
+done
+
+# Copy the migration dump file into the container
+echo "Copying migration-dump.sql into the container..."
+docker cp migration-dump.sql pg_new:/migration-dump.sql
+
+# Run the restore using the default 'postgres' user and its default database.
+echo "Running restore..."
+docker exec pg_new psql -U postgres -f ./migration-dump.sql
+
+echo "Stopping and removing temporary new PostgreSQL container..."
+docker stop pg_new
+docker rm pg_new
+
+
+# ----------------------------------------------------------------------------
+# Step 9: Finally, restart your project with the updated configuration.
+#
+echo "Restarting the project..."
+docker compose up -d --build
+
+echo "Migration complete."
