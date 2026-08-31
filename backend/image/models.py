@@ -14,13 +14,25 @@ TARGET_CHOICES = (
     ("_top", "Top"),
 )
 
+
+def image_upload_path(instance, filename) -> str:
+    """Generate path to save consent file based on experiment.identifier and language
+    Returns:
+        upload_to (str): Path for uploading the consent file
+    """
+    folder_name = instance.title
+    return f"images/{folder_name}/{filename}"
+
+
 class SVGAndImageFieldFile(ImageFieldFile):
     """
     Custom file field to handle SVG and standard image files that inherit from Django's ImageFieldFile.
     """
 
     def save(self, name, content, save=True):
-        if isinstance(content, UploadedFile) and (content.content_type == "image/svg+xml" or name.endswith(".svg")):
+        if isinstance(content, UploadedFile) and (
+            content.content_type == "image/svg+xml" or name.endswith(".svg")
+        ):
             name = default_storage.save(name, content)
             self.name = name
             self._committed = True
@@ -66,9 +78,15 @@ class Image(models.Model):
         )
     """
 
-    file = SVGAndImageField(upload_to="%Y/%m/%d/", validators=[validate_image_file], help_text="Uploaded image file.")
+    file = SVGAndImageField(
+        upload_to=image_upload_path,
+        validators=[validate_image_file],
+        help_text="Uploaded image file.",
+    )
     title = models.CharField(max_length=255, help_text="Title of the image.")
-    description = models.TextField(blank=True, default="", help_text="Description of the image.")
+    description = models.TextField(
+        blank=True, default="", help_text="Description of the image."
+    )
     background_color = models.CharField(
         max_length=32,
         blank=True,
@@ -76,9 +94,21 @@ class Image(models.Model):
         help_text="Show color from current theme (e.g. `colorPositive`) as image background",
         choices=COLOR_CHOICES,
     )
-    alt = models.CharField(max_length=255, blank=True, default="", help_text="Alternative text for the image.")
-    href = models.URLField(blank=True, default="", help_text="URL that the image links to.")
-    rel = models.CharField(max_length=255, blank=True, default="", help_text="Relationship attribute for the link.")
+    alt = models.CharField(
+        max_length=255,
+        blank=True,
+        default="",
+        help_text="Alternative text for the image.",
+    )
+    href = models.URLField(
+        blank=True, default="", help_text="URL that the image links to."
+    )
+    rel = models.CharField(
+        max_length=255,
+        blank=True,
+        default="",
+        help_text="Relationship attribute for the link.",
+    )
     target = models.CharField(
         max_length=255,
         blank=True,
@@ -87,10 +117,27 @@ class Image(models.Model):
         help_text="Specifies where to open the linked document.",
     )
     tags = ArrayField(
-        models.CharField(max_length=255), blank=True, default=list, help_text="Tags associated with the image."
+        models.CharField(max_length=255),
+        blank=True,
+        default=list,
+        help_text="Tags associated with the image.",
     )
-    created_at = models.DateTimeField(auto_now_add=True, help_text="Timestamp when the image was created.")
-    updated_at = models.DateTimeField(auto_now=True, help_text="Timestamp when the image was last updated.")
+    created_at = models.DateTimeField(
+        auto_now_add=True, help_text="Timestamp when the image was created."
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True, help_text="Timestamp when the image was last updated."
+    )
 
     def __str__(self):
         return self.title or self.file.name or self.alt or "Image"
+
+    def save(self, *args, **kwargs):
+        try:
+            old_instance = Image.objects.get(pk=self.pk)
+            if old_instance.file != self.file:
+                old_instance.file.storage.delete(old_instance.file.name)
+        except Image.DoesNotExist:
+            pass
+
+        super().save(*args, **kwargs)
