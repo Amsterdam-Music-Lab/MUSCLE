@@ -11,7 +11,6 @@ class Questionnaire(BaseRules):
     """ a rules file which does not do anything but show a questionnaire """
     ID = 'QUESTIONNAIRE'
     debrief_form = 'final/debrief_rhythm_unpaid.html'
-    show_participant_final = False
 
     def next_round(self, session: Session):
         actions = []

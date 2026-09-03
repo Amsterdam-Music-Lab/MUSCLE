@@ -220,13 +220,10 @@ class Session(models.Model):
         """
         Returns:
             rank of the current session for the associated block, based on `final_score`
+            If there are two higher scores than the current session, the rank is 3.
         """
-        return (
-            self.block.sessions.filter(final_score__gte=self.final_score)
-            .values("final_score")
-            .annotate(total=models.Count("final_score"))
-            .count()
-        )
+
+        return self.block.sessions.filter(final_score__gt=self.final_score).count() + 1
 
     def rounds_complete(self) -> bool:
         """

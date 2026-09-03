@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 
+from action.models import FinalFeedback, FinalScore
 from experiment.actions.types import FeedbackInfo
 from experiment.actions.final import Final
 from experiment.actions.form import Form
@@ -141,7 +142,13 @@ class BaseRules(object):
         """
         return 0
 
-    def final_score_message(self, session: Session) -> str:
+    def get_final_action(self, session: Session) -> str:
+        return Final(
+            statistic=self.get_final_statistic(session),
+            score=self.get_final_score(session),
+        )
+
+    def get_final_feedback_text(self, session: Session) -> FinalFeedback:
         """Create final score message for given session, base on score per result
         Override this to display different text on the final screen.
 

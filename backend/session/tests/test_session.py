@@ -56,6 +56,27 @@ class SessionTest(TestCase):
         rank = finished_session.percentile_rank({})
         self.assertEqual(rank, 62.5)
 
+    def test_rank(self):
+        Session.objects.bulk_create(
+            [
+                Session(
+                    block=self.block,
+                    participant=self.participant,
+                    final_score=score,
+                    finished_at=timezone.now(),
+                )
+                for score in [20, 30, 40, 50, 60, 70]
+            ]
+        )
+        finished_session = Session.objects.create(
+            block=self.block,
+            participant=self.participant,
+            final_score=50,
+            finished_at=timezone.now(),
+        )
+        rank = finished_session.rank()
+        self.assertEqual(rank, 3)
+
     def test_last_result(self):
         result = self.session.last_result()
         self.assertIsNone(result)

@@ -22,7 +22,7 @@ class Participant(models.Model):
         unique_hash (str): Unique identifier string
         country_code (str): Country code of the participant
         access_info (str): HTTP_USER_AGENT info
-        participant_id_url (str): URL code to link an experiment to a participant
+        participant_id_url (str): URL code to link a participant to an external service
     """
 
     unique_hash = models.CharField(
@@ -58,6 +58,12 @@ class Participant(models.Model):
         n_lte = all_participants.filter(accumulative_score__lte=this_score).count()
         n_eq = all_participants.filter(accumulative_score=this_score).count()
         return 100.0 * (n_lte - (0.5 * n_eq)) / n_participants
+
+    def rank_accumulative_score(self) -> float:
+        all_participants = Participant.objects.with_accumulative_score()
+        this_score = all_participants.get(pk=self.pk).accumulative_score
+        n_participants = all_participants.count()
+        return 1
 
     def result_count(self) -> int:
         """Get the total number of results

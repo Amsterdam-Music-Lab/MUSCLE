@@ -8,7 +8,7 @@ export default interface Block {
     description: string;
     image?: IImage;
     bonus_points: number;
-    theme?: Theme;
+    theme: Theme;
     class_name: string;
     rounds: number;
     playlists: Playlist[];

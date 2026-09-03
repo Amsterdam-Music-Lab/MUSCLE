@@ -11,24 +11,19 @@ from session.models import Session
 from .base_action import BaseAction
 from .button import Button
 
-class LogoConfiguration(TypedDict):
-    """
-    Logo configuration for branding or visual identification on the final screen.
 
-    Attributes:
-        image (str): The URL of the logo image to display.
-        link (str): The URL to navigate to when the logo is clicked.
-    """
+class FinalFeedback(TypedDict):
+    text: str
 
-    image: str
-    link: str
+class FinalScore(TypedDict):
+    score: float
+    text: str
 
 
 class FinalActionResponse(TypedDict):
     view: str
-    score: float
+    score: FinalScore
     percentile: Optional[float]
-    accumulative_percentile: Optional[float]
     rank: Optional[str]
     final_text: Optional[str]
     button: Optional[Button]
@@ -64,16 +59,14 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         button (Optional[ButtonConfiguration]): Optional button configuration. For example:
                                             {"text": "Play again", "link": "/{experiment_identifier}"}. If not provided, a default button with label "Next" will be rendered, unless the experiment is not replayable.
                                             If the passed in button does not specify a link, `get_experiment_url` will be used to link back to the experiment, if it is replayable.
-        points (Optional[str]): The label for the score units (e.g., "points"). Defaults to a localized "points".
         rank (Optional[str]): The participant's rank (e.g., "GOLD"). If not provided, no rank is displayed.
         show_profile_link (bool): If True, display a link to the participant's profile.
         show_participant_link (bool): If True, display a participant-related link or information.
         show_participant_id_only (bool): If True, only the participant ID is shown, without a link.
         feedback_info (Optional[Dict[str, str]]): Optional dictionary containing feedback-related data. For example:
                                                   {"header": "Feedback", "prompt": "Tell us what you think", "button_text": "Submit"}.
-        total_score (Optional[float]): Explicit final score. If None, this is derived from the session.
-        logo (Optional[LogoConfiguration]): Optional logo configuration for branding. For example:
-                                        {"image": "/static/logo.png", "link": "https://example.com"}.
+        score (float): Final score.
+        score_text (str): Text to display with score. Default: _("points)
 
     Note:
         The `action()` method returns a `FinalActionResponse` that can be consumed by the frontend
@@ -97,18 +90,14 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         title: str = _("Final score"),
         final_text: Optional[str] = None,
         button: Optional[Button] = None,
-        points: Optional[str] = None,
         rank: Optional[str] = None,
         show_profile_link: bool = False,
         show_participant_link: bool = False,
         show_participant_id_only: bool = False,
         feedback_info: FeedbackInfo | None = None,
-        total_score: Optional[float] = None,
-        logo: Optional[LogoConfiguration] = None,
-        percentile: Optional[float] = None,
-        accumulative_percentile: Optional[float] = None,
+        score: FinalScore,
+        statistic: Optional[float] = None,
     ):
-        self.session = session
         self.title = title
         self.final_text = final_text
         self.button = self.get_button(button, session)
@@ -117,30 +106,21 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         self.show_participant_link = show_participant_link
         self.show_participant_id_only = show_participant_id_only
         self.feedback_info = feedback_info
-        self.logo = logo
-        self.percentile = percentile
-        self.accumulative_percentile = accumulative_percentile
-
-        if total_score is None:
-            self.total_score = self.session.total_score()
-        else:
-            self.total_score = total_score
-
-        if points is None:
-            self.points = _("points")
-        else:
-            self.points = points
+        self.statistic = statistic
+        self.score = score
+        self.score_text = score_text
 
     def action(self) -> FinalActionResponse:
         response: FinalActionResponse = {
             "view": self.view,
-            "score": self.total_score,
-            "percentile": self.percentile,
-            "accumulativePercentile": self.accumulative_percentile,
+            "score": {
+                "value": self.total_score,
+                "text": self.score_text,
+            },
+            "statistic": self.statistic,
             "rank": self.rank,
             "finalText": self.wrap_plain_final_text(),
             "button": self.button.action() if self.button else None,
-            "points": self.points,
             "actionTexts": {
                 "playAgain": _("Play again"),
                 "profile": _("My profile"),
@@ -152,7 +132,6 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
             "showParticipantLink": self.show_participant_link,
             "feedbackInfo": self.feedback_info,
             "participantIDOnly": self.show_participant_id_only,
-            "logo": self.logo,
         }
 
         return response

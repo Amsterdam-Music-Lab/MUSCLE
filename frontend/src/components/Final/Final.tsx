@@ -1,10 +1,12 @@
+import { Suspense, lazy } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Rank from "../Rank/Rank";
+import Rank from "@/components/Rank/Rank";
 import Social from "@/components/Social/Social";
-import Button from "../Button/Button";
-import ParticipantLink from "../ParticipantLink/ParticipantLink";
-import UserFeedback from "../UserFeedback/UserFeedback";
+import Button from "@/components/Button/Button";
+const Footer = lazy(() => import("@/components/Footer/Footer"));
+import ParticipantLink from "@/components/ParticipantLink/ParticipantLink";
+import UserFeedback from "@/components/UserFeedback/UserFeedback";
 import { FinalAction, SharedActionProps } from "@/types/Action";
 import classNames from "@/util/classNames";
 import { URLS } from '@/API';
@@ -29,7 +31,6 @@ const Final = (props: FinalAction & SharedActionProps) => {
         feedbackInfo,
         points,
         rank,
-        logo,
         percentile
     } = props;
     const navigate = useNavigate();
@@ -55,13 +56,6 @@ const Final = (props: FinalAction & SharedActionProps) => {
                         {...button}
                         onClick={onNext}
                     />
-                </div>
-            )}
-            {logo && (
-                <div className="text-center pt-4">
-                    <a href={logo.link}>
-                        <img src={logo.image} width="100%" alt="Logo" />
-                    </a>
                 </div>
             )}
             {social && (<Social
@@ -92,6 +86,13 @@ const Final = (props: FinalAction & SharedActionProps) => {
                 participant={participant}
                 feedbackInfo={feedbackInfo}
             />)}
+            {block.theme.footer!.logos && (
+                <Suspense >
+                    <Footer
+                        logos={block.theme.footer!.logos}
+                    />
+                </Suspense>
+            )}
 
         </div>
     );
