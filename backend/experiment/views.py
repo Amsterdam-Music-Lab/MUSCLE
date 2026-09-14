@@ -4,6 +4,7 @@ import logging
 from django.http import Http404, HttpRequest, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _, get_language
+from django.views.decorators.http import require_POST
 from django.views.generic.list import ListView
 from django_markup.markup import formatter
 
@@ -56,10 +57,6 @@ def get_block(request: HttpRequest, identifier: str) -> JsonResponse:
         "class_name": class_name,  # can be used to override style
         "rounds": block.rounds,
         "bonus_points": block.bonus_points,
-        "playlists": [
-            {"id": playlist.id, "name": playlist.name}
-            for playlist in block.playlists.all()
-        ],
         "feedback_info": block.get_rules().feedback_info(),
         "loading_text": _("Loading"),
         "session_id": session.id,
@@ -68,6 +65,7 @@ def get_block(request: HttpRequest, identifier: str) -> JsonResponse:
     return response
 
 
+@require_POST
 def post_feedback(request, identifier):
     text = request.POST.get("feedback")
     if not text:

@@ -1,12 +1,17 @@
+import json
+
 from django.conf import settings
 from django.http import FileResponse
 from django.test import override_settings, TestCase
 
+from experiment.models import Block
+from participant.models import Participant
 from section.models import Playlist, Section
+from session.models import Session
 
 
 @override_settings(TESTING=True)
-class SectionViewTest(TestCase):
+class GetSectionViewTest(TestCase):
 
     def setUp(self) -> None:
         self.playlist = Playlist.objects.create(name="TestPlaylist")
@@ -51,3 +56,19 @@ class SectionViewTest(TestCase):
     def test_get_unknown_section(self):
         response = self.client.get("/section/12345/12345/")
         self.assertEqual(response.status_code, 404)
+
+
+class SetPlaylistViewTest(TestCase):
+    def setUp(self) -> None:
+        Playlist.objects.bulk_create(
+            [Playlist(name=f"TestPlaylist-{n}") for n in range(3)]
+        )
+        self.participant = Participant.objects.create(unique_hash=42)
+        self.block = Block.objects.create(rules='QUESTIONNAIRE', identifier='test')
+        self.playlist = Playlist.objects.first()
+        self.session = Session.objects.create()
+
+    def test_set_playlist(self):
+        request = {"session_id": self.session.id, "playlist_id": self.playlist.id}
+        response = self.client.post("/section/set_playlist", request)
+        self.assertEqual(response.content, {"status": "ok"})

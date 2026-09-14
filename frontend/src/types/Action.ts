@@ -1,11 +1,10 @@
 import Social from "@/types/Social";
-import Block, { FeedbackInfo } from "@/types/Block";
+import Block, { FeedbackInfo, Playlist } from "@/types/Block";
 import IButton from  "@/types/Button";
 import Participant from "@/types/Participant";
 import { PlaybackAction } from "./Playback";
 import Question from "./Question";
 import { BreakRoundOn } from "./Trial";
-import { MutableRefObject } from "react";
 
 export interface SharedActionProps {
   block: Block;
@@ -96,10 +95,15 @@ export interface FinalAction {
   };
 }
 
+export interface Playlist {
+    id: number;
+    name: string;
+}
+
 export interface PlaylistAction {
   view: "PLAYLIST";
   instruction: string;
-  playlist: MutableRefObject<string>;
+  playlists: Playlist[];
 }
 
 export interface RedirectAction {

@@ -29,6 +29,9 @@ export const URLS = {
         score: "/participant/scores/",
         share: "/participant/share/",
     },
+    section: {
+        setPlaylist: "/section/set_playlist/",
+    },
     result: {
         get: (question: string) => "/result/" + question + "/",
         current: "/result/current_profile",
@@ -166,6 +169,31 @@ export const scoreIntermediateResult = async ({
     }
 };
 
+interface SetPlaylistParams {
+    sessionID: number;
+    playlistID: number;
+    participant: Participant
+}
+
+
+/** set playlist for active session */
+export const setPlaylist = async ({ sessionID, playlistID, participant }: SetPlaylistParams) => {
+    try {
+        const vars = {
+            session_id: sessionID,
+            playlist_id: playlistID,
+            csrfmiddlewaretoken: participant.csrf_token
+        }
+        const response = await axios.post(
+            API_BASE_URL + URLS.section.setPlaylist, qs.stringify(vars)
+        );
+        return response.data;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+};
+
 interface GetNextRoundParams {
     session: Session;
 }
@@ -184,30 +212,6 @@ export const getNextRound = async ({ session }: GetNextRoundParams): Promise<Rou
         return null;
     }
 };
-
-interface FinalizeSessionParams {
-    session: Session;
-    participant: Participant;
-}
-
-// Tell the backend that the session is finished
-export const finalizeSession = async ({ session, participant }: FinalizeSessionParams) => {
-
-    const sessionId = session.id.toString();
-
-    try {
-        const response = await axios.post(
-            API_BASE_URL + URLS.session.finalize(sessionId),
-            qs.stringify({
-                csrfmiddlewaretoken: participant.csrf_token,
-            })
-        );
-        return response.data;
-    } catch (err) {
-        console.error(err);
-        return null;
-    }
-}
 
 interface ShareParticipantParams {
     email: string;
