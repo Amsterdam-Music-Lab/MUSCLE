@@ -1,11 +1,18 @@
 from os.path import join
 
-from django.http import Http404, HttpRequest, FileResponse
+from django.http import (
+    FileResponse,
+    Http404,
+    HttpRequest,
+    HttpResponseBadRequest,
+    JsonResponse,
+)
 from django.conf import settings
 from django.shortcuts import redirect
+from django.views.decorators.http import require_POST
 
-from .models import Section
-
+from section.models import Playlist, Section
+from session.models import Session
 
 def get_section(request: HttpRequest, section_id: int) -> Section:
     """Get section by given id"""
@@ -59,3 +66,22 @@ def get_section(request: HttpRequest, section_id: int) -> Section:
 
     except Section.DoesNotExist:
         raise Http404("Section does not exist")
+
+
+@require_POST
+def set_playlist(request: HttpRequest) -> JsonResponse:
+    playlist_id = request.POST.get("playlist_id")
+    session_id = request.POST.get("session_id")
+    if not playlist_id or not session_id:
+        return HttpResponseBadRequest("playlist_id and session_id not set")
+    try:
+        session = Session.objects.get(pk=session_id)
+    except Session.DoesNotExist:
+        raise Http404("Session does not exist")
+    try:
+        playlist = Playlist.objects.get(pk=playlist_id)
+    except Playlist.DoesNotExist:
+        raise Http404("Playlist does not exist")
+    session.playlist = playlist
+    session.save()
+    return JsonResponse({"status": "ok"})
