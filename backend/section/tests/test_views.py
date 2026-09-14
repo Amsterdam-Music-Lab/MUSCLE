@@ -1,7 +1,7 @@
 import json
 
 from django.conf import settings
-from django.http import FileResponse
+from django.http import FileResponse, HttpResponseBadRequest
 from django.test import override_settings, TestCase
 
 from experiment.models import Block
@@ -59,16 +59,37 @@ class GetSectionViewTest(TestCase):
 
 
 class SetPlaylistViewTest(TestCase):
-    def setUp(self) -> None:
+    fixtures = ["testing"]
+
+    @classmethod
+    def setUpTestData(cls):
         Playlist.objects.bulk_create(
             [Playlist(name=f"TestPlaylist-{n}") for n in range(3)]
         )
-        self.participant = Participant.objects.create(unique_hash=42)
-        self.block = Block.objects.create(rules='QUESTIONNAIRE', identifier='test')
-        self.playlist = Playlist.objects.first()
-        self.session = Session.objects.create()
+        cls.participant = Participant.objects.create(unique_hash=42)
+        cls.block = Block.objects.get(identifier='test-block')
+        cls.playlist = Playlist.objects.first()
+        cls.session = Session.objects.create(
+            block=cls.block, participant=cls.participant
+        )
 
     def test_set_playlist(self):
         request = {"session_id": self.session.id, "playlist_id": self.playlist.id}
-        response = self.client.post("/section/set_playlist", request)
-        self.assertEqual(response.content, {"status": "ok"})
+        response = self.client.post("/section/set_playlist/", request)
+        self.assertEqual(response.status_code, 200)
+
+    def test_set_nonexisting_playlist(self):
+        fake_playlist_id = sum(Playlist.objects.all().values_list("id", flat=True))
+        request = {"session_id": self.session.id, "playlist_id": fake_playlist_id}
+        response = self.client.post("/section/set_playlist/", request)
+        self.assertEqual(response.status_code, 404)
+
+    def test_set_playlist_to_nonexistent_session(self):
+        request = {"session_id": self.session.id + 1, "playlist_id": self.playlist.id}
+        response = self.client.post("/section/set_playlist/", request)
+        self.assertEqual(response.status_code, 404)
+
+    def test_set_playlist_incomplete_params(self):
+        request = {"session_id": self.session.id + 1}
+        response = self.client.post("/section/set_playlist/", request)
+        self.assertIsInstance(response, HttpResponseBadRequest)
