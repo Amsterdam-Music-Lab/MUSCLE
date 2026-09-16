@@ -267,7 +267,7 @@ class ToontjeHoger2Preverbal(BaseRules):
                 color='colorNeutral2',
             ),
             ImagePlaybackSection(
-                section=sectionA,
+                section=sectionB,
                 label=format_label(1, 'alphabetic'),
                 image={
                     "link": "/images/experiments/toontjehoger/spectrogram-baby-german.webp"
