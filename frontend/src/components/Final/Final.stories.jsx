@@ -24,7 +24,7 @@ function getFinalData(overrides = {}) {
             text: "Rank",
             class: "rank",
         },
-        final_text: `
+        finalText: `
             <p>You outperformed 66% of the players</p>
 
             <table>
@@ -48,20 +48,20 @@ function getFinalData(overrides = {}) {
             content: "Hey! Check out this cool experiment",
             tags: ["coolexperiment", "awesome"],
         },
-        show_profile_link: true,
-        action_texts: {
-            all_experiments: "All experiments",
+        showProfileLink: true,
+        actionTexts: {
+            allExperiments: "All experiments",
             profile: "Profile",
         },
-        show_participant_link: true,
-        participant_id_only: false,
-        feedback_info: {
+        showParticipantLink: true,
+        participantIDOnly: false,
+        feedbackInfo: {
             header: "Feedback",
             button: {
                 label: "Submit",
             },
-            thank_you: "Thank you for your feedback!",
-            contact_body:
+            thankYou: "Thank you for your feedback!",
+            contactBody:
                 '<p>Please contact us at <a href="mailto:info@example.com">info@example.com</a></p>',
         },
         block: {
