@@ -21,6 +21,7 @@ export const SCORE_FEEDBACK_DISPLAY: { [key: string]: ScoreFeedbackDisplay } = {
 interface MatchingPairsProps {
     playSection: (index: number) => void;
     sections: Card[];
+    instruction: string;
     showAnimation: boolean;
     finishedPlaying: () => void;
     scoreFeedbackDisplay?: ScoreFeedbackDisplay;
@@ -32,6 +33,7 @@ const MatchingPairs = ({
     playSection,
     sections: initialSections, // renamed to make it clear these are initial values
     showAnimation,
+    instruction,
     finishedPlaying,
     scoreFeedbackDisplay = SCORE_FEEDBACK_DISPLAY.LARGE_TOP,
     submitResult,
@@ -43,7 +45,7 @@ const MatchingPairs = ({
     const yPosition = useRef(-1);
     const [firstCard, setFirstCard] = useState<Card | null>(null);
     const [secondCard, setSecondCard] = useState<Card | null>(null);
-    const [feedbackText, setFeedbackText] = useState('Pick a card');
+    const [feedbackText, setFeedbackText] = useState(instruction);
     const [feedbackClass, setFeedbackClass] = useState('');
     const [score, setScore] = useState<number | null>(null);
     const [total, setTotal] = useState(bonusPoints);
@@ -75,7 +77,7 @@ const MatchingPairs = ({
         yPosition.current = posY;
     };
 
-    const showFeedback = (score: number) => {
+    const setFeedback = (score: number) => {
 
         setTotal(total + score);
 
@@ -83,19 +85,15 @@ const MatchingPairs = ({
         switch (score) {
             case 10:
                 fbclass = 'fblucky';
-                setFeedbackText('Lucky match');
                 break;
             case 20:
                 fbclass = 'fbmemory';
-                setFeedbackText('Good job!');
                 break;
             case 0:
                 fbclass = 'fbnomatch';
-                setFeedbackText('No match');
                 break;
             case -10:
                 fbclass = 'fbmisremembered';
-                setFeedbackText('Misremembered');
                 break;
             default:
                 setFeedbackClass('');
@@ -166,7 +164,8 @@ const MatchingPairs = ({
                         throw new Error('We cannot currently proceed with the game. Try again later');
                     }
                     setScore(scoreResponse.score);
-                    showFeedback(scoreResponse.score);
+                    setFeedback(scoreResponse.score);
+                    setFeedbackText(scoreResponse.feedback);
                 } catch {
                     setError('We cannot currently proceed with the game. Try again later');
                     return;
@@ -214,7 +213,7 @@ const MatchingPairs = ({
             submitResult({});
             setFeedbackText('');
         } else {
-            setFeedbackText('Pick a card');
+            setFeedbackText(instruction);
             setScore(null);
             setFeedbackClass('');
         }
