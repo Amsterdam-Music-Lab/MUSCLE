@@ -1,25 +1,19 @@
 #!/bin/bash
 # -----------------------------------------
+composefile=docker-compose.yaml
 # if -p flag is passed, run everything on the docker-compose-deploy.yml file
 if getopts 'p:'; then
-    echo "Creating a full database dump for production."
-    echo "Stopping all containers..."
-    docker compose -f docker-compose-deploy.yml down
-    echo "Starting database container..."
-    docker compose -f docker-compose-deploy.yml up db -d
-    echo "Create migration-dump.sql"
-    docker compose run --rm db pg_dumpall > /dump/db-dump.sql
-    docker compose -f docker-compose-deploy.yml down
-    exit 0
+    composefile=docker-compose-deploy.yml
 fi
 # ------------------------------------------
-# otherwise, use the development compose file
-echo "Creating a full database dump for development."
-echo "Stopping all containers..."
-docker compose down
-echo "Starting database container..."
-docker compose up db -d
-echo "Create migration-dump.sql"
-docker compose run --rm  db pg_dumpall > /dump/db-dump.sql
+# Step 1. Stop containers
+echo "1. Stopping all containers..."
+docker compose -f $composefile down
+# Step 2. Start database container
+echo "2. Starting database container..."
+docker compose -f $composefile up db -d
+# Step 3. Create dump file
+echo "3. Create db-dump.sql"
+docker compose run --rm  db pg_dumpall > db-dump.sql
 docker compose down
 echo 
