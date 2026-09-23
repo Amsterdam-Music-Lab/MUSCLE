@@ -12,7 +12,7 @@ services:
             - PGDATABASE=${SQL_DATABASE}
             - PGPASSWORD=${SQL_PASSWORD}
         volumes:
-            - ${HOST_DATA}/db-data:- db_data:/var/lib/postgresql:z
+            - ${HOST_DATA}/db-data:/var/lib/postgresql:z
             - ${HOST_DATA}/db-backups:/backups:z
         healthcheck:
             test: [ "CMD-SHELL", "pg_isready" ]
