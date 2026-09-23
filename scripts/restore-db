@@ -1,0 +1,37 @@
+#!/bin/bash
+# -----------------------------------------
+composefile=docker-compose.yaml
+while getopts ":p" opt; do
+  case $opt in
+    p)
+      echo "-p flag passed" >&2
+      composefile=docker-compose-deploy.yml
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      ;;
+  esac
+done
+echo "Starting database restore with $composefile"
+# -----------------------------------------
+# Step 1: stop and remove containers    
+echo "1. Stopping and removing containers..."
+docker compose -f $composefile down
+docker system prune
+# Step 2: backup old database volume
+echo "2. Making a backup copy of the postgres volume"
+docker volume create --name db_data_tmp
+docker run --rm -v muscle_db_data:/from -v db_data_tmp:/to alpine bash -c "scp -r /from /to"
+# Step 3: remove old database volume
+echo "3. Removing old database volume"
+docker volume rm muscle_db_data
+# Step 4: start new database container
+echo "4. Starting database container..."
+docker compose -f $composefile up db -d
+# Step 5: move dumpfile and restore database
+echo "5. Restore database from db-dump.sql"
+mv db-dump.sql /tmp
+docker compose run --rm -v /tmp/db-dump.sql:/dump db psql -f /dump/db-dump.sql
+# Step 6: remove backup database volume and database dump
+docker volume rm db_data_tmp
+rm /tmp/db-dump.sql

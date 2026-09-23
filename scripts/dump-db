@@ -1,0 +1,29 @@
+#!/bin/bash
+# -----------------------------------------
+#!/bin/bash
+# -----------------------------------------
+composefile=docker-compose.yaml
+while getopts ":p" opt; do
+  case $opt in
+    p)
+      echo "-p flag passed" >&2
+      composefile=docker-compose-deploy.yml
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      ;;
+  esac
+done
+echo "Starting database dump with $composefile"
+# ------------------------------------------
+# Step 1. Stop containers
+echo "1. Stopping all containers..."
+docker compose -f $composefile down
+# Step 2. Start database container
+echo "2. Starting database container..."
+docker compose -f $composefile up db -d
+# Step 3. Create dump file
+echo "3. Create db-dump.sql"
+docker compose run --rm  db pg_dumpall > db-dump.sql
+docker compose down
+echo 
