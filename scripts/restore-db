@@ -1,10 +1,18 @@
 #!/bin/bash
 # -----------------------------------------
 composefile=docker-compose.yaml
-# if -p flag is passed, run everything on the docker-compose-deploy.yml file
-if getopts 'p:'; then
-    composefile=docker-compose-deploy.yml
-fi
+while getopts ":p" opt; do
+  case $opt in
+    p)
+      echo "-p flag passed" >&2
+      composefile=docker-compose-deploy.yml
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      ;;
+  esac
+done
+echo "Starting database restore with $composefile"
 # -----------------------------------------
 # Step 1: stop and remove containers    
 echo "1. Stopping and removing containers..."
