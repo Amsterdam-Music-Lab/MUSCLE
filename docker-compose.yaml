@@ -1,7 +1,7 @@
 # Docker-compose definition for development
 services:
   db:
-    image: postgres:16-bookworm
+    image: postgres:18-trixie
     environment:
       - POSTGRES_DB=${SQL_DATABASE}
       - POSTGRES_USER=${SQL_USER}
@@ -12,7 +12,7 @@ services:
       - PGDATABASE=${SQL_DATABASE}
       - PGPASSWORD=${SQL_PASSWORD}
     volumes:
-      - db_data:/var/lib/postgresql/data/
+      - db_data:/var/lib/postgresql/
       - db_backup:/backups/
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready" ]
