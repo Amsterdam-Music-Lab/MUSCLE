@@ -95,6 +95,7 @@ class MatchingPairs2025(MatchingPairsGame):
             sections=[PlaybackSection(section) for section in player_sections],
             show_animation=self.show_animation,
             score_feedback_display=self.score_feedback_display,
+            instruction=_("Pick a card!"),
         )
         trial = Trial(
             title="Tune twins",
@@ -195,7 +196,7 @@ class MatchingPairs2025(MatchingPairsGame):
         condition_results = session.participant.result_set.filter(
             question_identifier='condition'
         ).order_by('score')
-        if len(condition_results) == 11:
+        if len(condition_results) == len(possible_conditions):
             # all conditions have been played, return the least played
             least_played = condition_results.first()
             least_played.score += 1

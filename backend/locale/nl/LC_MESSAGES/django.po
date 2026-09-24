@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-09 11:43+0200\n"
+"POT-Creation-Date: 2026-09-21 15:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,6 +40,14 @@ msgstr ""
 msgid "Turkish"
 msgstr ""
 
+#: aml/base_settings.py:139
+msgid "German"
+msgstr ""
+
+#: aml/base_settings.py:140
+msgid "Japanese"
+msgstr ""
+
 #: experiment/actions/consent.py:105
 msgid "I agree"
 msgstr "Akkoord"
@@ -47,6 +55,13 @@ msgstr "Akkoord"
 #: experiment/actions/consent.py:106
 msgid "Stop"
 msgstr ""
+
+#: experiment/actions/explainer.py:66 experiment/rules/hooked.py:95
+#: experiment/rules/huang_2022.py:172 experiment/rules/huang_2022.py:229
+#: experiment/rules/likert.py:46 experiment/rules/musical_preferences.py:88
+#: experiment/rules/two_questions.py:50
+msgid "Let's go!"
+msgstr "Start!"
 
 #: experiment/actions/final.py:86
 msgid "plastic"
@@ -81,7 +96,7 @@ msgid "points"
 msgstr "punten"
 
 #: experiment/actions/final.py:145 experiment/rules/hooked.py:116
-#: experiment/rules/matching_pairs.py:89 experiment/rules/thats_my_song.py:79
+#: experiment/rules/matching_pairs.py:89 experiment/rules/thats_my_song.py:80
 msgid "Play again"
 msgstr "Opnieuw spelen"
 
@@ -94,7 +109,7 @@ msgid "All experiments"
 msgstr "Alle experimenten"
 
 #: experiment/actions/final.py:171 experiment/actions/score.py:53
-#: experiment/rules/musical_preferences.py:137
+#: experiment/rules/musical_preferences.py:136
 msgid "Next"
 msgstr "Volgende"
 
@@ -160,17 +175,17 @@ msgstr ""
 msgid "Did the track come back in the right place?"
 msgstr ""
 
-#: experiment/forms.py:67
+#: experiment/forms.py:71
 msgid "The name and description will be displayed in dashboard mode."
 msgstr ""
 
-#: experiment/forms.py:69
+#: experiment/forms.py:73
 msgid ""
 "An image that will be displayed on the experiment page and as a meta image "
 "in search engines."
 msgstr ""
 
-#: experiment/forms.py:72
+#: experiment/forms.py:76
 #, python-brace-format
 msgid ""
 "The identifier is used to identify the block in the URL so you can access it "
@@ -180,7 +195,7 @@ msgid ""
 "block, participant, result, section, session, static."
 msgstr ""
 
-#: experiment/forms.py:76
+#: experiment/forms.py:80
 msgid ""
 "This field can be used to enter dictionaries to configure behaviour of "
 "rules. Refer to the rules files' source code for possible settings."
@@ -218,48 +233,48 @@ msgid ""
 "placeholders."
 msgstr ""
 
-#: experiment/models.py:169
+#: experiment/models.py:176
 msgid "Extra settings to control the behaviour of the block's rules"
 msgstr ""
 
-#: experiment/models.py:301
+#: experiment/models.py:314
 msgid "List of tags for social media sharing"
 msgstr ""
 
-#: experiment/models.py:305
+#: experiment/models.py:318
 msgid ""
 "URL to be shared on social media. If empty, the experiment URL will be used."
 msgstr ""
 
-#: experiment/models.py:309
+#: experiment/models.py:322
 msgid "Facebook"
 msgstr ""
 
-#: experiment/models.py:310
+#: experiment/models.py:323
 msgid "WhatsApp"
 msgstr ""
 
-#: experiment/models.py:311
+#: experiment/models.py:324
 msgid "Twitter"
 msgstr ""
 
-#: experiment/models.py:312
+#: experiment/models.py:325
 msgid "Weibo"
 msgstr ""
 
-#: experiment/models.py:313
+#: experiment/models.py:326
 msgid "Share"
 msgstr ""
 
-#: experiment/models.py:314
+#: experiment/models.py:327
 msgid "Clipboard"
 msgstr ""
 
-#: experiment/models.py:320
+#: experiment/models.py:333
 msgid "Selected social media channels for sharing"
 msgstr ""
 
-#: experiment/models.py:352
+#: experiment/models.py:365
 #, python-format
 msgid "I scored %(score)d points in %(experiment_name)s"
 msgstr ""
@@ -362,7 +377,7 @@ msgstr "Heb je een stabiele internetverbinding?"
 msgid "We appreciate your feedback!"
 msgstr ""
 
-#: experiment/rules/base.py:101 experiment/rules/musical_preferences.py:78
+#: experiment/rules/base.py:101 experiment/rules/musical_preferences.py:77
 msgid "Questionnaire"
 msgstr ""
 
@@ -415,7 +430,7 @@ msgstr ""
 #: experiment/rules/beat_alignment.py:71 experiment/rules/congosamediff.py:187
 #: experiment/rules/duration_discrimination.py:180
 #: experiment/rules/h_bat.py:197 experiment/rules/hbat_bst.py:91
-#: experiment/rules/musical_preferences.py:294
+#: experiment/rules/musical_preferences.py:358
 #: experiment/rules/rhythm_discrimination.py:293
 msgid "End"
 msgstr "Einde"
@@ -445,7 +460,7 @@ msgstr ""
 "geconcentreerd te blijven!"
 
 #: experiment/rules/beat_alignment.py:99
-#: experiment/rules/musical_preferences.py:118 experiment/rules/practice.py:220
+#: experiment/rules/musical_preferences.py:117 experiment/rules/practice.py:220
 #: experiment/rules/speech2song.py:55
 msgid "Start"
 msgstr "Start"
@@ -789,12 +804,6 @@ msgid ""
 "a different spot during the silence?"
 msgstr ""
 
-#: experiment/rules/hooked.py:95 experiment/rules/huang_2022.py:172
-#: experiment/rules/huang_2022.py:229 experiment/rules/likert.py:46
-#: experiment/rules/musical_preferences.py:89
-msgid "Let's go!"
-msgstr "Start!"
-
 #: experiment/rules/hooked.py:167
 msgid "Bonus Rounds"
 msgstr ""
@@ -826,7 +835,7 @@ msgid "Did you hear this song in previous rounds?"
 msgstr ""
 
 #: experiment/rules/huang_2022.py:62
-#: experiment/rules/musical_preferences.py:304
+#: experiment/rules/musical_preferences.py:368
 msgid "Any remarks or questions (optional):"
 msgstr ""
 
@@ -835,17 +844,17 @@ msgid "Thank you for your feedback!"
 msgstr ""
 
 #: experiment/rules/huang_2022.py:85
-#: experiment/rules/musical_preferences.py:162
+#: experiment/rules/musical_preferences.py:160
 msgid "Do you hear the music?"
 msgstr ""
 
 #: experiment/rules/huang_2022.py:103
-#: experiment/rules/musical_preferences.py:181
+#: experiment/rules/musical_preferences.py:179
 msgid "Audio check"
 msgstr ""
 
 #: experiment/rules/huang_2022.py:119
-#: experiment/rules/musical_preferences.py:132
+#: experiment/rules/musical_preferences.py:131
 msgid "Quit"
 msgstr ""
 
@@ -922,47 +931,48 @@ msgid ""
 "songs that came back."
 msgstr ""
 
-#: experiment/rules/likert.py:36
+#: experiment/rules/likert.py:36 experiment/rules/two_questions.py:40
 msgid "Step 1."
 msgstr ""
 
-#: experiment/rules/likert.py:41
+#: experiment/rules/likert.py:41 experiment/rules/two_questions.py:45
 msgid "Step 2."
 msgstr ""
 
-#: experiment/rules/likert.py:62
+#: experiment/rules/likert.py:62 experiment/rules/two_questions.py:66
 msgid "End of this part"
 msgstr "Einde van dit onderdeel"
 
-#: experiment/rules/likert.py:63
+#: experiment/rules/likert.py:63 experiment/rules/two_questions.py:67
 msgid "Thank you for your responses!"
 msgstr "Hartelijk dank voor je antwoorden!"
 
-#: experiment/rules/likert.py:87
+#: experiment/rules/likert.py:87 experiment/rules/two_questions.py:130
 msgid "Rate from lowest to highest"
 msgstr ""
 
-#: experiment/rules/likert.py:89
+#: experiment/rules/likert.py:89 experiment/rules/two_questions.py:132
 msgid "Lowest"
 msgstr ""
 
-#: experiment/rules/likert.py:90
+#: experiment/rules/likert.py:90 experiment/rules/two_questions.py:133
 msgid "Low"
 msgstr ""
 
-#: experiment/rules/likert.py:91
+#: experiment/rules/likert.py:91 experiment/rules/two_questions.py:134
 msgid "Medium"
 msgstr ""
 
-#: experiment/rules/likert.py:92
+#: experiment/rules/likert.py:92 experiment/rules/two_questions.py:135
 msgid "High"
 msgstr ""
 
-#: experiment/rules/likert.py:93
+#: experiment/rules/likert.py:93 experiment/rules/two_questions.py:136
 msgid "Highest"
 msgstr ""
 
-#: experiment/rules/likert.py:103
+#: experiment/rules/likert.py:103 experiment/rules/two_questions.py:121
+#, python-format
 msgid "Round %(round_number)d of %(total_rounds)d"
 msgstr "Ronde %(round_number)d van %(total_rounds)d"
 
@@ -997,6 +1007,22 @@ msgid ""
 "Before starting the game, we would like to ask you %i demographic questions."
 msgstr ""
 
+#: experiment/rules/matching_pairs.py:154
+msgid "Good job!"
+msgstr "Goed gedaan!"
+
+#: experiment/rules/matching_pairs.py:158
+msgid "Lucky match"
+msgstr "Toevalstreffer"
+
+#: experiment/rules/matching_pairs.py:163
+msgid "Misremembered"
+msgstr "Verkeerd onthouden"
+
+#: experiment/rules/matching_pairs.py:167
+msgid "No match"
+msgstr "Geen paar"
+
 #: experiment/rules/matching_pairs_2025.py:54
 #, python-format
 msgid ""
@@ -1006,66 +1032,77 @@ msgstr ""
 
 #: experiment/rules/matching_pairs_2025.py:75
 msgid "Click to start!"
-msgstr ""
+msgstr "Click om te beginnen!"
 
 #: experiment/rules/matching_pairs_2025.py:84
-#, fuzzy
-#| msgid "Next fragment"
 msgid "Next game"
-msgstr "Volgende fragment"
+msgstr "Volgende ronde"
 
-#: experiment/rules/matching_pairs_2025.py:154
+#: experiment/rules/matching_pairs_2025.py:98
+msgid "Pick a card!"
+msgstr "Kies een kaart!"
+
+#: experiment/rules/matching_pairs_2025.py:155
 #, python-format
 msgid ""
 "You get a board with %(n_cards)i musical cards. **Pick a card,** and listen "
 "to it carefully..."
 msgstr ""
+"Je krijgt een speelveld met %(n_cards)i muziekale kaarten. **Kies een "
+"kaart,** en luister aandachtig..."
 
-#: experiment/rules/matching_pairs_2025.py:159
+#: experiment/rules/matching_pairs_2025.py:160
 msgid "Then try to **find a second card that matches it.**"
-msgstr ""
+msgstr "Dan probeer je de **passende tweede kaart** te vinden."
 
-#: experiment/rules/matching_pairs_2025.py:163
+#: experiment/rules/matching_pairs_2025.py:164
 #, python-format
 msgid ""
 "**Find the %(n_pairs)i matching pairs** to clear the board and score points:"
 msgstr ""
+"**Vind de %(n_pairs)i paren** om het speelveld leeg te halen en punten te "
+"scoren: "
 
-#: experiment/rules/matching_pairs_2025.py:169
+#: experiment/rules/matching_pairs_2025.py:170
 msgid ""
 "**+20 points:** Matched first card with one you’ve heard before — memory "
 "wins!"
 msgstr ""
+"**+20 punten:** Je hebt een kaart correct aan een eerdere gekoppeld - "
+"geheugen bonus!"
 
-#: experiment/rules/matching_pairs_2025.py:174
+#: experiment/rules/matching_pairs_2025.py:175
 msgid ""
 "**-10 points:** Chose a wrong second card that’s heard before? Oops — "
 "penalty..."
 msgstr ""
+"**-10 punten:** Kies je een verkeerde kaart die je al hebt gehoord? Oeps - "
+"strafpunten..."
 
-#: experiment/rules/matching_pairs_2025.py:179
+#: experiment/rules/matching_pairs_2025.py:180
 msgid "Some cards sound **distorted** on purpose. Stay sharp!"
-msgstr ""
+msgstr "Sommige kaarten klinken opzettelijk **vervormd**. Blijf alert!"
 
-#: experiment/rules/matching_pairs_2025.py:263
-#, python-format
+#: experiment/rules/matching_pairs_2025.py:264
+#, fuzzy, python-format
+#| msgid "You outperformed {}% of the players!"
 msgid "You outperformed {}% of the players!"
-msgstr ""
+msgstr "Je hebt het beter dan {}% van alle spelers gedaan!"
 
-#: experiment/rules/musical_preferences.py:61
+#: experiment/rules/musical_preferences.py:60
 msgid "Welcome to the Musical Preferences experiment!"
 msgstr ""
 
-#: experiment/rules/musical_preferences.py:62
+#: experiment/rules/musical_preferences.py:61
 msgid "Please start by checking your connection quality."
 msgstr ""
 
-#: experiment/rules/musical_preferences.py:63
+#: experiment/rules/musical_preferences.py:62
 #: experiment/rules/speech2song.py:89
 msgid "OK"
 msgstr "OK"
 
-#: experiment/rules/musical_preferences.py:82
+#: experiment/rules/musical_preferences.py:81
 msgid ""
 "To understand your musical preferences, we have {} questions for you before "
 "the experiment                                         begins. The first two "
@@ -1074,62 +1111,62 @@ msgid ""
 "questions. It will take 2-3 minutes."
 msgstr ""
 
-#: experiment/rules/musical_preferences.py:87
-#: experiment/rules/musical_preferences.py:116
+#: experiment/rules/musical_preferences.py:86
+#: experiment/rules/musical_preferences.py:115
 msgid "Have fun!"
 msgstr ""
 
-#: experiment/rules/musical_preferences.py:94
+#: experiment/rules/musical_preferences.py:93
 msgid "How to play"
 msgstr ""
 
-#: experiment/rules/musical_preferences.py:98
+#: experiment/rules/musical_preferences.py:97
 msgid ""
 "You will hear 64 music clips and have to answer two questions for each clip."
 msgstr ""
 
-#: experiment/rules/musical_preferences.py:103
+#: experiment/rules/musical_preferences.py:102
 msgid "It will take 20-30 minutes to complete the whole experiment."
 msgstr ""
 
-#: experiment/rules/musical_preferences.py:108
+#: experiment/rules/musical_preferences.py:107
 msgid "Either wear headphones or use your device's speakers."
 msgstr ""
 
-#: experiment/rules/musical_preferences.py:113
+#: experiment/rules/musical_preferences.py:112
 msgid "Your final results will be displayed at the end."
 msgstr ""
 
-#: experiment/rules/musical_preferences.py:153
+#: experiment/rules/musical_preferences.py:152
 msgid "Tech check"
 msgstr ""
 
-#: experiment/rules/musical_preferences.py:191
+#: experiment/rules/musical_preferences.py:189
 msgid "Love unlocked"
 msgstr ""
 
-#: experiment/rules/musical_preferences.py:212
+#: experiment/rules/musical_preferences.py:210
 msgid "Knowledge unlocked"
 msgstr ""
 
-#: experiment/rules/musical_preferences.py:239
+#: experiment/rules/musical_preferences.py:237
 msgid "Connection unlocked"
 msgstr ""
 
-#: experiment/rules/musical_preferences.py:253
+#: experiment/rules/musical_preferences.py:251
 msgid "2. How much do you like this song?"
 msgstr ""
 
-#: experiment/rules/musical_preferences.py:262
+#: experiment/rules/musical_preferences.py:305
 msgid "1. Do you know this song?"
 msgstr ""
 
-#: experiment/rules/musical_preferences.py:276
+#: experiment/rules/musical_preferences.py:340
 #, python-format
 msgid "Song %(round)s/%(total)s"
 msgstr ""
 
-#: experiment/rules/musical_preferences.py:296
+#: experiment/rules/musical_preferences.py:360
 msgid "Thank you for your participation and contribution to science!"
 msgstr ""
 
@@ -1489,7 +1526,7 @@ msgid ""
 "1 to 5."
 msgstr ""
 
-#: experiment/rules/speech2song.py:166
+#: experiment/rules/speech2song.py:167
 msgid "End of experiment"
 msgstr ""
 
@@ -1497,63 +1534,63 @@ msgstr ""
 msgid "Thank you for contributing your time to science!"
 msgstr ""
 
-#: experiment/rules/speech2song.py:212
+#: experiment/rules/speech2song.py:213
 msgid "Does this sound like song or speech to you?"
 msgstr ""
 
-#: experiment/rules/speech2song.py:214
+#: experiment/rules/speech2song.py:215
 msgid "sounds exactly like speech"
 msgstr ""
 
-#: experiment/rules/speech2song.py:215
+#: experiment/rules/speech2song.py:216
 msgid "sounds somewhat like speech"
 msgstr ""
 
-#: experiment/rules/speech2song.py:216
+#: experiment/rules/speech2song.py:217
 msgid "sounds neither like speech nor like song"
 msgstr ""
 
-#: experiment/rules/speech2song.py:217
+#: experiment/rules/speech2song.py:218
 msgid "sounds somewhat like song"
 msgstr ""
 
-#: experiment/rules/speech2song.py:218
+#: experiment/rules/speech2song.py:219
 msgid "sounds exactly like song"
 msgstr ""
 
-#: experiment/rules/speech2song.py:230
+#: experiment/rules/speech2song.py:231
 msgid "Does this sound like music or an environmental sound to you?"
 msgstr ""
 
-#: experiment/rules/speech2song.py:232
+#: experiment/rules/speech2song.py:233
 msgid "sounds exactly like an environmental sound"
 msgstr ""
 
-#: experiment/rules/speech2song.py:233
+#: experiment/rules/speech2song.py:234
 msgid "sounds somewhat like an environmental sound"
 msgstr ""
 
-#: experiment/rules/speech2song.py:236
+#: experiment/rules/speech2song.py:237
 msgid "sounds neither like an environmental sound nor like music"
 msgstr ""
 
-#: experiment/rules/speech2song.py:238
+#: experiment/rules/speech2song.py:239
 msgid "sounds somewhat like music"
 msgstr ""
 
-#: experiment/rules/speech2song.py:239
+#: experiment/rules/speech2song.py:240
 msgid "sounds exactly like music"
 msgstr ""
 
-#: experiment/rules/speech2song.py:248
+#: experiment/rules/speech2song.py:249
 msgid "Listen carefully"
 msgstr ""
 
-#: experiment/rules/thats_my_song.py:99
+#: experiment/rules/thats_my_song.py:103
 msgid "Choose two or more decades of music"
 msgstr ""
 
-#: experiment/rules/thats_my_song.py:110
+#: experiment/rules/thats_my_song.py:114
 msgid "Playlist selection"
 msgstr ""
 
@@ -2789,21 +2826,21 @@ msgstr ""
 msgid "Or try at another time when you are ready"
 msgstr ""
 
-#: experiment/templates/html/musical_preferences/feedback.html:11
+#: experiment/templates/html/musical_preferences/feedback.html:16
 #, python-format
 msgid " Your top 3 favourite songs out of %(n_songs)s:"
 msgstr ""
 
-#: experiment/templates/html/musical_preferences/feedback.html:30
+#: experiment/templates/html/musical_preferences/feedback.html:35
 #, python-format
 msgid " Of %(n_songs)s songs, you know %(n_known_songs)s"
 msgstr ""
 
-#: experiment/templates/html/musical_preferences/feedback.html:44
+#: experiment/templates/html/musical_preferences/feedback.html:49
 msgid "All players' top 3 favourite songs:"
 msgstr ""
 
-#: experiment/views.py:64
+#: experiment/views.py:61
 msgid "Loading"
 msgstr ""
 
@@ -2828,12 +2865,16 @@ msgstr ""
 msgid "copy"
 msgstr "kopiëren"
 
-#: question/admin.py:36
+#: question/admin.py:40
 msgid "Duplicate selected choice sets"
 msgstr ""
 
-#: question/admin.py:60
+#: question/admin.py:64
 msgid "Duplicate selected questions"
+msgstr ""
+
+#: question/admin.py:76
+msgid "Rescore selected questions"
 msgstr ""
 
 #: question/models.py:27

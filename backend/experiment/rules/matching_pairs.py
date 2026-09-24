@@ -151,19 +151,23 @@ class MatchingPairsGame(BaseRules):
         if self.evaluate_sections_equal(first_section, second_section):
             if second_card.get("seen"):
                 score = 20
+                feedback = _("Good job!")
                 given_response = "match"
             else:
                 score = 10
+                feedback = _("Lucky match")
                 given_response = "lucky match"
         else:
             if second_card.get("seen"):
                 score = -10
+                feedback = _("Misremembered")
                 given_response = "misremembered"
             else:
                 score = 0
+                feedback = _("No match")
                 given_response = "no match"
         prepare_result("move", session, json_data=result_data, score=score, given_response=given_response)
-        return score
+        return {"score": score, "feedback": feedback}
 
     def evaluate_sections_equal(
         self, first_section: Section, second_section: Section

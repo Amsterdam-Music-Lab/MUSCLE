@@ -59,7 +59,7 @@ const getDefaultParams = (overrides = {}) => ({
     msw: {
         handlers: [
             http.post(API_BASE_URL + URLS.result.intermediateScore, () => {
-                return HttpResponse.json({ score: 10 });
+                return HttpResponse.json({ score: 10, feedback: "" });
             })
         ],
     },
