@@ -2,6 +2,7 @@
 .vscode/*
 !.vscode/extensions.json
 .DS_Store
+*dump.sql
 
 node_modules/
 yarn-error.log*

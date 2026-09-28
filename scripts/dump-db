@@ -1,7 +1,5 @@
 #!/bin/bash
 # -----------------------------------------
-#!/bin/bash
-# -----------------------------------------
 composefile=docker-compose.yaml
 while getopts ":p" opt; do
   case $opt in
