@@ -1,5 +1,6 @@
 from typing import List, TypedDict, Optional
 
+from django.utils.translation import gettext_lazy as _
 from django_markup.markup import formatter
 
 from .base_action import BaseAction
@@ -62,7 +63,7 @@ class Explainer(BaseAction):
         self,
         instruction: str,
         steps: List[Step],
-        button: Button = Button("Let's go!", "colorPrimary"),
+        button: Button = Button(_("Let's go!"), "colorPrimary"),
         timer: Optional[int] = None,
         step_numbers: Optional[bool] = False,
     ):

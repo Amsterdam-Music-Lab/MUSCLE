@@ -144,6 +144,7 @@ interface ScoreIntermediateResultParams {
 
 interface ScoreIntermediateResultResponse {
     score: number;
+    feedback: string;
 }
 
 export const scoreIntermediateResult = async ({

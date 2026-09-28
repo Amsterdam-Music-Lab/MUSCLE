@@ -128,7 +128,7 @@ class BaseRules(object):
             return True
         return False
 
-    def calculate_intermediate_score(self, session: Session, result: Result) -> int:
+    def calculate_intermediate_score(self, session: Session, result: Result) -> dict:
         """process result data during a trial (i.e., between next_round calls). This is only used in the matching_pairs rules files so far.
         Override this in your rules file to control what value should be returned when frontend calls `session/intermediate_score` endpoint.
 
@@ -139,7 +139,7 @@ class BaseRules(object):
         Returns:
             the score of the result
         """
-        return 0
+        return {"score": 0, "feedback": ""}
 
     def final_score_message(self, session: Session) -> str:
         """Create final score message for given session, base on score per result
