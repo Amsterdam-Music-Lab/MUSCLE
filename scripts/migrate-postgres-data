@@ -1,11 +1,13 @@
 #!/bin/bash
 # -----------------------------------------
 composefile=docker-compose.yaml
+production=0
 while getopts ":p" opt; do
   case $opt in
     p)
       echo "-p flag passed" >&2
       composefile=docker-compose-deploy.yml
+      production=1
       ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
@@ -13,74 +15,53 @@ while getopts ":p" opt; do
   esac
 done
 echo "Starting database upgrade from $composefile"
-read -p "Enter the PostgreSQL version from which upgrade takes place: " OLD_PG
-read -p "Enter the Debian version of the image from which upgrade takes place (trixie / bookworm): " OLD_DEBIAN
+read -p "Enter the name of the branch on which the updated postgres version can be found: " GIT_BRANCH
+CURRENT_DATE=$(date +%Y%m%d)
+echo $CURRENT_DATE
+
+# Step 1: Start database container from current branch
+echo "Starting PostgreSQL container from current branch"
+docker compose -f $composefile down
+docker compose -f $composefile up db -d
+
+# Step 2: Make database dump
+echo "Dumping the database from current PostgreSQL container"
+docker exec -it muscle_db sh -c "pg_dump > /backups/$CURRENT_DATE-migration.sql"
+FILECHECK=$(docker exec muscle_db ls /backups)
+
+# Step 3: Verify that the dump file exists on the host.
+if [[ ! "$FILECHECK" == *"$DATE"* ]]; then
+  echo "Error: $(DATE)-migration.sql was not created."
+  exit 1
+fi
+echo "Dump file created on db_backup volume: $CURRENT_DATE-migration.sql"
+
 # ----------------------------------------------------------------------------
-# Step 1: Shut down all running containers for the project.
+# Step 4: Stop all containers
 #
-echo "Shutting down all project containers..."
+echo "Stopping and removing containers..."
 docker compose -f $composefile down
 
 # ----------------------------------------------------------------------------
-# Step 2: Remove any lingering database container so the volume isn’t in use.
-#
-echo "Removing any lingering databse containers"
-docker compose rm -f db
-docker rm pg_old
-
-# ----------------------------------------------------------------------------
-# Step 3: Start a temporary container running the old PostgreSQL version.
-#
-echo "Starting a temporary PostgreSQL container for data dump..."
-source .env
-docker run --name pg_old \
-  -v muscle_db_data:/var/lib/postgresql/data \
-  -v muscle_db_backup:/backups \
-  -e POSTGRES_DB=${SQL_DATABASE} \
-  -e PG_DATABASE=${SQL_DATABASE} \
-  -e POSTGRES_USER=${SQL_USER} \
-  -e POSTGRES_PASSWORD=${SQL_PASSWORD} \
-  postgres:"$OLD_PG"-"$OLD_DEBIAN"
-
-# ----------------------------------------------------------------------------
-# Step 4: Wait until PostgreSQL inside the container is ready.
-#
-echo "Waiting for PostgreSQL to be ready..."
-until [ "`docker exec pg_old pg_isready`" ]; do
-    sleep 1;
-done;
-
-# ----------------------------------------------------------------------------
-# Step 5: Dump the database using the running container (user "muscle").
-#
-echo "Dumping the database from PostgreSQL $OLD_PG..."
-docker exec pg_old pg_dumpall -U postgres > /backups/migration-dump.sql
-docker exec pg_old ls /backups >&2
-
-# Verify that the dump file exists on the host.
-if [ ! -f pg_old:/backups/migration-dump.sql ]; then
-  echo "Error: migration-dump.sql was not created."
-  exit 1
-fi
-echo "Dump file created: $(realpath migration-dump.sql)"
-
-# ----------------------------------------------------------------------------
-# Step 6: Stop and remove the temporary old PostgreSQL container.
-#
-echo "Stopping and removing the temporary postgres:$OLD_PG-$OLD_DEBIAN container..."
-docker stop pg_old > /dev/null
-docker rm pg_old > /dev/null
-
-# ----------------------------------------------------------------------------
-# Step 7: Remove the old volume so that a new one can be created.
+# Step 5: Remove the old volume so that a new one can be created.
 #
 echo "Removing old volume 'muscle_db_data'..."
 docker volume rm muscle_db_data
+if [$production]; then
+  podman unshare
+  rm -r ~/podman-volumes/db-data/*
+  exit
+fi
 
 # ----------------------------------------------------------------------------
-# Step 8: Restore the dump using a temporary container running the new PostgreSQL version.
+# Step 6: Pull the branch with the new version.
 #
-# Use an absolute path for the dump file.
+git pull
+git checkout $GIT_BRANCH
+
+# ----------------------------------------------------------------------------
+# Step 7: Start up db service with updated Postgres version
+#
 docker compose -f $dockerfile up db
 
 echo "Waiting for PostgreSQL to be ready..."
@@ -91,11 +72,11 @@ done;
 
 # Run the restore using the default 'postgres' user and its default database.
 echo "Running restore..."
-docker exec muscle_db psql -f /backups/migration-dump.sql
+docker exec muscle_db psql -f /backups/$(DATE)-migration.sql
 
 
 # ----------------------------------------------------------------------------
-# Step 9: Finally, restart your project with the updated configuration.
+# Step 8: Finally, restart your project with the updated configuration.
 #
 echo "Restarting the project..."
 docker compose -f $dockerfile down
