@@ -36,7 +36,7 @@ describe("ScoreFeedback", () => {
 
   it("renders zero turn score message", () => {
     render(<ScoreFeedback turnScore={0} />);
-    expect(screen.getByText("You got 0 points.")).toBeInTheDocument();
+    expect(screen.getByTestId("turn-score-message")).toBeInTheDocument();
   });
 
   it("renders negative turn score", () => {

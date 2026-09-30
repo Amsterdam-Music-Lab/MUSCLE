@@ -47,7 +47,7 @@ export default function ScoreFeedback({
       <div className={styles.message}>
         <span className="text">{children}</span>{" "}
         {turnScore !== undefined && (
-          <span className="font-weight-bold">
+          <span data-testid="turn-score-message" className="font-weight-bold">
             {turnScore === 0
               ? t`You got 0 points.`
               : turnScore > 0
