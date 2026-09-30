@@ -4,15 +4,14 @@ import FloatingActionButton from './FloatingActionButton';
 
 describe('FloatingActionButton', () => {
     it('renders the button with the initial icon', () => {
-        const { getByTestId } = render(<FloatingActionButton icon="fa-comment" >Test Content</FloatingActionButton>);
-        const icon = getByTestId('floating-action-button__icon');
+        const { getByTestId } = render(<FloatingActionButton>Test Content</FloatingActionButton>);
+        const icon = getByTestId('floating-action-button');
 
         expect(document.body.contains(icon)).toBe(true);
-        expect(icon.classList.contains('fa-comment')).toBe(true);
     });
 
     it('toggles the content on click', () => {
-        const { getByTestId } = render(<FloatingActionButton icon="fa-comment"><div>Test Content</div></FloatingActionButton>);
+        const { getByTestId } = render(<FloatingActionButton><div>Test Content</div></FloatingActionButton>);
 
         const toggleButton = getByTestId('floating-action-button__toggle-button');
         fireEvent.click(toggleButton);
@@ -25,19 +24,17 @@ describe('FloatingActionButton', () => {
     });
 
     it('displays the correct icon when expanded', () => {
-        const { getByTestId } = render(<FloatingActionButton icon="fa-comment"><div>Test Content</div></FloatingActionButton>);
+        const { getByTestId } = render(<FloatingActionButton><div>Test Content</div></FloatingActionButton>);
 
         const toggleButton = getByTestId('floating-action-button__toggle-button');
         fireEvent.click(toggleButton);
 
         const icon = getByTestId('floating-action-button__icon');
-
         expect(document.body.contains(icon)).toBe(true);
-        expect(icon.classList.contains('fa-times')).toBe(true);
     });
 
     it('closes the expanded content when the overlay is clicked', () => {
-        const { getByTestId } = render(<FloatingActionButton icon="fa-comment"><div>Test Content</div></FloatingActionButton>);
+        const { getByTestId } = render(<FloatingActionButton><div>Test Content</div></FloatingActionButton>);
 
         const toggleButton = getByTestId('floating-action-button__toggle-button');
         fireEvent.click(toggleButton);
@@ -50,7 +47,7 @@ describe('FloatingActionButton', () => {
     });
 
     it('initially renders in a collapsed state', () => {
-        const { getByTestId } = render(<FloatingActionButton icon="fa-comment"><div>Test Content</div></FloatingActionButton>);
+        const { getByTestId } = render(<FloatingActionButton><div>Test Content</div></FloatingActionButton>);
         expect(getByTestId('floating-action-button').classList.contains('floating-action-button--expanded')).toBe(false);
     });
 

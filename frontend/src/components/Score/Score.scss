@@ -28,26 +28,10 @@
         justify-content: center;
         align-items: center;
 
-        .aha__circle {
-            margin-top: 20px;
-        }
-
         .aha__circle .circle-percentage {
             animation-duration: 2s;
             animation-fill-mode: both;
             animation-timing-function: ease-out;
-        }
-
-        &.zero .aha__circle .circle-percentage {
-            animation-name: scoreCircleZero;
-        }
-
-        &.positive .aha__circle .circle-percentage {
-            animation-name: scoreCirclePositive;
-        }
-
-        &.negative .aha__circle .circle-percentage {
-            animation-name: scoreCircleNegative;
         }
 
         .content {
@@ -76,8 +60,9 @@
                 line-height: 30px;
             }
 
-            span {
-                font-size: 80px;
+            .score-icon {
+                height: auto;
+                width: 5em;
             }
         }
     }
@@ -92,21 +77,3 @@
     }
 }
 
-@mixin scoreCircleAnimation($name, $color) {
-    @keyframes #{$name} {
-        0% {
-            opacity: 0;
-            fill: transparent;
-        }
-        50% {
-            opacity: 1;
-        }
-        100% {
-            fill: $color;
-        }
-    }
-}
-
-@include scoreCircleAnimation("scoreCircleZero", $gray);
-@include scoreCircleAnimation("scoreCirclePositive", $teal);
-@include scoreCircleAnimation("scoreCircleNegative", $red);

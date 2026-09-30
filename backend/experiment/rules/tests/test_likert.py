@@ -6,7 +6,13 @@ from section.models import Playlist
 from session.models import Session
 
 class TestLikertExperiment(TestCase):
-    fixtures = ["playlist"]
+    fixtures = [
+        "choice_lists",
+        "demographics",
+        "questions_china",
+        "goldsmiths_msi",
+        "musical_preferences",
+    ]
 
     @classmethod
     def setUpTestData(cls):

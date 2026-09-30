@@ -1,0 +1,298 @@
+- model: question.choicelist
+  pk: ZH_GENRE
+  fields: {}
+- model: question.choice
+  fields:
+    identifier: unpretentious
+    text: Pop/Country/Religious
+    text_en: Pop/Country/Religious
+    text_zh_hans: 流行音乐/民谣/乡村音乐
+    index: 0
+    choicelist: ZH_GENRE
+- model: question.choice
+  fields:
+    identifier: Chinese artistic
+    text: Folk/Mountain songs
+    text_en: Folk/Mountain songs
+    text_zh_hans: 中国民乐/民歌类（如山歌、小调等）
+    index: 1
+    choicelist: ZH_GENRE
+- model: question.choice
+  fields:
+    identifier: sophisticated
+    text: Western classical music/Jazz/Opera/Musical
+    text_en: Western classical music/Jazz/Opera/Musical
+    text_zh_hans: 西方古典音乐/爵士/歌剧/音乐剧
+    index: 2
+    choicelist: ZH_GENRE
+- model: question.choice
+  fields:
+    identifier: classical
+    text: Chinese opera
+    text_en: Chinese opera
+    text_zh_hans: 中国戏曲类（如京剧、粤剧、评弹等）
+    index: 3
+    choicelist: ZH_GENRE
+- model: question.choice
+  fields:
+    identifier: intense
+    text: Rock/Punk/Metal
+    text_en: Rock/Punk/Metal
+    text_zh_hans: 摇滚乐/重金属/朋克
+    index: 4
+    choicelist: ZH_GENRE
+- model: question.choice
+  fields:
+    identifier: mellow
+    text: Dance/Electronic/New Age
+    text_en: Dance/Electronic/New Age
+    text_zh_hans: 舞曲/电子乐/新潮音乐
+    index: 5
+    choicelist: ZH_GENRE
+- model: question.choice
+  fields:
+    identifier: contemporary
+    text: Hip-hop/R&B/Funk
+    text_en: Hip-hop/R&B/Funk
+    text_zh_hans: 嘻哈饶舌/R&B/Funk（放克）
+    index: 6
+    choicelist: ZH_GENRE
+- model: question.question
+  pk: dgf_genre_preference_zh
+  fields:
+    text: To which group of musical genres do you currently listen most?
+    text_en: To which group of musical genres do you currently listen most?
+    text_zh_hans: 你目前最常听哪一组音乐？
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: ''
+    choices: ZH_GENRE
+- model: question.question
+  pk: dgf_education_zh
+  fields:
+    text: What is the highest educational qualification that you have attained?
+    text_nl: Wat is uw hoogste afgeronde opleiding?
+    text_zh_hans: 您所获得的最高学历：
+    text_de: Welchen höchsten Ausbildungsabschluss haben Sie?
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: ''
+    choices: ATTAINED_EDUCATION_ZH
+- model: question.choicelist
+  pk: ATTAINED_EDUCATION_ZH
+  fields: {}
+- model: question.choice
+  fields:
+    identifier: isced-1
+    text: Primary school
+    text_zh_hans: 小学
+    index: 0
+    choicelist: ATTAINED_EDUCATION_ZH
+- model: question.choice
+  fields:
+    identifier: isced-2
+    text: Vocational qualification at about 16 years of age (GCSE)
+    text_nl: VMBO (of gelijkwaardig)
+    text_zh_hans: 初中/中专
+    text_de: Hauptschulabschluss
+    index: 1
+    choicelist: ATTAINED_EDUCATION_ZH
+- model: question.choice
+  fields:
+    identifier: isced-3
+    text: Secondary diploma (A-levels/high school)
+    text_nl: HAVO/VWO/Gymnasium (of gelijkwaardig)
+    text_zh_hans: 高中
+    text_de: Fachhochschulreife / Abitur
+    index: 2
+    choicelist: ATTAINED_EDUCATION_ZH
+- model: question.choice
+  fields:
+    identifier: isced-4
+    text: Post-16 vocational course
+    text_nl: MBO (of gelijkwaardig)
+    text_zh_hans: 职高
+    text_de: Abschluss einer beruflich-betrieblichen Berufsausbildung (Lehre)
+    index: 3
+    choicelist: ATTAINED_EDUCATION_ZH
+- model: question.choice
+  fields:
+    identifier: isced-6
+    text: Bachelor or equivalent
+    text_nl: HBO of WO bacheloropleiding (of gelijkwaardig)
+    text_zh_hans: 本科或同等学历(大专)
+    text_de: Bachelor an (Fach-)Hochschule
+    index: 5
+    choicelist: ATTAINED_EDUCATION_ZH
+- model: question.choice
+  fields:
+    identifier: isced-7
+    text: Master or equivalent
+    text_nl: HBO of WO masteropleiding (of gelijkwaardig)
+    text_zh_hans: 硕士研究生或同等学历
+    text_de: Fachhochschulabschluss (z. B. Diplom, Master)
+    index: 6
+    choicelist: ATTAINED_EDUCATION_ZH
+- model: question.choice
+  fields:
+    identifier: isced-8
+    text: Doctoral degree or equivalent
+    text_nl: Doctoraal/PhD (of gelijkwaardig)
+    text_zh_hans: 博士研究生或同等学历
+    text_de: Promotion
+    index: 7
+    choicelist: ATTAINED_EDUCATION_ZH
+- model: question.choice
+  fields:
+    identifier: none
+    text: Have not (yet) completed any school qualification
+    text_nl: Geen diploma
+    text_zh_hans: 尚未取得任何学历
+    text_de: Kein Abschluss
+    index: 8
+    choicelist: ATTAINED_EDUCATION_ZH
+- model: question.question
+  pk: dgf_region_of_origin_zh
+  fields:
+    text: In which region did you spend the most formative years of your childhood and youth?
+    text_zh_hans: 您的童年与青少年时期在哪个地区/省/市度过的？
+    explainer: ''
+    type: DropdownQuestion
+    profile_scoring_rule: ''
+    choices: ZH_REGIONS
+- model: question.choicelist
+  pk: ZH_REGIONS
+  fields: {}
+- model: question.choice
+  fields:
+    identifier: HD
+    text: 华东（山东、江苏、安徽、浙江、福建、江西、上海）
+    text_en: East China (Shandong, Jiangsu, Anhui, Zhejiang, Fujian, Jiangxi, Shanghai)
+    text_zh_hans: 华东（山东、江苏、安徽、浙江、福建、江西、上海）
+    index: 0
+    choicelist: ZH_REGIONS
+- model: question.choice
+  fields:
+    identifier: HN
+    text: 华南（广东、广西、海南）
+    text_en: South China (Guangdong, Guangxi, Hainan)
+    text_zh_hans: 华南（广东、广西、海南）
+    index: 1
+    choicelist: ZH_REGIONS
+- model: question.choice
+  fields:
+    identifier: HZ
+    text: 华中（湖北、湖南、河南、江西）
+    text_en: Central China (Hubei, Hunan, Henan, Jiangxi)
+    text_zh_hans: 华中（湖北、湖南、河南、江西）
+    index: 2
+    choicelist: ZH_REGIONS
+- model: question.choice
+  fields:
+    identifier: HB
+    text: 华北（北京、天津、河北、山西、内蒙古）
+    text_en: North China (Beijing, Tianjin, Hebei, Shanxi, Inner Mongolia)
+    text_zh_hans: 华北（北京、天津、河北、山西、内蒙古）
+    index: 3
+    choicelist: ZH_REGIONS
+- model: question.choice
+  fields:
+    identifier: XB
+    text: 西北（宁夏、新疆、青海、陕西、甘肃）
+    text_en: Northwest (Ningxia, Xinjiang, Qinghai, Shaanxi, Gansu)
+    text_zh_hans: 西北（宁夏、新疆、青海、陕西、甘肃）
+    index: 4
+    choicelist: ZH_REGIONS
+- model: question.choice
+  fields:
+    identifier: XN
+    text: 西南（四川、云南、贵州、西藏、重庆）
+    text_en: Southwest (Sichuan, Yunnan, Guizhou, Tibet, Chongqing)
+    text_zh_hans: 西南（四川、云南、贵州、西藏、重庆）
+    index: 5
+    choicelist: ZH_REGIONS
+- model: question.choice
+  fields:
+    identifier: DB
+    text: 东北（辽宁、吉林、黑龙江）
+    text_en: Northeast (Liaoning, Jilin, Heilongjiang)
+    text_zh_hans: 东北（辽宁、吉林、黑龙江）
+    index: 6
+    choicelist: ZH_REGIONS
+- model: question.choice
+  fields:
+    identifier: GAT
+    text: 港澳台（香港、澳门、台湾）
+    text_en: Hong Kong, Macau, and Taiwan
+    text_zh_hans: 港澳台（香港、澳门、台湾）
+    index: 7
+    choicelist: ZH_REGIONS
+- model: question.choice
+  fields:
+    identifier: QT
+    text: 国外
+    text_en: Abroad
+    text_zh_hans: 国外
+    index: 8
+    choicelist: ZH_REGIONS
+- model: question.choice
+  fields:
+    identifier: no_answer
+    text: 不想回答
+    text_en: I don't want to answer
+    text_zh_hans: 不想回答
+    index: 9
+    choicelist: ZH_REGIONS
+- model: question.question
+  pk: dgf_region_of_residence_zh
+  fields:
+    text: In which region do you currently reside?
+    text_zh_hans: 您目前所在的地区/省/市或国家：
+    explainer: ''
+    type: DropdownQuestion
+    profile_scoring_rule: ''
+    choices: ZH_REGIONS
+- model: question.question
+  pk: dgf_gender_identity_zh
+  fields:
+    text: What is your gender?
+    text_zh_hans: 您目前对自己的性别认识?
+    explainer: ''
+    type: RadiosQuestion
+    profile_scoring_rule: ''
+    choices: ZH_GENDER
+- model: question.choicelist
+  pk: ZH_GENDER
+  fields: {}
+- model: question.choice
+  fields:
+    identifier: male
+    text: 男
+    text_en: male
+    text_zh_hans: 男
+    index: 0
+    choicelist: ZH_GENDER
+- model: question.choice
+  fields:
+    identifier: female
+    text: 女
+    text_en: female
+    text_zh_hans: 女
+    index: 1
+    choicelist: ZH_GENDER
+- model: question.choice
+  fields:
+    identifier: other
+    text: 其他
+    text_en: other
+    text_zh_hans: 其他
+    index: 2
+    choicelist: ZH_GENDER
+- model: question.choice
+  fields:
+    identifier: no_answer
+    text: 不想回答
+    text_en: prefer not to say
+    text_zh_hans: 不想回答
+    index: 3
+    choicelist: ZH_GENDER

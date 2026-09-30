@@ -1,9 +1,11 @@
 import json
 import logging
+from typing import Union
 
 from django.http import Http404, HttpRequest, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _, get_language
+from django.views.decorators.http import require_POST
 from django.views.generic.list import ListView
 from django_markup.markup import formatter
 
@@ -29,12 +31,11 @@ class FeedbackListView(ListView):
         return super().get_queryset().filter(block__id=self.kwargs.get('block_id'))
 
 
-def get_block(request: HttpRequest, identifier: str) -> JsonResponse:
-    """Get block data from active block with given :identifier
+def get_block(request: HttpRequest, experiment_identifier: str, identifier: str) -> JsonResponse:
+    """Get block data from active block with given :slug
     DO NOT modify session data here, it will break participant_id system
-       (/participant and /block/<identifier> are called at the same time by the frontend)
-    """
-    block = get_object_or_404(Block, identifier=identifier)
+       (/participant and /block/<slug> are called at the same time by the frontend)"""
+    block = get_object_or_404(Block, identifier=identifier, phase__experiment__identifier=experiment_identifier)
     class_name = ""
     active_language = get_language()
 
@@ -56,10 +57,6 @@ def get_block(request: HttpRequest, identifier: str) -> JsonResponse:
         "class_name": class_name,  # can be used to override style
         "rounds": block.rounds,
         "bonus_points": block.bonus_points,
-        "playlists": [
-            {"id": playlist.id, "name": playlist.name}
-            for playlist in block.playlists.all()
-        ],
         "feedback_info": block.get_rules().feedback_info(),
         "loading_text": _("Loading"),
         "session_id": session.id,
@@ -68,11 +65,14 @@ def get_block(request: HttpRequest, identifier: str) -> JsonResponse:
     return response
 
 
-def post_feedback(request, identifier):
+@require_POST
+def post_feedback(
+    request, experiment_identifier: str, identifier: str
+) -> Union[JsonResponse, HttpResponseBadRequest]:
     text = request.POST.get("feedback")
     if not text:
         return HttpResponseBadRequest()
-    block = get_object_or_404(Block, identifier=identifier)
+    block = get_object_or_404(Block, identifier=identifier, phase__experiment__identifier=experiment_identifier)
     feedback = Feedback(text=text, block=block)
     feedback.save()
     return JsonResponse({"status": "ok"})

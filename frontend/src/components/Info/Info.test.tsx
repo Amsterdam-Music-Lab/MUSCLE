@@ -1,6 +1,7 @@
 import { describe, test, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import Info from './Info';
+import { wait } from "@testing-library/user-event/dist/cjs/utils/index.js";
 
 describe('Info Component', () => {
     test('renders without crashing', () => {
@@ -41,7 +42,7 @@ describe('Info Component', () => {
 
         // Simulate window resize
         window.innerHeight = 1001;
-        window.dispatchEvent(new Event('resize'));
+        waitFor(() => window.dispatchEvent(new Event('resize')));
 
         rerender(<Info body="Test body" />);
 

@@ -1,0 +1,114 @@
+- model: experiment.experiment
+  pk: 55
+  fields:
+    identifier: s2s
+    active: true
+- model: experiment.phase
+  pk: 55
+  fields:
+    experiment: 55
+- model: experiment.block
+  pk: 55
+  fields:
+    phase: 55
+    experiment: 55
+    index: 0
+    identifier: s2s
+    rounds: 64
+    bonus_points: 0
+    rules: SPEECH_TO_SONG
+    playlists:
+    - 55
+- model: section.playlist
+  pk: 55
+  fields:
+    name: Speech2Song
+    csv: |
+      non-transforming,Car explosion.wav,0.0,1.24,s2s/ENV/Non-Transforming/Car explosion.wav,0,4
+      non-transforming,Chamada Vendas Novas.wav,0.0,1.68,s2s/BP/Non-Transforming/Chamada Vendas Novas.wav,0,2
+      non-transforming,De casal por favor.wav,0.0,1.19,s2s/BP/Non-Transforming/De casal por favor.wav,0,2
+      non-transforming,Dolphin.wav,0.0,1.76,s2s/ENV/Non-Transforming/Dolphin.wav,0,4
+      non-transforming,Está nevando.wav,0.0,1.03,s2s/BP/Non-Transforming/Está nevando.wav,0,2
+      non-transforming,Illuminated boats.wav,0.0,0.94,s2s/EN/Non-Transforming/Illuminated boats.wav,0,1
+      non-transforming,Minha sobrinha.wav,0.0,0.99,s2s/BP/Non-Transforming/Minha sobrinha.wav,0,2
+      non-transforming,Powdered with gold.wav,0.0,1.03,s2s/EN/Non-Transforming/Powdered with gold.wav,0,1
+      non-transforming,Snow walking.wav,0.0,1.3,s2s/ENV/Non-Transforming/Snow walking.wav,0,4
+      non-transforming,The key of the affair.wav,0.0,1.13,s2s/EN/Non-Transforming/The key of the affair now.wav,0,1
+      non-transforming,The limpid Walbrook.wav,0.0,1.2,s2s/EN/Non-Transforming/The limpid Walbrook.wav,0,1
+      non-transforming,Wolf.wav,0.0,1.48,s2s/ENV/Non-Transforming/Wolf.wav,0,4
+      non-transforming,只能这样了.wav,0.0,0.94,s2s/MC/Non-Transforming/只能这样了.wav,0,3
+      non-transforming,快去打扫一下.wav,0.0,1.2,s2s/MC/Non-Transforming/快去打扫一下.wav,0,3
+      non-transforming,总是有输有赢.wav,0.0,1.55,s2s/MC/Non-Transforming/总是有输有赢.wav,0,3
+      non-transforming,网上有地图.wav,0.0,1.13,s2s/MC/Non-Transforming/网上有地图.wav,0,3
+      transforming,And a joy it would be.wav,0.0,0.94,s2s/EN/Transforming/And a joy it would be.wav,1,1
+      transforming,And his two sisters.wav,0.0,1.03,s2s/EN/Transforming/And his two sisters.wav,1,1
+      transforming,De abacaxi não tem.wav,0.0,1.19,s2s/BP/Transforming/De abacaxi não tem.wav,1,2
+      transforming,Eu gosto muito dele.wav,0.0,1.71,s2s/BP/Transforming/Eu gosto muito dele.wav,1,2
+      transforming,Hermit Thrush1.wav,0.0,1.19,s2s/ENV/Transforming/Hermit Thrush1.wav,1,4
+      transforming,Hermit Thrush2.wav,0.0,1.14,s2s/ENV/Transforming/Hermit Thrush2.wav,1,4
+      transforming,Ice cracking.wav,0.0,1.58,s2s/ENV/Transforming/Ice cracking.wav,1,4
+      transforming,Que são exuberantes.wav,0.0,1.57,s2s/BP/Transforming/Que são exuberantes.wav,1,2
+      transforming,Snags and Sandbars.wav,0.0,1.13,s2s/EN/Transforming/Snags and Sandbars.wav,1,1
+      transforming,Sometimes behave so strangely.wav,0.0,2.14,s2s/TEST/Sometimes behave so strangely.wav,1,0
+      transforming,There was a cold drizzle.wav,0.0,1.2,s2s/EN/Transforming/There was a cold drizzle.wav,1,1
+      transforming,Tô chateada.wav,0.0,1.19,s2s/BP/Transforming/Tô chateada.wav,1,2
+      transforming,Water dripping.wav,0.0,1.34,s2s/ENV/Transforming/Water dripping.wav,1,4
+      transforming,三分钟读一页书.wav,0.0,1.51,s2s/MC/Transforming/三分钟读一页书.wav,1,3
+      transforming,开车多骑车.wav,0.0,1.67,s2s/MC/Transforming/开车多骑车.wav,1,3
+      transforming,我刚刚接到通知.wav,0.0,1.22,s2s/MC/Transforming/我刚刚接到通知.wav,1,3
+      transforming,现在买沙发.wav,0.0,1.35,s2s/MC/Transforming/现在买沙发.wav,1,3
+- model: question.questionlist
+  pk: 55
+  fields:
+    name: Question series Speech2Song
+    block: 55
+    index: 0
+    randomize: false
+- model: question.questioninlist
+  pk: 197
+  fields:
+    questionlist: 55      
+    question: dgf_age
+    index: 1
+- model: question.questioninlist
+  pk: 198
+  fields:
+    questionlist: 55      
+    question: dgf_gender_identity
+    index: 2
+- model: question.questioninlist
+  pk: 199
+  fields:
+    questionlist: 55      
+    question: dgf_country_of_origin_open
+    index: 3
+- model: question.questioninlist
+  pk: 200
+  fields:
+    questionlist: 55      
+    question: dgf_country_of_residence_open
+    index: 4
+- model: question.questioninlist
+  pk: 201
+  fields:
+    questionlist: 55      
+    question: lang_mother
+    index: 5
+- model: question.questioninlist
+  pk: 202
+  fields:
+    questionlist: 55      
+    question: lang_second
+    index: 6
+- model: question.questioninlist
+  pk: 203
+  fields:
+    questionlist: 55      
+    question: lang_third
+    index: 7
+- model: question.questioninlist
+  pk: 204
+  fields:
+    questionlist: 55      
+    question: lang_exposure
+    index: 8

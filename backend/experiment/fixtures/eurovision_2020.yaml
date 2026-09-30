@@ -1,0 +1,516 @@
+- model: experiment.experiment
+  pk: 41
+  fields:
+    identifier: eurovision_2021
+    active: true
+- model: experiment.phase
+  pk: 41
+  fields:
+    experiment: 41
+- model: experiment.block
+  pk: 41
+  fields:
+    phase: 41
+    experiment: 41
+    index: 0
+    identifier: eurovision_2021
+    rounds: 30
+    bonus_points: 0
+    rules: EUROVISION_2020
+    playlists:
+    - 41
+- model: section.playlist
+  pk: 41
+  fields:
+    name: Eurovision 2021
+    csv: |
+      Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Set 2/Karaoke/2018-11-00-07-046-k.mp3,3,201811007
+      Albania 2018 - Eugent Bushpepa,Mall,7.046,45.0,Set 2/V1/2018-11-00-07-046-v1.mp3,1,201811007
+      Albania 2018 - Eugent Bushpepa,Mall,49.053,45.0,Free Excerpts/2018-11-00-49-053-c1.mp3,0,201811049
+      Albania 2018 - Eugent Bushpepa,Mall,81.788,45.0,Set 2/V2/2018-11-01-21-788-v2.mp3,2,201811082
+      Albania 2018 - Eugent Bushpepa,Mall,113.647,45.0,Free Excerpts/2018-11-01-53-647-b.mp3,0,201811114
+      Albania 2018 - Eugent Bushpepa,Mall,132.505,45.0,Free Excerpts/2018-11-02-12-505-c2.mp3,0,201811133
+      Albania 2019 - Jonida Maliqi,Ktheju Tokës,0.0,45.0,Free Excerpts/2019-17-00-00-000-i.mp3,0,201917000
+      Albania 2019 - Jonida Maliqi,Ktheju Tokës,4.021,45.0,Free Excerpts/2019-17-00-04-021-v1.mp3,0,201917004
+      Albania 2019 - Jonida Maliqi,Ktheju Tokës,36.829,45.0,Free Excerpts/2019-17-00-36-829-pc.mp3,0,201917037
+      Albania 2019 - Jonida Maliqi,Ktheju Tokës,52.703,45.0,Free Excerpts/2019-17-00-52-703-c1.mp3,0,201917053
+      Albania 2019 - Jonida Maliqi,Ktheju Tokës,85.722,45.0,Free Excerpts/2019-17-01-25-722-b1.mp3,0,201917086
+      Albania 2019 - Jonida Maliqi,Ktheju Tokës,114.295,45.0,Free Excerpts/2019-17-01-54-295-b2.mp3,0,201917114
+      Albania 2019 - Jonida Maliqi,Ktheju Tokës,146.891,45.0,Free Excerpts/2019-17-02-26-891-c2.mp3,0,201917147
+      Armenia 2016 - Iveta Mukuchyan,LoveWave,1.427,45.0,Free Excerpts/2016-07-00-01-427-v1.mp3,0,201607001
+      Armenia 2016 - Iveta Mukuchyan,LoveWave,16.1,45.0,Free Excerpts/2016-07-00-16-100-v1.mp3,0,201607016
+      Armenia 2016 - Iveta Mukuchyan,LoveWave,50.034,45.0,Free Excerpts/2016-07-00-50-034-c.mp3,0,201607050
+      Armenia 2016 - Iveta Mukuchyan,LoveWave,86.209,45.0,Free Excerpts/2016-07-01-26-209-v2.mp3,0,201607086
+      Armenia 2016 - Iveta Mukuchyan,LoveWave,118.002,45.0,Free Excerpts/2016-07-01-58-002-pc.mp3,0,201607118
+      Armenia 2016 - Iveta Mukuchyan,LoveWave,132.574,45.0,Free Excerpts/2016-07-02-12-574-c2.mp3,0,201607133
+      Armenia 2017 - Artsvik,Fly With Me,0.0,45.0,Free Excerpts/2017-18-00-00-000-i.mp3,0,201718000
+      Armenia 2017 - Artsvik,Fly With Me,33.569,45.0,Set 2/Karaoke/2017-18-00-33-569-k.mp3,3,201718034
+      Armenia 2017 - Artsvik,Fly With Me,33.569,45.0,Set 2/V1/2017-18-00-33-569-v1.mp3,1,201718034
+      Armenia 2017 - Artsvik,Fly With Me,76.385,45.0,Set 2/V2/2017-18-01-16-385-v2.mp3,2,201718076
+      Armenia 2017 - Artsvik,Fly With Me,97.099,45.0,Free Excerpts/2017-18-01-37-099-c1.mp3,0,201718097
+      Armenia 2017 - Artsvik,Fly With Me,129.515,45.0,Free Excerpts/2017-18-02-09-515-o.mp3,0,201718130
+      Australia 2016 - Dami Im,Sound of Silence,3.149,45.0,Free Excerpts/2016-02-00-03-149-v1.mp3,0,201602003
+      Australia 2016 - Dami Im,Sound of Silence,30.549,45.0,Free Excerpts/2016-02-00-30-549-pc.mp3,0,201602031
+      Australia 2016 - Dami Im,Sound of Silence,37.843,45.0,Free Excerpts/2016-02-00-37-843-c1.mp3,0,201602038
+      Australia 2016 - Dami Im,Sound of Silence,66.557,45.0,Free Excerpts/2016-02-01-06-557-v2.mp3,0,201602067
+      Australia 2016 - Dami Im,Sound of Silence,130.28,45.0,Free Excerpts/2016-02-02-10-280-b.mp3,0,201602130
+      Australia 2016 - Dami Im,Sound of Silence,150.541,45.0,Free Excerpts/2016-02-02-30-541-c2.mp3,0,201602151
+      Australia 2017 - Isaiah Firebrace,Don't Come Easy,0.0,45.0,Set 2/V1/2017-09-00-00-000-v1.mp3,1,201709000
+      Australia 2017 - Isaiah Firebrace,Don't Come Easy,0.0,45.0,Set 2/Karaoke/2017-09-00-00-000-k.mp3,3,201709000
+      Australia 2017 - Isaiah Firebrace,Don't Come Easy,23.368,45.0,Free Excerpts/2017-09-00-23-368-c1.mp3,0,201709023
+      Australia 2017 - Isaiah Firebrace,Don't Come Easy,52.023,45.0,Set 2/V2/2017-09-00-52-023-v2.mp3,2,201709052
+      Australia 2017 - Isaiah Firebrace,Don't Come Easy,74.848,45.0,Free Excerpts/2017-09-01-14-848-c2.mp3,0,201709075
+      Australia 2017 - Isaiah Firebrace,Don't Come Easy,101.346,45.0,Free Excerpts/2017-09-01-41-346-b.mp3,0,201709101
+      Australia 2018 - Jessica Mauboy,We Got Love,0.0,45.0,Free Excerpts/2018-20-00-00-000-v1.mp3,0,201820000
+      Australia 2018 - Jessica Mauboy,We Got Love,33.716,45.0,Free Excerpts/2018-20-00-33-716-c1.mp3,0,201820034
+      Australia 2018 - Jessica Mauboy,We Got Love,66.966,45.0,Free Excerpts/2018-20-01-06-966-v2.mp3,0,201820067
+      Australia 2018 - Jessica Mauboy,We Got Love,101.212,45.0,Free Excerpts/2018-20-01-41-212-c2.mp3,0,201820101
+      Australia 2018 - Jessica Mauboy,We Got Love,133.562,45.0,Free Excerpts/2018-20-02-13-562-b.mp3,0,201820134
+      Australia 2019 - Kate Miller-Heidke,Zero Gravity,0.0,45.0,Free Excerpts/2019-09-00-00-000-v1.mp3,0,201909000
+      Australia 2019 - Kate Miller-Heidke,Zero Gravity,21.741,45.0,Free Excerpts/2019-09-00-21-741-pc.mp3,0,201909022
+      Australia 2019 - Kate Miller-Heidke,Zero Gravity,31.448,45.0,Free Excerpts/2019-09-00-31-448-c1.mp3,0,201909031
+      Australia 2019 - Kate Miller-Heidke,Zero Gravity,63.806,45.0,Free Excerpts/2019-09-01-03-806-v2.mp3,0,201909064
+      Australia 2019 - Kate Miller-Heidke,Zero Gravity,109.309,45.0,Free Excerpts/2019-09-01-49-309-b.mp3,0,201909109
+      Australia 2019 - Kate Miller-Heidke,Zero Gravity,140.151,45.0,Free Excerpts/2019-09-02-20-151-c2.mp3,0,201909140
+      Austria 2016 - Zoë,Loin d'ici,3.827,45.0,Free Excerpts/2016-13-00-03-827-v1.mp3,0,201613004
+      Austria 2016 - Zoë,Loin d'ici,27.098,45.0,Free Excerpts/2016-13-00-27-098-pc.mp3,0,201613027
+      Austria 2016 - Zoë,Loin d'ici,39.199,45.0,Free Excerpts/2016-13-00-39-199-c1.mp3,0,201613039
+      Austria 2016 - Zoë,Loin d'ici,55.023,45.0,Free Excerpts/2016-13-00-55-023-v2.mp3,0,201613055
+      Austria 2016 - Zoë,Loin d'ici,120.39,45.0,Free Excerpts/2016-13-02-00-390-b.mp3,0,201613120
+      Austria 2016 - Zoë,Loin d'ici,133.525,45.0,Free Excerpts/2016-13-02-13-525-c2.mp3,0,201613134
+      Austria 2017 - Nathan Trent,Running On Air,0.0,45.0,Set 2/V1/2017-16-00-00-000-v1.mp3,1,201716000
+      Austria 2017 - Nathan Trent,Running On Air,0.0,45.0,Set 2/Karaoke/2017-16-00-00-000-k.mp3,3,201716000
+      Austria 2017 - Nathan Trent,Running On Air,20.602,45.0,Free Excerpts/2017-16-00-20-602-c1.mp3,0,201716021
+      Austria 2017 - Nathan Trent,Running On Air,58.522,45.0,Set 2/V2/2017-16-00-58-522-v2.mp3,2,201716059
+      Austria 2017 - Nathan Trent,Running On Air,79.068,45.0,Free Excerpts/2017-16-01-19-068-c2.mp3,0,201716079
+      Austria 2017 - Nathan Trent,Running On Air,120.017,45.0,Free Excerpts/2017-16-02-00-017-o.mp3,0,201716120
+      Austria 2018 - Cesár Sampson,Nobody But You,0.0,45.0,Free Excerpts/2018-03-00-00-000-v1.mp3,0,201803000
+      Austria 2018 - Cesár Sampson,Nobody But You,34.092,45.0,Free Excerpts/2018-03-00-34-092-c1.mp3,0,201803034
+      Austria 2018 - Cesár Sampson,Nobody But You,62.974,45.0,Free Excerpts/2018-03-01-02-974-v2.mp3,0,201803063
+      Austria 2018 - Cesár Sampson,Nobody But You,96.036,45.0,Free Excerpts/2018-03-01-36-036-c2.mp3,0,201803096
+      Austria 2018 - Cesár Sampson,Nobody But You,119.441,45.0,Free Excerpts/2018-03-01-59-441-o.mp3,0,201803119
+      Azerbaijan 2016 - Samra,Miracle,4.7379999999999995,45.0,Free Excerpts/2016-17-00-04-738-v1.mp3,0,201617005
+      Azerbaijan 2016 - Samra,Miracle,46.345,45.0,Free Excerpts/2016-17-00-46-345-c1.mp3,0,201617046
+      Azerbaijan 2016 - Samra,Miracle,72.505,45.0,Free Excerpts/2016-17-01-12-505-v2.mp3,0,201617073
+      Azerbaijan 2016 - Samra,Miracle,133.063,45.0,Free Excerpts/2016-17-02-13-063-b.mp3,0,201617133
+      Azerbaijan 2016 - Samra,Miracle,153.249,45.0,Free Excerpts/2016-17-02-33-249-c2.mp3,0,201617153
+      Azerbaijan 2017 - Dihaj,Skeletons,10.656,45.0,Set 2/V1/2017-14-00-10-656-v1.mp3,1,201714011
+      Azerbaijan 2017 - Dihaj,Skeletons,10.656,45.0,Set 2/Karaoke/2017-14-00-10-656-k.mp3,3,201714011
+      Azerbaijan 2017 - Dihaj,Skeletons,51.847,45.0,Free Excerpts/2017-14-00-51-847-c1.mp3,0,201714052
+      Azerbaijan 2017 - Dihaj,Skeletons,79.996,45.0,Set 2/V2/2017-14-01-19-996-v2.mp3,2,201714080
+      Azerbaijan 2017 - Dihaj,Skeletons,110.763,45.0,Free Excerpts/2017-14-01-50-763-c2.mp3,0,201714111
+      Azerbaijan 2017 - Dihaj,Skeletons,134.072,45.0,Free Excerpts/2017-14-02-14-072-o.mp3,0,201714134
+      Azerbaijan 2019 - Chingiz,Truth,8.422,45.0,Free Excerpts/2019-08-00-08-422-v1.mp3,0,201908008
+      Azerbaijan 2019 - Chingiz,Truth,27.897,45.0,Free Excerpts/2019-08-00-27-897-pc.mp3,0,201908028
+      Azerbaijan 2019 - Chingiz,Truth,47.162,45.0,Free Excerpts/2019-08-00-47-162-c1.mp3,0,201908047
+      Azerbaijan 2019 - Chingiz,Truth,75.69,45.0,Free Excerpts/2019-08-01-15-690-v2.mp3,0,201908076
+      Azerbaijan 2019 - Chingiz,Truth,133.169,45.0,Free Excerpts/2019-08-02-13-169-b.mp3,0,201908133
+      Azerbaijan 2019 - Chingiz,Truth,142.433,45.0,Free Excerpts/2019-08-02-22-433-c2.mp3,0,201908142
+      Belarus 2017 - Naviband,Historyja Majho Zyccia,23.808,45.0,Set 2/Karaoke/2017-17-00-23-808-k.mp3,3,201717024
+      Belarus 2017 - Naviband,Historyja Majho Zyccia,23.808,45.0,Set 2/V1/2017-17-00-23-808-v1.mp3,1,201717024
+      Belarus 2017 - Naviband,Historyja Majho Zyccia,48.513,45.0,Free Excerpts/2017-17-00-48-513-c1.mp3,0,201717049
+      Belarus 2017 - Naviband,Historyja Majho Zyccia,85.574,45.0,Set 2/V2/2017-17-01-25-574-v2.mp3,2,201717086
+      Belarus 2017 - Naviband,Historyja Majho Zyccia,110.731,45.0,Free Excerpts/2017-17-01-50-731-c2.mp3,0,201717111
+      Belarus 2017 - Naviband,Historyja Majho Zyccia,135.0,45.0,Free Excerpts/2017-17-02-15-000-o.mp3,0,201717135
+      Belgium 2016 - Laura Tesoro,What's the Pressure,0.0,45.0,Free Excerpts/2016-10-00-00-000-i.mp3,0,201610000
+      Belgium 2016 - Laura Tesoro,What's the Pressure,8.382,45.0,Free Excerpts/2016-10-00-08-382-v1.mp3,0,201610008
+      Belgium 2016 - Laura Tesoro,What's the Pressure,17.257,45.0,Free Excerpts/2016-10-00-17-257-pc.mp3,0,201610017
+      Belgium 2016 - Laura Tesoro,What's the Pressure,41.121,45.0,Free Excerpts/2016-10-00-41-121-c1.mp3,0,201610041
+      Belgium 2016 - Laura Tesoro,What's the Pressure,104.955,45.0,Free Excerpts/2016-10-01-44-955-v2.mp3,0,201610105
+      Belgium 2016 - Laura Tesoro,What's the Pressure,119.911,45.0,Free Excerpts/2016-10-01-59-911-b.mp3,0,201610120
+      Belgium 2016 - Laura Tesoro,What's the Pressure,134.111,45.0,Free Excerpts/2016-10-02-14-111-b.mp3,0,201610134
+      Belgium 2016 - Laura Tesoro,What's the Pressure,150.086,45.0,Free Excerpts/2016-10-02-30-086-c2.mp3,0,201610150
+      Belgium 2017 - Blanche,City Lights,26.47,45.0,Set 2/Karaoke/2017-04-00-26-470-k.mp3,3,201704026
+      Belgium 2017 - Blanche,City Lights,26.47,45.0,Set 2/V1/2017-04-00-26-470-v1.mp3,1,201704026
+      Belgium 2017 - Blanche,City Lights,42.0,45.0,Free Excerpts/2017-04-00-42-000-c1.mp3,0,201704042
+      Belgium 2017 - Blanche,City Lights,64.19,45.0,Set 2/V2/2017-04-01-04-190-v2.mp3,2,201704064
+      Belgium 2017 - Blanche,City Lights,104.312,45.0,Free Excerpts/2017-04-01-44-312-b.mp3,0,201704104
+      Belgium 2017 - Blanche,City Lights,129.637,45.0,Free Excerpts/2017-04-02-09-637-c2.mp3,0,201704130
+      Bulgaria 2016 - Poli Genova,If Love Was a Crime,8.41,45.0,Free Excerpts/2016-04-00-08-410-v1.mp3,0,201604008
+      Bulgaria 2016 - Poli Genova,If Love Was a Crime,25.231,45.0,Free Excerpts/2016-04-00-25-231-pc.mp3,0,201604025
+      Bulgaria 2016 - Poli Genova,If Love Was a Crime,43.693,45.0,Free Excerpts/2016-04-00-43-693-c1.mp3,0,201604044
+      Bulgaria 2016 - Poli Genova,If Love Was a Crime,67.078,45.0,Free Excerpts/2016-04-01-07-078-v2.mp3,0,201604067
+      Bulgaria 2016 - Poli Genova,If Love Was a Crime,119.591,45.0,Free Excerpts/2016-04-01-59-591-b.mp3,0,201604120
+      Bulgaria 2016 - Poli Genova,If Love Was a Crime,128.206,45.0,Free Excerpts/2016-04-02-08-206-b.mp3,0,201604128
+      Bulgaria 2016 - Poli Genova,If Love Was a Crime,137.95,45.0,Free Excerpts/2016-04-02-17-950-c2.mp3,0,201604138
+      Bulgaria 2017 - Kristian Kostov,Beautiful Mess,7.306,45.0,Set 2/Karaoke/2017-02-00-07-306-k.mp3,3,201702007
+      Bulgaria 2017 - Kristian Kostov,Beautiful Mess,7.306,45.0,Set 2/V1/2017-02-00-07-306-v1.mp3,1,201702007
+      Bulgaria 2017 - Kristian Kostov,Beautiful Mess,36.854,45.0,Free Excerpts/2017-02-00-36-854-c1.mp3,0,201702037
+      Bulgaria 2017 - Kristian Kostov,Beautiful Mess,83.449,45.0,Set 2/V2/2017-02-01-23-449-v2.mp3,2,201702083
+      Bulgaria 2017 - Kristian Kostov,Beautiful Mess,113.322,45.0,Free Excerpts/2017-02-01-53-322-c2.mp3,0,201702113
+      Bulgaria 2017 - Kristian Kostov,Beautiful Mess,135.523,45.0,Free Excerpts/2017-02-02-15-523-o.mp3,0,201702136
+      Bulgaria 2018 - Equinox,Bones,13.405,45.0,Set 2/Karaoke/2018-14-00-13-405-k.mp3,3,201814013
+      Bulgaria 2018 - Equinox,Bones,13.405,45.0,Set 2/V1/2018-14-00-13-405-v1.mp3,1,201814013
+      Bulgaria 2018 - Equinox,Bones,34.58,45.0,Free Excerpts/2018-14-00-34-580-b.mp3,0,201814035
+      Bulgaria 2018 - Equinox,Bones,53.462,45.0,Free Excerpts/2018-14-00-53-462-c1.mp3,0,201814053
+      Bulgaria 2018 - Equinox,Bones,78.986,45.0,Set 2/V2/2018-14-01-18-986-v2.mp3,2,201814079
+      Bulgaria 2018 - Equinox,Bones,109.653,45.0,Free Excerpts/2018-14-01-49-653-c2.mp3,0,201814110
+      Croatia 2017 - Jacques Houdek,My Friend,0.0,45.0,Free Excerpts/2017-13-00-00-000-i.mp3,0,201713000
+      Croatia 2017 - Jacques Houdek,My Friend,19.598,45.0,Free Excerpts/2017-13-00-19-598-v1.mp3,0,201713020
+      Croatia 2017 - Jacques Houdek,My Friend,56.616,45.0,Free Excerpts/2017-13-00-56-616-c1.mp3,0,201713057
+      Croatia 2017 - Jacques Houdek,My Friend,85.753,45.0,Free Excerpts/2017-13-01-25-753-b.mp3,0,201713086
+      Croatia 2017 - Jacques Houdek,My Friend,126.213,45.0,Free Excerpts/2017-13-02-06-213-c2.mp3,0,201713126
+      Cyprus 2018 - Eleni Foureira,Fuego,9.767,45.0,Set 2/V1/2018-02-00-09-767-v1.mp3,1,201802010
+      Cyprus 2018 - Eleni Foureira,Fuego,9.767,45.0,Set 2/Karaoke/2018-02-00-09-767-k.mp3,3,201802010
+      Cyprus 2018 - Eleni Foureira,Fuego,46.894,45.0,Free Excerpts/2018-02-00-46-894-c1.mp3,0,201802047
+      Cyprus 2018 - Eleni Foureira,Fuego,76.397,45.0,Set 2/V2/2018-02-01-16-397-v2.mp3,2,201802076
+      Cyprus 2018 - Eleni Foureira,Fuego,103.718,45.0,Free Excerpts/2018-02-01-43-718-c2.mp3,0,201802104
+      Cyprus 2018 - Eleni Foureira,Fuego,133.106,45.0,Free Excerpts/2018-02-02-13-106-o.mp3,0,201802133
+      Cyprus 2019 - Tamta,Replay,0.0,45.0,Free Excerpts/2019-13-00-00-000-i.mp3,0,201913000
+      Cyprus 2019 - Tamta,Replay,9.67,45.0,Set 2/Karaoke/2019-13-00-09-670-k.mp3,3,201913010
+      Cyprus 2019 - Tamta,Replay,9.67,45.0,Set 2/V1/2019-13-00-09-670-v1.mp3,1,201913010
+      Cyprus 2019 - Tamta,Replay,27.926,45.0,Free Excerpts/2019-13-00-27-926-pc.mp3,0,201913028
+      Cyprus 2019 - Tamta,Replay,46.082,45.0,Free Excerpts/2019-13-00-46-082-c1.mp3,0,201913046
+      Cyprus 2019 - Tamta,Replay,66.212,45.0,Set 2/V2/2019-13-01-06-212-v2.mp3,2,201913066
+      Cyprus 2019 - Tamta,Replay,122.557,45.0,Free Excerpts/2019-13-02-02-557-b.mp3,0,201913123
+      Cyprus 2019 - Tamta,Replay,141.01,45.0,Free Excerpts/2019-13-02-21-010-c2.mp3,0,201913141
+      Czechia 2018 - Mikolas Josef,Lie To Me,13.993,45.0,Set 2/Karaoke/2018-06-00-13-993-k.mp3,3,201806014
+      Czechia 2018 - Mikolas Josef,Lie To Me,13.993,45.0,Set 2/V1/2018-06-00-13-993-v1.mp3,1,201806014
+      Czechia 2018 - Mikolas Josef,Lie To Me,39.862,45.0,Free Excerpts/2018-06-00-39-862-c1.mp3,0,201806040
+      Czechia 2018 - Mikolas Josef,Lie To Me,67.81,45.0,Set 2/V2/2018-06-01-07-810-v2.mp3,2,201806068
+      Czechia 2018 - Mikolas Josef,Lie To Me,94.073,45.0,Free Excerpts/2018-06-01-34-073-c2.mp3,0,201806094
+      Czechia 2018 - Mikolas Josef,Lie To Me,113.878,45.0,Free Excerpts/2018-06-01-53-878-b.mp3,0,201806114
+      Czechia 2019 - Lake Malawi,Friend of a Friend,0.0,45.0,Set 2/V1/2019-11-00-00-000-v1.mp3,1,201911000
+      Czechia 2019 - Lake Malawi,Friend of a Friend,0.0,45.0,Set 2/Karaoke/2019-11-00-00-000-k.mp3,3,201911000
+      Czechia 2019 - Lake Malawi,Friend of a Friend,29.476,45.0,Free Excerpts/2019-11-00-29-476-pc.mp3,0,201911029
+      Czechia 2019 - Lake Malawi,Friend of a Friend,41.92,45.0,Free Excerpts/2019-11-00-41-920-c1.mp3,0,201911042
+      Czechia 2019 - Lake Malawi,Friend of a Friend,78.128,45.0,Set 2/V2/2019-11-01-18-128-v2.mp3,2,201911078
+      Czechia 2019 - Lake Malawi,Friend of a Friend,147.178,45.0,Free Excerpts/2019-11-02-27-178-b.mp3,0,201911147
+      Czechia 2019 - Lake Malawi,Friend of a Friend,154.522,45.0,Free Excerpts/2019-11-02-34-522-c2.mp3,0,201911155
+      Denmark 2017 - Anja,Where I Am,4.552,45.0,Set 2/V1/2017-20-00-04-552-v1.mp3,1,201720005
+      Denmark 2017 - Anja,Where I Am,4.552,45.0,Set 2/Karaoke/2017-20-00-04-552-k.mp3,3,201720005
+      Denmark 2017 - Anja,Where I Am,46.306,45.0,Free Excerpts/2017-20-00-46-306-c1.mp3,0,201720046
+      Denmark 2017 - Anja,Where I Am,68.057,45.0,Set 2/V2/2017-20-01-08-057-v2.mp3,2,201720068
+      Denmark 2017 - Anja,Where I Am,109.71,45.0,Free Excerpts/2017-20-01-49-710-b.mp3,0,201720110
+      Denmark 2017 - Anja,Where I Am,131.106,45.0,Free Excerpts/2017-20-02-11-106-c2.mp3,0,201720131
+      Denmark 2018 - Rasmussen,Higher Ground,6.223,45.0,Set 2/V1/2018-09-00-06-223-v1.mp3,1,201809006
+      Denmark 2018 - Rasmussen,Higher Ground,6.223,45.0,Set 2/Karaoke/2018-09-00-06-223-k.mp3,3,201809006
+      Denmark 2018 - Rasmussen,Higher Ground,34.077,45.0,Free Excerpts/2018-09-00-34-077-c1.mp3,0,201809034
+      Denmark 2018 - Rasmussen,Higher Ground,61.368,45.0,Set 2/V2/2018-09-01-01-368-v2.mp3,2,201809061
+      Denmark 2018 - Rasmussen,Higher Ground,77.659,45.0,Free Excerpts/2018-09-01-17-659-c2.mp3,0,201809078
+      Denmark 2018 - Rasmussen,Higher Ground,124.022,45.0,Free Excerpts/2018-09-02-04-022-b.mp3,0,201809124
+      Denmark 2019 - Leonora,Love Is Forever,3.189,45.0,Set 2/V1/2019-12-00-03-189-v1.mp3,1,201912003
+      Denmark 2019 - Leonora,Love Is Forever,3.189,45.0,Set 2/Karaoke/2019-12-00-03-189-k.mp3,3,201912003
+      Denmark 2019 - Leonora,Love Is Forever,30.754,45.0,Free Excerpts/2019-12-00-30-754-c1.mp3,0,201912031
+      Denmark 2019 - Leonora,Love Is Forever,61.508,45.0,Set 2/V2/2019-12-01-01-508-v2.mp3,2,201912062
+      Denmark 2019 - Leonora,Love Is Forever,121.268,45.0,Free Excerpts/2019-12-02-01-268-b.mp3,0,201912121
+      Denmark 2019 - Leonora,Love Is Forever,148.937,45.0,Free Excerpts/2019-12-02-28-937-c2.mp3,0,201912149
+      Estonia 2018 - Elina Nechayeva,La Forza,3.467,45.0,Set 2/V1/2018-08-00-03-467-v1.mp3,1,201808003
+      Estonia 2018 - Elina Nechayeva,La Forza,3.467,45.0,Set 2/Karaoke/2018-08-00-03-467-k.mp3,3,201808003
+      Estonia 2018 - Elina Nechayeva,La Forza,41.074,45.0,Free Excerpts/2018-08-00-41-074-c1.mp3,0,201808041
+      Estonia 2018 - Elina Nechayeva,La Forza,84.015,45.0,Set 2/V2/2018-08-01-24-015-v2.mp3,2,201808084
+      Estonia 2018 - Elina Nechayeva,La Forza,125.556,45.0,Free Excerpts/2018-08-02-05-556-c2.mp3,0,201808126
+      Estonia 2019 - Victor Crone,Storm,0.0,45.0,Free Excerpts/2019-20-00-00-000-v1.mp3,0,201920000
+      Estonia 2019 - Victor Crone,Storm,30.806,45.0,Free Excerpts/2019-20-00-30-806-c1.mp3,0,201920031
+      Estonia 2019 - Victor Crone,Storm,45.946,45.0,Free Excerpts/2019-20-00-45-946-v2.mp3,0,201920046
+      Estonia 2019 - Victor Crone,Storm,105.875,45.0,Free Excerpts/2019-20-01-45-875-b1.mp3,0,201920106
+      Estonia 2019 - Victor Crone,Storm,135.945,45.0,Free Excerpts/2019-20-02-15-945-b2.mp3,0,201920136
+      Estonia 2019 - Victor Crone,Storm,150.875,45.0,Free Excerpts/2019-20-02-30-875-c2.mp3,0,201920151
+      Estonia 2019 - Victor Crone,Storm,166.12,45.0,Free Excerpts/2019-20-02-46-120-o.mp3,0,201920166
+      France 2016 - Amir,J'ai Cherché,2.374,45.0,Free Excerpts/2016-06-00-02-374-v1.mp3,0,201606002
+      France 2016 - Amir,J'ai Cherché,33.85,45.0,Free Excerpts/2016-06-00-33-850-c1.mp3,0,201606034
+      France 2016 - Amir,J'ai Cherché,64.708,45.0,Free Excerpts/2016-06-01-04-708-v2.mp3,0,201606065
+      France 2016 - Amir,J'ai Cherché,80.291,45.0,Free Excerpts/2016-06-01-20-291-c2.mp3,0,201606080
+      France 2016 - Amir,J'ai Cherché,111.974,45.0,Free Excerpts/2016-06-01-51-974-b.mp3,0,201606112
+      France 2016 - Amir,J'ai Cherché,127.97,45.0,Free Excerpts/2016-06-02-07-970-c3.mp3,0,201606128
+      France 2016 - Amir,J'ai Cherché,156.454,45.0,Free Excerpts/2016-06-02-36-454-c4.mp3,0,201606156
+      France 2017 - Alma,Requiem,4.06,45.0,Set 2/V1/2017-12-00-04-060-v1.mp3,1,201712004
+      France 2017 - Alma,Requiem,4.06,45.0,Set 2/Karaoke/2017-12-00-04-060-k.mp3,3,201712004
+      France 2017 - Alma,Requiem,22.165,45.0,Free Excerpts/2017-12-00-22-165-c1.mp3,0,201712022
+      France 2017 - Alma,Requiem,59.521,45.0,Set 2/V2/2017-12-00-59-521-v2.mp3,2,201712060
+      France 2017 - Alma,Requiem,77.796,45.0,Free Excerpts/2017-12-01-17-796-c2.mp3,0,201712078
+      France 2017 - Alma,Requiem,113.677,45.0,Free Excerpts/2017-12-01-53-677-b.mp3,0,201712114
+      France 2018 - Madame Monsieur,Mercy,19.063,45.0,Set 2/Karaoke/2018-13-00-19-063-k.mp3,3,201813019
+      France 2018 - Madame Monsieur,Mercy,19.063,45.0,Set 2/V1/2018-13-00-19-063-v1.mp3,1,201813019
+      France 2018 - Madame Monsieur,Mercy,39.726,45.0,Free Excerpts/2018-13-00-39-726-c1.mp3,0,201813040
+      France 2018 - Madame Monsieur,Mercy,78.366,45.0,Set 2/V2/2018-13-01-18-366-v2.mp3,2,201813078
+      France 2018 - Madame Monsieur,Mercy,98.622,45.0,Free Excerpts/2018-13-01-38-622-c2.mp3,0,201813099
+      France 2018 - Madame Monsieur,Mercy,138.81,45.0,Free Excerpts/2018-13-02-18-810-o.mp3,0,201813139
+      France 2019 - Bilal Hassani,Roi,2.198,45.0,Set 2/Karaoke/2019-16-00-02-198-k.mp3,3,201916002
+      France 2019 - Bilal Hassani,Roi,2.198,45.0,Set 2/V1/2019-16-00-02-198-v1.mp3,1,201916002
+      France 2019 - Bilal Hassani,Roi,30.573,45.0,Free Excerpts/2019-16-00-30-573-pc.mp3,0,201916031
+      France 2019 - Bilal Hassani,Roi,44.161,45.0,Free Excerpts/2019-16-00-44-161-c1.mp3,0,201916044
+      France 2019 - Bilal Hassani,Roi,88.422,45.0,Set 2/V2/2019-16-01-28-422-v2.mp3,2,201916088
+      France 2019 - Bilal Hassani,Roi,131.583,45.0,Free Excerpts/2019-16-02-11-583-c2.mp3,0,201916132
+      Georgia 2016 - Nika Kocharov & Young Georgian Lolitaz,Midnight Gold,0.0,45.0,Free Excerpts/2016-20-00-00-000-i.mp3,0,201620000
+      Georgia 2016 - Nika Kocharov & Young Georgian Lolitaz,Midnight Gold,7.25,45.0,Free Excerpts/2016-20-00-07-250-c1.mp3,0,201620007
+      Georgia 2016 - Nika Kocharov & Young Georgian Lolitaz,Midnight Gold,15.205,45.0,Free Excerpts/2016-20-00-15-205-v1.mp3,0,201620015
+      Georgia 2016 - Nika Kocharov & Young Georgian Lolitaz,Midnight Gold,52.764,45.0,Free Excerpts/2016-20-00-52-764-v2.mp3,0,201620053
+      Georgia 2016 - Nika Kocharov & Young Georgian Lolitaz,Midnight Gold,97.875,45.0,Free Excerpts/2016-20-01-37-875-b.mp3,0,201620098
+      Georgia 2016 - Nika Kocharov & Young Georgian Lolitaz,Midnight Gold,105.225,45.0,Free Excerpts/2016-20-01-45-225-c2.mp3,0,201620105
+      Germany 2018 - Michael Schulte,You Let Me Walk Alone,4.7379999999999995,45.0,Set 2/V1/2018-04-00-04-738-v1.mp3,1,201804005
+      Germany 2018 - Michael Schulte,You Let Me Walk Alone,4.7379999999999995,45.0,Set 2/Karaoke/2018-04-00-04-738-k.mp3,3,201804005
+      Germany 2018 - Michael Schulte,You Let Me Walk Alone,40.404,45.0,Free Excerpts/2018-04-00-40-404-c1.mp3,0,201804040
+      Germany 2018 - Michael Schulte,You Let Me Walk Alone,71.381,45.0,Set 2/V2/2018-04-01-11-381-v2.mp3,2,201804071
+      Germany 2018 - Michael Schulte,You Let Me Walk Alone,107.745,45.0,Free Excerpts/2018-04-01-47-745-c2.mp3,0,201804108
+      Germany 2018 - Michael Schulte,You Let Me Walk Alone,130.441,45.0,Free Excerpts/2018-04-02-10-441-o.mp3,0,201804130
+      Greece 2017 - Demy,This is Love,4.094,45.0,Free Excerpts/2017-19-00-04-094-v1.mp3,0,201719004
+      Greece 2017 - Demy,This is Love,26.245,45.0,Free Excerpts/2017-19-00-26-245-b.mp3,0,201719026
+      Greece 2017 - Demy,This is Love,55.369,45.0,Free Excerpts/2017-19-00-55-369-c1.mp3,0,201719055
+      Greece 2017 - Demy,This is Love,86.586,45.0,Free Excerpts/2017-19-01-26-586-v2.mp3,0,201719087
+      Greece 2017 - Demy,This is Love,130.67,45.0,Free Excerpts/2017-19-02-10-670-c2.mp3,0,201719131
+      Hungary 2016 - Freddie,Pioneer,2.774,45.0,Free Excerpts/2016-19-00-02-774-v1.mp3,0,201619003
+      Hungary 2016 - Freddie,Pioneer,30.106,45.0,Free Excerpts/2016-19-00-30-106-pc.mp3,0,201619030
+      Hungary 2016 - Freddie,Pioneer,43.155,45.0,Free Excerpts/2016-19-00-43-155-c1.mp3,0,201619043
+      Hungary 2016 - Freddie,Pioneer,69.768,45.0,Free Excerpts/2016-19-01-09-768-v2.mp3,0,201619070
+      Hungary 2016 - Freddie,Pioneer,123.198,45.0,Free Excerpts/2016-19-02-03-198-b.mp3,0,201619123
+      Hungary 2016 - Freddie,Pioneer,136.145,45.0,Free Excerpts/2016-19-02-16-145-c2.mp3,0,201619136
+      Hungary 2017 - Joci Pápai,Origo,0.0,45.0,Free Excerpts/2017-08-00-00-000-v1.mp3,0,201708000
+      Hungary 2017 - Joci Pápai,Origo,21.141,45.0,Free Excerpts/2017-08-00-21-141-c1.mp3,0,201708021
+      Hungary 2017 - Joci Pápai,Origo,58.512,45.0,Free Excerpts/2017-08-00-58-512- v2.mp3,0,201708059
+      Hungary 2017 - Joci Pápai,Origo,98.967,45.0,Free Excerpts/2017-08-01-38-967-b.mp3,0,201708099
+      Hungary 2017 - Joci Pápai,Origo,138.531,45.0,Free Excerpts/2017-08-02-18-531-c2.mp3,0,201708139
+      Iceland 2019 - Hatari,Hatrið mun sigra,15.005,45.0,Set 2/V1/2019-10-00-15-005-v1.mp3,1,201910015
+      Iceland 2019 - Hatari,Hatrið mun sigra,15.005,45.0,Set 2/Karaoke/2019-10-00-15-005-k.mp3,3,201910015
+      Iceland 2019 - Hatari,Hatrið mun sigra,47.144,45.0,Free Excerpts/2019-10-00-47-144-c1.mp3,0,201910047
+      Iceland 2019 - Hatari,Hatrið mun sigra,66.305,45.0,Set 2/V2/2019-10-01-06-305-v2.mp3,2,201910066
+      Iceland 2019 - Hatari,Hatrið mun sigra,117.2,45.0,Free Excerpts/2019-10-01-57-200-b.mp3,0,201910117
+      Iceland 2019 - Hatari,Hatrið mun sigra,136.666,45.0,Free Excerpts/2019-10-02-16-666-c2.mp3,0,201910137
+      Ireland 2018 - Ryan O'Shaughnessy,Together,4.199,45.0,Set 2/V1/2018-16-00-04-199-v1.mp3,1,201816004
+      Ireland 2018 - Ryan O'Shaughnessy,Together,4.199,45.0,Set 2/Karaoke/2018-16-00-04-199-k.mp3,3,201816004
+      Ireland 2018 - Ryan O'Shaughnessy,Together,32.708,45.0,Free Excerpts/2018-16-00-32-708-c1.mp3,0,201816033
+      Ireland 2018 - Ryan O'Shaughnessy,Together,54.145,45.0,Set 2/V2/2018-16-00-54-145-v2.mp3,2,201816054
+      Ireland 2018 - Ryan O'Shaughnessy,Together,83.317,45.0,Free Excerpts/2018-16-01-23-317-c2.mp3,0,201816083
+      Ireland 2018 - Ryan O'Shaughnessy,Together,109.617,45.0,Free Excerpts/2018-16-01-49-617-b.mp3,0,201816110
+      Israel 2016 - Hovi Star,Made of Stars,3.002,45.0,Free Excerpts/2016-14-00-03-002-v1.mp3,0,201614003
+      Israel 2016 - Hovi Star,Made of Stars,29.707,45.0,Free Excerpts/2016-14-00-29-707-pc.mp3,0,201614030
+      Israel 2016 - Hovi Star,Made of Stars,40.368,45.0,Free Excerpts/2016-14-00-40-368-c1.mp3,0,201614040
+      Israel 2016 - Hovi Star,Made of Stars,67.979,45.0,Free Excerpts/2016-14-01-07-979-v2.mp3,0,201614068
+      Israel 2016 - Hovi Star,Made of Stars,118.309,45.0,Free Excerpts/2016-14-01-58-309-b.mp3,0,201614118
+      Israel 2016 - Hovi Star,Made of Stars,137.975,45.0,Free Excerpts/2016-14-02-17-975-c2.mp3,0,201614138
+      Israel 2018 - Netta Barzilai,Toy,14.905,45.0,Free Excerpts/2018-01-00-14-905-v1.mp3,0,201801015
+      Israel 2018 - Netta Barzilai,Toy,44.556,45.0,Free Excerpts/2018-01-00-44-556-c1.mp3,0,201801045
+      Israel 2018 - Netta Barzilai,Toy,81.579,45.0,Free Excerpts/2018-01-01-21-579-b.mp3,0,201801082
+      Israel 2018 - Netta Barzilai,Toy,103.376,45.0,Free Excerpts/2018-01-01-43-376-c2.mp3,0,201801103
+      Israel 2018 - Netta Barzilai,Toy,132.546,45.0,Free Excerpts/2018-01-02-12-546-o.mp3,0,201801133
+      Italy 2016 - Francesca Michielin,No Degree of Separation,0.0,45.0,Free Excerpts/2016-16-00-00-000-v1.mp3,0,201616000
+      Italy 2016 - Francesca Michielin,No Degree of Separation,24.095,45.0,Free Excerpts/2016-16-00-24-095-pc.mp3,0,201616024
+      Italy 2016 - Francesca Michielin,No Degree of Separation,47.222,45.0,Free Excerpts/2016-16-00-47-222-c1.mp3,0,201616047
+      Italy 2016 - Francesca Michielin,No Degree of Separation,78.739,45.0,Free Excerpts/2016-16-01-18-739-v2.mp3,0,201616079
+      Italy 2016 - Francesca Michielin,No Degree of Separation,139.3,45.0,Free Excerpts/2016-16-02-19-300-b.mp3,0,201616139
+      Italy 2016 - Francesca Michielin,No Degree of Separation,151.024,45.0,Free Excerpts/2016-16-02-31-024-c2.mp3,0,201616151
+      Italy 2016 - Francesca Michielin,No Degree of Separation,164.793,45.0,Free Excerpts/2016-16-02-44-793-o.mp3,0,201616165
+      Italy 2017 - Francesco Gabbani,Occidentali's Karma,2.078,45.0,Free Excerpts/2017-06-00-02-078-v1.mp3,0,201706002
+      Italy 2017 - Francesco Gabbani,Occidentali's Karma,17.612,45.0,Free Excerpts/2017-06-00-17-612-c1.mp3,0,201706018
+      Italy 2017 - Francesco Gabbani,Occidentali's Karma,63.913,45.0,Free Excerpts/2017-06-01-03-913-c2.mp3,0,201706064
+      Italy 2017 - Francesco Gabbani,Occidentali's Karma,111.34,45.0,Free Excerpts/2017-06-01-51-340-b.mp3,0,201706111
+      Italy 2017 - Francesco Gabbani,Occidentali's Karma,137.362,45.0,Free Excerpts/2017-06-02-17-362-o.mp3,0,201706137
+      Italy 2018 - Ermal Meta & Fabrizio Moro,Non Mi Avete Fatto Niente,3.058,45.0,Free Excerpts/2018-05-00-03-058-v1.mp3,0,201805003
+      Italy 2018 - Ermal Meta & Fabrizio Moro,Non Mi Avete Fatto Niente,45.413,45.0,Free Excerpts/2018-05-00-45-413-c1.mp3,0,201805045
+      Italy 2018 - Ermal Meta & Fabrizio Moro,Non Mi Avete Fatto Niente,69.388,45.0,Free Excerpts/2018-05-01-09-388-v2.mp3,0,201805069
+      Italy 2018 - Ermal Meta & Fabrizio Moro,Non Mi Avete Fatto Niente,91.088,45.0,Free Excerpts/2018-05-01-31-088-c2.mp3,0,201805091
+      Italy 2018 - Ermal Meta & Fabrizio Moro,Non Mi Avete Fatto Niente,112.418,45.0,Free Excerpts/2018-05-01-52-418-b.mp3,0,201805112
+      Italy 2019 - Mahmood,Soldi,2.657,45.0,Set 2/Karaoke/2019-02-00-02-657-k.mp3,3,201902003
+      Italy 2019 - Mahmood,Soldi,2.657,45.0,Set 2/V1/2019-02-00-02-657-v1.mp3,1,201902003
+      Italy 2019 - Mahmood,Soldi,21.79,45.0,Free Excerpts/2019-02-00-21-790-pc.mp3,0,201902022
+      Italy 2019 - Mahmood,Soldi,44.218,45.0,Free Excerpts/2019-02-00-44-218-c1.mp3,0,201902044
+      Italy 2019 - Mahmood,Soldi,65.37,45.0,Set 2/V2/2019-02-01-05-370-v2.mp3,2,201902065
+      Italy 2019 - Mahmood,Soldi,144.347,45.0,Free Excerpts/2019-02-02-24-347-b.mp3,0,201902144
+      Italy 2019 - Mahmood,Soldi,163.267,45.0,Free Excerpts/2019-02-02-43-267-c2.mp3,0,201902163
+      Latvia 2016 - Justs,Heartbeat,0.0,45.0,Free Excerpts/2016-15-00-00-000-i.mp3,0,201615000
+      Latvia 2016 - Justs,Heartbeat,3.654,45.0,Free Excerpts/2016-15-00-03-654-v1.mp3,0,201615004
+      Latvia 2016 - Justs,Heartbeat,35.526,45.0,Free Excerpts/2016-15-00-35-526-c1.mp3,0,201615036
+      Latvia 2016 - Justs,Heartbeat,53.797,45.0,Free Excerpts/2016-15-00-53-797-v2.mp3,0,201615054
+      Latvia 2016 - Justs,Heartbeat,120.485,45.0,Free Excerpts/2016-15-02-00-485-b.mp3,0,201615120
+      Latvia 2016 - Justs,Heartbeat,136.624,45.0,Free Excerpts/2016-15-02-16-624-c2.mp3,0,201615137
+      Lithuania 2016 - Donny Montell,I've Been Waiting for This Night,0.0,45.0,Free Excerpts/2016-09-00-00-000-i.mp3,0,201609000
+      Lithuania 2016 - Donny Montell,I've Been Waiting for This Night,7.645,45.0,Free Excerpts/2016-09-00-07-645-v1.mp3,0,201609008
+      Lithuania 2016 - Donny Montell,I've Been Waiting for This Night,39.482,45.0,Free Excerpts/2016-09-00-39-482-c1.mp3,0,201609039
+      Lithuania 2016 - Donny Montell,I've Been Waiting for This Night,68.178,45.0,Free Excerpts/2016-09-01-08-178-v2.mp3,0,201609068
+      Lithuania 2016 - Donny Montell,I've Been Waiting for This Night,127.035,45.0,Free Excerpts/2016-09-02-07-035-b.mp3,0,201609127
+      Lithuania 2016 - Donny Montell,I've Been Waiting for This Night,142.953,45.0,Free Excerpts/2016-09-02-22-953-c2.mp3,0,201609143
+      Lithuania 2018 - Ieva Zasimauskaitė,When We're Old,2.743,45.0,Set 2/Karaoke/2018-12-00-02-743-k.mp3,3,201812003
+      Lithuania 2018 - Ieva Zasimauskaitė,When We're Old,2.743,45.0,Set 2/V1/2018-12-00-02-743-v1.mp3,1,201812003
+      Lithuania 2018 - Ieva Zasimauskaitė,When We're Old,45.025,45.0,Free Excerpts/2018-12-00-45-025-c1.mp3,0,201812045
+      Lithuania 2018 - Ieva Zasimauskaitė,When We're Old,87.537,45.0,Set 2/V2/2018-12-01-27-537-v2.mp3,2,201812088
+      Lithuania 2018 - Ieva Zasimauskaitė,When We're Old,115.42,45.0,Free Excerpts/2018-12-01-55-420-c2.mp3,0,201812115
+      Lithuania 2018 - Ieva Zasimauskaitė,When We're Old,135.547,45.0,Free Excerpts/2018-12-02-15-547-o.mp3,0,201812136
+      Malta 2016 - Ira Losco,Walk on Water,0.0,45.0,Free Excerpts/2016-12-00-00-000-i.mp3,0,201612000
+      Malta 2016 - Ira Losco,Walk on Water,11.345,45.0,Free Excerpts/2016-12-00-11-345-v1.mp3,0,201612011
+      Malta 2016 - Ira Losco,Walk on Water,34.455,45.0,Free Excerpts/2016-12-00-34-455-pc.mp3,0,201612034
+      Malta 2016 - Ira Losco,Walk on Water,50.107,45.0,Free Excerpts/2016-12-00-50-107-pc2.mp3,0,201612050
+      Malta 2016 - Ira Losco,Walk on Water,63.238,45.0,Free Excerpts/2016-12-01-03-238-c1.mp3,0,201612063
+      Malta 2016 - Ira Losco,Walk on Water,85.192,45.0,Free Excerpts/2016-12-01-25-192-v2.mp3,0,201612085
+      Malta 2016 - Ira Losco,Walk on Water,136.245,45.0,Free Excerpts/2016-12-02-16-245-b.mp3,0,201612136
+      Malta 2016 - Ira Losco,Walk on Water,158.62,45.0,Free Excerpts/2016-12-02-38-620-c2.mp3,0,201612159
+      Malta 2019 - Michela Pace,Chameleon,0.0,45.0,Free Excerpts/2019-14-00-00-000-i.mp3,0,201914000
+      Malta 2019 - Michela Pace,Chameleon,9.736,45.0,Free Excerpts/2019-14-00-09-736-v1.mp3,0,201914010
+      Malta 2019 - Michela Pace,Chameleon,18.755,45.0,Free Excerpts/2019-14-00-18-755-pc1.mp3,0,201914019
+      Malta 2019 - Michela Pace,Chameleon,28.491,45.0,Free Excerpts/2019-14-00-28-491-pc2.mp3,0,201914028
+      Malta 2019 - Michela Pace,Chameleon,47.963,45.0,Free Excerpts/2019-14-00-47-963-c1.mp3,0,201914048
+      Malta 2019 - Michela Pace,Chameleon,68.46,45.0,Free Excerpts/2019-14-01-08-460-v2.mp3,0,201914068
+      Malta 2019 - Michela Pace,Chameleon,106.79,45.0,Free Excerpts/2019-14-01-46-790-c2.mp3,0,201914107
+      Malta 2019 - Michela Pace,Chameleon,116.628,45.0,Free Excerpts/2019-14-01-56-628-b.mp3,0,201914117
+      Moldova 2017 - Sunstroke Project,Hey Mamma,4.039,45.0,Set 2/V1/2017-03-00-04-039-v1.mp3,1,201703004
+      Moldova 2017 - Sunstroke Project,Hey Mamma,4.039,45.0,Set 2/Karaoke/2017-03-00-04-039-k.mp3,3,201703004
+      Moldova 2017 - Sunstroke Project,Hey Mamma,20.977,45.0,Free Excerpts/2017-03-00-20-977-c1.mp3,0,201703021
+      Moldova 2017 - Sunstroke Project,Hey Mamma,57.263,45.0,Set 2/V2/2017-03-00-57-263-v2.mp3,2,201703057
+      Moldova 2017 - Sunstroke Project,Hey Mamma,73.599,45.0,Free Excerpts/2017-03-01-13-599-c2.mp3,0,201703074
+      Moldova 2017 - Sunstroke Project,Hey Mamma,91.453,45.0,Free Excerpts/2017-03-01-31-453-b.mp3,0,201703091
+      Moldova 2018 - DoReDos,My Lucky Day,0.0,45.0,Free Excerpts/2018-10-00-00-000-i.mp3,0,201810000
+      Moldova 2018 - DoReDos,My Lucky Day,17.039,45.0,Set 2/V1/2018-10-00-17-039-v1.mp3,1,201810017
+      Moldova 2018 - DoReDos,My Lucky Day,17.039,45.0,Set 2/Karaoke/2018-10-00-17-039-k.mp3,3,201810017
+      Moldova 2018 - DoReDos,My Lucky Day,49.809,45.0,Free Excerpts/2018-10-00-49-809-c1.mp3,0,201810050
+      Moldova 2018 - DoReDos,My Lucky Day,100.082,45.0,Set 2/V2/2018-10-01-40-082-v2.mp3,2,201810100
+      Moldova 2018 - DoReDos,My Lucky Day,132.352,45.0,Free Excerpts/2018-10-02-12-352-c2.mp3,0,201810132
+      Netherlands 2016 - Douwe Bob,Slow Down,0.0,45.0,Free Excerpts/2016-11-00-00-000-i.mp3,0,201611000
+      Netherlands 2016 - Douwe Bob,Slow Down,3.501,45.0,Free Excerpts/2016-11-00-03-501-v1.mp3,0,201611004
+      Netherlands 2016 - Douwe Bob,Slow Down,34.251,45.0,Free Excerpts/2016-11-00-34-251-pc.mp3,0,201611034
+      Netherlands 2016 - Douwe Bob,Slow Down,49.012,45.0,Free Excerpts/2016-11-00-49-012-c1.mp3,0,201611049
+      Netherlands 2016 - Douwe Bob,Slow Down,65.948,45.0,Free Excerpts/2016-11-01-05-948-v2.mp3,0,201611066
+      Netherlands 2016 - Douwe Bob,Slow Down,112.594,45.0,Free Excerpts/2016-11-01-52-594-b.mp3,0,201611113
+      Netherlands 2016 - Douwe Bob,Slow Down,124.422,45.0,Free Excerpts/2016-11-02-04-422-c2.mp3,0,201611124
+      Netherlands 2017 - OG3NE,Lights And Shadows,5.002,45.0,Set 2/V1/2017-11-00-05-002-v1.mp3,1,201711005
+      Netherlands 2017 - OG3NE,Lights And Shadows,5.002,45.0,Set 2/Karaoke/2017-11-00-05-002-k.mp3,3,201711005
+      Netherlands 2017 - OG3NE,Lights And Shadows,37.891,45.0,Free Excerpts/2017-11-00-37-891-c1.mp3,0,201711038
+      Netherlands 2017 - OG3NE,Lights And Shadows,65.032,45.0,Set 2/V2/2017-11-01-05-032-v2.mp3,2,201711065
+      Netherlands 2017 - OG3NE,Lights And Shadows,98.241,45.0,Free Excerpts/2017-11-01-38-241-c2.mp3,0,201711098
+      Netherlands 2017 - OG3NE,Lights And Shadows,125.169,45.0,Free Excerpts/2017-11-02-05-169-b.mp3,0,201711125
+      Netherlands 2018 - Waylon,Outlaw In 'Em,9.97,45.0,Free Excerpts/2018-18-00-09-970-v1.mp3,0,201818010
+      Netherlands 2018 - Waylon,Outlaw In 'Em,39.438,45.0,Free Excerpts/2018-18-00-39-438-c1.mp3,0,201818039
+      Netherlands 2018 - Waylon,Outlaw In 'Em,66.468,45.0,Free Excerpts/2018-18-01-06-468-v2.mp3,0,201818066
+      Netherlands 2018 - Waylon,Outlaw In 'Em,96.3,45.0,Free Excerpts/2018-18-01-36-300-c2.mp3,0,201818096
+      Netherlands 2018 - Waylon,Outlaw In 'Em,129.534,45.0,Free Excerpts/2018-18-02-09-534-o.mp3,0,201818130
+      Netherlands 2019 - Duncan Laurence,Arcade,0.0,45.0,Free Excerpts/2019-01-00-00-000-i.mp3,0,201901000
+      Netherlands 2019 - Duncan Laurence,Arcade,12.852,45.0,Set 2/Karaoke/2019-01-00-12-852-k.mp3,3,201901013
+      Netherlands 2019 - Duncan Laurence,Arcade,12.852,45.0,Set 2/V1/2019-01-00-12-852-v1.mp3,1,201901013
+      Netherlands 2019 - Duncan Laurence,Arcade,53.289,45.0,Free Excerpts/2019-01-00-53-289-pc.mp3,0,201901053
+      Netherlands 2019 - Duncan Laurence,Arcade,66.664,45.0,Free Excerpts/2019-01-01-06-664-c1.mp3,0,201901067
+      Netherlands 2019 - Duncan Laurence,Arcade,81.292,45.0,Set 2/V2/2019-01-01-21-292-v2.mp3,2,201901081
+      Netherlands 2019 - Duncan Laurence,Arcade,128.626,45.0,Free Excerpts/2019-01-02-08-626-b.mp3,0,201901129
+      Netherlands 2019 - Duncan Laurence,Arcade,141.269,45.0,Free Excerpts/2019-01-02-21-269-c2.mp3,0,201901141
+      North Macedonia 2019 - Tamara Todevska,Proud,5.204,45.0,Free Excerpts/2019-07-00-05-204-v1.mp3,0,201907005
+      North Macedonia 2019 - Tamara Todevska,Proud,46.633,45.0,Free Excerpts/2019-07-00-46-633-c1.mp3,0,201907047
+      North Macedonia 2019 - Tamara Todevska,Proud,87.962,45.0,Free Excerpts/2019-07-01-27-962-b.mp3,0,201907088
+      North Macedonia 2019 - Tamara Todevska,Proud,106.675,45.0,Free Excerpts/2019-07-01-46-675-v2.mp3,0,201907107
+      North Macedonia 2019 - Tamara Todevska,Proud,126.489,45.0,Free Excerpts/2019-07-02-06-489-c.mp3,0,201907126
+      Norway 2017 - Jowst,Grab the Moment,8.868,45.0,Free Excerpts/2017-10-00-08-868-v1.mp3,0,201710009
+      Norway 2017 - Jowst,Grab the Moment,37.69,45.0,Free Excerpts/2017-10-00-37-690-c1.mp3,0,201710038
+      Norway 2017 - Jowst,Grab the Moment,66.734,45.0,Free Excerpts/2017-10-01-06-734-v2.mp3,0,201710067
+      Norway 2017 - Jowst,Grab the Moment,94.338,45.0,Free Excerpts/2017-10-01-34-338-c2.mp3,0,201710094
+      Norway 2017 - Jowst,Grab the Moment,130.689,45.0,Free Excerpts/2017-10-02-10-689-b.mp3,0,201710131
+      Norway 2018 - Alexander Rybak,That's How You Write a Song,15.229,45.0,Free Excerpts/2018-15-00-15-229-v1.mp3,0,201815015
+      Norway 2018 - Alexander Rybak,That's How You Write a Song,38.388,45.0,Free Excerpts/2018-15-00-38-388-v2.mp3,0,201815038
+      Norway 2018 - Alexander Rybak,That's How You Write a Song,74.561,45.0,Free Excerpts/2018-15-01-14-561-b.mp3,0,201815075
+      Norway 2018 - Alexander Rybak,That's How You Write a Song,94.405,45.0,Free Excerpts/2018-15-01-34-405-c1.mp3,0,201815094
+      Norway 2018 - Alexander Rybak,That's How You Write a Song,131.079,45.0,Free Excerpts/2018-15-02-11-079-c2.mp3,0,201815131
+      Norway 2019 - KEiiNO,Spirit in the Sky,0.0,45.0,Free Excerpts/2019-06-00-00-000-v1.mp3,0,201906000
+      Norway 2019 - KEiiNO,Spirit in the Sky,19.703,45.0,Free Excerpts/2019-06-00-19-703-pc1.mp3,0,201906020
+      Norway 2019 - KEiiNO,Spirit in the Sky,41.514,45.0,Free Excerpts/2019-06-00-41-514-pc2.mp3,0,201906042
+      Norway 2019 - KEiiNO,Spirit in the Sky,49.311,45.0,Free Excerpts/2019-06-00-49-311-c1.mp3,0,201906049
+      Norway 2019 - KEiiNO,Spirit in the Sky,67.223,45.0,Free Excerpts/2019-06-01-07-223-v2.mp3,0,201906067
+      Norway 2019 - KEiiNO,Spirit in the Sky,114.848,45.0,Free Excerpts/2019-06-01-54-848-b.mp3,0,201906115
+      Norway 2019 - KEiiNO,Spirit in the Sky,147.616,45.0,Free Excerpts/2019-06-02-27-616-c2.mp3,0,201906148
+      Poland 2016 - Michał Szpak,Color of Your Life,0.62,45.0,Free Excerpts/2016-08-00-00-620-v1.mp3,0,201608001
+      Poland 2016 - Michał Szpak,Color of Your Life,12.305,45.0,Free Excerpts/2016-08-00-12-305-pc.mp3,0,201608012
+      Poland 2016 - Michał Szpak,Color of Your Life,23.679,45.0,Free Excerpts/2016-08-00-23-679-c1.mp3,0,201608024
+      Poland 2016 - Michał Szpak,Color of Your Life,49.426,45.0,Free Excerpts/2016-08-00-49-426-v2.mp3,0,201608049
+      Poland 2016 - Michał Szpak,Color of Your Life,119.842,45.0,Free Excerpts/2016-08-01-59-842-b.mp3,0,201608120
+      Poland 2016 - Michał Szpak,Color of Your Life,141.763,45.0,Free Excerpts/2016-08-02-21-763-c2.mp3,0,201608142
+      Portugal 2017 - Salvador Sobral,Amar Pelos Dois,0.0,45.0,Free Excerpts/2017-01-00-00-000-i.mp3,0,201701000
+      Portugal 2017 - Salvador Sobral,Amar Pelos Dois,19.385,45.0,Free Excerpts/2017-01-00-19-385-v1.mp3,0,201701019
+      Portugal 2017 - Salvador Sobral,Amar Pelos Dois,51.382,45.0,Free Excerpts/2017-01-00-51-382-c1.mp3,0,201701051
+      Portugal 2017 - Salvador Sobral,Amar Pelos Dois,82.211,45.0,Free Excerpts/2017-01-01-22-211-c2.mp3,0,201701082
+      Portugal 2017 - Salvador Sobral,Amar Pelos Dois,132.893,45.0,Free Excerpts/2017-01-02-12-893-o.mp3,0,201701133
+      Romania 2017 - Ilinca feat. Alex Florea,Yodel It!,23.437,45.0,Free Excerpts/2017-07-00-23-437-v1.mp3,0,201707023
+      Romania 2017 - Ilinca feat. Alex Florea,Yodel It!,46.427,45.0,Free Excerpts/2017-07-00-46-427-c1.mp3,0,201707046
+      Romania 2017 - Ilinca feat. Alex Florea,Yodel It!,68.037,45.0,Free Excerpts/2017-07-01-08-037-v2.mp3,0,201707068
+      Romania 2017 - Ilinca feat. Alex Florea,Yodel It!,90.175,45.0,Free Excerpts/2017-07-01-30-175-c2.mp3,0,201707090
+      Romania 2017 - Ilinca feat. Alex Florea,Yodel It!,112.537,45.0,Free Excerpts/2017-07-01-52-537-o.mp3,0,201707113
+      Russia 2016 - Sergey Lazarev,You Are the Only One,0.0,45.0,Free Excerpts/2016-03-00-00-000-i.mp3,0,201603000
+      Russia 2016 - Sergey Lazarev,You Are the Only One,11.752,45.0,Free Excerpts/2016-03-00-11-752-v1.mp3,0,201603012
+      Russia 2016 - Sergey Lazarev,You Are the Only One,34.615,45.0,Free Excerpts/2016-03-00-34-615-v1.mp3,0,201603035
+      Russia 2016 - Sergey Lazarev,You Are the Only One,50.427,45.0,Free Excerpts/2016-03-00-50-427-pc.mp3,0,201603050
+      Russia 2016 - Sergey Lazarev,You Are the Only One,65.598,45.0,Free Excerpts/2016-03-01-05-598-c1.mp3,0,201603066
+      Russia 2016 - Sergey Lazarev,You Are the Only One,84.508,45.0,Free Excerpts/2016-03-01-24-508-v2.mp3,0,201603085
+      Russia 2016 - Sergey Lazarev,You Are the Only One,144.765,45.0,Free Excerpts/2016-03-02-24-765-b.mp3,0,201603145
+      Russia 2016 - Sergey Lazarev,You Are the Only One,164.637,45.0,Free Excerpts/2016-03-02-44-637-c2.mp3,0,201603165
+      Russia 2019 - Sergey Lazarev,Scream,0.0,45.0,Set 2/V1/2019-03-00-00-000-v1.mp3,1,201903000
+      Russia 2019 - Sergey Lazarev,Scream,0.0,45.0,Set 2/Karaoke/2019-03-00-00-000-k.mp3,3,201903000
+      Russia 2019 - Sergey Lazarev,Scream,16.459,45.0,Free Excerpts/2019-03-00-16-459-pc.mp3,0,201903016
+      Russia 2019 - Sergey Lazarev,Scream,47.242,45.0,Free Excerpts/2019-03-00-47-242-c1.mp3,0,201903047
+      Russia 2019 - Sergey Lazarev,Scream,79.956,45.0,Set 2/V2/2019-03-01-19-956-v2.mp3,2,201903080
+      Russia 2019 - Sergey Lazarev,Scream,133.904,45.0,Free Excerpts/2019-03-02-13-904-b.mp3,0,201903134
+      Russia 2019 - Sergey Lazarev,Scream,156.662,45.0,Free Excerpts/2019-03-02-36-662-c2.mp3,0,201903157
+      San Marino 2019 - Serhat,Say Na Na Na,0.0,45.0,Free Excerpts/2019-19-00-00-000-i.mp3,0,201919000
+      San Marino 2019 - Serhat,Say Na Na Na,17.584,45.0,Free Excerpts/2019-19-00-17-584-v1.mp3,0,201919018
+      San Marino 2019 - Serhat,Say Na Na Na,33.941,45.0,Free Excerpts/2019-19-00-33-941-pc.mp3,0,201919034
+      San Marino 2019 - Serhat,Say Na Na Na,51.423,45.0,Free Excerpts/2019-19-00-51-423-c1.mp3,0,201919051
+      San Marino 2019 - Serhat,Say Na Na Na,131.779,45.0,Free Excerpts/2019-19-02-11-779-b.mp3,0,201919132
+      San Marino 2019 - Serhat,Say Na Na Na,148.954,45.0,Free Excerpts/2019-19-02-28-954-c2.mp3,0,201919149
+      Serbia 2016 - Sanja Vučić ZAA,Goodbye (Shelter),5.993,45.0,Free Excerpts/2016-18-00-05-993-v1.mp3,0,201618006
+      Serbia 2016 - Sanja Vučić ZAA,Goodbye (Shelter),27.862,45.0,Free Excerpts/2016-18-00-27-862-pc.mp3,0,201618028
+      Serbia 2016 - Sanja Vučić ZAA,Goodbye (Shelter),38.06,45.0,Free Excerpts/2016-18-00-38-060-c1.mp3,0,201618038
+      Serbia 2016 - Sanja Vučić ZAA,Goodbye (Shelter),73.387,45.0,Free Excerpts/2016-18-01-13-387-v2.mp3,0,201618073
+      Serbia 2016 - Sanja Vučić ZAA,Goodbye (Shelter),135.314,45.0,Free Excerpts/2016-18-02-15-314-b.mp3,0,201618135
+      Serbia 2016 - Sanja Vučić ZAA,Goodbye (Shelter),153.819,45.0,Free Excerpts/2016-18-02-33-819-c2.mp3,0,201618154
+      Serbia 2018 - Sanja Ilić & Balkanika,Nova Deca,0.0,45.0,Free Excerpts/2018-19-00-00-000-v1.mp3,0,201819000
+      Serbia 2018 - Sanja Ilić & Balkanika,Nova Deca,55.207,45.0,Free Excerpts/2018-19-00-55-207-c1.mp3,0,201819055
+      Serbia 2018 - Sanja Ilić & Balkanika,Nova Deca,85.312,45.0,Free Excerpts/2018-19-01-25-312-v2.mp3,0,201819085
+      Serbia 2018 - Sanja Ilić & Balkanika,Nova Deca,116.442,45.0,Free Excerpts/2018-19-01-56-442-c2.mp3,0,201819116
+      Serbia 2018 - Sanja Ilić & Balkanika,Nova Deca,140.006,45.0,Free Excerpts/2018-19-02-20-006-o.mp3,0,201819140
+      Serbia 2019 - Nevena Božović,Kruna,0.0,45.0,Free Excerpts/2019-18-00-00-000-i.mp3,0,201918000
+      Serbia 2019 - Nevena Božović,Kruna,8.588,45.0,Set 2/Karaoke/2019-18-00-08-588-k.mp3,3,201918009
+      Serbia 2019 - Nevena Božović,Kruna,8.588,45.0,Set 2/V1/2019-18-00-08-588-v1.mp3,1,201918009
+      Serbia 2019 - Nevena Božović,Kruna,42.517,45.0,Free Excerpts/2019-18-00-42-517-pc.mp3,0,201918043
+      Serbia 2019 - Nevena Božović,Kruna,53.544,45.0,Free Excerpts/2019-18-00-53-544-c1.mp3,0,201918054
+      Serbia 2019 - Nevena Božović,Kruna,106.544,45.0,Set 2/V2/2019-18-01-46-544-v2.mp3,2,201918107
+      Serbia 2019 - Nevena Božović,Kruna,131.581,45.0,Free Excerpts/2019-18-02-11-581-c2.mp3,0,201918132
+      Serbia 2019 - Nevena Božović,Kruna,161.799,45.0,Free Excerpts/2019-18-02-41-799-o.mp3,0,201918162
+      Slovenia 2019 - Zala Kralj & Gašper Šantl,Sebi,0.0,45.0,Free Excerpts/2019-15-00-00-000-i.mp3,0,201915000
+      Slovenia 2019 - Zala Kralj & Gašper Šantl,Sebi,17.291,45.0,Set 2/V1/2019-15-00-17-291-v1.mp3,1,201915017
+      Slovenia 2019 - Zala Kralj & Gašper Šantl,Sebi,17.291,45.0,Set 2/Karaoke/2019-15-00-17-291-k.mp3,3,201915017
+      Slovenia 2019 - Zala Kralj & Gašper Šantl,Sebi,52.793,45.0,Free Excerpts/2019-15-00-52-793-c1.mp3,0,201915053
+      Slovenia 2019 - Zala Kralj & Gašper Šantl,Sebi,70.698,45.0,Set 2/V2/2019-15-01-10-698-v2.mp3,2,201915071
+      Slovenia 2019 - Zala Kralj & Gašper Šantl,Sebi,123.901,45.0,Free Excerpts/2019-15-02-03-901-b.mp3,0,201915124
+      Slovenia 2019 - Zala Kralj & Gašper Šantl,Sebi,141.396,45.0,Free Excerpts/2019-15-02-21-396-c2.mp3,0,201915141
+      Sweden 2016 - Frans,If I Were Sorry,8.639,45.0,Free Excerpts/2016-05-00-08-639-v1.mp3,0,201605009
+      Sweden 2016 - Frans,If I Were Sorry,28.023,45.0,Free Excerpts/2016-05-00-28-023-pc.mp3,0,201605028
+      Sweden 2016 - Frans,If I Were Sorry,48.356,45.0,Free Excerpts/2016-05-00-48-356-c1.mp3,0,201605048
+      Sweden 2016 - Frans,If I Were Sorry,71.323,45.0,Free Excerpts/2016-05-01-11-323-v2.mp3,0,201605071
+      Sweden 2016 - Frans,If I Were Sorry,121.365,45.0,Free Excerpts/2016-05-02-01-365-b.mp3,0,201605121
+      Sweden 2016 - Frans,If I Were Sorry,159.818,45.0,Free Excerpts/2016-05-02-39-818-c2.mp3,0,201605160
+      Sweden 2017 - Robin Bengtsson,I Can't Go On,7.095,45.0,Set 2/V1/2017-05-00-07-095-v1.mp3,1,201705007
+      Sweden 2017 - Robin Bengtsson,I Can't Go On,7.098,45.0,Set 2/Karaoke/2017-05-00-07-098-k.mp3,3,201705007
+      Sweden 2017 - Robin Bengtsson,I Can't Go On,43.617,45.0,Free Excerpts/2017-05-00-43-617-c1.mp3,0,201705044
+      Sweden 2017 - Robin Bengtsson,I Can't Go On,80.322,45.0,Set 2/V2/2017-05-01-20-322-v2.mp3,2,201705080
+      Sweden 2017 - Robin Bengtsson,I Can't Go On,99.004,45.0,Free Excerpts/2017-05-01-39-004-c2.mp3,0,201705099
+      Sweden 2017 - Robin Bengtsson,I Can't Go On,133.472,45.0,Free Excerpts/2017-05-02-13-472-o.mp3,0,201705133
+      Sweden 2018 - Benjamin Ingrosso,Dance You Off,2.289,45.0,Free Excerpts/2018-07-00-02-289-v1.mp3,0,201807002
+      Sweden 2018 - Benjamin Ingrosso,Dance You Off,18.315,45.0,Free Excerpts/2018-07-00-18-315-c1.mp3,0,201807018
+      Sweden 2018 - Benjamin Ingrosso,Dance You Off,54.903,45.0,Free Excerpts/2018-07-00-54-903-v2.mp3,0,201807055
+      Sweden 2018 - Benjamin Ingrosso,Dance You Off,88.999,45.0,Free Excerpts/2018-07-01-28-999-c2.mp3,0,201807089
+      Sweden 2018 - Benjamin Ingrosso,Dance You Off,125.657,45.0,Free Excerpts/2018-07-02-05-657-b.mp3,0,201807126
+      Sweden 2019 - John Lundvik,Too Late for Love,0.0,45.0,Set 2/V1/2019-05-00-00-000-v1.mp3,1,201905000
+      Sweden 2019 - John Lundvik,Too Late for Love,0.0,45.0,Set 2/Karaoke/2019-05-00-00-000-k.mp3,3,201905000
+      Sweden 2019 - John Lundvik,Too Late for Love,17.834,45.0,Free Excerpts/2019-05-00-17-834-pc1.mp3,0,201905018
+      Sweden 2019 - John Lundvik,Too Late for Love,34.453,45.0,Free Excerpts/2019-05-00-34-453-pc2.mp3,0,201905034
+      Sweden 2019 - John Lundvik,Too Late for Love,52.895,45.0,Free Excerpts/2019-05-00-52-895-c1.mp3,0,201905053
+      Sweden 2019 - John Lundvik,Too Late for Love,66.676,45.0,Set 2/V2/2019-05-01-06-676-v2.mp3,2,201905067
+      Sweden 2019 - John Lundvik,Too Late for Love,129.906,45.0,Free Excerpts/2019-05-02-09-906-b.mp3,0,201905130
+      Sweden 2019 - John Lundvik,Too Late for Love,160.306,45.0,Free Excerpts/2019-05-02-40-306-c2.mp3,0,201905160
+      Switzerland 2019 - Luca Hänni,She Got Me,0.0,45.0,Free Excerpts/2019-04-00-00-000-i.mp3,0,201904000
+      Switzerland 2019 - Luca Hänni,She Got Me,9.799,45.0,Free Excerpts/2019-04-00-09-799-v1.mp3,0,201904010
+      Switzerland 2019 - Luca Hänni,She Got Me,28.985,45.0,Free Excerpts/2019-04-00-28-985-pc.mp3,0,201904029
+      Switzerland 2019 - Luca Hänni,She Got Me,38.887,45.0,Free Excerpts/2019-04-00-38-887-c1.mp3,0,201904039
+      Switzerland 2019 - Luca Hänni,She Got Me,57.97,45.0,Free Excerpts/2019-04-00-57-970-b1.mp3,0,201904058
+      Switzerland 2019 - Luca Hänni,She Got Me,69.419,45.0,Free Excerpts/2019-04-01-09-419-v2.mp3,0,201904069
+      Switzerland 2019 - Luca Hänni,She Got Me,127.079,45.0,Free Excerpts/2019-04-02-07-079-b2.mp3,0,201904127
+      Switzerland 2019 - Luca Hänni,She Got Me,154.62,45.0,Free Excerpts/2019-04-02-34-620-c2.mp3,0,201904155
+      Ukraine 2016 - Jamala,1944,0.0,45.0,Free Excerpts/2016-01-00-00-000-i.mp3,0,201601000
+      Ukraine 2016 - Jamala,1944,7.925,45.0,Free Excerpts/2016-01-00-07-925-v1.mp3,0,201601008
+      Ukraine 2016 - Jamala,1944,39.5,45.0,Free Excerpts/2016-01-00-39-500-c1.mp3,0,201601040
+      Ukraine 2016 - Jamala,1944,72.043,45.0,Free Excerpts/2016-01-01-12-043-v2.mp3,0,201601072
+      Ukraine 2016 - Jamala,1944,132.559,45.0,Free Excerpts/2016-01-02-12-559-b.mp3,0,201601133
+      Ukraine 2016 - Jamala,1944,151.166,45.0,Free Excerpts/2016-01-02-31-166-c2.mp3,0,201601151
+      Ukraine 2018 - Mélovin,Under the Ladder,2.956,45.0,Free Excerpts/2018-17-00-02-956-v1.mp3,0,201817003
+      Ukraine 2018 - Mélovin,Under the Ladder,30.924,45.0,Free Excerpts/2018-17-00-30-924-c1.mp3,0,201817031
+      Ukraine 2018 - Mélovin,Under the Ladder,58.209,45.0,Free Excerpts/2018-17-00-58-209-v2.mp3,0,201817058
+      Ukraine 2018 - Mélovin,Under the Ladder,85.722,45.0,Free Excerpts/2018-17-01-25-722-c2.mp3,0,201817086
+      Ukraine 2018 - Mélovin,Under the Ladder,128.014,45.0,Free Excerpts/2018-17-02-8-014-c3.mp3,0,201817128
+      United Kingdom 2017 - Lucie Jones,Never Give Up on You,0.0,45.0,Set 2/V1/2017-15-00-00-000-v1.mp3,1,201715000
+      United Kingdom 2017 - Lucie Jones,Never Give Up on You,0.0,45.0,Set 2/Karaoke/2017-15-00-00-000-k.mp3,3,201715000
+      United Kingdom 2017 - Lucie Jones,Never Give Up on You,37.979,45.0,Free Excerpts/2017-15-00-37-979-c1.mp3,0,201715038
+      United Kingdom 2017 - Lucie Jones,Never Give Up on You,70.925,45.0,Set 2/V2/2017-15-01-10-925-v2.mp3,2,201715071
+      United Kingdom 2017 - Lucie Jones,Never Give Up on You,94.575,45.0,Free Excerpts/2017-15-01-34-575-c2.mp3,0,201715095
+      United Kingdom 2017 - Lucie Jones,Never Give Up on You,124.004,45.0,Free Excerpts/2017-15-02-04-004-b.mp3,0,201715124

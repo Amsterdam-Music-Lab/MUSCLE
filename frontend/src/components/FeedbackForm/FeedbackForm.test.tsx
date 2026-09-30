@@ -1,11 +1,11 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 
 import { QuestionViews } from "@/types/Question";
 
 import FeedbackForm from "./FeedbackForm";
 
-vi.mock('../../util/stores', () => ({
+vi.mock('@/util/stores', () => ({
     __esModule: true,
     default: (fn: (state: any) => any) => {
         const state = {
@@ -51,11 +51,13 @@ describe('FeedbackForm', () => {
             {...defaultProps}
             form={form}
         />)
-        const heading = screen.getByRole('heading');
-        expect(heading).toBeTruthy();
-        expect(heading.textContent).toBe('What is the average speed of a Swallow?');
-        expect(screen.queryByRole('form')).toBeTruthy();
-        expect(screen.queryAllByRole('radio')).toHaveLength(2);
+        waitFor(() => {
+            const heading = screen.getByRole('heading');
+            expect(heading).toBeTruthy();
+            expect(heading.textContent).toBe('What is the average speed of a Swallow?');
+            expect(screen.queryByRole('form')).toBeTruthy();
+            expect(screen.queryAllByRole('radio')).toHaveLength(2);
+        })
         
     });
 

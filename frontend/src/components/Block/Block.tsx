@@ -1,22 +1,22 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { lazy, useState, useEffect, useCallback, useRef } from "react";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { useParams } from "react-router-dom";
 import classNames from "classnames";
 
+import FontLoader from "@/components/FontLoader/FontLoader";
+import Loading from "@/components/Loading/Loading";
+import DefaultPage from "@/components/Page/DefaultPage";
+const Explainer = lazy(() => import("@/components/Explainer/Explainer"));
+const Final = lazy(() => import("@/components/Final/Final"));
+const Playlist = lazy(() => import("@/components/Playlist/Playlist"));
+const Score = lazy(() => import("@/components/Score/Score"));
+const Trial = lazy(() => import("@/components/Trial/Trial"));
+const Info = lazy(() => import("@/components/Info/Info"));
+const FloatingActionButton = lazy(() => import("@/components/FloatingActionButton/FloatingActionButton"));
+const UserFeedback = lazy(() => import("@/components/UserFeedback/UserFeedback"));
+import useResultHandler from "@/hooks/useResultHandler";
 import useBoundStore from "@/util/stores";
 import { getNextRound, useBlock } from "@/API";
-import DefaultPage from "@/components/Page/DefaultPage";
-import Explainer from "@/components/Explainer/Explainer";
-import Final from "@/components/Final/Final";
-import Loading from "@/components/Loading/Loading";
-import Playlist from "@/components/Playlist/Playlist";
-import Score from "@/components/Score/Score";
-import Trial from "@/components/Trial/Trial";
-import Info from "@/components/Info/Info";
-import FloatingActionButton from "@/components/FloatingActionButton/FloatingActionButton";
-import UserFeedback from "@/components/UserFeedback/UserFeedback";
-import FontLoader from "@/components/FontLoader/FontLoader";
-import useResultHandler from "@/hooks/useResultHandler";
 import Session from "@/types/Session";
 import { Action } from "@/types/Action";
 import { Round } from "@/types/Round";
@@ -28,7 +28,7 @@ import { Round } from "@/types/Round";
 // - Implements participant_id as URL parameter, e.g. http://localhost:3000/bat?participant_id=johnsmith34
 //   Empty URL parameter "participant_id" is the same as no URL parameter at all
 const Block = () => {
-    const { identifier } = useParams();
+    const { experimentIdentifier, identifier } = useParams();
     const startState = { view: "LOADING" } as Action;
     // Stores
     const setError = useBoundStore(state => state.setError);
@@ -50,7 +50,7 @@ const Block = () => {
     const playlist = useRef(null);
 
     // API hooks
-    const [block, loadingBlock] = useBlock(identifier!);
+    const [block, loadingBlock] = useBlock(experimentIdentifier!, identifier!);
 
     const loadingText = block ? block.loading_text : "";
     const className = block ? block.class_name : "";

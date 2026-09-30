@@ -1,0 +1,131 @@
+- model: experiment.experiment
+  pk: 50
+  fields:
+    identifier: mpref
+    active: true
+- model: experiment.phase
+  pk: 50
+  fields:
+    experiment: 50
+- model: experiment.block
+  pk: 50
+  fields:
+    phase: 50
+    experiment: 50
+    index: 0
+    identifier: mpref
+    rounds: 64
+    bonus_points: 0
+    rules: MUSICAL_PREFERENCES
+    playlists:
+    - 51
+- model: section.playlist
+  fields:
+    name: AudioSetup
+    csv: audiocheck,audiocheck,27.0,15.0,hooked-china-audiocheck/audiocheck.mp3,0,v1
+- model: section.playlist
+  pk: 51
+  fields:
+    name: MusicalPreferences
+    csv: |
+      88rising/Niki,Split,89.45,15.0,mpref/Split.01.29.450.c1.mp3,Split,R&B
+      Ah Nee Mah,Sun Circle,19.983,15.0,mpref/Sun%20Circle00.19.983.v1.mp3,Ah Nee Mah,World music
+      Amberhaze,Faith in Numbers,15.369,15.0,mpref/Faith.00.15.369.v1.mp3,Faith in Numbers,Post-rock
+      Andrew Lyold Webber,歌剧魅影,19.189,15.0,mpref/Phantom00.19.189.v1.mp3,The Phantom of The Opera,Musical
+      Big Bang,If You,67.545,15.0,mpref/If%20You01.07.545.c1.mp3,If You,Korean pop
+      Billie Eilish,Ocean Eyes,42.279,15.0,mpref/Ocean%20Eyes.00.42.279.c1.mp3,Ocean Eyes,Alternative
+      Black Country - New Road,Concorde,55.512,15.0,mpref/Concorde.00.55.512.c1.mp3,Concorde,Indie
+      Brad Paisley,Letter to Me,66.006,15.0,mpref/Letter%20to%20Me01.06.006.c1.mp3,Letter to Me,Country
+      Capo Productions ,Journey ,0.0,15.0,mpref/Journey00.00.000.v1.mp3,Journey ,New age
+      Colbie Caillat,Try,40.532,15.0,mpref/Try00.40.532.c1.mp3,Try,Western pop
+      Eminem,Without Me,90.934,15.0,mpref/Without%20Me01.30.934.c1.mp3,Without Me,Rap 
+      GALA,Young For You,67.771,15.0,mpref/Young%20For%20You01.07.771.c1.mp3,Young For You,Pop rock
+      K-391/Alan Walker/Ahrix,End of Time,33.723,15.0,mpref/End%20of%20Time00.33.723.c1.mp3,End of Time,Electronic
+      Kodie Shane,Sing to her,10.167,15.0,mpref/Sing%20to%20her00.10.167.c1.mp3,Sing to her,Rap 
+      Koko Taylor,Wang Dang Doodle,7.875,15.0,mpref/WDD00.07.875.v1.mp3,Wang Dang Doodle,Blues
+      Lady A,Need You Now,49.42,15.0,mpref/Need%20You%20Now00.49.420.c1.mp3,Need You Now,Country
+      L.A. Guns,On Way Ticket ,19.271,15.0,mpref/OWT00.19.271.v1.mp3,On Way Ticket ,Metal
+      LANY,13,50.291,15.0,mpref/13.00.50.291.c1.mp3,13,Alternative
+      Luiz Bonfá / Lalo Schifrin/ Oscar castro-Neves,Sambalamento,13.141,15.0,mpref/Samba00.13.141.v1.mp3,Sambalamento,Bossa nova
+      MAMAMOO,Starry Night ,55.87,15.0,mpref/Starry%20Night00.55.870.c1.mp3,Starry Night ,Korean pop
+      Maximilian Hecker,I Am Falling Now,14.312,15.0,mpref/I%20Am%20Falling%20Now00.14.312.v1.mp3,I Am Falling Now,Western pop
+      MC HotDog热狗,你记得吗？,91.299,15.0,mpref/DYR01.31.299.v2.mp3,Do You Remember?,Chinese rap
+      Miles Davis,You're My Everything,0.0,15.0,mpref/Everything00.00.00.int.mp3,You're My Everything,Jazz
+      New York Dolls,Personality Crisis,37.209,15.0,mpref/Personality.00.37.209.c1.mp3,Personality Crisis,Punk
+      Nicholas Hooper,Dumbledore’s Farewell （《哈利.波特与混血王子》电影配乐）,45.004,15.0,mpref/Dumbl00.02.937.int.mp3,Dumbledore鈥檚 Farewell,Soundtrack
+      Nina Simone,Feeling Good,46.601,15.0,mpref/Feeling%20Good00.46.601.v1.mp3,Feeling Good,Jazz
+      Oh Wonder,Drive ,27.375,15.0,mpref/Drive.00.27.375.c1.mp3,Drive ,Indie
+      One Republic ,Counting Stars,77.868,15.0,mpref/Counting%20Stars01.17.868.c1.mp3,Counting stars,Pop rock
+      Radwimps/ 菅田将晖,うたかた歌 《泡沫之歌》,74.401,15.0,mpref/Song.01.14.401.c1.mp3,Utakata uta,Japanese pop
+      Steve Wonder,I Just Called to Say I Love You,75.379,15.0,mpref/Love%20You01.15.379.c1.mp3,I Just Called to Say I Love You,Soul
+      Sting,Shape of My Heart,0.0,15.0,mpref/Shapeheart00.00.000.v1.mp3,Shape of My Heart,Soundtrack
+      The Police,Every Breath You Take,48.002,15.0,mpref/Every%20Breath00.48.002.c1.mp3,Every Breath You Take,Rock
+      Timo Tolkki / Sharon den Adel,Are You the One?,55.057,15.0,mpref/Are%20You00.55.057.c1.mp3,Are You the One?,Metal
+      U2,Sometimes You Can't Make It on Your Own,81.443,15.0,mpref/Sometimes01.20.443.c1.mp3,Sometimes You Can't Make It on Your Own,Rock
+      万妮达,场上称霸,9.376,15.0,mpref/Cheng%20Ba00.09.376.c1.mp3,Changshangchengba,Chinese rap
+      乌达木,梦中的额吉,48.468,15.0,mpref/Meng%20Zhong00.48.468.c1.mp3,Mengzhongdeeji,World music
+      单依纯,永不失联的爱,11.325,15.0,mpref/Xiao%20Shi%20de%20Ai00.11.325.c1.mp3,Yongbushiliandeai,Chinese pop
+      叶里,南山雪,65.817,15.0,mpref/Nan%20Shan%20Xue01.05.817.c1.mp3,Nanshanxue,Chinese Wind style
+      周杰伦,爱在西元前,77.819,15.0,mpref/Xi%20Yuan%20Qian01.17.819.c1.mp3,Aizaixiyuanqian,Chinese pop
+      周杰伦,青花瓷,57.082,15.0,mpref/Qing%20Hua%20Ci00.57.082.c1.mp3,Qinghuaci,Chinese Wind style
+      宇多田光,Beautiful World,17.701,15.0,mpref/Beautiful%20World.00.17.701.c1.mp3,Beautiful World,Japanese pop
+      小野丽莎,Fly Me To The Moon,11.005,15.0,mpref/Fly%20Me00.11.005.v1.mp3,Fly Me To The Moon,Bossa nova
+      巴赫,醒来吧,0.512,15.0,mpref/BWV140I00.00.512.int.mp3,\"Wachet auf, ruft uns die Stimme, BWV 140 (I)\",Classical 
+      张芸京,偏爱,55.076,15.0,mpref/Pian%20Ai00.55.076.c1.mp3,Pianai,Chinese OST
+      徐梦圆,Color-X 3D,0.689,15.0,mpref/ColorX00.00.689.int.mp3,Color-X 3D,Electronic
+      新裤子,我们的时代,32.113,15.0,mpref/Our%20Ages.00.32.113.c1.mp3,Our Ages,Punk
+      方大同,偷笑,38.097,15.0,mpref/Tou%20Xiao00.38.097.c1.mp3,Touxiao,Soul
+      昭宥,I Miss You,29.125,15.0,mpref/I%20Miss%20You00.29.125.c1.mp3,I Miss You,Korean OST
+      李琼,八百里洞庭我的家,102.303,15.0,mpref/Ba%20Bai%20Li01.42.303.v1.mp3,Babailidongtingwodejia,Chinese folk music
+      柴可夫斯基,第一钢琴协奏曲,0.727,15.0,mpref/op23I00.00.727.int.mp3,Piano Concerto No. 1 OP.23 (I allegro),Classical 
+      梁博,危险,15.239,15.0,mpref/Wei%20Xian00.15.239.v1.mp3,Dangerous,Blues
+      梅兰芳,贵妃醉酒,79.824,15.0,mpref/Gui%20Fei01.19.824.v1.mp3,Guifeizuijiu,Chinese traditional music
+      植地雅哉,潮汐,1.125,15.0,mpref/Tide00.01.125.int.mp3,The Tide,New age
+      汪苏泷,忽而今夏,46.1,15.0,mpref/Jin%20Xia00.46.100.c1.mp3,Huerjinxia,Chinese OST
+      清塚信也,春天来了,0.69,15.0,mpref/Chun%20Tian00.00.690.int.mp3,\"Haruyo, Koi\",Light Music
+      白智英,像中枪一样,42.036,15.0,mpref/Like%20being%20shot00.42.036.c1.mp3,Like being shot,Korean OST
+      腾格尔,蒙古人,87.814,15.0,mpref/Meng%20Gu01.27.814.v1.mp3,Mongolian,Chinese folkmusic
+      花粥,一腔诗意为了狗,43.752,15.0,mpref/Yi%20Qiang%20Shi%20Yi01.43.752.c1.mp3,Yiqiangshiyiweilegou,Chinese Min Yao
+      蒋月泉,莺莺操琴,28.823,15.0,mpref/Ying%20Ying00.28.823.v1.mp3,Yingyingcaoqin,Chinese traditional music
+      赵雷,南方姑娘,127.939,15.0,mpref/Gu%20Niang02.07.939.c1.mp3,Nanfangguniang,Chinese Min Yao
+      轻松频率,雨滴降落,0.156,15.0,mpref/Rain00.00.156.int.mp3,Rain dropping ,Light Music
+      金培达/梁芒 ,绝不可以（音乐剧《赵氏孤儿》）,78.727,15.0,mpref/Bu%20Ke%20Yi01.18.727.c1.mp3,The Orphan of Zhao,Musical
+      阿飞西雅,毕业旅行,0.0,15.0,mpref/Graduate.00.00.00.v1.mp3,Graduate Travel,Post-rock
+      鹤,Unique Design ,104.307,15.0,mpref/Unique%20Design.01.44.307.c1.mp3,Unique Design ,R&B
+- model: question.questionlist
+  pk: 50
+  fields:
+    name: Demographics_China
+    block: 50
+    index: 1
+    randomize: false
+- model: question.questioninlist
+  fields:
+    questionlist: 50
+    question: msi_39_best_instrument
+    index: 1
+- model: question.questioninlist
+  fields:
+    questionlist: 50
+    question: dgf_genre_preference_zh
+    index: 2
+- model: question.questioninlist
+  fields:
+    questionlist: 50
+    question: dgf_gender_identity_zh
+    index: 3
+- model: question.questioninlist
+  fields:
+    questionlist: 50
+    question: dgf_age
+    index: 4
+- model: question.questioninlist
+  fields:
+    questionlist: 50
+    question: dgf_region_of_origin_zh
+    index: 5
+- model: question.questioninlist
+  fields:
+    questionlist: 50
+    question: dgf_region_of_residence_zh
+    index: 6

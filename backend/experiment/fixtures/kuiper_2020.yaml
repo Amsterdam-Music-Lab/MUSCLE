@@ -1,0 +1,295 @@
+- model: experiment.experiment
+  pk: 42
+  fields:
+    identifier: christmas_2020
+    active: true
+- model: experiment.phase
+  pk: 42
+  fields:
+    experiment: 42
+- model: experiment.block
+  pk: 6
+  fields:
+    phase: 42
+    experiment: 42
+    index: 0
+    identifier: christmas_2020
+    rounds: 30
+    bonus_points: 0
+    rules: KUIPER_2020
+    playlists:
+    - 42
+- model: section.playlist
+  pk: 42
+  fields:
+    name: Kuiper 2020
+    csv: |
+      98°,2017 - What Christmas Means to Me,7.978,45.0,Kerstmuziek/What Christmas Means to Me00.07.978.v1.n.mp3,2,100003813
+      98°,2017 - What Christmas Means to Me,29.184,45.0,Kerstmuziek/What Christmas Means to Me00.29.184.c1.n.mp3,2,100003804
+      98°,2017 - What Christmas Means to Me,46.716,45.0,Kerstmuziek/What Christmas Means to Me00.46.716.v2.n.mp3,2,100003814
+      98°,2017 - What Christmas Means to Me,77.055,45.0,Kerstmuziek/What Christmas Means to Me01.17.055.b.n.mp3,2,100003801
+      98°,2017 - What Christmas Means to Me,118.102,45.0,Kerstmuziek/What Christmas Means to Me01.58.102.c2.n.mp3,2,100003805
+      Andy Williams,1963 - It’s the Most Wonderful Time of the Year,0.0,45.0,Kerstmuziek/It_s the Most Wonderful Time of the Year00.00.000.i.s.mp3,0,100001207
+      Andy Williams,1963 - It’s the Most Wonderful Time of the Year,6.626,45.0,Kerstmuziek/It_s the Most Wonderful Time of the Year00.06.626.c1.s.mp3,0,100001204
+      Andy Williams,1963 - It’s the Most Wonderful Time of the Year,34.613,45.0,Kerstmuziek/It_s the Most Wonderful Time of the Year00.34.613.v1.s.mp3,0,100001213
+      Andy Williams,1963 - It’s the Most Wonderful Time of the Year,93.551,45.0,Kerstmuziek/It_s the Most Wonderful Time of the Year01.33.551.v2.s.mp3,0,100001214
+      Andy Williams,1963 - It’s the Most Wonderful Time of the Year,116.133,45.0,Kerstmuziek/It_s the Most Wonderful Time of the Year01.56.133.c2.s.mp3,0,100001205
+      Ariana Grande,2013 - Santa Tell Me,10.03,45.0,Kerstmuziek/Santa Tell Me00.10.030.c1.s.mp3,0,100003104
+      Ariana Grande,2013 - Santa Tell Me,30.907,45.0,Kerstmuziek/Santa Tell Me00.30.907.v1.s.mp3,0,100003113
+      Ariana Grande,2013 - Santa Tell Me,81.058,45.0,Kerstmuziek/Santa Tell Me01.21.058.v2.s.mp3,0,100003114
+      Ariana Grande,2013 - Santa Tell Me,131.792,45.0,Kerstmuziek/Santa Tell Me02.11.792.b.s.mp3,0,100003101
+      Ariana Grande,2013 - Santa Tell Me,160.716,45.0,Kerstmuziek/Santa Tell Me02.40.716.c2.s.mp3,0,100003105
+      Band Aid,1984 - Do They Know It’s Christmas,1.017,45.0,Kerstmuziek/Do They Know It_s Christmas00.01.017.i.s.mp3,0,100000707
+      Band Aid,1984 - Do They Know It’s Christmas,8.393,45.0,Kerstmuziek/Do They Know It_s Christmas00.08.393.v1.s.mp3,0,100000713
+      Band Aid,1984 - Do They Know It’s Christmas,41.329,45.0,Kerstmuziek/Do They Know It_s Christmas00.41.329.v2.s.mp3,0,100000714
+      Band Aid,1984 - Do They Know It’s Christmas,117.755,45.0,Kerstmuziek/Do They Know It_s Christmas01.57.755.c1.s.mp3,0,100000704
+      Band Aid,1984 - Do They Know It’s Christmas,134.887,45.0,Kerstmuziek/Do They Know It_s Christmas02.14.887.b.s.mp3,0,100000701
+      Bing Crosby,1942 - White Christmas,0.0,45.0,Kerstmuziek/White Christmas00.00.000.i.s.mp3,0,100003907
+      Bing Crosby,1942 - White Christmas,10.178,45.0,Kerstmuziek/White Christmas00.10.178.c1.s.mp3,0,100003904
+      Bing Crosby,1942 - White Christmas,29.904,45.0,Kerstmuziek/White Christmas00.29.904.v.s.mp3,0,100003912
+      Bing Crosby,1942 - White Christmas,93.805,45.0,Kerstmuziek/White Christmas01.33.805.c2.s.mp3,0,100003905
+      Bing Crosby,1942 - White Christmas,133.467,45.0,Kerstmuziek/White Christmas02.13.467.c3.s.mp3,0,100003906
+      Bobby Helms,1970 - Jingle Bell Rock,0.0,45.0,Kerstmuziek/Jingle Bell Rock00.00.000.i.o.mp3,1,100001407
+      Bobby Helms,1970 - Jingle Bell Rock,7.934,45.0,Kerstmuziek/Jingle Bell Rock00.07.934.c1.o.mp3,1,100001404
+      Bobby Helms,1970 - Jingle Bell Rock,39.22,45.0,Kerstmuziek/Jingle Bell Rock00.39.220.v1.o.mp3,1,100001413
+      Bobby Helms,1970 - Jingle Bell Rock,55.761,45.0,Kerstmuziek/Jingle Bell Rock00.55.761.v2.o.mp3,1,100001414
+      Bobby Helms,1970 - Jingle Bell Rock,71.629,45.0,Kerstmuziek/Jingle Bell Rock01.11.629.c2.o.mp3,1,100001405
+      Boney M.,1978 - Mary’s Boy Child/Oh My Lord,0.0,45.0,Kerstmuziek/Mary_s Boy Child _ Oh My Lord00.00.000.i.s.mp3,0,100002007
+      Boney M.,1978 - Mary’s Boy Child/Oh My Lord,29.102,45.0,Kerstmuziek/Mary_s Boy Child _ Oh My Lord00.29.102.v1.s.mp3,0,100002013
+      Boney M.,1978 - Mary’s Boy Child/Oh My Lord,37.443,45.0,Kerstmuziek/Mary_s Boy Child _ Oh My Lord00.37.443.c1.s.mp3,0,100002004
+      Boney M.,1978 - Mary’s Boy Child/Oh My Lord,110.553,45.0,Kerstmuziek/Mary_s Boy Child _ Oh My Lord01.50.553.b1.s.mp3,0,100002002
+      Boney M.,1978 - Mary’s Boy Child/Oh My Lord,225.897,45.0,Kerstmuziek/Mary_s Boy Child _ Oh My Lord03.45.897.b2.s.mp3,0,100002003
+      Brenda Lee,1958 - Rockin’ Around the Christmas Tree,0.0,45.0,Kerstmuziek/Rockin_ Around the Christmas Tree00.00.000.i.o.mp3,1,100002607
+      Brenda Lee,1958 - Rockin’ Around the Christmas Tree,7.36,45.0,Kerstmuziek/Rockin_ Around the Christmas Tree00.07.360.c1.o.mp3,1,100002604
+      Brenda Lee,1958 - Rockin’ Around the Christmas Tree,34.201,45.0,Kerstmuziek/Rockin_ Around the Christmas Tree00.34.201.v1.o.mp3,1,100002613
+      Brenda Lee,1958 - Rockin’ Around the Christmas Tree,60.248,45.0,Kerstmuziek/Rockin_ Around the Christmas Tree01.00.248.b.o.mp3,1,100002601
+      Brenda Lee,1958 - Rockin’ Around the Christmas Tree,102.242,45.0,Kerstmuziek/Rockin_ Around the Christmas Tree01.42.242.c2.o.mp3,1,100002605
+      Britney Spears,2000 - My Only Wish (This Year),13.445,45.0,Kerstmuziek/My Only Wish This Year00.13.445.v1.s.mp3,0,100002413
+      Britney Spears,2000 - My Only Wish (This Year),38.727,45.0,Kerstmuziek/My Only Wish This Year00.38.727.b.s.mp3,0,100002401
+      Britney Spears,2000 - My Only Wish (This Year),52.464,45.0,Kerstmuziek/My Only Wish This Year00.52.464.c1.s.mp3,0,100002404
+      Britney Spears,2000 - My Only Wish (This Year),91.775,45.0,Kerstmuziek/My Only Wish This Year01.31.775.v2.s.mp3,0,100002414
+      Britney Spears,2000 - My Only Wish (This Year),187.642,45.0,Kerstmuziek/My Only Wish This Year03.07.642.c2.s.mp3,0,100002405
+      Bruce Springsteen,1975 - Santa Claus is Comin’ to Town,46.946,45.0,Kerstmuziek/Santa Claus Is Comin_ to Town00.46.946.c1.n.mp3,2,100002904
+      Bruce Springsteen,1975 - Santa Claus is Comin’ to Town,72.178,45.0,Kerstmuziek/Santa Claus Is Comin_ to Town01.12.178.v1.n.mp3,2,100002913
+      Bruce Springsteen,1975 - Santa Claus is Comin’ to Town,95.574,45.0,Kerstmuziek/Santa Claus Is Comin_ to Town01.35.574.v2.n.mp3,2,100002914
+      Bruce Springsteen,1975 - Santa Claus is Comin’ to Town,114.842,45.0,Kerstmuziek/Santa Claus Is Comin_ to Town01.54.842.c2.n.mp3,2,100002905
+      Bruce Springsteen,1975 - Santa Claus is Comin’ to Town,190.384,45.0,Kerstmuziek/Santa Claus Is Comin_ to Town03.10.384.b.n.mp3,2,100002901
+      Burl Ives,1965 - A Holly Jolly Christmas,0.426,45.0,Kerstmuziek/A Holly Jolly Christmas00.00.426.i.o.mp3,1,100000107
+      Burl Ives,1965 - A Holly Jolly Christmas,6.435,45.0,Kerstmuziek/A Holly Jolly Christmas00.06.435.c1.o.mp3,1,100000104
+      Burl Ives,1965 - A Holly Jolly Christmas,27.017,45.0,Kerstmuziek/A Holly Jolly Christmas00.27.017.v1.o.mp3,1,100000113
+      Burl Ives,1965 - A Holly Jolly Christmas,47.741,45.0,Kerstmuziek/A Holly Jolly Christmas00.47.741.b.o.mp3,1,100000101
+      Burl Ives,1965 - A Holly Jolly Christmas,61.651,45.0,Kerstmuziek/A Holly Jolly Christmas01.01.651.c2.o.mp3,1,100000105
+      Chris Rea,1988 - Driving Home for Christmas,0.0,45.0,Kerstmuziek/Driving Home For Christmas00.00.000.i.s.mp3,0,100000807
+      Chris Rea,1988 - Driving Home for Christmas,22.076,45.0,Kerstmuziek/Driving Home For Christmas00.22.076.c1.s.mp3,0,100000804
+      Chris Rea,1988 - Driving Home for Christmas,70.478,45.0,Kerstmuziek/Driving Home For Christmas01.10.478.v.s.mp3,0,100000812
+      Chris Rea,1988 - Driving Home for Christmas,138.762,45.0,Kerstmuziek/Driving Home For Christmas02.18.762.b.s.mp3,0,100000801
+      Chris Rea,1988 - Driving Home for Christmas,197.448,45.0,Kerstmuziek/Driving Home For Christmas03.17.448.c2.s.mp3,0,100000805
+      Christina Aguilera,2000 - Have Yourself a Merry Little Christmas,14.449,45.0,Kerstmuziek/Have Yourself a Merry Little Christmas00.14.449.c1.o.mp3,1,100001004
+      Christina Aguilera,2000 - Have Yourself a Merry Little Christmas,41.68,45.0,Kerstmuziek/Have Yourself a Merry Little Christmas00.41.680.c2.o.mp3,1,100001005
+      Christina Aguilera,2000 - Have Yourself a Merry Little Christmas,70.856,45.0,Kerstmuziek/Have Yourself a Merry Little Christmas01.10.856.v1.o.mp3,1,100001013
+      Christina Aguilera,2000 - Have Yourself a Merry Little Christmas,175.474,45.0,Kerstmuziek/Have Yourself a Merry Little Christmas02.55.474.v2.o.mp3,1,100001014
+      Christina Aguilera,2000 - Have Yourself a Merry Little Christmas,207.012,45.0,Kerstmuziek/Have Yourself a Merry Little Christmas03.27.012.c3.o.mp3,1,100001006
+      Chuck Berry,1959 - Run Rudolph Run,0.0,45.0,Kerstmuziek/Run Rudolph Run00.00.000.i.s.mp3,0,100002707
+      Chuck Berry,1959 - Run Rudolph Run,19.305,45.0,Kerstmuziek/Run Rudolph Run00.19.305.c1.s.mp3,0,100002704
+      Chuck Berry,1959 - Run Rudolph Run,37.58,45.0,Kerstmuziek/Run Rudolph Run00.37.580.v1.s.mp3,0,100002713
+      Chuck Berry,1959 - Run Rudolph Run,73.941,45.0,Kerstmuziek/Run Rudolph Run01.13.941.b.s.mp3,0,100002701
+      Chuck Berry,1959 - Run Rudolph Run,113.301,45.0,Kerstmuziek/Run Rudolph Run01.53.301.v2.s.mp3,0,100002714
+      Coldplay,2010 - Christmas Lights,0.0,45.0,Kerstmuziek/Christmas Lights00.00.000.i.s.mp3,0,100000607
+      Coldplay,2010 - Christmas Lights,21.618,45.0,Kerstmuziek/Christmas Lights00.21.618.v1.s.mp3,0,100000613
+      Coldplay,2010 - Christmas Lights,50.719,45.0,Kerstmuziek/Christmas Lights00.50.719.b.s.mp3,0,100000601
+      Coldplay,2010 - Christmas Lights,71.921,45.0,Kerstmuziek/Christmas Lights01.11.921.c1.s.mp3,0,100000604
+      Coldplay,2010 - Christmas Lights,132.479,45.0,Kerstmuziek/Christmas Lights02.12.479.c2.s.mp3,0,100000605
+      Darlene Love,1963 - Christmas (Baby Please Come Home),0.0,45.0,Kerstmuziek/Christmas Baby Please Come Home00.00.000.i.o.mp3,1,100000507
+      Darlene Love,1963 - Christmas (Baby Please Come Home),15.654,45.0,Kerstmuziek/Christmas Baby Please Come Home00.15.654.c1.o.mp3,1,100000504
+      Darlene Love,1963 - Christmas (Baby Please Come Home),46.379,45.0,Kerstmuziek/Christmas Baby Please Come Home00.46.379.v.o.mp3,1,100000512
+      Darlene Love,1963 - Christmas (Baby Please Come Home),76.035,45.0,Kerstmuziek/Christmas Baby Please Come Home01.16.035.b.o.mp3,1,100000501
+      Darlene Love,1963 - Christmas (Baby Please Come Home),106.468,45.0,Kerstmuziek/Christmas Baby Please Come Home01.46.468.c2.o.mp3,1,100000505
+      Daryl Hall and John Oates,1983 - Jingle Bell Rock,0.0,45.0,Kerstmuziek/Jingle Bell Rock00.00.000.i.n.mp3,2,100001407
+      Daryl Hall and John Oates,1983 - Jingle Bell Rock,7.365,45.0,Kerstmuziek/Jingle Bell Rock00.07.365.c1.n.mp3,2,100001404
+      Daryl Hall and John Oates,1983 - Jingle Bell Rock,37.042,45.0,Kerstmuziek/Jingle Bell Rock00.37.042.v1.n.mp3,2,100001413
+      Daryl Hall and John Oates,1983 - Jingle Bell Rock,52.278,45.0,Kerstmuziek/Jingle Bell Rock00.52.278.v2.n.mp3,2,100001414
+      Daryl Hall and John Oates,1983 - Jingle Bell Rock,67.224,45.0,Kerstmuziek/Jingle Bell Rock01.07.224.c2.n.mp3,2,100001405
+      Dean Martin,1959 - Let It Snow!,0.045,45.0,Kerstmuziek/Let It Snow00.00.045.i.n.mp3,2,100001607
+      Dean Martin,1959 - Let It Snow!,7.298,45.0,Kerstmuziek/Let It Snow00.07.298.c1.n.mp3,2,100001604
+      Dean Martin,1959 - Let It Snow!,35.886,45.0,Kerstmuziek/Let It Snow00.35.886.v.n.mp3,2,100001612
+      Dean Martin,1959 - Let It Snow!,64.14,45.0,Kerstmuziek/Let It Snow01.04.140.b.n.mp3,2,100001601
+      Dean Martin,1959 - Let It Snow!,91.925,45.0,Kerstmuziek/Let It Snow01.31.925.c2.n.mp3,2,100001605
+      Donny Hathaway,1970 - This Christmas,14.531,45.0,Kerstmuziek/This Christmas00.14.531.v1.s.mp3,0,100003613
+      Donny Hathaway,1970 - This Christmas,35.667,45.0,Kerstmuziek/This Christmas00.35.667.c1.s.mp3,0,100003604
+      Donny Hathaway,1970 - This Christmas,65.39,45.0,Kerstmuziek/This Christmas01.05.390.v2.s.mp3,0,100003614
+      Donny Hathaway,1970 - This Christmas,115.852,45.0,Kerstmuziek/This Christmas01.55.852.b.s.mp3,0,100003601
+      Donny Hathaway,1970 - This Christmas,161.956,45.0,Kerstmuziek/This Christmas02.41.956.o.s.mp3,0,100003608
+      Eartha Kitt,1953 - Santa Baby,0.0,45.0,Kerstmuziek/Santa Baby00.00.000.i.o.mp3,1,100002807
+      Eartha Kitt,1953 - Santa Baby,12.745,45.0,Kerstmuziek/Santa Baby00.12.745.c1.o.mp3,1,100002804
+      Eartha Kitt,1953 - Santa Baby,57.117,45.0,Kerstmuziek/Santa Baby00.57.117.v1.o.mp3,1,100002813
+      Eartha Kitt,1953 - Santa Baby,103.612,45.0,Kerstmuziek/Santa Baby01.43.612.v2.o.mp3,1,100002814
+      Eartha Kitt,1953 - Santa Baby,149.164,45.0,Kerstmuziek/Santa Baby02.29.164.b.o.mp3,1,100002801
+      Ella Fitzgerald,1960 - Sleigh Ride,0.0,45.0,Kerstmuziek/Sleigh Ride00.00.000.i.o.mp3,1,100003207
+      Ella Fitzgerald,1960 - Sleigh Ride,25.01,45.0,Kerstmuziek/Sleigh Ride00.25.010.c1.o.mp3,1,100003204
+      Ella Fitzgerald,1960 - Sleigh Ride,54.597,45.0,Kerstmuziek/Sleigh Ride00.54.597.b1.o.mp3,1,100003202
+      Ella Fitzgerald,1960 - Sleigh Ride,92.591,45.0,Kerstmuziek/Sleigh Ride01.32.591.b2.o.mp3,1,100003203
+      Ella Fitzgerald,1960 - Sleigh Ride,143.356,45.0,Kerstmuziek/Sleigh Ride02.23.356.c2.o.mp3,1,100003205
+      Elton John,1974 - Step into Christmas,0.0,45.0,Kerstmuziek/Step into Christmas00.00.000.i.s.mp3,0,100003307
+      Elton John,1974 - Step into Christmas,14.799,45.0,Kerstmuziek/Step into Christmas00.14.799.v1.s.mp3,0,100003313
+      Elton John,1974 - Step into Christmas,50.408,45.0,Kerstmuziek/Step into Christmas00.50.408.c1.s.mp3,0,100003304
+      Elton John,1974 - Step into Christmas,123.631,45.0,Kerstmuziek/Step into Christmas02.03.631.b.s.mp3,0,100003301
+      Elton John,1974 - Step into Christmas,184.213,45.0,Kerstmuziek/Step into Christmas03.04.213.c2.s.mp3,0,100003305
+      Elvis Presley,1957 - Blue Christmas,0.0,45.0,Kerstmuziek/Blue Christmas00.00.000.c1.s.mp3,0,100000404
+      Elvis Presley,1957 - Blue Christmas,21.806,45.0,Kerstmuziek/Blue Christmas00.21.806.v1.s.mp3,0,100000413
+      Elvis Presley,1957 - Blue Christmas,41.602,45.0,Kerstmuziek/Blue Christmas00.41.602.v2.s.mp3,0,100000414
+      Elvis Presley,1957 - Blue Christmas,82.088,45.0,Kerstmuziek/Blue Christmas01.22.088.b.s.mp3,0,100000401
+      Elvis Presley,1957 - Blue Christmas,102.852,45.0,Kerstmuziek/Blue Christmas01.42.852.c2.s.mp3,0,100000405
+      Frank Sinatra (with the B. Swanson Quartet),1950 - Let It Snow!,0.0,45.0,Kerstmuziek/Let It Snow00.00.000.i.o.mp3,1,100001607
+      Frank Sinatra (with the B. Swanson Quartet),1950 - Let It Snow!,6.579,45.0,Kerstmuziek/Let It Snow00.06.579.c1.o.mp3,1,100001604
+      Frank Sinatra (with the B. Swanson Quartet),1950 - Let It Snow!,33.075,45.0,Kerstmuziek/Let It Snow00.33.075.v.o.mp3,1,100001612
+      Frank Sinatra (with the B. Swanson Quartet),1950 - Let It Snow!,87.4,45.0,Kerstmuziek/Let It Snow01.27.400.b.o.mp3,1,100001601
+      Frank Sinatra (with the B. Swanson Quartet),1950 - Let It Snow!,134.168,45.0,Kerstmuziek/Let It Snow02.14.168.c2.o.mp3,1,100001605
+      Hannah Kerr,2018 - Winter Wonderland,0.0,45.0,Kerstmuziek/Winter Wonderland00.00.000.i.n.mp3,2,100004007
+      Hannah Kerr,2018 - Winter Wonderland,8.736,45.0,Kerstmuziek/Winter Wonderland00.08.736.v1.n.mp3,2,100004013
+      Hannah Kerr,2018 - Winter Wonderland,17.293,45.0,Kerstmuziek/Winter Wonderland00.17.293.c1.n.mp3,2,100004004
+      Hannah Kerr,2018 - Winter Wonderland,71.062,45.0,Kerstmuziek/Winter Wonderland01.11.062.b.n.mp3,2,100004001
+      Hannah Kerr,2018 - Winter Wonderland,122.76,45.0,Kerstmuziek/Winter Wonderland02.02.760.c2.n.mp3,2,100004005
+      James TW,2018 - Last Christmas,45.0,45.0,Kerstmuziek/Last Christmas00.45.000.c1.n.mp3,2,100001504
+      James TW,2018 - Last Christmas,48.273,45.0,Kerstmuziek/Last Christmas00.48.273.v1.n.mp3,2,100001513
+      James TW,2018 - Last Christmas,128.354,45.0,Kerstmuziek/Last Christmas02.08.354.v2.n.mp3,2,100001514
+      James TW,2018 - Last Christmas,160.037,45.0,Kerstmuziek/Last Christmas02.40.037.c2.n.mp3,2,100001505
+      Jonas Brothers,2019 - Like It’s Christmas,6.658,45.0,Kerstmuziek/Like It_s Christmas00.06.658.v1.s.mp3,0,100001713
+      Jonas Brothers,2019 - Like It’s Christmas,19.514,45.0,Kerstmuziek/Like It_s Christmas00.19.514.b.s.mp3,0,100001701
+      Jonas Brothers,2019 - Like It’s Christmas,34.665,45.0,Kerstmuziek/Like It_s Christmas00.34.665.c1.s.mp3,0,100001704
+      Jonas Brothers,2019 - Like It’s Christmas,62.214,45.0,Kerstmuziek/Like It_s Christmas01.02.214.v2.s.mp3,0,100001714
+      Jonas Brothers,2019 - Like It’s Christmas,130.167,45.0,Kerstmuziek/Like It_s Christmas02.10.167.c2.s.mp3,0,100001705
+      José Feliciano,1970 - Feliz Navidad,0.0,45.0,Kerstmuziek/Feliz Navidad00.00.000.i.s.mp3,0,100000907
+      José Feliciano,1970 - Feliz Navidad,12.382,45.0,Kerstmuziek/Feliz Navidad00.12.382.c1.s.mp3,0,100000904
+      José Feliciano,1970 - Feliz Navidad,37.562,45.0,Kerstmuziek/Feliz Navidad00.37.562.v1.s.mp3,0,100000913
+      José Feliciano,1970 - Feliz Navidad,141.093,45.0,Kerstmuziek/Feliz Navidad02.21.093.v2.s.mp3,0,100000914
+      José Feliciano,1970 - Feliz Navidad,167.314,45.0,Kerstmuziek/Feliz Navidad02.47.314.c2.s.mp3,0,100000905
+      Justin Bieber,2011 - Mistletoe,3.345,45.0,Kerstmuziek/Mistletoe00.03.345.pc1.s.mp3,0,100002310
+      Justin Bieber,2011 - Mistletoe,15.681000000000001,45.0,Kerstmuziek/Mistletoe00.15.681.c1.s.mp3,0,100002304
+      Justin Bieber,2011 - Mistletoe,39.412,45.0,Kerstmuziek/Mistletoe00.39.412.v1.s.mp3,0,100002313
+      Justin Bieber,2011 - Mistletoe,86.979,45.0,Kerstmuziek/Mistletoe01.26.979.b.s.mp3,0,100002301
+      Justin Bieber,2011 - Mistletoe,109.978,45.0,Kerstmuziek/Mistletoe01.49.978.pc2.s.mp3,0,100002311
+      Kelly Clarkson,2013 - Underneath the Tree,0.0,45.0,Kerstmuziek/Underneath the Tree00.00.000.c1.s.mp3,0,100003704
+      Kelly Clarkson,2013 - Underneath the Tree,29.526,45.0,Kerstmuziek/Underneath the Tree00.29.526.v1.s.mp3,0,100003713
+      Kelly Clarkson,2013 - Underneath the Tree,86.609,45.0,Kerstmuziek/Underneath the Tree01.26.609.v2.s.mp3,0,100003714
+      Kelly Clarkson,2013 - Underneath the Tree,143.691,45.0,Kerstmuziek/Underneath the Tree02.23.691.b.s.mp3,0,100003701
+      Kelly Clarkson,2013 - Underneath the Tree,167.706,45.0,Kerstmuziek/Underneath the Tree02.47.706.c2.s.mp3,0,100003705
+      Kylie Minogue,2000 - Santa Baby,0.0,45.0,Kerstmuziek/Santa Baby00.00.000.i.n.mp3,2,100002807
+      Kylie Minogue,2000 - Santa Baby,12.617,45.0,Kerstmuziek/Santa Baby00.12.617.c1.n.mp3,2,100002804
+      Kylie Minogue,2000 - Santa Baby,56.256,45.0,Kerstmuziek/Santa Baby00.56.256.v1.n.mp3,2,100002813
+      Kylie Minogue,2000 - Santa Baby,100.937,45.0,Kerstmuziek/Santa Baby01.40.937.v2.n.mp3,2,100002814
+      Kylie Minogue,2000 - Santa Baby,144.345,45.0,Kerstmuziek/Santa Baby02.24.345.b.n.mp3,2,100002801
+      Leona Lewis,2013 - One More Sleep,8.352,45.0,Kerstmuziek/One More Sleep00.08.352.v1.s.mp3,0,100002513
+      Leona Lewis,2013 - One More Sleep,34.229,45.0,Kerstmuziek/One More Sleep00.34.229.c1.s.mp3,0,100002504
+      Leona Lewis,2013 - One More Sleep,84.615,45.0,Kerstmuziek/One More Sleep01.24.615.v2.s.mp3,0,100002514
+      Leona Lewis,2013 - One More Sleep,161.289,45.0,Kerstmuziek/One More Sleep02.41.289.b.s.mp3,0,100002501
+      Leona Lewis,2013 - One More Sleep,179.772,45.0,Kerstmuziek/One More Sleep02.59.772.c2.s.mp3,0,100002505
+      Liam Payne,2019 - All I Want (for Christmas),6.832,45.0,Kerstmuziek/All I Want For Christmas00.06.832.v1.s.mp3,0,100000213
+      Liam Payne,2019 - All I Want (for Christmas),34.265,45.0,Kerstmuziek/All I Want For Christmas00.34.265.pc.s.mp3,0,100000209
+      Liam Payne,2019 - All I Want (for Christmas),47.516,45.0,Kerstmuziek/All I Want For Christmas00.47.516.c1.s.mp3,0,100000204
+      Liam Payne,2019 - All I Want (for Christmas),82.506,45.0,Kerstmuziek/All I Want For Christmas01.22.506.v2.s.mp3,0,100000214
+      Liam Payne,2019 - All I Want (for Christmas),150.933,45.0,Kerstmuziek/All I Want For Christmas02.30.933.b.s.mp3,0,100000201
+      Mariah Carey,1994 - All I Want for Christmas is You,57.151,45.0,Kerstmuziek/All I Want For Christmas Is You00.57.151.v1.s.mp3,0,100000313
+      Mariah Carey,1994 - All I Want for Christmas is You,91.938,45.0,Kerstmuziek/All I Want For Christmas Is You01.31.938.c1.s.mp3,0,100000304
+      Mariah Carey,1994 - All I Want for Christmas is You,101.601,45.0,Kerstmuziek/All I Want For Christmas Is You01.41.601.v2.s.mp3,0,100000314
+      Mariah Carey,1994 - All I Want for Christmas is You,146.052,45.0,Kerstmuziek/All I Want For Christmas Is You02.26.052.b.s.mp3,0,100000301
+      Mariah Carey,1994 - All I Want for Christmas is You,193.815,45.0,Kerstmuziek/All I Want For Christmas Is You03.13.815.c2.s.mp3,0,100000305
+      Mariah Carey,1994 - Christmas (Baby Please Come Home),0.0,45.0,Kerstmuziek/Christmas Baby Please Come Home00.00.000.i.n.mp3,2,100000507
+      Mariah Carey,1994 - Christmas (Baby Please Come Home),15.106,45.0,Kerstmuziek/Christmas Baby Please Come Home00.15.106.c1.n.mp3,2,100000504
+      Mariah Carey,1994 - Christmas (Baby Please Come Home),45.851,45.0,Kerstmuziek/Christmas Baby Please Come Home00.45.851.v.n.mp3,2,100000512
+      Mariah Carey,1994 - Christmas (Baby Please Come Home),75.619,45.0,Kerstmuziek/Christmas Baby Please Come Home01.15.619.b.n.mp3,2,100000501
+      Mariah Carey,1994 - Christmas (Baby Please Come Home),107.075,45.0,Kerstmuziek/Christmas Baby Please Come Home01.47.075.c2.n.mp3,2,100000505
+      Mel and Kim,1987 - Rockin’ Around the Christmas Tree,29.434,45.0,Kerstmuziek/Rockin_ Around the Christmas Tree00.29.434.i.n.mp3,2,100002607
+      Mel and Kim,1987 - Rockin’ Around the Christmas Tree,35.961,45.0,Kerstmuziek/Rockin_ Around the Christmas Tree00.35.961.c1.n.mp3,2,100002604
+      Mel and Kim,1987 - Rockin’ Around the Christmas Tree,62.451,45.0,Kerstmuziek/Rockin_ Around the Christmas Tree01.02.451.v1.n.mp3,2,100002613
+      Mel and Kim,1987 - Rockin’ Around the Christmas Tree,87.918,45.0,Kerstmuziek/Rockin_ Around the Christmas Tree01.27.918.b.n.mp3,2,100002601
+      Mel and Kim,1987 - Rockin’ Around the Christmas Tree,184.667,45.0,Kerstmuziek/Rockin_ Around the Christmas Tree03.04.667.c2.n.mp3,2,100002605
+      Michael Bublé,2011 - A Holly Jolly Christmas,0.0,45.0,Kerstmuziek/A Holly Jolly Christmas00.00.000.i.n.mp3,2,100000107
+      Michael Bublé,2011 - A Holly Jolly Christmas,5.9030000000000005,45.0,Kerstmuziek/A Holly Jolly Christmas00.05.903.c1.n.mp3,2,100000104
+      Michael Bublé,2011 - A Holly Jolly Christmas,32.154,45.0,Kerstmuziek/A Holly Jolly Christmas00.32.154.v1.n.mp3,2,100000113
+      Michael Bublé,2011 - A Holly Jolly Christmas,56.044,45.0,Kerstmuziek/A Holly Jolly Christmas00.56.044.b.n.mp3,2,100000101
+      Michael Bublé,2011 - A Holly Jolly Christmas,94.864,45.0,Kerstmuziek/A Holly Jolly Christmas01.34.864.c2.n.mp3,2,100000105
+      Michael Bublé,2015 - It’s Beginning to Look a Lot Like Christmas,1.066,45.0,Kerstmuziek/It_s Beginning To Look a Lot Like Christmas00.01.066.i.n.mp3,2,100001107
+      Michael Bublé,2015 - It’s Beginning to Look a Lot Like Christmas,35.167,45.0,Kerstmuziek/It_s Beginning To Look a Lot Like Christmas00.35.167.c1.n.mp3,2,100001104
+      Michael Bublé,2015 - It’s Beginning to Look a Lot Like Christmas,76.373,45.0,Kerstmuziek/It_s Beginning To Look a Lot Like Christmas01.16.373.v1.n.mp3,2,100001113
+      Michael Bublé,2015 - It’s Beginning to Look a Lot Like Christmas,132.498,45.0,Kerstmuziek/It_s Beginning To Look a Lot Like Christmas02.12.498.b.n.mp3,2,100001101
+      Michael Bublé,2015 - It’s Beginning to Look a Lot Like Christmas,152.509,45.0,Kerstmuziek/It_s Beginning To Look a Lot Like Christmas02.32.509.c2.n.mp3,2,100001105
+      Mud,1975 - Lonely This Christmas,0.0,45.0,Kerstmuziek/Lonely This Christmas00.00.000.i.s.mp3,0,100001907
+      Mud,1975 - Lonely This Christmas,15.349,45.0,Kerstmuziek/Lonely This Christmas00.15.349.v1.s.mp3,0,100001913
+      Mud,1975 - Lonely This Christmas,43.733,45.0,Kerstmuziek/Lonely This Christmas00.43.733.c1.s.mp3,0,100001904
+      Mud,1975 - Lonely This Christmas,103.091,45.0,Kerstmuziek/Lonely This Christmas01.43.091.v2.s.mp3,0,100001914
+      Mud,1975 - Lonely This Christmas,127.787,45.0,Kerstmuziek/Lonely This Christmas02.07.787.b.s.mp3,0,100001901
+      Nat King Cole,1946 - The Christmas Song (Merry Christmas to You),0.0,45.0,Kerstmuziek/The Christmas Song Merry Christmas to You00.00.000.i.s.mp3,0,100003507
+      Nat King Cole,1946 - The Christmas Song (Merry Christmas to You),58.142,45.0,Kerstmuziek/The Christmas Song Merry Christmas to You00.58.142.v.s.mp3,0,100003512
+      Nat King Cole,1946 - The Christmas Song (Merry Christmas to You),94.733,45.0,Kerstmuziek/The Christmas Song Merry Christmas to You01.34.733.c1.s.mp3,0,100003504
+      Nat King Cole,1946 - The Christmas Song (Merry Christmas to You),121.565,45.0,Kerstmuziek/The Christmas Song Merry Christmas to You02.01.565.b.s.mp3,0,100003501
+      Nat King Cole,1946 - The Christmas Song (Merry Christmas to You),149.82,45.0,Kerstmuziek/The Christmas Song Merry Christmas to You02.29.820.c2.s.mp3,0,100003505
+      Paul McCartney,1979 - Wonderful Christmastime,0.0,45.0,Kerstmuziek/Wonderful Christmastime00.00.000.i.s.mp3,0,100004107
+      Paul McCartney,1979 - Wonderful Christmastime,10.315,45.0,Kerstmuziek/Wonderful Christmastime00.10.315.v1.s.mp3,0,100004113
+      Paul McCartney,1979 - Wonderful Christmastime,21.072,45.0,Kerstmuziek/Wonderful Christmastime00.21.072.c1.s.mp3,0,100004104
+      Paul McCartney,1979 - Wonderful Christmastime,61.891,45.0,Kerstmuziek/Wonderful Christmastime01.01.891.b1.s.mp3,0,100004102
+      Paul McCartney,1979 - Wonderful Christmastime,178.453,45.0,Kerstmuziek/Wonderful Christmastime02.58.453.b2.s.mp3,0,100004103
+      Perry Como (with Mitchell Ayres and His Orchestra),2004 - It’s Beginning to Look a Lot Like Christmas,0.802,45.0,Kerstmuziek/It_s Beginning To Look a Lot Like Christmas00.00.802.i.o.mp3,1,100001107
+      Perry Como (with Mitchell Ayres and His Orchestra),2004 - It’s Beginning to Look a Lot Like Christmas,13.008,45.0,Kerstmuziek/It_s Beginning To Look a Lot Like Christmas00.13.008.c1.o.mp3,1,100001104
+      Perry Como (with Mitchell Ayres and His Orchestra),2004 - It’s Beginning to Look a Lot Like Christmas,47.4,45.0,Kerstmuziek/It_s Beginning To Look a Lot Like Christmas00.47.400.v1.o.mp3,1,100001113
+      Perry Como (with Mitchell Ayres and His Orchestra),2004 - It’s Beginning to Look a Lot Like Christmas,98.898,45.0,Kerstmuziek/It_s Beginning To Look a Lot Like Christmas01.38.898.b.o.mp3,1,100001101
+      Perry Como (with Mitchell Ayres and His Orchestra),2004 - It’s Beginning to Look a Lot Like Christmas,132.399,45.0,Kerstmuziek/It_s Beginning To Look a Lot Like Christmas02.12.399.c2.o.mp3,1,100001105
+      Queen,1984 - Thank God It’s Christmas,0.0,45.0,Kerstmuziek/Thank God It_s Christmas00.00.000.v1.s.mp3,0,100003413
+      Queen,1984 - Thank God It’s Christmas,49.964,45.0,Kerstmuziek/Thank God It_s Christmas00.49.964.v2.s.mp3,0,100003414
+      Queen,1984 - Thank God It’s Christmas,112.383,45.0,Kerstmuziek/Thank God It_s Christmas01.52.383.c1.s.mp3,0,100003404
+      Queen,1984 - Thank God It’s Christmas,136.549,45.0,Kerstmuziek/Thank God It_s Christmas02.16.549.v3.s.mp3,0,100003415
+      Queen,1984 - Thank God It’s Christmas,198.819,45.0,Kerstmuziek/Thank God It_s Christmas03.18.819.c2.s.mp3,0,100003405
+      Sam Smith,2014 - Have Yourself a Merry Little Christmas,0.0,45.0,Kerstmuziek/Have Yourself a Merry Little Christmas00.00.000.c1.n.mp3,2,100001004
+      Sam Smith,2014 - Have Yourself a Merry Little Christmas,30.09,45.0,Kerstmuziek/Have Yourself a Merry Little Christmas00.30.090.c2.n.mp3,2,100001005
+      Sam Smith,2014 - Have Yourself a Merry Little Christmas,59.301,45.0,Kerstmuziek/Have Yourself a Merry Little Christmas00.59.301.v1.n.mp3,2,100001013
+      Sam Smith,2014 - Have Yourself a Merry Little Christmas,87.437,45.0,Kerstmuziek/Have Yourself a Merry Little Christmas01.27.437.v2.n.mp3,2,100001014
+      Sam Smith,2014 - Have Yourself a Merry Little Christmas,115.671,45.0,Kerstmuziek/Have Yourself a Merry Little Christmas01.55.671.c3.n.mp3,2,100001006
+      Shakin’ Stevens,1991 - Merry Christmas Everyone,0.0,45.0,Kerstmuziek/Merry Christmas Everyone00.00.000.i.s.mp3,0,100002107
+      Shakin’ Stevens,1991 - Merry Christmas Everyone,8.052,45.0,Kerstmuziek/Merry Christmas Everyone00.08.052.c1.s.mp3,0,100002104
+      Shakin’ Stevens,1991 - Merry Christmas Everyone,46.55,45.0,Kerstmuziek/Merry Christmas Everyone00.46.550.v1.s.mp3,0,100002113
+      Shakin’ Stevens,1991 - Merry Christmas Everyone,76.619,45.0,Kerstmuziek/Merry Christmas Everyone01.16.619.b.s.mp3,0,100002101
+      Shakin’ Stevens,1991 - Merry Christmas Everyone,142.67,45.0,Kerstmuziek/Merry Christmas Everyone02.22.670.c2.s.mp3,0,100002105
+      Sia,2017 - Santa’s Coming For Us,0.0,45.0,Kerstmuziek/Santa_s Coming For Us00.00.000.i.s.mp3,0,100003007
+      Sia,2017 - Santa’s Coming For Us,20.772,45.0,Kerstmuziek/Santa_s Coming For Us00.20.772.v1.s.mp3,0,100003013
+      Sia,2017 - Santa’s Coming For Us,60.428,45.0,Kerstmuziek/Santa_s Coming For Us01.00.428.c1.s.mp3,0,100003004
+      Sia,2017 - Santa’s Coming For Us,82.852,45.0,Kerstmuziek/Santa_s Coming For Us01.22.852.v2.s.mp3,0,100003014
+      Sia,2017 - Santa’s Coming For Us,142.926,45.0,Kerstmuziek/Santa_s Coming For Us02.22.926.c2.s.mp3,0,100003005
+      Slade,1973 - Merry Xmas Everybody,7.031,45.0,Kerstmuziek/Merry Xmas Everybody00.07.031.v1.s.mp3,0,100002213
+      Slade,1973 - Merry Xmas Everybody,35.923,45.0,Kerstmuziek/Merry Xmas Everybody00.35.923.c1.s.mp3,0,100002204
+      Slade,1973 - Merry Xmas Everybody,55.611,45.0,Kerstmuziek/Merry Xmas Everybody00.55.611.v2.s.mp3,0,100002214
+      Slade,1973 - Merry Xmas Everybody,104.063,45.0,Kerstmuziek/Merry Xmas Everybody01.44.063.b.s.mp3,0,100002201
+      Slade,1973 - Merry Xmas Everybody,180.768,45.0,Kerstmuziek/Merry Xmas Everybody03.00.768.c2.s.mp3,0,100002205
+      Stevie Wonder,1967 - What Christmas Means to Me,10.177,45.0,Kerstmuziek/What Christmas Means to Me00.10.177.v1.o.mp3,1,100003813
+      Stevie Wonder,1967 - What Christmas Means to Me,29.151,45.0,Kerstmuziek/What Christmas Means to Me00.29.151.c1.o.mp3,1,100003804
+      Stevie Wonder,1967 - What Christmas Means to Me,42.432,45.0,Kerstmuziek/What Christmas Means to Me00.42.432.v2.o.mp3,1,100003814
+      Stevie Wonder,1967 - What Christmas Means to Me,75.637,45.0,Kerstmuziek/What Christmas Means to Me01.15.637.b.o.mp3,1,100003801
+      Stevie Wonder,1967 - What Christmas Means to Me,114.878,45.0,Kerstmuziek/What Christmas Means to Me01.54.878.c2.o.mp3,1,100003805
+      The Beach Boys,1963 - Little Saint Nick,0.0,45.0,Kerstmuziek/Little Saint Nick00.00.000.i.s.mp3,0,100001807
+      The Beach Boys,1963 - Little Saint Nick,14.786,45.0,Kerstmuziek/Little Saint Nick00.14.786.v1.s.mp3,0,100001813
+      The Beach Boys,1963 - Little Saint Nick,29.795,45.0,Kerstmuziek/Little Saint Nick00.29.795.c1.s.mp3,0,100001804
+      The Beach Boys,1963 - Little Saint Nick,37.039,45.0,Kerstmuziek/Little Saint Nick00.37.039.v2.s.mp3,0,100001814
+      The Beach Boys,1963 - Little Saint Nick,59.516,45.0,Kerstmuziek/Little Saint Nick00.59.516.b.s.mp3,0,100001801
+      The Jackson 5,1970 - Santa Claus is Comin’ to Town,12.668,45.0,Kerstmuziek/Santa Claus Is Comin_ To Town00.12.668.c1.o.mp3,1,100002904
+      The Jackson 5,1970 - Santa Claus is Comin’ to Town,32.177,45.0,Kerstmuziek/Santa Claus Is Comin_ To Town00.32.177.v1.o.mp3,1,100002913
+      The Jackson 5,1970 - Santa Claus is Comin’ to Town,51.263,45.0,Kerstmuziek/Santa Claus Is Comin_ To Town00.51.263.v2.o.mp3,1,100002914
+      The Jackson 5,1970 - Santa Claus is Comin’ to Town,64.438,45.0,Kerstmuziek/Santa Claus Is Comin_ To Town01.04.438.c2.o.mp3,1,100002905
+      The Jackson 5,1970 - Santa Claus is Comin’ to Town,82.511,45.0,Kerstmuziek/Santa Claus Is Comin_ To Town01.22.511.b.o.mp3,1,100002901
+      The Ronettes,1963 - Sleigh Ride,0.0,45.0,Kerstmuziek/Sleigh Ride00.00.000.i.n.mp3,2,100003207
+      The Ronettes,1963 - Sleigh Ride,11.212,45.0,Kerstmuziek/Sleigh Ride00.11.212.c1.n.mp3,2,100003204
+      The Ronettes,1963 - Sleigh Ride,86.366,45.0,Kerstmuziek/Sleigh Ride01.26.366.b1.n.mp3,2,100003202
+      The Ronettes,1963 - Sleigh Ride,111.922,45.0,Kerstmuziek/Sleigh Ride01.51.922.b2.n.mp3,2,100003203
+      The Ronettes,1963 - Sleigh Ride,154.65,45.0,Kerstmuziek/Sleigh Ride02.34.650.c2.n.mp3,2,100003205
+      Tony Bennett,1968 - Winter Wonderland,0.0,45.0,Kerstmuziek/Winter Wonderland00.00.000.i.o.mp3,1,100004007
+      Tony Bennett,1968 - Winter Wonderland,5.331,45.0,Kerstmuziek/Winter Wonderland00.05.331.v1.o.mp3,1,100004013
+      Tony Bennett,1968 - Winter Wonderland,13.83,45.0,Kerstmuziek/Winter Wonderland00.13.830.c1.o.mp3,1,100004004
+      Tony Bennett,1968 - Winter Wonderland,71.39,45.0,Kerstmuziek/Winter Wonderland01.11.390.b.o.mp3,1,100004001
+      Tony Bennett,1968 - Winter Wonderland,110.871,45.0,Kerstmuziek/Winter Wonderland01.50.871.c2.o.mp3,1,100004005
+      Wham!,1986 - Last Christmas,0.0,45.0,Kerstmuziek/Last Christmas00.00.000.i.o.mp3,1,100001507
+      Wham!,1986 - Last Christmas,17.877,45.0,Kerstmuziek/Last Christmas00.17.877.c1.o.mp3,1,100001504
+      Wham!,1986 - Last Christmas,71.808,45.0,Kerstmuziek/Last Christmas01.11.808.v1.o.mp3,1,100001513
+      Wham!,1986 - Last Christmas,160.141,45.0,Kerstmuziek/Last Christmas02.40.141.v2.o.mp3,1,100001514
+      Wham!,1986 - Last Christmas,196.195,45.0,Kerstmuziek/Last Christmas03.16.195.c2.o.mp3,1,100001505
+      Wizzard,1973 - I Wish It Could Be Christmas Every Day,0.0,45.0,Kerstmuziek/I Wish It Could Be Christmas Everyday00.00.000.i.s.mp3,0,100001307
+      Wizzard,1973 - I Wish It Could Be Christmas Every Day,8.332,45.0,Kerstmuziek/I Wish It Could Be Christmas Everyday00.08.332.v1.s.mp3,0,100001313
+      Wizzard,1973 - I Wish It Could Be Christmas Every Day,34.93,45.0,Kerstmuziek/I Wish It Could Be Christmas Everyday00.34.930.c1.s.mp3,0,100001304
+      Wizzard,1973 - I Wish It Could Be Christmas Every Day,64.733,45.0,Kerstmuziek/I Wish It Could Be Christmas Everyday01.04.733.v2.s.mp3,0,100001314
+      Wizzard,1973 - I Wish It Could Be Christmas Every Day,202.531,45.0,Kerstmuziek/I Wish It Could Be Christmas Everyday03.22.531.c2.s.mp3,0,100001305

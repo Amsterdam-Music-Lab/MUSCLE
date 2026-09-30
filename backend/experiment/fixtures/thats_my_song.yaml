@@ -1,0 +1,770 @@
+- model: experiment.experiment
+  pk: 44
+  fields:
+    identifier: thats_my_song
+    active: true
+- model: experiment.phase
+  pk: 44
+  fields:
+    experiment: 44
+- model: experiment.block
+  pk: 44
+  fields:
+    phase: 44
+    experiment: 44
+    index: 1
+    identifier: questionnaire
+    rules: QUESTIONNAIRE
+- model: question.questionlist
+  pk: 46
+  fields:
+    name: Demographic Questions
+    block: 44
+    index: 0
+    randomize: false
+- model: question.questioninlist
+  fields:
+    questionlist: 46
+    question: dgf_generation
+    index: 0
+- model: question.questioninlist
+  fields:
+    questionlist: 46
+    question: dgf_gender_identity
+    index: 1
+- model: experiment.block
+  pk: 45
+  fields:
+    phase: 44
+    experiment: 44
+    index: 2
+    identifier: thats_my_song
+    rounds: 30
+    bonus_points: 0
+    rules: THATS_MY_SONG
+    playlists:
+    - 46
+- model: section.playlist
+  pk: 46
+  fields:
+    name: ThatsMySong
+    csv: |
+      Alicia Keys,No One,0.0,45.0,ThatsMySong/2007 - Alicia Keys - No One - Bridge.mp3,Bridge,2000s
+      Alicia Keys,No One,10.721,45.0,ThatsMySong/2007 - Alicia Keys - No One - Chorus - 1.mp3,Chorus,2000s
+      Alicia Keys,No One,33.277,45.0,ThatsMySong/2007 - Alicia Keys - No One - Chorus - 2.mp3,Chorus,2000s
+      Alicia Keys,No One,53.603,45.0,ThatsMySong/2007 - Alicia Keys - No One - Chorus - 3.mp3,Chorus,2000s
+      Alicia Keys,No One,86.444,45.0,ThatsMySong/2007 - Alicia Keys - No One - Intro.mp3,Intro,2000s
+      Alicia Keys,No One,107.351,45.0,ThatsMySong/2007 - Alicia Keys - No One - Outro.mp3,Outro,2000s
+      Alicia Keys,No One,128.647,45.0,ThatsMySong/2007 - Alicia Keys - No One - Prechorus - 1.mp3,Prechorus,2000s
+      Alicia Keys,No One,159.742,45.0,ThatsMySong/2007 - Alicia Keys - No One - Prechorus - 2.mp3,Prechorus,2000s
+      Alicia Keys,No One,183.075,45.0,ThatsMySong/2007 - Alicia Keys - No One - Verse - 1.mp3,Verse,2000s
+      Alicia Keys,No One,203.982,45.0,ThatsMySong/2007 - Alicia Keys - No One - Verse - 2.mp3,Verse,2000s
+      Andy Gibb,I Just Want to Be Your Everything,0.0,45.0,ThatsMySong/1977 - Andy Gibb - I Just Want to Be Your Everything - Chorus - 1.mp3,Chorus,1970s
+      Andy Gibb,I Just Want to Be Your Everything,13.653,45.0,ThatsMySong/1977 - Andy Gibb - I Just Want to Be Your Everything - Chorus - 2.mp3,Chorus,1970s
+      Andy Gibb,I Just Want to Be Your Everything,34.043,45.0,ThatsMySong/1977 - Andy Gibb - I Just Want to Be Your Everything - Intro.mp3,Intro,1970s
+      Andy Gibb,I Just Want to Be Your Everything,53.521,45.0,ThatsMySong/1977 - Andy Gibb - I Just Want to Be Your Everything - Solo.mp3,Solo,1970s
+      Andy Gibb,I Just Want to Be Your Everything,91.569,45.0,ThatsMySong/1977 - Andy Gibb - I Just Want to Be Your Everything - Verse - 1.mp3,Verse,1970s
+      Andy Gibb,I Just Want to Be Your Everything,115.121,45.0,ThatsMySong/1977 - Andy Gibb - I Just Want to Be Your Everything - Verse - 2.mp3,Verse,1970s
+      Andy Gibb,I Just Want to Be Your Everything,136.375,45.0,ThatsMySong/1977 - Andy Gibb - I Just Want to Be Your Everything - Verse - 3.mp3,Verse,1970s
+      Andy Gibb,Shadow Dancing,0.0,45.0,ThatsMySong/1978 - Andy Gibb - Shadow Dancing - Chorus - 1.mp3,Chorus,1970s
+      Andy Gibb,Shadow Dancing,22.937,45.0,ThatsMySong/1978 - Andy Gibb - Shadow Dancing - Chorus - 2.mp3,Chorus,1970s
+      Andy Gibb,Shadow Dancing,40.874,45.0,ThatsMySong/1978 - Andy Gibb - Shadow Dancing - Chorus - 3.mp3,Chorus,1970s
+      Andy Gibb,Shadow Dancing,60.795,45.0,ThatsMySong/1978 - Andy Gibb - Shadow Dancing - Intro.mp3,Intro,1970s
+      Andy Gibb,Shadow Dancing,78.656,45.0,ThatsMySong/1978 - Andy Gibb - Shadow Dancing - Outro.mp3,Outro,1970s
+      Andy Gibb,Shadow Dancing,101.246,45.0,ThatsMySong/1978 - Andy Gibb - Shadow Dancing - Prechorus - 1.mp3,Prechorus,1970s
+      Andy Gibb,Shadow Dancing,119.121,45.0,ThatsMySong/1978 - Andy Gibb - Shadow Dancing - Prechorus - 2.mp3,Prechorus,1970s
+      Andy Gibb,Shadow Dancing,139.228,45.0,ThatsMySong/1978 - Andy Gibb - Shadow Dancing - Prechorus - 3.mp3,Prechorus,1970s
+      Andy Gibb,Shadow Dancing,157.201,45.0,ThatsMySong/1978 - Andy Gibb - Shadow Dancing - Solo.mp3,Solo,1970s
+      Andy Gibb,Shadow Dancing,179.222,45.0,ThatsMySong/1978 - Andy Gibb - Shadow Dancing - Verse - 1.mp3,Verse,1970s
+      Andy Gibb,Shadow Dancing,197.915,45.0,ThatsMySong/1978 - Andy Gibb - Shadow Dancing - Verse - 2.mp3,Verse,1970s
+      Ashanti,Foolish,0.0,45.0,ThatsMySong/2002 - Ashanti - Foolish - Bridge.mp3,Bridge,2000s
+      Ashanti,Foolish,9.894,45.0,ThatsMySong/2002 - Ashanti - Foolish - Chorus - 1.mp3,Chorus,2000s
+      Ashanti,Foolish,32.373,45.0,ThatsMySong/2002 - Ashanti - Foolish - Chorus - 2.mp3,Chorus,2000s
+      Ashanti,Foolish,53.16,45.0,ThatsMySong/2002 - Ashanti - Foolish - Chorus - 3.mp3,Chorus,2000s
+      Ashanti,Foolish,74.966,45.0,ThatsMySong/2002 - Ashanti - Foolish - Chorus - 4.mp3,Chorus,2000s
+      Ashanti,Foolish,95.774,45.0,ThatsMySong/2002 - Ashanti - Foolish - Intro.mp3,Intro,2000s
+      Ashanti,Foolish,118.666,45.0,ThatsMySong/2002 - Ashanti - Foolish - Verse - 1.mp3,Verse,2000s
+      Ashanti,Foolish,138.454,45.0,ThatsMySong/2002 - Ashanti - Foolish - Verse - 2.mp3,Verse,2000s
+      Ashanti,Foolish,160.564,45.0,ThatsMySong/2002 - Ashanti - Foolish - Verse - 3.mp3,Verse,2000s
+      Barbra Streisand,The Way We Were,0.0,45.0,ThatsMySong/1973 - Barbra Streisand - The Way We Were - Bridge.mp3,Bridge,1970s
+      Barbra Streisand,The Way We Were,33.517,45.0,ThatsMySong/1973 - Barbra Streisand - The Way We Were - Intro.mp3,Intro,1970s
+      Barbra Streisand,The Way We Were,61.419,45.0,ThatsMySong/1973 - Barbra Streisand - The Way We Were - Verse - 1.mp3,Verse,1970s
+      Barbra Streisand,The Way We Were,89.332,45.0,ThatsMySong/1973 - Barbra Streisand - The Way We Were - Verse - 2.mp3,Verse,1970s
+      Barbra Streisand,The Way We Were,119.82,45.0,ThatsMySong/1973 - Barbra Streisand - The Way We Were - Verse - 3.mp3,Verse,1970s
+      Barbra Streisand,The Way We Were,146.561,45.0,ThatsMySong/1973 - Barbra Streisand - The Way We Were - Verse - 4.mp3,Verse,1970s
+      Blondie,Call Me,0.0,45.0,ThatsMySong/1980 - Blondie - Call Me - Bridge.mp3,Bridge,1980s
+      Blondie,Call Me,15.467,45.0,ThatsMySong/1980 - Blondie - Call Me - Chorus - 1.mp3,Chorus,1980s
+      Blondie,Call Me,35.249,45.0,ThatsMySong/1980 - Blondie - Call Me - Chorus - 2.mp3,Chorus,1980s
+      Blondie,Call Me,55.928,45.0,ThatsMySong/1980 - Blondie - Call Me - Chorus - 3.mp3,Chorus,1980s
+      Blondie,Call Me,77.328,45.0,ThatsMySong/1980 - Blondie - Call Me - Intro.mp3,Intro,1980s
+      Blondie,Call Me,98.023,45.0,ThatsMySong/1980 - Blondie - Call Me - Solo.mp3,Solo,1980s
+      Blondie,Call Me,130.911,45.0,ThatsMySong/1980 - Blondie - Call Me - Verse - 1.mp3,Verse,1980s
+      Blondie,Call Me,163.287,45.0,ThatsMySong/1980 - Blondie - Call Me - Verse - 2.mp3,Verse,1980s
+      Bobby Lewis,Tossin’ and Turnin’,0.0,45.0,ThatsMySong/1961 - Bobby Lewis - Tossin’ and Turnin’ - Chorus - 1.mp3,Chorus,1960s
+      Bobby Lewis,Tossin’ and Turnin’,10.263,45.0,ThatsMySong/1961 - Bobby Lewis - Tossin’ and Turnin’ - Chorus - 2.mp3,Chorus,1960s
+      Bobby Lewis,Tossin’ and Turnin’,20.459,45.0,ThatsMySong/1961 - Bobby Lewis - Tossin’ and Turnin’ - Chorus - 3.mp3,Chorus,1960s
+      Bobby Lewis,Tossin’ and Turnin’,30.365,45.0,ThatsMySong/1961 - Bobby Lewis - Tossin’ and Turnin’ - Other - 1.mp3,Other,1960s
+      Bobby Lewis,Tossin’ and Turnin’,40.594,45.0,ThatsMySong/1961 - Bobby Lewis - Tossin’ and Turnin’ - Other - 2.mp3,Other,1960s
+      Bobby Lewis,Tossin’ and Turnin’,57.203,45.0,ThatsMySong/1961 - Bobby Lewis - Tossin’ and Turnin’ - Solo.mp3,Solo,1960s
+      Bobby Lewis,Tossin’ and Turnin’,66.985,45.0,ThatsMySong/1961 - Bobby Lewis - Tossin’ and Turnin’ - Verse - 1.mp3,Verse,1960s
+      Bobby Lewis,Tossin’ and Turnin’,77.215,45.0,ThatsMySong/1961 - Bobby Lewis - Tossin’ and Turnin’ - Verse - 2.mp3,Verse,1960s
+      Bobby Lewis,Tossin’ and Turnin’,92.312,45.0,ThatsMySong/1961 - Bobby Lewis - Tossin’ and Turnin’ - Verse - 3.mp3,Verse,1960s
+      Bobby Lewis,Tossin’ and Turnin’,107.551,45.0,ThatsMySong/1961 - Bobby Lewis - Tossin’ and Turnin’ - Verse - 4.mp3,Verse,1960s
+      Boyz II Men,End of the Road,0.0,45.0,ThatsMySong/1992 - Boyz II Men - End of the Road - Bridge.mp3,Bridge,1990s
+      Boyz II Men,End of the Road,21.351,45.0,ThatsMySong/1992 - Boyz II Men - End of the Road - Chorus - 1.mp3,Chorus,1990s
+      Boyz II Men,End of the Road,57.915,45.0,ThatsMySong/1992 - Boyz II Men - End of the Road - Chorus - 2.mp3,Chorus,1990s
+      Boyz II Men,End of the Road,77.131,45.0,ThatsMySong/1992 - Boyz II Men - End of the Road - Chorus - 3.mp3,Chorus,1990s
+      Boyz II Men,End of the Road,117.164,45.0,ThatsMySong/1992 - Boyz II Men - End of the Road - Intro.mp3,Intro,1990s
+      Boyz II Men,End of the Road,154.728,45.0,ThatsMySong/1992 - Boyz II Men - End of the Road - Prechorus - 1.mp3,Prechorus,1990s
+      Boyz II Men,End of the Road,173.21,45.0,ThatsMySong/1992 - Boyz II Men - End of the Road - Prechorus - 2.mp3,Prechorus,1990s
+      Boyz II Men,End of the Road,214.044,45.0,ThatsMySong/1992 - Boyz II Men - End of the Road - Prechorus - 3.mp3,Prechorus,1990s
+      Boyz II Men,End of the Road,260.75,45.0,ThatsMySong/1992 - Boyz II Men - End of the Road - Verse - 1.mp3,Verse,1990s
+      Boyz II Men,End of the Road,269.023,45.0,ThatsMySong/1992 - Boyz II Men - End of the Road - Verse - 2.mp3,Verse,1990s
+      Brandy and Monica,The Boy Is Mine,0.0,45.0,ThatsMySong/1998 - Brandy and Monica - The Boy Is Mine - Bridge.mp3,Bridge,1990s
+      Brandy and Monica,The Boy Is Mine,45.401,45.0,ThatsMySong/1998 - Brandy and Monica - The Boy Is Mine - Chorus - 1.mp3,Chorus,1990s
+      Brandy and Monica,The Boy Is Mine,66.134,45.0,ThatsMySong/1998 - Brandy and Monica - The Boy Is Mine - Chorus - 2.mp3,Chorus,1990s
+      Brandy and Monica,The Boy Is Mine,108.107,45.0,ThatsMySong/1998 - Brandy and Monica - The Boy Is Mine - Chorus - 3.mp3,Chorus,1990s
+      Brandy and Monica,The Boy Is Mine,128.083,45.0,ThatsMySong/1998 - Brandy and Monica - The Boy Is Mine - Chorus - 4.mp3,Chorus,1990s
+      Brandy and Monica,The Boy Is Mine,169.662,45.0,ThatsMySong/1998 - Brandy and Monica - The Boy Is Mine - Chorus - 5.mp3,Chorus,1990s
+      Brandy and Monica,The Boy Is Mine,189.918,45.0,ThatsMySong/1998 - Brandy and Monica - The Boy Is Mine - Intro.mp3,Intro,1990s
+      Brandy and Monica,The Boy Is Mine,210.484,45.0,ThatsMySong/1998 - Brandy and Monica - The Boy Is Mine - Verse - 1.mp3,Verse,1990s
+      Brandy and Monica,The Boy Is Mine,231.217,45.0,ThatsMySong/1998 - Brandy and Monica - The Boy Is Mine - Verse - 2.mp3,Verse,1990s
+      Brenda Lee,I'm Sorry,0.0,45.0,ThatsMySong/1960 - Brenda Lee - I'm Sorry - Intro.mp3,Intro,1960s
+      Brenda Lee,I'm Sorry,14.747,45.0,ThatsMySong/1960 - Brenda Lee - I'm Sorry - Verse - 1.mp3,Verse,1960s
+      Brenda Lee,I'm Sorry,42.478,45.0,ThatsMySong/1960 - Brenda Lee - I'm Sorry - Verse - 2.mp3,Verse,1960s
+      Brenda Lee,I'm Sorry,70.501,45.0,ThatsMySong/1960 - Brenda Lee - I'm Sorry - Verse - 3.mp3,Verse,1960s
+      Brenda Lee,I'm Sorry,98.754,45.0,ThatsMySong/1960 - Brenda Lee - I'm Sorry - Verse - 4.mp3,Verse,1960s
+      Bryan Adams,(Everything I Do) I Do It for You,0.0,45.0,ThatsMySong/1991 - Bryan Adams - (Everything I Do) I Do It for You - Bridge.mp3,Bridge,1990s
+      Bryan Adams,(Everything I Do) I Do It for You,14.622,45.0,ThatsMySong/1991 - Bryan Adams - (Everything I Do) I Do It for You - Chorus - 1.mp3,Chorus,1990s
+      Bryan Adams,(Everything I Do) I Do It for You,43.482,45.0,ThatsMySong/1991 - Bryan Adams - (Everything I Do) I Do It for You - Chorus - 2.mp3,Chorus,1990s
+      Bryan Adams,(Everything I Do) I Do It for You,73.203,45.0,ThatsMySong/1991 - Bryan Adams - (Everything I Do) I Do It for You - Chorus - 3.mp3,Chorus,1990s
+      Bryan Adams,(Everything I Do) I Do It for You,101.968,45.0,ThatsMySong/1991 - Bryan Adams - (Everything I Do) I Do It for You - Intro.mp3,Intro,1990s
+      Bryan Adams,(Everything I Do) I Do It for You,130.542,45.0,ThatsMySong/1991 - Bryan Adams - (Everything I Do) I Do It for You - Solo.mp3,Solo,1990s
+      Bryan Adams,(Everything I Do) I Do It for You,162.557,45.0,ThatsMySong/1991 - Bryan Adams - (Everything I Do) I Do It for You - Verse - 1.mp3,Verse,1990s
+      Bryan Adams,(Everything I Do) I Do It for You,191.991,45.0,ThatsMySong/1991 - Bryan Adams - (Everything I Do) I Do It for You - Verse - 2.mp3,Verse,1990s
+      Carly Simon,You're So Vain,0.0,45.0,ThatsMySong/1972 - Carly Simon - You're So Vain - Bridge.mp3,Bridge,1970s
+      Carly Simon,You're So Vain,18.072,45.0,ThatsMySong/1972 - Carly Simon - You're So Vain - Chorus - 1.mp3,Chorus,1970s
+      Carly Simon,You're So Vain,52.088,45.0,ThatsMySong/1972 - Carly Simon - You're So Vain - Chorus - 2.mp3,Chorus,1970s
+      Carly Simon,You're So Vain,69.537,45.0,ThatsMySong/1972 - Carly Simon - You're So Vain - Chorus - 3.mp3,Chorus,1970s
+      Carly Simon,You're So Vain,103.3,45.0,ThatsMySong/1972 - Carly Simon - You're So Vain - Chorus - 4.mp3,Chorus,1970s
+      Carly Simon,You're So Vain,121.418,45.0,ThatsMySong/1972 - Carly Simon - You're So Vain - Intro.mp3,Intro,1970s
+      Carly Simon,You're So Vain,147.073,45.0,ThatsMySong/1972 - Carly Simon - You're So Vain - Solo.mp3,Solo,1970s
+      Carly Simon,You're So Vain,154.317,45.0,ThatsMySong/1972 - Carly Simon - You're So Vain - Verse - 1.mp3,Verse,1970s
+      Carly Simon,You're So Vain,171.481,45.0,ThatsMySong/1972 - Carly Simon - You're So Vain - Verse - 2.mp3,Verse,1970s
+      Carly Simon,You're So Vain,205.237,45.0,ThatsMySong/1972 - Carly Simon - You're So Vain - Verse - 3.mp3,Verse,1970s
+      Chic,Le Freak,0.0,45.0,ThatsMySong/1978 - Chic - Le Freak - Bridge.mp3,Bridge,1970s
+      Chic,Le Freak,35.132,45.0,ThatsMySong/1978 - Chic - Le Freak - Chorus - 1.mp3,Chorus,1970s
+      Chic,Le Freak,66.714,45.0,ThatsMySong/1978 - Chic - Le Freak - Chorus - 2.mp3,Chorus,1970s
+      Chic,Le Freak,100.133,45.0,ThatsMySong/1978 - Chic - Le Freak - Chorus - 3.mp3,Chorus,1970s
+      Chic,Le Freak,131.619,45.0,ThatsMySong/1978 - Chic - Le Freak - Outro.mp3,Outro,1970s
+      Chic,Le Freak,164.707,45.0,ThatsMySong/1978 - Chic - Le Freak - Verse - 1.mp3,Verse,1970s
+      Chic,Le Freak,229.68,45.0,ThatsMySong/1978 - Chic - Le Freak - Verse - 2.mp3,Verse,1970s
+      Chic,Le Freak,261.127,45.0,ThatsMySong/1978 - Chic - Le Freak - Verse - 3.mp3,Verse,1970s
+      Chubby Checker,The Twist,0.0,45.0,ThatsMySong/1960 - Chubby Checker - The Twist - Bridge - 1.mp3,Bridge,1960s
+      Chubby Checker,The Twist,5.861,45.0,ThatsMySong/1960 - Chubby Checker - The Twist - Bridge - 2.mp3,Bridge,1960s
+      Chubby Checker,The Twist,22.519,45.0,ThatsMySong/1960 - Chubby Checker - The Twist - Intro.mp3,Intro,1960s
+      Chubby Checker,The Twist,42.033,45.0,ThatsMySong/1960 - Chubby Checker - The Twist - Solo.mp3,Solo,1960s
+      Chubby Checker,The Twist,60.1,45.0,ThatsMySong/1960 - Chubby Checker - The Twist - Verse - 1.mp3,Verse,1960s
+      Chubby Checker,The Twist,82.404,45.0,ThatsMySong/1960 - Chubby Checker - The Twist - Verse - 2.mp3,Verse,1960s
+      Chubby Checker,The Twist,96.64,45.0,ThatsMySong/1960 - Chubby Checker - The Twist - Verse - 3.mp3,Verse,1960s
+      Coolio,Gangsta's Paradise,0.0,45.0,ThatsMySong/1995 - Coolio - Gangsta's Paradise - Chorus - 1.mp3,Chorus,1990s
+      Coolio,Gangsta's Paradise,12.051,45.0,ThatsMySong/1995 - Coolio - Gangsta's Paradise - Chorus - 2.mp3,Chorus,1990s
+      Coolio,Gangsta's Paradise,48.529,45.0,ThatsMySong/1995 - Coolio - Gangsta's Paradise - Chorus - 3.mp3,Chorus,1990s
+      Coolio,Gangsta's Paradise,72.263,45.0,ThatsMySong/1995 - Coolio - Gangsta's Paradise - Intro.mp3,Intro,1990s
+      Coolio,Gangsta's Paradise,107.794,45.0,ThatsMySong/1995 - Coolio - Gangsta's Paradise - Outro.mp3,Outro,1990s
+      Coolio,Gangsta's Paradise,120.561,45.0,ThatsMySong/1995 - Coolio - Gangsta's Paradise - Prechorus.mp3,Prechorus,1990s
+      Coolio,Gangsta's Paradise,144.571,45.0,ThatsMySong/1995 - Coolio - Gangsta's Paradise - Verse - 1.mp3,Verse,1990s
+      Coolio,Gangsta's Paradise,168.559,45.0,ThatsMySong/1995 - Coolio - Gangsta's Paradise - Verse - 2.mp3,Verse,1990s
+      Coolio,Gangsta's Paradise,191.854,45.0,ThatsMySong/1995 - Coolio - Gangsta's Paradise - Verse - 3.mp3,Verse,1990s
+      Dawn (feat. Tony Orlando),Tie a Yellow Ribbon Round the Ole Oak Tree,0.0,45.0,ThatsMySong/1973 - Dawn (feat. Tony Orlando) - Tie a Yellow Ribbon Round the Ole Oak Tree - Bridge.mp3,Bridge,1970s
+      Dawn (feat. Tony Orlando),Tie a Yellow Ribbon Round the Ole Oak Tree,11.252,45.0,ThatsMySong/1973 - Dawn (feat. Tony Orlando) - Tie a Yellow Ribbon Round the Ole Oak Tree - Chorus - 1.mp3,Chorus,1970s
+      Dawn (feat. Tony Orlando),Tie a Yellow Ribbon Round the Ole Oak Tree,38.612,45.0,ThatsMySong/1973 - Dawn (feat. Tony Orlando) - Tie a Yellow Ribbon Round the Ole Oak Tree - Chorus - 2.mp3,Chorus,1970s
+      Dawn (feat. Tony Orlando),Tie a Yellow Ribbon Round the Ole Oak Tree,72.141,45.0,ThatsMySong/1973 - Dawn (feat. Tony Orlando) - Tie a Yellow Ribbon Round the Ole Oak Tree - Intro.mp3,Intro,1970s
+      Dawn (feat. Tony Orlando),Tie a Yellow Ribbon Round the Ole Oak Tree,98.98,45.0,ThatsMySong/1973 - Dawn (feat. Tony Orlando) - Tie a Yellow Ribbon Round the Ole Oak Tree - Solo.mp3,Solo,1970s
+      Dawn (feat. Tony Orlando),Tie a Yellow Ribbon Round the Ole Oak Tree,127.611,45.0,ThatsMySong/1973 - Dawn (feat. Tony Orlando) - Tie a Yellow Ribbon Round the Ole Oak Tree - Verse - 1.mp3,Verse,1970s
+      Dawn (feat. Tony Orlando),Tie a Yellow Ribbon Round the Ole Oak Tree,148.053,45.0,ThatsMySong/1973 - Dawn (feat. Tony Orlando) - Tie a Yellow Ribbon Round the Ole Oak Tree - Verse - 2.mp3,Verse,1970s
+      Debby Boone,You Light Up My Life,0.0,45.0,ThatsMySong/1977 - Debby Boone - You Light Up My Life - Chorus - 1.mp3,Chorus,1970s
+      Debby Boone,You Light Up My Life,4.567,45.0,ThatsMySong/1977 - Debby Boone - You Light Up My Life - Chorus - 2.mp3,Chorus,1970s
+      Debby Boone,You Light Up My Life,41.72,45.0,ThatsMySong/1977 - Debby Boone - You Light Up My Life - Intro.mp3,Intro,1970s
+      Debby Boone,You Light Up My Life,74.569,45.0,ThatsMySong/1977 - Debby Boone - You Light Up My Life - Verse - 1.mp3,Verse,1970s
+      Debby Boone,You Light Up My Life,112.149,45.0,ThatsMySong/1977 - Debby Boone - You Light Up My Life - Verse - 2.mp3,Verse,1970s
+      Diana Ross,Upside Down,0.0,45.0,ThatsMySong/1980 - Diana Ross - Upside Down - Chorus - 1.mp3,Chorus,1980s
+      Diana Ross,Upside Down,9.809,45.0,ThatsMySong/1980 - Diana Ross - Upside Down - Chorus - 2.mp3,Chorus,1980s
+      Diana Ross,Upside Down,19.149,45.0,ThatsMySong/1980 - Diana Ross - Upside Down - Chorus - 3.mp3,Chorus,1980s
+      Diana Ross,Upside Down,37.804,45.0,ThatsMySong/1980 - Diana Ross - Upside Down - Chorus - 4.mp3,Chorus,1980s
+      Diana Ross,Upside Down,54.608,45.0,ThatsMySong/1980 - Diana Ross - Upside Down - Intro.mp3,Intro,1980s
+      Diana Ross,Upside Down,73.238,45.0,ThatsMySong/1980 - Diana Ross - Upside Down - Outro.mp3,Outro,1980s
+      Diana Ross,Upside Down,89.919,45.0,ThatsMySong/1980 - Diana Ross - Upside Down - Postchorus.mp3,Postchorus,1980s
+      Diana Ross,Upside Down,108.562,45.0,ThatsMySong/1980 - Diana Ross - Upside Down - Prechorus.mp3,Prechorus,1980s
+      Diana Ross,Upside Down,125.255,45.0,ThatsMySong/1980 - Diana Ross - Upside Down - Verse - 1.mp3,Verse,1980s
+      Diana Ross,Upside Down,160.788,45.0,ThatsMySong/1980 - Diana Ross - Upside Down - Verse - 2.mp3,Verse,1980s
+      Diana Ross,Upside Down,200.467,45.0,ThatsMySong/1980 - Diana Ross - Upside Down - Verse - 3.mp3,Verse,1980s
+      "Dionne Warwick (feat. Elton John, Gladys Knight, and Stevie Wonder)",That's What Friends Are For,0.0,45.0,\"ThatsMySong/1985 - Dionne Warwick (feat. Elton John, Gladys Knight, and Stevie Wonder) - That's What Friends Are For - Chorus - 1.mp3\",Chorus,1980s
+      "Dionne Warwick (feat. Elton John, Gladys Knight, and Stevie Wonder)",That's What Friends Are For,54.235,45.0,\"ThatsMySong/1985 - Dionne Warwick (feat. Elton John, Gladys Knight, and Stevie Wonder) - That's What Friends Are For - Chorus - 2.mp3\",Chorus,1980s
+      "Dionne Warwick (feat. Elton John, Gladys Knight, and Stevie Wonder)",That's What Friends Are For,93.147,45.0,\"ThatsMySong/1985 - Dionne Warwick (feat. Elton John, Gladys Knight, and Stevie Wonder) - That's What Friends Are For - Chorus - 3.mp3\",Chorus,1980s
+      "Dionne Warwick (feat. Elton John, Gladys Knight, and Stevie Wonder)",That's What Friends Are For,126.108,45.0,\"ThatsMySong/1985 - Dionne Warwick (feat. Elton John, Gladys Knight, and Stevie Wonder) - That's What Friends Are For - Chorus - 4.mp3\",Chorus,1980s
+      "Dionne Warwick (feat. Elton John, Gladys Knight, and Stevie Wonder)",That's What Friends Are For,160.041,45.0,\"ThatsMySong/1985 - Dionne Warwick (feat. Elton John, Gladys Knight, and Stevie Wonder) - That's What Friends Are For - Verse - 1.mp3\",Verse,1980s
+      "Dionne Warwick (feat. Elton John, Gladys Knight, and Stevie Wonder)",That's What Friends Are For,193.956,45.0,\"ThatsMySong/1985 - Dionne Warwick (feat. Elton John, Gladys Knight, and Stevie Wonder) - That's What Friends Are For - Verse - 2.mp3\",Verse,1980s
+      Donna Summer,Hot Stuff,0.0,45.0,ThatsMySong/1979 - Donna Summer - Hot Stuff - Bridge.mp3,Bridge,1970s
+      Donna Summer,Hot Stuff,32.222,45.0,ThatsMySong/1979 - Donna Summer - Hot Stuff - Chorus - 1.mp3,Chorus,1970s
+      Donna Summer,Hot Stuff,47.193,45.0,ThatsMySong/1979 - Donna Summer - Hot Stuff - Chorus - 2.mp3,Chorus,1970s
+      Donna Summer,Hot Stuff,79.953,45.0,ThatsMySong/1979 - Donna Summer - Hot Stuff - Chorus - 3.mp3,Chorus,1970s
+      Donna Summer,Hot Stuff,96.049,45.0,ThatsMySong/1979 - Donna Summer - Hot Stuff - Chorus - 4.mp3,Chorus,1970s
+      Donna Summer,Hot Stuff,110.973,45.0,ThatsMySong/1979 - Donna Summer - Hot Stuff - Intro.mp3,Intro,1970s
+      Donna Summer,Hot Stuff,144.888,45.0,ThatsMySong/1979 - Donna Summer - Hot Stuff - Solo - 1.mp3,Solo,1970s
+      Donna Summer,Hot Stuff,175.796,45.0,ThatsMySong/1979 - Donna Summer - Hot Stuff - Solo - 2.mp3,Solo,1970s
+      Donna Summer,Hot Stuff,190.673,45.0,ThatsMySong/1979 - Donna Summer - Hot Stuff - Solo - 3.mp3,Solo,1970s
+      Donna Summer,Hot Stuff,223.464,45.0,ThatsMySong/1979 - Donna Summer - Hot Stuff - Verse - 1.mp3,Verse,1970s
+      Donna Summer,Hot Stuff,239.417,45.0,ThatsMySong/1979 - Donna Summer - Hot Stuff - Verse - 2.mp3,Verse,1970s
+      Donna Summer,Hot Stuff,254.484,45.0,ThatsMySong/1979 - Donna Summer - Hot Stuff - Verse - 3.mp3,Verse,1970s
+      Elvis Presley,Are You Lonesome Tonight,0.0,45.0,ThatsMySong/1960 - Elvis Presley - Are You Lonesome Tonight - Intro.mp3,Intro,1960s
+      Elvis Presley,Are You Lonesome Tonight,9.803,45.0,ThatsMySong/1960 - Elvis Presley - Are You Lonesome Tonight - Other.mp3,Other,1960s
+      Elvis Presley,Are You Lonesome Tonight,47.341,45.0,ThatsMySong/1960 - Elvis Presley - Are You Lonesome Tonight - Verse - 1.mp3,Verse,1960s
+      Elvis Presley,Are You Lonesome Tonight,85.729,45.0,ThatsMySong/1960 - Elvis Presley - Are You Lonesome Tonight - Verse - 2.mp3,Verse,1960s
+      Elvis Presley,It’s Now Or Never,0.0,45.0,ThatsMySong/1960 - Elvis Presley - It’s Now Or Never - Chorus - 1.mp3,Chorus,1960s
+      Elvis Presley,It’s Now Or Never,11.327,45.0,ThatsMySong/1960 - Elvis Presley - It’s Now Or Never - Chorus - 2.mp3,Chorus,1960s
+      Elvis Presley,It’s Now Or Never,42.593,45.0,ThatsMySong/1960 - Elvis Presley - It’s Now Or Never - Intro.mp3,Intro,1960s
+      Elvis Presley,It’s Now Or Never,72.758,45.0,ThatsMySong/1960 - Elvis Presley - It’s Now Or Never - Verse - 1.mp3,Verse,1960s
+      Elvis Presley,It’s Now Or Never,103.55,45.0,ThatsMySong/1960 - Elvis Presley - It’s Now Or Never - Verse - 2.mp3,Verse,1960s
+      Fergie,Big Girls Don't Cry,0.0,45.0,ThatsMySong/2007 - Fergie - Big Girls Don't Cry - Bridge.mp3,Bridge,2000s
+      Fergie,Big Girls Don't Cry,8.961,45.0,ThatsMySong/2007 - Fergie - Big Girls Don't Cry - Chorus - 1.mp3,Chorus,2000s
+      Fergie,Big Girls Don't Cry,45.012,45.0,ThatsMySong/2007 - Fergie - Big Girls Don't Cry - Chorus - 2.mp3,Chorus,2000s
+      Fergie,Big Girls Don't Cry,87.463,45.0,ThatsMySong/2007 - Fergie - Big Girls Don't Cry - Chorus - 3.mp3,Chorus,2000s
+      Fergie,Big Girls Don't Cry,121.414,45.0,ThatsMySong/2007 - Fergie - Big Girls Don't Cry - Intro.mp3,Intro,2000s
+      Fergie,Big Girls Don't Cry,155.852,45.0,ThatsMySong/2007 - Fergie - Big Girls Don't Cry - Verse - 1.mp3,Verse,2000s
+      Fergie,Big Girls Don't Cry,210.491,45.0,ThatsMySong/2007 - Fergie - Big Girls Don't Cry - Verse - 2.mp3,Verse,2000s
+      Gloria Gaynor,I Will Survive,0.0,45.0,ThatsMySong/1978 - Gloria Gaynor - I Will Survive - Chorus - 1.mp3,Chorus,1970s
+      Gloria Gaynor,I Will Survive,22.355,45.0,ThatsMySong/1978 - Gloria Gaynor - I Will Survive - Chorus - 2.mp3,Chorus,1970s
+      Gloria Gaynor,I Will Survive,38.893,45.0,ThatsMySong/1978 - Gloria Gaynor - I Will Survive - Intro.mp3,Intro,1970s
+      Gloria Gaynor,I Will Survive,55.447,45.0,ThatsMySong/1978 - Gloria Gaynor - I Will Survive - Prechorus - 1.mp3,Prechorus,1970s
+      Gloria Gaynor,I Will Survive,73.063,45.0,ThatsMySong/1978 - Gloria Gaynor - I Will Survive - Prechorus - 2.mp3,Prechorus,1970s
+      Gloria Gaynor,I Will Survive,121.68,45.0,ThatsMySong/1978 - Gloria Gaynor - I Will Survive - Solo.mp3,Solo,1970s
+      Gloria Gaynor,I Will Survive,138.263,45.0,ThatsMySong/1978 - Gloria Gaynor - I Will Survive - Verse - 1.mp3,Verse,1970s
+      Gloria Gaynor,I Will Survive,148.809,45.0,ThatsMySong/1978 - Gloria Gaynor - I Will Survive - Verse - 2.mp3,Verse,1970s
+      Irene Cara,Flashdance...What a Feeling,0.0,45.0,ThatsMySong/1983 - Irene Cara - Flashdance...What a Feeling - Bridge.mp3,Bridge,1980s
+      Irene Cara,Flashdance...What a Feeling,53.991,45.0,ThatsMySong/1983 - Irene Cara - Flashdance...What a Feeling - Chorus - 1.mp3,Chorus,1980s
+      Irene Cara,Flashdance...What a Feeling,69.642,45.0,ThatsMySong/1983 - Irene Cara - Flashdance...What a Feeling - Chorus - 2.mp3,Chorus,1980s
+      Irene Cara,Flashdance...What a Feeling,101.952,45.0,ThatsMySong/1983 - Irene Cara - Flashdance...What a Feeling - Chorus - 3.mp3,Chorus,1980s
+      Irene Cara,Flashdance...What a Feeling,116.558,45.0,ThatsMySong/1983 - Irene Cara - Flashdance...What a Feeling - Intro.mp3,Intro,1980s
+      Irene Cara,Flashdance...What a Feeling,132.557,45.0,ThatsMySong/1983 - Irene Cara - Flashdance...What a Feeling - Solo.mp3,Solo,1980s
+      Irene Cara,Flashdance...What a Feeling,163.858,45.0,ThatsMySong/1983 - Irene Cara - Flashdance...What a Feeling - Verse - 1.mp3,Verse,1980s
+      Irene Cara,Flashdance...What a Feeling,179.533,45.0,ThatsMySong/1983 - Irene Cara - Flashdance...What a Feeling - Verse - 2.mp3,Verse,1980s
+      Jimmy Dean,Big Bad John,0.0,45.0,ThatsMySong/1961 - Jimmy Dean - Big Bad John - Chorus - 1.mp3,Chorus,1960s
+      Jimmy Dean,Big Bad John,5.66,45.0,ThatsMySong/1961 - Jimmy Dean - Big Bad John - Chorus - 2.mp3,Chorus,1960s
+      Jimmy Dean,Big Bad John,19.033,45.0,ThatsMySong/1961 - Jimmy Dean - Big Bad John - Chorus - 3.mp3,Chorus,1960s
+      Jimmy Dean,Big Bad John,30.353,45.0,ThatsMySong/1961 - Jimmy Dean - Big Bad John - Chorus - 4.mp3,Chorus,1960s
+      Jimmy Dean,Big Bad John,44.046,45.0,ThatsMySong/1961 - Jimmy Dean - Big Bad John - Intro.mp3,Intro,1960s
+      Jimmy Dean,Big Bad John,57.853,45.0,ThatsMySong/1961 - Jimmy Dean - Big Bad John - Verse - 1.mp3,Verse,1960s
+      Jimmy Dean,Big Bad John,68.83,45.0,ThatsMySong/1961 - Jimmy Dean - Big Bad John - Verse - 2.mp3,Verse,1960s
+      Jimmy Dean,Big Bad John,82.614,45.0,ThatsMySong/1961 - Jimmy Dean - Big Bad John - Verse - 3.mp3,Verse,1960s
+      Jimmy Dean,Big Bad John,96.239,45.0,ThatsMySong/1961 - Jimmy Dean - Big Bad John - Verse - 4.mp3,Verse,1960s
+      Jimmy Dean,Big Bad John,107.53,45.0,ThatsMySong/1961 - Jimmy Dean - Big Bad John - Verse - 5.mp3,Verse,1960s
+      Jimmy Dean,Big Bad John,121.411,45.0,ThatsMySong/1961 - Jimmy Dean - Big Bad John - Verse - 6.mp3,Verse,1960s
+      Jimmy Dean,Big Bad John,135.287,45.0,ThatsMySong/1961 - Jimmy Dean - Big Bad John - Verse - 7.mp3,Verse,1960s
+      Jimmy Gilmer (feat. The Fireballs),Sugar Shack,0.0,45.0,ThatsMySong/1963 - Jimmy Gilmer (feat. The Fireballs) - Sugar Shack - Chorus - 1.mp3,Chorus,1960s
+      Jimmy Gilmer (feat. The Fireballs),Sugar Shack,9.621,45.0,ThatsMySong/1963 - Jimmy Gilmer (feat. The Fireballs) - Sugar Shack - Chorus - 2.mp3,Chorus,1960s
+      Jimmy Gilmer (feat. The Fireballs),Sugar Shack,21.933,45.0,ThatsMySong/1963 - Jimmy Gilmer (feat. The Fireballs) - Sugar Shack - Intro.mp3,Intro,1960s
+      Jimmy Gilmer (feat. The Fireballs),Sugar Shack,33.12,45.0,ThatsMySong/1963 - Jimmy Gilmer (feat. The Fireballs) - Sugar Shack - Prechorus - 1.mp3,Prechorus,1960s
+      Jimmy Gilmer (feat. The Fireballs),Sugar Shack,40.297,45.0,ThatsMySong/1963 - Jimmy Gilmer (feat. The Fireballs) - Sugar Shack - Prechorus - 2.mp3,Prechorus,1960s
+      Jimmy Gilmer (feat. The Fireballs),Sugar Shack,54.626,45.0,ThatsMySong/1963 - Jimmy Gilmer (feat. The Fireballs) - Sugar Shack - Verse - 1.mp3,Verse,1960s
+      Jimmy Gilmer (feat. The Fireballs),Sugar Shack,65.8,45.0,ThatsMySong/1963 - Jimmy Gilmer (feat. The Fireballs) - Sugar Shack - Verse - 2.mp3,Verse,1960s
+      Joan Jett and the Blackhearts,I Love Rock 'N Roll,0.0,45.0,ThatsMySong/1981 - Joan Jett and the Blackhearts - I Love Rock 'N Roll - Chorus - 1.mp3,Chorus,1980s
+      Joan Jett and the Blackhearts,I Love Rock 'N Roll,15.456,45.0,ThatsMySong/1981 - Joan Jett and the Blackhearts - I Love Rock 'N Roll - Chorus - 2.mp3,Chorus,1980s
+      Joan Jett and the Blackhearts,I Love Rock 'N Roll,42.25,45.0,ThatsMySong/1981 - Joan Jett and the Blackhearts - I Love Rock 'N Roll - Intro.mp3,Intro,1980s
+      Joan Jett and the Blackhearts,I Love Rock 'N Roll,56.615,45.0,ThatsMySong/1981 - Joan Jett and the Blackhearts - I Love Rock 'N Roll - Outro.mp3,Outro,1980s
+      Joan Jett and the Blackhearts,I Love Rock 'N Roll,83.654,45.0,ThatsMySong/1981 - Joan Jett and the Blackhearts - I Love Rock 'N Roll - Solo.mp3,Solo,1980s
+      Joan Jett and the Blackhearts,I Love Rock 'N Roll,94.217,45.0,ThatsMySong/1981 - Joan Jett and the Blackhearts - I Love Rock 'N Roll - Verse - 1.mp3,Verse,1980s
+      Joan Jett and the Blackhearts,I Love Rock 'N Roll,108.018,45.0,ThatsMySong/1981 - Joan Jett and the Blackhearts - I Love Rock 'N Roll - Verse - 2.mp3,Verse,1980s
+      Joan Jett and the Blackhearts,I Love Rock 'N Roll,124.284,45.0,ThatsMySong/1981 - Joan Jett and the Blackhearts - I Love Rock 'N Roll - Verse - 3.mp3,Verse,1980s
+      Kenny Rogers,Lady,0.0,45.0,ThatsMySong/1980 - Kenny Rogers - Lady - Chorus - 1.mp3,Chorus,1980s
+      Kenny Rogers,Lady,8.698,45.0,ThatsMySong/1980 - Kenny Rogers - Lady - Chorus - 2.mp3,Chorus,1980s
+      Kenny Rogers,Lady,54.038,45.0,ThatsMySong/1980 - Kenny Rogers - Lady - Intro.mp3,Intro,1980s
+      Kenny Rogers,Lady,86.766,45.0,ThatsMySong/1980 - Kenny Rogers - Lady - Verse - 1.mp3,Verse,1980s
+      Kenny Rogers,Lady,131.849,45.0,ThatsMySong/1980 - Kenny Rogers - Lady - Verse - 2.mp3,Verse,1980s
+      Kenny Rogers,Lady,164.718,45.0,ThatsMySong/1980 - Kenny Rogers - Lady - Verse - 3.mp3,Verse,1980s
+      Leona Lewis,Bleeding Love,0.0,45.0,ThatsMySong/2007 - Leona Lewis - Bleeding Love - Bridge.mp3,Bridge,2000s
+      Leona Lewis,Bleeding Love,18.823,45.0,ThatsMySong/2007 - Leona Lewis - Bleeding Love - Chorus - 1.mp3,Chorus,2000s
+      Leona Lewis,Bleeding Love,55.767,45.0,ThatsMySong/2007 - Leona Lewis - Bleeding Love - Chorus - 2.mp3,Chorus,2000s
+      Leona Lewis,Bleeding Love,74.54,45.0,ThatsMySong/2007 - Leona Lewis - Bleeding Love - Chorus - 3.mp3,Chorus,2000s
+      Leona Lewis,Bleeding Love,97.693,45.0,ThatsMySong/2007 - Leona Lewis - Bleeding Love - Intro.mp3,Intro,2000s
+      Leona Lewis,Bleeding Love,134.212,45.0,ThatsMySong/2007 - Leona Lewis - Bleeding Love - Prechorus - 1.mp3,Prechorus,2000s
+      Leona Lewis,Bleeding Love,152.985,45.0,ThatsMySong/2007 - Leona Lewis - Bleeding Love - Prechorus - 2.mp3,Prechorus,2000s
+      Leona Lewis,Bleeding Love,171.081,45.0,ThatsMySong/2007 - Leona Lewis - Bleeding Love - Prechorus - 3.mp3,Prechorus,2000s
+      Leona Lewis,Bleeding Love,189.629,45.0,ThatsMySong/2007 - Leona Lewis - Bleeding Love - Verse - 1.mp3,Verse,2000s
+      Leona Lewis,Bleeding Love,207.901,45.0,ThatsMySong/2007 - Leona Lewis - Bleeding Love - Verse - 2.mp3,Verse,2000s
+      Lionel Richie,All Night Long,0.0,45.0,ThatsMySong/1983 - Lionel Richie - All Night Long - Bridge.mp3,Bridge,1980s
+      Lionel Richie,All Night Long,19.11,45.0,ThatsMySong/1983 - Lionel Richie - All Night Long - Chorus - 1.mp3,Chorus,1980s
+      Lionel Richie,All Night Long,43.976,45.0,ThatsMySong/1983 - Lionel Richie - All Night Long - Chorus - 2.mp3,Chorus,1980s
+      Lionel Richie,All Night Long,62.681,45.0,ThatsMySong/1983 - Lionel Richie - All Night Long - Chorus - 3.mp3,Chorus,1980s
+      Lionel Richie,All Night Long,81.947,45.0,ThatsMySong/1983 - Lionel Richie - All Night Long - Intro.mp3,Intro,1980s
+      Lionel Richie,All Night Long,106.931,45.0,ThatsMySong/1983 - Lionel Richie - All Night Long - Outro.mp3,Outro,1980s
+      Lionel Richie,All Night Long,116.695,45.0,ThatsMySong/1983 - Lionel Richie - All Night Long - Prechorus - 1.mp3,Prechorus,1980s
+      Lionel Richie,All Night Long,134.525,45.0,ThatsMySong/1983 - Lionel Richie - All Night Long - Prechorus - 2.mp3,Prechorus,1980s
+      Lionel Richie,All Night Long,161.911,45.0,ThatsMySong/1983 - Lionel Richie - All Night Long - Prechorus - 3.mp3,Prechorus,1980s
+      Lionel Richie,All Night Long,170.708,45.0,ThatsMySong/1983 - Lionel Richie - All Night Long - Solo.mp3,Solo,1980s
+      Lionel Richie,All Night Long,185.824,45.0,ThatsMySong/1983 - Lionel Richie - All Night Long - Verse - 1.mp3,Verse,1980s
+      Lionel Richie,All Night Long,193.838,45.0,ThatsMySong/1983 - Lionel Richie - All Night Long - Verse - 2.mp3,Verse,1980s
+      Lionel Richie,All Night Long,210.573,45.0,ThatsMySong/1983 - Lionel Richie - All Night Long - Verse - 3.mp3,Verse,1980s
+      Lionel Richie,"Say You, Say Me",0.0,45.0,\"ThatsMySong/1985 - Lionel Richie - Say You, Say Me - Bridge.mp3\",Bridge,1980s
+      Lionel Richie,"Say You, Say Me",46.084,45.0,\"ThatsMySong/1985 - Lionel Richie - Say You, Say Me - Chorus - 1.mp3\",Chorus,1980s
+      Lionel Richie,"Say You, Say Me",78.896,45.0,\"ThatsMySong/1985 - Lionel Richie - Say You, Say Me - Chorus - 2.mp3\",Chorus,1980s
+      Lionel Richie,"Say You, Say Me",119.791,45.0,\"ThatsMySong/1985 - Lionel Richie - Say You, Say Me - Chorus - 3.mp3\",Chorus,1980s
+      Lionel Richie,"Say You, Say Me",142.64,45.0,\"ThatsMySong/1985 - Lionel Richie - Say You, Say Me - Chorus - 4.mp3\",Chorus,1980s
+      Lionel Richie,"Say You, Say Me",167.894,45.0,\"ThatsMySong/1985 - Lionel Richie - Say You, Say Me - Verse - 1.mp3\",Verse,1980s
+      Lionel Richie,"Say You, Say Me",196.209,45.0,\"ThatsMySong/1985 - Lionel Richie - Say You, Say Me - Verse - 2.mp3\",Verse,1980s
+      Lionel Richie and Diana Ross,Endless Love,0.0,45.0,ThatsMySong/1981 - Lionel Richie and Diana Ross - Endless Love - Bridge.mp3,Bridge,1980s
+      Lionel Richie and Diana Ross,Endless Love,5.184,45.0,ThatsMySong/1981 - Lionel Richie and Diana Ross - Endless Love - Chorus - 1.mp3,Chorus,1980s
+      Lionel Richie and Diana Ross,Endless Love,35.829,45.0,ThatsMySong/1981 - Lionel Richie and Diana Ross - Endless Love - Chorus - 2.mp3,Chorus,1980s
+      Lionel Richie and Diana Ross,Endless Love,87.263,45.0,ThatsMySong/1981 - Lionel Richie and Diana Ross - Endless Love - Chorus - 3.mp3,Chorus,1980s
+      Lionel Richie and Diana Ross,Endless Love,118.225,45.0,ThatsMySong/1981 - Lionel Richie and Diana Ross - Endless Love - Chorus - 4.mp3,Chorus,1980s
+      Lionel Richie and Diana Ross,Endless Love,163.187,45.0,ThatsMySong/1981 - Lionel Richie and Diana Ross - Endless Love - Intro.mp3,Intro,1980s
+      Lionel Richie and Diana Ross,Endless Love,187.919,45.0,ThatsMySong/1981 - Lionel Richie and Diana Ross - Endless Love - Verse - 1.mp3,Verse,1980s
+      Lionel Richie and Diana Ross,Endless Love,210.382,45.0,ThatsMySong/1981 - Lionel Richie and Diana Ross - Endless Love - Verse - 2.mp3,Verse,1980s
+      Louis Armstrong,"Hello, Dolly!",0.0,45.0,\"ThatsMySong/1964 - Louis Armstrong - Hello, Dolly! - Intro.mp3\",Intro,1960s
+      Louis Armstrong,"Hello, Dolly!",12.051,45.0,\"ThatsMySong/1964 - Louis Armstrong - Hello, Dolly! - Solo.mp3\",Solo,1960s
+      Louis Armstrong,"Hello, Dolly!",60.911,45.0,\"ThatsMySong/1964 - Louis Armstrong - Hello, Dolly! - Verse.mp3\",Verse,1960s
+      Mariah Carey,We Belong Together,0.0,45.0,ThatsMySong/2005 - Mariah Carey - We Belong Together - Chorus - 1.mp3,Chorus,2000s
+      Mariah Carey,We Belong Together,21.448,45.0,ThatsMySong/2005 - Mariah Carey - We Belong Together - Chorus - 2.mp3,Chorus,2000s
+      Mariah Carey,We Belong Together,49.007,45.0,ThatsMySong/2005 - Mariah Carey - We Belong Together - Intro.mp3,Intro,2000s
+      Mariah Carey,We Belong Together,62.768,45.0,ThatsMySong/2005 - Mariah Carey - We Belong Together - Prechorus - 1.mp3,Prechorus,2000s
+      Mariah Carey,We Belong Together,89.751,45.0,ThatsMySong/2005 - Mariah Carey - We Belong Together - Prechorus - 2.mp3,Prechorus,2000s
+      Mariah Carey,We Belong Together,117.156,45.0,ThatsMySong/2005 - Mariah Carey - We Belong Together - Verse - 1.mp3,Verse,2000s
+      Mariah Carey,We Belong Together,131.301,45.0,ThatsMySong/2005 - Mariah Carey - We Belong Together - Verse - 2.mp3,Verse,2000s
+      Mario,Let Me Love You,0.0,45.0,ThatsMySong/2004 - Mario - Let Me Love You - Bridge.mp3,Bridge,2000s
+      Mario,Let Me Love You,21.109,45.0,ThatsMySong/2004 - Mario - Let Me Love You - Chorus - 1.mp3,Chorus,2000s
+      Mario,Let Me Love You,40.971,45.0,ThatsMySong/2004 - Mario - Let Me Love You - Chorus - 2.mp3,Chorus,2000s
+      Mario,Let Me Love You,59.833,45.0,ThatsMySong/2004 - Mario - Let Me Love You - Chorus - 3.mp3,Chorus,2000s
+      Mario,Let Me Love You,92.329,45.0,ThatsMySong/2004 - Mario - Let Me Love You - Chorus - 4.mp3,Chorus,2000s
+      Mario,Let Me Love You,112.012,45.0,ThatsMySong/2004 - Mario - Let Me Love You - Intro.mp3,Intro,2000s
+      Mario,Let Me Love You,131.077,45.0,ThatsMySong/2004 - Mario - Let Me Love You - Prechorus - 1.mp3,Prechorus,2000s
+      Mario,Let Me Love You,153.803,45.0,ThatsMySong/2004 - Mario - Let Me Love You - Prechorus - 2.mp3,Prechorus,2000s
+      Mario,Let Me Love You,171.489,45.0,ThatsMySong/2004 - Mario - Let Me Love You - Verse - 1.mp3,Verse,2000s
+      Mario,Let Me Love You,191.315,45.0,ThatsMySong/2004 - Mario - Let Me Love You - Verse - 2.mp3,Verse,2000s
+      Marvin Gaye,I Heard It Through the Grapevine,0.0,45.0,ThatsMySong/1968 - Marvin Gaye - I Heard It Through the Grapevine - Chorus - 1.mp3,Chorus,1960s
+      Marvin Gaye,I Heard It Through the Grapevine,20.487,45.0,ThatsMySong/1968 - Marvin Gaye - I Heard It Through the Grapevine - Chorus - 2.mp3,Chorus,1960s
+      Marvin Gaye,I Heard It Through the Grapevine,44.71,45.0,ThatsMySong/1968 - Marvin Gaye - I Heard It Through the Grapevine - Chorus - 3.mp3,Chorus,1960s
+      Marvin Gaye,I Heard It Through the Grapevine,69.657,45.0,ThatsMySong/1968 - Marvin Gaye - I Heard It Through the Grapevine - Chorus - 4.mp3,Chorus,1960s
+      Marvin Gaye,I Heard It Through the Grapevine,94.182,44.1,ThatsMySong/1968 - Marvin Gaye - I Heard It Through the Grapevine - Chorus - 5.mp3,Chorus,1960s
+      Marvin Gaye,I Heard It Through the Grapevine,112.56,45.0,ThatsMySong/1968 - Marvin Gaye - I Heard It Through the Grapevine - Intro.mp3,Intro,1960s
+      Marvin Gaye,I Heard It Through the Grapevine,126.902,45.0,ThatsMySong/1968 - Marvin Gaye - I Heard It Through the Grapevine - Other - 1.mp3,Other,1960s
+      Marvin Gaye,I Heard It Through the Grapevine,151.125,45.0,ThatsMySong/1968 - Marvin Gaye - I Heard It Through the Grapevine - Other - 2.mp3,Other,1960s
+      Marvin Gaye,I Heard It Through the Grapevine,173.36,25.7,ThatsMySong/1968 - Marvin Gaye - I Heard It Through the Grapevine - Outro.mp3,Outro,1960s
+      Marvin Gaye,I Heard It Through the Grapevine,200.235,45.0,ThatsMySong/1968 - Marvin Gaye - I Heard It Through the Grapevine - Verse - 1.mp3,Verse,1960s
+      Marvin Gaye,I Heard It Through the Grapevine,218.734,45.0,ThatsMySong/1968 - Marvin Gaye - I Heard It Through the Grapevine - Verse - 2.mp3,Verse,1960s
+      Marvin Gaye,I Heard It Through the Grapevine,233.075,45.0,ThatsMySong/1968 - Marvin Gaye - I Heard It Through the Grapevine - Verse - 3.mp3,Verse,1960s
+      Marvin Gaye,I Heard It Through the Grapevine,257.419,45.0,ThatsMySong/1968 - Marvin Gaye - I Heard It Through the Grapevine - Verse - 4.mp3,Verse,1960s
+      Marvin Gaye,I Heard It Through the Grapevine,275.798,45.0,ThatsMySong/1968 - Marvin Gaye - I Heard It Through the Grapevine - Verse - 5.mp3,Verse,1960s
+      Marvin Gaye,Let's Get It On,0.0,45.0,ThatsMySong/1973 - Marvin Gaye - Let's Get It On - Bridge - 1.mp3,Bridge,1970s
+      Marvin Gaye,Let's Get It On,24.264,45.0,ThatsMySong/1973 - Marvin Gaye - Let's Get It On - Bridge - 2.mp3,Bridge,1970s
+      Marvin Gaye,Let's Get It On,49.199,45.0,ThatsMySong/1973 - Marvin Gaye - Let's Get It On - Chorus.mp3,Chorus,1970s
+      Marvin Gaye,Let's Get It On,94.329,45.0,ThatsMySong/1973 - Marvin Gaye - Let's Get It On - Verse - 1.mp3,Verse,1970s
+      Marvin Gaye,Let's Get It On,139.125,45.0,ThatsMySong/1973 - Marvin Gaye - Let's Get It On - Verse - 2.mp3,Verse,1970s
+      Marvin Gaye,Let's Get It On,185.285,45.0,ThatsMySong/1973 - Marvin Gaye - Let's Get It On - Verse - 3.mp3,Verse,1970s
+      Michael Jackson,Billie Jean,0.0,45.0,ThatsMySong/1983 - Michael Jackson - Billie Jean - Bridge.mp3,Bridge,1980s
+      Michael Jackson,Billie Jean,29.134,45.0,ThatsMySong/1983 - Michael Jackson - Billie Jean - Chorus - 1.mp3,Chorus,1980s
+      Michael Jackson,Billie Jean,70.323,45.0,ThatsMySong/1983 - Michael Jackson - Billie Jean - Chorus - 2.mp3,Chorus,1980s
+      Michael Jackson,Billie Jean,86.693,45.0,ThatsMySong/1983 - Michael Jackson - Billie Jean - Chorus - 3.mp3,Chorus,1980s
+      Michael Jackson,Billie Jean,111.306,45.0,ThatsMySong/1983 - Michael Jackson - Billie Jean - Intro.mp3,Intro,1980s
+      Michael Jackson,Billie Jean,152.303,45.0,ThatsMySong/1983 - Michael Jackson - Billie Jean - Prechorus - 1.mp3,Prechorus,1980s
+      Michael Jackson,Billie Jean,168.717,45.0,ThatsMySong/1983 - Michael Jackson - Billie Jean - Prechorus - 2.mp3,Prechorus,1980s
+      Michael Jackson,Billie Jean,209.641,45.0,ThatsMySong/1983 - Michael Jackson - Billie Jean - Solo.mp3,Solo,1980s
+      Michael Jackson,Billie Jean,223.99,45.0,ThatsMySong/1983 - Michael Jackson - Billie Jean - Verse - 1.mp3,Verse,1980s
+      Michael Jackson,Billie Jean,234.248,45.0,ThatsMySong/1983 - Michael Jackson - Billie Jean - Verse - 2.mp3,Verse,1980s
+      Olivia Newton-John,Physical,0.0,45.0,ThatsMySong/1981 - Olivia Newton-John - Physical - Chorus - 1.mp3,Chorus,1980s
+      Olivia Newton-John,Physical,16.169,45.0,ThatsMySong/1981 - Olivia Newton-John - Physical - Chorus - 2.mp3,Chorus,1980s
+      Olivia Newton-John,Physical,46.15,45.0,ThatsMySong/1981 - Olivia Newton-John - Physical - Chorus - 3.mp3,Chorus,1980s
+      Olivia Newton-John,Physical,78.437,45.0,ThatsMySong/1981 - Olivia Newton-John - Physical - Intro.mp3,Intro,1980s
+      Olivia Newton-John,Physical,108.186,45.0,ThatsMySong/1981 - Olivia Newton-John - Physical - Solo.mp3,Solo,1980s
+      Olivia Newton-John,Physical,140.115,45.0,ThatsMySong/1981 - Olivia Newton-John - Physical - Verse - 1.mp3,Verse,1980s
+      Olivia Newton-John,Physical,169.591,45.0,ThatsMySong/1981 - Olivia Newton-John - Physical - Verse - 2.mp3,Verse,1980s
+      Otis Redding,(Sittin' On) The Dock of the Bay,0.0,45.0,ThatsMySong/1968 - Otis Redding - (Sittin' On) The Dock of the Bay - Bridge.mp3,Bridge,1960s
+      Otis Redding,(Sittin' On) The Dock of the Bay,9.656,45.0,ThatsMySong/1968 - Otis Redding - (Sittin' On) The Dock of the Bay - Chorus - 1.mp3,Chorus,1960s
+      Otis Redding,(Sittin' On) The Dock of the Bay,28.03,45.0,ThatsMySong/1968 - Otis Redding - (Sittin' On) The Dock of the Bay - Chorus - 2.mp3,Chorus,1960s
+      Otis Redding,(Sittin' On) The Dock of the Bay,46.604,45.0,ThatsMySong/1968 - Otis Redding - (Sittin' On) The Dock of the Bay - Chorus - 3.mp3,Chorus,1960s
+      Otis Redding,(Sittin' On) The Dock of the Bay,64.039,166.8,ThatsMySong/1968 - Otis Redding - (Sittin' On) The Dock of the Bay - Intro.mp3,Intro,1960s
+      Otis Redding,(Sittin' On) The Dock of the Bay,84.558,45.0,ThatsMySong/1968 - Otis Redding - (Sittin' On) The Dock of the Bay - Verse - 1.mp3,Verse,1960s
+      Otis Redding,(Sittin' On) The Dock of the Bay,103.066,45.0,ThatsMySong/1968 - Otis Redding - (Sittin' On) The Dock of the Bay - Verse - 2.mp3,Verse,1960s
+      Otis Redding,(Sittin' On) The Dock of the Bay,120.031,45.0,ThatsMySong/1968 - Otis Redding - (Sittin' On) The Dock of the Bay - Verse - 3.mp3,Verse,1960s
+      Outkast,Hey Ya!,0.0,45.0,ThatsMySong/2000 - Outkast - Hey Ya! - Bridge - 1.mp3,Bridge,2000s
+      Outkast,Hey Ya!,34.11,45.0,ThatsMySong/2000 - Outkast - Hey Ya! - Bridge - 2.mp3,Bridge,2000s
+      Outkast,Hey Ya!,67.715,45.0,ThatsMySong/2000 - Outkast - Hey Ya! - Chorus - 1.mp3,Chorus,2000s
+      Outkast,Hey Ya!,100.35,45.0,ThatsMySong/2000 - Outkast - Hey Ya! - Chorus - 2.mp3,Chorus,2000s
+      Outkast,Hey Ya!,133.567,45.0,ThatsMySong/2000 - Outkast - Hey Ya! - Verse - 1.mp3,Verse,2000s
+      Outkast,Hey Ya!,167.313,45.0,ThatsMySong/2000 - Outkast - Hey Ya! - Verse - 2.mp3,Verse,2000s
+      Paula Abdul,Rush Rush,0.0,45.0,ThatsMySong/1991 - Paula Abdul - Rush Rush - Bridge.mp3,Bridge,1990s
+      Paula Abdul,Rush Rush,18.225,45.0,ThatsMySong/1991 - Paula Abdul - Rush Rush - Chorus - 1.mp3,Chorus,1990s
+      Paula Abdul,Rush Rush,46.932,45.0,ThatsMySong/1991 - Paula Abdul - Rush Rush - Chorus - 2.mp3,Chorus,1990s
+      Paula Abdul,Rush Rush,58.561,45.0,ThatsMySong/1991 - Paula Abdul - Rush Rush - Chorus - 3.mp3,Chorus,1990s
+      Paula Abdul,Rush Rush,80.615,45.0,ThatsMySong/1991 - Paula Abdul - Rush Rush - Intro.mp3,Intro,1990s
+      Paula Abdul,Rush Rush,110.944,45.0,ThatsMySong/1991 - Paula Abdul - Rush Rush - Prechorus - 1.mp3,Prechorus,1990s
+      Paula Abdul,Rush Rush,122.516,45.0,ThatsMySong/1991 - Paula Abdul - Rush Rush - Prechorus - 2.mp3,Prechorus,1990s
+      Paula Abdul,Rush Rush,165.703,45.0,ThatsMySong/1991 - Paula Abdul - Rush Rush - Prechorus - 3.mp3,Prechorus,1990s
+      Paula Abdul,Rush Rush,186.5,45.0,ThatsMySong/1991 - Paula Abdul - Rush Rush - Solo.mp3,Solo,1990s
+      Paula Abdul,Rush Rush,207.185,45.0,ThatsMySong/1991 - Paula Abdul - Rush Rush - Verse - 1.mp3,Verse,1990s
+      Paula Abdul,Rush Rush,218.701,45.0,ThatsMySong/1991 - Paula Abdul - Rush Rush - Verse - 2.mp3,Verse,1990s
+      Paul Mauriat,Love Is Blue,0.0,45.0,ThatsMySong/1967 - Paul Mauriat - Love Is Blue - Chorus - 1.mp3,Chorus,1960s
+      Paul Mauriat,Love Is Blue,13.913,45.0,ThatsMySong/1967 - Paul Mauriat - Love Is Blue - Chorus - 2.mp3,Chorus,1960s
+      Paul Mauriat,Love Is Blue,53.991,45.0,ThatsMySong/1967 - Paul Mauriat - Love Is Blue - Intro.mp3,Intro,1960s
+      Paul Mauriat,Love Is Blue,74.522,45.0,ThatsMySong/1967 - Paul Mauriat - Love Is Blue - Verse - 1.mp3,Verse,1960s
+      Paul Mauriat,Love Is Blue,98.546,45.0,ThatsMySong/1967 - Paul Mauriat - Love Is Blue - Verse - 2.mp3,Verse,1960s
+      Paul Mauriat,Love Is Blue,119.057,38.4,ThatsMySong/1967 - Paul Mauriat - Love Is Blue - Verse - 3.mp3,Verse,1960s
+      Paul McCartney and Michael Jackson,Say Say Say,0.0,45.0,ThatsMySong/1983 - Paul McCartney and Michael Jackson - Say Say Say - Bridge.mp3,Bridge,1980s
+      Paul McCartney and Michael Jackson,Say Say Say,16.686,45.0,ThatsMySong/1983 - Paul McCartney and Michael Jackson - Say Say Say - Chorus - 1.mp3,Chorus,1980s
+      Paul McCartney and Michael Jackson,Say Say Say,33.113,45.0,ThatsMySong/1983 - Paul McCartney and Michael Jackson - Say Say Say - Chorus - 2.mp3,Chorus,1980s
+      Paul McCartney and Michael Jackson,Say Say Say,57.694,45.0,ThatsMySong/1983 - Paul McCartney and Michael Jackson - Say Say Say - Chorus - 3.mp3,Chorus,1980s
+      Paul McCartney and Michael Jackson,Say Say Say,73.79,45.0,ThatsMySong/1983 - Paul McCartney and Michael Jackson - Say Say Say - Intro.mp3,Intro,1980s
+      Paul McCartney and Michael Jackson,Say Say Say,90.641,45.0,ThatsMySong/1983 - Paul McCartney and Michael Jackson - Say Say Say - Outro.mp3,Outro,1980s
+      Paul McCartney and Michael Jackson,Say Say Say,107.091,45.0,ThatsMySong/1983 - Paul McCartney and Michael Jackson - Say Say Say - Postchorus.mp3,Postchorus,1980s
+      Paul McCartney and Michael Jackson,Say Say Say,123.047,45.0,ThatsMySong/1983 - Paul McCartney and Michael Jackson - Say Say Say - Verse - 1.mp3,Verse,1980s
+      Paul McCartney and Michael Jackson,Say Say Say,139.167,45.0,ThatsMySong/1983 - Paul McCartney and Michael Jackson - Say Say Say - Verse - 2.mp3,Verse,1980s
+      Paul McCartney and Michael Jackson,Say Say Say,156.018,45.0,ThatsMySong/1983 - Paul McCartney and Michael Jackson - Say Say Say - Verse - 3.mp3,Verse,1980s
+      Paul McCartney (feat. Stevie Wonder),Ebony and Ivory,0.0,45.0,ThatsMySong/1982 - Paul McCartney (feat. Stevie Wonder) - Ebony and Ivory - Bridge.mp3,Bridge,1980s
+      Paul McCartney (feat. Stevie Wonder),Ebony and Ivory,6.822,45.0,ThatsMySong/1982 - Paul McCartney (feat. Stevie Wonder) - Ebony and Ivory - Chorus - 1.mp3,Chorus,1980s
+      Paul McCartney (feat. Stevie Wonder),Ebony and Ivory,33.615,45.0,ThatsMySong/1982 - Paul McCartney (feat. Stevie Wonder) - Ebony and Ivory - Chorus - 2.mp3,Chorus,1980s
+      Paul McCartney (feat. Stevie Wonder),Ebony and Ivory,60.384,45.0,ThatsMySong/1982 - Paul McCartney (feat. Stevie Wonder) - Ebony and Ivory - Chorus - 3.mp3,Chorus,1980s
+      Paul McCartney (feat. Stevie Wonder),Ebony and Ivory,81.157,45.0,ThatsMySong/1982 - Paul McCartney (feat. Stevie Wonder) - Ebony and Ivory - Intro.mp3,Intro,1980s
+      Paul McCartney (feat. Stevie Wonder),Ebony and Ivory,96.052,45.0,ThatsMySong/1982 - Paul McCartney (feat. Stevie Wonder) - Ebony and Ivory - Outro.mp3,Outro,1980s
+      Paul McCartney (feat. Stevie Wonder),Ebony and Ivory,107.921,45.0,ThatsMySong/1982 - Paul McCartney (feat. Stevie Wonder) - Ebony and Ivory - Solo.mp3,Solo,1980s
+      Paul McCartney (feat. Stevie Wonder),Ebony and Ivory,134.717,45.0,ThatsMySong/1982 - Paul McCartney (feat. Stevie Wonder) - Ebony and Ivory - Verse - 1.mp3,Verse,1980s
+      Paul McCartney (feat. Stevie Wonder),Ebony and Ivory,176.286,45.0,ThatsMySong/1982 - Paul McCartney (feat. Stevie Wonder) - Ebony and Ivory - Verse - 2.mp3,Verse,1980s
+      Percy Faith,Theme from _A Summer Place_,0.0,45.0,ThatsMySong/1959 - Percy Faith - Theme from _A Summer Place_ - Bridge.mp3,Bridge,1960s
+      Percy Faith,Theme from _A Summer Place_,7.834,45.0,ThatsMySong/1959 - Percy Faith - Theme from _A Summer Place_ - Intro.mp3,Intro,1960s
+      Percy Faith,Theme from _A Summer Place_,23.298,45.0,ThatsMySong/1959 - Percy Faith - Theme from _A Summer Place_ - Verse - 1.mp3,Verse,1960s
+      Percy Faith,Theme from _A Summer Place_,46.539,45.0,ThatsMySong/1959 - Percy Faith - Theme from _A Summer Place_ - Verse - 2.mp3,Verse,1960s
+      Percy Faith,Theme from _A Summer Place_,60.401,45.0,ThatsMySong/1959 - Percy Faith - Theme from _A Summer Place_ - Verse - 3.mp3,Verse,1960s
+      Percy Faith,Theme from _A Summer Place_,89.437,45.0,ThatsMySong/1959 - Percy Faith - Theme from _A Summer Place_ - Verse - 4.mp3,Verse,1960s
+      Queen,Another One Bites the Dust,0.0,45.0,ThatsMySong/1980 - Queen - Another One Bites the Dust - Bridge.mp3,Bridge,1980s
+      Queen,Another One Bites the Dust,22.161,45.0,ThatsMySong/1980 - Queen - Another One Bites the Dust - Chorus - 1.mp3,Chorus,1980s
+      Queen,Another One Bites the Dust,39.642,45.0,ThatsMySong/1980 - Queen - Another One Bites the Dust - Chorus - 2.mp3,Chorus,1980s
+      Queen,Another One Bites the Dust,65.826,45.0,ThatsMySong/1980 - Queen - Another One Bites the Dust - Intro.mp3,Intro,1980s
+      Queen,Another One Bites the Dust,83.296,45.0,ThatsMySong/1980 - Queen - Another One Bites the Dust - Verse - 1.mp3,Verse,1980s
+      Queen,Another One Bites the Dust,101.284,45.0,ThatsMySong/1980 - Queen - Another One Bites the Dust - Verse - 2.mp3,Verse,1980s
+      Queen,Another One Bites the Dust,157.49,45.0,ThatsMySong/1980 - Queen - Another One Bites the Dust - Verse - 3.mp3,Verse,1980s
+      Ray Charles,I Can't Stop Loving You,0.0,45.0,ThatsMySong/1962 - Ray Charles - I Can't Stop Loving You - Chorus - 1.mp3,Chorus,1960s
+      Ray Charles,I Can't Stop Loving You,49.0,45.0,ThatsMySong/1962 - Ray Charles - I Can't Stop Loving You - Chorus - 2.mp3,Chorus,1960s
+      Ray Charles,I Can't Stop Loving You,97.056,45.0,ThatsMySong/1962 - Ray Charles - I Can't Stop Loving You - Chorus - 3.mp3,Chorus,1960s
+      Ray Charles,I Can't Stop Loving You,145.233,45.0,ThatsMySong/1962 - Ray Charles - I Can't Stop Loving You - Verse - 1.mp3,Verse,1960s
+      Ray Charles,I Can't Stop Loving You,193.146,45.0,ThatsMySong/1962 - Ray Charles - I Can't Stop Loving You - Verse - 2.mp3,Verse,1960s
+      Roberta Flack,Killing Me Softly with His Song,0.0,45.0,ThatsMySong/1973 - Roberta Flack - Killing Me Softly with His Song - Bridge.mp3,Bridge,1970s
+      Roberta Flack,Killing Me Softly with His Song,31.419,45.0,ThatsMySong/1973 - Roberta Flack - Killing Me Softly with His Song - Chorus - 1.mp3,Chorus,1970s
+      Roberta Flack,Killing Me Softly with His Song,47.503,45.0,ThatsMySong/1973 - Roberta Flack - Killing Me Softly with His Song - Chorus - 2.mp3,Chorus,1970s
+      Roberta Flack,Killing Me Softly with His Song,71.636,45.0,ThatsMySong/1973 - Roberta Flack - Killing Me Softly with His Song - Chorus - 3.mp3,Chorus,1970s
+      Roberta Flack,Killing Me Softly with His Song,99.675,45.0,ThatsMySong/1973 - Roberta Flack - Killing Me Softly with His Song - Chorus - 4.mp3,Chorus,1970s
+      Roberta Flack,Killing Me Softly with His Song,123.368,45.0,ThatsMySong/1973 - Roberta Flack - Killing Me Softly with His Song - Chorus - 5.mp3,Chorus,1970s
+      Roberta Flack,Killing Me Softly with His Song,152.357,45.0,ThatsMySong/1973 - Roberta Flack - Killing Me Softly with His Song - Intro.mp3,Intro,1970s
+      Roberta Flack,Killing Me Softly with His Song,174.856,45.0,ThatsMySong/1973 - Roberta Flack - Killing Me Softly with His Song - Verse - 1.mp3,Verse,1970s
+      Roberta Flack,Killing Me Softly with His Song,202.174,45.0,ThatsMySong/1973 - Roberta Flack - Killing Me Softly with His Song - Verse - 2.mp3,Verse,1970s
+      Roberta Flack,Killing Me Softly with His Song,229.182,45.0,ThatsMySong/1973 - Roberta Flack - Killing Me Softly with His Song - Verse - 3.mp3,Verse,1970s
+      Rod Stewart,Tonight's the Night (Gonna Be Alright),0.0,45.0,ThatsMySong/1976 - Rod Stewart - Tonight's the Night (Gonna Be Alright) - Chorus - 1.mp3,Chorus,1970s
+      Rod Stewart,Tonight's the Night (Gonna Be Alright),17.741,45.0,ThatsMySong/1976 - Rod Stewart - Tonight's the Night (Gonna Be Alright) - Chorus - 2.mp3,Chorus,1970s
+      Rod Stewart,Tonight's the Night (Gonna Be Alright),44.352,45.0,ThatsMySong/1976 - Rod Stewart - Tonight's the Night (Gonna Be Alright) - Chorus - 3.mp3,Chorus,1970s
+      Rod Stewart,Tonight's the Night (Gonna Be Alright),65.67,45.0,ThatsMySong/1976 - Rod Stewart - Tonight's the Night (Gonna Be Alright) - Intro.mp3,Intro,1970s
+      Rod Stewart,Tonight's the Night (Gonna Be Alright),87.035,45.0,ThatsMySong/1976 - Rod Stewart - Tonight's the Night (Gonna Be Alright) - Outro.mp3,Outro,1970s
+      Rod Stewart,Tonight's the Night (Gonna Be Alright),108.282,45.0,ThatsMySong/1976 - Rod Stewart - Tonight's the Night (Gonna Be Alright) - Solo.mp3,Solo,1970s
+      Rod Stewart,Tonight's the Night (Gonna Be Alright),128.669,45.0,ThatsMySong/1976 - Rod Stewart - Tonight's the Night (Gonna Be Alright) - Verse - 1.mp3,Verse,1970s
+      Rod Stewart,Tonight's the Night (Gonna Be Alright),150.798,45.0,ThatsMySong/1976 - Rod Stewart - Tonight's the Night (Gonna Be Alright) - Verse - 2.mp3,Verse,1970s
+      Rod Stewart,Tonight's the Night (Gonna Be Alright),171.782,45.0,ThatsMySong/1976 - Rod Stewart - Tonight's the Night (Gonna Be Alright) - Verse - 3.mp3,Verse,1970s
+      Rod Stewart,Tonight's the Night (Gonna Be Alright),188.616,45.0,ThatsMySong/1976 - Rod Stewart - Tonight's the Night (Gonna Be Alright) - Verse - 4.mp3,Verse,1970s
+      Sinéad O'Connor,Nothing Compares 2 U,0.0,45.0,ThatsMySong/1990 - Sinéad O'Connor - Nothing Compares 2 U - Bridge.mp3,Bridge,1990s
+      Sinéad O'Connor,Nothing Compares 2 U,9.018,45.0,ThatsMySong/1990 - Sinéad O'Connor - Nothing Compares 2 U - Chorus - 1.mp3,Chorus,1990s
+      Sinéad O'Connor,Nothing Compares 2 U,71.968,45.0,ThatsMySong/1990 - Sinéad O'Connor - Nothing Compares 2 U - Chorus - 2.mp3,Chorus,1990s
+      Sinéad O'Connor,Nothing Compares 2 U,88.521,45.0,ThatsMySong/1990 - Sinéad O'Connor - Nothing Compares 2 U - Intro.mp3,Intro,1990s
+      Sinéad O'Connor,Nothing Compares 2 U,151.946,45.0,ThatsMySong/1990 - Sinéad O'Connor - Nothing Compares 2 U - Outro.mp3,Outro,1990s
+      Sinéad O'Connor,Nothing Compares 2 U,168.44,45.0,ThatsMySong/1990 - Sinéad O'Connor - Nothing Compares 2 U - Solo.mp3,Solo,1990s
+      Sinéad O'Connor,Nothing Compares 2 U,200.3,45.0,ThatsMySong/1990 - Sinéad O'Connor - Nothing Compares 2 U - Verse - 1.mp3,Verse,1990s
+      Sinéad O'Connor,Nothing Compares 2 U,232.518,45.0,ThatsMySong/1990 - Sinéad O'Connor - Nothing Compares 2 U - Verse - 2.mp3,Verse,1990s
+      Stevie B,Because I Love You (The Postman Song),0.0,45.0,ThatsMySong/1990 - Stevie B - Because I Love You (The Postman Song) - Chorus - 1.mp3,Chorus,1990s
+      Stevie B,Because I Love You (The Postman Song),30.218,45.0,ThatsMySong/1990 - Stevie B - Because I Love You (The Postman Song) - Chorus - 2.mp3,Chorus,1990s
+      Stevie B,Because I Love You (The Postman Song),58.585,45.0,ThatsMySong/1990 - Stevie B - Because I Love You (The Postman Song) - Chorus - 3.mp3,Chorus,1990s
+      Stevie B,Because I Love You (The Postman Song),90.078,45.0,ThatsMySong/1990 - Stevie B - Because I Love You (The Postman Song) - Intro.mp3,Intro,1990s
+      Stevie B,Because I Love You (The Postman Song),118.444,45.0,ThatsMySong/1990 - Stevie B - Because I Love You (The Postman Song) - Outro.mp3,Outro,1990s
+      Stevie B,Because I Love You (The Postman Song),149.821,45.0,ThatsMySong/1990 - Stevie B - Because I Love You (The Postman Song) - Solo.mp3,Solo,1990s
+      Stevie B,Because I Love You (The Postman Song),179.692,45.0,ThatsMySong/1990 - Stevie B - Because I Love You (The Postman Song) - Verse - 1.mp3,Verse,1990s
+      Stevie B,Because I Love You (The Postman Song),208.058,45.0,ThatsMySong/1990 - Stevie B - Because I Love You (The Postman Song) - Verse - 2.mp3,Verse,1990s
+      Stevie B,Because I Love You (The Postman Song),239.319,45.0,ThatsMySong/1990 - Stevie B - Because I Love You (The Postman Song) - Verse - 3.mp3,Verse,1990s
+      Survivor,Eye of the Tiger,0.0,45.0,ThatsMySong/1982 - Survivor - Eye of the Tiger - Chorus - 1.mp3,Chorus,1980s
+      Survivor,Eye of the Tiger,49.347,45.0,ThatsMySong/1982 - Survivor - Eye of the Tiger - Chorus - 2.mp3,Chorus,1980s
+      Survivor,Eye of the Tiger,83.866,45.0,ThatsMySong/1982 - Survivor - Eye of the Tiger - Chorus - 3.mp3,Chorus,1980s
+      Survivor,Eye of the Tiger,123.59,45.0,ThatsMySong/1982 - Survivor - Eye of the Tiger - Intro.mp3,Intro,1980s
+      Survivor,Eye of the Tiger,167.706,45.0,ThatsMySong/1982 - Survivor - Eye of the Tiger - Outro.mp3,Outro,1980s
+      Survivor,Eye of the Tiger,192.824,45.0,ThatsMySong/1982 - Survivor - Eye of the Tiger - Verse.mp3,Verse,1980s
+      The 5th Dimension,Aquarius_Let the Sunshine In,16.686,45.0,ThatsMySong/1969 - The 5th Dimension - Aquarius_Let the Sunshine In - Bridge.mp3,Bridge,1960s
+      The 5th Dimension,Aquarius_Let the Sunshine In,36.511,45.0,ThatsMySong/1969 - The 5th Dimension - Aquarius_Let the Sunshine In - Chorus - 1.mp3,Chorus,1960s
+      The 5th Dimension,Aquarius_Let the Sunshine In,57.034,45.0,ThatsMySong/1969 - The 5th Dimension - Aquarius_Let the Sunshine In - Chorus - 2.mp3,Chorus,1960s
+      The 5th Dimension,Aquarius_Let the Sunshine In,87.964,45.0,ThatsMySong/1969 - The 5th Dimension - Aquarius_Let the Sunshine In - Outro.mp3,Outro,1960s
+      The 5th Dimension,Aquarius_Let the Sunshine In,108.065,45.0,ThatsMySong/1969 - The 5th Dimension - Aquarius_Let the Sunshine In - Solo.mp3,Solo,1960s
+      The 5th Dimension,Aquarius_Let the Sunshine In,139.053,45.0,ThatsMySong/1969 - The 5th Dimension - Aquarius_Let the Sunshine In - Verse - 1.mp3,Verse,1960s
+      The 5th Dimension,Aquarius_Let the Sunshine In,151.618,45.0,ThatsMySong/1969 - The 5th Dimension - Aquarius_Let the Sunshine In - Verse - 2.mp3,Verse,1960s
+      The Archies,"Sugar, Sugar",0.0,45.0,\"ThatsMySong/1969 - The Archies - Sugar, Sugar - Bridge.mp3\",Bridge,1960s
+      The Archies,"Sugar, Sugar",8.182,45.0,\"ThatsMySong/1969 - The Archies - Sugar, Sugar - Chorus - 1.mp3\",Chorus,1960s
+      The Archies,"Sugar, Sugar",39.616,45.0,\"ThatsMySong/1969 - The Archies - Sugar, Sugar - Chorus - 2.mp3\",Chorus,1960s
+      The Archies,"Sugar, Sugar",54.208,45.0,\"ThatsMySong/1969 - The Archies - Sugar, Sugar - Intro.mp3\",Intro,1960s
+      The Archies,"Sugar, Sugar",86.425,45.0,\"ThatsMySong/1969 - The Archies - Sugar, Sugar - Verse - 1.mp3\",Verse,1960s
+      The Archies,"Sugar, Sugar",102.074,45.0,\"ThatsMySong/1969 - The Archies - Sugar, Sugar - Verse - 2.mp3\",Verse,1960s
+      The Beatles,Hey Jude,0.0,45.0,ThatsMySong/1968 - The Beatles - Hey Jude - Bridge - 1.mp3,Bridge,1960s
+      The Beatles,Hey Jude,25.952,45.0,ThatsMySong/1968 - The Beatles - Hey Jude - Bridge - 2.mp3,Bridge,1960s
+      The Beatles,Hey Jude,52.641,45.0,ThatsMySong/1968 - The Beatles - Hey Jude - Chorus - 1.mp3,Chorus,1960s
+      The Beatles,Hey Jude,92.236,45.0,ThatsMySong/1968 - The Beatles - Hey Jude - Chorus - 2.mp3,Chorus,1960s
+      The Beatles,Hey Jude,118.979,45.0,ThatsMySong/1968 - The Beatles - Hey Jude - Chorus - 3.mp3,Chorus,1960s
+      The Beatles,Hey Jude,158.638,45.0,ThatsMySong/1968 - The Beatles - Hey Jude - Chorus - 4.mp3,Chorus,1960s
+      The Beatles,Hey Jude,187.765,45.0,ThatsMySong/1968 - The Beatles - Hey Jude - Verse - 1.mp3,Verse,1960s
+      The Beatles,Hey Jude,229.245,45.0,ThatsMySong/1968 - The Beatles - Hey Jude - Verse - 2.mp3,Verse,1960s
+      The Beatles,Hey Jude,294.554,45.0,ThatsMySong/1968 - The Beatles - Hey Jude - Verse - 3.mp3,Verse,1960s
+      The Beatles,Hey Jude,320.398,45.0,ThatsMySong/1968 - The Beatles - Hey Jude - Verse - 4.mp3,Verse,1960s
+      The Beatles,I Want to Hold Your Hand,0.0,45.0,ThatsMySong/1963 - The Beatles - I Want to Hold Your Hand - Chorus - 1.mp3,Chorus,1960s
+      The Beatles,I Want to Hold Your Hand,6.678,45.0,ThatsMySong/1963 - The Beatles - I Want to Hold Your Hand - Chorus - 2.mp3,Chorus,1960s
+      The Beatles,I Want to Hold Your Hand,21.91,45.0,ThatsMySong/1963 - The Beatles - I Want to Hold Your Hand - Chorus - 3.mp3,Chorus,1960s
+      The Beatles,I Want to Hold Your Hand,28.295,45.0,ThatsMySong/1963 - The Beatles - I Want to Hold Your Hand - Intro.mp3,Intro,1960s
+      The Beatles,I Want to Hold Your Hand,43.702,45.0,ThatsMySong/1963 - The Beatles - I Want to Hold Your Hand - Postchorus - 1.mp3,Postchorus,1960s
+      The Beatles,I Want to Hold Your Hand,50.966,45.0,ThatsMySong/1963 - The Beatles - I Want to Hold Your Hand - Postchorus - 2.mp3,Postchorus,1960s
+      The Beatles,I Want to Hold Your Hand,70.533,45.0,ThatsMySong/1963 - The Beatles - I Want to Hold Your Hand - Verse - 1.mp3,Verse,1960s
+      The Beatles,I Want to Hold Your Hand,85.999,45.0,ThatsMySong/1963 - The Beatles - I Want to Hold Your Hand - Verse - 2.mp3,Verse,1960s
+      The Beatles,I Want to Hold Your Hand,93.351,45.0,ThatsMySong/1963 - The Beatles - I Want to Hold Your Hand - Verse - 3.mp3,Verse,1960s
+      The Bee Gees,How Deep Is Your Love,0.0,45.0,ThatsMySong/1977 - The Bee Gees - How Deep Is Your Love - Bridge.mp3,Bridge,1970s
+      The Bee Gees,How Deep Is Your Love,17.355,45.0,ThatsMySong/1977 - The Bee Gees - How Deep Is Your Love - Chorus - 1.mp3,Chorus,1970s
+      The Bee Gees,How Deep Is Your Love,35.641,45.0,ThatsMySong/1977 - The Bee Gees - How Deep Is Your Love - Chorus - 2.mp3,Chorus,1970s
+      The Bee Gees,How Deep Is Your Love,48.535,45.0,ThatsMySong/1977 - The Bee Gees - How Deep Is Your Love - Chorus - 3.mp3,Chorus,1970s
+      The Bee Gees,How Deep Is Your Love,73.93,45.0,ThatsMySong/1977 - The Bee Gees - How Deep Is Your Love - Chorus - 4.mp3,Chorus,1970s
+      The Bee Gees,How Deep Is Your Love,90.574,45.0,ThatsMySong/1977 - The Bee Gees - How Deep Is Your Love - Intro.mp3,Intro,1970s
+      The Bee Gees,How Deep Is Your Love,103.443,45.0,ThatsMySong/1977 - The Bee Gees - How Deep Is Your Love - Prechorus - 1.mp3,Prechorus,1970s
+      The Bee Gees,How Deep Is Your Love,128.409,45.0,ThatsMySong/1977 - The Bee Gees - How Deep Is Your Love - Prechorus - 2.mp3,Prechorus,1970s
+      The Bee Gees,How Deep Is Your Love,145.556,45.0,ThatsMySong/1977 - The Bee Gees - How Deep Is Your Love - Prechorus - 3.mp3,Prechorus,1970s
+      The Bee Gees,How Deep Is Your Love,158.253,45.0,ThatsMySong/1977 - The Bee Gees - How Deep Is Your Love - Verse - 1.mp3,Verse,1970s
+      The Bee Gees,How Deep Is Your Love,188.943,45.0,ThatsMySong/1977 - The Bee Gees - How Deep Is Your Love - Verse - 2.mp3,Verse,1970s
+      The Bee Gees,Night Fever,0.0,45.0,ThatsMySong/1978 - The Bee Gees - Night Fever - Chorus - 1.mp3,Chorus,1970s
+      The Bee Gees,Night Fever,18.893,45.0,ThatsMySong/1978 - The Bee Gees - Night Fever - Chorus - 2.mp3,Chorus,1970s
+      The Bee Gees,Night Fever,35.984,45.0,ThatsMySong/1978 - The Bee Gees - Night Fever - Chorus - 3.mp3,Chorus,1970s
+      The Bee Gees,Night Fever,49.657,45.0,ThatsMySong/1978 - The Bee Gees - Night Fever - Intro.mp3,Intro,1970s
+      The Bee Gees,Night Fever,67.297,45.0,ThatsMySong/1978 - The Bee Gees - Night Fever - Prechorus - 1.mp3,Prechorus,1970s
+      The Bee Gees,Night Fever,84.862,45.0,ThatsMySong/1978 - The Bee Gees - Night Fever - Prechorus - 2.mp3,Prechorus,1970s
+      The Bee Gees,Night Fever,102.193,45.0,ThatsMySong/1978 - The Bee Gees - Night Fever - Verse - 1.mp3,Verse,1970s
+      The Bee Gees,Night Fever,119.641,45.0,ThatsMySong/1978 - The Bee Gees - Night Fever - Verse - 2.mp3,Verse,1970s
+      The Bee Gees,Night Fever,133.185,45.0,ThatsMySong/1978 - The Bee Gees - Night Fever - Verse - 3.mp3,Verse,1970s
+      The Bee Gees,Night Fever,150.804,45.0,ThatsMySong/1978 - The Bee Gees - Night Fever - Verse - 4.mp3,Verse,1970s
+      The Bee Gees,Stayin' Alive,0.0,45.0,ThatsMySong/1977 - The Bee Gees - Stayin' Alive - Verse - 3.mp3,Verse,1970s
+      The Bee Gees,Stayin' Alive,0.0,45.0,ThatsMySong/1977 - The Bee Gees - Stayin' Alive - Bridge.mp3,Bridge,1970s
+      The Bee Gees,Stayin' Alive,13.245,45.0,ThatsMySong/1977 - The Bee Gees - Stayin' Alive - Chorus - 1.mp3,Chorus,1970s
+      The Bee Gees,Stayin' Alive,23.064,45.0,ThatsMySong/1977 - The Bee Gees - Stayin' Alive - Chorus - 2.mp3,Chorus,1970s
+      The Bee Gees,Stayin' Alive,32.769,45.0,ThatsMySong/1977 - The Bee Gees - Stayin' Alive - Chorus - 3.mp3,Chorus,1970s
+      The Bee Gees,Stayin' Alive,62.227,45.0,ThatsMySong/1977 - The Bee Gees - Stayin' Alive - Intro.mp3,Intro,1970s
+      The Bee Gees,Stayin' Alive,71.818,45.0,ThatsMySong/1977 - The Bee Gees - Stayin' Alive - Outro.mp3,Outro,1970s
+      The Bee Gees,Stayin' Alive,81.409,45.0,ThatsMySong/1977 - The Bee Gees - Stayin' Alive - Prechorus - 1.mp3,Prechorus,1970s
+      The Bee Gees,Stayin' Alive,111.537,45.0,ThatsMySong/1977 - The Bee Gees - Stayin' Alive - Prechorus - 2.mp3,Prechorus,1970s
+      The Bee Gees,Stayin' Alive,133.816,45.0,ThatsMySong/1977 - The Bee Gees - Stayin' Alive - Prechorus - 3.mp3,Prechorus,1970s
+      The Bee Gees,Stayin' Alive,143.589,45.0,ThatsMySong/1977 - The Bee Gees - Stayin' Alive - Verse - 1.mp3,Verse,1970s
+      The Bee Gees,Stayin' Alive,153.255,45.0,ThatsMySong/1977 - The Bee Gees - Stayin' Alive - Verse - 2.mp3,Verse,1970s
+      The Black Eyed Peas,Boom Boom Pow,0.0,45.0,ThatsMySong/2009 - The Black Eyed Peas - Boom Boom Pow - Verse - 4.mp3,Verse,2000s
+      The Black Eyed Peas,Boom Boom Pow,0.0,45.0,ThatsMySong/2009 - The Black Eyed Peas - Boom Boom Pow - Bridge.mp3,Bridge,2000s
+      The Black Eyed Peas,Boom Boom Pow,15.068,45.0,ThatsMySong/2009 - The Black Eyed Peas - Boom Boom Pow - Chorus - 1.mp3,Chorus,2000s
+      The Black Eyed Peas,Boom Boom Pow,28.744,45.0,ThatsMySong/2009 - The Black Eyed Peas - Boom Boom Pow - Chorus - 2.mp3,Chorus,2000s
+      The Black Eyed Peas,Boom Boom Pow,43.944,45.0,ThatsMySong/2009 - The Black Eyed Peas - Boom Boom Pow - Chrous - 3.mp3,Chrous,2000s
+      The Black Eyed Peas,Boom Boom Pow,59.425,45.0,ThatsMySong/2009 - The Black Eyed Peas - Boom Boom Pow - Intro.mp3,Intro,2000s
+      The Black Eyed Peas,Boom Boom Pow,73.467,45.0,ThatsMySong/2009 - The Black Eyed Peas - Boom Boom Pow - Outro.mp3,Outro,2000s
+      The Black Eyed Peas,Boom Boom Pow,88.727,45.0,ThatsMySong/2009 - The Black Eyed Peas - Boom Boom Pow - Prechorus - 1.mp3,Prechorus,2000s
+      The Black Eyed Peas,Boom Boom Pow,103.723,45.0,ThatsMySong/2009 - The Black Eyed Peas - Boom Boom Pow - Prechorus - 2.mp3,Prechorus,2000s
+      The Black Eyed Peas,Boom Boom Pow,133.259,45.0,ThatsMySong/2009 - The Black Eyed Peas - Boom Boom Pow - Verse - 1.mp3,Verse,2000s
+      The Black Eyed Peas,Boom Boom Pow,163.25,45.0,ThatsMySong/2009 - The Black Eyed Peas - Boom Boom Pow - Verse - 2.mp3,Verse,2000s
+      The Black Eyed Peas,Boom Boom Pow,199.672,45.0,ThatsMySong/2009 - The Black Eyed Peas - Boom Boom Pow - Verse - 3.mp3,Verse,2000s
+      The Black Eyed Peas,I Gotta Feeling,0.0,45.0,ThatsMySong/2009 - The Black Eyed Peas - I Gotta Feeling - Bridge.mp3,Bridge,2000s
+      The Black Eyed Peas,I Gotta Feeling,28.989,45.0,ThatsMySong/2009 - The Black Eyed Peas - I Gotta Feeling - Chorus - 1.mp3,Chorus,2000s
+      The Black Eyed Peas,I Gotta Feeling,90.013,45.0,ThatsMySong/2009 - The Black Eyed Peas - I Gotta Feeling - Chorus - 2.mp3,Chorus,2000s
+      The Black Eyed Peas,I Gotta Feeling,104.986,45.0,ThatsMySong/2009 - The Black Eyed Peas - I Gotta Feeling - Intro.mp3,Intro,2000s
+      The Black Eyed Peas,I Gotta Feeling,119.977,45.0,ThatsMySong/2009 - The Black Eyed Peas - I Gotta Feeling - Other - 1.mp3,Other,2000s
+      The Black Eyed Peas,I Gotta Feeling,148.589,45.0,ThatsMySong/2009 - The Black Eyed Peas - I Gotta Feeling - Other - 2.mp3,Other,2000s
+      The Black Eyed Peas,I Gotta Feeling,180.196,45.0,ThatsMySong/2009 - The Black Eyed Peas - I Gotta Feeling - Postchorus - 1.mp3,Postchorus,2000s
+      The Black Eyed Peas,I Gotta Feeling,194.99,45.0,ThatsMySong/2009 - The Black Eyed Peas - I Gotta Feeling - Postchorus - 2.mp3,Postchorus,2000s
+      The Black Eyed Peas,I Gotta Feeling,224.997,45.0,ThatsMySong/2009 - The Black Eyed Peas - I Gotta Feeling - Verse - 1.mp3,Verse,2000s
+      The Black Eyed Peas,I Gotta Feeling,239.954,45.0,ThatsMySong/2009 - The Black Eyed Peas - I Gotta Feeling - Verse - 2.mp3,Verse,2000s
+      The Emotions,Best of My Love,0.0,45.0,ThatsMySong/1977 - The Emotions - Best of My Love - Verse - 3.mp3,Verse,1970s
+      The Emotions,Best of My Love,0.0,45.0,ThatsMySong/1977 - The Emotions - Best of My Love - Chorus - 1.mp3,Chorus,1970s
+      The Emotions,Best of My Love,12.906,45.0,ThatsMySong/1977 - The Emotions - Best of My Love - Chorus - 2.mp3,Chorus,1970s
+      The Emotions,Best of My Love,45.88,45.0,ThatsMySong/1977 - The Emotions - Best of My Love - Chorus - 3.mp3,Chorus,1970s
+      The Emotions,Best of My Love,63.162,45.0,ThatsMySong/1977 - The Emotions - Best of My Love - Intro.mp3,Intro,1970s
+      The Emotions,Best of My Love,79.406,45.0,ThatsMySong/1977 - The Emotions - Best of My Love - Prechorus.mp3,Prechorus,1970s
+      The Emotions,Best of My Love,100.301,45.0,ThatsMySong/1977 - The Emotions - Best of My Love - Verse - 1.mp3,Verse,1970s
+      The Emotions,Best of My Love,116.932,45.0,ThatsMySong/1977 - The Emotions - Best of My Love - Verse - 2.mp3,Verse,1970s
+      The Four Seasons,Big Girls Don't Cry,0.0,45.0,ThatsMySong/1962 - The Four Seasons - Big Girls Don't Cry - Chorus - 1.mp3,Chorus,1960s
+      The Four Seasons,Big Girls Don't Cry,12.822,45.0,ThatsMySong/1962 - The Four Seasons - Big Girls Don't Cry - Chorus - 2.mp3,Chorus,1960s
+      The Four Seasons,Big Girls Don't Cry,43.004,37.0,ThatsMySong/1962 - The Four Seasons - Big Girls Don't Cry - Chorus - 3.mp3,Chorus,1960s
+      The Four Seasons,Big Girls Don't Cry,53.207,45.0,ThatsMySong/1962 - The Four Seasons - Big Girls Don't Cry - Intro.mp3,Intro,1960s
+      The Four Seasons,Big Girls Don't Cry,71.829,45.0,ThatsMySong/1962 - The Four Seasons - Big Girls Don't Cry - Other.mp3,Other,1960s
+      The Four Seasons,Big Girls Don't Cry,93.226,22.2,ThatsMySong/1962 - The Four Seasons - Big Girls Don't Cry - Outro.mp3,Outro,1960s
+      The Four Seasons,Big Girls Don't Cry,109.011,45.0,ThatsMySong/1962 - The Four Seasons - Big Girls Don't Cry - Verse - 1.mp3,Verse,1960s
+      The Four Seasons,Big Girls Don't Cry,123.806,45.0,ThatsMySong/1962 - The Four Seasons - Big Girls Don't Cry - Verse - 2.mp3,Verse,1960s
+      The J. Geils Band,Centerfold,0.0,45.0,ThatsMySong/1981 - The J. Geils Band - Centerfold - Bridge - 1.mp3,Bridge,1980s
+      The J. Geils Band,Centerfold,0.0,45.0,ThatsMySong/1981 - The J. Geils Band - Centerfold - Verse - 3.mp3,Verse,1980s
+      The J. Geils Band,Centerfold,17.081,45.0,ThatsMySong/1981 - The J. Geils Band - Centerfold - Bridge - 2.mp3,Bridge,1980s
+      The J. Geils Band,Centerfold,33.64,45.0,ThatsMySong/1981 - The J. Geils Band - Centerfold - Chorus - 1.mp3,Chorus,1980s
+      The J. Geils Band,Centerfold,42.017,45.0,ThatsMySong/1981 - The J. Geils Band - Centerfold - Chorus - 2.mp3,Chorus,1980s
+      The J. Geils Band,Centerfold,59.012,45.0,ThatsMySong/1981 - The J. Geils Band - Centerfold - Chorus - 3.mp3,Chorus,1980s
+      The J. Geils Band,Centerfold,75.473,45.0,ThatsMySong/1981 - The J. Geils Band - Centerfold - Intro.mp3,Intro,1980s
+      The J. Geils Band,Centerfold,83.981,45.0,ThatsMySong/1981 - The J. Geils Band - Centerfold - Outro.mp3,Outro,1980s
+      The J. Geils Band,Centerfold,101.029,45.0,ThatsMySong/1981 - The J. Geils Band - Centerfold - Prechorus - 1.mp3,Prechorus,1980s
+      The J. Geils Band,Centerfold,116.935,45.0,ThatsMySong/1981 - The J. Geils Band - Centerfold - Prechorus - 2.mp3,Prechorus,1980s
+      The J. Geils Band,Centerfold,134.462,45.0,ThatsMySong/1981 - The J. Geils Band - Centerfold - Prechorus - 3.mp3,Prechorus,1980s
+      The J. Geils Band,Centerfold,159.763,45.0,ThatsMySong/1981 - The J. Geils Band - Centerfold - Verse - 1.mp3,Verse,1980s
+      The J. Geils Band,Centerfold,168.636,45.0,ThatsMySong/1981 - The J. Geils Band - Centerfold - Verse - 2.mp3,Verse,1980s
+      The Knack,My Sharona,0.0,45.0,ThatsMySong/1979 - The Knack - My Sharona - Bridge.mp3,Bridge,1970s
+      The Knack,My Sharona,18.916,45.0,ThatsMySong/1979 - The Knack - My Sharona - Chorus - 1.mp3,Chorus,1970s
+      The Knack,My Sharona,32.51,45.0,ThatsMySong/1979 - The Knack - My Sharona - Chorus - 2.mp3,Chorus,1970s
+      The Knack,My Sharona,49.088,45.0,ThatsMySong/1979 - The Knack - My Sharona - Chorus - 3.mp3,Chorus,1970s
+      The Knack,My Sharona,62.239,45.0,ThatsMySong/1979 - The Knack - My Sharona - Intro.mp3,Intro,1970s
+      The Knack,My Sharona,78.67,45.0,ThatsMySong/1979 - The Knack - My Sharona - Outro.mp3,Outro,1970s
+      The Knack,My Sharona,117.126,45.0,ThatsMySong/1979 - The Knack - My Sharona - Verse - 1.mp3,Verse,1970s
+      The Knack,My Sharona,130.218,45.0,ThatsMySong/1979 - The Knack - My Sharona - Verse - 2.mp3,Verse,1970s
+      The Knack,My Sharona,159.244,45.0,ThatsMySong/1979 - The Knack - My Sharona - Verse - 3.mp3,Verse,1970s
+      The Monkees,I'm a Believer,0.0,45.0,ThatsMySong/1966 - The Monkees - I'm a Believer - Bridge.mp3,Bridge,1960s
+      The Monkees,I'm a Believer,5.093,45.0,ThatsMySong/1966 - The Monkees - I'm a Believer - Chorus - 1.mp3,Chorus,1960s
+      The Monkees,I'm a Believer,27.602,45.0,ThatsMySong/1966 - The Monkees - I'm a Believer - Chorus - 2.mp3,Chorus,1960s
+      The Monkees,I'm a Believer,49.895,45.0,ThatsMySong/1966 - The Monkees - I'm a Believer - Chorus - 3.mp3,Chorus,1960s
+      The Monkees,I'm a Believer,72.479,45.0,ThatsMySong/1966 - The Monkees - I'm a Believer - Intro.mp3,Intro,1960s
+      The Monkees,I'm a Believer,95.18,45.0,ThatsMySong/1966 - The Monkees - I'm a Believer - Solo.mp3,Solo,1960s
+      The Monkees,I'm a Believer,106.181,45.0,ThatsMySong/1966 - The Monkees - I'm a Believer - Verse - 1.mp3,Verse,1960s
+      The Monkees,I'm a Believer,117.897,45.0,ThatsMySong/1966 - The Monkees - I'm a Believer - Verse - 2.mp3,Verse,1960s
+      The Police,Every Breath You Take,0.0,45.0,ThatsMySong/1983 - The Police - Every Breath You Take - Bridge.mp3,Bridge,1980s
+      The Police,Every Breath You Take,14.936,45.0,ThatsMySong/1983 - The Police - Every Breath You Take - Chorus - 1.mp3,Chorus,1980s
+      The Police,Every Breath You Take,47.633,45.0,ThatsMySong/1983 - The Police - Every Breath You Take - Chorus - 2.mp3,Chorus,1980s
+      The Police,Every Breath You Take,63.999,45.0,ThatsMySong/1983 - The Police - Every Breath You Take - Intro.mp3,Intro,1980s
+      The Police,Every Breath You Take,81.87,45.0,ThatsMySong/1983 - The Police - Every Breath You Take - Other.mp3,Other,1980s
+      The Police,Every Breath You Take,112.367,45.0,ThatsMySong/1983 - The Police - Every Breath You Take - Outro.mp3,Outro,1980s
+      The Police,Every Breath You Take,133.543,45.0,ThatsMySong/1983 - The Police - Every Breath You Take - Verse - 1.mp3,Verse,1980s
+      The Police,Every Breath You Take,149.899,45.0,ThatsMySong/1983 - The Police - Every Breath You Take - Verse - 2.mp3,Verse,1980s
+      The Police,Every Breath You Take,179.011,45.0,ThatsMySong/1983 - The Police - Every Breath You Take - Verse - 3.mp3,Verse,1980s
+      The Steve Miller Band,Abracadabra,0.0,45.0,ThatsMySong/1981 - The Steve Miller Band - Abracadabra - Bridge - 1.mp3,Bridge,1980s
+      The Steve Miller Band,Abracadabra,16.237,45.0,ThatsMySong/1981 - The Steve Miller Band - Abracadabra - Bridge - 2.mp3,Bridge,1980s
+      The Steve Miller Band,Abracadabra,31.406,45.0,ThatsMySong/1981 - The Steve Miller Band - Abracadabra - Chorus - 1.mp3,Chorus,1980s
+      The Steve Miller Band,Abracadabra,45.784,45.0,ThatsMySong/1981 - The Steve Miller Band - Abracadabra - Chorus - 2.mp3,Chorus,1980s
+      The Steve Miller Band,Abracadabra,61.324,45.0,ThatsMySong/1981 - The Steve Miller Band - Abracadabra - Chorus - 3.mp3,Chorus,1980s
+      The Steve Miller Band,Abracadabra,75.957,45.0,ThatsMySong/1981 - The Steve Miller Band - Abracadabra - Intro.mp3,Intro,1980s
+      The Steve Miller Band,Abracadabra,91.49,45.0,ThatsMySong/1981 - The Steve Miller Band - Abracadabra - Outro.mp3,Outro,1980s
+      The Steve Miller Band,Abracadabra,106.503,45.0,ThatsMySong/1981 - The Steve Miller Band - Abracadabra - Solo - 1.mp3,Solo,1980s
+      The Steve Miller Band,Abracadabra,121.052,45.0,ThatsMySong/1981 - The Steve Miller Band - Abracadabra - Solo - 2.mp3,Solo,1980s
+      The Steve Miller Band,Abracadabra,136.53,45.0,ThatsMySong/1981 - The Steve Miller Band - Abracadabra - Verse - 1.mp3,Verse,1980s
+      The Steve Miller Band,Abracadabra,155.261,45.0,ThatsMySong/1981 - The Steve Miller Band - Abracadabra - Verse - 2.mp3,Verse,1980s
+      The Steve Miller Band,Abracadabra,196.583,45.0,ThatsMySong/1981 - The Steve Miller Band - Abracadabra - Verse - 3.mp3,Verse,1980s
+      The Steve Miller Band,Abracadabra,219.235,45.0,ThatsMySong/1981 - The Steve Miller Band - Abracadabra - Verse - 4.mp3,Verse,1980s
+      The Steve Miller Band,Abracadabra,241.917,45.0,ThatsMySong/1981 - The Steve Miller Band - Abracadabra - Verse - 5.mp3,Verse,1980s
+      The Steve Miller Band,Abracadabra,263.082,45.0,ThatsMySong/1981 - The Steve Miller Band - Abracadabra - Verse - 6.mp3,Verse,1980s
+      Timbaland (feat. OneRepublic),Apologize,0.0,45.0,ThatsMySong/2007 - Timbaland (feat. OneRepublic) - Apologize - Bridge.mp3,Bridge,2000s
+      Timbaland (feat. OneRepublic),Apologize,15.802,45.0,ThatsMySong/2007 - Timbaland (feat. OneRepublic) - Apologize - Chorus - 1.mp3,Chorus,2000s
+      Timbaland (feat. OneRepublic),Apologize,48.818,45.0,ThatsMySong/2007 - Timbaland (feat. OneRepublic) - Apologize - Chorus - 2.mp3,Chorus,2000s
+      Timbaland (feat. OneRepublic),Apologize,73.227,45.0,ThatsMySong/2007 - Timbaland (feat. OneRepublic) - Apologize - Chorus - 3.mp3,Chorus,2000s
+      Timbaland (feat. OneRepublic),Apologize,105.608,45.0,ThatsMySong/2007 - Timbaland (feat. OneRepublic) - Apologize - Intro.mp3,Intro,2000s
+      Timbaland (feat. OneRepublic),Apologize,120.987,45.0,ThatsMySong/2007 - Timbaland (feat. OneRepublic) - Apologize - Verse - 1.mp3,Verse,2000s
+      Timbaland (feat. OneRepublic),Apologize,139.541,45.0,ThatsMySong/2007 - Timbaland (feat. OneRepublic) - Apologize - Verse - 2.mp3,Verse,2000s
+      Whitney Houston,I Will Always Love You,0.0,45.0,ThatsMySong/1992 - Whitney Houston - I Will Always Love You - Chorus - 1.mp3,Chorus,1990s
+      Whitney Houston,I Will Always Love You,42.719,45.0,ThatsMySong/1992 - Whitney Houston - I Will Always Love You - Chorus - 2.mp3,Chorus,1990s
+      Whitney Houston,I Will Always Love You,66.874,45.0,ThatsMySong/1992 - Whitney Houston - I Will Always Love You - Chorus - 3.mp3,Chorus,1990s
+      Whitney Houston,I Will Always Love You,76.719,45.0,ThatsMySong/1992 - Whitney Houston - I Will Always Love You - Intro.mp3,Intro,1990s
+      Whitney Houston,I Will Always Love You,105.599,45.0,ThatsMySong/1992 - Whitney Houston - I Will Always Love You - Postchorus.mp3,Postchorus,1990s
+      Whitney Houston,I Will Always Love You,127.316,45.0,ThatsMySong/1992 - Whitney Houston - I Will Always Love You - Solo.mp3,Solo,1990s
+      Whitney Houston,I Will Always Love You,155.252,45.0,ThatsMySong/1992 - Whitney Houston - I Will Always Love You - Verse - 1.mp3,Verse,1990s
+      Whitney Houston,I Will Always Love You,188.059,45.0,ThatsMySong/1992 - Whitney Houston - I Will Always Love You - Verse - 2.mp3,Verse,1990s
+      Wild Cherry,Play That Funky Music,0.0,45.0,ThatsMySong/1976 - Wild Cherry - Play That Funky Music - Chorus.mp3,Chorus,1970s
+      Wild Cherry,Play That Funky Music,16.797,45.0,ThatsMySong/1976 - Wild Cherry - Play That Funky Music - Intro.mp3,Intro,1970s
+      Wild Cherry,Play That Funky Music,52.587,45.0,ThatsMySong/1976 - Wild Cherry - Play That Funky Music - Prechorus - 1.mp3,Prechorus,1970s
+      Wild Cherry,Play That Funky Music,62.15,45.0,ThatsMySong/1976 - Wild Cherry - Play That Funky Music - Prechorus - 2.mp3,Prechorus,1970s
+      Wild Cherry,Play That Funky Music,88.606,45.0,ThatsMySong/1976 - Wild Cherry - Play That Funky Music - Solo.mp3,Solo,1970s
+      Wild Cherry,Play That Funky Music,105.556,45.0,ThatsMySong/1976 - Wild Cherry - Play That Funky Music - Verse - 1.mp3,Verse,1970s
+      Wild Cherry,Play That Funky Music,200.239,45.0,ThatsMySong/1976 - Wild Cherry - Play That Funky Music - Verse - 2.mp3,Verse,1970s
+      Wings,Silly Love Songs,0.0,45.0,ThatsMySong/1976 - Wings - Silly Love Songs - Bridge - 1.mp3,Bridge,1970s
+      Wings,Silly Love Songs,22.557,45.0,ThatsMySong/1976 - Wings - Silly Love Songs - Bridge - 2.mp3,Bridge,1970s
+      Wings,Silly Love Songs,45.827,45.0,ThatsMySong/1976 - Wings - Silly Love Songs - Bridge - 3.mp3,Bridge,1970s
+      Wings,Silly Love Songs,61.745,45.0,ThatsMySong/1976 - Wings - Silly Love Songs - Chorus - 1.mp3,Chorus,1970s
+      Wings,Silly Love Songs,92.529,45.0,ThatsMySong/1976 - Wings - Silly Love Songs - Chorus - 2.mp3,Chorus,1970s
+      Wings,Silly Love Songs,107.573,45.0,ThatsMySong/1976 - Wings - Silly Love Songs - Intro.mp3,Intro,1970s
+      Wings,Silly Love Songs,123.526,45.0,ThatsMySong/1976 - Wings - Silly Love Songs - Prechorus - 1.mp3,Prechorus,1970s
+      Wings,Silly Love Songs,139.016,45.0,ThatsMySong/1976 - Wings - Silly Love Songs - Prechorus - 2.mp3,Prechorus,1970s
+      Wings,Silly Love Songs,160.734,45.0,ThatsMySong/1976 - Wings - Silly Love Songs - Solo - 1.mp3,Solo,1970s
+      Wings,Silly Love Songs,190.982,45.0,ThatsMySong/1976 - Wings - Silly Love Songs - Solo - 2.mp3,Solo,1970s
+      Wings,Silly Love Songs,221.421,45.0,ThatsMySong/1976 - Wings - Silly Love Songs - Verse - 1.mp3,Verse,1970s
+      Wings,Silly Love Songs,251.929,45.0,ThatsMySong/1976 - Wings - Silly Love Songs - Verse - 2.mp3,Verse,1970s
+- model: question.questionlist
+  pk: 47
+  fields:
+    name: VANDERBILT_FIXED
+    block: 45
+    index: 0
+    randomize: false
+- model: question.questioninlist
+  fields:
+    questionlist: 47
+    question: P08_1
+    index: 1
+- model: question.questioninlist
+  fields:
+    questionlist: 47
+    question: P07_1
+    index: 2
+- model: question.questioninlist
+  fields:
+    questionlist: 47
+    question: VB_01
+    index: 3
+- model: question.questioninlist
+  fields:
+    questionlist: 47
+    question: VB_02
+    index: 4
+- model: question.questioninlist
+  fields:
+    questionlist: 47
+    question: VB_03
+    index: 5
+- model: question.questionlist
+  pk: 48
+  fields:
+    name: VANDERBILT_RANDOM
+    block: 45
+    index: 1
+    randomize: true
+- model: question.questioninlist
+  fields:
+    questionlist: 48
+    question: P03_1
+    index: 1
+- model: question.questioninlist
+  fields:
+    questionlist: 48
+    question: P04_4
+    index: 2
+- model: question.questioninlist
+  fields:
+    questionlist: 48
+    question: P05_5
+    index: 3
+- model: question.questioninlist
+  fields:
+    questionlist: 48
+    question: P09_2
+    index: 4
+- model: question.questioninlist
+  fields:
+    questionlist: 48
+    question: P14_4
+    index: 5
+- model: question.questioninlist
+  fields:
+    questionlist: 48
+    question: P15_1
+    index: 6
+- model: question.questioninlist
+  fields:
+    questionlist: 48
+    question: VB_04
+    index: 7
+- model: question.questioninlist
+  fields:
+    questionlist: 48
+    question: PHENOTYPES_3
+    index: 8
+- model: question.questioninlist
+  fields:
+    questionlist: 48
+    question: VB_05
+    index: 9
+- model: question.questioninlist
+  fields:
+    questionlist: 48
+    question: VB_06
+    index: 10

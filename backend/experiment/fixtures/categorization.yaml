@@ -1,0 +1,102 @@
+- model: experiment.experiment
+  pk: 31
+  fields:
+    name: Categorization
+    identifier: cat
+    active: true
+- model: experiment.phase
+  pk: 31
+  fields:
+    experiment: 31
+- model: experiment.block
+  pk: 31
+  fields:
+    phase: 31
+    experiment: 31
+    index: 0
+    identifier: cat
+    rounds: 70
+    bonus_points: 0
+    rules: CATEGORIZATION
+    playlists:
+    - 31
+- model: section.playlist
+  pk: 31
+  fields:
+    name: Categorization
+    csv: |
+      P1 F0=290Hz A-290Hz(2.6k-3.1k-3.6k-4.1k-4.6k).wav,C3FcP1A,0.0,1.25,CAT/C3FcP1A.wav,1A,CROSSED
+      P1 F0=290Hz A-290Hz(2.6k-3.1k-3.6k-4.1k-4.6k).wav,S3FcP1A,0.0,1.25,CAT/S3FcP1A.wav,1A,SAME
+      P1 F0=290Hz B-290Hz(4.6k-4.1k-3.6k-3.1k-2.6k).wav,C3FcP1B,0.0,1.25,CAT/C3FcP1B.wav,1B,CROSSED
+      P1 F0=290Hz B-290Hz(4.6k-4.1k-3.6k-3.1k-2.6k).wav,S3FcP1B,0.0,1.25,CAT/S3FcP1B.wav,1B,SAME
+      P1 Formant3.6k A-150Hz(3.6k)-220Hz(3.6k)-290Hz(3.6k)-360Hz(3.6k)-430Hz(3.6k).wav,S4PcF1A,0.0,1.25,CAT/S4PcF1A.wav,1A,SAME
+      P1 Formant3.6k A-430Hz(3.6k)-360Hz(3.6k)-290Hz(3.6k)-220Hz(3.6k)-150Hz(3.6k).wav,C4PcF1A,0.0,1.25,CAT/C4PcF1A.wav,1A,CROSSED
+      P1 Formant3.6k B-150Hz(3.6k)-220Hz(3.6k)-290Hz(3.6k)-360Hz(3.6k)-430Hz(3.6k).wav,C4PcF1B,0.0,1.25,CAT/C4PcF1B.wav,1B,CROSSED
+      P1 Formant3.6k B-430Hz(3.6k)-360Hz(3.6k)-290Hz(3.6k)-220Hz(3.6k)-150Hz(3.6k).wav,S4PcF1B,0.0,1.25,CAT/S4PcF1B.wav,1B,SAME
+      P1 Formants = Pitches A-150Hz(2.6k)-220Hz(3.1k)-290Hz(3.6k)-360Hz(4.1k)-430Hz(4.6k).wav,C5P=F1A,0.0,1.25,CAT/C5P=F1A.wav,1A,CROSSED
+      P1 Formants = Pitches B-430Hz(4.6k)-360Hz(4.1k)-290Hz(3.6k)-220Hz(3.1k)-150Hz(2.6k).wav,C5P=F1B,0.0,1.25,CAT/C5P=F1B.wav,1B,CROSSED
+      P1 Formants x Pitches A-430Hz(2.6k)-360Hz(3.1k)-290Hz(3.6k)-220Hz(4.1k)-150Hz(4.6k).wav,S5PxF1A,0.0,1.25,CAT/S5PxF1A.wav,1A,SAME
+      P1 Formants x Pitches B-150Hz(4.6k)-220Hz(4.1k)-290Hz(3.6k)-360Hz(3.1k)-430Hz(2.6k).wav,S5PxF1B,0.0,1.25,CAT/S5PxF1B.wav,1B,SAME
+      P1 No-Formant A-150Hz-220Hz-290Hz-360Hz-430Hz.wav,S2PnF1A,0.0,1.25,CAT/S2PnF1A.wav,1A,SAME
+      P1 No-Formant A-430Hz-360Hz-290Hz-220Hz-150Hz.wav,C2PnF1A,0.0,1.25,CAT/C2PnF1A.wav,1A,CROSSED
+      P1 No-Formant B-150Hz-220Hz-290Hz-360Hz-430Hz.wav,C2PnF1B,0.0,1.25,CAT/C2PnF1B.wav,1B,CROSSED
+      P1 No-Formant B-430Hz-360Hz-290Hz-220Hz-150Hz.wav,S2PnF1B,0.0,1.25,CAT/S2PnF1B.wav,1B,SAME
+      P1 Training A-150Hz(2.6k)-220Hz(3.1k)-290Hz(3.6k)-360Hz(4.1k)-430Hz(4.6k).wav,S0T1A,0.0,1.25,CAT/S0T1A.wav,1A,SAME
+      P1 Training A-430Hz(2.6k)-360Hz(3.1k)-290Hz(3.6k)-220Hz(4.1k)-150Hz(4.6k).wav,C0T1A,0.0,1.25,CAT/C0T1A.wav,1A,CROSSED
+      P1 Training B-150Hz(4.6k)-220Hz(4.1k)-290Hz(3.6k)-360Hz(3.1k)-430Hz(2.6k).wav,C0T1B,0.0,1.25,CAT/C0T1B.wav,1B,CROSSED
+      P1 Training B-430Hz(4.6k)-360Hz(4.1k)-290Hz(3.6k)-220Hz(3.1k)-150Hz(2.6k).wav,S0T1B,0.0,1.25,CAT/S0T1B.wav,1B,SAME
+      P1 Vocoded A-150Hz(2.6k)-220Hz(3.1k)-290Hz(3.6k)-360Hz(4.1k)-430Hz(4.6k).wav,S1VnP1A,0.0,1.25,CAT/S1VnP1A.wav,1A,SAME
+      P1 Vocoded A-430Hz(2.6k)-360Hz(3.1k)-290Hz(3.6k)-220Hz(4.1k)-150Hz(4.6k).wav,C1VnP1A,0.0,1.25,CAT/C1VnP1A.wav,1A,CROSSED
+      P1 Vocoded B-150Hz(4.6k)-220Hz(4.1k)-290Hz(3.6k)-360Hz(3.1k)-430Hz(2.6k).wav,C1VnP1B,0.0,1.25,CAT/C1VnP1B.wav,1B,CROSSED
+      P1 Vocoded B-430Hz(4.6k)-360Hz(4.1k)-290Hz(3.6k)-220Hz(3.1k)-150Hz(2.6k).wav,S1VnP1B,0.0,1.25,CAT/S1VnP1B.wav,1B,SAME
+      P2 F0=255Hz A-255Hz(2.1k-2.7k-3.3k-3.9k-4.5k).wav,C3FcP2A,0.0,1.25,CAT/C3FcP2A.wav,2A,CROSSED
+      P2 F0=255Hz A-255Hz(2.1k-2.7k-3.3k-3.9k-4.5k).wav,S3FcP2A,0.0,1.25,CAT/S3FcP2A.wav,2A,SAME
+      P2 F0=255Hz B-255Hz(4.5k-3.9k-3.3k-2.7k-2.1k).wav,C3FcP2B,0.0,1.25,CAT/C3FcP2B.wav,2B,CROSSED
+      P2 F0=255Hz B-255Hz(4.5k-3.9k-3.3k-2.7k-2.1k).wav,S3FcP2B,0.0,1.25,CAT/S3FcP2B.wav,2B,SAME
+      P2 Formant3.3k A-105Hz(3.3k)-180Hz(3.3k)-255Hz(3.3k)-330Hz(3.3k)-405Hz(3.3k).wav,S4PcF2A,0.0,1.25,CAT/S4PcF2A.wav,2A,SAME
+      P2 Formant3.3k A-405Hz(3.3k)-330Hz(3.3k)-255Hz(3.3k)-180Hz(3.3k)-105Hz(3.3k).wav,C4PcF2A,0.0,1.25,CAT/C4PcF2A.wav,2A,CROSSED
+      P2 Formant3.3k B-105Hz(3.3k)-180Hz(3.3k)-255Hz(3.3k)-330Hz(3.3k)-405Hz(3.3k).wav,C4PcF2B,0.0,1.25,CAT/C4PcF2B.wav,2B,CROSSED
+      P2 Formant3.3k B-405Hz(3.3k)-330Hz(3.3k)-255Hz(3.3k)-180Hz(3.3k)-105Hz(3.3k).wav,S4PcF2B,0.0,1.25,CAT/S4PcF2B.wav,2B,SAME
+      P2 Formants = Pitches A-105Hz(2.1k)-180Hz(2.7k)-255Hz(3.3k)-330Hz(3.9k)-405Hz(4.5k).wav,C5P=F2A,0.0,1.25,CAT/C5P=F2A.wav,2A,CROSSED
+      P2 Formants = Pitches B-405Hz(4.5k)-330Hz(3.9k)-255Hz(3.3k)-180Hz(2.7k)-105Hz(2.1k).wav,C5P=F2B,0.0,1.25,CAT/C5P=F2B.wav,2B,CROSSED
+      P2 Formants x Pitches A-405Hz(2.1k)-330Hz(2.7k)-255Hz(3.3k)-180Hz(3.9k)-105Hz(4.5k).wav,S5PxF2A,0.0,1.25,CAT/S5PxF2A.wav,2A,SAME
+      P2 Formants x Pitches B-105Hz(4.5k)-180Hz(3.9k)-255Hz(3.3k)-330Hz(2.7k)-405Hz(2.1k).wav,S5PxF2B,0.0,1.25,CAT/S5PxF2B.wav,2B,SAME
+      P2 No-Formant A-105Hz-180Hz-255Hz-330Hz-405Hz.wav,S2PnF2A,0.0,1.25,CAT/S2PnF2A.wav,2A,SAME
+      P2 No-Formant A-405Hz-330Hz-255Hz-180Hz-105Hz.wav,C2PnF2A,0.0,1.25,CAT/C2PnF2A.wav,2A,CROSSED
+      P2 No-Formant B-105Hz-180Hz-255Hz-330Hz-405Hz.wav,C2PnF2B,0.0,1.25,CAT/C2PnF2B.wav,2B,CROSSED
+      P2 No-Formant B-405Hz-330Hz-255Hz-180Hz-105Hz.wav,S2PnF2B,0.0,1.25,CAT/S2PnF2B.wav,2B,SAME
+      P2 Training A-105Hz(2.1k)-180Hz(2.7k)-255Hz(3.3k)-330Hz(3.9k)-405Hz(4.5k).wav,S0T2A,0.0,1.25,CAT/S0T2A.wav,2A,SAME
+      P2 Training A-405Hz(2.1k)-330Hz(2.7k)-255Hz(3.3k)-180Hz(3.9k)-105Hz(4.5k).wav,C0T2A,0.0,1.25,CAT/C0T2A.wav,2A,CROSSED
+      P2 Training B-105Hz(4.5k)-180Hz(3.9k)-255Hz(3.3k)-330Hz(2.7k)-405Hz(2.1k).wav,C0T2B,0.0,1.25,CAT/C0T2B.wav,2B,CROSSED
+      P2 Training B-405Hz(4.5k)-330Hz(3.9k)-255Hz(3.3k)-180Hz(2.7k)-105Hz(2.1k).wav,S0T2B,0.0,1.25,CAT/S0T2B.wav,2B,SAME
+      P2 Vocoded A-105Hz(2.1k)-180Hz(2.7k)-255Hz(3.3k)-330Hz(3.9k)-405Hz(4.5k).wav,S1VnP2A,0.0,1.25,CAT/S1VnP2A.wav,2A,SAME
+      P2 Vocoded A-405Hz(2.1k)-330Hz(2.7k)-255Hz(3.3k)-180Hz(3.9k)-105Hz(4.5k).wav,C1VnP2A,0.0,1.25,CAT/C1VnP2A.wav,2A,CROSSED
+      P2 Vocoded B-105Hz(4.5k)-180Hz(3.9k)-255Hz(3.3k)-330Hz(2.7k)-405Hz(2.1k).wav,C1VnP2B,0.0,1.25,CAT/C1VnP2B.wav,2B,CROSSED
+      P2 Vocoded B-405Hz(4.5k)-330Hz(3.9k)-255Hz(3.3k)-180Hz(2.7k)-105Hz(2.1k).wav,S1VnP2B,0.0,1.25,CAT/S1VnP2B.wav,2B,SAME
+- model: question.questionlist
+  pk: 31
+  fields:
+    name: Categorization questions
+    block: 31
+    index: 0
+    randomize: false
+- model: question.questioninlist
+  fields:
+    questionlist: 31
+    question: dgf_age
+    index: 0
+- model: question.questioninlist
+  fields:
+    questionlist: 31
+    question: dgf_gender_reduced
+    index: 1
+- model: question.questioninlist
+  fields:
+    questionlist: 31
+    question: dgf_native_language
+    index: 2
+- model: question.questioninlist
+  fields:
+    questionlist: 31
+    question: dgf_musical_experience
+    index: 3

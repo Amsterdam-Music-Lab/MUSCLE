@@ -1,11 +1,15 @@
-import { PlaylistAction, SharedActionProps } from "@/types/Action";
 import { useEffect } from "react";
+
+import { setPlaylist } from "@/API";
+import { PlaylistAction, SharedActionProps, Playlist as IPlaylist } from "@/types/Action";
+import useBoundStore from "@/util/stores";
 
 /**
  * Playlist is a block view, that handles (auto)selection of a playlist
  */
-const Playlist = ({ block, instruction, onNext, playlist }: PlaylistAction & SharedActionProps) => {
-    const playlists = block.playlists;
+const Playlist = ({ instruction, onNext, playlists, participant }: PlaylistAction & SharedActionProps) => {
+    const session = useBoundStore((state) => state.session);
+    const theme = useBoundStore((state) => state.theme);
 
     useEffect(() => {
         if (playlists.length < 2) {
@@ -25,11 +29,10 @@ const Playlist = ({ block, instruction, onNext, playlist }: PlaylistAction & Sha
                             key={playlistItem.id}
                             playlist={playlistItem}
                             onClick={(playlistId) => {
-                                playlist.current = playlistId;
-                                onNext();
+                                setPlaylist({sessionID: session!.id, playlistID: playlistId, participant}).then( () => onNext() );
                             }}
                             delay={index * 250}
-                            iconColor={block.theme?.colorPrimary}
+                            iconColor={theme!.colorPrimary}
                         />
                     ))}
                 </ul>
@@ -40,8 +43,8 @@ const Playlist = ({ block, instruction, onNext, playlist }: PlaylistAction & Sha
 
 interface PlaylistItemProps {
     delay: number;
-    playlist: { id: string, name: string };
-    onClick: (playlistId: string) => void;
+    playlist: IPlaylist;
+    onClick: (playlistId: number) => void;
     iconColor: string;
 }
 

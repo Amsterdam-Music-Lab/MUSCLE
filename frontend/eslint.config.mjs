@@ -24,5 +24,5 @@ export default defineConfig(
 			},
 		},
 	},
-	globalIgnores(["src/**/*.test.tsx", "src/stories/*"])
+	globalIgnores(["src/**/*.test.tsx", "src/**/*.stories.tsx"])
 );

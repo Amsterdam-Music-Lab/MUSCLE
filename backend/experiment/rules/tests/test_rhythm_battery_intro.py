@@ -1,8 +1,8 @@
 from django.test import TestCase
-from section.models import Section, Song, Playlist as PlaylistModel
+from section.models import Playlist as PlaylistModel
 from participant.models import Participant
 from session.models import Session
-from experiment.models import Block, Experiment, Phase
+from experiment.models import Block
 from experiment.rules.rhythm_battery_intro import RhythmBatteryIntro
 from experiment.actions.explainer import Explainer
 from experiment.actions.final import Final
@@ -12,32 +12,18 @@ from experiment.actions.trial import Trial
 
 
 class RhythmBatteryIntroTest(TestCase):
-    fixtures = ["choice_lists", "choices_general"]
+    fixtures = ["choice_lists", "goldsmiths_msi", "demographics", "rhythm_tests"]
 
-    def setUp(self):
-        playlist = PlaylistModel.objects.create(
-            name='test'
-        )
-        song = Song.objects.create(
-            artist="Cheese Shop",
-            name="Gouda"
-        )
-        Section.objects.create(
-            playlist=playlist,
-            song=song,
-            filename="not/to_be_found.mp3",
-            tag=0
-        )
-        experiment = Experiment.objects.create(identifier="rhythm_battery_intro")
-        phase = Phase.objects.create(experiment=experiment)
-        self.block = Block.objects.create(
-            phase=phase, identifier="TEST", rules="RHYTHM_BATTERY_INTRO"
-        )
+    @classmethod
+    def setUpTestData(cls):
+        block = Block.objects.get(identifier="rhythm_intro")
+        playlist = PlaylistModel.objects.get(name="AudioSetup")
+        playlist._update_sections()
         participant = Participant.objects.create()
-        self.session = Session.objects.create(
-            block=Block.objects.first(),
+        cls.session = Session.objects.create(
+            block=block,
             participant=participant,
-            playlist=playlist
+            playlist=playlist,
         )
 
     def test_first_round(self):

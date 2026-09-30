@@ -1,4 +1,6 @@
-import { css } from '@emotion/react'
+import { css, keyframes } from '@emotion/react'
+
+import Theme from '@types/Theme';
 
 export const styleButton = (buttonColor: string) => {
     return css`
@@ -31,5 +33,27 @@ export const styleButtonOutline = (buttonColor: string) => {
         &:focus {
             box-shadow: 0 0 0 0.2rem hsl(from ${buttonColor} h s 40%);
         }
+    `
+}
+
+const scoreBackgroundAnimation = (backgroundColor: string) => keyframes`
+    0% {
+        opacity: 0;
+        fill: transparent;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        fill: ${backgroundColor};
+    }
+`
+
+export const animateScoreBackground = (score: number, theme: Theme) => {
+    const backgroundColor = score > 0 ? theme.colorPositive : score === 0 ? theme.colorGrey : theme.colorNegative;
+    return css`
+    .aha__circle .circle-percentage {
+        animation-name: ${scoreBackgroundAnimation(backgroundColor)};
+    }
     `
 }

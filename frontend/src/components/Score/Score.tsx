@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from "react";
-import classNames from "classnames";
 import Circle from "../Circle/Circle";
 import Button from "../Button/Button";
-import { Score as ScoreAction } from "@/types/Action";
+import { ScoreAction } from "@/types/Action";
+import useBoundStore from "@/util/stores";
+import { animateScoreBackground } from "@/util/stylingHelpers";
 
 export interface ScoreProps extends ScoreAction {
     onNext: () => void;
@@ -25,6 +26,7 @@ const Score = ({
     // Use a ref to prevent doing multiple increments
     // when the render is skipped
     const scoreValue = useRef(0);
+    const theme = useBoundStore((state) => state.theme);
 
     useEffect(() => {
 
@@ -67,11 +69,7 @@ const Score = ({
     return (
         <div className="aha__score d-flex flex-column justify-content-center">
             <div
-                className={classNames("score", {
-                    zero: score === 0,
-                    positive: score > 0,
-                    negative: score < 0,
-                })}
+                className="score" css={animateScoreBackground(score, theme)}
             >
                 <Circle />
                 <div className="content">
@@ -84,7 +82,7 @@ const Score = ({
                             <h3>{score_message}</h3>
                         </div>
                     ) : (
-                        <span className={`fa-solid ${icon}`}></span>
+                        <div style={{ color: theme.colorText }} className="score-icon" dangerouslySetInnerHTML={{ __html: icon }}/>
                     )}
                 </div>
             </div>

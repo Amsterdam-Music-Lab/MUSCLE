@@ -11,15 +11,9 @@ export default interface Block {
     theme?: Theme;
     class_name: string;
     rounds: number;
-    playlists: Playlist[];
     feedback_info: FeedbackInfo;
     session_id: number;
     loading_text: string;
-}
-
-export interface Playlist {
-    id: string;
-    name: string;
 }
 
 export interface FeedbackInfo {

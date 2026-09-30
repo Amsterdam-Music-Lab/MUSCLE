@@ -10,7 +10,7 @@ from session.models import Session
 
 
 class DDITest(TestCase):
-    fixtures = ['playlist', 'experiment']
+    fixtures = ["choice_lists", "goldsmiths_msi", "demographics", "rhythm_tests"]
 
     @classmethod
     def setUpTestData(cls):
@@ -87,7 +87,7 @@ class DDITest(TestCase):
 
 
 class AnisochronyTest(TestCase):
-    fixtures = ['playlist', 'experiment']
+    fixtures = ["choice_lists", "goldsmiths_msi", "demographics", "rhythm_tests"]
 
     @classmethod
     def setUpTestData(cls):

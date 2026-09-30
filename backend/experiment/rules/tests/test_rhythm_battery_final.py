@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from experiment.actions.explainer import Explainer
-from experiment.models import Experiment, Block
+from experiment.models import Experiment, Block, Phase
 from experiment.rules.rhythm_battery_final import RhythmBatteryFinal
 from participant.models import Participant
 from section.models import Playlist
@@ -9,14 +9,11 @@ from session.models import Session
 
 
 class TestRhythmBatteryFinal(TestCase):
-    fixtures = ["choice_lists", "demographics", "goldsmiths_msi"]
+    fixtures = ["choice_lists", "demographics", "goldsmiths_msi", "rhythm_tests"]
 
     @classmethod
     def setUpTestData(cls):
-        Experiment.objects.create(
-            identifier="MARKDOWN_EXPERIMENT",
-        )
-        block = Block.objects.create(identifier="test_md", rules=RhythmBatteryFinal.ID)
+        block = Block.objects.get(identifier="rhythm_outro")
         Session.objects.create(
             block=block, playlist=Playlist.objects.create(name="test"), participant=Participant.objects.create()
         )

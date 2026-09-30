@@ -263,8 +263,16 @@ class Categorization(BaseRules):
         colors = ['colorNeutral1', 'colorNeutral2']
         random.shuffle(colors)
         choices = [
-            {"value": "A", "label": "", "color": colors[0]},
-            {"value": "B", "label": "", "color": colors[1]},
+            {
+                "value": "A",
+                "label": "\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0",
+                "color": colors[0],
+            },
+            {
+                "value": "B",
+                "label": "\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0",
+                "color": colors[1],
+            },
         ]
         random.shuffle(choices)
         if group == "S1":
@@ -392,11 +400,11 @@ class Categorization(BaseRules):
         last_score = session.last_score()
 
         if session.last_result().given_response == "TIMEOUT":
-            icon = "fa-question"
+            icon = render_to_string("images/categorization/question-solid.svg")
         elif last_score == 1:
-            icon = "fa-face-smile"
+            icon = render_to_string("images/categorization/face-smile-solid.svg")
         elif last_score == 0:
-            icon = "fa-face-frown"
+            icon = render_to_string("images/categorization/face-frown-solid.svg")
         else:
             raise ValueError(f"invalid last score: {last_score}")
 

@@ -1,0 +1,16 @@
+- model: experiment.experiment
+  pk: 4242
+  fields:
+    identifier: test-experiment
+    active: true
+- model: experiment.phase
+  pk: 4242
+  fields:
+    experiment: 4242
+- model: experiment.block
+  pk: 4242
+  fields:
+    phase: 4242
+    experiment: 4242
+    identifier: test-block
+    rules: QUESTIONNAIRE

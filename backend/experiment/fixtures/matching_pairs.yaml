@@ -1,0 +1,331 @@
+- model: experiment.experiment
+  pk: 60
+  fields:
+    identifier: mpairs
+    active: true
+- model: experiment.phase
+  pk: 60
+  fields:
+    experiment: 60
+- model: experiment.block
+  pk: 60
+  fields:
+    phase: 60
+    experiment: 60
+    index: 0
+    identifier: mpairs
+    rules: MATCHING_PAIRS
+    playlists:
+    - 60
+- model: section.playlist
+  pk: 60
+  fields:
+    name: TuneTwins
+    csv: |
+      default,AgentsofSHIELD_52_E1,0.0,10.0,MatchingPairs/Original/AgentsofSHIELD_52_E1.mp3,Original,0
+      default,AgentsofSHIELD_52_E1,0.0,10.0,MatchingPairs/2ndDegradation/AgentsofSHIELD_52_E1.mp3,2ndDegradation,0
+      default,AgentsofSHIELD_52_E1,0.0,10.0,MatchingPairs/1stDegradation/AgentsofSHIELD_52_E1.mp3,1stDegradation,0
+      default,AgentsofSHIELD_5_E1,0.0,10.0,MatchingPairs/2ndDegradation/AgentsofSHIELD_5_E1.mp3,2ndDegradation,1
+      default,AgentsofSHIELD_5_E1,0.0,10.0,MatchingPairs/Original/AgentsofSHIELD_5_E1.mp3,Original,1
+      default,AgentsofSHIELD_5_E1,0.0,10.0,MatchingPairs/1stDegradation/AgentsofSHIELD_5_E1.mp3,1stDegradation,1
+      default,Arrow_2_E1,0.0,10.0,MatchingPairs/1stDegradation/Arrow_2_E1.mp3,1stDegradation,2
+      default,Arrow_2_E1,0.0,10.0,MatchingPairs/Original/Arrow_2_E1.mp3,Original,2
+      default,Arrow_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/Arrow_2_E1.mp3,2ndDegradation,2
+      default,BoJack_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/BoJack_1_E1.mp3,2ndDegradation,4
+      default,BoJack_1_E1,0.0,10.0,MatchingPairs/Original/BoJack_1_E1.mp3,Original,4
+      default,BoJack_1_E1,0.0,10.0,MatchingPairs/1stDegradation/BoJack_1_E1.mp3,1stDegradation,4
+      default,BoJackHorseman_0_E1,0.0,10.0,MatchingPairs/Original/BoJackHorseman_0_E1.mp3,Original,3
+      default,BoJackHorseman_0_E1,0.0,10.0,MatchingPairs/1stDegradation/BoJackHorseman_0_E1.mp3,1stDegradation,3
+      default,BoJackHorseman_0_E1,0.0,10.0,MatchingPairs/2ndDegradation/BoJackHorseman_0_E1.mp3,2ndDegradation,3
+      default,BreakingBad_3_E1,0.0,10.0,MatchingPairs/2ndDegradation/BreakingBad_3_E1.mp3,2ndDegradation,5
+      default,BreakingBad_3_E1,0.0,10.0,MatchingPairs/Original/BreakingBad_3_E1.mp3,Original,5
+      default,BreakingBad_3_E1,0.0,10.0,MatchingPairs/1stDegradation/BreakingBad_3_E1.mp3,1stDegradation,5
+      default,Crown_1_E1,0.0,10.0,MatchingPairs/1stDegradation/Crown_1_E1.mp3,1stDegradation,6
+      default,Crown_1_E1,0.0,10.0,MatchingPairs/Original/Crown_1_E1.mp3,Original,6
+      default,Crown_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/Crown_1_E1.mp3,2ndDegradation,6
+      default,Dallas_1_E1,0.0,10.0,MatchingPairs/1stDegradation/Dallas_1_E1.mp3,1stDegradation,7
+      default,Dallas_1_E1,0.0,10.0,MatchingPairs/Original/Dallas_1_E1.mp3,Original,7
+      default,Dallas_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/Dallas_1_E1.mp3,2ndDegradation,7
+      default,Dallas_2_E1,0.0,10.0,MatchingPairs/Original/Dallas_2_E1.mp3,Original,8
+      default,Dallas_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/Dallas_2_E1.mp3,2ndDegradation,8
+      default,Dallas_2_E1,0.0,10.0,MatchingPairs/1stDegradation/Dallas_2_E1.mp3,1stDegradation,8
+      default,Daredevil_0_E1,0.0,10.0,MatchingPairs/Original/Daredevil_0_E1.mp3,Original,9
+      default,Daredevil_0_E1,0.0,10.0,MatchingPairs/2ndDegradation/Daredevil_0_E1.mp3,2ndDegradation,9
+      default,Daredevil_0_E1,0.0,10.0,MatchingPairs/1stDegradation/Daredevil_0_E1.mp3,1stDegradation,9
+      default,Daredevil_1_E1,0.0,10.0,MatchingPairs/1stDegradation/Daredevil_1_E1.mp3,1stDegradation,10
+      default,Daredevil_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/Daredevil_1_E1.mp3,2ndDegradation,10
+      default,Daredevil_1_E1,0.0,10.0,MatchingPairs/Original/Daredevil_1_E1.mp3,Original,10
+      default,Daredevil_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/Daredevil_2_E1.mp3,2ndDegradation,11
+      default,Daredevil_2_E1,0.0,10.0,MatchingPairs/1stDegradation/Daredevil_2_E1.mp3,1stDegradation,11
+      default,Daredevil_2_E1,0.0,10.0,MatchingPairs/Original/Daredevil_2_E1.mp3,Original,11
+      default,Deadwood_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/Deadwood_1_E1.mp3,2ndDegradation,12
+      default,Deadwood_1_E1,0.0,10.0,MatchingPairs/Original/Deadwood_1_E1.mp3,Original,12
+      default,Deadwood_1_E1,0.0,10.0,MatchingPairs/1stDegradation/Deadwood_1_E1.mp3,1stDegradation,12
+      default,Deadwood_3_E1,0.0,10.0,MatchingPairs/1stDegradation/Deadwood_3_E1.mp3,1stDegradation,13
+      default,Deadwood_3_E1,0.0,10.0,MatchingPairs/2ndDegradation/Deadwood_3_E1.mp3,2ndDegradation,13
+      default,Deadwood_3_E1,0.0,10.0,MatchingPairs/Original/Deadwood_3_E1.mp3,Original,13
+      default,Dexter_1_E1,0.0,10.0,MatchingPairs/1stDegradation/Dexter_1_E1.mp3,1stDegradation,14
+      default,Dexter_1_E1,0.0,10.0,MatchingPairs/Original/Dexter_1_E1.mp3,Original,14
+      default,Dexter_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/Dexter_1_E1.mp3,2ndDegradation,14
+      default,Dexter_3_E1,0.0,10.0,MatchingPairs/2ndDegradation/Dexter_3_E1.mp3,2ndDegradation,15
+      default,Dexter_3_E1,0.0,10.0,MatchingPairs/1stDegradation/Dexter_3_E1.mp3,1stDegradation,15
+      default,Dexter_3_E1,0.0,10.0,MatchingPairs/Original/Dexter_3_E1.mp3,Original,15
+      default,DoctorWho_1_E1,0.0,10.0,MatchingPairs/1stDegradation/DoctorWho_1_E1.mp3,1stDegradation,16
+      default,DoctorWho_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/DoctorWho_1_E1.mp3,2ndDegradation,16
+      default,DoctorWho_1_E1,0.0,10.0,MatchingPairs/Original/DoctorWho_1_E1.mp3,Original,16
+      default,DoctorWho_2_E1,0.0,10.0,MatchingPairs/1stDegradation/DoctorWho_2_E1.mp3,1stDegradation,17
+      default,DoctorWho_2_E1,0.0,10.0,MatchingPairs/Original/DoctorWho_2_E1.mp3,Original,17
+      default,DoctorWho_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/DoctorWho_2_E1.mp3,2ndDegradation,17
+      default,DowntownAbbey_2_E1,0.0,10.0,MatchingPairs/Original/DowntownAbbey_2_E1.mp3,Original,18
+      default,DowntownAbbey_2_E1,0.0,10.0,MatchingPairs/1stDegradation/DowntownAbbey_2_E1.mp3,1stDegradation,18
+      default,DowntownAbbey_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/DowntownAbbey_2_E1.mp3,2ndDegradation,18
+      default,ER_0_E1,0.0,11.0,MatchingPairs/2ndDegradation/ER_0_E1.mp3,2ndDegradation,19
+      default,ER_0_E1,0.0,11.0,MatchingPairs/1stDegradation/ER_0_E1.mp3,1stDegradation,19
+      default,ER_0_E1,0.0,11.0,MatchingPairs/Original/ER_0_E1.mp3,Original,19
+      default,ER_1_E1,0.0,10.0,MatchingPairs/1stDegradation/ER_1_E1.mp3,1stDegradation,20
+      default,ER_1_E1,0.0,10.0,MatchingPairs/Original/ER_1_E1.mp3,Original,20
+      default,ER_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/ER_1_E1.mp3,2ndDegradation,20
+      default,ER_2_E1,0.0,10.0,MatchingPairs/1stDegradation/ER_2_E1.mp3,1stDegradation,21
+      default,ER_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/ER_2_E1.mp3,2ndDegradation,21
+      default,ER_2_E1,0.0,10.0,MatchingPairs/Original/ER_2_E1.mp3,Original,21
+      default,Fargo_1_E1,0.0,10.0,MatchingPairs/Original/Fargo_1_E1.mp3,Original,22
+      default,Fargo_1_E1,0.0,10.0,MatchingPairs/1stDegradation/Fargo_1_E1.mp3,1stDegradation,22
+      default,Fargo_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/Fargo_1_E1.mp3,2ndDegradation,22
+      default,Fargo_2_E1,0.0,10.0,MatchingPairs/Original/Fargo_2_E1.mp3,Original,23
+      default,Fargo_2_E1,0.0,10.0,MatchingPairs/1stDegradation/Fargo_2_E1.mp3,1stDegradation,23
+      default,Fargo_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/Fargo_2_E1.mp3,2ndDegradation,23
+      default,FridayNightLights_1_E1,0.0,10.0,MatchingPairs/Original/FridayNightLights_1_E1.mp3,Original,24
+      default,FridayNightLights_1_E1,0.0,10.0,MatchingPairs/1stDegradation/FridayNightLights_1_E1.mp3,1stDegradation,24
+      default,FridayNightLights_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/FridayNightLights_1_E1.mp3,2ndDegradation,24
+      default,FridayNightLights_2_E1,0.0,10.0,MatchingPairs/1stDegradation/FridayNightLights_2_E1.mp3,1stDegradation,25
+      default,FridayNightLights_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/FridayNightLights_2_E1.mp3,2ndDegradation,25
+      default,FridayNightLights_2_E1,0.0,10.0,MatchingPairs/Original/FridayNightLights_2_E1.mp3,Original,25
+      default,GameOfThrones_1_E1,0.0,10.0,MatchingPairs/1stDegradation/GameOfThrones_1_E1.mp3,1stDegradation,26
+      default,GameOfThrones_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/GameOfThrones_1_E1.mp3,2ndDegradation,26
+      default,GameOfThrones_1_E1,0.0,10.0,MatchingPairs/Original/GameOfThrones_1_E1.mp3,Original,26
+      default,GameOfThrones_2_E1,0.0,10.0,MatchingPairs/Original/GameOfThrones_2_E1.mp3,Original,27
+      default,GameOfThrones_2_E1,0.0,10.0,MatchingPairs/1stDegradation/GameOfThrones_2_E1.mp3,1stDegradation,27
+      default,GameOfThrones_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/GameOfThrones_2_E1.mp3,2ndDegradation,27
+      default,HaltAndCatchFire_12_E1,0.0,10.0,MatchingPairs/Original/HaltAndCatchFire_12_E1.mp3,Original,28
+      default,HaltAndCatchFire_12_E1,0.0,10.0,MatchingPairs/1stDegradation/HaltAndCatchFire_12_E1.mp3,1stDegradation,28
+      default,HaltAndCatchFire_12_E1,0.0,10.0,MatchingPairs/2ndDegradation/HaltAndCatchFire_12_E1.mp3,2ndDegradation,28
+      default,HaltAndCatchFire_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/HaltAndCatchFire_1_E1.mp3,2ndDegradation,29
+      default,HaltAndCatchFire_1_E1,0.0,10.0,MatchingPairs/Original/HaltAndCatchFire_1_E1.mp3,Original,29
+      default,HaltAndCatchFire_1_E1,0.0,10.0,MatchingPairs/1stDegradation/HaltAndCatchFire_1_E1.mp3,1stDegradation,29
+      default,heFlash_2_E1,0.0,10.0,MatchingPairs/Original/heFlash_2_E1.mp3,Original,71
+      default,HouseofCards_12_E1,0.0,10.0,MatchingPairs/1stDegradation/HouseofCards_12_E1.mp3,1stDegradation,30
+      default,HouseofCards_12_E1,0.0,10.0,MatchingPairs/2ndDegradation/HouseofCards_12_E1.mp3,2ndDegradation,30
+      default,HouseofCards_12_E1,0.0,10.0,MatchingPairs/Original/HouseofCards_12_E1.mp3,Original,30
+      default,HouseofCards_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/HouseofCards_1_E1.mp3,2ndDegradation,31
+      default,HouseofCards_1_E1,0.0,10.0,MatchingPairs/Original/HouseofCards_1_E1.mp3,Original,31
+      default,HouseofCards_1_E1,0.0,10.0,MatchingPairs/1stDegradation/HouseofCards_1_E1.mp3,1stDegradation,31
+      default,IronFist_2_E1,0.0,10.0,MatchingPairs/Original/IronFist_2_E1.mp3,Original,32
+      default,IronFist_2_E1,0.0,10.0,MatchingPairs/1stDegradation/IronFist_2_E1.mp3,1stDegradation,32
+      default,IronFist_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/IronFist_2_E1.mp3,2ndDegradation,32
+      default,IronFist_3_E1,0.0,10.0,MatchingPairs/Original/IronFist_3_E1.mp3,Original,33
+      default,IronFist_3_E1,0.0,10.0,MatchingPairs/2ndDegradation/IronFist_3_E1.mp3,2ndDegradation,33
+      default,IronFist_3_E1,0.0,10.0,MatchingPairs/1stDegradation/IronFist_3_E1.mp3,1stDegradation,33
+      default,ItsAlwaysSunnyInPhiladephia_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/ItsAlwaysSunnyInPhiladephia_1_E1.mp3,2ndDegradation,34
+      default,ItsAlwaysSunnyInPhiladephia_1_E1,0.0,10.0,MatchingPairs/Original/ItsAlwaysSunnyInPhiladephia_1_E1.mp3,Original,34
+      default,ItsAlwaysSunnyInPhiladephia_1_E1,0.0,10.0,MatchingPairs/1stDegradation/ItsAlwaysSunnyInPhiladephia_1_E1.mp3,1stDegradation,34
+      default,JessicaJones_0_E1,0.0,10.0,MatchingPairs/Original/JessicaJones_0_E1.mp3,Original,35
+      default,JessicaJones_0_E1,0.0,10.0,MatchingPairs/2ndDegradation/JessicaJones_0_E1.mp3,2ndDegradation,35
+      default,JessicaJones_0_E1,0.0,10.0,MatchingPairs/1stDegradation/JessicaJones_0_E1.mp3,1stDegradation,35
+      default,JessicaJones_1_E1,0.0,10.0,MatchingPairs/Original/JessicaJones_1_E1.mp3,Original,36
+      default,JessicaJones_1_E1,0.0,10.0,MatchingPairs/1stDegradation/JessicaJones_1_E1.mp3,1stDegradation,36
+      default,JessicaJones_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/JessicaJones_1_E1.mp3,2ndDegradation,36
+      default,JessicaJones_2_E1,0.0,10.0,MatchingPairs/Original/JessicaJones_2_E1.mp3,Original,37
+      default,JessicaJones_2_E1,0.0,10.0,MatchingPairs/1stDegradation/JessicaJones_2_E1.mp3,1stDegradation,37
+      default,JessicaJones_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/JessicaJones_2_E1.mp3,2ndDegradation,37
+      default,LukeCage_0_E1,0.0,10.0,MatchingPairs/Original/LukeCage_0_E1.mp3,Original,38
+      default,Luke_Cage_E1,0.0,10.0,MatchingPairs/2ndDegradation/Luke_Cage_E1.mp3,2ndDegradation,38
+      default,Luke_Cage_E1,0.0,10.0,MatchingPairs/1stDegradation/Luke_Cage_E1.mp3,1stDegradation,38
+      default,MadMen_1_E1,0.0,10.0,MatchingPairs/1stDegradation/MadMen_1_E1.mp3,1stDegradation,41
+      default,MadMen_1_E1,0.0,10.0,MatchingPairs/Original/MadMen_1_E1.mp3,Original,41
+      default,MadMen_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/MadMen_1_E1.mp3,2ndDegradation,41
+      default,MASH_12_E1,0.0,10.0,MatchingPairs/Original/MASH_12_E1.mp3,Original,39
+      default,MASH_12_E1,0.0,10.0,MatchingPairs/1stDegradation/MASH_12_E1.mp3,1stDegradation,39
+      default,MASH_12_E1,0.0,10.0,MatchingPairs/2ndDegradation/MASH_12_E1.mp3,2ndDegradation,39
+      default,MASH_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/MASH_1_E1.mp3,2ndDegradation,40
+      default,MASH_1_E1,0.0,10.0,MatchingPairs/1stDegradation/MASH_1_E1.mp3,1stDegradation,40
+      default,MASH_1_E1,0.0,10.0,MatchingPairs/Original/MASH_1_E1.mp3,Original,40
+      default,Mindhunter_0_E1,0.0,10.0,MatchingPairs/Original/Mindhunter_0_E1.mp3,Original,42
+      default,Mindhunter_0_E1,0.0,10.0,MatchingPairs/1stDegradation/Mindhunter_0_E1.mp3,1stDegradation,42
+      default,Mindhunter_0_E1,0.0,10.0,MatchingPairs/2ndDegradation/Mindhunter_0_E1.mp3,2ndDegradation,42
+      default,NYPDBlue_0_E1,0.0,10.0,MatchingPairs/2ndDegradation/NYPDBlue_0_E1.mp3,2ndDegradation,43
+      default,NYPDBlue_0_E1,0.0,10.0,MatchingPairs/Original/NYPDBlue_0_E1.mp3,Original,43
+      default,NYPDBlue_0_E1,0.0,10.0,MatchingPairs/1stDegradation/NYPDBlue_0_E1.mp3,1stDegradation,43
+      default,NYPDBlue_1_E1,0.0,10.0,MatchingPairs/Original/NYPDBlue_1_E1.mp3,Original,44
+      default,NYPDBlue_1_E1,0.0,10.0,MatchingPairs/1stDegradation/NYPDBlue_1_E1.mp3,1stDegradation,44
+      default,NYPDBlue_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/NYPDBlue_1_E1.mp3,2ndDegradation,44
+      default,RickandMorty_12_E1,0.0,10.0,MatchingPairs/2ndDegradation/RickandMorty_12_E1.mp3,2ndDegradation,45
+      default,RickandMorty_12_E1,0.0,10.0,MatchingPairs/1stDegradation/RickandMorty_12_E1.mp3,1stDegradation,45
+      default,RickandMorty_12_E1,0.0,10.0,MatchingPairs/Original/RickandMorty_12_E1.mp3,Original,45
+      default,RickandMorty_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/RickandMorty_1_E1.mp3,2ndDegradation,46
+      default,RickandMorty_1_E1,0.0,10.0,MatchingPairs/1stDegradation/RickandMorty_1_E1.mp3,1stDegradation,46
+      default,RickandMorty_1_E1,0.0,10.0,MatchingPairs/Original/RickandMorty_1_E1.mp3,Original,46
+      default,Riverdale_2_E1,0.0,10.0,MatchingPairs/Original/Riverdale_2_E1.mp3,Original,47
+      default,Riverdale_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/Riverdale_2_E1.mp3,2ndDegradation,47
+      default,Riverdale_2_E1,0.0,10.0,MatchingPairs/1stDegradation/Riverdale_2_E1.mp3,1stDegradation,47
+      default,Roseanne_0_E1,0.0,10.0,MatchingPairs/1stDegradation/Roseanne_0_E1.mp3,1stDegradation,48
+      default,Roseanne_0_E1,0.0,10.0,MatchingPairs/2ndDegradation/Roseanne_0_E1.mp3,2ndDegradation,48
+      default,Roseanne_0_E1,0.0,10.0,MatchingPairs/Original/Roseanne_0_E1.mp3,Original,48
+      default,Roseanne_1_E1,0.0,10.0,MatchingPairs/1stDegradation/Roseanne_1_E1.mp3,1stDegradation,49
+      default,Roseanne_1_E1,0.0,10.0,MatchingPairs/Original/Roseanne_1_E1.mp3,Original,49
+      default,Roseanne_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/Roseanne_1_E1.mp3,2ndDegradation,49
+      default,Roseanne_2_E1,0.0,10.0,MatchingPairs/Original/Roseanne_2_E1.mp3,Original,50
+      default,Roseanne_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/Roseanne_2_E1.mp3,2ndDegradation,50
+      default,Roseanne_2_E1,0.0,10.0,MatchingPairs/1stDegradation/Roseanne_2_E1.mp3,1stDegradation,50
+      default,Seinfeld_0_E1,0.0,10.0,MatchingPairs/2ndDegradation/Seinfeld_0_E1.mp3,2ndDegradation,51
+      default,Seinfeld_0_E1,0.0,10.0,MatchingPairs/1stDegradation/Seinfeld_0_E1.mp3,1stDegradation,51
+      default,Seinfeld_0_E1,0.0,10.0,MatchingPairs/Original/Seinfeld_0_E1.mp3,Original,51
+      default,Seinfeld_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/Seinfeld_1_E1.mp3,2ndDegradation,52
+      default,Seinfeld_1_E1,0.0,10.0,MatchingPairs/Original/Seinfeld_1_E1.mp3,Original,52
+      default,Seinfeld_1_E1,0.0,10.0,MatchingPairs/1stDegradation/Seinfeld_1_E1.mp3,1stDegradation,52
+      default,Seinfeld_2_E1,0.0,10.0,MatchingPairs/1stDegradation/Seinfeld_2_E1.mp3,1stDegradation,53
+      default,Seinfeld_2_E1,0.0,10.0,MatchingPairs/Original/Seinfeld_2_E1.mp3,Original,53
+      default,Seinfeld_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/Seinfeld_2_E1.mp3,2ndDegradation,53
+      default,SenseEight_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/SenseEight_1_E1.mp3,2ndDegradation,54
+      default,SenseEight_1_E1,0.0,10.0,MatchingPairs/1stDegradation/SenseEight_1_E1.mp3,1stDegradation,54
+      default,SenseEight_1_E1,0.0,10.0,MatchingPairs/Original/SenseEight_1_E1.mp3,Original,54
+      default,SenseEight_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/SenseEight_2_E1.mp3,2ndDegradation,55
+      default,SenseEight_2_E1,0.0,10.0,MatchingPairs/Original/SenseEight_2_E1.mp3,Original,55
+      default,SenseEight_2_E1,0.0,10.0,MatchingPairs/1stDegradation/SenseEight_2_E1.mp3,1stDegradation,55
+      default,SenseEight_3_E1,0.0,10.0,MatchingPairs/2ndDegradation/SenseEight_3_E1.mp3,2ndDegradation,56
+      default,SenseEight_3_E1,0.0,10.0,MatchingPairs/1stDegradation/SenseEight_3_E1.mp3,1stDegradation,56
+      default,SenseEight_3_E1,0.0,10.0,MatchingPairs/Original/SenseEight_3_E1.mp3,Original,56
+      default,Sherlock_1_E1,0.0,10.0,MatchingPairs/Original/Sherlock_1_E1.mp3,Original,57
+      default,Sherlock_1_E1,0.0,10.0,MatchingPairs/1stDegradation/Sherlock_1_E1.mp3,1stDegradation,57
+      default,Sherlock_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/Sherlock_1_E1.mp3,2ndDegradation,57
+      default,Sherlock_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/Sherlock_2_E1.mp3,2ndDegradation,58
+      default,Sherlock_2_E1,0.0,10.0,MatchingPairs/Original/Sherlock_2_E1.mp3,Original,58
+      default,Sherlock_2_E1,0.0,10.0,MatchingPairs/1stDegradation/Sherlock_2_E1.mp3,1stDegradation,58
+      default,SixFeetUnder_0_E1,0.0,10.0,MatchingPairs/1stDegradation/SixFeetUnder_0_E1.mp3,1stDegradation,59
+      default,SixFeetUnder_0_E1,0.0,10.0,MatchingPairs/2ndDegradation/SixFeetUnder_0_E1.mp3,2ndDegradation,59
+      default,SixFeetUnder_0_E1,0.0,10.0,MatchingPairs/Original/SixFeetUnder_0_E1.mp3,Original,59
+      default,SixFeetUnder_12_E1,0.0,10.0,MatchingPairs/Original/SixFeetUnder_12_E1.mp3,Original,60
+      default,SixFeetUnder_12_E1,0.0,10.0,MatchingPairs/2ndDegradation/SixFeetUnder_12_E1.mp3,2ndDegradation,60
+      default,SixFeetUnder_12_E1,0.0,10.0,MatchingPairs/1stDegradation/SixFeetUnder_12_E1.mp3,1stDegradation,60
+      default,SixFeetUnder_13_E1,0.0,10.0,MatchingPairs/1stDegradation/SixFeetUnder_13_E1.mp3,1stDegradation,61
+      default,SixFeetUnder_13_E1,0.0,10.0,MatchingPairs/2ndDegradation/SixFeetUnder_13_E1.mp3,2ndDegradation,61
+      default,SixFeetUnder_13_E1,0.0,10.0,MatchingPairs/Original/SixFeetUnder_13_E1.mp3,Original,61
+      default,SixFeetUnder_1_E1,0.0,10.0,MatchingPairs/Original/SixFeetUnder_1_E1.mp3,Original,62
+      default,SixFeetUnder_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/SixFeetUnder_1_E1.mp3,2ndDegradation,62
+      default,SixFeetUnder_1_E1,0.0,10.0,MatchingPairs/1stDegradation/SixFeetUnder_1_E1.mp3,1stDegradation,62
+      default,Succession_1_E1,0.0,10.0,MatchingPairs/1stDegradation/Succession_1_E1.mp3,1stDegradation,63
+      default,Succession_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/Succession_1_E1.mp3,2ndDegradation,63
+      default,Succession_1_E1,0.0,10.0,MatchingPairs/Original/Succession_1_E1.mp3,Original,63
+      default,Succession_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/Succession_2_E1.mp3,2ndDegradation,64
+      default,Succession_2_E1,0.0,10.0,MatchingPairs/Original/Succession_2_E1.mp3,Original,64
+      default,Succession_2_E1,0.0,10.0,MatchingPairs/1stDegradation/Succession_2_E1.mp3,1stDegradation,64
+      default,Succession_3_E1,0.0,10.0,MatchingPairs/Original/Succession_3_E1.mp3,Original,65
+      default,Succession_3_E1,0.0,10.0,MatchingPairs/1stDegradation/Succession_3_E1.mp3,1stDegradation,65
+      default,Succession_3_E1,0.0,10.0,MatchingPairs/2ndDegradation/Succession_3_E1.mp3,2ndDegradation,65
+      default,Supergirl_0_E1,0.0,10.0,MatchingPairs/2ndDegradation/Supergirl_0_E1.mp3,2ndDegradation,66
+      default,Supergirl_0_E1,0.0,10.0,MatchingPairs/1stDegradation/Supergirl_0_E1.mp3,1stDegradation,66
+      default,Supergirl_0_E1,0.0,10.0,MatchingPairs/Original/Supergirl_0_E1.mp3,Original,66
+      default,Supergirl_1_E1,0.0,10.0,MatchingPairs/1stDegradation/Supergirl_1_E1.mp3,1stDegradation,67
+      default,Supergirl_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/Supergirl_1_E1.mp3,2ndDegradation,67
+      default,Supergirl_1_E1,0.0,10.0,MatchingPairs/Original/Supergirl_1_E1.mp3,Original,67
+      default,Supergirl_2_E1,0.0,10.0,MatchingPairs/Original/Supergirl_2_E1.mp3,Original,68
+      default,Supergirl_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/Supergirl_2_E1.mp3,2ndDegradation,68
+      default,Supergirl_2_E1,0.0,10.0,MatchingPairs/1stDegradation/Supergirl_2_E1.mp3,1stDegradation,68
+      default,TeenWolf_1_E1,0.0,10.0,MatchingPairs/1stDegradation/TeenWolf_1_E1.mp3,1stDegradation,69
+      default,TeenWolf_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/TeenWolf_1_E1.mp3,2ndDegradation,69
+      default,TeenWolf_1_E1,0.0,10.0,MatchingPairs/Original/TeenWolf_1_E1.mp3,Original,69
+      default,TheCrown_3_E1,0.0,10.0,MatchingPairs/1stDegradation/TheCrown_3_E1.mp3,1stDegradation,70
+      default,TheCrown_3_E1,0.0,10.0,MatchingPairs/2ndDegradation/TheCrown_3_E1.mp3,2ndDegradation,70
+      default,TheCrown_3_E1,0.0,10.0,MatchingPairs/Original/TheCrown_3_E1.mp3,Original,70
+      default,TheFlash_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/TheFlash_2_E1.mp3,2ndDegradation,71
+      default,TheFlash_2_E1,0.0,10.0,MatchingPairs/1stDegradation/TheFlash_2_E1.mp3,1stDegradation,71
+      default,TheFlash_4_E1,0.0,10.0,MatchingPairs/2ndDegradation/TheFlash_4_E1.mp3,2ndDegradation,72
+      default,TheFlash_4_E1,0.0,10.0,MatchingPairs/1stDegradation/TheFlash_4_E1.mp3,1stDegradation,72
+      default,TheFlash_4_E1,0.0,10.0,MatchingPairs/Original/TheFlash_4_E1.mp3,Original,72
+      default,TheFlash_6_E1,0.0,10.0,MatchingPairs/2ndDegradation/TheFlash_6_E1.mp3,2ndDegradation,73
+      default,TheFlash_6_E1,0.0,10.0,MatchingPairs/Original/TheFlash_6_E1.mp3,Original,73
+      default,TheFlash_6_E1,0.0,10.0,MatchingPairs/1stDegradation/TheFlash_6_E1.mp3,1stDegradation,73
+      default,TheHauntingofHillHouse_0_E1,0.0,10.0,MatchingPairs/1stDegradation/TheHauntingofHillHouse_0_E1.mp3,1stDegradation,74
+      default,TheHauntingofHillHouse_0_E1,0.0,10.0,MatchingPairs/Original/TheHauntingofHillHouse_0_E1.mp3,Original,74
+      default,TheHauntingofHillHouse_0_E1,0.0,10.0,MatchingPairs/2ndDegradation/TheHauntingofHillHouse_0_E1.mp3,2ndDegradation,74
+      default,TheMentalist_0_E1,0.0,10.0,MatchingPairs/1stDegradation/TheMentalist_0_E1.mp3,1stDegradation,75
+      default,TheMentalist_0_E1,0.0,10.0,MatchingPairs/2ndDegradation/TheMentalist_0_E1.mp3,2ndDegradation,75
+      default,TheMentalist_0_E1,0.0,10.0,MatchingPairs/Original/TheMentalist_0_E1.mp3,Original,75
+      default,TheMentalist_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/TheMentalist_2_E1.mp3,2ndDegradation,76
+      default,TheMentalist_2_E1,0.0,10.0,MatchingPairs/1stDegradation/TheMentalist_2_E1.mp3,1stDegradation,76
+      default,TheMentalist_2_E1,0.0,10.0,MatchingPairs/Original/TheMentalist_2_E1.mp3,Original,76
+      default,ThePunisher_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/ThePunisher_1_E1.mp3,2ndDegradation,77
+      default,ThePunisher_1_E1,0.0,10.0,MatchingPairs/Original/ThePunisher_1_E1.mp3,Original,77
+      default,ThePunisher_1_E1,0.0,10.0,MatchingPairs/1stDegradation/ThePunisher_1_E1.mp3,1stDegradation,77
+      default,ThePunisher_3_E1,0.0,10.0,MatchingPairs/1stDegradation/ThePunisher_3_E1.mp3,1stDegradation,78
+      default,ThePunisher_3_E1,0.0,10.0,MatchingPairs/Original/ThePunisher_3_E1.mp3,Original,78
+      default,ThePunisher_3_E1,0.0,10.0,MatchingPairs/2ndDegradation/ThePunisher_3_E1.mp3,2ndDegradation,78
+      default,TheVampireDiaries_4_E1,0.0,10.0,MatchingPairs/2ndDegradation/TheVampireDiaries_4_E1.mp3,2ndDegradation,79
+      default,TheVampireDiaries_4_E1,0.0,10.0,MatchingPairs/1stDegradation/TheVampireDiaries_4_E1.mp3,1stDegradation,79
+      default,TheVampireDiaries_4_E1,0.0,10.0,MatchingPairs/Original/TheVampireDiaries_4_E1.mp3,Original,79
+      default,TheWalkingDead_12_E1,0.0,10.0,MatchingPairs/1stDegradation/TheWalkingDead_12_E1.mp3,1stDegradation,80
+      default,TheWalkingDead_12_E1,0.0,10.0,MatchingPairs/Original/TheWalkingDead_12_E1.mp3,Original,80
+      default,TheWalkingDead_12_E1,0.0,10.0,MatchingPairs/2ndDegradation/TheWalkingDead_12_E1.mp3,2ndDegradation,80
+      default,TheWalkingDead_1_E1,0.0,10.0,MatchingPairs/Original/TheWalkingDead_1_E1.mp3,Original,81
+      default,TheWalkingDead_1_E1,0.0,10.0,MatchingPairs/1stDegradation/TheWalkingDead_1_E1.mp3,1stDegradation,81
+      default,TheWalkingDead_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/TheWalkingDead_1_E1.mp3,2ndDegradation,81
+      default,TheWestWing_1_E1,0.0,10.0,MatchingPairs/Original/TheWestWing_1_E1.mp3,Original,82
+      default,TheWestWing_1_E1,0.0,10.0,MatchingPairs/1stDegradation/TheWestWing_1_E1.mp3,1stDegradation,82
+      default,TheWestWing_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/TheWestWing_1_E1.mp3,2ndDegradation,82
+      default,TheWestWing_2_E1,0.0,10.0,MatchingPairs/1stDegradation/TheWestWing_2_E1.mp3,1stDegradation,83
+      default,TheWestWing_2_E1,0.0,10.0,MatchingPairs/Original/TheWestWing_2_E1.mp3,Original,83
+      default,TheWestWing_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/TheWestWing_2_E1.mp3,2ndDegradation,83
+      default,ThirtySomething_0_E1,0.0,10.0,MatchingPairs/1stDegradation/ThirtySomething_0_E1.mp3,1stDegradation,84
+      default,ThirtySomething_0_E1,0.0,10.0,MatchingPairs/2ndDegradation/ThirtySomething_0_E1.mp3,2ndDegradation,84
+      default,ThirtySomething_0_E1,0.0,10.0,MatchingPairs/Original/ThirtySomething_0_E1.mp3,Original,84
+      default,ThirtySomething_1_E1,0.0,10.0,MatchingPairs/Original/ThirtySomething_1_E1.mp3,Original,85
+      default,ThirtySomething_1_E1,0.0,10.0,MatchingPairs/1stDegradation/ThirtySomething_1_E1.mp3,1stDegradation,85
+      default,ThirtySomething_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/ThirtySomething_1_E1.mp3,2ndDegradation,85
+      default,ThirtySomething_2_E1,0.0,10.0,MatchingPairs/Original/ThirtySomething_2_E1.mp3,Original,86
+      default,ThirtySomething_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/ThirtySomething_2_E1.mp3,2ndDegradation,86
+      default,ThirtySomething_2_E1,0.0,10.0,MatchingPairs/1stDegradation/ThirtySomething_2_E1.mp3,1stDegradation,86
+      default,Transparent_1_E1,0.0,10.0,MatchingPairs/1stDegradation/Transparent_1_E1.mp3,1stDegradation,87
+      default,Transparent_1_E1,0.0,10.0,MatchingPairs/2ndDegradation/Transparent_1_E1.mp3,2ndDegradation,87
+      default,Transparent_1_E1,0.0,10.0,MatchingPairs/Original/Transparent_1_E1.mp3,Original,87
+      default,TwinPeaks_0_E1,0.0,10.0,MatchingPairs/2ndDegradation/TwinPeaks_0_E1.mp3,2ndDegradation,88
+      default,TwinPeaks_0_E1,0.0,10.0,MatchingPairs/Original/TwinPeaks_0_E1.mp3,Original,88
+      default,TwinPeaks_0_E1,0.0,10.0,MatchingPairs/1stDegradation/TwinPeaks_0_E1.mp3,1stDegradation,88
+      default,TwinPeaks_4_E1,0.0,10.0,MatchingPairs/Original/TwinPeaks_4_E1.mp3,Original,89
+      default,TwinPeaks_4_E1,0.0,10.0,MatchingPairs/1stDegradation/TwinPeaks_4_E1.mp3,1stDegradation,89
+      default,TwinPeaks_4_E1,0.0,10.0,MatchingPairs/2ndDegradation/TwinPeaks_4_E1.mp3,2ndDegradation,89
+      default,WalkingDead_0_E1,0.0,10.0,MatchingPairs/1stDegradation/WalkingDead_0_E1.mp3,1stDegradation,90
+      default,WalkingDead_0_E1,0.0,10.0,MatchingPairs/2ndDegradation/WalkingDead_0_E1.mp3,2ndDegradation,90
+      default,WalkingDead_0_E1,0.0,10.0,MatchingPairs/Original/WalkingDead_0_E1.mp3,Original,90
+      default,Westworld_2_E1,0.0,10.0,MatchingPairs/Original/Westworld_2_E1.mp3,Original,91
+      default,Westworld_2_E1,0.0,10.0,MatchingPairs/2ndDegradation/Westworld_2_E1.mp3,2ndDegradation,91
+      default,Westworld_2_E1,0.0,10.0,MatchingPairs/1stDegradation/Westworld_2_E1.mp3,1stDegradation,91
+- model: question.questionlist
+  pk: 60
+  fields:
+    name: Demographics
+    block: 60
+    randomize: false
+- model: question.questioninlist
+  fields:
+    questionlist: 60
+    question: dgf_gender_identity
+    index: 1
+- model: question.questioninlist
+  fields:
+    questionlist: 60
+    question: dgf_generation
+    index: 2
+- model: question.questioninlist
+  fields:
+    questionlist: 60
+    question: dgf_musical_experience
+    index: 3
+- model: question.questioninlist
+  fields:
+    questionlist: 60
+    question: dgf_country_of_origin
+    index: 4
+- model: question.questioninlist
+  fields:
+    questionlist: 60
+    question: dgf_education
+    index: 5

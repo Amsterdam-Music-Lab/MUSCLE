@@ -2,7 +2,7 @@ import { Route, MemoryRouter, Routes } from 'react-router-dom';
 import { render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import Block from './Block';
-import * as API from '../../API';
+import * as API from '@/API';
 import type useBoundStore from '../../util/stores';
 
 type StoreSelector = Parameters<typeof useBoundStore>[0];
@@ -21,7 +21,6 @@ vi.mock('react-router-dom', async () => {
 
 const blockObj = {
     id: 24, identifier: 'test', name: 'Test',
-    playlists: [{ id: 42, name: 'TestPlaylist' }],
     session_id: 42,
     loadingText: 'Patience!'
 };

@@ -12,11 +12,12 @@ from result.utils import handle_results
 from result.views import verify_session
 
 class ResultTest(TestCase):
+    fixtures = ["testing"]
 
     @classmethod
     def setUpTestData(cls):
         cls.participant = Participant.objects.create(unique_hash=42)
-        cls.block = Block.objects.create(rules='QUESTIONNAIRE', identifier='test')
+        cls.block = Block.objects.get(identifier='test-block')
         cls.session = Session.objects.create(
             block=cls.block,
             participant=cls.participant,
@@ -53,7 +54,6 @@ class ResultTest(TestCase):
                     "identifier": "speed_swallow",
                     "resultId": result.id,
                     "view": "TEXT",
-                    "scale_steps": 7,
                     "value": 'An African or a European swallow?',
                 }
             ]
@@ -63,12 +63,12 @@ class ResultTest(TestCase):
             "json_data": json.dumps(view)
         }
         response = self.client.post('/result/score/', request)
-        assert response.status_code == 200
-        assert Result.objects.count() == 1
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Result.objects.count(), 1)
         response = self.client.get('/result/speed_swallow/')
-        assert json.loads(response.content).get('answer') is not None
+        self.assertIsNotNone(json.loads(response.content).get('answer'))
         response = self.client.post('/result/score/', request)
-        assert Result.objects.count() == 1
+        self.assertEqual(Result.objects.count(), 1)
 
     def test_handle_results_with_form(self):
         result1 = Result.objects.create(

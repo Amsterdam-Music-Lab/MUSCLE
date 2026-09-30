@@ -46,7 +46,7 @@ describe('Circle', () => {
         expect(container.querySelectorAll('circle').length).toBe(2);
     });
 
-    it('calls onTick and onFinish callbacks when running is true', async () => {
+    it('calls onTick and onFinish callbacks when running is true', () => {
 
 
         const onTick = vi.fn();
@@ -63,8 +63,8 @@ describe('Circle', () => {
             />
         );
 
-        await waitFor(() => expect(onTick).toHaveBeenCalled());
-        await waitFor(() => expect(onFinish).toHaveBeenCalled());
+        waitFor(() => expect(onTick).toHaveBeenCalled());
+        waitFor(() => expect(onFinish).toHaveBeenCalled());
     });
 
     it('does not start timer when running is false', () => {

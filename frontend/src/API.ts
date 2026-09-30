@@ -17,8 +17,8 @@ axios.defaults.withCredentials = true;
 // API endpoints
 export const URLS = {
     block: {
-        get: (identifier: string) => "/experiment/block/" + identifier + "/",
-        feedback: (identifier: string) => "/experiment/block/" + identifier + "/feedback/",
+        get: (experimentIdentifier: string, identifier: string) => `/experiment/${experimentIdentifier}/block/${identifier}/`,
+        feedback: (experimentIdentifier: string, identifier: string) => `/experiment/${experimentIdentifier}/block/${identifier}/feedback/`,
     },
     experiment: {
         get: (identifier: string) => `/experiment/${identifier}/`
@@ -28,6 +28,9 @@ export const URLS = {
         link: "/participant/link/",
         score: "/participant/scores/",
         share: "/participant/share/",
+    },
+    section: {
+        setPlaylist: "/section/set_playlist/",
     },
     result: {
         get: (question: string) => "/result/" + question + "/",
@@ -44,8 +47,8 @@ export const URLS = {
     }
 };
 
-export const useBlock = (identifier: string): [IBlock | null, boolean] =>
-    useGet<IBlock>(API_BASE_URL + URLS.block.get(identifier));
+export const useBlock = (experimentIdentifier: string, identifier: string): [IBlock | null, boolean] =>
+    useGet<IBlock>(API_BASE_URL + URLS.block.get(experimentIdentifier, identifier));
 
 export const useExperiment = (identifier: string) => {
     const data = useGet<Experiment>(API_BASE_URL + URLS.experiment.get(identifier));
@@ -141,6 +144,7 @@ interface ScoreIntermediateResultParams {
 
 interface ScoreIntermediateResultResponse {
     score: number;
+    feedback: string;
 }
 
 export const scoreIntermediateResult = async ({
@@ -158,6 +162,31 @@ export const scoreIntermediateResult = async ({
         const response = await axios.post(
             API_BASE_URL + URLS.result.intermediateScore,
             qs.stringify(vars)
+        );
+        return response.data;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+};
+
+interface SetPlaylistParams {
+    sessionID: number;
+    playlistID: number;
+    participant: Participant
+}
+
+
+/** set playlist for active session */
+export const setPlaylist = async ({ sessionID, playlistID, participant }: SetPlaylistParams) => {
+    try {
+        const vars = {
+            session_id: sessionID,
+            playlist_id: playlistID,
+            csrfmiddlewaretoken: participant.csrf_token
+        }
+        const response = await axios.post(
+            API_BASE_URL + URLS.section.setPlaylist, qs.stringify(vars)
         );
         return response.data;
     } catch (err) {
@@ -185,30 +214,6 @@ export const getNextRound = async ({ session }: GetNextRoundParams): Promise<Rou
     }
 };
 
-interface FinalizeSessionParams {
-    session: Session;
-    participant: Participant;
-}
-
-// Tell the backend that the session is finished
-export const finalizeSession = async ({ session, participant }: FinalizeSessionParams) => {
-
-    const sessionId = session.id.toString();
-
-    try {
-        const response = await axios.post(
-            API_BASE_URL + URLS.session.finalize(sessionId),
-            qs.stringify({
-                csrfmiddlewaretoken: participant.csrf_token,
-            })
-        );
-        return response.data;
-    } catch (err) {
-        console.error(err);
-        return null;
-    }
-}
-
 interface ShareParticipantParams {
     email: string;
     participant: Participant;
@@ -232,14 +237,15 @@ export const shareParticipant = async ({ email, participant }: ShareParticipantP
 };
 
 interface PostFeedbackParams {
+    experimentIdentifier: string;
     blockIdentifier: string;
     feedback: string;
     participant: Participant;
 }
 
 // Collect user feedback
-export const postFeedback = async ({ blockIdentifier, feedback, participant }: PostFeedbackParams) => {
-    const endpoint = API_BASE_URL + URLS.block.feedback(blockIdentifier)
+export const postFeedback = async ({ experimentIdentifier, blockIdentifier, feedback, participant }: PostFeedbackParams) => {
+    const endpoint = API_BASE_URL + URLS.block.feedback(experimentIdentifier, blockIdentifier)
     try {
         const response = await axios.post(
             endpoint,
@@ -254,3 +260,6 @@ export const postFeedback = async ({ blockIdentifier, feedback, participant }: P
         return null;
     }
 }
+
+
+export const getBlockHref = (experimentIdentifier: string, blockIdentifier: string, participantIdUrl: string | undefined) => `/${experimentIdentifier}/block/${blockIdentifier}${participantIdUrl ? `?participant_id=${participantIdUrl}` : ""}`;

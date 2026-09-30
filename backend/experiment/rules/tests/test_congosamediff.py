@@ -14,34 +14,18 @@ from experiment.rules.congosamediff import CongoSameDiff
 
 
 class CongoSameDiffTest(TestCase):
+    fixtures = ["congosamediff"]
 
     @classmethod
-    def setUpTestData(self):
-        self.section_csv = (
-            "Dave,m1_contour_practice,0.0,20.0,samediff/melody_1_contour.wav,practice,1\n"
-            "Dave,m2_same_practice,0.0,20.0,samediff/melody_1_same.wav,practice,1\n"
-            "Dave,m1_same,0.0,20.0,samediff/melody_1_same.wav,A,1\n"
-            "Dave,m1_scale,0.0,20.0,samediff/melody_1_scale.wav,B,1\n"
-            "Dave,m1_contour,0.0,20.0,samediff/melody_1_contour.wav,C,1\n"
-            "Dave,m1_interval,0.0,20.0,samediff/melody_1_interval.wav,D,1\n"
-            "Dave,m2_same,0.0,20.0,samediff/melody_2_same.wav,A,2\n"
-            "Dave,m2_scale,0.0,20.0,samediff/melody_2_scale.wav,B,2\n"
-            "Dave,m2_contour,0.0,20.0,samediff/melody_2_contour.wav,C,2\n"
-            "Dave,m2_interval,0.0,20.0,samediff/melody_2_interval.wav,D,2\n"
+    def setUpTestData(cls):
+        cls.playlist = Playlist.objects.get(name='CongoSameDiff')
+        cls.playlist._update_sections()
+        cls.participant = Participant.objects.create()
+        cls.block = Block.objects.get(
+            identifier="congo-same-diff",
         )
-        self.playlist = Playlist.objects.create(name='CongoSameDiff')
-        self.playlist.csv = self.section_csv
-        self.playlist._update_sections()
-        self.participant = Participant.objects.create()
-        experiment = Experiment.objects.create(identifier="congosamediff")
-        phase = Phase.objects.create(experiment=experiment)
-        self.block = Block.objects.create(
-            phase=phase, identifier="congosamediff", rules="CONGOSAMEDIFF", rounds=4
-        )
-        self.session = Session.objects.create(
-            block=self.block,
-            participant=self.participant,
-            playlist=self.playlist
+        cls.session = Session.objects.create(
+            block=cls.block, participant=cls.participant, playlist=cls.playlist
         )
 
     def test_initializes_correctly(self):

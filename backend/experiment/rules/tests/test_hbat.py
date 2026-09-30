@@ -8,7 +8,7 @@ from session.models import Session
 
 
 class HBatTest(TestCase):
-    fixtures = ['playlist', 'experiment']
+    fixtures = ["choice_lists", "goldsmiths_msi", "demographics", "rhythm_tests"]
 
     @classmethod
     def setUpTestData(cls):
@@ -41,7 +41,7 @@ class HBatTest(TestCase):
 
 
 class HBat_BST_Test(TestCase):
-    fixtures = ['playlist', 'experiment']
+    fixtures = ["choice_lists", "goldsmiths_msi", "demographics", "rhythm_tests"]
 
     @classmethod
     def setUpTestData(cls):
