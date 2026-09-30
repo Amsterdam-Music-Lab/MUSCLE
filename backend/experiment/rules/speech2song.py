@@ -6,7 +6,7 @@ from .base import BaseRules
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import Final
+from experiment.actions.final import FinalAction
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import RadiosQuestion

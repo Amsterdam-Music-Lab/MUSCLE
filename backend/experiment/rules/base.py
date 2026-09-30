@@ -6,11 +6,11 @@ from django.core.exceptions import ValidationError
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 
-from action.models import FinalFeedback, FinalScore
-from experiment.actions.types import FeedbackInfo
-from experiment.actions.final import Final
+from action.models import Final
+from experiment.actions.final import FinalAction
 from experiment.actions.form import Form
 from experiment.actions.trial import Trial
+from experiment.actions.types import FeedbackInfo
 from question.utils import get_unanswered_questions
 from result.models import Result
 from result.score import SCORING_RULES
@@ -142,13 +142,20 @@ class BaseRules(object):
         """
         return 0
 
-    def get_final_action(self, session: Session) -> str:
-        return Final(
-            statistic=self.get_final_statistic(session),
-            score=self.get_final_score(session),
-        )
+    def get_final_scores(self, session: Session) -> str:
+        return 0
 
-    def get_final_feedback_text(self, session: Session) -> FinalFeedback:
+    def get_final_action(self, session: Session) -> str:
+        scores = self.get_final_scores(session)
+        rank = session.block.get_active_rank(scores)
+        session.finish()
+        final = FinalAction(title=_("End of experiment"))
+        final.set_scores(scores)
+        final.set_active_rank(rank)
+        final.set_progress(session.block.experiment.progress)
+        return final.action()
+
+    def get_final_feedback_text(self, session: Session) -> str:
         """Create final score message for given session, base on score per result
         Override this to display different text on the final screen.
 

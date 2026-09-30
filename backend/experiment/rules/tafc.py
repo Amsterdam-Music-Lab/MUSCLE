@@ -36,7 +36,7 @@ from django.db.models import Avg
 from .base import BaseRules
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer
-from experiment.actions.final import Final
+from experiment.actions.final import FinalAction
 from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
@@ -141,7 +141,7 @@ class TwoAlternativeForced(BaseRules):
 
         return feedback
 
-    def get_final_view(self, session: Session) -> Final:
+    def get_final_view(self, session: Session) -> FinalAction:
         """
         Get Final view (action).
         """

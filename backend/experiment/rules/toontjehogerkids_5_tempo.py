@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import Final
+from experiment.actions.final import FinalAction
 from experiment.actions.info import Info
 from experiment.actions.score import Score
 from .toontjehoger_1_mozart import toontjehoger_ranks

@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from .base import BaseRules
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import Final
+from experiment.actions.final import FinalAction
 from experiment.actions.playback import MatchingPairs, PlaybackSection
 from experiment.actions.playlist import PlaylistSelection
 from experiment.actions.trial import Trial

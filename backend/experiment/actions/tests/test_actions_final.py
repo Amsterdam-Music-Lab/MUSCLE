@@ -11,7 +11,7 @@ from result.models import Result
 from session.models import Session
 
 from experiment.actions.button import Button
-from experiment.actions.final import Final
+from experiment.actions.final import FinalAction
 from experiment.actions.utils import get_experiment_url
 
 class FinalTest(TestCase):

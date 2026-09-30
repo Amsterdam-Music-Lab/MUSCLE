@@ -4,7 +4,7 @@ from os.path import join
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import Final
+from experiment.actions.final import FinalAction
 from experiment.actions.info import Info
 from experiment.actions.utils import get_experiment_url
 from session.models import Session

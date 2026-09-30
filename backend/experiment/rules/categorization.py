@@ -7,7 +7,7 @@ from django.db.models import Avg
 from experiment.actions.button import Button
 from experiment.actions.form import Form
 from experiment.actions.explainer import Explainer
-from experiment.actions.final import Final
+from experiment.actions.final import FinalAction
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial

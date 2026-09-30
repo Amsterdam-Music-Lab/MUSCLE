@@ -5,7 +5,7 @@ from django.db.models import Avg
 from django.test import TestCase
 
 from experiment.models import Block, Experiment, Phase
-from experiment.actions.final import Final
+from experiment.actions.final import FinalAction
 from participant.models import Participant
 from result.models import Result
 from section.models import Playlist, Song

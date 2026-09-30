@@ -6,7 +6,7 @@ from django.conf import settings
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import Final
+from experiment.actions.final import FinalAction
 from experiment.actions.form import Form
 from experiment.actions.html import HTML
 from experiment.actions.question import ButtonArrayQuestion
@@ -235,14 +235,14 @@ class Huang2022(Hooked):
                     return [self.finalize(session)]
         return actions
 
-    def finalize(self, session: Session) -> Final:
+    def finalize(self, session: Session) -> FinalAction:
         session.finish()
-        return Final(
+        return FinalAction(
             session=session,
             final_text=self.final_score_message(session),
             rank=self.rank(session),
             show_profile_link=True,
-            feedback_info=self.feedback_info()
+            feedback_info=self.feedback_info(),
         )
 
     def final_score_message(self, session):

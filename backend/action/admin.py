@@ -5,9 +5,6 @@ from modeltranslation.admin import TabbedTranslationAdmin, TranslationTabularInl
 from action.models import (
     Explainer,
     Final,
-    FinalFeedback,
-    FinalScore,
-    Progress,
     Step,
 )
 
@@ -22,21 +19,8 @@ class ExplainerAdmin(TabbedTranslationAdmin):
     inlines = [StepInline]
 
 
-class FinalFeedbackInline(TranslationTabularInline):
-    model = FinalFeedback
-
-
-class FinalScoreInline(TranslationTabularInline):
-    model = FinalScore
-
-
-class ProgressInline(admin.TabularInline):
-    model = Progress
-
-
 class FinalAdmin(TabbedTranslationAdmin):
     model = Final
-    inlines = [FinalFeedbackInline, FinalScoreInline, ProgressInline]
 
 
 admin.site.register(Explainer, ExplainerAdmin)

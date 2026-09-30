@@ -1,44 +1,53 @@
-import re
-from typing import Optional, Dict, TypedDict
+from typing import Optional, TypedDict
 
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions.types import FeedbackInfo
 from experiment.actions.utils import get_experiment_url
-from experiment.serializers import serialize_social_media_config, SocialMediaConfigConfiguration
+from experiment.models import Progress, Rank
 from session.models import Session
 
 from .base_action import BaseAction
 from .button import Button
 
 
-class FinalFeedback(TypedDict):
-    text: str
-
 class FinalScore(TypedDict):
-    score: float
-    text: str
+    value: float
+    label: str
+
+
+class ScoresAction(TypedDict):
+    session: FinalScore
+    relative: FinalScore
+    accumulative: FinalScore
+
+
+class AchievementAction(TypedDict):
+    label: str
+    description: str
+    class_name: str
+
+
+class RewardAction(TypedDict):
+    every_n: int
+    image: str
+
+
+class ProgressAction(TypedDict):
+    total_sessions: int
+    rewards: Optional[list[RewardAction]]
 
 
 class FinalActionResponse(TypedDict):
     view: str
-    score: FinalScore
-    percentile: Optional[float]
-    rank: Optional[str]
-    final_text: Optional[str]
-    button: Optional[Button]
-    points: str
-    action_texts: Dict[str, str]
     title: str
-    social: Optional[SocialMediaConfigConfiguration]
-    show_profile_link: bool
-    show_participant_link: bool
-    feedback_info: Optional[Dict[str, str]]
-    participant_id_only: bool
-    logo: Optional[LogoConfiguration]
+    achievement: AchievementAction
+    feedback: str
+    visualization: str
+    scores: ScoresAction
+    progress: ProgressAction
 
 
-class Final(BaseAction):  # pylint: disable=too-few-public-methods
+class FinalAction(BaseAction):  # pylint: disable=too-few-public-methods
     """
     Provide data for a "final" view, typically shown at the end of an experiment or session.
 
@@ -55,18 +64,11 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
     Args:
         session (Session): The current session object associated with the participant.
         title (str): The title displayed at the top of the final view. Defaults to a localized "Final score".
-        final_text (Optional[str]): An optional concluding message (e.g., "Thanks for participating!").
-        button (Optional[ButtonConfiguration]): Optional button configuration. For example:
-                                            {"text": "Play again", "link": "/{experiment_identifier}"}. If not provided, a default button with label "Next" will be rendered, unless the experiment is not replayable.
-                                            If the passed in button does not specify a link, `get_experiment_url` will be used to link back to the experiment, if it is replayable.
-        rank (Optional[str]): The participant's rank (e.g., "GOLD"). If not provided, no rank is displayed.
-        show_profile_link (bool): If True, display a link to the participant's profile.
-        show_participant_link (bool): If True, display a participant-related link or information.
-        show_participant_id_only (bool): If True, only the participant ID is shown, without a link.
-        feedback_info (Optional[Dict[str, str]]): Optional dictionary containing feedback-related data. For example:
-                                                  {"header": "Feedback", "prompt": "Tell us what you think", "button_text": "Submit"}.
-        score (float): Final score.
-        score_text (str): Text to display with score. Default: _("points)
+        visualization(str): The visualization displayed to show the participant's relative score
+        score_label (str): Text to display with score. Default: _("points)
+        button (Optional[Button]): Optional button configuration. For example:
+            {"label": "Play again", "link": "/{experiment_identifier}"}. If not provided, a default button with label "Next" will be rendered, unless the experiment is not replayable.
+            If the passed in button does not specify a link, `get_experiment_url` will be used to link back to the experiment, if it is replayable.
 
     Note:
         The `action()` method returns a `FinalActionResponse` that can be consumed by the frontend
@@ -88,53 +90,54 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
         self,
         session: Session,
         title: str = _("Final score"),
-        final_text: Optional[str] = None,
+        visualization: Optional[str] = None,
+        score_label: str = _("points"),
         button: Optional[Button] = None,
-        rank: Optional[str] = None,
-        show_profile_link: bool = False,
-        show_participant_link: bool = False,
-        show_participant_id_only: bool = False,
-        feedback_info: FeedbackInfo | None = None,
-        score: FinalScore,
-        statistic: Optional[float] = None,
     ):
         self.title = title
-        self.final_text = final_text
+        self.visualization = visualization
+        self.score_label = score_label
         self.button = self.get_button(button, session)
-        self.rank = rank
-        self.show_profile_link = show_profile_link
-        self.show_participant_link = show_participant_link
-        self.show_participant_id_only = show_participant_id_only
-        self.feedback_info = feedback_info
-        self.statistic = statistic
-        self.score = score
-        self.score_text = score_text
 
     def action(self) -> FinalActionResponse:
         response: FinalActionResponse = {
             "view": self.view,
-            "score": {
-                "value": self.total_score,
-                "text": self.score_text,
-            },
-            "statistic": self.statistic,
-            "rank": self.rank,
-            "finalText": self.wrap_plain_final_text(),
-            "button": self.button.action() if self.button else None,
-            "actionTexts": {
-                "playAgain": _("Play again"),
-                "profile": _("My profile"),
-                "allExperiments": _("All experiments"),
-            },
             "title": self.title,
-            "social": self.get_social_media_config(self.session),
-            "showProfileLink": self.show_profile_link,
-            "showParticipantLink": self.show_participant_link,
-            "feedbackInfo": self.feedback_info,
-            "participantIDOnly": self.show_participant_id_only,
+            "achievement": self.rank.get_achievement_data(),
+            "feedback": self.rank.get_feedback_data(self.relative_score),
+            "visualization": self.visualization,
+            "scores": {
+                "relative": {"value": self.relative_score, "label": "%"},
+                "session": {
+                    "value": self.score,
+                    "label": self.score_label,
+                },
+                "total": {
+                    "value": self.accumulative_score,
+                    "label": self.score_label,
+                },
+            },
+            "progress": self.progress.convert_to_action(),
+            "button": self.button,
         }
 
         return response
+
+    def set_scores(
+        self,
+        score: float = None,
+        relative_score: float = 100,
+        accumulative_score: float = None,
+    ):
+        self.score = score
+        self.relative_score = relative_score
+        self.accumulative_score = accumulative_score
+
+    def set_progress(self, progress: Progress):
+        self.progress = progress
+
+    def set_active_rank(self, rank: Rank):
+        self.rank = rank
 
     def get_button(self, button: Button, session: Session) -> Optional[Button]:
         """
@@ -148,18 +151,3 @@ class Final(BaseAction):  # pylint: disable=too-few-public-methods
                 button.link = button_link
                 return button
             return Button(label=_("Next"), link=button_link)
-
-    def get_social_media_config(self, session: Session) -> Optional[SocialMediaConfigConfiguration]:
-        experiment = session.block.phase.experiment
-        if hasattr(experiment, "social_media_config") and experiment.social_media_config:
-            return serialize_social_media_config(experiment.social_media_config, session.total_score())
-        return None
-
-    def wrap_plain_final_text(self):
-        """check if `final_text` starts with a html tag
-        If not, wrap it in a `<center>` element for better alignment
-        """
-        tag_pattern = re.compile("<[a-z]*>")
-        if self.final_text and not re.match(tag_pattern, str(self.final_text)):
-            return f"<center>{self.final_text}</center>"
-        return self.final_text

@@ -3,7 +3,7 @@ from django.template.loader import render_to_string
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import Final
+from experiment.actions.final import FinalAction
 from question.banks import get_question_bank
 from session.models import Session
 from .base import BaseRules
@@ -58,7 +58,7 @@ class RhythmBatteryFinal(BaseRules):
         else:
             rendered = render_to_string(self.debrief_form)
             session.finish()
-            return Final(
+            return FinaAction(
                 session,
                 title=_("Thank you very much for participating!"),
                 final_text=rendered,

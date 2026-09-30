@@ -77,7 +77,16 @@ class Experiment(models.Model):
             "If True, the experiment will restart from the first block after the last block has been finished."
         ),
     )
-    theme_config = models.ForeignKey("theme.ThemeConfig", blank=True, null=True, on_delete=models.SET_NULL)
+    theme_config = models.ForeignKey(
+        "theme.ThemeConfig", blank=True, null=True, on_delete=models.SET_NULL
+    )
+    ranking = models.ForeignKey(
+        "experiment.Ranking",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="experiments",
+    )
     active = models.BooleanField(default=True)
     social_media_config: Optional["SocialMediaConfig"]
     phases: models.QuerySet["Phase"]
@@ -97,6 +106,53 @@ class Experiment(models.Model):
 
         return Block.objects.filter(phase__experiment=self)
 
+    def get_active_rank(self, scores: dict):
+        if not self.rankings:
+            return None
+        else:
+            return self.rankings.get_active_rank(scores.get('accumulative_score'))
+
+
+class Progress(models.Model):
+    experiment = models.OneToOneField(Experiment, on_delete=models.CASCADE)
+    total_sessions = models.IntegerField(
+        help_text=_(
+            "Optional: set the total number of sessions the participant should play to complete this experiment. This shows a progress bar after very session."
+        ),
+        blank=True,
+        null=True,
+    )
+    # TO DO? Allow setting a custom image on the progress bar
+
+    def convert_to_action(self):
+        {
+            "total_sessions": self.total_sessions,
+            "rewards": (
+                [reward.convert_to_action() for reward in self.rewards.objects.all()]
+                if self.rewards.objects.count()
+                else None
+            ),
+        }
+
+
+REWARD_IMAGE_CHOICES = [
+    ("cup", _("Cup")),
+    ("star", _("Star")),
+]
+
+
+class Reward(models.Model):
+    progress = models.ForeignKey(
+        Progress, on_delete=models.CASCADE, related_name="rewards"
+    )
+    every_n = models.PositiveIntegerField(
+        help_text=_("Show this reward every nth session"), default=1
+    )
+    image = models.CharField(max_length=8, choices=REWARD_IMAGE_CHOICES, default="cup")
+
+    def convert_to_action(self):
+        return {"every_n": self.every_n, "image": self.image}
+
 
 class Phase(models.Model):
     """Root entity for configuring experiment phases
@@ -108,13 +164,17 @@ class Phase(models.Model):
         randomize (bool): Should the blocks of this phase be randomized?
     """
 
-    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE, related_name="phases")
+    experiment = models.ForeignKey(
+        Experiment, on_delete=models.CASCADE, related_name="phases"
+    )
     index = models.IntegerField(
         default=0,
         help_text="Index of the phase in the experiment. Lower numbers come first.",
     )
     dashboard = models.BooleanField(default=False)
-    randomize = models.BooleanField(default=False, help_text="Randomize the order of the blocks in this phase.")
+    randomize = models.BooleanField(
+        default=False, help_text="Randomize the order of the blocks in this phase."
+    )
 
     def __str__(self):
         compound_name = self.experiment.name or self.experiment.identifier
@@ -142,6 +202,7 @@ class Block(models.Model):
         theme_config (theme.ThemeConfig): Theme settings
         rules_config (dict): a dictionary containing extra settings for the rules coupled to the block
     """
+
     experiment = models.ForeignKey(
         Experiment,
         on_delete=models.CASCADE,
@@ -169,6 +230,14 @@ class Block(models.Model):
 
     theme_config = models.ForeignKey(
         "theme.ThemeConfig", on_delete=models.SET_NULL, blank=True, null=True
+    )
+
+    ranking = models.ForeignKey(
+        "experiment.Ranking",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="blocks",
     )
 
     rules_config = models.JSONField(
@@ -233,6 +302,12 @@ class Block(models.Model):
         cl = BLOCK_RULES[self.rules]
         return cl()
 
+    def get_active_rank(self, scores: dict):
+        if not self.rankings:
+            return None
+        else:
+            return self.rankings.get_active_rank(scores.get("relative_score"))
+
     def max_score(self) -> int:
         """Get max score from all sessions with a positive score
 
@@ -286,6 +361,7 @@ class Block(models.Model):
                 index=i + 1,
             )
 
+
 class Feedback(models.Model):
     """A model for adding feedback to an experiment block
 
@@ -308,14 +384,22 @@ class SocialMediaConfig(models.Model):
         channels (list[str]): Social media channel
     """
 
-    experiment = models.OneToOneField(Experiment, on_delete=models.CASCADE, related_name="social_media_config")
+    experiment = models.OneToOneField(
+        Experiment, on_delete=models.CASCADE, related_name="social_media_config"
+    )
 
     tags = ArrayField(
-        models.CharField(max_length=100), blank=True, default=list, help_text=_("List of tags for social media sharing")
+        models.CharField(max_length=100),
+        blank=True,
+        default=list,
+        help_text=_("List of tags for social media sharing"),
     )
 
     url = models.URLField(
-        blank=True, help_text=_("URL to be shared on social media. If empty, the experiment URL will be used.")
+        blank=True,
+        help_text=_(
+            "URL to be shared on social media. If empty, the experiment URL will be used."
+        ),
     )
 
     SOCIAL_MEDIA_CHANNELS = [
@@ -349,18 +433,24 @@ class SocialMediaConfig(models.Model):
         experiment_name = self.experiment.name
 
         if social_message:
-            has_placeholders = "{points}" in social_message and "{experiment_name}" in social_message
+            has_placeholders = (
+                "{points}" in social_message and "{experiment_name}" in social_message
+            )
 
             if not has_placeholders:
                 return social_message
 
             if has_placeholders and (score is None or experiment_name is None):
-                raise ValueError("score and experiment_name are required for placeholder substitution")
+                raise ValueError(
+                    "score and experiment_name are required for placeholder substitution"
+                )
 
             return social_message.format(points=score, experiment_name=experiment_name)
 
         if score is None or experiment_name is None:
-            raise ValueError("score and name are required when no social media message is provided")
+            raise ValueError(
+                "score and name are required when no social media message is provided"
+            )
 
         return _("I scored %(score)d points in %(experiment_name)s") % {
             "score": score,
@@ -370,3 +460,64 @@ class SocialMediaConfig(models.Model):
     def __str__(self):
         social_media_description = self.experiment.name or self.experiment.identifier
         return f"Social Media for {social_media_description}"
+
+
+class Ranking(models.Model):
+    identifier = models.SlugField(primary_key=True, max_length=128)
+
+    def get_active_rank(self, final_score: float) -> Optional["experiment.Rank"]:
+        try:
+            return (
+                self.ranks.filter(cutoff__lte=final_score)
+                .order_by(models.Max("cutoff"))
+                .first()
+            )
+        except:
+            return None
+
+
+RANK_CHOICES = [
+    (None, "----"),
+    ("plastic", _("Plastic")),
+    ("bronze", _("Bronze")),
+    ("silver", _("Silver")),
+    ("gold", _("Gold")),
+    ("platinum", _("Platinum")),
+    ("diamond", _("Diamond")),
+]
+
+
+class Rank(models.Model):
+    ranking = models.ForeignKey(
+        Ranking, null=True, blank=True, on_delete=models.CASCADE, related_name="ranks"
+    )
+    label = models.CharField(
+        max_length=8, choices=RANK_CHOICES, null=True, default=None
+    )
+    description = models.TextField(
+        blank=True,
+        default="",
+        help_text=_("(Optional) Enter a description of the rank here"),
+    )
+    feedback = models.TextField(
+        blank=True,
+        default="",
+        help_text=_("(Optional) enter feedback to your participant here"),
+    )
+    cutoff = models.FloatField(
+        help_text=_("The minimal relative score for which this rank is displayed"),
+        default=0.0,
+        blank=True,
+    )
+
+    def get_achievement_data(self):
+        return {
+            "label": self.get_label_display(),  # Django inbuilt: returns translatable text
+            "description": self.description,
+            "class_name": self.label,
+        }
+
+    def get_feedback_data(self, relative_score: float) -> str:
+        if "{relative}" in self.feedback:
+            self.feedback = self.feedback.replace("{relative}", relative_score)
+        return self.feedback

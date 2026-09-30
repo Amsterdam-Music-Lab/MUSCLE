@@ -8,7 +8,7 @@ from .base import BaseRules
 from .practice import PracticeMixin
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import Final
+from experiment.actions.final import FinalAction
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
@@ -181,7 +181,7 @@ class HBat(BaseRules, PracticeMixin):
             instruction=instruction, steps=[], button=Button(_("Next fragment"))
         )
 
-    def finalize_block(self, session: Session) -> Final:
+    def finalize_block(self, session: Session) -> FinalAction:
         """ if either the max_turnpoints have been reached,
         or if the section couldn't be found (outlier), stop the experiment
         """
@@ -194,7 +194,7 @@ class HBat(BaseRules, PracticeMixin):
         trivia = self.get_trivia()
         final_text = render_feedback_trivia(feedback, trivia)
         session.save()
-        return Final(session, title=_("End"), final_text=final_text)
+        return FinaAction(session, title=_("End"), final_text=final_text)
 
     def get_trivia(self):
         return _("When people listen to music, they often perceive an underlying regular pulse, like the woodblock \

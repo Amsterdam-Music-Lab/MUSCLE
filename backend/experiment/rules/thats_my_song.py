@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.button import Button
-from experiment.actions.final import Final
+from experiment.actions.final import FinalAction
 from experiment.actions.form import Form
 from experiment.actions.playlist import PlaylistSelection
 from experiment.actions.question import CheckBoxQuestion
