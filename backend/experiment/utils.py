@@ -139,19 +139,25 @@ def block_export_json_results(block_slug: str) -> ZipFile:
 
     this_block = Block.objects.get(slug=block_slug)
     # Init empty querysets
-    all_results = Result.objects.none()
     all_songs = Song.objects.none()
     all_sections = Section.objects.none()
-    all_participants = Participant.objects.none()
     all_profiles = Result.objects.none()
     all_feedback = Feedback.objects.filter(block=this_block)
 
     # Collect data
     all_sessions = this_block.export_sessions().order_by("pk")
+    session_ids = list(all_sessions.values_list("pk", flat=True))
+    participant_ids = list(
+        all_sessions.values_list("participant_id", flat=True).distinct()
+    )
+
+    # Use IN-lists instead of OR-chaining per session: on blocks with many
+    # sessions the OR-chain query was heavy enough to get the Postgres
+    # backend OOM-killed on the export host.
+    all_results = Result.objects.filter(session_id__in=session_ids)
+    all_participants = Participant.objects.filter(pk__in=participant_ids)
 
     for session in all_sessions:
-        all_results |= session.result_set.all()
-        all_participants |= Participant.objects.filter(pk=session.participant.pk)
         all_profiles |= session.participant.export_profiles()
 
     for playlist in this_block.playlists.all():
@@ -166,37 +172,63 @@ def block_export_json_results(block_slug: str) -> ZipFile:
     with ZipFile(zip_buffer, "w") as new_zip:
         # serialize data to new json files within the zip file
         new_zip.writestr(
-            "sessions.json", data=str(serializers.serialize("json", all_sessions))
+            "sessions.json",
+            data=str(
+                serializers.serialize("json", all_sessions.iterator(chunk_size=200))
+            ),
         )
         new_zip.writestr(
             "participants.json",
-            data=str(serializers.serialize("json", all_participants.order_by("pk"))),
+            data=str(
+                serializers.serialize(
+                    "json",
+                    all_participants.order_by("pk").iterator(chunk_size=200),
+                )
+            ),
         )
         new_zip.writestr(
             "profiles.json",
             data=str(
                 serializers.serialize(
-                    "json", all_profiles.order_by("participant", "pk")
+                    "json",
+                    all_profiles.order_by("participant", "pk").iterator(
+                        chunk_size=200
+                    ),
                 )
             ),
         )
         new_zip.writestr(
             "results.json",
-            data=str(serializers.serialize("json", all_results.order_by("session"))),
+            data=str(
+                serializers.serialize(
+                    "json", all_results.order_by("session").iterator(chunk_size=200)
+                )
+            ),
         )
         new_zip.writestr(
             "sections.json",
             data=str(
-                serializers.serialize("json", all_sections.order_by("playlist", "pk"))
+                serializers.serialize(
+                    "json",
+                    all_sections.order_by("playlist", "pk").iterator(chunk_size=200),
+                )
             ),
         )
         new_zip.writestr(
             "songs.json",
-            data=str(serializers.serialize("json", all_songs.order_by("pk"))),
+            data=str(
+                serializers.serialize(
+                    "json", all_songs.order_by("pk").iterator(chunk_size=200)
+                )
+            ),
         )
         new_zip.writestr(
             "feedback.json",
-            data=str(serializers.serialize("json", all_feedback.order_by("pk"))),
+            data=str(
+                serializers.serialize(
+                    "json", all_feedback.order_by("pk").iterator(chunk_size=200)
+                )
+            ),
         )
     return zip_buffer
 

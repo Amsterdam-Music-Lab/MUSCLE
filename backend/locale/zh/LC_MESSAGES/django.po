@@ -16,6 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: aml/base_settings.py:132 experiment/rules/speech2song.py:38
 #: question/languages.py:59
@@ -910,7 +911,7 @@ msgstr ""
 msgid ""
 "TuneTwins is a musical version of \"Memory\". It consists of 16 musical "
 "fragments. Your task is to listen and find the 8 matching pairs."
-msgstr ""
+msgstr "TuneTwins 是音乐版的记忆翻牌游戏，由16段音乐片段组成。你的任务是聆听并找出8对相互匹配的音乐。"
 
 #: experiment/rules/matching_pairs.py:50
 msgid ""
@@ -938,30 +939,20 @@ msgid ""
 msgstr "游戏开始前，请您先回答 %i 个基本信息问题。"
 
 #: experiment/rules/matching_pairs_2025.py:31
-msgid ""
-"This was not a match, so you get 0 points. Please try again to see if you "
-"can find a matching pair."
-msgstr "这两张卡片不匹配，不得分。请继续尝试寻找匹配的卡片。"
+msgid "Every music card has a twin. Remember cards' tune and position, then find where its match is hiding!"
+msgstr "每张音乐卡片都有且只有一张配对卡。记住卡片的音乐和位置，找找它们的双胞胎藏在哪里吧！"
 
 #: experiment/rules/matching_pairs_2025.py:34
-#, fuzzy
-#| msgid ""
-#| "You got a matching pair, but you didn't hear the matching card before. "
-#| "This is considered a lucky match. You get 10 points."
-msgid ""
-"You got a matching pair, but you didn't hear both cards before. This is "
-"considered a lucky match. You get 10 points."
-msgstr "配对成功！不过您之前没听过第二张卡片，获得幸运分 10 分。"
+msgid "The card(s) you just flipped were new to you — lucky match! +10 points!"
+msgstr "这一回合的匹配卡片您之前没听过，幸运配对，运气不错！+10 分🍀"
 
 #: experiment/rules/matching_pairs_2025.py:36
-msgid "You got a matching pair. You get 20 points."
-msgstr "匹配成功！获得 20 分！"
+msgid "Sharp ears, sharp memory! Matched — +20!"
+msgstr "听得准，记得牢！配对成功 +20 分"
 
 #: experiment/rules/matching_pairs_2025.py:38
-msgid ""
-"You thought you found a matching pair, but you didn't. This is considered a "
-"misremembered pair. You lose 10 points."
-msgstr "您以为这两张卡片是一对，但它们不匹配。记忆偏差，减 10 分。"
+msgid "You've heard both of these, but they don't match. Keep track of where each sound is so you don't drop points!"
+msgstr "这两张你都听过，但它们不是一对。仔细记住音乐位置来避免扣分！"
 
 #: experiment/rules/matching_pairs_2025.py:43
 msgid "Nice start! Your first star is 2 games away."
@@ -1109,34 +1100,28 @@ msgstr ""
 "*"
 
 #: experiment/rules/matching_pairs_2025.py:265
-msgid ""
-"You get a board with 16 musical cards. **Pick a card,** and listen to it "
-"carefully..."
-msgstr "您将在游戏中看到16张音乐卡片。**请选择一张卡片**，仔细聆听..."
+msgid "You'll see a board with 16 musical cards. **Each turn, you can select two cards in sequence.**"
+msgstr "您将在游戏中看到16张音乐卡片。**每回合可依次选择两张卡片**。"
 
 #: experiment/rules/matching_pairs_2025.py:269
-msgid "Then try to **find a second card that matches it.**"
-msgstr "然后尝试**找到与之匹配的第二张卡片。**"
+msgid "Listen carefully and **find all 8 matching pairs to finish one level**. Scoring rules are as follows:"
+msgstr "仔细聆听，**找出全部8对匹配卡片即完成一关**，计分规则如下："
 
 #: experiment/rules/matching_pairs_2025.py:273
-msgid "**Find the 8 matching pairs** to clear the board and score points:"
-msgstr "**找出全部8对匹配卡片**即可完成游戏，计分规则如下："
+msgid "**+20 points:** The second card of the turn was one you'd heard before, and you matched it successfully — memory wins!"
+msgstr "**+20分**：回合中第二张卡片听过且成功配对，实力加分！"
 
 #: experiment/rules/matching_pairs_2025.py:278
-msgid ""
-"**+20 points:** Matched first card with one you’ve heard before — memory "
-"wins!"
-msgstr "**+20分**：将第一张卡片与之前听过的卡片成功配对 —— 出色的记忆！"
+msgid "**-10 points:** Chose a wrong second card that's heard before? Oops — penalty..."
+msgstr "**-10分**：回合中第二张卡片听过但选错了？遗憾扣分。"
 
 #: experiment/rules/matching_pairs_2025.py:283
-msgid ""
-"**-10 points:** Chose a wrong second card that’s heard before? Oops — "
-"penalty..."
-msgstr "**-10分**：第二张卡片听过但选错了？遗憾扣分。"
+msgid "**+10 points:** The second card of the turn was one you hadn't heard before, but you got lucky and matched it anyway? A lucky bonus."
+msgstr "**+10分**：回合中第二张卡片没听过但歪打正着？幸运加分。"
 
 #: experiment/rules/matching_pairs_2025.py:288
-msgid "Some cards sound **distorted** on purpose. Stay sharp!"
-msgstr "部分卡片的声音经过**失真处理**。但这正是挑战所在，请认真聆听辨别！"
+msgid "In some levels, the music on the matching cards has been **distorted**. That's exactly where the challenge lies! **Stay sharp!**"
+msgstr "部分关卡配对卡片的音乐经过失真处理。**这正是挑战所在, 请保持敏锐！**"
 
 #: experiment/rules/matching_pairs_2025.py:390
 msgid "Exploring"

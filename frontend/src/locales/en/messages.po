@@ -223,7 +223,7 @@ msgstr "No consent was given"
 
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:87
 msgid "No match, try again!"
-msgstr "No match, try again!"
+msgstr "Remember the music and find their match!"
 
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:89
 msgid "Nope, that's no match..."
@@ -375,7 +375,7 @@ msgstr "Yay, you've earned a star! 💫"
 
 #: src/components/modules/ScoreFeedback/ScoreFeedback.tsx:52
 msgid "You got 0 points."
-msgstr "You got 0 points."
+msgstr " "
 
 #: src/components/application/View/View.tsx:127
 msgid "Your feedback"

@@ -199,7 +199,7 @@ msgstr "未给予同意"
 
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:87
 msgid "No match, try again!"
-msgstr "不匹配，再试一次！"
+msgstr "记住音乐，寻找配对！"
 
 #: src/components/matching-pairs/TuneTwins/TuneTwins.tsx:89
 msgid "Nope, that's no match..."
