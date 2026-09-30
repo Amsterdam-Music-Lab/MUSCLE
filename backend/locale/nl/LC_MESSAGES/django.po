@@ -975,32 +975,20 @@ msgid ""
 msgstr "Voordat het spel begint, willen we je %i demografische vragen stellen."
 
 #: experiment/rules/matching_pairs_2025.py:43
-msgid ""
-"This was not a match, so you get 0 points. Please try again to see if you "
-"can find a matching pair."
-msgstr ""
-"Dit was geen match, dus je krijgt 0 punten. Probeer opnieuw een matchend "
-"paar te vinden."
+msgid "Every music card has a twin. Remember cards' tune and position, then find where its match is hiding!"
+msgstr "Elke muziekkaart heeft een tweeling. Onthoud de melodie en de plek van de kaarten, en ontdek waar de match zich verstopt!"
 
 #: experiment/rules/matching_pairs_2025.py:46
-msgid ""
-"You got a matching pair, but you didn't hear both cards before. This is "
-"considered a lucky match. You get 10 points."
-msgstr ""
-"Je hebt een matchend paar gevonden, maar je hebt beide kaarten niet eerder "
-"gehoord: een toevalstreffer. Je krijgt 10 punten."
+msgid "The card(s) you just flipped were new to you — lucky match! +10 points!"
+msgstr "Je had de omgedraaide kaart(en) nog niet eerder gehoord — een toevalstreffer! +10 punten!"
 
 #: experiment/rules/matching_pairs_2025.py:48
-msgid "You got a matching pair. You get 20 points."
-msgstr "Je hebt een matchend paar gevonden. Je krijgt 20 punten."
+msgid "Sharp ears, sharp memory! Matched — +20!"
+msgstr "Scherpe oren, scherp geheugen! Match — +20!"
 
 #: experiment/rules/matching_pairs_2025.py:50
-msgid ""
-"You thought you found a matching pair, but you didn't. This is considered a "
-"misremembered pair. You lose 10 points."
-msgstr ""
-"Je dacht een matchend paar te hebben gevonden, maar dat was niet zo. Je hebt "
-"het verkeerd herinnerd en verliest 10 punten."
+msgid "You've heard both of these, but they don't match. Keep track of where each sound is so you don't drop points!"
+msgstr "Je hebt deze allebei al gehoord, maar ze vormen geen paar. Onthoud goed waar elk geluid zit, zodat je geen punten verliest!"
 
 #: experiment/rules/matching_pairs_2025.py:79
 msgid ""
@@ -1012,41 +1000,28 @@ msgid "Click to start!"
 msgstr "Klik om te starten!"
 
 #: experiment/rules/matching_pairs_2025.py:181
-msgid ""
-"You get a board with 16 musical cards. **Pick a card,** and listen to it "
-"carefully..."
-msgstr ""
-"Je ziet zo een bord met 16 muzikale kaarten. **Kies een kaart** en luister "
-"goed..."
+msgid "You'll see a board with 16 musical cards. **Each turn, you can select two cards in sequence.**"
+msgstr "Je ziet een bord met 16 muzikale kaarten. **Elke beurt kies je na elkaar twee kaarten.**"
 
 #: experiment/rules/matching_pairs_2025.py:185
-msgid "Then try to **find a second card that matches it.**"
-msgstr "Probeer dan een **matchende tweede kaart te vinden**."
+msgid "Listen carefully and **find all 8 matching pairs to finish one level**. Scoring rules are as follows:"
+msgstr "Luister goed en **vind alle 8 matchende paren om een level af te ronden**. Zo werkt de puntentelling:"
 
 #: experiment/rules/matching_pairs_2025.py:189
-msgid "**Find the 8 matching pairs** to clear the board and score points:"
-msgstr ""
-"**Vind de 8 matchende paren** om het bord leeg te maken en punten te scoren:"
+msgid "**+20 points:** The second card of the turn was one you'd heard before, and you matched it successfully — memory wins!"
+msgstr "**+20 punten:** De tweede kaart van de beurt had je al eerder gehoord, en je hebt de match gevonden — geheugen wint!"
 
 #: experiment/rules/matching_pairs_2025.py:194
-msgid ""
-"**+20 points:** Matched first card with one you’ve heard before — memory "
-"wins!"
-msgstr ""
-"**+20 punten:** Eerste kaart gematcht met een die je eerder hebt gehoord — "
-"geheugen wint!"
+msgid "**-10 points:** Chose a wrong second card that's heard before? Oops — penalty..."
+msgstr "**-10 punten:** Een verkeerde tweede kaart gekozen die je al eerder had gehoord? Oeps — strafpunten..."
 
 #: experiment/rules/matching_pairs_2025.py:199
-msgid ""
-"**-10 points:** Chose a wrong second card that’s heard before? Oops — "
-"penalty..."
-msgstr ""
-"**-10 punten:** Verkeerde tweede kaart gekozen die eerder is gehoord? Oeps — "
-"je verliest punten..."
+msgid "**+10 points:** The second card of the turn was one you hadn't heard before, but you got lucky and matched it anyway? A lucky bonus."
+msgstr "**+10 punten:** De tweede kaart van de beurt had je nog niet eerder gehoord, maar je vond toch een match? Een gelukstreffer-bonus."
 
 #: experiment/rules/matching_pairs_2025.py:204
-msgid "Some cards sound **distorted** on purpose. Stay sharp!"
-msgstr "Sommige kaarten klinken **vervormd** opzettelijk. Blijf scherp!"
+msgid "In some levels, the music on the matching cards has been **distorted**. That's exactly where the challenge lies! **Stay sharp!**"
+msgstr "In sommige levels is de muziek op de matchende kaarten **vervormd**. Daar zit juist de uitdaging! **Blijf scherp!**"
 
 #: experiment/rules/matching_pairs_2025.py:287
 #, python-format
