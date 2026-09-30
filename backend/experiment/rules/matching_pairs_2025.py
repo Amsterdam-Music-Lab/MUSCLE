@@ -28,14 +28,14 @@ class MatchingPairs2025(MatchingPairsGame):
     num_pairs = 8
     tutorial = {
         "no_match": _(
-            "This was not a match, so you get 0 points. Please try again to see if you can find a matching pair."
+            "Every music card has a twin. Remember cards' tune and position, then find where its match is hiding!"
         ),
         "lucky_match": _(
-            "You got a matching pair, but you didn't hear both cards before. This is considered a lucky match. You get 10 points."
+            "The card(s) you just flipped were new to you — lucky match! +10 points!"
         ),
-        "memory_match": _("You got a matching pair. You get 20 points."),
+        "memory_match": _("Sharp ears, sharp memory! Matched — +20!"),
         "misremembered": _(
-            "You thought you found a matching pair, but you didn't. This is considered a misremembered pair. You lose 10 points."
+            "You've heard both of these, but they don't match. Keep track of where each sound is so you don't drop points!"
         ),
     }
     cutoff = 30
@@ -262,30 +262,30 @@ class MatchingPairs2025(MatchingPairsGame):
             steps=[
                 Step(
                     description=_(
-                        'You get a board with 16 musical cards. **Pick a card,** and listen to it carefully...'
+                        "You'll see a board with 16 musical cards. **Each turn, you can select two cards in sequence.**"
                     )
                 ),
                 Step(
-                    description=_("Then try to **find a second card that matches it.**")
+                    description=_("Listen carefully and **find all 8 matching pairs to finish one level**. Scoring rules are as follows:")
                 ),
                 Step(
                     description=_(
-                        "**Find the 8 matching pairs** to clear the board and score points:"
-                    )
-                ),
-                Step(
-                    description=_(
-                        "**+20 points:** Matched first card with one you’ve heard before — memory wins!"
+                        "**+20 points:** The second card of the turn was one you'd heard before, and you matched it successfully — memory wins!"
                     )
                 ),
                 Step(
                     description=_(
-                        "**-10 points:** Chose a wrong second card that’s heard before? Oops — penalty..."
+                        "**-10 points:** Chose a wrong second card that's heard before? Oops — penalty..."
                     )
                 ),
                 Step(
                     description=_(
-                        "Some cards sound **distorted** on purpose. Stay sharp!"
+                        "**+10 points:** The second card of the turn was one you hadn't heard before, but you got lucky and matched it anyway? A lucky bonus."
+                    )
+                ),
+                Step(
+                    description=_(
+                        "In some levels, the music on the matching cards has been **distorted**. That's exactly where the challenge lies! **Stay sharp!**"
                     )
                 ),
             ],
