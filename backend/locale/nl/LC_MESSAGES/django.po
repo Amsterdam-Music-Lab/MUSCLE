@@ -1084,8 +1084,6 @@ msgid "Some cards sound **distorted** on purpose. Stay sharp!"
 msgstr "Sommige kaarten klinken opzettelijk **vervormd**. Blijf alert!"
 
 #: experiment/rules/matching_pairs_2025.py:264
-#, fuzzy, python-format
-#| msgid "You outperformed {}% of the players!"
 msgid "You outperformed {}% of the players!"
 msgstr "Je hebt het beter dan {}% van alle spelers gedaan!"
 
