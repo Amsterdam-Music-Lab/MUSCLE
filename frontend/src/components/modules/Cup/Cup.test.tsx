@@ -18,8 +18,8 @@ describe("Cup Component", () => {
     const text = getByTestId("cup-text");
 
     expect(cup).toBeInTheDocument();
-    expect(cup.className).toContain("plastic"); // default type
-    expect(text.textContent).toBe("Plastic"); // default label
+    expect(cup.className).toContain("diamond"); // default type
+    expect(text.textContent).toBe("Diamond"); // default label
   });
 
   it("renders with a specific type and label", () => {

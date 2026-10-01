@@ -922,32 +922,20 @@ msgstr ""
 "Antes de começar o jogo, gostaríamos de fazer %i perguntas demográficas."
 
 #: experiment/rules/matching_pairs_2025.py:43
-msgid ""
-"This was not a match, so you get 0 points. Please try again to see if you "
-"can find a matching pair."
-msgstr ""
-"Este não foi um par correspondente, então você ganha 0 pontos. Por favor, "
-"tente novamente para ver se consegue encontrar um par correspondente."
+msgid "Every music card has a twin. Remember cards' tune and position, then find where its match is hiding!"
+msgstr "Cada cartão musical tem um gêmeo. Lembre-se da música e da posição dos cartões e descubra onde o par está escondido!"
 
 #: experiment/rules/matching_pairs_2025.py:46
-msgid ""
-"You got a matching pair, but you didn't hear both cards before. This is "
-"considered a lucky match. You get 10 points."
-msgstr ""
-"Você conseguiu um par correspondente, mas não ouviu ambos os cartões antes. "
-"Isso é considerado um par sortudo. Você ganha 10 pontos."
+msgid "The card(s) you just flipped were new to you — lucky match! +10 points!"
+msgstr "Você ainda não tinha ouvido o(s) cartão(ões) que acabou de virar — par sortudo! +10 pontos!"
 
 #: experiment/rules/matching_pairs_2025.py:48
-msgid "You got a matching pair. You get 20 points."
-msgstr "Você conseguiu um par correspondente. Você ganha 20 pontos."
+msgid "Sharp ears, sharp memory! Matched — +20!"
+msgstr "Ouvido afiado, memória afiada! Par encontrado — +20!"
 
 #: experiment/rules/matching_pairs_2025.py:50
-msgid ""
-"You thought you found a matching pair, but you didn't. This is considered a "
-"misremembered pair. You lose 10 points."
-msgstr ""
-"Você achou que encontrou um par correspondente, mas não encontrou. Isso é "
-"considerado um par mal lembrado. Você perde 10 pontos."
+msgid "You've heard both of these, but they don't match. Keep track of where each sound is so you don't drop points!"
+msgstr "Você já ouviu estes dois, mas eles não formam um par. Lembre-se de onde está cada som para não perder pontos!"
 
 #: experiment/rules/matching_pairs_2025.py:79
 msgid ""
@@ -960,43 +948,28 @@ msgid "Click to start!"
 msgstr "Clique para começar!"
 
 #: experiment/rules/matching_pairs_2025.py:181
-msgid ""
-"You get a board with 16 musical cards. **Pick a card,** and listen to it "
-"carefully..."
-msgstr ""
-"Você recebe um tabuleiro com 16 cartões musicais. **Escolha um cartão** e "
-"ouça-o com atenção..."
+msgid "You'll see a board with 16 musical cards. **Each turn, you can select two cards in sequence.**"
+msgstr "Você verá um tabuleiro com 16 cartões musicais. **A cada rodada, você pode escolher dois cartões, um após o outro.**"
 
 #: experiment/rules/matching_pairs_2025.py:185
-msgid "Then try to **find a second card that matches it.**"
-msgstr ""
-"Em seguida, tente **encontrar um segundo cartão que corresponda a ele.**"
+msgid "Listen carefully and **find all 8 matching pairs to finish one level**. Scoring rules are as follows:"
+msgstr "Ouça com atenção e **encontre os 8 pares correspondentes para concluir um nível**. As regras de pontuação são as seguintes:"
 
 #: experiment/rules/matching_pairs_2025.py:189
-msgid "**Find the 8 matching pairs** to clear the board and score points:"
-msgstr ""
-"**Encontre os 8 pares correspondentes** para limpar o tabuleiro e marcar "
-"pontos:"
+msgid "**+20 points:** The second card of the turn was one you'd heard before, and you matched it successfully — memory wins!"
+msgstr "**+20 pontos:** O segundo cartão da rodada era um que você já tinha ouvido, e você formou o par — a memória vence!"
 
 #: experiment/rules/matching_pairs_2025.py:194
-msgid ""
-"**+20 points:** Matched first card with one you’ve heard before — memory "
-"wins!"
-msgstr ""
-"**+20 pontos:** Correspondência do primeiro cartão com um que você já ouviu "
-"antes — a memória vence!"
+msgid "**-10 points:** Chose a wrong second card that's heard before? Oops — penalty..."
+msgstr "**-10 pontos:** Escolheu um segundo cartão errado que já tinha ouvido? Oops — penalidade..."
 
 #: experiment/rules/matching_pairs_2025.py:199
-msgid ""
-"**-10 points:** Chose a wrong second card that’s heard before? Oops — "
-"penalty..."
-msgstr ""
-"**-10 pontos:** Escolheu um segundo cartão errado que já foi ouvido? Oops — "
-"penalidade..."
+msgid "**+10 points:** The second card of the turn was one you hadn't heard before, but you got lucky and matched it anyway? A lucky bonus."
+msgstr "**+10 pontos:** O segundo cartão da rodada era um que você ainda não tinha ouvido, mas mesmo assim formou o par? Um bônus de sorte."
 
 #: experiment/rules/matching_pairs_2025.py:204
-msgid "Some cards sound **distorted** on purpose. Stay sharp!"
-msgstr "Alguns cartões soam **distorcidos** de propósito. Fique atento!"
+msgid "In some levels, the music on the matching cards has been **distorted**. That's exactly where the challenge lies! **Stay sharp!**"
+msgstr "Em alguns níveis, a música dos cartões correspondentes foi **distorcida**. É justamente aí que está o desafio! **Fique atento!**"
 
 #: experiment/rules/matching_pairs_2025.py:287
 msgid "You outperformed {}% of the players!"

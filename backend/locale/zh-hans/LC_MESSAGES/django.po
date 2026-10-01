@@ -2081,7 +2081,7 @@ msgstr ""
 msgid ""
 "TuneTwins is a musical version of \"Memory\". It consists of 16 musical "
 "fragments. Your task is to listen and find the 8 matching pairs."
-msgstr ""
+msgstr "TuneTwins 是音乐版的记忆翻牌游戏，由16段音乐片段组成。你的任务是聆听并找出8对相互匹配的音乐。"
 
 #: experiment/rules/matching_pairs.py:49
 #: experiment/rules/visual_matching_pairs.py:46
