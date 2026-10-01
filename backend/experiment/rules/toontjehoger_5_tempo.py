@@ -127,8 +127,8 @@ class ToontjeHoger5Tempo(BaseRules):
             text=self.get_trial_question(),
             identifier=identifier,
             choices=[
-                {"value": "A", "label": "A", "color": "colorNegative2"},
-                {"value": "B", "label": "B", "color": "colorNegative1"},
+                {"value": "A", "label": "A", "color": "colorNeutral2"},
+                {"value": "B", "label": "B", "color": "colorNeutral1"},
             ],
             result_id=prepare_result(
                 identifier,

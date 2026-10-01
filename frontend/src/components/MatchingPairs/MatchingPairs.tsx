@@ -89,14 +89,11 @@ const MatchingPairs = ({
             case 20:
                 fbclass = 'fbmemory';
                 break;
-            case 0:
-                fbclass = 'fbnomatch';
-                break;
             case -10:
-                fbclass = 'fbmisremembered';
+                fbclass = 'fbmisrembered';
                 break;
             default:
-                setFeedbackClass('');
+                fbclass = '';
                 setFeedbackText('');
         }
         setFeedbackClass(fbclass);
