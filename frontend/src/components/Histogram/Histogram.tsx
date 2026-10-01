@@ -116,7 +116,7 @@ const Histogram: React.FC<HistogramProps> = ({
                     className='aha__histogram-bar'
                     style={{
                         width: barWidth,
-                        height: `${(frequencyData[index] / 255) * 100}%`,
+                        height: `${(frequencyData[index] / 255) * 80}%`,
                         backgroundColor: 'currentColor',
                         marginRight: index < bars - 1 ? spacing : 0,
                         transition: shouldRandomize
