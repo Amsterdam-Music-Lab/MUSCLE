@@ -12,7 +12,7 @@
     "@fortawesome/react-fontawesome": "^3.5.0",
     "@sentry/react": "^10.37.0",
     "@vitejs/plugin-react": "^5.1.2",
-    "axios": ">=1.18.0",
+    "axios": ">=1.20.0",
     "classnames": "^2.2.6",
     "email-validator": "^2.0.4",
     "file-saver": "^2.0.5",
