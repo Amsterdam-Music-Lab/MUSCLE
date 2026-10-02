@@ -1,0 +1,39 @@
+#!/bin/bash
+# -----------------------------------------
+composefile=docker-compose.yaml
+while getopts ":p" opt; do
+  case $opt in
+    p)
+      echo "-p flag passed" >&2
+      composefile=docker-compose-deploy.yml
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      ;;
+  esac
+done
+CURRENT_DATE=$(date +%Y%m%d)
+echo "Starting database dump $CURRENT_DATE.sql from $composefile"
+
+# Step 1: Start database container from current branch
+echo "Taking down all containers and starting new PostgreSQL container"
+docker compose -f $composefile down
+docker compose -f $composefile up db -d
+
+# Step 2: Wait for database container to be ready
+echo "Waiting for PostgreSQL container to be ready..."
+until docker exec muscle_db pg_isready; do
+  sleep 1;
+done;
+
+# Step 3: Make database dump
+echo "Dumping the database from current PostgreSQL container"
+docker exec muscle_db sh -c "pg_dump > /backups/$CURRENT_DATE.sql"
+FILECHECK=$(docker exec muscle_db ls /backups)
+
+# Step 4: Verify that the dump file exists on the host.
+if [[ ! "$FILECHECK" == *"$CURRENT_DATE.sql"* ]]; then
+  echo "Error: $CURRENT_DATE.sql was not created."
+  exit 1
+fi
+echo "Dump file created on db_backup volume: $CURRENT_DATE.sql"
