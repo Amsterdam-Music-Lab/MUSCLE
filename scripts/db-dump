@@ -1,19 +1,31 @@
 #!/bin/bash
 # -----------------------------------------
 composefile=docker-compose.yaml
-while getopts ":p" opt; do
-  case $opt in
+while (($#)); do
+  case "$1" in
     p)
       echo "-p flag passed" >&2
       composefile=docker-compose-deploy.yml
       ;;
-    \?)
-      echo "Invalid option: -$OPTARG" >&2
+    -*)
+      echo "Invalid option: $1" >&2
+      exit 1
+      ;;
+    *)
+      if [[ -n "$dump_filename" ]]; then
+        echo "Error: provide only one filename." >&2
+        exit 1
+      fi
+      dump_filename=$1
       ;;
   esac
+  shift
 done
 CURRENT_DATE=$(date +%Y%m%d)
-echo "Starting database dump $CURRENT_DATE.sql from $composefile"
+DUMP_FILENAME=${dump_filename:-$CURRENT_DATE}
+[[ "$DUMP_FILENAME" == *.sql ]] || DUMP_FILENAME="${DUMP_FILENAME}.sql"
+DUMP_PATH="/backups/$DUMP_FILENAME"
+echo "Starting database dump $DUMP_FILENAME.sql from $composefile"
 
 # Step 1: Start database container from current branch
 echo "Taking down all containers and starting new PostgreSQL container"
@@ -28,12 +40,11 @@ done;
 
 # Step 3: Make database dump
 echo "Dumping the database from current PostgreSQL container"
-docker exec muscle_db sh -c "pg_dump > /backups/$CURRENT_DATE.sql"
-FILECHECK=$(docker exec muscle_db ls /backups)
+docker exec muscle_db sh -c "pg_dump > $DUMP_PATH"
 
 # Step 4: Verify that the dump file exists on the host.
-if [[ ! "$FILECHECK" == *"$CURRENT_DATE.sql"* ]]; then
-  echo "Error: $CURRENT_DATE.sql was not created."
+if ! docker exec muscle_db test -f "$DUMP_PATH"; then
+  echo "Error: $DUMP_FILENAME was not created."
   exit 1
 fi
-echo "Dump file created on db_backup volume: $CURRENT_DATE.sql"
+echo "Dump file created on db_backup volume: $DUMP_FILENAME"

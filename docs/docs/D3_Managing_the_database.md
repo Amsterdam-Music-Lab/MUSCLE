@@ -10,11 +10,11 @@ This is especially useful in the following situations:
 
 Run the following command from the top directory to back up the database:
 
-`scripts/db-dump`
+`scripts/db-dump {optional-filename}`
 
 In production, use the flag `-p` to make sure the correct `docker-compose` file is used for the environment variables, volumes, etc.
 
-The backups are stored on the docker volume `db_backup` which mirrors `/backups` from the Postgresql container, and will be named by the current date: `yyyymmdd.sql`.
+The backups are stored on the docker volume `db_backup` which mirrors `/backups` from the Postgresql container. If you do not provide a filename, the file will be named by the current date: `yyyymmdd.sql`.
 
 ## Restore the PostgreSQL database
 
