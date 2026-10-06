@@ -36,7 +36,7 @@ describe('MatchingPairs Component', () => {
     beforeEach(() => {
         vi.resetAllMocks();
         mock = new MockAdapter(axios);
-        mock.onPost().reply(200, { score: 10 });
+        mock.onPost().reply(200, { score: 10, text: 'Lucky match!'});
     });
 
     afterEach(() => {
@@ -60,7 +60,7 @@ describe('MatchingPairs Component', () => {
     };
 
     test('renders correctly', () => {
-        const { getByText } = render(<MatchingPairs sections={mockSections} />);
+        const { getByText } = render(<MatchingPairs sections={mockSections} instruction={"Pick a card"}/>);
         expect(getByText('Pick a card')).not.toBeNull();
     });
 

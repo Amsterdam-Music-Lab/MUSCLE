@@ -69,8 +69,10 @@ def intermediate_score(
     result = request.POST.get("json_data")
     if not result:
         return HttpResponseBadRequest("json_data not defined")
-    score = session.block_rules().calculate_intermediate_score(session, result)
-    return JsonResponse({'score': score})
+    intermediate_score_info = session.block_rules().calculate_intermediate_score(
+        session, result
+    )
+    return JsonResponse(intermediate_score_info)
 
 
 @require_POST

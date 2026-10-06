@@ -1,7 +1,7 @@
 # Docker-compose definition for development
 services:
   db:
-    image: postgres:16-bookworm
+    image: postgres:18-trixie
     container_name: muscle_db
     environment:
       - POSTGRES_DB=${SQL_DATABASE}
