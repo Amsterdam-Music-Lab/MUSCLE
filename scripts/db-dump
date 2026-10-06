@@ -3,7 +3,7 @@
 composefile=docker-compose.yaml
 while (($#)); do
   case "$1" in
-    p)
+    -p)
       echo "-p flag passed" >&2
       composefile=docker-compose-deploy.yml
       ;;
