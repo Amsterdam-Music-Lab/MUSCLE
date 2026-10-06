@@ -2,44 +2,35 @@
 
 The Docker infrastructure runs a PostgreSQL container. We can create backups of the database within this container, as well as restore the database.
 
+This is especially useful in the following situations:
+- before complex (data) migrations of the Django backend.
+- before upgrading the PostgreSQL version
+
 ## Backup the PostgreSQL database
 
-Run the following command in the console to back up the database:
+Run the following command from the top directory to back up the database:
 
-`docker-compose run --rm db bash -c "pg_dump aml -Fc > /backups/<filename>.dump"`
+`scripts/db-dump`
 
-Use this command to make daily backups, numbered by the day of the month:
+In production, use the flag `-p` to make sure the correct `docker-compose` file is used for the environment variables, volumes, etc.
 
-`docker-compose run --rm db bash -c "pg_dump aml -Fc > /backups/backup-$(date +"%d").dump"`
+The backups are stored on the docker volume `db_backup` which mirrors `/backups` from the Postgresql container, and will be named by the current date: `yyyymmdd.sql`.
 
-The backups are stored on the docker volume `db_backup` which mirrors `/backups` from the Postgresql container.
+## Restore the PostgreSQL database
 
-## Restore the postgreSQL database
+In case you want to upgrade the PostgreSQL version, switch to a branch with the new version before restoring the database.
 
-Always stop the backend container first:
+Run the following command from the top directory to restore the database:
 
-`docker stop aml-experiments_server_1`
+`scripts/db-restore`
 
-Then drop, create and restore the database:
+In production, use the flag `-p` to make sure the correct `docker-compose` file is used for the environment variables, volumes, etc.
 
-`docker-compose run --rm db bash -c "dropdb aml"`
+The script will:
+- stop and remove all running containers
+- remove the contents of the `db_data` volume
+- restart containers
+- prompt you to select which files to restore (e.g., type `1` and hit enter to restore the first file in the list)
+- restore the database and then restart all containers
 
-`docker-compose run --rm db bash -c "createdb aml"`
-
-`docker-compose run --rm db bash -c "pg_restore -d aml /backups/<filename>.dump"`
-
-Restart the backend container: (or alternatively rebuilt the containers as descibed above) 
-
-`docker start aml-experiments_server_1`
-
-## Backup the database to your local file system
-
-`docker compose exec db pg_dump aml -Fc > db_backup.dump`
-
-## Restore the database from your local filesystem
-
-`docker compose exec db dropdb aml`
-
-`docker compose exec db createdb aml`
-
-`docker compose exec -T db pg_restore -d aml < db_backup.dump`
+NB: the files created via this script will always end in `sql`, whereas automatically created backups through GitHub actions will always end in `dump`. Both files can be used for restoring, but the `sql` file will be the most recent, so choose this one to prevent data loss.
