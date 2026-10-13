@@ -175,32 +175,10 @@ class Participant(models.Model):
             scores.append(
                 {
                     "block_identifier": session.block.identifier,
-                    "rank": session.block.get_rules().rank(session),
+                    "rank": session.block.get_active_rank(session.final_score),
                     "score": session.final_score,
                     "date": naturalday(session.finished_at),
                 }
             )
 
         return scores
-
-    def score_sum(self, question_list: QuestionList) -> float:
-        """Sums scores of all profile results with questions in a question list
-
-        Args:
-            question_list: a QuestionList object for which to return the summed score
-
-        Returns:
-            Total score of all profile results from a Participant
-
-        Example:
-            Get the total score of all participant's profile results from a specific question list
-            ```python
-            score_sum = participant.score_sum(question_list)
-            ```
-        """
-        question_identifiers = question_list.questions.values_list('identifier')
-        return (
-            self.result_set.all()
-            .filter(question_identifier__in=question_identifiers)
-            .aggregate(Sum("score"))['score__sum']
-        )

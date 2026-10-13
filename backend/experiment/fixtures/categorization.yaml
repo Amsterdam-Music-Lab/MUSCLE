@@ -4,6 +4,7 @@
     name: Categorization
     identifier: cat
     active: true
+    ranking: categorization-ranking
 - model: experiment.phase
   pk: 31
   fields:

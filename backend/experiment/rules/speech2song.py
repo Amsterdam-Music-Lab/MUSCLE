@@ -163,7 +163,7 @@ class Speech2Song(BaseRules):
             session.finish()
             # Return a score and final score action
             return [
-                Final(
+                FinalAction(
                     title=_('End of experiment'),
                     session=session,
                     final_text=_('Thank you for contributing your time to science!'),

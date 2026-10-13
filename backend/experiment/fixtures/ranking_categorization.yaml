@@ -1,0 +1,31 @@
+- model: experiment.ranking
+  fields:
+    identifier: categorization-ranking
+- model: experiment.rank
+  pk: 31
+  fields:
+    ranking: categorization-ranking
+    label: platinum
+    cutoff: 100
+    feedback: Congratulations! You did great and won a platinum medal!
+- model: experiment.rank
+  pk: 32
+  fields:
+    ranking: categorization-ranking
+    label: gold
+    cutoff: 80
+    feedback: Congratulations! You did great and won a gold medal!
+- model: experiment.rank
+  pk: 33
+  fields:
+    ranking: categorization-ranking
+    label: silver
+    cutoff: 60
+    feedback: Congratulations! You did very well and won a silver medal!
+- model: experiment.rank
+  pk: 34
+  fields:
+    ranking: categorization-ranking
+    label: bronze
+    cutoff: 0
+    feedback: Congratulations! You did well and won a bronze medal!

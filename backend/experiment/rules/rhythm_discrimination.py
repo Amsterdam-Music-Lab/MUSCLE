@@ -290,7 +290,7 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
         )
         final_text = render_feedback_trivia(feedback, trivia)
         session.finish()
-        return FinaAction(session, title=_("End"), final_text=final_text)
+        return FinalAction(session, title=_("End"), final_text=final_text)
 
     def practice_successful(self, session: Session) -> bool:
         """Check if practice was successful: at least two answers correct"""

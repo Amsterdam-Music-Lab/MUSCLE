@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from experiment.models import Block, Phase
+from experiment.models import Block
 from experiment.rules.toontjehoger_2_preverbal import ToontjeHoger2Preverbal
 from participant.models import Participant
 from section.models import Playlist
@@ -8,7 +8,7 @@ from session.models import Session
 
 
 class TestToontjeHoger2Preverbal(TestCase):
-    fixtures = ["toontjehoger", "toontjehoger_kids"]
+    fixtures = ["ranking_toontjehoger", "toontjehoger", "toontjehoger_kids"]
 
     @classmethod
     def setUpTestData(cls):

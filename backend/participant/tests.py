@@ -51,9 +51,7 @@ class ParticipantTest(TestCase):
         )
 
     def setUp(self):
-        self.client = Client(
-            HTTP_USER_AGENT='Agent 007'
-        )
+        self.client = Client(HTTP_USER_AGENT='Agent 007')
         self.session = self.client.session
         self.session['country_code'] = 'BLA'
         self.session.save()
@@ -76,8 +74,7 @@ class ParticipantTest(TestCase):
         request.session = self.client.session
 
         with self.assertRaisesMessage(
-            Participant.DoesNotExist,
-            'No participant in session'
+            Participant.DoesNotExist, 'No participant in session'
         ):
             get_participant(request)
 
@@ -90,8 +87,7 @@ class ParticipantTest(TestCase):
         request.session = session
 
         with self.assertRaisesMessage(
-            Participant.DoesNotExist,
-            'Participant matching query does not exist.'
+            Participant.DoesNotExist, 'Participant matching query does not exist.'
         ):
             get_participant(request)
 
@@ -124,30 +120,6 @@ class ParticipantTest(TestCase):
         self.client.get('/participant/')
         participant = Participant.objects.last()
         assert participant.country_code == 'BLA'
-
-    def test_score_sum(self):
-        self.block.create_question_list(
-            {
-                "name": "test_msi1",
-                "question_identifiers": get_question_bank("MSI_F1_ACTIVE_ENGAGEMENT"),
-            }
-        )
-        self.block.create_question_list(
-            {
-                "name": "test_msi2",
-                "question_identifiers": get_question_bank(
-                    "MSI_F2_PERCEPTUAL_ABILITIES"
-                ),
-            }
-        )
-        score_sum = self.participant.score_sum(
-            QuestionList.objects.get(block=self.block, name="test_msi1")
-        )
-        assert score_sum == 8
-        score_sum = self.participant.score_sum(
-            QuestionList.objects.get(block=self.block, name="test_msi2")
-        )
-        assert score_sum is None
 
     def test_session_count(self):
         new_participant = Participant.objects.create(unique_hash=4242)
@@ -208,11 +180,12 @@ class ParticipantTest(TestCase):
         self.assertEqual(this_profile.count(), 4)
 
     def test_is_dutch(self):
-        new_participant = Participant.objects.create(unique_hash="84",
-                                                     country_code="nl",
-                                                     access_info="Mozilla/5.0 (X11; Linux x86_64)",
-                                                     participant_id_url = "this_participant",
-                                                     )
+        new_participant = Participant.objects.create(
+            unique_hash="84",
+            country_code="nl",
+            access_info="Mozilla/5.0 (X11; Linux x86_64)",
+            participant_id_url="this_participant",
+        )
         self.assertEqual(new_participant.is_dutch(), True)
 
     def test_scores_per_experiment(self):

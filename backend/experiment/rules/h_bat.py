@@ -194,7 +194,7 @@ class HBat(BaseRules, PracticeMixin):
         trivia = self.get_trivia()
         final_text = render_feedback_trivia(feedback, trivia)
         session.save()
-        return FinaAction(session, title=_("End"), final_text=final_text)
+        return FinalAction(session, title=_("End"), final_text=final_text)
 
     def get_trivia(self):
         return _("When people listen to music, they often perceive an underlying regular pulse, like the woodblock \

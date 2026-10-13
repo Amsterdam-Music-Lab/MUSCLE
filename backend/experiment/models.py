@@ -7,7 +7,6 @@ from django.contrib.postgres.fields import ArrayField
 
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from image.models import Image
-from question.models import Question, QuestionInList, QuestionList
 
 from .validators import (
     markdown_html_validator,
@@ -107,10 +106,10 @@ class Experiment(models.Model):
         return Block.objects.filter(phase__experiment=self)
 
     def get_active_rank(self, scores: dict):
-        if not self.rankings:
+        if not self.ranking:
             return None
         else:
-            return self.rankings.get_active_rank(scores.get('accumulative_score'))
+            return self.ranking.get_active_rank(scores.get('accumulative_score'))
 
 
 class Progress(models.Model):
@@ -124,12 +123,12 @@ class Progress(models.Model):
     )
     # TO DO? Allow setting a custom image on the progress bar
 
-    def convert_to_action(self):
-        {
+    def convert_to_action(self) -> dict:
+        return {
             "total_sessions": self.total_sessions,
             "rewards": (
-                [reward.convert_to_action() for reward in self.rewards.objects.all()]
-                if self.rewards.objects.count()
+                [reward.convert_to_action() for reward in self.rewards.all()]
+                if self.rewards.count()
                 else None
             ),
         }
@@ -257,7 +256,6 @@ class Block(models.Model):
 
     def save(self, *args, **kwargs):
         self.experiment = self.phase.experiment
-        # self.add_default_question_lists()
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -303,63 +301,10 @@ class Block(models.Model):
         return cl()
 
     def get_active_rank(self, scores: dict):
-        if not self.rankings:
+        if not self.ranking:
             return None
         else:
-            return self.rankings.get_active_rank(scores.get("relative_score"))
-
-    def max_score(self) -> int:
-        """Get max score from all sessions with a positive score
-
-        Returns:
-            max score from all sessions with a positive score
-        """
-
-        score = self.sessions.filter(final_score__gte=0).aggregate(
-            models.Max("final_score")
-        )
-        if "final_score__max" in score:
-            return score["final_score__max"]
-
-        return 0
-
-    def add_default_question_lists(self):
-        """Add default question lists to block"""
-        try:
-            rules = self.get_rules()
-        except ValueError:
-            return
-        question_lists = getattr(rules, "question_lists", [])
-        if question_lists:
-            for i, ql in enumerate(question_lists):
-                self.create_question_list(ql, i)
-
-    def create_question_list(self, question_list: dict, index: int = 0):
-        """create a question list for this block based on a dict specifying name and list of question identifiers"""
-
-        ql, created = QuestionList.objects.get_or_create(
-            name=question_list["name"], block=self, index=index
-        )
-        if not created:
-            "do nothing if the question series already exists"
-            return
-
-        # only set these when the object is created, so we don't overwrite changes by admin user
-        ql.randomize = question_list.get("randomize", False)
-        ql.save()
-
-        for i, question in enumerate(question_list["question_identifiers"]):
-            try:
-                question_obj = Question.objects.get(pk=question)
-            except Question.DoesNotExist:
-                raise Question.DoesNotExist(
-                    f"Question with identifier {question} does not exist."
-                )
-            QuestionInList.objects.create(
-                questionlist=ql,
-                question=question_obj,
-                index=i + 1,
-            )
+            return self.ranking.get_active_rank(scores.get("relative_score"))
 
 
 class Feedback(models.Model):
@@ -468,9 +413,7 @@ class Ranking(models.Model):
     def get_active_rank(self, final_score: float) -> Optional["experiment.Rank"]:
         try:
             return (
-                self.ranks.filter(cutoff__lte=final_score)
-                .order_by(models.Max("cutoff"))
-                .first()
+                self.ranks.filter(cutoff__lte=final_score).order_by("-cutoff").first()
             )
         except:
             return None
@@ -488,9 +431,7 @@ RANK_CHOICES = [
 
 
 class Rank(models.Model):
-    ranking = models.ForeignKey(
-        Ranking, null=True, blank=True, on_delete=models.CASCADE, related_name="ranks"
-    )
+    ranking = models.ForeignKey(Ranking, on_delete=models.CASCADE, related_name="ranks")
     label = models.CharField(
         max_length=8, choices=RANK_CHOICES, null=True, default=None
     )
@@ -510,7 +451,7 @@ class Rank(models.Model):
         blank=True,
     )
 
-    def get_achievement_data(self):
+    def get_trophy_data(self):
         return {
             "label": self.get_label_display(),  # Django inbuilt: returns translatable text
             "description": self.description,

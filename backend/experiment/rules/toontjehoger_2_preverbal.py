@@ -313,7 +313,7 @@ class ToontjeHoger2Preverbal(BaseRules):
         final_text = "Goed gedaan! Je hebt beide vragen correct beantwoord!" if session.final_score >= 2 * \
             self.SCORE_CORRECT else "Dat bleek toch even lastig!"
         session.finish()
-        final = Final(
+        final = FinalAction(
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),

@@ -82,13 +82,13 @@ class MatchingPairsGame(BaseRules):
         else:
             # final score saves the result from the cleared board into account
             session.finish()
-            score = Final(
+            score = FinalAction(
                 session,
                 title="Score",
-                final_text="Can you score higher than your friends and family? Share and let them try!",
-                button=Button(_("Play again")),
-                rank=self.rank(session, exclude_unfinished=False),
-                feedback_info=self.feedback_info(),
+                # final_text="Can you score higher than your friends and family? Share and let them try!",
+                # button=Button(_("Play again")),
+                # rank=self.rank(session, exclude_unfinished=False),
+                # feedback_info=self.feedback_info(),
             )
             return [score]
 

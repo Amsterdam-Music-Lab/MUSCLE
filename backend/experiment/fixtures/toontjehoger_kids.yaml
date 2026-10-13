@@ -4,6 +4,7 @@
     name: ToontjeHogerKids
     identifier: thk
     active: true
+    ranking: toontjehoger-ranking
 - model: experiment.phase
   pk: 21
   fields:

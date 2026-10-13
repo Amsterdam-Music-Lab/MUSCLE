@@ -65,7 +65,7 @@ class ToontjeHogerKids6Relative(ToontjeHoger6Relative):
 
         # Final
         final_text = "Goed gedaan!" if session.final_score >= 2 * self.SCORE_CORRECT else "Best lastig!"
-        final = Final(
+        final = FinalAction(
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),

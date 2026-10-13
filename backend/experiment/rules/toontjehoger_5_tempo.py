@@ -219,7 +219,7 @@ class ToontjeHoger5Tempo(BaseRules):
         elif session.final_score >= session.block.rounds * 0.5 * self.SCORE_CORRECT:
             final_text = "Goed gedaan! Jouw timing is best OK!"
 
-        final = Final(
+        final = FinalAction(
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),

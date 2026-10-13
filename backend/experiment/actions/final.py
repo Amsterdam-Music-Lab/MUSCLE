@@ -21,7 +21,7 @@ class ScoresAction(TypedDict):
     accumulative: FinalScore
 
 
-class AchievementAction(TypedDict):
+class TrophyAction(TypedDict):
     label: str
     description: str
     class_name: str
@@ -40,11 +40,10 @@ class ProgressAction(TypedDict):
 class FinalActionResponse(TypedDict):
     view: str
     title: str
-    achievement: AchievementAction
+    trophy: TrophyAction
     feedback: str
     visualization: str
     scores: ScoresAction
-    progress: ProgressAction
 
 
 class FinalAction(BaseAction):  # pylint: disable=too-few-public-methods
@@ -103,7 +102,7 @@ class FinalAction(BaseAction):  # pylint: disable=too-few-public-methods
         response: FinalActionResponse = {
             "view": self.view,
             "title": self.title,
-            "achievement": self.rank.get_achievement_data(),
+            "trophy": self.rank.get_trophy_data(),
             "feedback": self.rank.get_feedback_data(self.relative_score),
             "visualization": self.visualization,
             "scores": {
@@ -112,7 +111,7 @@ class FinalAction(BaseAction):  # pylint: disable=too-few-public-methods
                     "value": self.score,
                     "label": self.score_label,
                 },
-                "total": {
+                "accumulative": {
                     "value": self.accumulative_score,
                     "label": self.score_label,
                 },

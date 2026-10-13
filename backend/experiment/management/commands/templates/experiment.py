@@ -60,10 +60,10 @@ class NewBlockRuleset(BaseRules):
             session.finish()
             session.save()
             return [
-                Final(
+                FinalAction(
                     session,
                     final_text=_('Thank you for participating!'),
-                    feedback_info=self.feedback_info()  # show feedback bar, this line can be removed
+                    feedback_info=self.feedback_info(),  # show feedback bar, this line can be removed
                 )
             ]
         else:

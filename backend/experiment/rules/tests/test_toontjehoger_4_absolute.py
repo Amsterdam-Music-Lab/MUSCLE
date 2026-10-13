@@ -11,7 +11,7 @@ from experiment.rules.toontjehoger_4_absolute import ToontjeHoger4Absolute
 
 
 class TestToontjeHoger4Absolute(TestCase):
-    fixtures = ["toontjehoger"]
+    fixtures = ["ranking_toontjehoger", "toontjehoger"]
 
     @classmethod
     def setUpTestData(cls):

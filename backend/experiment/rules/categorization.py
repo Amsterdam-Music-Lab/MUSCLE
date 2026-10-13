@@ -75,7 +75,7 @@ class Categorization(BaseRules):
                     session.finish()
                     profile.delete()
                     final_message = render_to_string("final/categorization_final.html")
-                    final = Final(
+                    final = FinalAction(
                         session=session,
                         final_text="Thanks for your participation!" + final_message,
                     )
@@ -140,7 +140,7 @@ class Categorization(BaseRules):
                         if profile.question_identifier == "failed_training":
                             profile.delete()
                     final_message = render_to_string("final/categorization_final.html")
-                    final = Final(
+                    final = FinalAction(
                         session=session,
                         final_text="Thanks for your participation!" + final_message,
                     )
@@ -169,22 +169,6 @@ class Categorization(BaseRules):
                     final_score += 1
             score_percent = 100 * (final_score / 30)
 
-            ranks = Final.RANKS
-
-            # assign rank based on percentage of correct response to training stimuli
-            if score_percent == 100:
-                rank = ranks["PLATINUM"]
-                final_text = "Congratulations! You did great and won a platinum medal!"
-            elif score_percent >= 80:
-                rank = ranks["GOLD"]
-                final_text = "Congratulations! You did great and won a gold medal!"
-            elif score_percent >= 60:
-                rank = ranks["SILVER"]
-                final_text = "Congratulations! You did very well and won a silver medal!"
-            else:
-                rank = ranks["BRONZE"]
-                final_text = "Congratulations! You did well and won a bronze medal!"
-
             # calculate the final score for the entire test sequence
             # final_score = sum([result.score for result in training_results])
             end_data = {
@@ -200,12 +184,11 @@ class Categorization(BaseRules):
                 if profile.question_identifier == "failed_training":
                     profile.delete()
             final_message = render_to_string("final/categorization_final.html")
-            final = Final(
+            final = FinalAction(
                 session=session,
-                final_text=final_text + final_message,
-                total_score=round(score_percent),
-                rank=rank,
-                points="% correct",
+                # final_text=final_message,
+                # total_score=round(score_percent),
+                # points="% correct",
             )
             return final
 

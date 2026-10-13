@@ -70,19 +70,19 @@ class ThatsMySong(Hooked):
             session.finish()
             return [
                 self.get_score(session, round_number),
-                Final(
+                FinalAction(
                     session=session,
-                    final_text=self.final_score_message(session)
-                    + " For more information about this experiment, visit the Vanderbilt University Medical Center Music Cognition Lab.",
-                    rank=self.rank(session),
-                    show_profile_link=True,
-                    button=Button(
-                        _("Play again"),
-                    ),
-                    logo={
-                        "image": "/images/vumc_mcl_logo.png",
-                        "link": "https://www.vumc.org/music-cognition-lab/welcome",
-                    },
+                    # final_text=self.final_score_message(session)
+                    # + " For more information about this experiment, visit the Vanderbilt University Medical Center Music Cognition Lab.",
+                    # rank=self.rank(session),
+                    # show_profile_link=True,
+                    # button=Button(
+                    #     _("Play again"),
+                    # ),
+                    # logo={
+                    #     "image": "/images/vumc_mcl_logo.png",
+                    #     "link": "https://www.vumc.org/music-cognition-lab/welcome",
+                    # },
                 ),
             ]
 

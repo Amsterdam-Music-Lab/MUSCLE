@@ -1,8 +1,8 @@
 from django.test import TestCase
 
-from experiment.models import Block, Experiment, Phase
+from experiment.models import Block, Experiment, Phase, Progress, Ranking
 from participant.models import Participant
-from question.models import QuestionInList, QuestionList
+
 
 class TestModelBlock(TestCase):
     fixtures = [
@@ -18,39 +18,9 @@ class TestModelBlock(TestCase):
     def setUpTestData(cls):
         cls.block = Block.objects.get(identifier="thats_my_song")
 
-    def test_separate_rules_instance(self):
-        rules1 = self.block.get_rules()
-        rules2 = self.block.get_rules()
-        identifiers1 = (
-            rules1.question_lists[0]["question_identifiers"]
-            + rules1.question_lists[1]["question_identifiers"]
-        )
-        identifiers2 = (
-            rules2.question_lists[0]["question_identifiers"]
-            + rules2.question_lists[1]["question_identifiers"]
-        )
-        assert identifiers1 == identifiers2
-
-    def test_add_default_question_lists(self):
-        self.block.save()  # triggers `add_default_question_lists` method
-        created_lists = QuestionList.objects.filter(block=self.block)
-        n_lists = created_lists.count()
-        expected_n = len(self.block.get_rules().question_lists)
-        self.assertEqual(
-            n_lists,
-            expected_n,
-        )
-        self.assertNotEqual(
-            QuestionInList.objects.filter(questionlist=created_lists.first()).count(),
-            0,
-        )
-        # test that question series aren't created more than once
-        self.block.save()
-        created_series = QuestionList.objects.filter(block=self.block)
-        self.assertEqual(created_series.count(), n_lists)
-
 
 class TestModelExperiment(TestCase):
+    fixtures = ["ranking_toontjehoger", "toontjehoger"]
 
     @classmethod
     def setUpTestData(cls):
@@ -95,3 +65,31 @@ class TestModelExperiment(TestCase):
             ]
         )
         self.assertEqual(experiment.associated_blocks().count(), 3)
+
+    def test_get_active_rank(self):
+        experiment = Experiment.objects.get(identifier="toontjehoger")
+        scores = {"accumulative_score": 400}
+        self.assertEqual(experiment.get_active_rank(scores).label, "gold")
+
+
+class RankingModelTest(TestCase):
+    fixtures = ["eurovision_2020", "ranking_hooked"]
+
+    def test_get_active_rank(self):
+        ranking = Ranking.objects.get(identifier="hooked-ranking")
+        self.assertEqual(ranking.get_active_rank(98.0).label, "diamond")
+        self.assertEqual(ranking.get_active_rank(90.0).label, "platinum")
+        self.assertEqual(ranking.get_active_rank(80.0).label, "gold")
+        self.assertEqual(ranking.get_active_rank(40.0).label, "silver")
+        self.assertEqual(ranking.get_active_rank(20.0).label, "bronze")
+        self.assertEqual(ranking.get_active_rank(-1.0).label, "plastic")
+
+
+class ProgressModelTest(TestCase):
+    fixtures = ["eurovision_2020", "ranking_hooked"]
+
+    def test_progress_convert_to_action(self):
+        progress_action = Progress.objects.first().convert_to_action()
+        self.assertIsNone(progress_action.get("total_sessions"))
+        self.assertEqual(len(progress_action.get("rewards")), 1)
+        self.assertEqual(progress_action.get("rewards")[0].get("every_n"), 1)

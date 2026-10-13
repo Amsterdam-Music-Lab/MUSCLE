@@ -35,7 +35,7 @@ class FinalTest(TestCase):
         Result.objects.create(session=cls.session, score=14)
 
     def test_final_action_without_social(self):
-        final = Final(self.session)
+        final = FinalAction(self.session)
         serialized = final.action()
         self.assertEqual(serialized.get("title"), "Final score")
         self.assertIsNone(serialized.get("social"))
@@ -47,20 +47,20 @@ class FinalTest(TestCase):
             tags=["amazing"],
             url="example.com",
         )
-        final = Final(self.session)
+        final = FinalAction(self.session)
         serialized = final.action()
         social_info = serialized.get("social")
         self.assertIsNotNone(social_info)
         self.assertEqual(social_info.get("channels"), ["Facebook"])
         self.assertEqual(social_info.get("url"), "example.com")
         self.assertEqual(social_info.get("tags"), ["amazing"])
-        final = Final(self.session)
+        final = FinalAction(self.session)
         serialized = final.action()
         social_info = serialized.get("social")
         self.assertEqual(social_info.get("content"), "I scored 42.0 points in Final Countdown!")
 
     def test_final_action_with_percentile_disabled(self):
-        final = Final(self.session)
+        final = FinalAction(self.session)
         final.percentile = 85.0
         serialized = final.action()
         self.assertEqual(serialized.get("percentile"), 85.0)
@@ -69,21 +69,21 @@ class FinalTest(TestCase):
         test_cases = [95.0, 85.0, 65.0, 45.0, 25.0, 5.0]
         for percentile in test_cases:
             with self.subTest(percentile=percentile):
-                final = Final(self.session)
+                final = FinalAction(self.session)
                 final.percentile = percentile
                 serialized = final.action()
                 self.assertIn("percentile", serialized)
                 self.assertEqual(serialized["percentile"], percentile)
 
     def test_final_action_with_percentile(self):
-        final = Final(self.session)
+        final = FinalAction(self.session)
         final.percentile = 85.0
         serialized = final.action()
         self.assertIn("percentile", serialized)
         self.assertIn("rank", serialized)
 
     def test_wrap_final_text(self):
-        final = Final(self.session)
+        final = FinalAction(self.session)
         final.final_text = 'plain text'
         serialized = final.action()
         self.assertEqual(serialized.get('finalText'), '<center>plain text</center>')
@@ -92,13 +92,15 @@ class FinalTest(TestCase):
         self.assertEqual(serialized.get('finalText'), final.final_text)
 
     def test_final_get_button_no_arguments(self):
-        final = Final(self.session)
+        final = FinalAction(self.session)
         self.assertIsNotNone(final.button)
 
     def test_final_get_button_with_text(self):
-        final = Final(self.session, button=Button("Next!"))
+        final = FinalAction(self.session, button=Button("Next!"))
         self.assertEqual(final.button.link, get_experiment_url(self.session))
 
     def test_final_get_button_with_link_and_text(self):
-        final = Final(self.session, button=Button("Next!", link="/my/fancy/link/"))
+        final = FinalAction(
+            self.session, button=Button("Next!", link="/my/fancy/link/")
+        )
         self.assertEqual(final.button.link, "/my/fancy/link/")

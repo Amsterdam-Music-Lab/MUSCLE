@@ -353,7 +353,7 @@ class MusicalPreferences(BaseRules):
     def get_final_view(self, session: Session):
         # finalize block
         session.finish()
-        view = Final(
+        view = FinalAction(
             session,
             title=_("End"),
             final_text=_(

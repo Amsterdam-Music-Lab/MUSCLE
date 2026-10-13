@@ -1,0 +1,54 @@
+- model: experiment.ranking
+  fields:
+    identifier: hooked-ranking
+- model: experiment.rank
+  pk: 41
+  fields:
+    ranking: hooked-ranking
+    label: diamond
+    feedback: ''
+    cutoff: 95.0
+- model: experiment.rank
+  pk: 42
+  fields:
+    ranking: hooked-ranking
+    label: platinum
+    feedback: ''
+    cutoff: 90.0
+- model: experiment.rank
+  pk: 43
+  fields:
+    ranking: hooked-ranking
+    label: gold
+    feedback: ''
+    cutoff: 75.0
+- model: experiment.rank
+  pk: 44
+  fields:
+    ranking: hooked-ranking
+    label: silver
+    feedback: ''
+    cutoff: 25.0
+- model: experiment.rank
+  pk: 45
+  fields:
+    ranking: hooked-ranking
+    label: bronze
+    feedback: ''
+    cutoff: 0.0
+- model: experiment.rank
+  pk: 46
+  fields:
+    ranking: hooked-ranking
+    label: plastic
+    feedback: ''
+    cutoff: -1.0
+- model: experiment.progress
+  pk: 41
+  fields:
+    experiment: 41
+- model: experiment.reward
+  pk: 41
+  fields:
+    progress: 41
+    every_n: 1

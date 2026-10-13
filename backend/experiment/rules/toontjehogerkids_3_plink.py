@@ -121,7 +121,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
 
         # Final
         final_text = "Goed gedaan!" if session.final_score >= 4 * self.SCORE_MAIN_CORRECT else "Best lastig!"
-        final = Final(
+        final = FinalAction(
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),

@@ -296,7 +296,7 @@ class ToontjeHoger3Plink(BaseRules):
             if session.final_score >= 4 * self.SCORE_MAIN_CORRECT
             else "Dat bleek toch even lastig!"
         )
-        final = Final(
+        final = FinalAction(
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),

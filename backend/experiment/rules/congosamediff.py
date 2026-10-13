@@ -182,7 +182,7 @@ class CongoSameDiff(BaseRules):
     def get_final_round(self, session: Session):
         # Finish session
         session.finish()
-        return FinaAction(
+        return FinalAction(
             session,
             title=_("End"),
             final_text=_('Thank you for participating!'),

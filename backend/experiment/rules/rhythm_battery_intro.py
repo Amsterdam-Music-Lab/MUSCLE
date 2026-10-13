@@ -139,7 +139,7 @@ class RhythmBatteryIntro(BaseRules):
             session.finish()
             actions = [
                 Trial(playback, feedback_form),
-                Final(session, final_text=message),
+                FinalAction(session, final_text=message),
             ]
             return actions
 

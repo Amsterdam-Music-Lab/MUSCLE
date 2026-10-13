@@ -62,34 +62,6 @@ class BlockModelTest(TestCase):
         rules = self.block.get_rules()
         self.assertIsNotNone(rules)
 
-    def test_block_max_score(self):
-        amount_of_results = 3
-        question_score = 1
-
-        session = Session.objects.create(
-            block=self.block, participant=Participant.objects.create()
-        )
-        Result.objects.bulk_create(
-            [
-                Result(
-                    session=session,
-                    expected_response=1,
-                    given_response=1,
-                    score=question_score,
-                    question_identifier=f"test_question_{j + 1}",
-                )
-                for j in range(amount_of_results)
-            ]
-        )
-        session.finish()
-        session.save()
-
-        question_scores = amount_of_results * question_score
-        bonus_points = self.block.bonus_points
-        max_score = self.block.max_score()
-        self.assertEqual(max_score, question_scores + bonus_points)
-        self.assertEqual(max_score, 13.0)
-
 
 class ExperimentModelTest(TestCase):
     @classmethod

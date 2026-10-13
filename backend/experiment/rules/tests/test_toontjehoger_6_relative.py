@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from experiment.models import Block, Phase
+from experiment.models import Block
 from experiment.rules.toontjehoger_6_relative import ToontjeHoger6Relative
 from experiment.rules.toontjehogerkids_6_relative import ToontjeHogerKids6Relative
 from participant.models import Participant
@@ -9,7 +9,7 @@ from session.models import Session
 
 
 class TestToontjeHoger6Relative(TestCase):
-    fixtures = ["toontjehoger", "toontjehoger_kids"]
+    fixtures = ["ranking_toontjehoger", "toontjehoger", "toontjehoger_kids"]
 
     @classmethod
     def setUpTestData(cls):

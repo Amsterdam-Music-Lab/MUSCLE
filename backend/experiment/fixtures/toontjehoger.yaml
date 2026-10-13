@@ -4,6 +4,7 @@
     name: ToontjeHoger
     identifier: toontjehoger
     active: true
+    ranking: toontjehoger-ranking
 - model: experiment.phase
   pk: 11
   fields:

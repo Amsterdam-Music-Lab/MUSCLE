@@ -68,7 +68,7 @@ class BeatAlignment(BaseRules):
             trivia = _('In the UK, over 140.000 people did \
                 this test when it was first developed?')
             final_text = render_feedback_trivia(feedback, trivia)
-            return FinaAction(session, title=_("End"), final_text=final_text)
+            return FinalAction(session, title=_("End"), final_text=final_text)
 
         # Practice rounds
         if not session.json_data.get("done_practice"):

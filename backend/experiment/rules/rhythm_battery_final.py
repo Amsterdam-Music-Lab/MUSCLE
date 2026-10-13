@@ -58,7 +58,7 @@ class RhythmBatteryFinal(BaseRules):
         else:
             rendered = render_to_string(self.debrief_form)
             session.finish()
-            return FinaAction(
+            return FinalAction(
                 session,
                 title=_("Thank you very much for participating!"),
                 final_text=rendered,

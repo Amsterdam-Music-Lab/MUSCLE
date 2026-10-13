@@ -182,49 +182,6 @@ class BaseRules(object):
         message = "You correctly identified {} out of {} recognized songs!".format(correct, total)
         return score_message + " " + message
 
-    def rank(self, session: Session, exclude_unfinished: bool = True) -> str:
-        """Get rank based on session score, based on the participant's percentile rank
-        Override this function in your rules file to change rank calculation
-
-        Args:
-            session: the current session
-            exclude_unfinished: whether unfinished sessions should be excluded when calculating rank
-
-        Returns:
-            a string indicating the rank of the participant (e.g., "bronze")
-        """
-        score = session.final_score
-        ranks = Final.RANKS
-
-        # Few or negative points or no score, always return lowest plastic score
-        if score <= 0 or not score:
-            return ranks["PLASTIC"]
-
-        # Buckets for positive scores:
-        # rank: starts percentage
-        buckets = [
-            # ~ stanines 1-3
-            {"rank": ranks["BRONZE"], "min_percentile": 0.0},
-            # ~ stanines 4-6
-            {"rank": ranks["SILVER"], "min_percentile": 25.0},
-            # ~ stanine 7
-            {"rank": ranks["GOLD"], "min_percentile": 75.0},
-            {"rank": ranks["PLATINUM"], "min_percentile": 90.0},  # ~ stanine 8
-            {"rank": ranks["DIAMOND"], "min_percentile": 95.0},  # ~ stanine 9
-        ]
-        filter_condition = {"finished_at__isnull": False} if exclude_unfinished else {}
-        percentile = session.percentile_rank(filter_condition)
-
-        # Check the buckets in reverse order
-        # If the percentile rank is higher than the min_percentile
-        # return the rank
-        for bucket in reversed(buckets):
-            if percentile >= bucket["min_percentile"]:
-                return bucket["rank"]
-
-        # Default return, in case score isn't in the buckets
-        return ranks["PLASTIC"]
-
     def validate_playlist(self, playlist: Playlist = None) -> list[str]:
         """Validate a playlist associated with this rules file, e.g., ensure that files have a specific name format
 

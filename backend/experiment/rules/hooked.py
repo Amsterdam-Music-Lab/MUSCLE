@@ -107,14 +107,14 @@ class Hooked(BaseRules):
 
             return [
                 self.get_score(session, round_number),
-                Final(
+                FinalAction(
                     session=session,
-                    final_text=self.final_score_message(session),
-                    rank=self.rank(session),
-                    show_profile_link=True,
-                    button=Button(
-                        _("Play again"),
-                    ),
+                    # final_text=self.final_score_message(session),
+                    # rank=self.rank(session),
+                    # show_profile_link=True,
+                    # button=Button(
+                    #     _("Play again"),
+                    # ),
                 ),
             ]
 

@@ -177,7 +177,7 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
         difference = get_average_difference(session, 4, self.start_diff)
         final_text = self.get_final_text(difference)
         session.finish()
-        return FinaAction(session, title=_("End"), final_text=final_text)
+        return FinalAction(session, title=_("End"), final_text=final_text)
 
     def get_final_text(self, difference):
         percentage = round(difference / 6000, 2)

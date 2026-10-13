@@ -9,7 +9,7 @@ from session.models import Session
 
 
 class TestToontjeHoger3Plink(TestCase):
-    fixtures = ["toontjehoger"]
+    fixtures = ["ranking_toontjehoger", "toontjehoger"]
 
     def test_initializes(self):
         rules = ToontjeHoger3Plink()
@@ -30,7 +30,7 @@ class TestToontjeHoger3Plink(TestCase):
 
 
 class TestToontjeHogerKids3Plink(TestCase):
-    fixtures = ["toontjehoger_kids"]
+    fixtures = ["ranking_toontjehoger", "toontjehoger_kids"]
 
     def test_initializes(self):
         rules = ToontjeHogerKids3Plink()
