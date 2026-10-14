@@ -1,0 +1,17 @@
+.aha__final-rank-bar-section {
+    position: relative;
+    height: 10px;
+    border: 2px solid $gold;
+    border-top: 0;
+    margin-top: 50px;
+    margin: 50px auto 0;
+    max-width: 480px;
+    width: 100%;
+    .aha__final-rank-bar-cursor {
+        position: absolute;
+        top: -5px;
+        height: 20px;
+        width: 2px;
+        background: $gold;
+    }
+}

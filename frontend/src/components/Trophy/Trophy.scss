@@ -1,10 +1,8 @@
-.aha__cup {
+.aha__trophy {
     width: 150px;
     height: 150px;
     border-radius: 50%;
     margin: auto;
-    background-color: $yellow;
-    box-shadow: 13px 0 64px $yellow;
     border: 5px solid white;
     box-sizing: border-box;
     display: flex;
@@ -23,7 +21,7 @@
         top: -27px;
         width: 193px;
         height: 193px;
-        background-image: $rank-deco;
+        background-image: $trophy-deco;
         background-repeat: no-repeat;
         background-position: center;
         opacity: 0.1;
@@ -58,37 +56,6 @@
         animation-delay: -0.588s;
     }
 
-    // Rankings:
-    &.diamond {
-        background-color: #1c79ef;
-        box-shadow: 13px 0 64px #1c79ef;
-    }
-
-    &.platinum {
-        background-color: #7ddff5;
-        box-shadow: 13px 0 64px #7ddff5;
-    }
-
-    &.gold {
-        background-color: $gold;
-        box-shadow: 13px 0 64px $gold;
-    }
-
-    &.silver {
-        background-color: $gray;
-        box-shadow: 13px 0 64px $gray;
-    }
-
-    &.bronze {
-        background-color: #ee8b6c;
-        box-shadow: 13px 0 64px #ee8b6c;
-    }
-
-    &.plastic {
-        background-color: mix($gray, $black, 20%);
-        box-shadow: 13px 0 64px $black;
-    }
-
     >h4 {
         position: absolute;
         bottom: 9px;
@@ -98,12 +65,12 @@
         font-weight: bold;
         font-size: 16px;
         letter-spacing: 0.1em;
+        margin-top: 20px;
     }
 
-    >.cup {
+    >.aha__trophy-image {
         width: 85px;
         height: 85px;
-        background-image: $cup;
         background-repeat: no-repeat;
         background-position: center center;
 
@@ -111,9 +78,11 @@
         animation-name: bounce;
         animation-duration: 2.8s;
         animation-timing-function: ease-in-out;
+
+        &.cup {
+            background-image: $cup;
+        }
     }
 
-    &.offsetCup>.cup {
-        margin-top: -20px;
-    }
+    
 }

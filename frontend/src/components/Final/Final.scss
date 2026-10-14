@@ -5,27 +5,15 @@
     $platinum: #7ddff5;
     $diamond: #1c79ef;
 
-    .aha__rank {
+    .aha__trophy {
         margin-top: 15px;
     }
 
-    .aha__final-rank-bar-section {
-        position: relative;
-        height: 10px;
-        border: 2px solid $gold;
-        border-top: 0;
-        margin-top: 50px;
-        margin: 50px auto 0;
-        max-width: 480px;
+    .aha__final-text {
         width: 100%;
-
-        .aha__final-rank-bar-cursor {
-            position: absolute;
-            top: -5px;
-            height: 20px;
-            width: 2px;
-            background: $gold;
-        }
+        max-width: 360px;
+        margin: 1rem auto;
+    }
 
         &.diamond {
             border-color: $diamond;
@@ -76,16 +64,6 @@
         }
     }
 
-    .aha__final-text {
-        width: 100%;
-        max-width: 360px;
-        margin: 1rem auto;
-
-        table {
-            width: 100%;
-        }
-    }
-
     .share {
         a {
             $size: 55px;
@@ -107,7 +85,6 @@
                 text-decoration: none;
             }
         }
-    }
 
     .home {
         padding: 10px;
@@ -119,4 +96,5 @@
             text-decoration: underline;
         }
     }
+    
 }

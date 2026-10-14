@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import Cup from './Cup';
+import Cup from './Trophy';
 import { describe, expect, it } from 'vitest';
 
 

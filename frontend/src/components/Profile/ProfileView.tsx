@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Cup from "../Cup/Cup";
+import Cup from "../Trophy/Trophy";
 import { URLS } from "@/config";
 import ParticipantLink from "../ParticipantLink/ParticipantLink";
 

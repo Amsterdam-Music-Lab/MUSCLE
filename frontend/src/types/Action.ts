@@ -72,9 +72,27 @@ export interface ScoreAction {
   timer?: number;
 }
 
+interface ScoreDescription {
+  value: string;
+  label: string;
+}
+
+export interface Scores {
+  session: ScoreDescription;
+  relative: ScoreDescription;
+  accumulative: ScoreDescription;
+}
+
+export interface Trophy {
+  className: string | "diamond" | "platinum" | "gold" | "silver" | "bronze" | "plastic";
+  label: string;
+  description?: string | TrustedHTML;
+  image?: string | "cup" | "star";
+}
+
 export interface FinalAction {
-  score: number;
-  percentile?: number;
+  trophy: Trophy;
+  scores: Scores;
   finalText: string | TrustedHTML;
   actionTexts: {
     allExperiments: string;

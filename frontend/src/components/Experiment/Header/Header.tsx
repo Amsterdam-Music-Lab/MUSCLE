@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import Social from "../../Social/Social"
 import HTML from '@/components/HTML/HTML';
 import { ScoreDisplayConfig } from "@/types/Theme";
-import Rank from "@/components/Rank/Rank";
+import ScoreCounter, { ScoreCounterProps } from "../ScoreCounter/ScoreCounter";
+import Trophy, { TrophyProps } from "../Trophy/Trophy";
 import { SocialMediaConfig } from "@/types/Experiment";
 import { styleButton, styleButtonOutline } from "@/util/stylingHelpers";
 
@@ -43,10 +44,10 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
             {scoreDisplayConfig && totalScore !== 0 && (
                 <div className="results">
-                    <Rank
-                        cup={{ className: scoreDisplayConfig.scoreClass, text: '' }}
-                        score={{ score: totalScore, label: scoreDisplayConfig.scoreLabel }}
-                    />
+                    <div data-testid="header-trophy" className="aha__header-trophy">
+                        <Trophy className={trophy.className} label={trophy.label} />
+                        <ScoreCounter score={scores.accumulative.value} label={scores.accumulative.label} />
+                    </div >
                     {socialMediaConfig?.channels?.length && (
                         <Social
                             social={socialMediaConfig}

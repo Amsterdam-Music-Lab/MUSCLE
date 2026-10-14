@@ -1,6 +1,7 @@
 import { css, keyframes } from '@emotion/react'
 
 import Theme from '@types/Theme';
+import { color } from "storybook/theming";
 
 export const styleButton = (buttonColor: string) => {
     return css`
@@ -56,4 +57,31 @@ export const animateScoreBackground = (score: number, theme: Theme) => {
         animation-name: ${scoreBackgroundAnimation(backgroundColor)};
     }
     `
+}
+
+export const getTrophyColor = (className: string) => {
+    let colorValue;
+    switch(className) {
+        case "plastic":
+            colorValue = "#9e9fa1";
+            break;
+        case "bronze":
+            colorValue = "#ee8b6c";
+            break;
+        case "silver":
+            colorValue = "white";
+            break;
+        case "gold":
+            colorValue = "#f9b900";
+            break;
+        case "platinum":
+            colorValue = "#7ddff5";
+            break;
+        case "diamond":
+            colorValue = "#1c79ef";
+            break;
+        default:
+            colorValue = "";
+    }
+    return colorValue;
 }
