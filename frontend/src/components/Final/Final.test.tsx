@@ -1,7 +1,6 @@
 import { vi, expect, describe, it } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import * as API from '../../API';
 
 import Final from './Final'; // Adjust the import path as necessary
 
@@ -19,10 +18,9 @@ vi.mock('../../util/stores', () => ({
     useBoundStore: vi.fn()
 }));
 
-vi.mock('../../API', () => {
+vi.mock('@/API', () => {
     return {
-        SILENT_MP3: '',
-        API_ROOT: '',
+        getExperimentProgress: () => vi.fn(),
         URLS: {
             AMLHome: '/aml',
             profile: '/profile',

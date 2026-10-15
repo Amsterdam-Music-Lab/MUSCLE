@@ -9,6 +9,7 @@ import ScoreCounter from "@/components/ScoreCounter/ScoreCounter";
 const Social = lazy(() => import("@/components/Social/Social"));
 const Trophy = lazy(() => import("@/components/Trophy/Trophy"));
 const UserFeedback = lazy(() => import("@/components/UserFeedback/UserFeedback"));
+import Visualization from "@/components/Visualization/Visualization";
 import { FinalAction, SharedActionProps } from "@/types/Action";
 import { URLS, useExperimentProgress } from '@/API';
 
@@ -25,6 +26,7 @@ const Final = (props: FinalAction & SharedActionProps) => {
         scores,
         trophy,
         finalText,
+        visualizationType,
         actionTexts,
         button,
         onNext,
@@ -42,10 +44,10 @@ const Final = (props: FinalAction & SharedActionProps) => {
         <div className="aha__final d-flex flex-column justify-content-center">
             {trophy && (
                 <Suspense>
-                    <div className="text-center">
+                    <div className="aha__trophy-container text-center">
                         <Trophy className={trophy.className} label={trophy.label} image={progress.currentReward? progress.currentReward.image : undefined} />
                         {trophy.description && (
-                            <HTML innerClassName="aha__final-text" body={trophy.description} />
+                            <HTML innerClassName="aha__trophy-description" body={trophy.description} />
                             )
                         }
                     </div>
@@ -53,11 +55,11 @@ const Final = (props: FinalAction & SharedActionProps) => {
             )}
 
             {finalText && (
-                <HTML body={finalText} />
+                <HTML innerClassName="aha__final-text" body={finalText} />
             )}
             
             {visualizationType && (
-                <Visualization percentile={scores.relative.value} type={visualizationType} rankClass={trophy.class}/>
+                <Visualization percentile={scores.relative.value} type={visualizationType} rankClass={trophy.className}/>
             )}
 
             {scores && (
@@ -101,7 +103,7 @@ const Final = (props: FinalAction & SharedActionProps) => {
                 participant={participant}
                 feedbackInfo={feedbackInfo}
             />)}
-            {block.theme.footer!.logos && (
+            {(block.theme && block.theme.footer) && (
                 <Suspense >
                     <Footer
                         logos={block.theme.footer!.logos}

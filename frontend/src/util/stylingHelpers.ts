@@ -69,7 +69,7 @@ export const getTrophyColor = (className: string) => {
             colorValue = "#ee8b6c";
             break;
         case "silver":
-            colorValue = "white";
+            colorValue = "#bdbebf";
             break;
         case "gold":
             colorValue = "#f9b900";

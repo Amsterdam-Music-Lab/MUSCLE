@@ -4,7 +4,7 @@ import ParticipantLink from './ParticipantLink';
 
 // Mock the useParticipantLink hook
 const mockUseParticipantLink = vi.fn();
-vi.mock('../../API', () => ({
+vi.mock('@/API', () => ({
     useParticipantLink: () => mockUseParticipantLink(),
 }));
 

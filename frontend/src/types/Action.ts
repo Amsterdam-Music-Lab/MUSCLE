@@ -94,6 +94,7 @@ export interface FinalAction {
   trophy: Trophy;
   scores: Scores;
   finalText: string | TrustedHTML;
+  visualizationType: string;
   actionTexts: {
     allExperiments: string;
     profile: string;

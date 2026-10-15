@@ -18,13 +18,22 @@ export default {
 
 function getFinalData(overrides = {}) {
     return {
-        score: 100,
-        percentile: 66,
-        rank: {
-            text: "Rank",
-            class: "rank",
+        scores: {
+            session: {
+                value: 100,
+                label: "points"
+            },
+            relative: {
+                value: 66,
+                label: "%"
+            }
         },
-        final_text: `
+        trophy: {
+            label: "Platinum",
+            className: "platinum",
+            description: `<h4>Awesome!</h4>`
+        },
+        finalText: `
             <p>You outperformed 66% of the players</p>
 
             <table>
@@ -33,20 +42,10 @@ function getFinalData(overrides = {}) {
                 <tr><td>Average score</td><td>80</td></tr>
             </table>
         `,
-        points: "points",
+        visualizationType: "cup",
         button: {
             label: "Button",
             link: "https://www.example.com",
-        },
-        logo: {
-            image: "/images/logo-white.svg",
-            link: "https://www.example.com",
-        },
-        social: {
-            channels: ["facebook", "whatsapp", "twitter", "weibo", "share", "clipboard"],
-            url: "https://www.example.com",
-            content: "Hey! Check out this cool experiment",
-            tags: ["coolexperiment", "awesome"],
         },
         show_profile_link: true,
         action_texts: {
@@ -55,15 +54,6 @@ function getFinalData(overrides = {}) {
         },
         show_participant_link: true,
         participant_id_only: false,
-        feedback_info: {
-            header: "Feedback",
-            button: {
-                label: "Submit",
-            },
-            thank_you: "Thank you for your feedback!",
-            contact_body:
-                '<p>Please contact us at <a href="mailto:info@example.com">info@example.com</a></p>',
-        },
         block: {
             identifier: "test",
         },
@@ -124,71 +114,12 @@ export const NoButtonLink = {
     decorators: [getDecorator],
 };
 
-// gold cup
-export const GoldCup = {
-    args: getFinalData({
-        rank: {
-            text: "Gold",
-            class: "gold",
-        },
-    }),
-    decorators: [getDecorator],
-};
 
-// silver cup
-export const SilverCup = {
-    args: getFinalData({
-        rank: {
-            text: "Silver",
-            class: "silver",
-        },
-    }),
-    decorators: [getDecorator],
-};
-
-// bronze cup
-export const BronzeCup = {
-    args: getFinalData({
-        rank: {
-            text: "Bronze",
-            class: "bronze",
-        },
-    }),
-    decorators: [getDecorator],
-};
-
-// plastic cup
-export const PlasticCup = {
-    args: getFinalData({
-        rank: {
-            text: "Plastic",
-            class: "plastic",
-        },
-    }),
-    decorators: [getDecorator],
-};
-
-// diamond cup
-export const DiamondCup = {
-    args: getFinalData({
-        rank: {
-            text: "Diamond",
-            class: "diamond",
-        },
-    }),
-    decorators: [getDecorator],
-};
 
 // final text html test
 export const FinalTextHtml = {
     args: getFinalData({
-        final_text: `
-            <p>You outperformed 66% of the players</p>
-            <table>
-                <tr><td>This game</td><td>100</td></tr>
-                <tr><td>Personal best</td><td>120</td></tr>
-                <tr><td>Average score</td><td>80</td></tr>
-            </table>
+        finalText: `
             <h1>Heading 1</h1>
             <h2>Heading 2</h2>
             <h3>Heading 3</h3>

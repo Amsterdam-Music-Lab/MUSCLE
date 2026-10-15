@@ -1,9 +1,9 @@
 .aha__final {
 
-    $plastic: mix($gray, $black, 20%);
-    $bronze: #ee8b6c;
-    $platinum: #7ddff5;
-    $diamond: #1c79ef;
+    .aha__trophy-container {
+        display: flex;
+        align-items: center;
+    }
 
     .aha__trophy {
         margin-top: 15px;
@@ -13,55 +13,6 @@
         width: 100%;
         max-width: 360px;
         margin: 1rem auto;
-    }
-
-        &.diamond {
-            border-color: $diamond;
-
-            .aha__final-rank-bar-cursor {
-                background: $diamond;
-            }
-        }
-
-        &.platinum {
-            border-color: $platinum;
-
-            .aha__final-rank-bar-cursor {
-                background: $platinum;
-            }
-        }
-
-        &.gold {
-            border-color: $gold;
-
-            .aha__final-rank-bar-cursor {
-                background: $gold;
-            }
-        }
-
-        &.silver {
-            border-color: white;
-
-            .aha__final-rank-bar-cursor {
-                background: white;
-            }
-        }
-
-        &.bronze {
-            border-color: $bronze;
-
-            .aha__final-rank-bar-cursor {
-                background: $bronze;
-            }
-        }
-
-        &.plastic {
-            border-color: $plastic;
-
-            .aha__final-rank-bar-cursor {
-                background: $plastic;
-            }
-        }
     }
 
     .share {
@@ -85,6 +36,7 @@
                 text-decoration: none;
             }
         }
+    }
 
     .home {
         padding: 10px;
