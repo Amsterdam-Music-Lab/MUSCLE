@@ -3,7 +3,6 @@ from typing import Optional, TypedDict
 from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.utils import get_experiment_url
-from experiment.models import Progress, Rank
 from session.models import Session
 
 from .base_action import BaseAction
@@ -25,16 +24,6 @@ class TrophyAction(TypedDict):
     label: str
     description: str
     class_name: str
-
-
-class RewardAction(TypedDict):
-    every_n: int
-    image: str
-
-
-class ProgressAction(TypedDict):
-    total_sessions: int
-    rewards: Optional[list[RewardAction]]
 
 
 class FinalActionResponse(TypedDict):
@@ -76,15 +65,6 @@ class FinalAction(BaseAction):  # pylint: disable=too-few-public-methods
 
     view = "FINAL"
 
-    RANKS = {
-        "PLASTIC": {"text": _("plastic"), "class": "plastic"},
-        "BRONZE": {"text": _("bronze"), "class": "bronze"},
-        "SILVER": {"text": _("silver"), "class": "silver"},
-        "GOLD": {"text": _("gold"), "class": "gold"},
-        "PLATINUM": {"text": _("platinum"), "class": "platinum"},
-        "DIAMOND": {"text": _("diamond"), "class": "diamond"},
-    }
-
     def __init__(
         self,
         session: Session,
@@ -116,7 +96,6 @@ class FinalAction(BaseAction):  # pylint: disable=too-few-public-methods
                     "label": self.score_label,
                 },
             },
-            "progress": self.progress.convert_to_action(),
             "button": self.button,
         }
 
@@ -131,12 +110,6 @@ class FinalAction(BaseAction):  # pylint: disable=too-few-public-methods
         self.score = score
         self.relative_score = relative_score
         self.accumulative_score = accumulative_score
-
-    def set_progress(self, progress: Progress):
-        self.progress = progress
-
-    def set_active_rank(self, rank: Rank):
-        self.rank = rank
 
     def get_button(self, button: Button, session: Session) -> Optional[Button]:
         """

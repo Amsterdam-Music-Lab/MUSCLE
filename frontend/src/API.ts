@@ -5,8 +5,8 @@ import qs from "qs";
 import IBlock from "@/types/Block";
 import IExperiment from "@/types/Experiment";
 import Participant, { ParticipantLink } from "./types/Participant";
-import Session from "./types/Session";
-import Experiment from "@/types/Experiment";
+import Session from "@/types/Session";
+import Experiment, { ProgressResponse } from "@/types/Experiment";
 import { RoundResponse } from "./types/Round";
 
 // API handles the calls to the Hooked-server api
@@ -21,7 +21,8 @@ export const URLS = {
         feedback: (experimentIdentifier: string, identifier: string) => `/experiment/${experimentIdentifier}/block/${identifier}/feedback/`,
     },
     experiment: {
-        get: (identifier: string) => `/experiment/${identifier}/`
+        get: (identifier: string) => `/experiment/${identifier}/`,
+        getProgress: (identifier: string) => `/experiment/${identifier}/progress/`
     },
     participant: {
         current: "/participant/",
@@ -51,6 +52,9 @@ export const useExperiment = (identifier: string) => {
     const data = useGet<Experiment>(API_BASE_URL + URLS.experiment.get(identifier));
     return data;
 }
+
+export const useExperimentProgress = (identifier: string) =>
+    useGet<ProgressResponse>(API_BASE_URL + URLS.experiment.getProgress(identifier));
 
 export const useParticipantScores = <T>() =>
     useGet<T>(API_BASE_URL + URLS.participant.score);

@@ -11,7 +11,7 @@ from participant.models import Participant
 from session.models import Session
 from theme.models import ThemeConfig
 from theme.serializers import serialize_theme
-from .models import Block, Experiment, Phase, SocialMediaConfig
+from .models import Block, Experiment, Phase, Progress, Reward, SocialMediaConfig
 
 
 def serialize_actions(actions):
@@ -19,6 +19,27 @@ def serialize_actions(actions):
     if isinstance(actions, list):
         return [a.action() for a in actions]
     return actions.action()
+
+
+class RewardDict(TypedDict):
+    everyN: int
+    image: str
+
+
+def serialize_reward(reward: Reward) -> RewardDict:
+    return {"everyN": reward.every_n, "image": reward.image}
+
+
+class ProgressDict(TypedDict):
+    totalSessions: int
+    rewards: Optional[list[RewardDict]]
+
+
+def serialize_progress(progress: Progress):
+    return {
+        "totalSessions": progress.total_sessions,
+        "rewards": [serialize_reward(reward) for reward in progress.rewards.all()],
+    }
 
 
 def serialize_experiment(experiment: Experiment) -> dict:

@@ -9,12 +9,13 @@ export default interface Block {
     image?: IImage;
     bonus_points: number;
     theme: Theme;
-    class_name: string;
+    className: string;
     rounds: number;
     playlists: Playlist[];
-    feedback_info: FeedbackInfo;
-    session_id: number;
-    loading_text: string;
+    feedbackInfo: FeedbackInfo;
+    sessionId: number;
+    experimentIdentifier: string;
+    loadingText: string;
 }
 
 export interface Playlist {

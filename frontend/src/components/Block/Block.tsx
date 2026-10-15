@@ -52,8 +52,8 @@ const Block = () => {
     // API hooks
     const [block, loadingBlock] = useBlock(experimentIdentifier!, identifier!);
 
-    const loadingText = block ? block.loading_text : "";
-    const className = block ? block.class_name : "";
+    const loadingText = block ? block.loadingText : "";
+    const className = block ? block.className : "";
 
     /** Set new state as spread of current state to force re-render */
     const updateState = useCallback((state: Action) => {
@@ -116,13 +116,13 @@ const Block = () => {
 
                 setBlock(block);
 
-                if (block.session_id) {
-                    setSession({ id: block.session_id });
-                } else if (!block.session_id && session) {
+                if (block.sessionId) {
+                    setSession({ id: block.sessionId });
+                } else if (!block.sessionId && session) {
                     setError('Session could not be created');
                 }
 
-                continueToNextRound({ id: block.session_id });
+                continueToNextRound({ id: block.sessionId });
 
             } else {
                 // Loading error
@@ -222,8 +222,8 @@ const Block = () => {
     const view = state?.view;
 
     return (<>
-        <FontLoader fontUrl={theme?.heading_font_url} fontType="heading" />
-        <FontLoader fontUrl={theme?.body_font_url} fontType="body" />
+        <FontLoader fontUrl={theme?.headingFontUrl} fontType="heading" />
+        <FontLoader fontUrl={theme?.bodyFontUrl} fontType="body" />
         <TransitionGroup
             className={classNames(
                 "aha__block",
@@ -245,12 +245,12 @@ const Block = () => {
                     >
                         {render()}
 
-                        {block?.feedback_info?.show_float_button && (
+                        {block?.feedbackInfo?.show_float_button && (
                             <FloatingActionButton>
                                 <UserFeedback
                                     blockIdentifier={block.identifier}
                                     participant={participant}
-                                    feedbackInfo={block.feedback_info}
+                                    feedbackInfo={block.feedbackInfo}
                                     inline={false} />
                             </FloatingActionButton>
                         )}

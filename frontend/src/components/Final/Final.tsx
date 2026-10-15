@@ -1,16 +1,17 @@
 import { Suspense, lazy } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Trophy from "@/components/Trophy/Trophy";
 import Button from "@/components/Button/Button";
 const Footer = lazy(() => import("@/components/Footer/Footer"));
+import HTML from "@/components/HTML/HTML";
 import ParticipantLink from "@/components/ParticipantLink/ParticipantLink";
 import ScoreCounter from "@/components/ScoreCounter/ScoreCounter";
-import Social from "@/components/Social/Social";
-import UserFeedback from "@/components/UserFeedback/UserFeedback";
+const Social = lazy(() => import("@/components/Social/Social"));
+const Trophy = lazy(() => import("@/components/Trophy/Trophy"));
+const UserFeedback = lazy(() => import("@/components/UserFeedback/UserFeedback"));
 import { FinalAction, SharedActionProps } from "@/types/Action";
-import { URLS } from '@/API';
-import HTML from "../HTML/HTML";
+import { URLS, useExperimentProgress } from '@/API';
+
 import useBoundStore from "@/util/stores";
 
 /**
@@ -35,18 +36,20 @@ const Final = (props: FinalAction & SharedActionProps) => {
         
     } = props;
     const navigate = useNavigate();
-    const progress = getExperimentProgress(participant);
+    const progress = useExperimentProgress(block.experimentIdentifier);
 
     return (
         <div className="aha__final d-flex flex-column justify-content-center">
             {trophy && (
-                <div className="text-center">
-                    <Trophy className={trophy.className} label={trophy.label} image={reward.image} />
-                    {trophy.description && (
-                        <HTML innerClassName="aha__final-text" body={trophy.description} />
-                        )
-                    }
-                </div>
+                <Suspense>
+                    <div className="text-center">
+                        <Trophy className={trophy.className} label={trophy.label} image={progress.currentReward? progress.currentReward.image : undefined} />
+                        {trophy.description && (
+                            <HTML innerClassName="aha__final-text" body={trophy.description} />
+                            )
+                        }
+                    </div>
+                </Suspense>
             )}
 
             {finalText && (

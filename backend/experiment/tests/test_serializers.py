@@ -2,12 +2,14 @@ from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
 
-from experiment.models import (
-    Block,
-    Experiment,
-    Phase,
+from experiment.models import Block, Experiment, Phase, Progress
+from experiment.serializers import (
+    get_session_info,
+    get_upcoming_block,
+    serialize_block,
+    serialize_phase,
+    serialize_progress,
 )
-from experiment.serializers import get_session_info, get_upcoming_block, serialize_block, serialize_phase
 from experiment.tests.test_views import create_theme_config
 from image.models import Image
 from participant.models import Participant
@@ -164,3 +166,13 @@ class SerializerTest(TestCase):
         participant = Participant.objects.create()
         serialized_block = serialize_block(block, participant)
         self.assertEqual(serialized_block.get("theme").get("name"), "Default")
+
+
+class ProgressSerializerTest(TestCase):
+    fixtures = ["eurovision_2020", "ranking_hooked"]
+
+    def test_progress_convert_to_action(self):
+        progress_action = serialize_progress(Progress.objects.first())
+        self.assertIsNone(progress_action.get("totalSessions"))
+        self.assertEqual(len(progress_action.get("rewards")), 1)
+        self.assertEqual(progress_action.get("rewards")[0].get("everyN"), 1)

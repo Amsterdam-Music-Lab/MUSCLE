@@ -11,6 +11,23 @@ export interface Consent {
     view: 'CONSENT';
 }
 
+export interface Reward {
+    everyN: number;
+    image: string;
+}
+
+export interface Progress {
+    totalSessions?: number;
+    rewards?: Reward[];
+    
+}
+
+export interface ProgressResponse {
+    playedSessions: number;
+    progress: Progress;
+    currentReward?: Reward;
+}
+
 export interface SocialMediaConfig {
     tags: string[];
     url: string;
@@ -30,5 +47,6 @@ export default interface Experiment {
     backButtonText?: string;
     accumulatedScore: number;
     playedSessions: number;
+    progress?: Progress;
     socialMediaConfig?: SocialMediaConfig;
 }

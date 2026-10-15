@@ -2,6 +2,7 @@ import json
 import logging
 from typing import Union
 
+from django.db.models import F
 from django.http import Http404, HttpRequest, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _, get_language
@@ -15,10 +16,12 @@ from experiment.serializers import (
     serialize_block,
     serialize_experiment,
     serialize_phase,
+    serialize_progress,
+    serialize_reward,
 )
 from experiment.rules import BLOCK_RULES
 from participant.models import Participant
-from participant.utils import get_or_create_participant
+from participant.utils import get_participant, get_or_create_participant
 
 logger = logging.getLogger(__name__)
 
@@ -53,16 +56,17 @@ def get_block(request: HttpRequest, experiment_identifier: str, identifier: str)
     # create data
     block_data = {
         **serialize_block(block),
-        "class_name": class_name,  # can be used to override style
+        "className": class_name,  # can be used to override style
         "rounds": block.rounds,
-        "bonus_points": block.bonus_points,
+        "bonusPoints": block.bonus_points,
         "playlists": [
             {"id": playlist.id, "name": playlist.name}
             for playlist in block.playlists.all()
         ],
-        "feedback_info": block.get_rules().feedback_info(),
-        "loading_text": _("Loading"),
-        "session_id": session.id,
+        "feedbackInfo": block.get_rules().feedback_info(),
+        "loadingText": _("Loading"),
+        "sessionId": session.id,
+        "experimentIdentifier": block.experiment.identifier,
     }
     response = JsonResponse(block_data, json_dumps_params={"indent": 4})
     return response
@@ -127,24 +131,44 @@ def get_experiment(
     return get_experiment(request, identifier)
 
 
+def get_experiment_progress(request: HttpRequest, identifier: str) -> JsonResponse:
+    experiment = Experiment.objects.get(identifier=identifier)
+    participant = get_participant(request)
+    played_sessions = Session.objects.filter(
+        block__in=experiment.associated_blocks(),
+        participant__pk=participant,
+        finished_at__isnull=False,
+    ).count()
+    response_dict = {
+        "progress": serialize_progress(experiment.progress),
+        "playedSessions": played_sessions,
+    }
+    if experiment.progress.rewards.count():
+        if experiment.progress.count == 1:
+            response_dict.update({"currentReward": experiment.progress.rewards.first()})
+        else:
+            eligible_rewards = experiment.progress.rewards.annotate(
+                modulo=F("every_n") % played_sessions
+            ).filter(modulo=0)
+            if eligible_rewards.count():
+                response_dict.update(
+                    {
+                        "currentReward": serialize_reward(
+                            eligible_rewards.order_by("-every_n").first()
+                        )
+                    }
+                )
+    return JsonResponse(response_dict)
+
+
 def _get_min_session_count(experiment: Experiment, participant: Participant) -> int:
-    phases = experiment.phases.all()
-    session_counts = []
-    for phase in phases:
-        session_counts.extend(
-            [
-                Session.objects.exclude(finished_at__isnull=True)
-                .filter(block=block, participant=participant)
-                .count()
-                for block in phase.blocks.all()
-            ]
-        )
+    session_counts = [
+        Session.objects.exclude(finished_at__isnull=True)
+        .filter(block=block, participant=participant)
+        .count()
+        for block in experiment.associated_blocks()
+    ]
     return min(session_counts)
-
-
-def get_associated_blocks(pk_list):
-    """get all the experiment objects registered in an Experiment field"""
-    return [Block.objects.get(pk=pk) for pk in pk_list]
 
 
 def render_markdown(request):

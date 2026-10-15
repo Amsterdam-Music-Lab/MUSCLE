@@ -123,16 +123,6 @@ class Progress(models.Model):
     )
     # TO DO? Allow setting a custom image on the progress bar
 
-    def convert_to_action(self) -> dict:
-        return {
-            "total_sessions": self.total_sessions,
-            "rewards": (
-                [reward.convert_to_action() for reward in self.rewards.all()]
-                if self.rewards.count()
-                else None
-            ),
-        }
-
 
 REWARD_IMAGE_CHOICES = [
     ("cup", _("Cup")),
@@ -148,9 +138,6 @@ class Reward(models.Model):
         help_text=_("Show this reward every nth session"), default=1
     )
     image = models.CharField(max_length=8, choices=REWARD_IMAGE_CHOICES, default="cup")
-
-    def convert_to_action(self):
-        return {"every_n": self.every_n, "image": self.image}
 
 
 class Phase(models.Model):

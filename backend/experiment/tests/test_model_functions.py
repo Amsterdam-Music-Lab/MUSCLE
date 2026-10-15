@@ -84,12 +84,3 @@ class RankingModelTest(TestCase):
         self.assertEqual(ranking.get_active_rank(20.0).label, "bronze")
         self.assertEqual(ranking.get_active_rank(-1.0).label, "plastic")
 
-
-class ProgressModelTest(TestCase):
-    fixtures = ["eurovision_2020", "ranking_hooked"]
-
-    def test_progress_convert_to_action(self):
-        progress_action = Progress.objects.first().convert_to_action()
-        self.assertIsNone(progress_action.get("total_sessions"))
-        self.assertEqual(len(progress_action.get("rewards")), 1)
-        self.assertEqual(progress_action.get("rewards")[0].get("every_n"), 1)

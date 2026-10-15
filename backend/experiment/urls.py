@@ -4,6 +4,7 @@ from .views import (
     FeedbackListView,
     get_block,
     get_experiment,
+    get_experiment_progress,
     post_feedback,
     render_markdown,
     validate_block_playlist,
@@ -22,7 +23,14 @@ urlpatterns = [
         'feedback_list/<int:block_id>', FeedbackListView.as_view(), name='feedback_list'
     ),
     path('<slug:identifier>/', get_experiment, name='experiment'),
-    path('<slug:experiment_identifier>/block/<slug:identifier>/', get_block, name='block'),
+    path(
+        '<slug:identifier>/progress/',
+        get_experiment_progress,
+        name='experiment_progress',
+    ),
+    path(
+        '<slug:experiment_identifier>/block/<slug:identifier>/', get_block, name='block'
+    ),
     path(
         '<slug:experiment_identifier>/block/<slug:identifier>/feedback/',
         post_feedback,
