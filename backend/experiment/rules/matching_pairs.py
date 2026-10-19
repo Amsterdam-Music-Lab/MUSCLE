@@ -4,7 +4,6 @@ import json
 from django.utils.translation import gettext_lazy as _
 
 from .base import BaseRules
-from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.final import FinalAction
 from experiment.actions.playback import MatchingPairs, PlaybackSection

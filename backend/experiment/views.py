@@ -16,12 +16,10 @@ from experiment.serializers import (
     serialize_block,
     serialize_experiment,
     serialize_phase,
-    serialize_progress,
-    serialize_reward,
 )
 from experiment.rules import BLOCK_RULES
 from participant.models import Participant
-from participant.utils import get_participant, get_or_create_participant
+from participant.utils import get_or_create_participant
 
 logger = logging.getLogger(__name__)
 
@@ -129,40 +127,6 @@ def get_experiment(
     # if no phase was found, start from scratch with the minimum session count
     request.session[times_played_key] = _get_min_session_count(experiment, participant)
     return get_experiment(request, identifier)
-
-
-def get_experiment_progress(request: HttpRequest, identifier: str) -> JsonResponse:
-    try:
-        experiment = Experiment.objects.get(identifier=identifier)
-    except Experiment.DoesNotExist:
-        return Http404("Experiment not found")
-    participant = get_participant(request)
-    played_sessions = Session.objects.filter(
-        block__in=experiment.associated_blocks(),
-        participant__pk=participant,
-        finished_at__isnull=False,
-    ).count()
-    response_dict = {
-        "progress": serialize_progress(experiment.progress),
-        "playedSessions": played_sessions,
-    }
-    if experiment.progress.rewards.count():
-        if experiment.progress.count == 1:
-            response_dict.update({"currentReward": experiment.progress.rewards.first()})
-        else:
-            eligible_rewards = experiment.progress.rewards.annotate(
-                modulo=F("every_n") % played_sessions
-            ).filter(modulo=0)
-            if eligible_rewards.count():
-                response_dict.update(
-                    {
-                        "currentReward": serialize_reward(
-                            eligible_rewards.order_by("-every_n").first()
-                        )
-                    }
-                )
-    return JsonResponse(response_dict)
-
 
 def _get_min_session_count(experiment: Experiment, participant: Participant) -> int:
     session_counts = [

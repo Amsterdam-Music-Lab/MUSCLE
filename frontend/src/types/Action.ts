@@ -4,8 +4,9 @@ import Social from "@/types/Social";
 import Block, { FeedbackInfo } from "@/types/Block";
 import IButton from  "@/types/Button";
 import Participant from "@/types/Participant";
-import { PlaybackAction } from "./Playback";
-import Question from "./Question";
+import { PlaybackAction } from "@/types/Playback";
+import Question from "@/types/Question";
+import Timeline from "@/types/Timeline";
 import { BreakRoundOn } from "./Trial";
 import { OnResultParams } from "@/hooks/useResultHandler";
 
@@ -95,6 +96,7 @@ export interface FinalAction {
   scores: Scores;
   finalText: string | TrustedHTML;
   visualizationType: string;
+  timeline: Timeline;
   actionTexts: {
     allExperiments: string;
     profile: string;

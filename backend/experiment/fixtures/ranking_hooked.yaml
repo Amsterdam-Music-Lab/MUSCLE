@@ -43,12 +43,13 @@
     label: plastic
     feedback: ''
     cutoff: -1.0
-- model: experiment.progress
+- model: experiment.timeline
   pk: 41
   fields:
     experiment: 41
 - model: experiment.reward
   pk: 41
   fields:
-    progress: 41
-    every_n: 1
+    timeline: 41
+    session_number: 1
+    image: "cup"

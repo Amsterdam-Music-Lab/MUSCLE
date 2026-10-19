@@ -1,9 +1,8 @@
-from os.path import dirname, join
-from shutil import rmtree
+from os.path import dirname
 
-from django.test import override_settings, TestCase
-from django.utils import timezone
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase
+from django.utils import timezone
 
 from image.models import Image
 from experiment.serializers import serialize_phase
@@ -21,6 +20,7 @@ from session.models import Session
 from theme.models import ThemeConfig, FooterConfig, HeaderConfig
 
 here = dirname(__file__)
+
 
 class TestExperimentViews(TestCase):
     @classmethod
@@ -59,24 +59,40 @@ class TestExperimentViews(TestCase):
         response = self.client.get("/experiment/test_series/")
         self.assertEqual(response.json().get("nextBlock").get("identifier"), "block1")
         # create session
-        Session.objects.create(block=self.block1, participant=self.participant, finished_at=timezone.now())
+        Session.objects.create(
+            block=self.block1, participant=self.participant, finished_at=timezone.now()
+        )
         response = self.client.get("/experiment/test_series/")
         self.assertIn(
             response.json().get("nextBlock").get("identifier"), ("block2", "block3")
         )
         self.assertEqual(response.json().get("dashboard"), [])
-        Session.objects.create(block=self.block2, participant=self.participant, finished_at=timezone.now())
-        Session.objects.create(block=self.block3, participant=self.participant, finished_at=timezone.now())
+        Session.objects.create(
+            block=self.block2, participant=self.participant, finished_at=timezone.now()
+        )
+        Session.objects.create(
+            block=self.block3, participant=self.participant, finished_at=timezone.now()
+        )
         response = self.client.get("/experiment/test_series/")
         response_json = response.json()
         self.assertEqual(response_json.get("nextBlock").get("identifier"), "block4")
         self.assertEqual(response_json.get("dashboard"), [])
         self.assertEqual(response_json.get("theme").get("name"), "test_theme")
         self.assertEqual(len(response_json["theme"]["header"]["score"]), 3)
-        self.assertEqual(response_json.get("socialMedia").get("url"), "https://www.example.com")
-        self.assertEqual(response_json.get("socialMedia").get("content"), "Please play this Test experiment!")
-        self.assertEqual(response_json.get("socialMedia").get("tags"), ["aml", "toontjehoger"])
-        self.assertEqual(response_json.get("socialMedia").get("channels"), ["facebook", "twitter", "weibo"])
+        self.assertEqual(
+            response_json.get("socialMedia").get("url"), "https://www.example.com"
+        )
+        self.assertEqual(
+            response_json.get("socialMedia").get("content"),
+            "Please play this Test experiment!",
+        )
+        self.assertEqual(
+            response_json.get("socialMedia").get("tags"), ["aml", "toontjehoger"]
+        )
+        self.assertEqual(
+            response_json.get("socialMedia").get("channels"),
+            ["facebook", "twitter", "weibo"],
+        )
         Session.objects.create(
             block=self.block4, participant=self.participant, finished_at=timezone.now()
         )
@@ -154,7 +170,9 @@ class TestExperimentViews(TestCase):
 
     def test_experiment_with_dashboard(self):
         # if Experiment has dashboard set True, return list of random blocks
-        Session.objects.create(block=self.block1, participant=self.participant, finished_at=timezone.now())
+        Session.objects.create(
+            block=self.block1, participant=self.participant, finished_at=timezone.now()
+        )
         self.intermediate_phase.dashboard = True
         self.intermediate_phase.save()
         # check that the dashboard is returned correctly
@@ -164,7 +182,10 @@ class TestExperimentViews(TestCase):
     def test_experiment_total_score(self):
         """Test calculation of total score for grouped block on dashboard"""
         Session.objects.create(
-            block=self.block2, participant=self.participant, finished_at=timezone.now(), final_score=8
+            block=self.block2,
+            participant=self.participant,
+            finished_at=timezone.now(),
+            final_score=8,
         )
         self.intermediate_phase.dashboard = True
         self.intermediate_phase.save()
@@ -174,7 +195,10 @@ class TestExperimentViews(TestCase):
         total_score_1 = serialized_coll_1["accumulatedScore"]
         self.assertEqual(total_score_1, 8)
         Session.objects.create(
-            block=self.block3, participant=self.participant, finished_at=timezone.now(), final_score=8
+            block=self.block3,
+            participant=self.participant,
+            finished_at=timezone.now(),
+            final_score=8,
         )
         serialized_coll_2 = serialize_phase(
             self.intermediate_phase, self.participant, 0
@@ -186,7 +210,7 @@ class TestExperimentViews(TestCase):
         """Test translations of experiment texts"""
 
         experiment = Experiment.objects.create(
-            identifier="test_experiment_translated_content",
+            identifier="test_experiment_translation",
             name_en="Test Experiment Translation",
             description_en="Test experiment description in English.",
             name_nl="Probeersel",
@@ -201,7 +225,7 @@ class TestExperimentViews(TestCase):
 
         # request experiment with language set to English (British)
         response = self.client.get(
-            "/experiment/test_experiment_translated_content/",
+            "/experiment/test_experiment_translation/",
             headers={"Accept-Language": "en-Gb"},
         )
         # since English translation is available, the English content should be returned
@@ -209,7 +233,7 @@ class TestExperimentViews(TestCase):
 
         # request experiment with language set to Spanish
         response = self.client.get(
-            "/experiment/test_experiment_translated_content/",
+            "/experiment/test_experiment_translation/",
             headers={"Accept-Language": "nl"},
         )
 
@@ -217,7 +241,10 @@ class TestExperimentViews(TestCase):
         self.assertEqual(response.json().get("name"), "Probeersel")
 
         # request experiment with language set to Dutch
-        response = self.client.get("/experiment/test_experiment_translated_content/", headers={"Accept-Language": "nl"})
+        response = self.client.get(
+            "/experiment/test_experiment_translation/",
+            headers={"Accept-Language": "nl"},
+        )
 
         # since Dutch translation is available, should be returned
         self.assertEqual(
@@ -254,7 +281,12 @@ class TestExperimentViews(TestCase):
 
         # Experiment block session
         Session.objects.bulk_create(
-            [Session(block=block, participant=participant, finished_at=timezone.now()) for index in range(3)]
+            [
+                Session(
+                    block=block, participant=participant, finished_at=timezone.now()
+                )
+                for index in range(3)
+            ]
         )
 
         response = self.client.get("/experiment/test-experiment/block/test-block/")
@@ -296,8 +328,12 @@ def create_theme_config(name="test_theme") -> ThemeConfig:
     footer_config = FooterConfig.objects.create(
         theme=theme_config,
     )
-    footer_config.logos.add(Image.objects.create(file="test-logo-b.jpg"), through_defaults={"index": 1})
-    footer_config.logos.add(Image.objects.create(file="test-logo-a.jpg"), through_defaults={"index": 0})
+    footer_config.logos.add(
+        Image.objects.create(file="test-logo-b.jpg"), through_defaults={"index": 1}
+    )
+    footer_config.logos.add(
+        Image.objects.create(file="test-logo-a.jpg"), through_defaults={"index": 0}
+    )
 
     return theme_config
 

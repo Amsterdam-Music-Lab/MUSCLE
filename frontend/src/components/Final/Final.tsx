@@ -7,11 +7,12 @@ import HTML from "@/components/HTML/HTML";
 import ParticipantLink from "@/components/ParticipantLink/ParticipantLink";
 import ScoreCounter from "@/components/ScoreCounter/ScoreCounter";
 const Social = lazy(() => import("@/components/Social/Social"));
+const Timeline = lazy( () => import ("@/components/Timeline/Timeline"));
 const Trophy = lazy(() => import("@/components/Trophy/Trophy"));
 const UserFeedback = lazy(() => import("@/components/UserFeedback/UserFeedback"));
 import Visualization from "@/components/Visualization/Visualization";
 import { FinalAction, SharedActionProps } from "@/types/Action";
-import { URLS, useExperimentProgress } from '@/API';
+import { URLS, useExperimentTimeline } from '@/API';
 
 import useBoundStore from "@/util/stores";
 
@@ -27,6 +28,7 @@ const Final = (props: FinalAction & SharedActionProps) => {
         trophy,
         finalText,
         visualizationType,
+        timeline,
         actionTexts,
         button,
         onNext,
@@ -38,14 +40,19 @@ const Final = (props: FinalAction & SharedActionProps) => {
         
     } = props;
     const navigate = useNavigate();
-    const progress = useExperimentProgress(block.experimentIdentifier);
+
+    const currentTimelineStep = timeline? timeline.playedSessions % timeline.steps.length : 0;
+    const trophyImage = timeline.steps[currentTimelineStep - 1];
+
 
     return (
         <div className="aha__final d-flex flex-column justify-content-center">
             {trophy && (
                 <Suspense>
                     <div className="aha__trophy-container text-center">
-                        <Trophy className={trophy.className} label={trophy.label} image={progress.currentReward? progress.currentReward.image : undefined} />
+                        {trophyImage && (
+                            <Trophy className={trophy.className} label={trophy.label} image={trophyImage} />
+                        )}
                         {trophy.description && (
                             <HTML innerClassName="aha__trophy-description" body={trophy.description} />
                             )
@@ -65,16 +72,14 @@ const Final = (props: FinalAction & SharedActionProps) => {
             {scores && (
                 <ScoreCounter scores={scores} />
             )}
-            
-            
-            {button && (
-                <div className="text-center pt-4">
-                    <Button
-                        {...button}
-                        onClick={onNext}
-                    />
-                </div>
+
+            {timeline && timeline.steps.length > 1 && (
+                <Suspense>
+                    <Timeline timeline={timeline} />
+                </Suspense>
             )}
+            
+
             {social && (<Social
                 social={social}
             />
@@ -103,6 +108,14 @@ const Final = (props: FinalAction & SharedActionProps) => {
                 participant={participant}
                 feedbackInfo={feedbackInfo}
             />)}
+                        {button && (
+                <div className="text-center pt-4">
+                    <Button
+                        {...button}
+                        onClick={onNext}
+                    />
+                </div>
+            )}
             {(block.theme && block.theme.footer) && (
                 <Suspense >
                     <Footer

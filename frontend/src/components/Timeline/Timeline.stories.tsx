@@ -1,35 +1,48 @@
 import Timeline from "./Timeline";
+import useBoundStore from "@/util/stores";
 
 const timeline = {
-  currentStep: 4,
-  symbols: [
-    "dot",
-    "dot",
-    "star-4",
-    "dot",
-    "dot",
-    "star-5",
-    "dot",
-    "dot",
-    "star-6",
+  playedSessions: 4,
+  steps: [
+    "",
+    "",
+    "star",
+    "",
+    "",
+    "star",
+    "",
+    "",
+    "cup",
   ],
 };
 
 const timeline2 = {
-  currentStep: 7,
-  symbols: [
-    "star-5",
-    "dot",
-    "star-4",
-    "dot",
-    "dot",
-    "star-7",
-    "dot",
-    "dot",
-    "dot",
-    "star-8",
+  playedSessions: 7,
+  steps: [
+    "star",
+    "",
+    "star",
+    "",
+    "",
+    "star",
+    "",
+    "",
+    "",
+    "cup",
   ],
 };
+
+const getDecorator = (Story) => {
+    const setTheme = useBoundStore((state) => state.setTheme);
+    setTheme({ colorPrimary: '#d843e2', colorGrey: '#bdbebf' });
+    return (
+      <div
+          style={{ width: "100%", height: "100%", backgroundColor: "#9e9fa1", padding: "1rem" }}
+      >
+        <Story />
+      </div>
+    );
+}
 
 export default {
   title: "Timeline/Timeline",
@@ -40,24 +53,21 @@ export const Default = {
   args: {
     timeline: timeline,
   },
+  decorators: [getDecorator]
 };
 
 export const Alternative = {
   args: {
     timeline: timeline2,
   },
+  decorators: [getDecorator]
 };
 
 export const CustomFill = {
   args: {
     timeline: timeline,
-    fillPast: {
-      startColor: "#ff0000",
-      endColor: "#00ff00",
-      scale: 2,
-      angle: 60,
-    },
   },
+  decorators: [getDecorator]
 };
 
 export const NoSymbols = {
@@ -65,6 +75,7 @@ export const NoSymbols = {
     timeline: timeline,
     showSymbols: false,
   },
+  decorators: [getDecorator]
 };
 
 export const NoSpine = {
@@ -72,12 +83,14 @@ export const NoSpine = {
     timeline: timeline,
     showSpine: false,
   },
+  decorators: [getDecorator]
 };
 
 export const NoDots = {
   args: {
     timeline: { ...timeline, showDots: false },
   },
+  decorators: [getDecorator]
 };
 
 export const PrimaryVariant = {
@@ -85,6 +98,7 @@ export const PrimaryVariant = {
     timeline: timeline2,
     variant: "primary",
   },
+  decorators: [getDecorator]
 };
 
 export const SecondaryVariant = {
@@ -92,19 +106,6 @@ export const SecondaryVariant = {
     timeline: timeline2,
     variant: "secondary",
   },
+  decorators: [getDecorator]
 };
 
-export const CustomizeEverything = {
-  args: {
-    timeline: {
-      currentStep: 3,
-      steps: [
-        { symbol: "dot" },
-        { symbol: "star-4", fill: "#0ff" },
-        { symbol: "star-5", fill: "#f00", size: 80 },
-        { symbol: "star-6", size: 50, fill: "#ff0" },
-      ],
-      fill: "#0f0",
-    },
-  },
-};

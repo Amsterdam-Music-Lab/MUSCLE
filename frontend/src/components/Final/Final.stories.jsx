@@ -5,7 +5,7 @@ import useBoundStore from "@/util/stores";
 
 const StoreDecorator = (Story) => {
     const setTheme = useBoundStore((state) => state.setTheme);
-    setTheme({ colorPrimary: "#d843e2", colorSecondary: "#39d7b8" });
+    setTheme({ colorPrimary: "#d843e2", colorSecondary: "#39d7b8", colorGrey: '#bdbebf'});
 };
 
 export default {
@@ -43,6 +43,17 @@ function getFinalData(overrides = {}) {
             </table>
         `,
         visualizationType: "cup",
+        timeline: {
+            playedSessions: 2,
+            steps: [
+                "",
+                "",
+                "star",
+                "",
+                "",
+                "star",
+            ]
+        },
         button: {
             label: "Button",
             link: "https://www.example.com",

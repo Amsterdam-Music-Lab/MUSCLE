@@ -22,7 +22,6 @@ export const URLS = {
     },
     experiment: {
         get: (identifier: string) => `/experiment/${identifier}/`,
-        getProgress: (identifier: string) => `/experiment/${identifier}/progress/`
     },
     participant: {
         current: "/participant/",
@@ -52,9 +51,6 @@ export const useExperiment = (identifier: string) => {
     const data = useGet<Experiment>(API_BASE_URL + URLS.experiment.get(identifier));
     return data;
 }
-
-export const useExperimentProgress = (identifier: string) =>
-    useGet<ProgressResponse>(API_BASE_URL + URLS.experiment.getProgress(identifier));
 
 export const useParticipantScores = <T>() =>
     useGet<T>(API_BASE_URL + URLS.participant.score);

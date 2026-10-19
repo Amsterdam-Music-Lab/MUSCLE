@@ -1,8 +1,9 @@
 from django.test import TestCase
+from django.utils import timezone
 
-from experiment.models import Block, Experiment, Phase, Progress, Ranking
+from experiment.models import Block, Experiment, Phase, Ranking, Timeline
 from participant.models import Participant
-
+from session.models import Session
 
 class TestModelBlock(TestCase):
     fixtures = [
@@ -22,13 +23,6 @@ class TestModelBlock(TestCase):
 class TestModelExperiment(TestCase):
     fixtures = ["ranking_toontjehoger", "toontjehoger"]
 
-    @classmethod
-    def setUpTestData(cls):
-        cls.experiment = Experiment.objects.create(name="test_experiment")
-        cls.participant1 = Participant.objects.create(participant_id_url="001")
-        cls.participant2 = Participant.objects.create(participant_id_url="002")
-        cls.participant3 = Participant.objects.create(participant_id_url="003")
-
     def test_verbose_name_plural(self):
         # Get the Experiment Meta class
         meta = Experiment._meta
@@ -36,7 +30,7 @@ class TestModelExperiment(TestCase):
         self.assertEqual(meta.verbose_name_plural, "Experiments")
 
     def test_associated_blocks(self):
-        experiment = self.experiment
+        experiment = Experiment.objects.create(name="test_experiment")
         phase1 = Phase.objects.create(experiment=experiment)
         phase2 = Phase.objects.create(experiment=experiment)
         Block.objects.bulk_create(
@@ -71,6 +65,22 @@ class TestModelExperiment(TestCase):
         scores = {"accumulative_score": 400}
         self.assertEqual(experiment.get_active_rank(scores).label, "gold")
 
+    def test_get_played_sessions(self):
+        participant = Participant.objects.create()
+        Session.objects.bulk_create(
+            [
+                Session(
+                    block=block,
+                    participant=participant,
+                    finished_at=timezone.now(),
+                )
+                for block in Block.objects.all()
+            ]
+        )
+        experiment = Experiment.objects.first()
+        played_sessions = experiment.get_played_sessions(participant)
+        self.assertEqual(played_sessions, Block.objects.count())
+
 
 class RankingModelTest(TestCase):
     fixtures = ["eurovision_2020", "ranking_hooked"]
@@ -84,3 +94,13 @@ class RankingModelTest(TestCase):
         self.assertEqual(ranking.get_active_rank(20.0).label, "bronze")
         self.assertEqual(ranking.get_active_rank(-1.0).label, "plastic")
 
+
+class TimelineModelTest(TestCase):
+    fixtures = ["choice_lists", "demographics", "matching_pairs_2025"]
+
+    def test_to_dict(self):
+        timeline = Timeline.objects.first()
+        steps = timeline.to_dict().get('steps')
+        self.assertEqual(len(steps), 12)
+        self.assertEqual(steps[:3], ["", "", "star"])
+        self.assertEqual(steps[9:12], ["", "", "cup"])

@@ -77,6 +77,7 @@ class FinalAction(BaseAction):  # pylint: disable=too-few-public-methods
         self.visualization = visualization
         self.score_label = score_label
         self.button = self.get_button(button, session)
+        self.timeline = self.get_timeline(session)
 
     def action(self) -> FinalActionResponse:
         response: FinalActionResponse = {
@@ -96,6 +97,7 @@ class FinalAction(BaseAction):  # pylint: disable=too-few-public-methods
                     "label": self.score_label,
                 },
             },
+            "timeline": self.timeline,
             "button": self.button,
         }
 
@@ -123,3 +125,11 @@ class FinalAction(BaseAction):  # pylint: disable=too-few-public-methods
                 button.link = button_link
                 return button
             return Button(label=_("Next"), link=button_link)
+
+    def get_timeline(self, session: Session):
+        return {
+            "playedSessions": session.block.experiment.get_played_sessions(
+                session.participant
+            ),
+            "timeline": session.block.experiment.timeline.to_dict(),
+        }

@@ -9,8 +9,6 @@ from experiment.models import (
 )
 from participant.models import Participant
 from session.models import Session
-from result.models import Result
-
 
 class BlockModelTest(TestCase):
     @classmethod

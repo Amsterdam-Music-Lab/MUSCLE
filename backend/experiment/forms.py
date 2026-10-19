@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.forms import (
     CheckboxSelectMultiple,
     ChoiceField,
@@ -9,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.models import (
     Block,
+    Ranking,
     SocialMediaConfig,
 )
 from experiment.rules import BLOCK_RULES
@@ -84,7 +84,9 @@ class BlockForm(ModelForm):
 
 class SocialMediaConfigForm(ModelForm):
     channels = MultipleChoiceField(
-        widget=CheckboxSelectMultiple, choices=SocialMediaConfig.SOCIAL_MEDIA_CHANNELS, required=False
+        widget=CheckboxSelectMultiple,
+        choices=SocialMediaConfig.SOCIAL_MEDIA_CHANNELS,
+        required=False,
     )
 
     class Meta:

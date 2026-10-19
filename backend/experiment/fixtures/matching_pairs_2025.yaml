@@ -3,6 +3,35 @@
   fields:
     identifier: tunetwins
     active: true
+- model: experiment.timeline
+  pk: 61
+  fields:
+    experiment: 61
+    total_sessions: 12
+- model: experiment.reward
+  pk: 61
+  fields:
+    timeline: 61
+    session_number: 3
+    image: "star"
+- model: experiment.reward
+  pk: 62
+  fields:
+    timeline: 61
+    session_number: 6
+    image: "star" 
+- model: experiment.reward
+  pk: 63
+  fields:
+    timeline: 61
+    session_number: 9
+    image: "star"
+- model: experiment.reward
+  pk: 64
+  fields:
+    timeline: 61
+    session_number: 12
+    image: "cup"  
 - model: experiment.phase
   pk: 61
   fields:

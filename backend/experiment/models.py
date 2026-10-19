@@ -7,6 +7,7 @@ from django.contrib.postgres.fields import ArrayField
 
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from image.models import Image
+from session.models import Session
 
 from .validators import (
     markdown_html_validator,
@@ -111,17 +112,39 @@ class Experiment(models.Model):
         else:
             return self.ranking.get_active_rank(scores.get('accumulative_score'))
 
+    def get_played_sessions(self, participant) -> int:
+        return Session.objects.filter(
+            block__in=self.associated_blocks(),
+            participant=participant,
+            finished_at__isnull=False,
+        ).count()
 
-class Progress(models.Model):
+
+class Timeline(models.Model):
     experiment = models.OneToOneField(Experiment, on_delete=models.CASCADE)
-    total_sessions = models.IntegerField(
+    total_sessions = models.PositiveIntegerField(
         help_text=_(
-            "Optional: set the total number of sessions the participant should play to complete this experiment. This shows a progress bar after very session."
+            "Optional: set the total number of sessions the participant should play to complete this experiment. If greater than 1, the Final view displays a timeline after very session."
         ),
+        default=1,
         blank=True,
-        null=True,
     )
-    # TO DO? Allow setting a custom image on the progress bar
+    # TO DO? Allow setting a custom image on the timeline bar for non-reward sessions
+
+    def to_dict(self):
+        return {
+            "steps": [
+                self.serialize_step(step_number)
+                for step_number in range(1, self.total_sessions + 1)
+            ]
+        }
+
+    def serialize_step(self, step_number: int) -> str:
+        eligible_rewards = self.rewards.filter(session_number=step_number)
+        if eligible_rewards:
+            return eligible_rewards.first().image
+        else:
+            return ""
 
 
 REWARD_IMAGE_CHOICES = [
@@ -131,13 +154,21 @@ REWARD_IMAGE_CHOICES = [
 
 
 class Reward(models.Model):
-    progress = models.ForeignKey(
-        Progress, on_delete=models.CASCADE, related_name="rewards"
+    timeline = models.ForeignKey(
+        Timeline, on_delete=models.CASCADE, related_name="rewards"
     )
-    every_n = models.PositiveIntegerField(
-        help_text=_("Show this reward every nth session"), default=1
+    session_number = models.PositiveIntegerField(
+        help_text=_("Show this reward after this many sessions"), default=1
     )
     image = models.CharField(max_length=8, choices=REWARD_IMAGE_CHOICES, default="cup")
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["timeline", "session_number"],
+                name="unique_reward_step_per_timeline",
+            )
+        ]
 
 
 class Phase(models.Model):

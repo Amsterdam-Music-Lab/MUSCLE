@@ -1,5 +1,6 @@
 import Block from "./Block";
 import Theme from "./Theme";
+import { Progress } from "./Timeline";
 
 import IButton from "@/types/Button";
 
@@ -9,23 +10,6 @@ export interface Consent {
     confirmButton: IButton;
     denyButton: IButton;
     view: 'CONSENT';
-}
-
-export interface Reward {
-    everyN: number;
-    image: string;
-}
-
-export interface Progress {
-    totalSessions?: number;
-    rewards?: Reward[];
-    
-}
-
-export interface ProgressResponse {
-    playedSessions: number;
-    progress: Progress;
-    currentReward?: Reward;
 }
 
 export interface SocialMediaConfig {

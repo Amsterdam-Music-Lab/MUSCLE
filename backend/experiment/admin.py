@@ -10,15 +10,20 @@ from django.shortcuts import render, redirect
 from django.urls import path, reverse
 from django.utils.html import format_html, format_html_join
 
+from nested_admin import NestedModelAdmin, NestedStackedInline, NestedTabularInline
 from inline_actions.admin import InlineActionsModelAdminMixin
-from modeltranslation.admin import TabbedTranslationAdmin
+from modeltranslation.admin import TabbedTranslationAdmin, TranslationTabularInline
 
 from experiment.models import (
     Block,
     Experiment,
     Feedback,
     Phase,
+    Rank,
+    Ranking,
+    Reward,
     SocialMediaConfig,
+    Timeline,
 )
 from experiment.forms import (
     BlockForm,
@@ -32,6 +37,7 @@ from .utils import (
     get_block_json_export_as_response,
     get_experiment_csv_export_as_response,
 )
+
 
 class FeedbackAdmin(admin.ModelAdmin):
     model = Feedback
@@ -59,7 +65,8 @@ class BlockAdmin(TabbedTranslationAdmin):
     form = BlockForm
 
     def has_module_permission(self, request):
-        ''' Prevents the admin from being shown in the sidebar.'''
+        '''Prevents the admin from being shown in the sidebar.'''
+
         return False
 
     def save_model(self, request, obj, form, changed):
@@ -84,7 +91,7 @@ class BlockAdmin(TabbedTranslationAdmin):
         )
 
 
-class PhaseInline(admin.StackedInline):
+class PhaseInline(NestedStackedInline):
     model = Phase
     sortable_field_name = "index"
     template = "admin/phase_inline.html"
@@ -96,7 +103,7 @@ class PhaseInline(admin.StackedInline):
         css = {"all": ("phase_inline.css",)}
 
 
-class SocialMediaConfigInline(admin.StackedInline):
+class SocialMediaConfigInline(NestedStackedInline):
     form = SocialMediaConfigForm
     model = SocialMediaConfig
 
@@ -106,7 +113,19 @@ class SocialMediaConfigInline(admin.StackedInline):
         return 1
 
 
-class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
+class RewardInline(NestedStackedInline):
+    model = Reward
+    extra = 0
+
+
+class TimelineInline(NestedStackedInline):
+    model = Timeline
+    inlines = [RewardInline]
+
+
+class ExperimentAdmin(
+    InlineActionsModelAdminMixin, TabbedTranslationAdmin, NestedModelAdmin
+):
     list_display = (
         "experiment_name",
         "url_link",
@@ -115,10 +134,7 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
     )
     inline_actions = ["experimenter_dashboard", "duplicate"]
 
-    inlines = [
-        PhaseInline,
-        SocialMediaConfigInline,
-    ]
+    inlines = [PhaseInline, TimelineInline, SocialMediaConfigInline]
 
     save_on_top = True
 
@@ -424,6 +440,22 @@ class ExperimentAdmin(InlineActionsModelAdminMixin, TabbedTranslationAdmin):
             ),
         )
 
+
+class RankInline(TranslationTabularInline):
+    model = Rank
+    extra = 1
+
+    formfield_overrides = {
+        models.TextField: {"widget": MarkdownPreviewTextInput},
+    }
+
+
+class RankingAdmin(TabbedTranslationAdmin):
+    model = Ranking
+    inlines = [RankInline]
+
+
 admin.site.register(Block, BlockAdmin)
 admin.site.register(Experiment, ExperimentAdmin)
 admin.site.register(Feedback, FeedbackAdmin)
+admin.site.register(Ranking, RankingAdmin)
