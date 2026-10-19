@@ -59,7 +59,7 @@ const Final = (props: FinalAction & SharedActionProps) => {
             )}
             
             {visualizationType && (
-                <Visualization percentile={scores.relative.value} type={visualizationType} rankClass={trophy.className}/>
+                <Visualization value={scores.relative.value} label={scores.relative.label} type={visualizationType} className={trophy.className}/>
             )}
 
             {scores && (

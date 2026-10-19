@@ -11,8 +11,7 @@ export default {
 
 export const Default = {
     args: {
-        value: 3,
-        max: 20,
+        value: 40,
         label: "3 / 20",
     },
     decorators: [

@@ -16,9 +16,7 @@ import type {
 import type { Fill } from "@/types/svg";
 
 import classNames from "classnames";
-import { symbols as svgSymbols } from "@/components/svg";
-import { useVariantFill } from "@/hooks/useVariantFill";
-import styles from "./Timeline.module.scss";
+// import { useVariantFill } from "@/hooks/useVariantFill";
 
 interface ProcessTimelineConfigProps extends BaseTimeline {
   timeline: TimelineConfig;
@@ -178,8 +176,8 @@ export default function Timeline({
     );
   }
 
-  const variantFill =
-    useVariantFill(timeline.variant ?? variant ?? "primary") ?? "#000";
+  const variantFill = "#000";
+    // useVariantFill(timeline.variant ?? variant ?? "primary") ?? "#000";
   fillPast = timeline.fill ?? fillPast ?? variantFill;
 
   // Determine default bg fill of the spine:
@@ -206,13 +204,13 @@ export default function Timeline({
   } as CSSProperties;
 
   return (
-    <div className={styles.timeline} style={style}>
+    <div className="aha__timeline" style={style}>
       {steps.map((step, idx) => {
-        const Symbol = step.symbol ? svgSymbols[step.symbol] : null;
+        const Symbol = null; //step.symbol ? svgSymbols[step.symbol] : null;
         return (
-          <div className={styles.step} key={idx}>
+          <div className="aha__timeline-step" key={idx}>
             {showSymbols && Symbol && (
-              <div className={styles.symbol}>
+              <div className="aha__timeline-symbol">
                 <Symbol
                   size={step.size}
                   fill={idx < currentStep ? step?.fill ?? fillPast : fillFuture}
@@ -227,10 +225,10 @@ export default function Timeline({
             )}
             {showSpine && idx >= 1 && (
               <div
-                className={classNames(
-                  styles.spineSegment,
-                  idx < currentStep && styles.active
-                )}
+                // className={classNames(
+                //   styles.spineSegment,
+                //   idx < currentStep && styles.active
+                // )}
               />
             )}
           </div>

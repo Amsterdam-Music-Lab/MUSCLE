@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import Social from "../../Social/Social"
 import HTML from '@/components/HTML/HTML';
-import { ScoreDisplayConfig } from "@/types/Theme";
-import ScoreCounter, { ScoreCounterProps } from "../ScoreCounter/ScoreCounter";
-import Trophy, { TrophyProps } from "../Trophy/Trophy";
+import ScoreCounter, { ScoreCounterProps } from "@/components/ScoreCounter/ScoreCounter";
+import Social from "@/components/Social/Social"
+import Trophy, { TrophyProps } from "@/components/Trophy/Trophy";
 import { SocialMediaConfig } from "@/types/Experiment";
+import { ScoreDisplayConfig } from "@/types/Theme";
 import { styleButton, styleButtonOutline } from "@/util/stylingHelpers";
 
 interface HeaderProps {

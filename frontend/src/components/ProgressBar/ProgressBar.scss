@@ -28,6 +28,7 @@ $transition-duration: 0.3s;
         border-radius: $progress-border-radius;
         transition: width $transition-duration ease-in-out;
         position: absolute;
+        height: $progress-height-md;
         top: 0;
         left: 0;
     }
