@@ -132,7 +132,10 @@ def get_experiment(
 
 
 def get_experiment_progress(request: HttpRequest, identifier: str) -> JsonResponse:
-    experiment = Experiment.objects.get(identifier=identifier)
+    try:
+        experiment = Experiment.objects.get(identifier=identifier)
+    except Experiment.DoesNotExist:
+        return Http404("Experiment not found")
     participant = get_participant(request)
     played_sessions = Session.objects.filter(
         block__in=experiment.associated_blocks(),
