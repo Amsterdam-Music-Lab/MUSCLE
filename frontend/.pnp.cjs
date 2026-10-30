@@ -60,7 +60,7 @@ const RAW_RUNTIME_STATE =
           ["msw", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:2.6.6"],\
           ["msw-storybook-addon", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:2.0.4"],\
           ["prop-types", "npm:15.8.1"],\
-          ["qs", "npm:6.16.0"],\
+          ["qs", "npm:6.16.1"],\
           ["react", "npm:19.2.4"],\
           ["react-dom", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:19.2.4"],\
           ["react-helmet", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:6.1.0"],\
@@ -3337,7 +3337,7 @@ const RAW_RUNTIME_STATE =
           ["msw", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:2.6.6"],\
           ["msw-storybook-addon", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:2.0.4"],\
           ["prop-types", "npm:15.8.1"],\
-          ["qs", "npm:6.16.0"],\
+          ["qs", "npm:6.16.1"],\
           ["react", "npm:19.2.4"],\
           ["react-dom", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:19.2.4"],\
           ["react-helmet", "virtual:74792effab46f58ba1849ed2d34bd613b5659d762979dea959819ade1937f6e3f71378429c07ee0ed12a2f529924b755998205bbacdbe5f616b371b307f52d67#npm:6.1.0"],\
@@ -6212,10 +6212,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["qs", [\
-      ["npm:6.16.0", {\
-        "packageLocation": "../../../.yarn/berry/cache/qs-npm-6.16.0-160b61647c-10c0.zip/node_modules/qs/",\
+      ["npm:6.16.1", {\
+        "packageLocation": "../../../.yarn/berry/cache/qs-npm-6.16.1-9b77e54f12-10c0.zip/node_modules/qs/",\
         "packageDependencies": [\
-          ["qs", "npm:6.16.0"],\
+          ["qs", "npm:6.16.1"],\
           ["es-define-property", "npm:1.0.1"],\
           ["side-channel", "npm:1.1.1"]\
         ],\
