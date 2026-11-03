@@ -1,4 +1,5 @@
 from os.path import join
+import re
 from typing import Optional
 
 from django.db import models
@@ -318,12 +319,6 @@ class Block(models.Model):
         cl = BLOCK_RULES[self.rules]
         return cl()
 
-    def get_active_rank(self, scores: dict):
-        if not self.ranking:
-            return None
-        else:
-            return self.ranking.get_active_rank(scores.get("relative_score"))
-
 
 class Feedback(models.Model):
     """A model for adding feedback to an experiment block
@@ -428,13 +423,22 @@ class SocialMediaConfig(models.Model):
 class Ranking(models.Model):
     identifier = models.SlugField(primary_key=True, max_length=128)
 
-    def get_active_rank(self, final_score: float) -> Optional["experiment.Rank"]:
+    def get_active_rank(
+        self, score: Optional[float], has_feedback: bool = False
+    ) -> Optional["experiment.Rank"]:
+        if not score:
+            score = -1
         try:
-            return (
-                self.ranks.filter(cutoff__lte=final_score).order_by("-cutoff").first()
-            )
+            if has_feedback:
+                return (
+                    self.ranks.exclude(feedback__exact="")
+                    .filter(cutoff__lte=score)
+                    .order_by("-cutoff")
+                    .first()
+                )
+            return self.ranks.filter(cutoff__lte=score).order_by("-cutoff").first()
         except:
-            return None
+            None
 
 
 RANK_CHOICES = [
@@ -473,10 +477,15 @@ class Rank(models.Model):
         return {
             "label": self.get_label_display(),  # Django inbuilt: returns translatable text
             "description": self.description,
-            "class_name": self.label,
+            "className": self.label,
         }
 
-    def get_feedback_data(self, relative_score: float) -> str:
-        if "{relative}" in self.feedback:
-            self.feedback = self.feedback.replace("{relative}", relative_score)
-        return self.feedback
+    def get_feedback_text(self, session: Session) -> str:
+        score_data = session.json_data.get("scores")
+        feedback_text = str(self.feedback)
+        replacements = re.findall(r"\{\w+\}", feedback_text)
+        for rep in replacements:
+            feedback_text = feedback_text.replace(
+                rep, str(score_data.get(rep.strip("{}"), ""))
+            )
+        return feedback_text

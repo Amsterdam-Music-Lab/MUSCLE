@@ -8,7 +8,7 @@ from question.utils import get_unanswered_questions
 
 
 class UtilsTestCase(TestCase):
-    fixtures = ['choice_lists', 'demographics', 'testing']
+    fixtures = ["choice_lists", "demographics", "testing"]
 
     @classmethod
     def setUpTestData(cls):

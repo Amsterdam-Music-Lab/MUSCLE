@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.utils import timezone
 
-from experiment.models import Block, Experiment, Phase, Ranking, Timeline
+from experiment.models import Block, Experiment, Phase, Rank, Ranking, Timeline
 from participant.models import Participant
 from session.models import Session
 
@@ -92,7 +92,50 @@ class RankingModelTest(TestCase):
         self.assertEqual(ranking.get_active_rank(80.0).label, "gold")
         self.assertEqual(ranking.get_active_rank(40.0).label, "silver")
         self.assertEqual(ranking.get_active_rank(20.0).label, "bronze")
-        self.assertEqual(ranking.get_active_rank(-1.0).label, "plastic")
+        self.assertEqual(ranking.get_active_rank(None).label, "plastic")
+
+    def test_get_active_rank_with_feedback(self):
+        block = Block.objects.first()
+        participant = Participant.objects.create()
+        session = Session.objects.create(block=block, participant=participant)
+        session.save_json_data(
+            {
+                "scores": {
+                    "percentile": 80.0,
+                    "n_correct": 4,
+                    "n_total": 42,
+                    "song_sync_feedback": "You did not recognize any songs at first.",
+                }
+            }
+        )
+        ranking = Ranking.objects.get(identifier="hooked-ranking")
+        rank = ranking.get_active_rank(98.0, True)
+        self.assertEqual(rank.label, "bronze")
+        self.assertTrue(rank.get_feedback_text(session).startswith("Well done!"))
+
+
+class RankTest(TestCase):
+    fixtures = ["ranking_generic", "testing"]
+
+    def test_get_feedback_text(self):
+        block = Block.objects.first()
+        block.ranking = Ranking.objects.first()
+        participant = Participant.objects.create()
+        session = Session.objects.create(block=block, participant=participant)
+        rank = Rank.objects.first()
+        rank.feedback = "{message} You recognized {n_correct} out of {n_total} songs"
+        session.save_json_data(
+            {
+                "scores": {
+                    "percentile": 80.0,
+                    "n_correct": 4,
+                    "n_total": 42,
+                    "message": "Well done!",
+                }
+            }
+        )
+        feedback_text = rank.get_feedback_text(session)
+        self.assertEqual(feedback_text, "Well done! You recognized 4 out of 42 songs")
 
 
 class TimelineModelTest(TestCase):

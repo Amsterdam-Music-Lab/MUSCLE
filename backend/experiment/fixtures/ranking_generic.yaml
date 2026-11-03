@@ -1,0 +1,35 @@
+- model: experiment.ranking
+  fields:
+    identifier: generic-ranking
+- model: experiment.rank
+  fields:
+    ranking: generic-ranking
+    label: diamond
+    cutoff: 95.0
+- model: experiment.rank
+  fields:
+    ranking: generic-ranking
+    label: platinum
+    cutoff: 90.0
+- model: experiment.rank
+  fields:
+    ranking: generic-ranking
+    label: gold
+    cutoff: 75.0
+- model: experiment.rank
+  fields:
+    ranking: generic-ranking
+    label: silver
+    cutoff: 25.0
+- model: experiment.rank
+  fields:
+    ranking: generic-ranking
+    label: bronze
+    cutoff: 0.0
+    feedback: 'Well done!'
+- model: experiment.rank
+  fields:
+    ranking: generic-ranking
+    label: plastic
+    cutoff: -1.0
+    feedback: 'Too bad!'

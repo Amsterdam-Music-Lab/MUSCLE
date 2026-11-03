@@ -34,8 +34,10 @@ def serialize_experiment(experiment: Experiment) -> dict:
         "identifier": experiment.identifier,
         "name": experiment.name,
         "description": formatter(experiment.description, filter_name="markdown"),
-        "timeline": experiment.timeline.to_dict(),
     }
+
+    if hasattr(experiment, "timeline"):
+        serialized["timeline"] = experiment.timeline.to_dict()
 
     if experiment.consent:
         serialized["consent"] = Consent(experiment.consent).action()

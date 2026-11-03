@@ -11,6 +11,7 @@ from experiment.actions.final import FinalAction
 from experiment.actions.form import Form
 from experiment.actions.trial import Trial
 from experiment.actions.types import FeedbackInfo
+from experiment.models import Rank
 from question.utils import get_unanswered_questions
 from result.models import Result
 from result.score import SCORING_RULES
@@ -142,17 +143,29 @@ class BaseRules(object):
         """
         return 0
 
-    def get_final_scores(self, session: Session) -> str:
-        return 0
+    def finalize(self, session: Session) -> str:
+        """Mark the session as finished and calculate final scores"""
+        session.finish(session.final_score)
+        session.save_json_data({"scores": self.get_score_data(session)})
+
+    def get_score_data(session: Session) -> dict:
+        return {
+            "percentile": session.percentile_rank(),
+            "total": session.total_score,
+            "accumulative": session.participant.with_accumulative_score().accumulative_score,
+        }
+
+    def get_rank(session: Session) -> Rank:
+        pass
 
     def get_final_action(self, session: Session) -> str:
-        scores = self.get_final_scores(session)
-        rank = session.block.get_active_rank(scores)
-        session.finish()
-        final = FinalAction(title=_("End of experiment"))
-        final.set_scores(scores)
-        final.set_active_rank(rank)
-        final.set_progress(session.block.experiment.progress)
+        self.finalize(session)
+        final = FinalAction(
+            session,
+            title=_("End of experiment"),
+            scores=session.json_data.get("scores"),
+            final_text=self.get_final_feedback_text(session),
+        )
         return final.action()
 
     def get_final_feedback_text(self, session: Session) -> str:
@@ -165,22 +178,8 @@ class BaseRules(object):
         Returns:
             a string with feedback for the participant based on their score
         """
-
-        correct = 0
-        total = 0
-
-        for result in session.result_set.all():
-            # if a result has score != 0, it was recognized
-            if result.score:
-                total += 1
-
-                if result.score > 0:
-                    # if a result has score > 0, it was identified correctly
-                    correct += 1
-
-        score_message = "Well done!" if session.final_score > 0 else "Too bad!"
-        message = "You correctly identified {} out of {} recognized songs!".format(correct, total)
-        return score_message + " " + message
+        rank = session.get_active_rank(has_feedback=True)
+        return rank.get_feedback_text(session)
 
     def validate_playlist(self, playlist: Playlist = None) -> list[str]:
         """Validate a playlist associated with this rules file, e.g., ensure that files have a specific name format

@@ -3,6 +3,7 @@ from typing import Optional, TypedDict
 from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.utils import get_experiment_url
+from experiment.models import Rank
 from session.models import Session
 
 from .base_action import BaseAction
@@ -68,6 +69,8 @@ class FinalAction(BaseAction):  # pylint: disable=too-few-public-methods
     def __init__(
         self,
         session: Session,
+        rank: Rank,
+        scores: dict,
         title: str = _("Final score"),
         visualization: Optional[str] = None,
         score_label: str = _("points"),
@@ -76,6 +79,8 @@ class FinalAction(BaseAction):  # pylint: disable=too-few-public-methods
         self.title = title
         self.visualization = visualization
         self.score_label = score_label
+        self.rank = rank
+        self.scores = scores
         self.button = self.get_button(button, session)
         self.timeline = self.get_timeline(session)
 
@@ -84,34 +89,14 @@ class FinalAction(BaseAction):  # pylint: disable=too-few-public-methods
             "view": self.view,
             "title": self.title,
             "trophy": self.rank.get_trophy_data(),
-            "feedback": self.rank.get_feedback_data(self.relative_score),
+            "feedback": self.rank.get_feedback_data(self.scores.get("percentile")),
             "visualization": self.visualization,
-            "scores": {
-                "relative": {"value": self.relative_score, "label": "%"},
-                "session": {
-                    "value": self.score,
-                    "label": self.score_label,
-                },
-                "accumulative": {
-                    "value": self.accumulative_score,
-                    "label": self.score_label,
-                },
-            },
+            "scores": self.get_scores(),
             "timeline": self.timeline,
             "button": self.button,
         }
 
         return response
-
-    def set_scores(
-        self,
-        score: float = None,
-        relative_score: float = 100,
-        accumulative_score: float = None,
-    ):
-        self.score = score
-        self.relative_score = relative_score
-        self.accumulative_score = accumulative_score
 
     def get_button(self, button: Button, session: Session) -> Optional[Button]:
         """
@@ -125,6 +110,19 @@ class FinalAction(BaseAction):  # pylint: disable=too-few-public-methods
                 button.link = button_link
                 return button
             return Button(label=_("Next"), link=button_link)
+
+    def get_scores(self):
+        return {
+            "percentile": {"value": self.scores("percentile"), "label": "%"},
+            "total": {
+                "value": self.scores.get("total"),
+                "label": self.score_label,
+            },
+            "accumulative": {
+                "value": self.scores.get("accumulative"),
+                "label": self.score_label,
+            },
+        }
 
     def get_timeline(self, session: Session):
         return {
