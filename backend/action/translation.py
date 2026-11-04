@@ -1,5 +1,5 @@
 from modeltranslation.translator import register, TranslationOptions
-from .models import Explainer, Final, Step
+from .models import Explainer, FeedbackText, Final, Step
 
 @register(Explainer)
 class ExplainerTranslationOptions(TranslationOptions):
@@ -17,3 +17,8 @@ class FinalTranslationOptions(TranslationOptions):
         "title",
         "score_label",
     )
+
+
+@register(FeedbackText)
+class FeedbackTextTranslationOptions(TranslationOptions):
+    fields = ("text", "alternative_text")
