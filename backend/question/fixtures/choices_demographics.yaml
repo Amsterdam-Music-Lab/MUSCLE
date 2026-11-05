@@ -260,6 +260,7 @@
     identifier: silent
     text: 1945 or earlier
     text_nl: 1945 of eerder
+    text_es: 1945 o antes
     text_zh_hans: （早于）1945年
     text_de: 1945 oder eher
     index: 0
@@ -290,6 +291,7 @@
     identifier: gen_z
     text: 1997 or later
     text_nl: 1997 of later
+    text_es: 1997 o después
     text_zh_hans: （晚于）1997年
     text_de: 1997 oder später
     index: 4
