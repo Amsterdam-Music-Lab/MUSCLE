@@ -26,4 +26,4 @@ class RankingTranslationOptions(TranslationOptions):
 
 @register(Rank)
 class RankTranslationOptions(TranslationOptions):
-    fields = ('description', 'feedback')
+    fields = ('description',)

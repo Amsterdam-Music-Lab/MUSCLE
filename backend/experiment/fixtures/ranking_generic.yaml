@@ -26,10 +26,8 @@
     ranking: generic-ranking
     label: bronze
     cutoff: 0.0
-    feedback: 'Well done!'
 - model: experiment.rank
   fields:
     ranking: generic-ranking
     label: plastic
     cutoff: -1.0
-    feedback: 'Too bad!'

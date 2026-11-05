@@ -462,11 +462,6 @@ class Rank(models.Model):
         default="",
         help_text=_("(Optional) Enter a description of the rank here"),
     )
-    feedback = models.TextField(
-        blank=True,
-        default="",
-        help_text=_("(Optional) enter feedback to your participant here"),
-    )
     cutoff = models.FloatField(
         help_text=_("The minimal relative score for which this rank is displayed"),
         default=0.0,
@@ -479,13 +474,3 @@ class Rank(models.Model):
             "description": self.description,
             "className": self.label,
         }
-
-    def get_feedback_text(self, session: Session) -> str:
-        score_data = session.json_data.get("scores")
-        feedback_text = str(self.feedback)
-        replacements = re.findall(r"\{\w+\}", feedback_text)
-        for rep in replacements:
-            feedback_text = feedback_text.replace(
-                rep, str(score_data.get(rep.strip("{}"), ""))
-            )
-        return feedback_text

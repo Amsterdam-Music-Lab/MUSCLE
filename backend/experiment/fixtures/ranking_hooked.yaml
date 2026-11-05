@@ -34,14 +34,12 @@
   fields:
     ranking: hooked-ranking
     label: bronze
-    feedback: 'Well done! {song_sync_feedback} During the bonus rounds, you remembered {n_correct} of the {n_total} songs that came back.'
     cutoff: 0.0
 - model: experiment.rank
   pk: 46
   fields:
     ranking: hooked-ranking
     label: plastic
-    feedback: 'Too bad! {song_sync_feedback} During the bonus rounds, you remembered {n_correct} of the {n_total} songs that came back.'
     cutoff: -1.0
 - model: experiment.timeline
   pk: 41

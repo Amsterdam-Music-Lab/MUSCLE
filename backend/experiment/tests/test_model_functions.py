@@ -117,25 +117,7 @@ class RankingModelTest(TestCase):
 class RankTest(TestCase):
     fixtures = ["ranking_generic", "testing"]
 
-    def test_get_feedback_text(self):
-        block = Block.objects.first()
-        block.ranking = Ranking.objects.first()
-        participant = Participant.objects.create()
-        session = Session.objects.create(block=block, participant=participant)
-        rank = Rank.objects.first()
-        rank.feedback = "{message} You recognized {n_correct} out of {n_total} songs"
-        session.save_json_data(
-            {
-                "scores": {
-                    "percentile": 80.0,
-                    "n_correct": 4,
-                    "n_total": 42,
-                    "message": "Well done!",
-                }
-            }
-        )
-        feedback_text = rank.get_feedback_text(session)
-        self.assertEqual(feedback_text, "Well done! You recognized 4 out of 42 songs")
+    pass
 
 
 class TimelineModelTest(TestCase):
