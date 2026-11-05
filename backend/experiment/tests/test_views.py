@@ -37,7 +37,7 @@ class TestExperimentViews(TestCase):
         experiment.social_media_config = create_social_media_config(experiment)
         cls.introductory_phase = Phase.objects.create(experiment=experiment, index=1)
         cls.block1 = Block.objects.create(
-            identifier="block1", phase=cls.introductory_phase
+            identifier="block1", phase=cls.introductory_phase, rules="QUESTIONNAIRE"
         )
         cls.intermediate_phase = Phase.objects.create(experiment=experiment, index=2)
         cls.block2 = Block.objects.create(
@@ -112,6 +112,26 @@ class TestExperimentViews(TestCase):
         )
         response = self.client.get("/experiment/test_series/")
         self.assertEqual(response.json().get("nextBlock").get("identifier"), "block1")
+
+    def test_get_experiment_enforced_language(self):
+        experiment = Experiment.objects.first()
+        block = Block.objects.get(identifier="block1")
+        nl_block_name = "Naam"
+        block.name = "Name"
+        block.name_nl = nl_block_name
+        block.save()
+        experiment.enforce_language = "nl"
+        nl_name = "Test experiment in het Nederlands"
+        nl_description = "Speel dit fantastische experiment!"
+        experiment.name_nl = nl_name
+        experiment.description_nl = nl_description
+        experiment.save()
+        response = self.client.get("/experiment/test_series/")
+        self.assertEqual(response.json().get("name"), nl_name)
+        self.assertIn(nl_description, response.json().get("description"))
+        # test that language setting persists across requests
+        response = self.client.get("/experiment/test_series/block/block1/")
+        self.assertEqual(response.json().get("name"), nl_block_name)
 
     def _get_session_objects(self, block_list: list[Block]) -> list[Session]:
         return [
