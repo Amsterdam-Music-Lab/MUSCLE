@@ -104,31 +104,31 @@
   fields:
     name: Toontje Hoger 3 - Plink
     csv: |
-      Billy Joel,Piano Man,0.0,1.0,toontjehoger/plink/2021-005.mp3,0,70s;vrolijk
-      Boudewijn de Groot,Avond,0.0,1.0,toontjehoger/plink/2021-010.mp3,0,90s;tederheid
-      Bruce Springsteen,The River,0.0,1.0,toontjehoger/plink/2021-016.mp3,0,80s;droevig
-      Coldplay,Fix You,0.0,1.0,toontjehoger/plink/2021-011.mp3,0,00s;tederheid
-      Danny Vera,Roller Coaster,0.0,1.0,toontjehoger/plink/2021-002.mp3,0,10s;tederheid
-      David Bowie,Heroes,0.0,1.0,toontjehoger/plink/2021-024.mp3,0,70s;vrolijk
-      Deep Purple,Child In Time,0.0,1.0,toontjehoger/plink/2021-015.mp3,0,70s;boosheid
-      Di-rect,Soldier On,0.0,1.0,toontjehoger/plink/2021-014.mp3,0,20s;tederheid
-      Dire Straits,Brothers In Arms,0.0,1.0,toontjehoger/plink/2021-018.mp3,0,80s;angst
-      Dire Straits,Sultans Of Swing,0.0,1.0,toontjehoger/plink/2021-025.mp3,0,70s;vrolijk
-      Disturbed,The Sound Of Silence,0.0,1.0,toontjehoger/plink/2021-019.mp3,0,10s;droevig
-      Eagles,Hotel California,0.0,1.0,toontjehoger/plink/2021-004.mp3,0,70s;droevig
-      Golden Earring,Radar Love,0.0,1.0,toontjehoger/plink/2021-006.mp3,0,70s;vrolijk
-      Guns N' Roses,November Rain,0.0,1.0,toontjehoger/plink/2021-017.mp3,0,90s;droevig
-      Led Zeppelin,Stairway To Heaven,0.0,1.0,toontjehoger/plink/2021-007.mp3,0,70s;tederheid
-      Metallica,Nothing Else Matters,0.0,1.0,toontjehoger/plink/2021-008.mp3,0,90s;droevig
-      Miss Montreal,Door De Wind,0.0,1.0,toontjehoger/plink/2021-020.mp3,0,20s;angst
-      Pearl Jam,Black,0.0,1.0,toontjehoger/plink/2021-009.mp3,0,90s;droevig
-      Pink Floyd,Comfortably Numb,0.0,1.0,toontjehoger/plink/2021-022.mp3,0,70s;droevig
-      Pink Floyd,Wish You Were Here,0.0,1.0,toontjehoger/plink/2021-013.mp3,0,70s;droevig
-      Prince & The Revolution,Purple Rain,0.0,1.0,toontjehoger/plink/2021-021.mp3,0,80s;tederheid
-      Procol Harum,A Whiter Shade Of Pale,0.0,1.0,toontjehoger/plink/2021-003.mp3,0,60s;droevig
-      Queen,Bohemian Rhapsody,0.0,1.0,toontjehoger/plink/2021-001.mp3,0,70s;droevig
-      Queen,Love Of My Life,0.0,1.0,toontjehoger/plink/2021-012.mp3,0,70s;tederheid
-      Toto,Africa,0.0,1.0,toontjehoger/plink/2021-023.mp3,0,80s;vrolijk
+      Billy Joel,Piano Man,0.0,1.0,toontjehoger/plink/2021-005.mp3,70s,vrolijk
+      Boudewijn de Groot,Avond,0.0,1.0,toontjehoger/plink/2021-010.mp3,90s,tederheid
+      Bruce Springsteen,The River,0.0,1.0,toontjehoger/plink/2021-016.mp3,80s,droevig
+      Coldplay,Fix You,0.0,1.0,toontjehoger/plink/2021-011.mp3,00s,tederheid
+      Danny Vera,Roller Coaster,0.0,1.0,toontjehoger/plink/2021-002.mp3,10s,tederheid
+      David Bowie,Heroes,0.0,1.0,toontjehoger/plink/2021-024.mp3,70s,vrolijk
+      Deep Purple,Child In Time,0.0,1.0,toontjehoger/plink/2021-015.mp3,70s,boosheid
+      Di-rect,Soldier On,0.0,1.0,toontjehoger/plink/2021-014.mp3,20s,tederheid
+      Dire Straits,Brothers In Arms,0.0,1.0,toontjehoger/plink/2021-018.mp3,80s,angst
+      Dire Straits,Sultans Of Swing,0.0,1.0,toontjehoger/plink/2021-025.mp3,70s,vrolijk
+      Disturbed,The Sound Of Silence,0.0,1.0,toontjehoger/plink/2021-019.mp3,10s,droevig
+      Eagles,Hotel California,0.0,1.0,toontjehoger/plink/2021-004.mp3,70s,droevig
+      Golden Earring,Radar Love,0.0,1.0,toontjehoger/plink/2021-006.mp3,70s,vrolijk
+      Guns N' Roses,November Rain,0.0,1.0,toontjehoger/plink/2021-017.mp3,90s,droevig
+      Led Zeppelin,Stairway To Heaven,0.0,1.0,toontjehoger/plink/2021-007.mp3,70s,tederheid
+      Metallica,Nothing Else Matters,0.0,1.0,toontjehoger/plink/2021-008.mp3,90s,droevig
+      Miss Montreal,Door De Wind,0.0,1.0,toontjehoger/plink/2021-020.mp3,20s,angst
+      Pearl Jam,Black,0.0,1.0,toontjehoger/plink/2021-009.mp3,90s,droevig
+      Pink Floyd,Comfortably Numb,0.0,1.0,toontjehoger/plink/2021-022.mp3,70s,droevig
+      Pink Floyd,Wish You Were Here,0.0,1.0,toontjehoger/plink/2021-013.mp3,70s,droevig
+      Prince & The Revolution,Purple Rain,0.0,1.0,toontjehoger/plink/2021-021.mp3,80s,tederheid
+      Procol Harum,A Whiter Shade Of Pale,0.0,1.0,toontjehoger/plink/2021-003.mp3,60s,droevig
+      Queen,Bohemian Rhapsody,0.0,1.0,toontjehoger/plink/2021-001.mp3,70s,droevig
+      Queen,Love Of My Life,0.0,1.0,toontjehoger/plink/2021-012.mp3,70s,tederheid
+      Toto,Africa,0.0,1.0,toontjehoger/plink/2021-023.mp3,80s,vrolijk
 - model: section.playlist
   pk: 14
   fields:
