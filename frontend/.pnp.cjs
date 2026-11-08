@@ -6023,7 +6023,7 @@ const RAW_RUNTIME_STATE =
           ["magicast", "npm:0.5.1"],\
           ["@babel/parser", "npm:7.28.6"],\
           ["@babel/types", "npm:7.28.6"],\
-          ["source-map-js", "npm:1.2.1"]\
+          ["source-map-js", "npm:1.2.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -6707,7 +6707,7 @@ const RAW_RUNTIME_STATE =
           ["postcss", "npm:8.5.6"],\
           ["nanoid", "npm:3.3.18"],\
           ["picocolors", "npm:1.1.1"],\
-          ["source-map-js", "npm:1.2.1"]\
+          ["source-map-js", "npm:1.2.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -7290,7 +7290,7 @@ const RAW_RUNTIME_STATE =
           ["@parcel/watcher", "npm:2.5.6"],\
           ["chokidar", "npm:4.0.3"],\
           ["immutable", "npm:5.1.9"],\
-          ["source-map-js", "npm:1.2.1"]\
+          ["source-map-js", "npm:1.2.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -7467,10 +7467,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["source-map-js", [\
-      ["npm:1.2.1", {\
-        "packageLocation": "../../../.yarn/berry/cache/source-map-js-npm-1.2.1-b9a47d7e1a-10c0.zip/node_modules/source-map-js/",\
+      ["npm:1.2.2", {\
+        "packageLocation": "../../../.yarn/berry/cache/source-map-js-npm-1.2.2-d40ce9a415-10c0.zip/node_modules/source-map-js/",\
         "packageDependencies": [\
-          ["source-map-js", "npm:1.2.1"]\
+          ["source-map-js", "npm:1.2.2"]\
         ],\
         "linkType": "HARD"\
       }]\
