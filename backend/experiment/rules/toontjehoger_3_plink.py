@@ -266,7 +266,7 @@ class ToontjeHoger3Plink(BaseRules):
         if result.question_identifier == "plink":
             return (
                 self.SCORE_MAIN_CORRECT
-                if result.expected_response == str(result.given_response)
+                if int(result.expected_response) == int(result.given_response)
                 else self.SCORE_MAIN_WRONG
             )
         elif result.question_identifier == "era":
