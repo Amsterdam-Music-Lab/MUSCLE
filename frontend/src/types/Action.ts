@@ -91,7 +91,7 @@ export interface Trophy {
   image?: string | "cup" | "star";
 }
 
-export interface FinalAction {
+export interface FinalView {
   trophy: Trophy;
   scores: Scores;
   finalText: string | TrustedHTML;
@@ -166,7 +166,7 @@ export type Action = (
     | InfoAction
     | TrialAction
     | ScoreAction
-    | FinalAction
+    | FinalView
     | PlaylistAction
     | RedirectAction
     | LoadingAction

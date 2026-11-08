@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
@@ -290,7 +290,7 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
         )
         final_text = render_feedback_trivia(feedback, trivia)
         session.finish()
-        return FinalAction(session, title=_("End"), final_text=final_text)
+        return FinalView(session, title=_("End"), final_text=final_text)
 
     def practice_successful(self, session: Session) -> bool:
         """Check if practice was successful: at least two answers correct"""

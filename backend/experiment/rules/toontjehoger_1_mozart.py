@@ -5,7 +5,7 @@ from os.path import join
 from section.models import Playlist
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.html import HTML
 from experiment.actions.info import Info
@@ -222,7 +222,7 @@ class ToontjeHoger1Mozart(BaseRules):
             if session.final_score >= 2 * self.SCORE_CORRECT
             else "Dat bleek toch even lastig!"
         )
-        final = FinalAction(
+        final = FinalView(
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),

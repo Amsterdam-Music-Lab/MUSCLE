@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from .base import BaseRules
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.playlist import PlaylistSelection
@@ -107,7 +107,7 @@ class Hooked(BaseRules):
 
             return [
                 self.get_score(session, round_number),
-                FinalAction(
+                FinalView(
                     session=session,
                     # final_text=self.final_score_message(session),
                     # rank=self.rank(session),

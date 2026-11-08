@@ -2,7 +2,6 @@ from typing import Optional, TypedDict
 
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions.utils import get_experiment_url
 from experiment.models import Rank
 from session.models import Session
 
@@ -15,28 +14,28 @@ class FinalScore(TypedDict):
     label: str
 
 
-class ScoresAction(TypedDict):
+class ScoresView(TypedDict):
     session: FinalScore
     relative: FinalScore
     accumulative: FinalScore
 
 
-class TrophyAction(TypedDict):
+class TrophyView(TypedDict):
     label: str
     description: str
     class_name: str
 
 
-class FinalActionResponse(TypedDict):
+class FinalViewResponse(TypedDict):
     view: str
     title: str
-    trophy: TrophyAction
+    trophy: TrophyView
     feedback: str
     visualization: str
-    scores: ScoresAction
+    scores: ScoresView
 
 
-class FinalAction(BaseAction):  # pylint: disable=too-few-public-methods
+class FinalView(BaseAction):  # pylint: disable=too-few-public-methods
     """
     Provide data for a "final" view, typically shown at the end of an experiment or session.
 
@@ -45,7 +44,7 @@ class FinalAction(BaseAction):  # pylint: disable=too-few-public-methods
     Branding elements like a logo or social sharing options can be included to enhance user engagement.
     A feedback section may also be provided if `feedback_info` is supplied.
 
-    The returned data aligns with `FinalActionResponse`, ensuring type consistency and making the structure
+    The returned data aligns with `FinalViewResponse`, ensuring type consistency and making the structure
     clear for both developers and documentation readers. It can be consumed by a frontend component
     (e.g.,
     [Final.tsx](https://amsterdam-music-lab.github.io/MUSCLE/storybook/?path=/story/final--default)) to render the final screen.
@@ -57,10 +56,10 @@ class FinalAction(BaseAction):  # pylint: disable=too-few-public-methods
         score_label (str): Text to display with score. Default: _("points)
         button (Optional[Button]): Optional button configuration. For example:
             {"label": "Play again", "link": "/{experiment_identifier}"}. If not provided, a default button with label "Next" will be rendered, unless the experiment is not replayable.
-            If the passed in button does not specify a link, `get_experiment_url` will be used to link back to the experiment, if it is replayable.
+            If the passed in button does not specify a link, `session.get_current_experiment_link` will be used to link back to the experiment, if it is replayable.
 
     Note:
-        The `action()` method returns a `FinalActionResponse` that can be consumed by the frontend
+        The `action()` method returns a `FinalViewResponse` that can be consumed by the frontend
         to render the final screen.
     """
 
@@ -84,12 +83,12 @@ class FinalAction(BaseAction):  # pylint: disable=too-few-public-methods
         self.button = self.get_button(button, session)
         self.timeline = self.get_timeline(session)
 
-    def action(self) -> FinalActionResponse:
-        response: FinalActionResponse = {
+    def action(self) -> FinalViewResponse:
+        response = {
             "view": self.view,
             "title": self.title,
-            "trophy": self.rank.get_trophy_data(),
-            "feedback": self.rank.get_feedback_data(self.scores.get("percentile")),
+            "rank": self.rank.to_dict(),
+            "feedback": self.final_feedback_text,
             "visualization": self.visualization,
             "scores": self.get_scores(),
             "timeline": self.timeline,
@@ -104,7 +103,7 @@ class FinalAction(BaseAction):  # pylint: disable=too-few-public-methods
         """
         if button and button.link is not None:
             return button
-        button_link = get_experiment_url(session)
+        button_link = session.get_current_experiment_link()
         if button_link:
             if button:
                 button.link = button_link
@@ -126,7 +125,7 @@ class FinalAction(BaseAction):  # pylint: disable=too-few-public-methods
 
     def get_timeline(self, session: Session):
         return {
-            "playedSessions": session.block.experiment.get_played_sessions(
+            "playedSessions": session.block.experiment.get_played_sessions_count(
                 session.participant
             ),
             "timeline": session.block.experiment.timeline.to_dict(),

@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from experiment.actions.utils import get_experiment_url, randomize_playhead
+from experiment.actions.utils import randomize_playhead
 from experiment.models import Block, Experiment, Phase
 from participant.models import Participant
 from section.models import Playlist
@@ -17,28 +17,6 @@ class TestActions(TestCase):
         self.block = Block.objects.create(phase=phase, identifier="TestBlock")
         self.session = Session.objects.create(
             block=self.block, participant=self.participant, playlist=self.playlist)
-
-    def test_get_experiment_url(self):
-        self.assertEqual(get_experiment_url(self.session), "/utils_test")
-        self.participant.participant_id_url = 'participant42'
-        self.assertEqual(
-            get_experiment_url(self.session),
-            "/utils_test?participant_id=participant42",
-        )
-
-    def test_get_experiment_url_replayable(self):
-        self.session.finish()
-        self.assertIsNone(get_experiment_url(self.session))
-        self.experiment.replayable = True
-        self.experiment.save()
-        self.assertEqual(get_experiment_url(self.session), "/utils_test")
-
-    def test_get_experiment_url_independent_of_other_participant(self):
-        new_session = Session.objects.create(
-            participant=Participant.objects.create(), block=self.block
-        )
-        new_session.finish()
-        self.assertEqual(get_experiment_url(self.session), "/utils_test")
 
     def test_randomize_playhead(self):
         min_jitter = 5

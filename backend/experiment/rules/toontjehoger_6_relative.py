@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.info import Info
 from experiment.actions.playback import PlayButtons, PlaybackSection
@@ -169,7 +169,7 @@ class ToontjeHoger6Relative(BaseRules):
         # Final
         final_text = "Goed gedaan, jouw relatief gehoor is uitstekend!" if session.final_score >= 2 * \
             self.SCORE_CORRECT else "Dat bleek toch even lastig!"
-        final = FinalAction(
+        final = FinalView(
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),

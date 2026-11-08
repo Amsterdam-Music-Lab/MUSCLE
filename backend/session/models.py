@@ -116,19 +116,27 @@ class Session(models.Model):
         used_song_ids = self.get_used_song_ids()
         return list(set(song_ids) - set(used_song_ids))
 
-    def get_active_rank(self, has_feedback=False) -> dict:
-        if not self.block.ranking:
-            return None
-        else:
-            return self.block.ranking.get_active_rank(
-                self.json_data.get("scores").get("percentile"), has_feedback
-            )
-
     def _filter_results(self, question_identifiers) -> QuerySet:
         results = self.result_set
         if question_identifiers:
             results = results.filter(question_identifier__in=question_identifiers)
         return results.order_by("-created_at")
+
+    def get_current_experiment_link(self) -> str:
+        """
+        Description: Retrieve the URL for the current experiment.
+
+        Returns:
+            str: The URL for the current experiment, potentially with added participant identifier.
+
+        """
+        experiment_identifier = self.block.experiment.identifier
+
+        if self.participant.participant_id_url:
+            participant_id_url = self.participant.participant_id_url
+            return f"/{experiment_identifier}?participant_id={participant_id_url}"
+        else:
+            return f"/{experiment_identifier}"
 
     def last_result(self, question_identifiers: list[str] = []) -> Optional[Result]:
         """

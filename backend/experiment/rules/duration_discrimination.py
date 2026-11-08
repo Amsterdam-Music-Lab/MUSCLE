@@ -10,7 +10,7 @@ from section.models import Section
 from experiment.actions.button import Button
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
@@ -170,14 +170,14 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
     def get_introduction(self):
         return _('In this test you will hear two time durations for each trial, which are marked by two tones.')
 
-    def finalize_block(self, session: Session) -> FinalAction:
+    def finalize_block(self, session: Session) -> FinalView:
         ''' After 8 turnpoints, finalize experiment
         Give participant feedback
         '''
         difference = get_average_difference(session, 4, self.start_diff)
         final_text = self.get_final_text(difference)
         session.finish()
-        return FinalAction(session, title=_("End"), final_text=final_text)
+        return FinalView(session, title=_("End"), final_text=final_text)
 
     def get_final_text(self, difference):
         percentage = round(difference / 6000, 2)

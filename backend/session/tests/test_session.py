@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.utils import timezone
 
-from experiment.models import Block
+from experiment.models import Block, Experiment
 from participant.models import Participant
 from section.models import Playlist, Section, Song
 from result.models import Result
@@ -29,6 +29,14 @@ class SessionTest(TestCase):
             block=cls.block,
             participant=cls.participant,
             playlist=cls.playlist
+        )
+
+    def test_get_current_experiment_link(self):
+        self.assertEqual(self.session.get_current_experiment_link(), "/test-experiment")
+        self.participant.participant_id_url = 'participant42'
+        self.assertEqual(
+            self.session.get_current_experiment_link(),
+            "/test-experiment?participant_id=participant42",
         )
 
     def test_percentile_rank(self):

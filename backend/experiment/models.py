@@ -1,5 +1,4 @@
 from os.path import join
-import re
 from typing import Optional
 
 from django.db import models
@@ -8,6 +7,7 @@ from django.contrib.postgres.fields import ArrayField
 
 from experiment.standards.iso_languages import ISO_LANGUAGES
 from image.models import Image
+from participant.models import Participant
 from session.models import Session
 
 from .validators import (
@@ -113,12 +113,54 @@ class Experiment(models.Model):
         else:
             return self.ranking.get_active_rank(scores.get('accumulative_score'))
 
-    def get_played_sessions(self, participant) -> int:
+    def get_played_sessions(self, participant: Participant) -> models.QuerySet[Session]:
+        """Retrieve the sessions of blocks in this experiment, played by this participant.
+        Args:
+            participant (Participant): the participant for which to collect this experiment's block sessions.
+
+        Returns:
+            the sessions of blocks in this experiment played by this participant
+        """
+
         return Session.objects.filter(
             block__in=self.associated_blocks(),
             participant=participant,
             finished_at__isnull=False,
-        ).count()
+        )
+
+    def get_played_sessions_count(
+        self, participant: Participant, remove_duplicates: bool = False
+    ) -> int:
+        """Get the number of played sessions in this experiment.
+        Args:
+            participant (Participant): the participant for which to count this experiment's block sessions.
+            remove_duplicates (bool): if True, count only one session per block.
+
+        Returns:
+            the total number of sessions for this experiment played by this participant.
+        """
+        sessions = self.get_played_sessions(participant)
+        if remove_duplicates:
+            return sessions.values_list("block").distinct().count()
+        else:
+            return sessions.count()
+
+    def is_finished(self, participant: Participant) -> bool:
+        """Check if this experiment has been finished by this participant.
+        Args:
+            session (Session): the current experiment session
+
+        Returns:
+            bool: True if the experiment is not replayable and all blocks have been finished, False otherwise
+        """
+        if not self.replayable:
+            blocks = self.associated_blocks()
+            played_sessions = self.get_played_sessions_count(
+                participant, remove_duplicates=True
+            )
+            if played_sessions == blocks.count():
+                return True
+        return False
 
 
 class Timeline(models.Model):
@@ -302,6 +344,12 @@ class Block(models.Model):
 
     playlist_count.short_description = "Playlists"
 
+    def get_active_rank(self, scores: dict):
+        if not self.ranking:
+            return None
+        else:
+            return self.ranking.get_active_rank(scores.get('percentile'))
+
     def get_rules(self) -> "experiment.rules.base.Base":
         """Get instance of rules class to be used for this session
 
@@ -429,16 +477,9 @@ class Ranking(models.Model):
         if not score:
             score = -1
         try:
-            if has_feedback:
-                return (
-                    self.ranks.exclude(feedback__exact="")
-                    .filter(cutoff__lte=score)
-                    .order_by("-cutoff")
-                    .first()
-                )
             return self.ranks.filter(cutoff__lte=score).order_by("-cutoff").first()
         except:
-            None
+            return None
 
 
 RANK_CHOICES = [
@@ -468,7 +509,7 @@ class Rank(models.Model):
         blank=True,
     )
 
-    def get_trophy_data(self):
+    def to_dict(self):
         return {
             "label": self.get_label_display(),  # Django inbuilt: returns translatable text
             "description": self.description,

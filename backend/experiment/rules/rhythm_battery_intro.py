@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from .base import BaseRules
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
@@ -139,7 +139,7 @@ class RhythmBatteryIntro(BaseRules):
             session.finish()
             actions = [
                 Trial(playback, feedback_form),
-                FinalAction(session, final_text=message),
+                FinalView(session, final_text=message),
             ]
             return actions
 

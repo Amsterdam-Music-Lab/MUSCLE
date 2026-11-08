@@ -4,9 +4,8 @@ from os.path import join
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.info import Info
-from experiment.actions.utils import get_experiment_url
 from session.models import Session
 from .toontjehoger_1_mozart import toontjehoger_ranks, ToontjeHoger1Mozart
 
@@ -14,7 +13,10 @@ logger = logging.getLogger(__name__)
 
 
 def get_info_button(session: Session):
-    return Button("Terug naar ToontjeHogerKids", link=get_experiment_url(session))
+    return Button(
+        "Terug naar ToontjeHogerKids",
+        link=session.get_current_experiment_link(),
+    )
 
 
 class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
@@ -52,7 +54,7 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
 
         # Final
         final_text = "Goed gedaan!" if session.final_score >= 2 * self.SCORE_CORRECT else "Best lastig!"
-        final = FinalAction(
+        final = FinalView(
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),

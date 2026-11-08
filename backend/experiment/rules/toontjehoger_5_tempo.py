@@ -7,7 +7,7 @@ from django.template.loader import render_to_string
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.info import Info
 from experiment.actions.playback import PlayButtons, PlaybackSection
@@ -219,7 +219,7 @@ class ToontjeHoger5Tempo(BaseRules):
         elif session.final_score >= session.block.rounds * 0.5 * self.SCORE_CORRECT:
             final_text = "Goed gedaan! Jouw timing is best OK!"
 
-        final = FinalAction(
+        final = FinalView(
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),

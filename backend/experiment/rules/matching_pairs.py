@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .base import BaseRules
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.playback import MatchingPairs, PlaybackSection
 from experiment.actions.playlist import PlaylistSelection
 from experiment.actions.trial import Trial
@@ -81,7 +81,7 @@ class MatchingPairsGame(BaseRules):
         else:
             # final score saves the result from the cleared board into account
             session.finish()
-            score = FinalAction(
+            score = FinalView(
                 session,
                 title="Score",
                 # final_text="Can you score higher than your friends and family? Share and let them try!",

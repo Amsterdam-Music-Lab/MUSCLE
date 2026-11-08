@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.trial import Trial
@@ -60,7 +60,7 @@ class NewBlockRuleset(BaseRules):
             session.finish()
             session.save()
             return [
-                FinalAction(
+                FinalView(
                     session,
                     final_text=_('Thank you for participating!'),
                     feedback_info=self.feedback_info(),  # show feedback bar, this line can be removed

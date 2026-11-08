@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.button import Button
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.playlist import PlaylistSelection
 from experiment.actions.question import CheckBoxQuestion
@@ -70,7 +70,7 @@ class ThatsMySong(Hooked):
             session.finish()
             return [
                 self.get_score(session, round_number),
-                FinalAction(
+                FinalView(
                     session=session,
                     # final_text=self.final_score_message(session)
                     # + " For more information about this experiment, visit the Vanderbilt University Medical Center Music Cognition Lab.",

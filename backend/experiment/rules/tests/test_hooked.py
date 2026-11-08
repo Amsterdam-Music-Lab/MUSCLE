@@ -4,7 +4,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from unittest.mock import Mock
 
 from experiment.actions.explainer import Explainer
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
 from experiment.models import (

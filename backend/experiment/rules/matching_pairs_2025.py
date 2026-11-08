@@ -11,7 +11,7 @@ from session.models import Session
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.playback import MatchingPairs, PlaybackSection
 from experiment.actions.trial import Trial
 from experiment.actions.types import FeedbackInfo
@@ -74,9 +74,9 @@ class MatchingPairs2025(MatchingPairsGame):
     def get_short_explainer(self):
         return Explainer(_("Click to start!"), steps=[])
 
-    def _get_final_actions(self, session: Session) -> list[FinalAction]:
+    def _get_final_actions(self, session: Session) -> list[FinalView]:
         session.finish()
-        score = FinalAction(
+        score = FinalView(
             session,
             title="Score",
             total_score=session.final_score,

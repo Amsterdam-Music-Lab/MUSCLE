@@ -6,7 +6,7 @@ from .base import BaseRules
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import RadiosQuestion
@@ -163,7 +163,7 @@ class Speech2Song(BaseRules):
             session.finish()
             # Return a score and final score action
             return [
-                FinalAction(
+                FinalView(
                     title=_('End of experiment'),
                     session=session,
                     final_text=_('Thank you for contributing your time to science!'),

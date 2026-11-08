@@ -11,7 +11,7 @@ const Timeline = lazy( () => import ("@/components/Timeline/Timeline"));
 const Trophy = lazy(() => import("@/components/Trophy/Trophy"));
 const UserFeedback = lazy(() => import("@/components/UserFeedback/UserFeedback"));
 import Visualization from "@/components/Visualization/Visualization";
-import { FinalAction, SharedActionProps } from "@/types/Action";
+import { FinalView, SharedActionProps } from "@/types/Action";
 import { URLS, useExperimentTimeline } from '@/API';
 
 import useBoundStore from "@/util/stores";
@@ -20,7 +20,7 @@ import useBoundStore from "@/util/stores";
  * Final is a block view that shows the final scores of the block
  * It can only be the last view of a block
  */
-const Final = (props: FinalAction & SharedActionProps) => {
+const Final = (props: FinalView & SharedActionProps) => {
     const {
         block,
         participant,

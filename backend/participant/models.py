@@ -158,26 +158,26 @@ class Participant(models.Model):
         """
         scores = []
 
-        # Get all finished sessions
-        sessions = self.sessions.exclude(
-            finished_at=None).order_by('-final_score')
-
-        hits = {}
+        experiments = (
+            self.sessions.filter(finished_at__isnull=False, participant=self)
+            .values_list("block__experiment")
+            .distinct()
+        )
 
         # Create best rank/score data per experiment session
-        for session in sessions:
-
-            if session.block.identifier in hits:
-                continue
-
-            hits[session.block.identifier] = True
+        for experiment in experiments:
+            top_session = (
+                experiment.get_played_sessions().order_by('-final_score').first()
+            )
 
             scores.append(
                 {
-                    "block_identifier": session.block.identifier,
-                    "rank": session.block.get_active_rank(session.final_score),
-                    "score": session.final_score,
-                    "date": naturalday(session.finished_at),
+                    "block_identifier": top_session.block.identifier,
+                    "rank": top_session.block.get_active_rank(
+                        top_session.json_data.get("scores")
+                    ),
+                    "score": top_session.final_score,
+                    "date": naturalday(top_session.finished_at),
                 }
             )
 

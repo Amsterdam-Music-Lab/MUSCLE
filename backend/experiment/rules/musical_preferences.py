@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.html import HTML
 from experiment.actions.playback import Autoplay, PlaybackSection
@@ -353,7 +353,7 @@ class MusicalPreferences(BaseRules):
     def get_final_view(self, session: Session):
         # finalize block
         session.finish()
-        view = FinalAction(
+        view = FinalView(
             session,
             title=_("End"),
             final_text=_(

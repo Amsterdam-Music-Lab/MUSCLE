@@ -4,11 +4,10 @@ import re
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions.explainer import (
-    Explainer as ExplainerAction,
-    Step as StepAction,
-)
+from experiment.actions.explainer import Explainer as ExplainerView
+from experiment.models import Block
 from session.models import Session
+from theme.models import COLOR_CHOICES
 
 class Explainer(models.Model):
     identifier = models.SlugField(max_length=64, unique=True)
@@ -20,7 +19,7 @@ class Explainer(models.Model):
         return self.identifier
 
     def convert_to_action(self):
-        return ExplainerAction(
+        return ExplainerView(
             instruction=self.instruction,
             steps=[step.convert_to_action() for step in list(self.steps.all())],
             step_numbers=self.number_steps,
@@ -49,8 +48,39 @@ STATISTIC_VISUALIZATION_CHOICES = [
 ]
 
 
+class Button(models.Model):
+    label = models.CharField(
+        max_length=16, help_text=_("Set the text displayed on the button")
+    )
+    color = models.CharField(
+        max_length=20,
+        choices=COLOR_CHOICES,
+        blank=True,
+        null=True,
+        help_text=_(
+            "Set the color of the button, based on the theme. If not set, defaults to primary color."
+        ),
+    )
+    link = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text=_(
+            "If clicking on a button should link to a specific url, set it here. Otherwise, the button will link back to the experiment's entrypoint."
+        ),
+    )
+
+    def to_dict(self):
+        return {
+            "label": self.label,
+            "color": self.color or "colorPrimary",
+            "link": self.link,
+        }
+
+
 class Final(models.Model):
     identifier = models.SlugField(max_length=64, primary_key=True)
+    block = models.OneToOneField(Block, on_delete=models.CASCADE)
     title = models.CharField(
         max_length=128,
         blank=True,
@@ -69,12 +99,40 @@ class Final(models.Model):
         default=None,
         help_text=_("Select a visualization of the relative score."),
     )
-    # Potential TODO: allow setting a button
+    button = models.OneToOneField(
+        Button, blank=True, null=True, on_delete=models.CASCADE
+    )
 
-    def get_feedback_text(self, session: Session):
+    def convert_to_view(self, session: Session) -> dict:
+        scores = session.json_data.get("scores")
+        active_rank = self.block.get_active_rank(scores)
+        active_experiment = self.block.experiment
+        timeline = active_experiment.timeline
+        button = self.button or Button(label=_("Play again"))
+        setattr(
+            button,
+            "link",
+            button.link or session.get_current_experiment_link,
+        )
+        return {
+            "title": self.title or _("End of experiment"),
+            "score_label": self.score_label or _("points"),
+            "visualization": self.visualization_type,
+            "rank": active_rank.to_dict(),
+            "scores": scores,
+            "finalFeedbackText": self.get_feedback_text(session.json_data),
+            "timeline": timeline.to_dict() if timeline else None,
+            "button": (
+                button.to_dict()
+                if active_experiment.is_finished(session.participant)
+                else None
+            ),
+        }
+
+    def get_feedback_text(self, json_data: dict):
         return " ".join(
             [
-                feedback.feedback_text.get_feedback_text(session)
+                feedback.feedback_text.get_feedback_text(json_data)
                 for feedback in self.feedbacks.all()
             ]
         )
@@ -151,8 +209,7 @@ class FeedbackText(models.Model):
     class Meta:
         ordering = ["index"]
 
-    def get_feedback_text(self, session: Session) -> str:
-        json_data = session.json_data
+    def get_feedback_text(self, json_data: dict) -> str:
         if self.condition:
             if self.condition.is_met(json_data):
                 feedback_text = str(self.text)

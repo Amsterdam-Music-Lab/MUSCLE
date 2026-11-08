@@ -60,12 +60,30 @@ class TestModelExperiment(TestCase):
         )
         self.assertEqual(experiment.associated_blocks().count(), 3)
 
+    def test_is_replayable(self):
+        experiment = Experiment.objects.first()
+        participant = Participant.objects.first()
+        self.assertFalse(experiment.is_finished(participant))
+        blocks = experiment.associated_blocks()
+        Session.objects.bulk_create(
+            [
+                Session(
+                    block=block, participant=participant, finished_at=timezone.now()
+                )
+                for block in blocks
+            ]
+        )
+        self.assertFalse(experiment.is_finished(participant))
+        experiment.replayable = False
+        experiment.save()
+        self.assertTrue(experiment.is_finished(participant))
+
     def test_get_active_rank(self):
         experiment = Experiment.objects.get(identifier="toontjehoger")
         scores = {"accumulative_score": 400}
         self.assertEqual(experiment.get_active_rank(scores).label, "gold")
 
-    def test_get_played_sessions(self):
+    def test_get_played_sessions_count(self):
         participant = Participant.objects.create()
         Session.objects.bulk_create(
             [
@@ -76,9 +94,29 @@ class TestModelExperiment(TestCase):
                 )
                 for block in Block.objects.all()
             ]
+            * 2
         )
         experiment = Experiment.objects.first()
-        played_sessions = experiment.get_played_sessions(participant)
+        played_sessions = experiment.get_played_sessions_count(participant)
+        self.assertEqual(played_sessions, Block.objects.count() * 2)
+
+    def test_get_played_sessions_count_no_duplicates(self):
+        participant = Participant.objects.create()
+        Session.objects.bulk_create(
+            [
+                Session(
+                    block=block,
+                    participant=participant,
+                    finished_at=timezone.now(),
+                )
+                for block in Block.objects.all()
+            ]
+            * 2
+        )
+        experiment = Experiment.objects.first()
+        played_sessions = experiment.get_played_sessions_count(
+            participant, remove_duplicates=True
+        )
         self.assertEqual(played_sessions, Block.objects.count())
 
 

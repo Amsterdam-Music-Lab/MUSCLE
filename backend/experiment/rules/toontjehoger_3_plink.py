@@ -8,7 +8,7 @@ from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.playback import PlayButtons, PlaybackSection
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.info import Info
 from experiment.actions.question import AutoCompleteQuestion, RadiosQuestion
@@ -296,7 +296,7 @@ class ToontjeHoger3Plink(BaseRules):
             if session.final_score >= 4 * self.SCORE_MAIN_CORRECT
             else "Dat bleek toch even lastig!"
         )
-        final = FinalAction(
+        final = FinalView(
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),

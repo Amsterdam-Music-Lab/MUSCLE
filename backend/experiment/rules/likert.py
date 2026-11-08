@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from action.models import Explainer
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer as ExplainerAction, Step
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import TextRangeQuestion
@@ -57,7 +57,7 @@ class Likert(BaseRules):
         elif round_number == total_rounds:
             session.finish()
             return [
-                FinalAction(
+                FinalView(
                     session,
                     title=_("End of this part"),
                     final_text=_("Thank you for your responses!"),

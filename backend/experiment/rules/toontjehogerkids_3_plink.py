@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.playback import PlayButtons, PlaybackSection
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.info import Info
 from experiment.actions.question import DropdownQuestion
@@ -121,7 +121,7 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
 
         # Final
         final_text = "Goed gedaan!" if session.final_score >= 4 * self.SCORE_MAIN_CORRECT else "Best lastig!"
-        final = FinalAction(
+        final = FinalView(
             session=session,
             final_text=final_text,
             rank=toontjehoger_ranks(session),

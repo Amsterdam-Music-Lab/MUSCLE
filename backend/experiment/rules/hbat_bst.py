@@ -2,7 +2,7 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.utils import (
     get_average_difference_level_based,
     render_feedback_trivia,
@@ -88,4 +88,4 @@ class BST(HBat):
         trivia = _("A march and a waltz are very common meters in Western music, but in other cultures, much more complex meters also exist!")
         final_text = render_feedback_trivia(feedback, trivia)
         session.finish()
-        return FinalAction(session, title=_("End"), final_text=final_text)
+        return FinalView(session, title=_("End"), final_text=final_text)

@@ -6,8 +6,6 @@ from django.core.exceptions import ValidationError
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 
-from action.models import Final
-from experiment.actions.final import FinalAction
 from experiment.actions.form import Form
 from experiment.actions.trial import Trial
 from experiment.actions.types import FeedbackInfo
@@ -160,11 +158,13 @@ class BaseRules(object):
 
     def get_final_action(self, session: Session) -> str:
         self.finalize(session)
-        final = FinalAction(
-            session,
+        final = session.block.final
+        final = FinalView(
             title=_("End of experiment"),
+            rank=session.get_active_rank(),
             scores=session.json_data.get("scores"),
-            final_text=self.get_final_feedback_text(session),
+            final_text=session.get_final_feedback_text(),
+            timeline=session.get_timeline(),
         )
         return final.action()
 

@@ -7,7 +7,7 @@ from django.db.models import Avg
 from experiment.actions.button import Button
 from experiment.actions.form import Form
 from experiment.actions.explainer import Explainer
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
@@ -75,7 +75,7 @@ class Categorization(BaseRules):
                     session.finish()
                     profile.delete()
                     final_message = render_to_string("final/categorization_final.html")
-                    final = FinalAction(
+                    final = FinalView(
                         session=session,
                         final_text="Thanks for your participation!" + final_message,
                     )
@@ -140,7 +140,7 @@ class Categorization(BaseRules):
                         if profile.question_identifier == "failed_training":
                             profile.delete()
                     final_message = render_to_string("final/categorization_final.html")
-                    final = FinalAction(
+                    final = FinalView(
                         session=session,
                         final_text="Thanks for your participation!" + final_message,
                     )
@@ -184,7 +184,7 @@ class Categorization(BaseRules):
                 if profile.question_identifier == "failed_training":
                     profile.delete()
             final_message = render_to_string("final/categorization_final.html")
-            final = FinalAction(
+            final = FinalView(
                 session=session,
                 # final_text=final_message,
                 # total_score=round(score_percent),

@@ -15,48 +15,6 @@ def camelize(input_str: str) -> str:
     return sub(snake_case_pattern, lambda match: match.group(1).upper(), input_str)
 
 
-def get_experiment_url(session: Session) -> str | None:
-    """
-    Description: Retrieve the URL for the current experiment.
-
-    Args:
-        session (Session): The current user experiment session.
-
-    Returns:
-        (str | None): The URL for the current experiment.
-
-    Example:
-        ```python
-        url = get_experiment_url(session)
-        ```
-
-    Note:
-        Returns None if there is no experiment identifier.
-    """
-    experiment = session.block.phase.experiment
-
-    if not experiment.replayable:
-        blocks = experiment.associated_blocks()
-        played_sessions = (
-            Session.objects.filter(
-                block__in=blocks,
-                finished_at__isnull=False,
-                participant=session.participant,
-            )
-            .values_list("block")
-            .distinct()
-            .count()
-        )
-        if played_sessions == blocks.count():
-            return None
-
-    if session.participant.participant_id_url:
-        participant_id_url = session.participant.participant_id_url
-        return f"/{experiment.identifier}?participant_id={participant_id_url}"
-    else:
-        return f"/{experiment.identifier}"
-
-
 def render_feedback_trivia(feedback, trivia) -> str:
     """
     Description: Render feedback and trivia into the final template.

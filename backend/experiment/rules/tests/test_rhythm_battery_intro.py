@@ -5,7 +5,7 @@ from session.models import Session
 from experiment.models import Block
 from experiment.rules.rhythm_battery_intro import RhythmBatteryIntro
 from experiment.actions.explainer import Explainer
-from experiment.actions.final import FinalAction
+from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.playback import Playback
 from experiment.actions.trial import Trial
