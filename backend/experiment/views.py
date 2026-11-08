@@ -123,7 +123,8 @@ def get_experiment(
                     **serialized_phase,
                 }
             )
-            response.set_cookie(settings.LANGUAGE_COOKIE_NAME, get_language())
+            if experiment.enforce_language:
+                response.set_cookie(settings.LANGUAGE_COOKIE_NAME, get_language())
             return response
     # if no phase was found, start from scratch with the minimum session count
     request.session[times_played_key] = _get_min_session_count(experiment, participant)

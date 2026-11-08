@@ -1,7 +1,6 @@
-from os.path import dirname, join
-from shutil import rmtree
+from os.path import dirname
 
-from django.test import override_settings, TestCase
+from django.test import TestCase
 from django.utils import timezone
 from django.core.files.uploadedfile import SimpleUploadedFile
 
@@ -214,10 +213,6 @@ class TestExperimentViews(TestCase):
         )
         self.intermediate_phase.experiment = experiment
         self.intermediate_phase.save()
-
-        session = self.client.session
-        session["participant_id"] = self.participant.id
-        session.save()
 
         # request experiment with language set to English (British)
         response = self.client.get(
