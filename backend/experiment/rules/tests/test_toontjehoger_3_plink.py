@@ -1,9 +1,10 @@
 from django.test import TestCase
 
-from experiment.models import Block, Experiment, Phase
+from experiment.models import Block
 from experiment.rules.toontjehoger_3_plink import ToontjeHoger3Plink
 from experiment.rules.toontjehogerkids_3_plink import ToontjeHogerKids3Plink
 from participant.models import Participant
+from result.models import Result
 from section.models import Playlist
 from session.models import Session
 
@@ -27,6 +28,42 @@ class TestToontjeHoger3Plink(TestCase):
             last_result.score = rules.SCORE_MAIN_CORRECT
             last_result.save()
             self.assertIsNotNone(actions)
+
+    def test_calculate_score(self):
+        block = Block.objects.get(identifier="th_plink")
+        playlist = Playlist.objects.get(name="Toontje Hoger 3 - Plink")
+        playlist._update_sections()
+        session = Session.objects.create(
+            block=block, participant=Participant.objects.create(), playlist=playlist
+        )
+        rules = block.get_rules()
+        result = Result.objects.create(
+            question_identifier="plink",
+            session=session,
+            expected_response=playlist.section_set.first().pk,
+            given_response=str(playlist.section_set.first().pk),
+        )
+        score = rules.calculate_score(result, {})
+        self.assertEqual(score, rules.SCORE_MAIN_CORRECT)
+        result.given_response = str(playlist.section_set.last().pk)
+        score = rules.calculate_score(result, {})
+        self.assertEqual(score, rules.SCORE_MAIN_WRONG)
+        result = Result.objects.create(
+            question_identifier="era",
+            session=session,
+            expected_response="80s",
+            given_response="80s",
+        )
+        score = rules.calculate_score(result, {})
+        self.assertEqual(score, rules.SCORE_EXTRA_1_CORRECT)
+        result = Result.objects.create(
+            question_identifier="mood",
+            session=session,
+            expected_response="vrolijk",
+            given_response="vrolijk",
+        )
+        score = rules.calculate_score(result, {})
+        self.assertEqual(score, rules.SCORE_EXTRA_2_CORRECT)
 
 
 class TestToontjeHogerKids3Plink(TestCase):

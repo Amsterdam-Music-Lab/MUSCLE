@@ -140,10 +140,9 @@ class ToontjeHoger3Plink(BaseRules):
                 feedback_prefix = "Deels goed!"
 
             # Get section info
-            section_details = section.group.split(";")
-            time_period = section_details[0] if len(section_details) >= 1 else "?"
+            time_period = section.tag
             time_period = time_period.replace("s", "'s")
-            emotion = section_details[1] if len(section_details) >= 2 else "?"
+            emotion = section.group
 
             # Construct final feedback message
             question_part = "Het nummer komt uit de {} en de emotie is {}.".format(time_period, emotion)
@@ -194,7 +193,7 @@ class ToontjeHoger3Plink(BaseRules):
                 playback=PlayButtons(sections=[PlaybackSection(section)]),
                 feedback_form=Form(
                     [question1],
-                    skip_button=Button("Ik weet het niet"),
+                    skip_button=Button("Ik weet het niet", "colorGrey"),
                     submit_button=Button("Volgende"),
                 ),
                 break_round_on={"NOT": [""]},
@@ -266,7 +265,9 @@ class ToontjeHoger3Plink(BaseRules):
         """
         if result.question_identifier == "plink":
             return (
-                self.SCORE_MAIN_CORRECT if result.expected_response == result.given_response else self.SCORE_MAIN_WRONG
+                self.SCORE_MAIN_CORRECT
+                if int(result.expected_response) == int(result.given_response)
+                else self.SCORE_MAIN_WRONG
             )
         elif result.question_identifier == "era":
             result.session.save_json_data({"extra_questions_intro_shown": True})
