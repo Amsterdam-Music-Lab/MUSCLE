@@ -7,7 +7,6 @@ from django.db.models import Avg
 from experiment.actions.button import Button
 from experiment.actions.form import Form
 from experiment.actions.explainer import Explainer
-from experiment.actions.final import FinalView
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
@@ -61,25 +60,22 @@ class Categorization(BaseRules):
         if session.get_rounds_passed() == 10:
             json_data["phase"] = "training-1B"
             session.save_json_data(json_data)
-            session.save()
 
         if rounds_passed == 0:
             # Check if participants wants to exit after failed traning
-            profiles = session.participant.profile_results()
-            for profile in profiles:
-                # Delete results and json from session and exit
-                if profile.given_response == "aborted":
-                    session.result_set.all().delete()
-                    json_data = {"phase": "ABORTED", "training_rounds": json_data["training_rounds"]}
-                    session.save_json_data(json_data)
-                    session.finish()
-                    profile.delete()
-                    final_message = render_to_string("final/categorization_final.html")
-                    final = FinalView(
-                        session=session,
-                        final_text="Thanks for your participation!" + final_message,
-                    )
-                    return final
+            if (
+                session.participant.profile_results()
+                .filter(question_identifier="failed_training", given_response="aborted")
+                .count()
+            ):
+                session.result_set.all().delete()
+                json_data = {
+                    "phase": "ABORTED",
+                    "training_rounds": json_data["training_rounds"],
+                }
+                session.save_json_data(json_data)
+                return self.get_final_view(session)
+
             # Prepare sections for next phase
             json_data = self.plan_phase(session)
 
@@ -114,7 +110,6 @@ class Categorization(BaseRules):
                 json_data["phase"] = "testing"
                 json_data["training_rounds"] = session.get_rounds_passed()
                 session.save_json_data(json_data)
-                session.save()
                 explainer = Explainer(
                     instruction="You are entering the main phase of the experiment. From now on you will only occasionally get feedback on your responses. Simply try to keep responding to the sound sequences as you did before.",
                     steps=[],
@@ -124,7 +119,6 @@ class Categorization(BaseRules):
                 # Update passed training rounds for calc round_number
                 json_data["training_rounds"] = session.get_rounds_passed()
                 session.save_json_data(json_data)
-                session.save()
 
                 # Failed the training? exit experiment
                 if json_data["training_rounds"] == 40:
@@ -133,21 +127,14 @@ class Categorization(BaseRules):
                         "phase": "FAILED_TRAINING",
                     }
                     session.save_json_data(end_data)
-                    session.finish(final_score=0)
-                    profiles = session.participant.profile_results()
-                    for profile in profiles:
-                        # Delete failed_training tag from profile
-                        if profile.question_identifier == "failed_training":
-                            profile.delete()
-                    final_message = render_to_string("final/categorization_final.html")
-                    final = FinalView(
-                        session=session,
-                        final_text="Thanks for your participation!" + final_message,
-                    )
-                    return final
+                    session.final_score = 0
+                    return self.get_final_view(session)
                 else:
                     # Show continue to next training phase or exit option
-                    explainer = Trial(title="Training failed", feedback_form=Form([repeat_training_or_quit]))
+                    explainer = Trial(
+                        title="Training failed",
+                        feedback_form=Form([repeat_training_or_quit]),
+                    )
 
             feedback = self.get_feedback(session)
             return [feedback, explainer]
@@ -159,38 +146,31 @@ class Categorization(BaseRules):
                     return self.get_trial_with_feedback(session)
                 return self.next_trial_action(session)
 
-            # Testing phase completed get results
-            this_results = session.result_set.filter(comment="testing")
-
-            # Calculate percentage of correct response to training stimuli
-            final_score = 0
-            for result in this_results:
-                if "T" in result.section.song.name and result.score == 1:
-                    final_score += 1
-            score_percent = 100 * (final_score / 30)
-
             # calculate the final score for the entire test sequence
             # final_score = sum([result.score for result in training_results])
             end_data = {
                 "phase": "FINISHED",
             }
             session.save_json_data(end_data)
-            session.finish()
-            session.final_score = final_score
-            session.save()
-            profiles = session.participant.profile_results()
-            for profile in profiles:
-                # Delete failed_training tag from profile
-                if profile.question_identifier == "failed_training":
-                    profile.delete()
-            final_message = render_to_string("final/categorization_final.html")
-            final = FinalView(
-                session=session,
-                # final_text=final_message,
-                # total_score=round(score_percent),
-                # points="% correct",
-            )
-            return final
+            return self.get_final_view(session)
+
+    def get_score_data(self, session):
+        score_data = super().get_score_data(session)
+        # Testing phase completed get results
+        this_results = session.result_set.filter(comment="testing")
+        # Calculate percentage of correct response to training stimuli
+        final_score = this_results.filter(
+            score=1, section__song__name__icontains="T"
+        ).count()
+        score_percent = 100 * (final_score / 30)
+        score_data["total"]["value"] = score_percent
+
+    def finalize(self, session):
+        """on top of the usual session finalization, delete profile results"""
+        session.participant.profile_results().filter(
+            question_identifier="failed_training"
+        ).delete()
+        super().finalize(session)
 
     def plan_experiment(self, session):
         """
@@ -375,8 +355,6 @@ class Categorization(BaseRules):
             json_data["sequence"] = section_sequence
 
         session.save_json_data(json_data)
-        session.save()
-
         return json_data
 
     def get_feedback(self, session):

@@ -232,61 +232,8 @@ class Huang2022(Hooked):
                         ]
                     )
                 else:
-                    return [self.finalize(session)]
+                    return [self.get_final_view(session)]
         return actions
-
-    def finalize(self, session: Session) -> FinalView:
-        session.finish()
-        return FinalView(
-            session=session,
-            final_text=self.final_score_message(session),
-            rank=self.rank(session),
-            show_profile_link=True,
-            feedback_info=self.feedback_info(),
-        )
-
-    def final_score_message(self, session):
-        """Create final score message for given session"""
-
-        n_sync_guessed = 0
-        sync_time = 0
-        n_sync_correct = 0
-        n_old_new_expected = 0
-        n_old_new_correct = 0
-
-        for result in session.result_set.all():
-            json_data = result.json_data
-            if json_data.get('result') and json_data['result']['type'] == 'recognized':
-                n_sync_guessed += 1
-                sync_time += json_data['result']['recognition_time']
-                if result.score > 0:
-                    n_sync_correct += 1
-            else:
-                if result.expected_response == 'old':
-                    n_old_new_expected += 1
-                    if result.score > 0:
-                        n_old_new_correct += 1
-        thanks_message = _("Thank you for your contribution to science!")
-        score_message = _(
-            "Well done!") if session.final_score > 0 else _("Too bad!")
-        if n_sync_guessed == 0:
-            song_sync_message = _("You did not recognise any songs at first.")
-        else:
-            song_sync_message = _("It took you %(n_seconds)d s to recognise a song on average, \
-                and you correctly identified %(n_correct)d out of the %(n_total)d songs you thought you knew.") % {
-                'n_seconds': round(sync_time / n_sync_guessed, 1),
-                'n_correct': n_sync_correct,
-                'n_total': n_sync_guessed
-            }
-        heard_before_message = _("During the bonus rounds, you remembered %(n_correct)d of the %(n_total)d songs that came back.") % {
-            'n_correct': n_old_new_correct,
-            'n_total': n_old_new_expected
-        }
-        messages = [
-            thanks_message, score_message, song_sync_message, heard_before_message
-        ]
-        return " ".join([str(m) for m in messages])
-
 
 def get_test_playback():
     from section.models import Section

@@ -3,8 +3,8 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.utils import render_feedback_trivia
 from .duration_discrimination import DurationDiscrimination
+from session.models import Session
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ class Anisochrony(DurationDiscrimination):
     second_condition_i18n = _("REGULAR")
     section_count = 249
 
-    def get_feedback_explainer(self, session):
+    def get_feedback_explainer(self, session: Session) -> Explainer:
         button_label = _("Next fragment")
         last_result = session.last_result()
         correct_response = (
@@ -38,7 +38,7 @@ class Anisochrony(DurationDiscrimination):
                     'The tones were {}. Your answer was INCORRECT.').format(correct_response)
         return Explainer(instruction=instruction, steps=[], button=Button(button_label))
 
-    def get_intro_explanainer(self):
+    def get_intro_explanainer(self) -> Explainer:
         return Explainer(
             instruction=_(
                 "In this test you will hear a series of tones for each trial."
@@ -67,16 +67,11 @@ class Anisochrony(DurationDiscrimination):
             button=Button(_("Ok")),
         )
 
-    def get_final_text(self, difference):
-        percentage = round(difference / 6000, 2)
-        feedback = _(
-            "Well done! You heard the difference when we shifted a tone by {} percent.").format(percentage)
-        trivia = _("Many sounds in nature have regularity like a metronome. \
-            Our brains use this to process rhythm even better!")
-        return render_feedback_trivia(feedback, trivia)
-
-    def get_difficulty(self, session):
+    def get_difficulty(self, session: Session) -> int:
         if not session.json_data.get("practice_done"):
             return self.practice_diff
         else:
             return super().get_difficulty(session)
+
+    def format_difference(self, difference: int) -> float:
+        return round(difference / 6000, 2)

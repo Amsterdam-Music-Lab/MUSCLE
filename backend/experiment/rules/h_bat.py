@@ -5,19 +5,13 @@ import random
 from django.utils.translation import gettext_lazy as _
 
 from .base import BaseRules
-from .practice import PracticeMixin
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
-from experiment.actions.utils import (
-    get_average_difference_level_based,
-    render_feedback_trivia,
-)
-from experiment.rules.util.staircasing import register_turnpoint
+from experiment.rules.mixins import PracticeMixin, StaircasingMixin
 from result.utils import prepare_result
 from section.models import Playlist, Section
 from session.models import Session
@@ -27,7 +21,7 @@ logger = logging.getLogger(__name__)
 MAX_TURNPOINTS = 6
 
 
-class HBat(BaseRules, PracticeMixin):
+class HBat(BaseRules, PracticeMixin, StaircasingMixin):
     """Harvard Beat Assessment Test (H-BAT)
     Fujii & Schlaug, 2013
     """
@@ -46,14 +40,14 @@ class HBat(BaseRules, PracticeMixin):
             return self.next_practice_round(session)
         else:
             # actual experiment
-            action = staircasing(session, self.get_next_trial)
+            action = self.staircasing(session, self.get_next_trial)
             if not action:
                 # action is None if the audio file doesn't exist
                 action = self.finalize_block(session)
             if session.final_score == MAX_TURNPOINTS + 1:
                 # delete result created before this check
                 session.result_set.order_by("-created_at").first().delete()
-                action = self.finalize_block(session)
+                action = self.get_final_view(session)
             return action
 
     def get_condition(self, session) -> int:
@@ -181,24 +175,60 @@ class HBat(BaseRules, PracticeMixin):
             instruction=instruction, steps=[], button=Button(_("Next fragment"))
         )
 
-    def finalize_block(self, session: Session) -> FinalView:
-        """ if either the max_turnpoints have been reached,
-        or if the section couldn't be found (outlier), stop the experiment
+    def get_average_difference(
+        self, session: Session, num_turnpoints: int, initial_value: int
+    ) -> float:
         """
-        average_diff = get_average_difference_level_based(
-            session, 6, self.start_diff)
-        percentage = float(Decimal(str(average_diff / 5)
-                                   ).quantize(Decimal('.01'), rounding=ROUND_HALF_UP))
-        feedback = _("Well done! You heard the difference when the rhythm was \
-                    speeding up or slowing down with only {} percent!").format(percentage)
-        trivia = self.get_trivia()
-        final_text = render_feedback_trivia(feedback, trivia)
-        session.save()
-        return FinalView(session, title=_("End"), final_text=final_text)
+        Description: Calculate the difference level based on exponential decay.
 
-    def get_trivia(self):
-        return _("When people listen to music, they often perceive an underlying regular pulse, like the woodblock \
-            in this task. This allows us to clap along with the music at a concert and dance together in synchrony.")
+        Args:
+            session (Session): The current session.
+            num_turnpoints (int): The number of last turnpoints to consider.
+            initial_value (float): The starting reference value.
+
+        Returns:
+            (float): The average difference in milliseconds.
+
+        Example:
+            ```python
+            level_diff = get_average_difference_level_based(my_session, 5, 20.0)
+            ```
+        """
+
+        last_turnpoints = self.get_last_n_turnpoints(session, num_turnpoints)
+        if last_turnpoints.count() == 0:
+            # outliers
+            last_result = self.get_fallback_result(session)
+            if last_result:
+                return initial_value / (
+                    2 ** (int(last_result.section.song.name.split("_")[-1]) - 1)
+                )
+            else:
+                # participant didn't pay attention,
+                # no results right after the practice rounds
+                return initial_value
+        # Difference by level starts at initial value (which is level 1, so 20/(2^0)) and then halves for every next level
+        return (
+            sum(
+                [
+                    initial_value
+                    / (2 ** (int(result.section.song.name.split("_")[-1]) - 1))
+                    for result in last_turnpoints
+                ]
+            )
+            / last_turnpoints.count()
+        )
+
+    def get_final_statistics(self, session: Session) -> dict:
+        average_diff = self.get_average_difference_level_based(
+            session, 6, self.start_diff
+        )
+        percentage = float(
+            Decimal(str(average_diff / 5)).quantize(
+                Decimal('.01'), rounding=ROUND_HALF_UP
+            )
+        )
+        return {"percentage": percentage}
 
     def practice_successful(self, session: Session) -> bool:
         previous_results = session.last_n_results(n_results=2)
@@ -225,52 +255,3 @@ class HBat(BaseRules, PracticeMixin):
             errors.append("Tags should be integers")
 
         return errors
-
-
-def get_previous_condition(previous_result):
-    """ check if previous section was slower / in 2 (1) or faster / in 3 (0) """
-    return int(previous_result.section.tag)
-
-
-def get_previous_level(previous_result):
-    return int(previous_result.section.group)
-
-
-def staircasing(session, trial_action_callback):
-    previous_results = session.result_set.order_by('-created_at')
-    last_result = previous_results.first()
-    if not last_result:
-        # first trial
-        action = trial_action_callback(session)
-    elif last_result.score == 0:
-        # the previous response was incorrect
-        direction = session.json_data.get('direction')
-        last_result.save_json_data({"difficulty": "decrease"})
-        last_result.save()
-        if direction == 'increase':
-            register_turnpoint(session, last_result)
-        # register decreasing difficulty
-        session.save_json_data({"direction": "decrease"})
-        action = trial_action_callback(session)
-    else:
-        if previous_results.count() == 1:
-            # this is the second trial, so the level is still 1
-            action = trial_action_callback(session)
-        elif previous_results.all()[1].score == 1 and not previous_results.all()[1].comment:
-            # the previous two responses were correct
-            direction = session.json_data.get("direction")
-            last_result.save_json_data({"difficulty": "increase"})
-            if direction == 'decrease':
-                # mark the turnpoint
-                register_turnpoint(session, last_result)
-            # register increasing difficulty
-            session.save_json_data({"direction": "increase"})
-            action = trial_action_callback(session)
-        else:
-            # previous answer was correct
-            # but we didn't yet get two correct in a row
-            action = trial_action_callback(session)
-    if not action:
-        # action is None if the audio file doesn't exist
-        return None
-    return action

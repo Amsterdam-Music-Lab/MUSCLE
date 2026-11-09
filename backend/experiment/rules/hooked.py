@@ -105,18 +105,7 @@ class Hooked(BaseRules):
             # Finish session.
             session.finish()
 
-            return [
-                self.get_score(session, round_number),
-                FinalView(
-                    session=session,
-                    # final_text=self.final_score_message(session),
-                    # rank=self.rank(session),
-                    # show_profile_link=True,
-                    # button=Button(
-                    #     _("Play again"),
-                    # ),
-                ),
-            ]
+            return [self.get_score(session, round_number), self.get_final_view(session)]
 
         # Get next round number and initialise actions list. Two thirds of
         # rounds will be song_sync; the remainder heard_before.

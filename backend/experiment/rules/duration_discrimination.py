@@ -1,11 +1,9 @@
 import logging
 from decimal import Decimal, ROUND_HALF_UP
-import random
 
 from django.utils.translation import gettext_lazy as _
 
 from .base import BaseRules
-from .practice import PracticeMixin
 from section.models import Section
 from experiment.actions.button import Button
 from experiment.actions.playback import Autoplay, PlaybackSection
@@ -14,8 +12,8 @@ from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
-from experiment.actions.utils import get_average_difference, render_feedback_trivia
-from experiment.rules.util.staircasing import register_turnpoint
+from experiment.rules.mixins.practice import PracticeMixin
+from experiment.rules.mixins.staircasing import StaircasingMixin
 from result.models import Result
 from result.utils import prepare_result
 from section.models import Playlist
@@ -24,7 +22,7 @@ from session.models import Session
 logger = logging.getLogger(__name__)
 
 
-class DurationDiscrimination(BaseRules, PracticeMixin):
+class DurationDiscrimination(BaseRules, PracticeMixin, StaircasingMixin):
     """
     These rules make use of the session's final_score to register turnpoints
     """
@@ -69,16 +67,51 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
         else:
             return 0
 
+    def get_average_difference(
+        self, session: Session, num_turnpoints: int, initial_value: int
+    ) -> float:
+        """
+        Description: Calculate and return the average difference in milliseconds participants could hear (from the last `num_turnpoints` records).
+
+        Args:
+            session (Session): The current session.
+            num_turnpoints (int): The number of last turnpoints to consider.
+            initial_value (float): A fallback initial value.
+
+        Returns:
+            (float): The average difference in milliseconds.
+
+        Example:
+            ```python
+            avg_diff = get_average_difference(my_session, 3, 20.0)
+            ```
+        """
+        last_turnpoints = self.get_last_n_turnpoints(session, num_turnpoints)
+        if last_turnpoints.count() == 0:
+            last_result = self.get_fallback_result(session)
+            if last_result:
+                return float(last_result.section.song.name)
+            else:
+                # this cannot happen in DurationDiscrimination style blocks
+                # for future compatibility, still catch the condition that there may be no results
+                return initial_value
+        return (
+            sum([int(result.section.song.name) for result in last_turnpoints])
+            / last_turnpoints.count()
+        )
+
     def get_feedback_explainer(self, session):
         button_label = _("Next fragment")
         correct_response, is_correct = self.get_condition_and_correctness(session)
         preposition = _("than") if is_correct else _("as")
         if is_correct:
             instruction = _(
-                'The second interval was %(correct_response)s %(preposition)s the first interval. Your answer was CORRECT.') % {'correct_response': correct_response, 'preposition': preposition}
+                'The second interval was %(correct_response)s %(preposition)s the first interval. Your answer was CORRECT.'
+            ) % {'correct_response': correct_response, 'preposition': preposition}
         else:
             instruction = _(
-                'The second interval was %(correct_response)s %(preposition)s the first interval. Your answer was INCORRECT.') % {'correct_response': correct_response, 'preposition': preposition}
+                'The second interval was %(correct_response)s %(preposition)s the first interval. Your answer was INCORRECT.'
+            ) % {'correct_response': correct_response, 'preposition': preposition}
         return Explainer(instruction=instruction, steps=[], button=Button(button_label))
 
     def get_next_trial(self, session: Session) -> Trial:
@@ -165,93 +198,21 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
         )
 
     def get_task_explanation(self):
-        return _("It's your job to decide if the second interval is EQUALLY LONG as the first interval, or LONGER.")
+        return _(
+            "It's your job to decide if the second interval is EQUALLY LONG as the first interval, or LONGER."
+        )
 
     def get_introduction(self):
-        return _('In this test you will hear two time durations for each trial, which are marked by two tones.')
+        return _(
+            'In this test you will hear two time durations for each trial, which are marked by two tones.'
+        )
 
-    def finalize_block(self, session: Session) -> FinalView:
-        ''' After 8 turnpoints, finalize experiment
-        Give participant feedback
-        '''
-        difference = get_average_difference(session, 4, self.start_diff)
-        final_text = self.get_final_text(difference)
-        session.finish()
-        return FinalView(session, title=_("End"), final_text=final_text)
+    def get_final_statistics(self, session: Session) -> dict:
+        difference = self.get_average_difference(session, 4, self.start_diff)
+        return {"difference": self.format_difference(difference)}
 
-    def get_final_text(self, difference):
-        percentage = round(difference / 6000, 2)
-        feedback = _(
-            "Well done! You heard the difference between two intervals that \
-            differed only {} percent in duration.").format(percentage)
-        trivia = _("When we research timing in \
-            humans, we often find that people's accuracy in this task scales: \
-            for shorter durations, people can hear even smaller differences than for longer durations.")
-        return render_feedback_trivia(feedback, trivia)
-
-    def staircasing_blocks(self, session):
-        """Calculate staircasing procedure in blocks of 5 trials with one catch trial
-
-        Args:
-            session: the session
-
-        Returns:
-            a Trial object
-        """
-        previous_results = session.result_set.order_by("-created_at")
-        if not previous_results.count():
-            # first trial
-            return self.get_next_trial(session)
-        previous_condition = previous_results.first().expected_response
-        if previous_condition == self.second_condition:
-            # last trial was catch trial, don't calculate turnpoints
-            # don't manipulate duration
-            action = self.get_next_trial(session)
-        else:
-            if previous_results.first().score == 0:
-                # the previous response was incorrect
-                direction = session.json_data.get("direction")
-                last_result = previous_results.first()
-                last_result.save_json_data(
-                    {"multiplier": self.decrease_difficulty_multiplier}
-                )
-                if direction == 'increase':
-                    # register turnpoint
-                    register_turnpoint(session, last_result)
-                if session.final_score == self.max_turnpoints + 1:
-                    # experiment is finished, None will be replaced by final view
-                    return None
-                else:
-                    # register decreasing difficulty
-                    session.save_json_data({"direction": "decrease"})
-                    # decrease difficulty
-                    action = self.get_next_trial(session)
-            else:
-                # the previous response was correct - check if previous non-catch trial was 1
-                if previous_results.count() > 1 and self.last_non_catch_correct(previous_results.all()):
-                    # the previous two responses were correct
-                    direction = session.json_data.get("direction")
-                    last_correct_result = previous_results.first()
-                    last_correct_result.save_json_data(
-                        {"multiplier": self.increase_difficulty_multiplier}
-                    )
-                    if direction == 'decrease':
-                        # register turnpoint
-                        register_turnpoint(session, last_correct_result)
-                    if session.final_score == self.max_turnpoints + 1:
-                        # experiment is finished, None will be replaced by final view
-                        action = None
-                    else:
-                        # register increasing difficulty
-                        session.save_json_data({"direction": "increase"})
-                        # increase difficulty
-                        action = self.get_next_trial(session)
-                else:
-                    action = self.get_next_trial(session)
-        if not action:
-            # action is None if the audio file doesn't exist
-            return self.finalize_block(session)
-        return action
+    def format_difference(difference: int) -> float:
+        return round(difference / 6000, 2)
 
     def get_difficulty(self, session: Session) -> int:
         """
@@ -282,30 +243,6 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
         # this uses the decimal module, since round() does not work entirely as expected
         return int(Decimal(str(current_difficulty)).quantize(Decimal('0'), rounding=ROUND_HALF_UP))
 
-    def last_non_catch_correct(self, previous_results: list[Result]) -> bool:
-        """ check if previous responses (before the current one, which is correct)
-        have been catch or non-catch, and if non-catch, if they were correct
-        """
-        n_results = len(previous_results)
-        # get the previous scores and conditions, from most to least recent
-        results = [previous_results[r] for r in range(1, n_results)]
-        answer = False
-        while results:
-            result = results.pop(0)
-            if result.score == 1:
-                if result.comment:
-                    # a comment on the second-to-last result indicates that difficulty changed there;
-                    # we need to wait for another correct response before changing again
-                    break
-                else:
-                    answer = True
-                    break
-            elif result.expected_response == self.second_condition:
-                continue
-            else:
-                break
-        return answer
-
     def practice_successful(self, session: Session) -> bool:
         previous_results = session.last_n_results(n_results=2)
         return all(r.score > 0 for r in previous_results)
@@ -315,21 +252,6 @@ class DurationDiscrimination(BaseRules, PracticeMixin):
             return super().get_condition(session)
         else:
             return self.get_trial_condition(session)
-
-    def get_trial_condition(self, session: Session) -> str:
-        """make a list of the {block_size} conditions, of which one is a catch condition
-        store updates in the session.json_data field
-        """
-        current_trials = session.json_data.get("current_trials")
-        if not current_trials:
-            current_trials = [self.first_condition] * (self.block_size - 1) + [
-                self.second_condition
-            ]
-            random.shuffle(current_trials)
-        condition = current_trials.pop()
-        session.save_json_data({"current_trials": current_trials})
-        session.save()
-        return condition
 
     def validate_playlist(self, playlist: Playlist):
         errors = []

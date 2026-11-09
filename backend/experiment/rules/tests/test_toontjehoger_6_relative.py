@@ -9,7 +9,7 @@ from session.models import Session
 
 
 class TestToontjeHoger6Relative(TestCase):
-    fixtures = ["ranking_toontjehoger", "toontjehoger", "toontjehoger_kids"]
+    fixtures = ["rankings", "toontjehoger", "toontjehoger_kids"]
 
     @classmethod
     def setUpTestData(cls):

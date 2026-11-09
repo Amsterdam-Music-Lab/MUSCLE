@@ -69,23 +69,10 @@ class MatchingPairs2025(MatchingPairsGame):
             actions.append(trial)
             return actions
 
-        return self._get_final_actions(session)
+        return self.get_final_view(session)
 
     def get_short_explainer(self):
         return Explainer(_("Click to start!"), steps=[])
-
-    def _get_final_actions(self, session: Session) -> list[FinalView]:
-        session.finish()
-        score = FinalView(
-            session,
-            title="Score",
-            total_score=session.final_score,
-            final_text=self._final_text(self._get_percentile_rank(session)),
-            button=Button(_("Next game")),
-            percentile=self._get_percentile_rank(session),
-            accumulative_percentile=session.participant.percentile_rank_accumulative_score(),
-        )
-        return [score]
 
     def get_matching_pairs_trial(self, session: Session):
         player_sections = self._select_sections(session)

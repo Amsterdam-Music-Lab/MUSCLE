@@ -9,7 +9,6 @@ from django.utils.translation import gettext_lazy as _
 from experiment.actions.form import Form
 from experiment.actions.trial import Trial
 from experiment.actions.types import FeedbackInfo
-from experiment.models import Rank
 from question.utils import get_unanswered_questions
 from result.models import Result
 from result.score import SCORING_RULES
@@ -141,45 +140,38 @@ class BaseRules(object):
         """
         return 0
 
-    def finalize(self, session: Session) -> str:
+    def finalize(self, session: Session):
         """Mark the session as finished and calculate final scores"""
         session.finish(session.final_score)
-        session.save_json_data({"scores": self.get_score_data(session)})
+        session.save_json_data(
+            {
+                "scores": self.get_score_data(session),
+                **self.get_final_statistics(session),
+            },
+        )
 
-    def get_score_data(session: Session) -> dict:
+    def get_final_statistics(self, session: Session) -> dict:
+        return {}
+
+    def get_score_data(self, session: Session) -> dict:
         return {
-            "percentile": session.percentile_rank(),
-            "total": session.total_score,
-            "accumulative": session.participant.with_accumulative_score().accumulative_score,
+            "percentile": {
+                "value": session.percentile_rank({"finished_at__isnull": False}),
+                "label": "%",
+            },
+            "total": {
+                "value": session.total_score(),
+                "label": session.block.final.score_label or _("points"),
+            },
+            "accumulative": {
+                "value": session.participant.accumulative_score(),
+                "label": session.block.final.score_label or _("points"),
+            },
         }
 
-    def get_rank(session: Session) -> Rank:
-        pass
-
-    def get_final_action(self, session: Session) -> str:
+    def get_final_view(self, session: Session) -> dict:
         self.finalize(session)
-        final = session.block.final
-        final = FinalView(
-            title=_("End of experiment"),
-            rank=session.get_active_rank(),
-            scores=session.json_data.get("scores"),
-            final_text=session.get_final_feedback_text(),
-            timeline=session.get_timeline(),
-        )
-        return final.action()
-
-    def get_final_feedback_text(self, session: Session) -> str:
-        """Create final score message for given session, base on score per result
-        Override this to display different text on the final screen.
-
-        Args:
-            session: the current session
-
-        Returns:
-            a string with feedback for the participant based on their score
-        """
-        rank = session.get_active_rank(has_feedback=True)
-        return rank.get_feedback_text(session)
+        return session.block.final.convert_to_view(session)
 
     def validate_playlist(self, playlist: Playlist = None) -> list[str]:
         """Validate a playlist associated with this rules file, e.g., ensure that files have a specific name format

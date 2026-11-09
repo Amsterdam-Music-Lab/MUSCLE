@@ -13,11 +13,19 @@ from theme.models import ThemeConfig
 from theme.serializers import serialize_theme
 from .models import Block, Experiment, Phase, SocialMediaConfig, Timeline
 
-def serialize_actions(actions):
+
+def serialize_actions(actions) -> list[dict]:
     """Serialize an array of actions"""
     if isinstance(actions, list):
-        return [a.action() for a in actions]
-    return actions.action()
+        return [process_action(a) for a in actions]
+    return process_action(actions)
+
+
+def process_action(action) -> dict:
+    if isinstance(action, dict):
+        return action
+    else:
+        return action.action()
 
 
 def serialize_experiment(experiment: Experiment) -> dict:

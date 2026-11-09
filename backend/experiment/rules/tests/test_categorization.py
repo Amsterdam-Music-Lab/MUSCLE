@@ -1,5 +1,6 @@
 from django.test import TestCase
-from experiment.models import Block, Phase
+from experiment.models import Block
+from result.models import Result
 from section.models import Playlist
 from participant.models import Participant
 from session.models import Session
@@ -89,3 +90,28 @@ class CategorizationRuleTest(TestCase):
         self.assertEqual(self.session.json_data.get('phase'), 'training-1A')
         self.assertEqual(self.session.json_data.get('training_rounds'), '0')
         self.assertEqual(self.session.json_data.get('phase'), 'training-1A')
+
+    def test_get_final_view_aborted(self):
+        self.create_results(2)
+        self.session.save_json_data({"phase": "unit test", "training_rounds": 2})
+        Result.objects.create(
+            participant=self.participant,
+            question_identifier="failed_training",
+            given_response="aborted",
+        )
+        next_round = self.rules.next_round(self.session)
+        self.assertEqual(next_round.get("view"), "FINAL")
+        self.assertEqual(Result.objects.count(), 0)
+
+    def create_results(self, n_results: int):
+        Result.objects.bulk_create(
+            [
+                Result(
+                    session=self.session,
+                    question_identifier="unit test",
+                    score=0,
+                    comment="training-2",
+                )
+                for n in range(n_results)
+            ]
+        )

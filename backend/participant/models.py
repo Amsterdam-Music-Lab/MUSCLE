@@ -59,11 +59,9 @@ class Participant(models.Model):
         n_eq = all_participants.filter(accumulative_score=this_score).count()
         return 100.0 * (n_lte - (0.5 * n_eq)) / n_participants
 
-    def rank_accumulative_score(self) -> float:
+    def accumulative_score(self) -> float:
         all_participants = Participant.objects.with_accumulative_score()
-        this_score = all_participants.get(pk=self.pk).accumulative_score
-        n_participants = all_participants.count()
-        return 1
+        return all_participants.get(pk=self.pk).accumulative_score
 
     def result_count(self) -> int:
         """Get the total number of results

@@ -15,8 +15,8 @@ class FinalScore(TypedDict):
 
 
 class ScoresView(TypedDict):
-    session: FinalScore
-    relative: FinalScore
+    total: FinalScore
+    percentile: FinalScore
     accumulative: FinalScore
 
 

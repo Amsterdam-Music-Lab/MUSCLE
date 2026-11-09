@@ -30,7 +30,7 @@ class RhythmDiscriminationTest(TestCase):
         # Initial setup
         participant = self._setup_participant()
         block_json = self._get_block_info("rhdis")
-        session_id = block_json["session_id"]
+        session_id = block_json["sessionId"]
 
         # Test practice rounds (first 4 rounds)
         self._validate_practice_round(session_id, 1, participant, actions=["EXPLAINER", "EXPLAINER", "TRIAL_VIEW"])
@@ -146,11 +146,11 @@ class RhythmDiscriminationTest(TestCase):
         self.assertTrue(
             {
                 "identifier",
-                "class_name",
+                "className",
                 "rounds",
                 "playlists",
-                "loading_text",
-                "session_id",
+                "loadingText",
+                "sessionId",
             }
             <= block_json.keys()
         )

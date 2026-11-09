@@ -3,6 +3,16 @@
   fields:
     identifier: eurovision_2021
     active: true
+- model: experiment.timeline
+  pk: 41
+  fields:
+    experiment: 41
+- model: experiment.reward
+  pk: 41
+  fields:
+    timeline: 41
+    session_number: 1
+    image: "cup"
 - model: experiment.phase
   pk: 41
   fields:
@@ -14,11 +24,60 @@
     experiment: 41
     index: 0
     identifier: eurovision_2021
+    ranking: hooked-ranking
     rounds: 30
     bonus_points: 0
     rules: EUROVISION_2020
     playlists:
     - 41
+- model: action.final
+  pk: 41
+  fields:
+    title: End of experiment
+    block: 41
+- model: action.feedbackcondition
+  pk: 41
+  fields:
+    metric: final_score
+    operator: gt
+    value: 0
+- model: action.feedbacktext
+  pk: 41
+  fields:
+    index: 1
+    condition: 41
+    text: Well done!
+    alternative_text: Too bad!
+- model: action.finalfeedback
+  fields:
+    final: 41
+    feedback_text: 41
+- model: action.feedbackcondition
+  pk: 42
+  fields:
+    metric: n_sync_guessed
+    operator: gt
+    value: 0
+- model: action.feedbacktext
+  pk: 42
+  fields:
+    index: 2
+    condition: 42
+    text: It took you {mean_reaction_time} s to recognise a song on average, and you correctly identified {n_sync_correct} out of the {n_sync_guessed} songs you thought you knew.
+    alternative_text: You did not recognise any songs at first.
+- model: action.finalfeedback
+  fields:
+    final: 41
+    feedback_text: 42
+- model: action.feedbacktext
+  pk: 43
+  fields:
+    index: 3
+    text: During the bonus rounds, you remembered {n_old_new_correct} of the {n_old_new} songs that came back.
+- model: action.finalfeedback
+  fields:
+    final: 41
+    feedback_text: 43
 - model: section.playlist
   pk: 41
   fields:

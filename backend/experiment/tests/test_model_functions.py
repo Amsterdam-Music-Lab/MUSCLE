@@ -21,7 +21,7 @@ class TestModelBlock(TestCase):
 
 
 class TestModelExperiment(TestCase):
-    fixtures = ["ranking_toontjehoger", "toontjehoger"]
+    fixtures = ["rankings", "toontjehoger"]
 
     def test_verbose_name_plural(self):
         # Get the Experiment Meta class
@@ -121,7 +121,7 @@ class TestModelExperiment(TestCase):
 
 
 class RankingModelTest(TestCase):
-    fixtures = ["eurovision_2020", "ranking_hooked"]
+    fixtures = ["eurovision_2020", "rankings"]
 
     def test_get_active_rank(self):
         ranking = Ranking.objects.get(identifier="hooked-ranking")
@@ -153,7 +153,7 @@ class RankingModelTest(TestCase):
 
 
 class RankTest(TestCase):
-    fixtures = ["ranking_generic", "testing"]
+    fixtures = ["rankings", "testing"]
 
     pass
 

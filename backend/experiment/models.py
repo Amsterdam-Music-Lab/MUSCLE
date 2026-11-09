@@ -348,7 +348,7 @@ class Block(models.Model):
         if not self.ranking:
             return None
         else:
-            return self.ranking.get_active_rank(scores.get('percentile'))
+            return self.ranking.get_active_rank(scores.get("percentile"))
 
     def get_rules(self) -> "experiment.rules.base.Base":
         """Get instance of rules class to be used for this session

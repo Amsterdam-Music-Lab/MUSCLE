@@ -37,15 +37,15 @@ class BeatAlignmentRuleTest(TestCase):
         self.assertTrue(
             {
                 "identifier",
-                "class_name",
+                "className",
                 "rounds",
                 "playlists",
-                "loading_text",
-                "session_id",
+                "loadingText",
+                "sessionId",
             }
             <= block_json.keys()
         )
-        session_id = block_json['session_id']
+        session_id = block_json['sessionId']
         response = self.client.post(
                 f'/session/{session_id}/next_round/')
         rounds = self.load_json(response).get('next_round')

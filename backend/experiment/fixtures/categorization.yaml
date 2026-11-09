@@ -21,6 +21,21 @@
     rules: CATEGORIZATION
     playlists:
     - 31
+- model: action.final
+  pk: 31
+  fields:
+    block: 31
+- model: action.feedbacktext
+  pk: 31
+  fields:
+    text: | 
+      The experiment is now finished. More information about the experiment and the results will be made available [here]("https://www.mcg.uva.nl/humansvszebrafinches") after the data collection has finished (expected December 2022)\n
+      You can now close this window. Thank you!
+- model: action.finalfeedback
+  pk: 31
+  fields:
+    final: 31
+    feedback_text: 31
 - model: section.playlist
   pk: 31
   fields:

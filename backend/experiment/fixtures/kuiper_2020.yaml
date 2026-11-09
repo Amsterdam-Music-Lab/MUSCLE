@@ -14,6 +14,7 @@
     experiment: 42
     index: 0
     identifier: christmas_2020
+    ranking: hooked-ranking
     rounds: 30
     bonus_points: 0
     rules: KUIPER_2020

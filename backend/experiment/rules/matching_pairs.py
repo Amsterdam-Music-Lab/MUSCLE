@@ -79,17 +79,8 @@ class MatchingPairsGame(BaseRules):
             actions.append(trial)
             return actions
         else:
-            # final score saves the result from the cleared board into account
-            session.finish()
-            score = FinalView(
-                session,
-                title="Score",
-                # final_text="Can you score higher than your friends and family? Share and let them try!",
-                # button=Button(_("Play again")),
-                # rank=self.rank(session, exclude_unfinished=False),
-                # feedback_info=self.feedback_info(),
-            )
-            return [score]
+            # get_final_view saves the result from the cleared board
+            return [self.get_final_view(session)]
 
     def select_sections(self, session):
         n_pairs = session.block.rules_config.get("n_pairs", self.num_pairs)

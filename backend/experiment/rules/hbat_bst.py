@@ -2,11 +2,6 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalView
-from experiment.actions.utils import (
-    get_average_difference_level_based,
-    render_feedback_trivia,
-)
 
 from session.models import Session
 
@@ -78,14 +73,6 @@ class BST(HBat):
             instruction=instruction, steps=[], button=Button(_("Next fragment"))
         )
 
-    def finalize_block(self, session):
-        """ if either the max_turnpoints have been reached,
-        or if the section couldn't be found (outlier), stop the experiment
-        """
-        loudness_diff = int(get_average_difference_level_based(session, 6, self.start_diff))
-        feedback = _("Well done! You heard the difference \
-            when the accented tone was only {} dB louder.").format(loudness_diff)
-        trivia = _("A march and a waltz are very common meters in Western music, but in other cultures, much more complex meters also exist!")
-        final_text = render_feedback_trivia(feedback, trivia)
-        session.finish()
-        return FinalView(session, title=_("End"), final_text=final_text)
+    def get_final_statistics(self, session: Session) -> dict:
+        loudness_diff = int(self.get_average_difference(session, 6, self.start_diff))
+        return {"loudness_diff": loudness_diff}

@@ -6,16 +6,13 @@ from django.utils.translation import gettext_lazy as _
 from .base import BaseRules
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
-from experiment.actions.utils import (
-    render_feedback_trivia,
-)
 from result.utils import prepare_result
 from section.models import Playlist
+from session.models import Session
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +21,13 @@ class BeatAlignment(BaseRules):
     """Rules for the beat alignment test by Mullensiefen et al. (2014)"""
 
     ID = 'BEAT_ALIGNMENT'
+
+    def get_final_statistics(self, session: Session) -> dict:
+        percentage = int(
+            (sum([r.score for r in session.result_set.all()]) / session.block.rounds)
+            * 100
+        )
+        return {"percentage": percentage}
 
     def get_intro_explainer(self):
         """ Explainer at start of experiment """
@@ -59,16 +63,7 @@ class BeatAlignment(BaseRules):
         # If the number of results equals the number of block.rounds
         # Close the session and return data for the final_score view
         if session.rounds_complete():
-            # Finish session
-            session.finish()
-            percentage = int(
-                (sum([r.score for r in session.result_set.all()]) / session.block.rounds) * 100)
-            feedback = _('Well done! You’ve answered {} percent correctly!').format(
-                percentage)
-            trivia = _('In the UK, over 140.000 people did \
-                this test when it was first developed?')
-            final_text = render_feedback_trivia(feedback, trivia)
-            return FinalView(session, title=_("End"), final_text=final_text)
+            return self.get_final_view(session)
 
         # Practice rounds
         if not session.json_data.get("done_practice"):

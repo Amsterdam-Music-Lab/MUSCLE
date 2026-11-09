@@ -31,7 +31,7 @@ class CongoSameDiff(BaseRules):
 
             # if the participant has completed all trials, return the final round
             if round_number == total_trials_count:
-                return self.get_final_round(session)
+                return self.get_final_view(session)
 
             # otherwise, return a normal trial
             # load the non-practice group variants for the group number
@@ -178,15 +178,6 @@ class CongoSameDiff(BaseRules):
             listen_first=False,
         )
         return view
-
-    def get_final_round(self, session: Session):
-        # Finish session
-        session.finish()
-        return FinalView(
-            session,
-            title=_("End"),
-            final_text=_('Thank you for participating!'),
-        )
 
     def get_total_trials_count(self, session: Session):
         total_exp_variants = session.playlist.section_set.exclude(

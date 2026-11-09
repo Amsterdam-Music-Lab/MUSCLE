@@ -4,7 +4,7 @@ import re
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions.explainer import Explainer as ExplainerView
+from experiment.actions.explainer import Explainer as ExplainerView, StepAction
 from experiment.models import Block
 from session.models import Session
 from theme.models import COLOR_CHOICES
@@ -107,24 +107,28 @@ class Final(models.Model):
         scores = session.json_data.get("scores")
         active_rank = self.block.get_active_rank(scores)
         active_experiment = self.block.experiment
-        timeline = active_experiment.timeline
+        timeline = (
+            active_experiment.timeline
+            if hasattr(active_experiment, "timeline")
+            else None
+        )
         button = self.button or Button(label=_("Play again"))
         setattr(
             button,
             "link",
-            button.link or session.get_current_experiment_link,
+            button.link or session.get_current_experiment_link(),
         )
         return {
-            "title": self.title or _("End of experiment"),
-            "score_label": self.score_label or _("points"),
+            "view": "FINAL",
+            "title": self.title or _("End"),
             "visualization": self.visualization_type,
-            "rank": active_rank.to_dict(),
+            "rank": active_rank.to_dict() if active_rank else None,
             "scores": scores,
             "finalFeedbackText": self.get_feedback_text(session.json_data),
             "timeline": timeline.to_dict() if timeline else None,
             "button": (
                 button.to_dict()
-                if active_experiment.is_finished(session.participant)
+                if not active_experiment.is_finished(session.participant)
                 else None
             ),
         }

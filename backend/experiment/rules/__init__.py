@@ -6,7 +6,6 @@ from .duration_discrimination import DurationDiscrimination
 from .duration_discrimination_tone import DurationDiscriminationTone
 from .eurovision_2020 import Eurovision2020
 from .h_bat import HBat
-from .h_bat_bfit import HBatBFIT
 from .hbat_bst import BST
 from .hooked import Hooked
 from .huang_2022 import Huang2022
@@ -50,7 +49,6 @@ BLOCK_RULES = {
     DurationDiscriminationTone.ID: DurationDiscriminationTone,
     Eurovision2020.ID: Eurovision2020,
     HBat.ID: HBat,
-    HBatBFIT.ID: HBatBFIT,
     Hooked.ID: Hooked,
     HookedTeleTunes.ID: HookedTeleTunes,
     Huang2022.ID: Huang2022,

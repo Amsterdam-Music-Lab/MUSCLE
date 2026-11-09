@@ -36,7 +36,7 @@ class ExplainerText(TestCase):
 
 
 class FinalFeedbackTest(TestCase):
-    fixtures = ["final_hooked", "eurovision_2020"]
+    fixtures = ["eurovision_2020"]
 
     def setUp(self):
         block = Block.objects.get(identifier="eurovision_2021")
@@ -44,23 +44,23 @@ class FinalFeedbackTest(TestCase):
         self.session = Session.objects.create(block=block, participant=participant)
 
     def test_feedback_final_score_condition(self):
-        final_feedback = Final.objects.get(identifier="hooked-final")
+        final = Final.objects.first()
         self.session.save_json_data({"final_score": 0})
-        feedback_text = final_feedback.get_feedback_text(self.session)
+        feedback_text = final.get_feedback_text(self.session)
         self.assertIn("Too bad!", feedback_text)
         self.session.save_json_data({"final_score": 1})
-        feedback_text = final_feedback.get_feedback_text(self.session)
+        feedback_text = final.get_feedback_text(self.session)
         self.assertIn("Well done!", feedback_text)
 
     def test_feedback_n_sync_condition(self):
-        final_feedback = Final.objects.get(identifier="hooked-final")
+        final = Final.objects.first()
         self.session.save_json_data({"n_sync_guessed": 0})
-        feedback_text = final_feedback.get_feedback_text(self.session)
+        feedback_text = final.get_feedback_text(self.session)
         self.assertIn("You did not recognise any songs at first.", feedback_text)
         self.session.save_json_data(
             {"n_sync_guessed": 20, "n_sync_correct": 10, 'mean_reaction_time': 4.2}
         )
-        feedback_text = final_feedback.get_feedback_text(self.session)
+        feedback_text = final.get_feedback_text(self.session)
         self.assertIn(
             "It took you 4.2 s to recognise a song on average, and you correctly identified 10 out of the 20 songs you thought you knew.",
             feedback_text,

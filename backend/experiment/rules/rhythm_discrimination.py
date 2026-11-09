@@ -5,19 +5,17 @@ from django.utils.translation import gettext_lazy as _
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial
-from experiment.actions.utils import render_feedback_trivia
+from experiment.rules.mixins import PracticeMixin
 
 from result.utils import prepare_result
 from section.models import Playlist
 from session.models import Session
 
 from .base import BaseRules
-from .practice import PracticeMixin
 
 logger = logging.getLogger(__name__)
 
@@ -104,7 +102,7 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
                 return None
 
             if len(plan) == session.get_rounds_passed():
-                return [self.finalize_block(session)]
+                return [self.get_final_view(session)]
             return self.get_next_trial(session)
 
     def get_condition(self, session):
@@ -271,26 +269,12 @@ class RhythmDiscrimination(BaseRules, PracticeMixin):
             instruction=instruction, steps=[], button=Button(_("Next fragment"))
         )
 
-    def finalize_block(self, session: Session):
-        # we had 4 practice trials and 60 experiment trials
+    def get_final_statistics(self, session: Session) -> dict:
         percentage = (
             sum([res.score for res in session.result_set.all()])
             / session.result_set.count()
         ) * 100
-        session.finish()
-        session.save()
-        feedback = _("Well done! You've answered {} percent correctly!").format(
-            percentage
-        )
-        trivia = _(
-            "One reason for the \
-            weird beep-tones in this test (instead of some nice drum-sound) is that it is used very often\
-            in brain scanners, which make a lot of noise. The beep-sound helps people in the scanner \
-            to hear the rhythm really well."
-        )
-        final_text = render_feedback_trivia(feedback, trivia)
-        session.finish()
-        return FinalView(session, title=_("End"), final_text=final_text)
+        return {"percentage": percentage}
 
     def practice_successful(self, session: Session) -> bool:
         """Check if practice was successful: at least two answers correct"""

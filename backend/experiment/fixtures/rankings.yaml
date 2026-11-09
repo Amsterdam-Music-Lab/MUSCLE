@@ -1,0 +1,192 @@
+- model: experiment.ranking
+  fields:
+    identifier: generic-ranking
+- model: experiment.rank
+  fields:
+    ranking: generic-ranking
+    label: diamond
+    cutoff: 95.0
+- model: experiment.rank
+  fields:
+    ranking: generic-ranking
+    label: platinum
+    cutoff: 90.0
+- model: experiment.rank
+  fields:
+    ranking: generic-ranking
+    label: gold
+    cutoff: 75.0
+- model: experiment.rank
+  fields:
+    ranking: generic-ranking
+    label: silver
+    cutoff: 25.0
+- model: experiment.rank
+  fields:
+    ranking: generic-ranking
+    label: bronze
+    cutoff: 0.0
+- model: experiment.rank
+  fields:
+    ranking: generic-ranking
+    label: plastic
+    cutoff: -1.0
+- model: experiment.ranking
+  fields:
+    identifier: categorization-ranking
+- model: experiment.rank
+  pk: 31
+  fields:
+    ranking: categorization-ranking
+    label: platinum
+    cutoff: 100
+    description: Congratulations! You did great and won a platinum medal!
+- model: experiment.rank
+  pk: 32
+  fields:
+    ranking: categorization-ranking
+    label: gold
+    cutoff: 80
+    description: Congratulations! You did great and won a gold medal!
+- model: experiment.rank
+  pk: 33
+  fields:
+    ranking: categorization-ranking
+    label: silver
+    cutoff: 60
+    description: Congratulations! You did very well and won a silver medal!
+- model: experiment.rank
+  pk: 34
+  fields:
+    ranking: categorization-ranking
+    label: bronze
+    cutoff: 0
+    description: Congratulations! You did well and won a bronze medal!
+- model: experiment.ranking
+  fields:
+    identifier: hooked-ranking
+- model: experiment.rank
+  pk: 41
+  fields:
+    ranking: hooked-ranking
+    label: diamond
+    feedback: ''
+    cutoff: 95.0
+- model: experiment.rank
+  pk: 42
+  fields:
+    ranking: hooked-ranking
+    label: platinum
+    cutoff: 90.0
+- model: experiment.rank
+  pk: 43
+  fields:
+    ranking: hooked-ranking
+    label: gold
+    cutoff: 75.0
+- model: experiment.rank
+  pk: 44
+  fields:
+    ranking: hooked-ranking
+    label: silver
+    cutoff: 25.0
+- model: experiment.rank
+  pk: 45
+  fields:
+    ranking: hooked-ranking
+    label: bronze
+    cutoff: 0.0
+- model: experiment.rank
+  pk: 46
+  fields:
+    ranking: hooked-ranking
+    label: plastic
+    cutoff: -1.0
+- model: experiment.ranking
+  fields:
+    identifier: toontjehoger-ranking
+- model: experiment.rank
+  fields:
+    ranking: toontjehoger-ranking
+    label: diamond
+    cutoff: 1000
+- model: experiment.rank
+  fields:
+    ranking: toontjehoger-ranking
+    label: platinum
+    cutoff: 600
+- model: experiment.rank
+  fields:
+    ranking: toontjehoger-ranking
+    label: gold
+    cutoff: 300
+- model: experiment.rank
+  fields:
+    ranking: toontjehoger-ranking
+    label: silver
+    cutoff: 200
+- model: experiment.rank
+  fields:
+    ranking: toontjehoger-ranking
+    label: bronze
+    cutoff: 100
+- model: experiment.rank
+  fields:
+    ranking: toontjehoger-ranking
+    label: plastic
+    description: Geen punten
+    cutoff: 0
+- model: experiment.ranking
+  fields:
+    identifier: tunetwins-block-ranking
+- model: experiment.rank
+  fields:
+    ranking: tunetwins-block-ranking
+    label: diamond
+    description: Supreme
+    cutoff: 90.0
+- model: experiment.rank
+  fields:
+    ranking: tunetwins-block-ranking
+    label: gold
+    description: Advanced
+    cutoff: 75.0
+- model: experiment.rank
+  fields:
+    ranking: tunetwins-block-ranking
+    label: silver
+    description: Proficient
+    cutoff: 50.0
+- model: experiment.rank
+  fields:
+    ranking: tunetwins-block-ranking
+    label: bronze
+    description: Exploring
+    cutoff: -1.0
+- model: experiment.ranking
+  fields:
+    identifier: tunetwins-block-ranking
+- model: experiment.rank
+  fields:
+    ranking: tunetwins-experiment-ranking
+    label: diamond
+    description: Razor-Sharp Recognition
+    cutoff: 90.0
+- model: experiment.rank
+  fields:
+    ranking: tunetwins-experiment-ranking
+    label: gold
+    description: High-Fidelity Recognition
+    cutoff: 75.0
+- model: experiment.rank
+  fields:
+    ranking: tunetwins-experiment-ranking
+    label: silver
+    description: Reliable Recognition
+    cutoff: 50.0
+- model: experiment.rank
+  fields:
+    ranking: tunetwins-experiment-ranking
+    label: bronze
+    description: Untapped Potential
+    cutoff: -1.0
