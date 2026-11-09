@@ -84,15 +84,14 @@ export interface Scores {
   accumulative: ScoreDescription;
 }
 
-export interface Trophy {
+export interface Rank {
   className: string | "diamond" | "platinum" | "gold" | "silver" | "bronze" | "plastic";
   label: string;
   description?: string | TrustedHTML;
-  image?: string | "cup" | "star";
 }
 
 export interface FinalView {
-  trophy: Trophy;
+  rank: Rank;
   scores: Scores;
   finalText: string | TrustedHTML;
   visualizationType: string;

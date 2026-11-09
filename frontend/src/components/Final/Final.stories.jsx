@@ -28,7 +28,7 @@ function getFinalData(overrides = {}) {
                 label: "%"
             }
         },
-        trophy: {
+        rank: {
             label: "Platinum",
             className: "platinum",
             description: `<h4>Awesome!</h4>`

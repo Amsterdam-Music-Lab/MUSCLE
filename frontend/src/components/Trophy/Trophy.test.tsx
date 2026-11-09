@@ -1,23 +1,22 @@
 import { render } from '@testing-library/react';
-import Cup from './Trophy';
+import Trophy from './Trophy';
 import { describe, expect, it } from 'vitest';
 
 
-describe('Cup Component', () => {
+describe('Trophy Component', () => {
     it('renders with the correct class and text', () => {
-        const rank = {
+        const trophyProps = {
             className: 'gold',
-            text: 'Gold Cup',
+            label: 'Gold Cup',
+            image: 'cup'
         };
 
-        const { getByTestId, getByText } = render(<Cup {...rank} />);
+        const { container } = render(<Trophy {...trophyProps} />);
 
-        const cupElement = getByTestId('cup');
+        const trophyElement = container.querySelector('.aha__trophy');
 
         // Check if the main div has the correct classes
-        expect(cupElement.classList.contains('aha__cup')).toBe(true);
-        expect(cupElement.classList.contains('gold')).toBe(true);
-        expect(cupElement.classList.contains('offsetCup')).toBe(true);
+        expect(trophyElement.classList.contains('gold')).toBe(true);
 
         // Check if the h4 element contains the correct text
         expect(document.body.contains(getByText('Gold Cup'))).toBe(true);
@@ -26,7 +25,7 @@ describe('Cup Component', () => {
     it('does not have offsetCup class when text is empty', () => {
         const rank = {
             className: 'silver',
-            text: '',
+            label: '',
         };
 
         const { getByTestId } = render(<Cup {...rank} />);
@@ -44,13 +43,13 @@ describe('Cup Component', () => {
         expect(cupText.textContent).toBe('');
     });
 
-    it('renders the cup div', () => {
+    it('shows an animation', () => {
         const rank = {
             className: 'bronze',
-            text: 'Bronze Cup',
+            label: 'Bronze Cup',
         };
 
-        const { getByTestId } = render(<Cup {...rank} />);
+        const { getByTestId } = render(<Trophy {...rank} />);
 
         const cupElement = getByTestId('cup-animation');
 

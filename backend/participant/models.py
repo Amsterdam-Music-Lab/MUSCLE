@@ -175,7 +175,7 @@ class Participant(models.Model):
                     "block_identifier": top_session.block.identifier,
                     "rank": top_session.block.get_active_rank(
                         top_session.json_data.get("scores")
-                    ),
+                    ).to_dict(),
                     "score": top_session.final_score,
                     "date": naturalday(top_session.finished_at),
                 }

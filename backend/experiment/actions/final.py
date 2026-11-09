@@ -20,7 +20,7 @@ class ScoresView(TypedDict):
     accumulative: FinalScore
 
 
-class TrophyView(TypedDict):
+class RankView(TypedDict):
     label: str
     description: str
     class_name: str
@@ -29,7 +29,7 @@ class TrophyView(TypedDict):
 class FinalViewResponse(TypedDict):
     view: str
     title: str
-    trophy: TrophyView
+    rank: RankView
     feedback: str
     visualization: str
     scores: ScoresView
