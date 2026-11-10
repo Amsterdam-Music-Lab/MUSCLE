@@ -1,0 +1,64 @@
+#!/bin/bash
+# -----------------------------------------
+composefile=docker-compose.yaml
+while getopts ":p" opt; do
+  case $opt in
+    p)
+      echo "-p flag passed" >&2
+      composefile=docker-compose-deploy.yml
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      ;;
+  esac
+done
+echo "Starting database restore with $composefile"
+# -----------------------------------------
+# Step 1: stop and remove containers    
+#
+echo "Stopping and removing containers..."
+docker compose -f $composefile down
+
+# ----------------------------------------------------------------------------
+# Step 2: Remove the old volume so that a new one can be created.
+# In production, also empty the mounted directory
+#
+echo "Removing old volume 'muscle_db_data'..."
+docker volume rm muscle_db_data
+if [ "$dockerfile" = "docker-compose-deploy.yml" ]; then
+  podman unshare
+  rm -r ~/podman-volumes/db-data/*
+  exit
+fi
+
+# ----------------------------------------------------------------------------
+# Step 3: Start up db service, wait for it to be ready.
+#
+docker compose -f $composefile up db -d
+
+echo "Waiting for PostgreSQL container to be ready..."
+until docker exec muscle_db pg_isready; do
+  sleep 1;
+done;
+
+# ----------------------------------------------------------------------------
+# Step 4: restore from file selected by user
+#
+BACKUPS=$(docker exec muscle_db ls /backups)
+echo "Choose which file to restore: "
+select backup in $BACKUPS; do
+  # Run the restore using the default 'postgres' user and its default database.
+  echo "Restoring $backup..."
+  docker exec muscle_db psql -f /backups/$backup
+  break
+done
+
+
+# ----------------------------------------------------------------------------
+# Step 8: Finally, restart your project with the updated configuration.
+#
+echo "Restarting the project..."
+docker compose -f $composefile down
+docker compose -f $composefile up --build -d
+
+echo "Migration complete."

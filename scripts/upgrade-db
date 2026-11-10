@@ -1,0 +1,29 @@
+#!/bin/bash
+# -----------------------------------------
+echo "Starting database upgrade"
+read -p "Enter the PostgreSQL version upgrading to: " pg
+read -p "Enter the Debian version of the new image (trixie / bookworm)": debian
+# -----------------------------------------
+echo "Starting up secondary container with new PostgreSQL image"
+docker rm db_new # make sure no container of this name exists
+docker run --name db_new -d \
+    -e POSTGRES_HOST_AUTH_METHOD=trust \
+    -v muscle_db_new_data:/var/lib/postgresql \
+    -v muscle_db_data:/db_old_data \
+    -v muscle_db_backup:/db_backups \
+    postgres:"$pg"-"$debian"
+until [ "`docker inspect -f {{.State.Running}} db_new`"=="true" ]; do
+    sleep 1;
+done;
+#-------------------------------------------
+echo "Dumping data and importing into new container"
+docker exec muscle_db pg_dumpall | docker exec -i db_new psql -U postgres
+#-------------------------------------------
+echo "Updating db_data volume"
+docker exec db_new cp -r /db_old_data /db_backup
+docker exec db_new cp -r /var/lib/postgresql /db_old_data
+#-------------------------------------------
+echo "Cleanup"
+docker stop db_new
+docker rm db_new
+docker volume rm muscle_db_new_data
