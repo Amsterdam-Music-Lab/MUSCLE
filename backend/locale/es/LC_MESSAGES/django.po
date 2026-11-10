@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-05 11:54+0100\n"
+"POT-Creation-Date: 2026-11-09 19:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -228,55 +228,61 @@ msgstr ""
 msgid "Test block"
 msgstr ""
 
-#: experiment/models.py:67
+#: experiment/models.py:68
 #, python-brace-format
 msgid ""
 "Content for social media sharing. Use {points} and {experiment_name} as "
 "placeholders."
 msgstr ""
 
-#: experiment/models.py:176
+#: experiment/models.py:88
+msgid ""
+"Show this experiment always in this language. WARNING: Make sure all "
+"translation strings exist"
+msgstr ""
+
+#: experiment/models.py:185
 msgid "Extra settings to control the behaviour of the block's rules"
 msgstr ""
 
-#: experiment/models.py:314
+#: experiment/models.py:323
 msgid "List of tags for social media sharing"
 msgstr ""
 
-#: experiment/models.py:318
+#: experiment/models.py:327
 msgid ""
 "URL to be shared on social media. If empty, the experiment URL will be used."
 msgstr ""
 
-#: experiment/models.py:322
+#: experiment/models.py:331
 msgid "Facebook"
 msgstr ""
 
-#: experiment/models.py:323
+#: experiment/models.py:332
 msgid "WhatsApp"
 msgstr ""
 
-#: experiment/models.py:324
+#: experiment/models.py:333
 msgid "Twitter"
 msgstr ""
 
-#: experiment/models.py:325
+#: experiment/models.py:334
 msgid "Weibo"
 msgstr ""
 
-#: experiment/models.py:326
+#: experiment/models.py:335
 msgid "Share"
 msgstr ""
 
-#: experiment/models.py:327
+#: experiment/models.py:336
 msgid "Clipboard"
 msgstr ""
 
-#: experiment/models.py:333
+#: experiment/models.py:342
 msgid "Selected social media channels for sharing"
 msgstr ""
 
-#: experiment/models.py:365
+#: experiment/models.py:374
 #, python-format
 msgid "I scored %(score)d points in %(experiment_name)s"
 msgstr ""
@@ -728,23 +734,34 @@ msgid ""
 "cultures, much more complex meters also exist!"
 msgstr ""
 
+#: experiment/rules/hooked.py:76 experiment/rules/huang_2022.py:153
+msgid "How to Play"
+msgstr "Cómo jugar"
+
 #: experiment/rules/hooked.py:80 experiment/rules/huang_2022.py:157
 msgid ""
 "Do you recognise the song? Try to sing along. The faster you recognise "
 "songs, the more points you can earn."
-msgstr "¿Reconoces la canción? Intenta cantar con ella. Cuanto más rápido reconozcas las canciones, más puntos puedes ganar."
+msgstr ""
+"¿Reconoces la canción? Intenta cantar con ella. Cuanto más rápido reconozcas "
+"las canciones, más puntos puedes ganar."
 
 #: experiment/rules/hooked.py:85 experiment/rules/huang_2022.py:162
 msgid ""
 "Do you really know the song? Keep singing or imagining the music while the "
 "sound is muted. The music is still playing: you just can’t hear it!"
-msgstr "¿Realmente conoces la canción? Sigue cantando o imaginando la música mientras el sonido está silenciado. La música todavía está tocando ¡sólo no la puedes oír!"
+msgstr ""
+"¿Realmente conoces la canción? Sigue cantando o imaginando la música "
+"mientras el sonido está silenciado. La música todavía está tocando ¡sólo no "
+"la puedes oír!"
 
 #: experiment/rules/hooked.py:90 experiment/rules/huang_2022.py:167
 msgid ""
 "Was the music in the right place when the sound came back? Or did we jump to "
 "a different spot during the silence?"
-msgstr "¿La música estaba en el lugar correcto cuando volvió el sonido? O, ¿saltamos a otro lugar en la canción durante el silencio?"
+msgstr ""
+"¿La música estaba en el lugar correcto cuando volvió el sonido? O, ¿saltamos "
+"a otro lugar en la canción durante el silencio?"
 
 #: experiment/rules/hooked.py:167
 msgid "Bonus Rounds"
@@ -806,10 +823,6 @@ msgstr ""
 #: experiment/rules/huang_2022.py:140
 msgid "Ready to experiment"
 msgstr ""
-
-#: experiment/rules/huang_2022.py:153
-msgid "How to Play"
-msgstr "Cómo jugar"
 
 #: experiment/rules/huang_2022.py:176
 msgid ""
@@ -2616,7 +2629,7 @@ msgstr ""
 msgid "All players' top 3 favourite songs:"
 msgstr ""
 
-#: experiment/views.py:61
+#: experiment/views.py:62
 msgid "Loading"
 msgstr ""
 

@@ -4,6 +4,7 @@
     identifier: 'yes'
     text: Yes
     text_nl: Ja
+    text_es: Sí
     text_zh_hans: 是
     text_de: Ja
     index: 0
@@ -14,6 +15,7 @@
     identifier: 'no'
     text: No
     text_nl: Nee
+    text_es: No
     text_zh_hans: 否
     text_de: Nein
     index: 1
@@ -24,6 +26,7 @@
     identifier: 'no'
     text: No
     text_nl: Nee
+    text_es: No
     text_zh_hans: 否
     text_de: Nein
     index: 0
@@ -33,6 +36,7 @@
   fields:
     identifier: 'yes'
     text: Yes
+    text_es: Sí
     text_nl: Ja
     text_zh_hans: 是
     text_de: Ja
