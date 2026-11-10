@@ -34,13 +34,10 @@ def update_choices():
                 try:
                     choice.save()
                 except IntegrityError:
-                    existing = Choice.objects.get(
+                    Choice.objects.get(
                         identifier=choice.identifier, choicelist=choice.choicelist
-                    )
-                    existing.text = choice.text
-                    existing.index = choice.index
-                    existing.color = choice.color
-                    existing.save()
+                    ).delete()
+                    choice.save()
 
 
 def update_questions():

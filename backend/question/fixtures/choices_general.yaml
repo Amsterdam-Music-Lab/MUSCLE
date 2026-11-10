@@ -4,6 +4,7 @@
     identifier: 'yes'
     text: Yes
     text_nl: Ja
+    text_es: Sí
     text_zh_hans: 是
     text_de: Ja
     index: 0
@@ -14,6 +15,7 @@
     identifier: 'no'
     text: No
     text_nl: Nee
+    text_es: No
     text_zh_hans: 否
     text_de: Nein
     index: 1
@@ -24,6 +26,7 @@
     identifier: 'no'
     text: No
     text_nl: Nee
+    text_es: No
     text_zh_hans: 否
     text_de: Nein
     index: 0
@@ -33,6 +36,7 @@
   fields:
     identifier: 'yes'
     text: Yes
+    text_es: Sí
     text_nl: Ja
     text_zh_hans: 是
     text_de: Ja
@@ -156,6 +160,7 @@
     text: Completely Disagree
     text_en: Completely Disagree
     text_nl: Helemaal mee oneens
+    text_es: Completamente en desacuerdo
     text_zh_hans: 完全不同意
     text_de: Stimme ganz und gar nicht zu
     text_ja: 全くあてはまらない
@@ -167,6 +172,7 @@
     text: Strongly Disagree
     text_en: Strongly Disagree
     text_nl: Zeer mee oneens
+    text_es: Muy en desacuerdo
     text_zh_hans: 非常不同意
     text_de: Stimme nicht zu
     text_ja: ほとんどあてはまらない
@@ -178,6 +184,7 @@
     text: Disagree
     text_en: Disagree
     text_nl: Mee oneens
+    text_es: En desacuerdo
     text_zh_hans: 不同意
     text_de: Stimme eher nicht zu
     text_ja: あまりあてはまらない
@@ -189,6 +196,7 @@
     text: Neither Agree nor Disagree
     text_en: Neither Agree nor Disagree
     text_nl: Niet mee eens of oneens
+    text_es: Ni de acuerdo ni en desacuerdo
     text_zh_hans: 即不同意也不反对
     text_de: Weder noch
     text_ja: どちらでもない
@@ -200,6 +208,7 @@
     text: Agree
     text_en: Agree
     text_nl: Mee eens
+    text_es: De acuerdo
     text_zh_hans: 同意
     text_de: Stimme eher zu
     text_ja: わりとあてはまる
@@ -211,6 +220,7 @@
     text: Strongly Agree
     text_en: Strongly Agree
     text_nl: Zeer mee eens
+    text_es: Muy de acuerdo
     text_zh_hans: 非常同意
     text_de: Stimme zu
     text_ja: よくあてはまる
@@ -222,6 +232,7 @@
     text: Completely Agree
     text_en: Completely Agree
     text_nl: Helemaal mee eens
+    text_es: Completamente de acuerdo
     text_zh_hans: 完全同意
     text_de: Stimme voll und ganz zu
     text_ja: 実によくあてはまる
@@ -231,36 +242,42 @@
   fields:
     identifier: '1'
     text: Never
+    text_es: Nunca
     index: 0
     choicelist: LIKERT_FREQUENCY_6
 - model: question.choice
   fields:
     identifier: '2'
     text: Not very often
+    text_es: No muy a menudo
     index: 1
     choicelist: LIKERT_FREQUENCY_6
 - model: question.choice
   fields:
     identifier: '3'
     text: Occasionally
+    text_es: Ocasionalmente
     index: 2
     choicelist: LIKERT_FREQUENCY_6
 - model: question.choice
   fields:
     identifier: '4'
     text: Sometimes
+    text_es: A veces
     index: 3
     choicelist: LIKERT_FREQUENCY_6
 - model: question.choice
   fields:
     identifier: '5'
     text: Very often
+    text_es: Muy a menudo
     index: 4
     choicelist: LIKERT_FREQUENCY_6
 - model: question.choice
   fields:
     identifier: '6'
     text: Always
+    text_es: Siempre
     index: 5
     choicelist: LIKERT_FREQUENCY_6
 - model: question.choice

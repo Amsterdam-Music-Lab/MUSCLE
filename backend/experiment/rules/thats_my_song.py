@@ -15,7 +15,7 @@ from .hooked import Hooked
 
 class ThatsMySong(Hooked):
     ID = "THATS_MY_SONG"
-    consent_file = ""
+    default_consent_file = ""
 
     def __init__(self):
         self.question_lists = [

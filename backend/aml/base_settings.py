@@ -133,6 +133,7 @@ USE_L10N = True
 LANGUAGES = [
     ("en", _("English")),
     ("nl", _("Dutch")),
+    ("es", _("Spanish")),
     ("pt", _("Portuguese")),
     ("zh-hans", _("Chinese")),
     ("tr", _("Turkish")),

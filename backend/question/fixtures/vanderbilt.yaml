@@ -2,6 +2,7 @@
   pk: VB_01
   fields:
     text: I can recognize a piece of music after hearing just a few notes.
+    text_es: Puedo reconocer una pieza musical después de escuchar unas pocas notas.
     explainer: Please tell us how often this happens to you
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -10,6 +11,7 @@
   pk: VB_02
   fields:
     text: My musical ability is important to my identity.
+    text_es: Mis habilidades musicales son parte importante de mi identidad.
     explainer: Please tell us how much you agree
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -18,6 +20,7 @@
   pk: VB_03
   fields:
     text: Listening to music makes me feel less alone.
+    text_es: La música me hace compañía cuando estoy solo.
     explainer: Please tell us how much you agree
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -26,6 +29,7 @@
   pk: VB_04
   fields:
     text: I can tap in time with a musical beat.
+    text_es: Puedo seguir el ritmo de la música con el pie.
     explainer: Please tell us how much you agree
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -35,6 +39,7 @@
   fields:
     text: When I feel anxious, listening to music helps me see things in a more
       positive light.
+    text_es: Cuando siento ansiedad, escuchar música me ayuda a ver las cosas de manera más positiva.
     explainer: Please tell us how much you agree
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -43,6 +48,7 @@
   pk: VB_06
   fields:
     text: Making music helps me to socially connect with others.
+    text_es: Hacer música me ayuda a conectar con otras personas.
     explainer: Please tell us how much you agree
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
