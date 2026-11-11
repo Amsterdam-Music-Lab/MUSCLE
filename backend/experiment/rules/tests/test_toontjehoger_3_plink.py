@@ -65,6 +65,47 @@ class TestToontjeHoger3Plink(TestCase):
         score = rules.calculate_score(result, {})
         self.assertEqual(score, rules.SCORE_EXTRA_2_CORRECT)
 
+    def test_get_last_results(self):
+        block = Block.objects.get(identifier="th_plink")
+        playlist = Playlist.objects.get(name="Toontje Hoger 3 - Plink")
+        playlist._update_sections()
+        session = Session.objects.create(
+            block=block, participant=Participant.objects.create(), playlist=playlist
+        )
+        rules = block.get_rules()
+        plink_result = Result.objects.create(
+            question_identifier="plink",
+            session=session,
+            expected_response=playlist.section_set.first().pk,
+            given_response=playlist.section_set.first().pk + 1,
+        )
+        self.create_extra_results(session)
+        results = rules.get_last_results(session)
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].question_identifier, "plink")
+        plink_result.given_response = "SKIPPED"
+        plink_result.save()
+        self.create_extra_results(session)
+        results = rules.get_last_results(session)
+        self.assertEqual(len(results), 2)
+        question_ids = [r.question_identifier for r in results]
+        self.assertIn("era", question_ids)
+        self.assertIn("mood", question_ids)
+
+    def create_extra_results(self, session: Session):
+        Result.objects.create(
+            question_identifier="mood",
+            session=session,
+            expected_response="vrolijk",
+            given_response="droevig",
+        )
+        Result.objects.create(
+            question_identifier="era",
+            session=session,
+            expected_response="20s",
+            given_response="10s",
+        )
+
 
 class TestToontjeHogerKids3Plink(TestCase):
     fixtures = ["toontjehoger_kids"]

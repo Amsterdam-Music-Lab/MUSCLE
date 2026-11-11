@@ -76,7 +76,7 @@ const FeedbackForm = ({
                             <Button
                                 {...skipButton}
                                 onClick={() => {
-                                    submitResult();
+                                    submitResult("SKIPPED");
                                 }}
                                 className={"=col-4 align-self-start"
                                 }
