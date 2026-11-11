@@ -34,7 +34,7 @@ class Form(BaseAction):
         self,
         form: List[Any],
         submit_button: Optional[Button] = Button(_("Submit"), 'colorPrimary'),
-        skip_button: Optional[Button] = Button(_("Skip"), 'colorGrey'),
+        skip_button: Optional[Button] = None,
     ) -> None:
         self.form = form
         self.submit_button = submit_button
