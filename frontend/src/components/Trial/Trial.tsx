@@ -47,7 +47,7 @@ const Trial = (props: TrialAction & SharedActionProps) => {
 
     // Create result data
     const makeResult = useCallback(
-        async (hasTimedOut?: boolean) => {
+        async (specialSubmit?: "TIMEOUT"|"SKIPPED") => {
 
             // Prevent multiple submissions
             if (submitted.current) {
@@ -62,8 +62,8 @@ const Trial = (props: TrialAction & SharedActionProps) => {
 
             const { form = [] } = feedbackForm;
 
-            if (hasTimedOut) {
-                form.map((formElement) => (formElement.value = "TIMEOUT"));
+            if (specialSubmit) {
+                form.map((formElement) => (formElement.value = specialSubmit));
             }
 
             if (feedbackForm.skipButton) {
@@ -123,11 +123,11 @@ const Trial = (props: TrialAction & SharedActionProps) => {
                 if (responseTime) {
                     // create timeout result after responseTime
                     setTimeout(() => {
-                        makeResult(true);
+                        makeResult("TIMEOUT");
                     }, responseTime * 1000);
                 }
             } else {
-                makeResult(true);
+                makeResult("TIMEOUT");
             }
         }
         setFormActive(true);

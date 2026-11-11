@@ -106,13 +106,14 @@ class ToontjeHoger3Plink(BaseRules):
             logger.error("No last result")
             return ""
 
-        if last_results[2].given_response != "":
-            # delete other results, because these questions weren't asked
-            last_results[0].delete()
-            last_results[1].delete()
-            return [last_results[2]]
+        if last_results[2].given_response == "SKIPPED":
+            # the plink question was skipped
+            return last_results[:2]
 
-        return last_results[:2]
+        # if last_results[2] (plink question) was answered, the other two questions weren't asked
+        last_results[0].delete()
+        last_results[1].delete()
+        return [last_results[2]]
 
     def get_score_view(self, session):
         last_results = self.get_last_results(session)
@@ -145,19 +146,28 @@ class ToontjeHoger3Plink(BaseRules):
             emotion = section.group
 
             # Construct final feedback message
-            question_part = "Het nummer komt uit de {} en de emotie is {}.".format(time_period, emotion)
+            question_part = "Het nummer komt uit de {} en de emotie is {}.".format(
+                time_period, emotion
+            )
             section_part = "Je hoorde {} van {}.".format(
                 non_breaking_spaces(section.song_name()),
                 non_breaking_spaces(section.artist_name()),
             )
 
             # The \n results in a linebreak
-            feedback = "{} {} \n {}".format(feedback_prefix, question_part, section_part)
+            feedback = "{} {} \n {}".format(
+                feedback_prefix, question_part, section_part
+            )
 
         config = {"show_total_score": True}
         round_number = session.get_rounds_passed()
-        score_title = "Ronde %(number)d / %(total)d" % {"number": round_number, "total": session.block.rounds}
-        return Score(session, config=config, feedback=feedback, score=score, title=score_title)
+        score_title = "Ronde %(number)d / %(total)d" % {
+            "number": round_number,
+            "total": session.block.rounds,
+        }
+        return Score(
+            session, config=config, feedback=feedback, score=score, title=score_title
+        )
 
     def get_plink_round(self, session: Session, present_score=False):
         next_round = []
@@ -178,7 +188,9 @@ class ToontjeHoger3Plink(BaseRules):
         trials = self.get_plink_trials(session, section, choices, expected_response)
         return [*next_round, *trials]
 
-    def get_plink_trials(self, session: Session, section: Section, choices: dict, expected_response: str) -> list:
+    def get_plink_trials(
+        self, session: Session, section: Section, choices: dict, expected_response: str
+    ) -> list:
         plink_trials = []
         question1 = AutoCompleteQuestion(
             identifier="plink",
@@ -196,7 +208,7 @@ class ToontjeHoger3Plink(BaseRules):
                     skip_button=Button("Ik weet het niet", "colorGrey"),
                     submit_button=Button("Volgende"),
                 ),
-                break_round_on={"NOT": [""]},
+                break_round_on={"NOT": ["SKIPPED"]},
             )
         )
         json_data = session.json_data
@@ -215,7 +227,10 @@ class ToontjeHoger3Plink(BaseRules):
             )
             plink_trials.append(extra_questions_intro)
 
-        extra_trials = [self.get_era_question(session, section), self.get_emotion_question(session, section)]
+        extra_trials = [
+            self.get_era_question(session, section),
+            self.get_emotion_question(session, section),
+        ]
 
         return [*plink_trials, *extra_trials]
 
@@ -266,7 +281,7 @@ class ToontjeHoger3Plink(BaseRules):
         if result.question_identifier == "plink":
             return (
                 self.SCORE_MAIN_CORRECT
-                if int(result.expected_response) == int(result.given_response)
+                if str(result.expected_response) == str(result.given_response)
                 else self.SCORE_MAIN_WRONG
             )
         elif result.question_identifier == "era":
