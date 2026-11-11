@@ -1,5 +1,6 @@
 from django.test import TestCase
 
+from experiment.actions.button import Button
 from experiment.actions.form import Form
 from experiment.actions.question import NumberQuestion
 
@@ -13,10 +14,16 @@ class FormTest(TestCase):
     def test_initialization(self):
         self.assertEqual(len(self.form.form), 1)
         self.assertEqual(self.form.submit_button.label, 'Submit')
-        self.assertEqual(self.form.skip_button.label, 'Skip')
+        self.assertIsNone(self.form.skip_button)
+
+    def test_initialization_with_skip_button(self):
+        form = Form(
+            form=self.questions, skip_button=Button(label="Skipping", color="colorGrey")
+        )
+        self.assertEqual(form.skip_button.label, "Skipping")
 
     def test_action_method(self):
         action_result = self.form.action()
         self.assertIn('form', action_result)
         self.assertEqual(len(action_result['form']), 1)
-        self.assertIsNotNone(action_result.get("skipButton"))
+        self.assertIsNone(action_result.get("skipButton"))
