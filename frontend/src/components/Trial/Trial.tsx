@@ -123,11 +123,11 @@ const Trial = (props: TrialAction & SharedActionProps) => {
                 if (responseTime) {
                     // create timeout result after responseTime
                     setTimeout(() => {
-                        makeResult(true);
+                        makeResult("TIMEOUT");
                     }, responseTime * 1000);
                 }
             } else {
-                makeResult(true);
+                makeResult("TIMEOUT");
             }
         }
         setFormActive(true);
