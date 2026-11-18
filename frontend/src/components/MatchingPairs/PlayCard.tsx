@@ -16,7 +16,7 @@ interface PlayCardProps {
 const PlayCard = ({ onClick, registerUserClicks, section, showAnimation }: PlayCardProps) => {
     const theme = useBoundStore((state) => state.theme);
     const cardColor = section.color || 'colorPrimary';
-    const cardColorValue = `hsl(from ${theme[cardColor]} h s 35%)`;
+    const cardColorValue = `${theme[cardColor]}`;
     
     const getImgSrc = (url: string) => {
         if (url.startsWith("http")) {

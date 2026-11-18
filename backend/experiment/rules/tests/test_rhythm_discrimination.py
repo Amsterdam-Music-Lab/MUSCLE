@@ -148,7 +148,6 @@ class RhythmDiscriminationTest(TestCase):
                 "identifier",
                 "className",
                 "rounds",
-                "playlists",
                 "loadingText",
                 "sessionId",
             }

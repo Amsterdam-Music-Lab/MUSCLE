@@ -11,16 +11,10 @@ export default interface Block {
     theme: Theme;
     className: string;
     rounds: number;
-    playlists: Playlist[];
     feedbackInfo: FeedbackInfo;
     sessionId: number;
     experimentIdentifier: string;
     loadingText: string;
-}
-
-export interface Playlist {
-    id: string;
-    name: string;
 }
 
 export interface FeedbackInfo {

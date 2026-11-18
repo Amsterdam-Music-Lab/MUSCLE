@@ -24,10 +24,14 @@ class Likert(BaseRules):
 
     def get_intro_explainer(self, session: Session):
         """Explain the game"""
-        explainer_identifier = session.block.rules_config.get('intro_explainer')
-        if explainer_identifier:
-            return Explainer.objects.get(identifier=explainer_identifier).convert_to_action()
-        else:
+        explainer_identifier = session.block.rules_config.get(
+            "intro_explainer", "explainer_fallback_dummy"
+        )
+        try:
+            return Explainer.objects.get(
+                identifier=explainer_identifier
+            ).convert_to_action()
+        except:
             return ExplainerAction(
                 instruction="Default question",
                 steps=[
@@ -67,21 +71,19 @@ class Likert(BaseRules):
             return [self.get_trial(session, total_rounds)]
 
     def get_trial(self, session, total_rounds):
-        configured_question_identifier = session.block.rules_config.get(
-            "question_identifier"
+        question_identifier = session.block.rules_config.get(
+            "question_identifier", "question_fallback_dummy"
         )
-        question_identifier = configured_question_identifier or "likert"
         played_sections = session.result_set.filter(
             question_identifier=question_identifier
         ).values_list('section__id', flat=True)
         section = session.playlist.get_section(exclude={'pk__in': played_sections})
         playback = Autoplay(sections=[PlaybackSection(section)], show_animation=False)
-        question_identifier = configured_question_identifier or "likert"
-        if configured_question_identifier:
+        try:
             question = Question.objects.get(
                 identifier=question_identifier
             ).convert_to_action()
-        else:
+        except:
             question = TextRangeQuestion(
                 identifier=question_identifier,
                 explainer=_("Rate from lowest to highest"),

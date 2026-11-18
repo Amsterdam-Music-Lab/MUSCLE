@@ -101,6 +101,7 @@
   fields:
     text: When were you born?
     text_zh_hans: 您的出生日期是？
+    text_es: ¿Cuando naciste?
     explainer: ''
     type: RadiosQuestion
     profile_scoring_rule: ''

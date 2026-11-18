@@ -39,7 +39,6 @@ class BeatAlignmentRuleTest(TestCase):
                 "identifier",
                 "className",
                 "rounds",
-                "playlists",
                 "loadingText",
                 "sessionId",
             }

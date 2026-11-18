@@ -1,5 +1,3 @@
-import { RefObject } from "react";
-
 import Social from "@/types/Social";
 import Block, { FeedbackInfo } from "@/types/Block";
 import IButton from  "@/types/Button";
@@ -118,10 +116,15 @@ export interface FinalView {
   };
 }
 
+export interface Playlist {
+    id: number;
+    name: string;
+}
+
 export interface PlaylistAction {
   view: "PLAYLIST";
   instruction: string;
-  playlist: RefObject<string>;
+  playlists: Playlist[];
 }
 
 export interface RedirectAction {

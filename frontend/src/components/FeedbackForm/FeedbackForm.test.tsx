@@ -5,7 +5,7 @@ import { QuestionViews } from "@/types/Question";
 
 import FeedbackForm from "./FeedbackForm";
 
-vi.mock('../../util/stores', () => ({
+vi.mock('@/util/stores', () => ({
     __esModule: true,
     default: (fn: (state: any) => any) => {
         const state = {
