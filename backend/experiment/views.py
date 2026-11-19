@@ -2,6 +2,7 @@ import json
 import logging
 from typing import Union
 
+from django.conf import settings
 from django.http import Http404, HttpRequest, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.translation import activate, gettext_lazy as _, get_language

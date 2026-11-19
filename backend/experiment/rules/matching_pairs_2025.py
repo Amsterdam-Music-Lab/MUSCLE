@@ -1,7 +1,7 @@
 from os.path import split
 import random
 
-
+from django.db.models import Avg, Sum
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 
@@ -9,9 +9,7 @@ from result.models import Result
 from section.models import Section
 from session.models import Session
 
-from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalView
 from experiment.actions.playback import MatchingPairs, PlaybackSection
 from experiment.actions.trial import Trial
 from experiment.actions.types import FeedbackInfo
@@ -25,6 +23,7 @@ class MatchingPairs2025(MatchingPairsGame):
 
     ID = "MATCHING_PAIRS_2025"
     num_pairs = 8
+    cutoff = 30  # report no lower than this percentile to participantss
 
     def feedback_info(self) -> FeedbackInfo:
         feedback_body = render_to_string(
@@ -70,6 +69,65 @@ class MatchingPairs2025(MatchingPairsGame):
             return actions
 
         return self.get_final_view(session)
+
+    def get_final_statistics(self, session: Session) -> dict:
+        """The final statistics differ depending on whether the timeline is completed"""
+        played_sessions = session.participant.session_set.filter(
+            finished_at__isnull=False,
+            block__in=session.block.phase.blocks.all(),
+        )
+        n_sessions = played_sessions.count()
+        timeline_sessions = session.block.experiment.timeline.total_sessions
+        if n_sessions % timeline_sessions == 0:
+            # the timeline has been completed, show special feedback
+            accumulative_percentile = (
+                session.participant.percentile_rank_accumulative_score()
+            )
+
+            mean_score = played_sessions.aggregate(Avg("final_score"))[
+                "final_score__avg"
+            ]
+            session_total = played_sessions.aggregate(Sum("final_score"))[
+                "final_score__sum"
+            ]
+            session_average_temporal = played_sessions.filter(
+                json_data__icontains="TD"
+            ).aggregate(Avg("final_score"))["final_score__avg"]
+            session_average_spectral = played_sessions.filter(
+                json_data__icontains="SD"
+            ).aggregate(Avg("final_score"))["final_score__avg"]
+            strongest_domain = (
+                "spectral"
+                if session_average_spectral > session_average_temporal
+                else (
+                    "temporal"
+                    if session_average_spectral < session_average_temporal
+                    else "balanced"
+                )
+            )
+            statistics = {
+                "mean_score": mean_score,
+                "total_score": session_total,
+                "n_sessions": n_sessions,
+                "accumulative_percentile": max(
+                    self.cutoff, round(accumulative_percentile)
+                ),
+                "strongest_domain": strongest_domain,
+            }
+            rank = session.block.ranking.get_active_rank(statistics).label
+            return {"rank": rank, **statistics}
+        else:
+            blocks = session.block.experiment.associated_blocks()
+            condition = session.json_data.get('condition')
+            difficulty = session.json_data.get('difficulty')
+            filter_conditions = {
+                'block__in': blocks,
+                'json_data__contains': {
+                    'condition': condition,
+                    'difficulty': difficulty,
+                },
+            }
+            return {"percentile": session.percentile_rank(filter_conditions)}
 
     def get_short_explainer(self):
         return Explainer(_("Click to start!"), steps=[])

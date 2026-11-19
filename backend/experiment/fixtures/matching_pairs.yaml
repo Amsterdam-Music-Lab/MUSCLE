@@ -15,8 +15,22 @@
     index: 0
     identifier: mpairs
     rules: MATCHING_PAIRS
+    ranking: tunetwins-ranking
+    final: matching-pairs-final
     playlists:
     - 60
+- model: action.final
+  pk: matching-pairs-final
+  fields:
+    title: Score
+- model: action.feedbacktext
+  pk: 60
+  fields:
+    text: Can you score higher than your friends and family? Share and let them try!"
+- model: action.finalfeedback
+  fields:
+    final: matching-pairs-final
+    feedback_text: 60
 - model: section.playlist
   pk: 60
   fields:

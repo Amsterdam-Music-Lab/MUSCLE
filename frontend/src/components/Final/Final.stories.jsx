@@ -46,12 +46,12 @@ function getFinalData(overrides = {}) {
         timeline: {
             playedSessions: 2,
             steps: [
-                "",
-                "",
-                "star",
-                "",
-                "",
-                "star",
+                {},
+                {},
+                {image: "star"},
+                {},
+                {},
+                {image: "star"},
             ]
         },
         button: {

@@ -12,7 +12,7 @@ import { TimelineConfig } from "@/types/timeline.ts";
 
 describe("Timeline component", () => {
   const timeline = {
-    steps: ["", "", "str", ""],
+    steps: [{}, {}, {image: "cup"}, {}],
     playedSessions: 2,
     dotSize: 10,
     trophySize: 20,

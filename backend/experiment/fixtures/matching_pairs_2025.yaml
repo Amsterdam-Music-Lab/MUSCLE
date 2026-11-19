@@ -9,29 +9,72 @@
     experiment: 61
     total_sessions: 12
 - model: experiment.reward
-  pk: 61
+  fields:
+    timeline: 61
+    session_number: 1
+    text: "Nice start! Your first star is 2 games away."
+- model: experiment.reward
+  fields:
+    timeline: 61
+    session_number: 2
+    text: "One more for your first star!"
+- model: experiment.reward
   fields:
     timeline: 61
     session_number: 3
     image: "star"
+    text: "First star earned! On to the second."
+- model: experiment.reward
+  fields:
+    timeline: 61
+    session_number: 4
+    text: "Cruising along — next star in 2 games."
+- model: experiment.reward
+  fields:
+    timeline: 61
+    session_number: 5
+    text: "One more for star number two!"
 - model: experiment.reward
   pk: 62
   fields:
     timeline: 61
     session_number: 6
-    image: "star" 
+    image: "star"
+    text: "Second star! You're halfway there."
+- model: experiment.reward
+  fields:
+    timeline: 61
+    session_number: 7
+    text: "Two-thirds done — the final star awaits."
+- model: experiment.reward
+  fields:
+    timeline: 61
+    session_number: 8
+    text: "So close to the third star!"
 - model: experiment.reward
   pk: 63
   fields:
     timeline: 61
     session_number: 9
     image: "star"
+    text: "All three stars earned — now finish strong!"
+- model: experiment.reward
+  fields:
+    timeline: 61
+    session_number: 10
+    text: "Two games left. You've got this!"
+- model: experiment.reward
+  fields:
+    timeline: 61
+    session_number: 11
+    text: "Final game — your title is waiting!"
 - model: experiment.reward
   pk: 64
   fields:
     timeline: 61
     session_number: 12
-    image: "cup"  
+    image: "cup"
+    text: "All experiments complete. Thank you for making a real contribution to music science!"
 - model: experiment.phase
   pk: 61
   fields:
@@ -148,6 +191,8 @@
     experiment: 61
     index: 0
     identifier: tt-ch
+    final: tunetwins-final
+    ranking: tunetwins-ranking
     rules: MATCHING_PAIRS_2025
     playlists:
     - 62
@@ -158,6 +203,8 @@
     experiment: 61
     index: 0
     identifier: tt-rc
+    final: tunetwins-final
+    ranking: tunetwins-ranking
     rules: MATCHING_PAIRS_2025
     playlists:
     - 63
@@ -168,9 +215,138 @@
     experiment: 61
     index: 0
     identifier: tt-tv
+    final: tunetwins-final
+    ranking: tunetwins-ranking
     rules: MATCHING_PAIRS_2025
     playlists:
     - 64
+- model: action.button
+  pk: 61
+  fields:
+    label: Keep playing!
+- model: action.final
+  pk: tunetwins-final
+  fields:
+    button: 61
+- model: action.feedbacktext
+  pk: 62
+  fields:
+    index: 0
+    text: You outperformed {accumulative_percentile}% of all the participants
+    text_zh_hans: 您的表现超过了 {accumulative_percentile}% 的参与者
+- model: action.finalfeedback
+  fields:
+    final: tunetwins-final
+    feedback_text: 62
+- model: action.feedbacktext
+  pk: 63
+  fields:
+    index: 0
+    text: Congrats! You did better than {percentile}% of players at this level
+    text_zh_hans: 祝贺您！您的表现超过了此级别{percentile}%的玩家
+- model: action.finalfeedback
+  fields:
+    final: tunetwins-final
+    feedback_text: 63
+- model: action.feedbacktext
+  pk: 64
+  fields:
+    index: 1
+    text: |
+      ### Result Analysis
+      Your mean score is **{mean_score}** points ({total_score} points / {n_sessions} boards).
+      The average score was **36.25** for Dutch participants and **44.86** for US participants.
+    text_zh_hans: |
+      您的音乐识别平均得分为 **{mean_score}** 分（共 {total_score} 分/{n_sessions} 局）。
+      作为参考，荷兰参与者的平均分为 **36.25**，美国参与者的平均分为 **44.86**。
+- model: action.finalfeedback
+  fields:
+    final: tunetwins-final
+    feedback_text: 64
+- model: action.condition
+  fields:
+    metric: rank
+    operator: eq
+    value: diamond
+- model: action.feedbacktext
+  pk: 65
+  fields:
+    condition: rank-eq-diamond
+    index: 2
+    text: "**You demonstrated exceptional music recognition ability!**"
+    text_zh_hans: "**你的音乐识别表现非常优异！**"
+- model: action.finalfeedback
+  fields:
+    final: tunetwins-final
+    feedback_text: 65
+- model: action.condition
+  fields:
+    metric: rank
+    operator: eq
+    value: gold
+- model: action.feedbacktext
+  pk: 66
+  fields:
+    condition: rank-eq-gold
+    index: 3
+    text: "**Your music recognition is stronger than most!**"
+    text_zh_hans: "**你的音乐识别表现优于大多数人！**"
+- model: action.finalfeedback
+  fields:
+    final: tunetwins-final
+    feedback_text: 66
+- model: action.condition
+  fields:
+    metric: rank
+    operator: eq
+    value: silver
+- model: action.feedbacktext
+  pk: 67
+  fields:
+    condition: rank-eq-silver
+    index: 4
+    text: "**Your music recognition is above average — well done!**"
+    text_zh_hans: "**你的音乐识别表现良好，高于平均水平！**"
+    alternative_text: "**Your music recognition has room to grow — and that's completely normal when listening to unfamiliar music!**"
+    alternative_text_zh_hans: "**发展级\t您的音乐识别表现还有成长空间，这在不熟悉音乐的情况下完全正常！**"
+- model: action.finalfeedback
+  fields:
+    final: tunetwins-final
+    feedback_text: 67
+- model: action.condition
+  fields:
+    metric: strongest_domain
+    operator: eq
+    value: spectral
+- model: action.feedbacktext
+  pk: 68
+  fields:
+    condition: strongest_domain-eq-spectral
+    index: 5
+    text: "*In addition, your pitch recognition performance is stronger than your rhythm recognition performance — that's the most common pattern we see!*"
+    text_zh_hans: "*此外，您的音调识别表现优于节奏识别表现，这与大部分参与者的识别模式相一致。*"
+- model: action.finalfeedback
+  fields:
+    final: tunetwins-final
+    feedback_text: 68
+- model: action.condition
+  fields:
+    metric: strongest_domain
+    operator: eq
+    value: temporal
+- model: action.feedbacktext
+  pk: 69
+  fields:
+    condition: strongest_domain-eq-temporal
+    index: 6
+    text: "*In addition, your rhythm recognition performance is stronger than your pitch recognition performance — that's less common, and suggests you have a unique way of processing music!*"
+    text_zh_hans: "*此外，您的节奏识别表现优于音调识别表现，这与大部分参与者的识别模式不同，您在聆听和加工音乐信号方面很特别哦！*"
+    alternative_text: "*In addition, your pitch and rhythm recognition performance is equally balanced — a rare and well-rounded profile!*"
+    alternative_text_zh_hans: "*此外，您的音调识别表现和节奏识别表现旗鼓相当——这是非常少见且均衡的识别模式！*"
+- model: action.finalfeedback
+  fields:
+    final: tunetwins-final
+    feedback_text: 69
 - model: section.playlist
   pk: 62
   fields:

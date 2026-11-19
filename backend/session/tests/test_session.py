@@ -61,7 +61,7 @@ class SessionTest(TestCase):
         )
         rank = finished_session.percentile_rank({'finished_at__isnull': False})
         self.assertEqual(rank, 75.0)
-        rank = finished_session.percentile_rank({})
+        rank = finished_session.percentile_rank()
         self.assertEqual(rank, 62.5)
 
     def test_rank(self):

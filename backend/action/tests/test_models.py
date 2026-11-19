@@ -1,13 +1,22 @@
 from django.test import TestCase
 
-from action.models import Explainer, Final, Step
+from action.models import Condition, Explainer, Final, Step
 from experiment.actions.explainer import Explainer as ExplainerAction, Step as StepAction
 from experiment.models import Block
 from participant.models import Participant
 from session.models import Session
 
 
-class ExplainerText(TestCase):
+class ConditionTest(TestCase):
+
+    def test_save_identifier(self):
+        condition = Condition.objects.create(
+            metric="fantasy_metric", operator="le", value=42
+        )
+        self.assertEqual(condition.identifier, "fantasy_metric-le-42")
+
+
+class ExplainerTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
@@ -36,7 +45,7 @@ class ExplainerText(TestCase):
 
 
 class FinalFeedbackTest(TestCase):
-    fixtures = ["eurovision_2020"]
+    fixtures = ["rankings", "eurovision_2020"]
 
     def setUp(self):
         block = Block.objects.get(identifier="eurovision_2021")
@@ -46,21 +55,21 @@ class FinalFeedbackTest(TestCase):
     def test_feedback_final_score_condition(self):
         final = Final.objects.first()
         self.session.save_json_data({"final_score": 0})
-        feedback_text = final.get_feedback_text(self.session)
+        feedback_text = final.get_feedback_text(self.session.json_data)
         self.assertIn("Too bad!", feedback_text)
         self.session.save_json_data({"final_score": 1})
-        feedback_text = final.get_feedback_text(self.session)
+        feedback_text = final.get_feedback_text(self.session.json_data)
         self.assertIn("Well done!", feedback_text)
 
     def test_feedback_n_sync_condition(self):
         final = Final.objects.first()
         self.session.save_json_data({"n_sync_guessed": 0})
-        feedback_text = final.get_feedback_text(self.session)
+        feedback_text = final.get_feedback_text(self.session.json_data)
         self.assertIn("You did not recognise any songs at first.", feedback_text)
         self.session.save_json_data(
             {"n_sync_guessed": 20, "n_sync_correct": 10, 'mean_reaction_time': 4.2}
         )
-        feedback_text = final.get_feedback_text(self.session)
+        feedback_text = final.get_feedback_text(self.session.json_data)
         self.assertIn(
             "It took you 4.2 s to recognise a song on average, and you correctly identified 10 out of the 20 songs you thought you knew.",
             feedback_text,

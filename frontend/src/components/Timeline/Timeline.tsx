@@ -36,12 +36,12 @@ export default function Timeline({
 
 	const currentStep = timeline.playedSessions % timeline.steps.length;
 
-	const renderRewardImage = (step: string, size: number) => {
+	const renderRewardImage = (image: string, size: number) => {
 		const props = {
 			size: size
 		}
 
-		switch(step) {
+		switch(image) {
 			case "cup":
 				return (<Cup {... props}/>);
 			case "star":
@@ -68,7 +68,7 @@ export default function Timeline({
 							}}
 						/>
 						<div className="aha__timeline-symbol" style={{backgroundColor: fillColor, border: `.2em solid hsl(from ${fillColor} h s 70%)`, width: size+10, height: size+10, top: margin, left: margin}}>
-							{renderRewardImage(step, size)}
+							{renderRewardImage(step.image || "", size)}
 						</div>
 						
 					</div>

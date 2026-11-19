@@ -41,8 +41,8 @@ const Final = (props: FinalView & SharedActionProps) => {
     } = props;
     const navigate = useNavigate();
 
-    const currentTimelineStep = timeline? timeline.playedSessions % timeline.steps.length : 0;
-    const trophyImage = timeline.steps[currentTimelineStep - 1];
+    const timelineIndex = timeline? timeline.playedSessions % timeline.steps.length : 0;
+    const timelineStep = timeline.steps[timelineIndex - 1];
 
 
     return (
@@ -50,7 +50,7 @@ const Final = (props: FinalView & SharedActionProps) => {
             {trophy && (
                 <Suspense>
                     <div className="aha__trophy-container text-center">
-                        {trophyImage && (
+                        {timelineStep.image && (
                             <Trophy className={trophy.className} label={trophy.label} image={trophyImage} />
                         )}
                         {trophy.description && (
@@ -75,6 +75,9 @@ const Final = (props: FinalView & SharedActionProps) => {
 
             {timeline && timeline.steps.length > 1 && (
                 <Suspense>
+                    {timelineStep.text &&
+                        <h5>timelineStep.text</h5>
+                    }
                     <Timeline timeline={timeline} />
                 </Suspense>
             )}

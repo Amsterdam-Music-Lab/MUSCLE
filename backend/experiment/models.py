@@ -116,12 +116,6 @@ class Experiment(models.Model):
 
         return Block.objects.filter(phase__experiment=self)
 
-    def get_active_rank(self, scores: dict):
-        if not self.ranking:
-            return None
-        else:
-            return self.ranking.get_active_rank(scores.get('accumulative_score'))
-
     def get_played_sessions(self, participant: Participant) -> models.QuerySet[Session]:
         """Retrieve the sessions of blocks in this experiment, played by this participant.
         Args:
@@ -181,7 +175,6 @@ class Timeline(models.Model):
         default=1,
         blank=True,
     )
-    # TO DO? Allow setting a custom image on the timeline bar for non-reward sessions
 
     def to_dict(self):
         return {
@@ -191,15 +184,16 @@ class Timeline(models.Model):
             ]
         }
 
-    def serialize_step(self, step_number: int) -> str:
-        eligible_rewards = self.rewards.filter(session_number=step_number)
-        if eligible_rewards:
-            return eligible_rewards.first().image
+    def serialize_step(self, step_number: int) -> dict:
+        eligible_reward = self.rewards.filter(session_number=step_number).first()
+        if eligible_reward:
+            return {"image": eligible_reward.image, "text": eligible_reward.text}
         else:
-            return ""
+            return {}
 
 
 REWARD_IMAGE_CHOICES = [
+    ("", "----"),
     ("cup", _("Cup")),
     ("star", _("Star")),
 ]
@@ -212,7 +206,12 @@ class Reward(models.Model):
     session_number = models.PositiveIntegerField(
         help_text=_("Show this reward after this many sessions"), default=1
     )
-    image = models.CharField(max_length=8, choices=REWARD_IMAGE_CHOICES, default="cup")
+    text = models.TextField(
+        blank=True,
+        default="",
+        help_text=_("(Optional) Enter text to encourage participants to play on"),
+    )
+    image = models.CharField(max_length=8, choices=REWARD_IMAGE_CHOICES, default="")
 
     class Meta:
         constraints = [
@@ -309,6 +308,14 @@ class Block(models.Model):
         related_name="blocks",
     )
 
+    final = models.ForeignKey(
+        "action.Final",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="blocks",
+    )
+
     rules_config = models.JSONField(
         default=dict,
         help_text=_("Extra settings to control the behaviour of the block's rules"),
@@ -352,12 +359,6 @@ class Block(models.Model):
         return self.playlists.count()
 
     playlist_count.short_description = "Playlists"
-
-    def get_active_rank(self, scores: dict):
-        if not self.ranking:
-            return None
-        else:
-            return self.ranking.get_active_rank(scores.get("percentile"))
 
     def get_rules(self) -> "experiment.rules.base.Base":
         """Get instance of rules class to be used for this session
@@ -480,19 +481,16 @@ class SocialMediaConfig(models.Model):
 class Ranking(models.Model):
     identifier = models.SlugField(primary_key=True, max_length=128)
 
-    def get_active_rank(
-        self, score: Optional[float], has_feedback: bool = False
-    ) -> Optional["experiment.Rank"]:
-        if not score:
-            score = -1
-        try:
-            return self.ranks.filter(cutoff__lte=score).order_by("-cutoff").first()
-        except:
-            return None
+    def get_active_rank(self, json_data: dict) -> Optional["experiment.Rank"]:
+        for rank_label in reversed(RANK_CHOICES):
+            ranks = self.ranks.filter(label=rank_label)
+            for rank in ranks:
+                if rank.condition.is_met(json_data):
+                    return rank
+        return Rank(ranking=self, label="plastic")
 
 
 RANK_CHOICES = [
-    (None, "----"),
     ("plastic", _("Plastic")),
     ("bronze", _("Bronze")),
     ("silver", _("Silver")),
@@ -504,18 +502,18 @@ RANK_CHOICES = [
 
 class Rank(models.Model):
     ranking = models.ForeignKey(Ranking, on_delete=models.CASCADE, related_name="ranks")
-    label = models.CharField(
-        max_length=8, choices=RANK_CHOICES, null=True, default=None
-    )
+    label = models.CharField(max_length=8, choices=RANK_CHOICES)
     description = models.TextField(
         blank=True,
         default="",
-        help_text=_("(Optional) Enter a description of the rank here"),
+        help_text=_(
+            "(Optional) Enter a description of the rank here, which will be shown in the Final view"
+        ),
     )
-    cutoff = models.FloatField(
-        help_text=_("The minimal relative score for which this rank is displayed"),
-        default=0.0,
-        blank=True,
+    condition = models.ForeignKey(
+        to="action.Condition",
+        help_text=_("The condition that needs to be met so this rank is displayed"),
+        on_delete=models.PROTECT,
     )
 
     def to_dict(self):

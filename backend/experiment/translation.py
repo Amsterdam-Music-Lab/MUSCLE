@@ -1,5 +1,5 @@
 from modeltranslation.translator import register, TranslationOptions
-from .models import Block, Experiment, Rank, Ranking
+from .models import Block, Experiment, Rank, Ranking, Reward
 
 @register(Block)
 class BlockTranslationOptions(TranslationOptions):
@@ -27,3 +27,8 @@ class RankingTranslationOptions(TranslationOptions):
 @register(Rank)
 class RankTranslationOptions(TranslationOptions):
     fields = ('description',)
+
+
+@register(Reward)
+class RewardTranslationOptions(TranslationOptions):
+    fields = ('text',)

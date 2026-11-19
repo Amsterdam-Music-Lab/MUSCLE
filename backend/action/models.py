@@ -3,9 +3,9 @@ import re
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django_markup.markup import formatter
 
-from experiment.actions.explainer import Explainer as ExplainerView, StepAction
-from experiment.models import Block
+from experiment.actions.explainer import Explainer as ExplainerView, Step as StepView
 from session.models import Session
 from theme.models import COLOR_CHOICES
 
@@ -38,7 +38,7 @@ class Step(models.Model):
         ordering = ["index"]
 
     def convert_to_action(self):
-        return StepAction(description=self.description)
+        return StepView(description=self.description)
 
 
 STATISTIC_VISUALIZATION_CHOICES = [
@@ -80,7 +80,6 @@ class Button(models.Model):
 
 class Final(models.Model):
     identifier = models.SlugField(max_length=64, primary_key=True)
-    block = models.OneToOneField(Block, on_delete=models.CASCADE)
     title = models.CharField(
         max_length=128,
         blank=True,
@@ -105,13 +104,18 @@ class Final(models.Model):
 
     def convert_to_view(self, session: Session) -> dict:
         scores = session.json_data.get("scores")
-        active_rank = self.block.get_active_rank(scores)
         active_experiment = self.block.experiment
         timeline = (
             active_experiment.timeline
             if hasattr(active_experiment, "timeline")
             else None
         )
+        active_rank = (
+            self.block.ranking.get_active_rank(session.json_data)
+            if hasattr(self.block, "ranking")
+            else None
+        )
+
         button = self.button or Button(label=_("Play again"))
         setattr(
             button,
@@ -124,7 +128,9 @@ class Final(models.Model):
             "visualization": self.visualization_type,
             "rank": active_rank.to_dict() if active_rank else None,
             "scores": scores,
-            "finalFeedbackText": self.get_feedback_text(session.json_data),
+            "finalFeedbackText": formatter(
+                self.get_feedback_text(session.json_data), filter_name="markdown"
+            ),
             "timeline": timeline.to_dict() if timeline else None,
             "button": (
                 button.to_dict()
@@ -152,7 +158,8 @@ OPERATOR_CHOICES = [
 ]
 
 
-class FeedbackCondition(models.Model):
+class Condition(models.Model):
+    identifier = models.CharField(max_length=100, primary_key=True, blank=True)
     metric = models.CharField(
         help_text=_(
             "The metric to check: make sure this key is present in the json_data"
@@ -167,8 +174,10 @@ class FeedbackCondition(models.Model):
         help_text=_("The value against which to compare. Can be string or integer.")
     )
 
-    def __str__(self):
-        return f"{self.metric} {self.get_operator_display()} {self.value}"
+    def save(self, **kwargs):
+        if not self.pk:
+            self.pk = f"{str(self.metric)}-{str(self.operator)}-{str(self.value)}"
+        super().save(**kwargs)
 
     def is_met(self, json_data: dict) -> bool:
         """check if the actual value of the metric saved on the session meets the condition"""
@@ -195,7 +204,7 @@ class FeedbackText(models.Model):
         ),
     )
     condition = models.ForeignKey(
-        FeedbackCondition, null=True, blank=True, on_delete=models.SET_NULL
+        Condition, null=True, blank=True, on_delete=models.SET_NULL
     )
     text = models.TextField(
         help_text=_(
@@ -214,6 +223,11 @@ class FeedbackText(models.Model):
         ordering = ["index"]
 
     def get_feedback_text(self, json_data: dict) -> str:
+        """get the feedback text, optionally based on conditions
+        replace {statistic_name} with json_data[statistic_name]
+        Return empty string if any statistic is missing in json_data
+        """
+
         if self.condition:
             if self.condition.is_met(json_data):
                 feedback_text = str(self.text)
@@ -221,11 +235,14 @@ class FeedbackText(models.Model):
                 feedback_text = str(self.alternative_text)
         else:
             feedback_text = str(self.text)
-        replacements = re.findall(r"\{\w+\}", feedback_text)
+        if not feedback_text:
+            return ""
+        replacements = list(set(re.findall(r"\{\w+\}", feedback_text)))
         for rep in replacements:
-            feedback_text = feedback_text.replace(
-                rep, str(json_data.get(rep.strip("{}"), ""))
-            )
+            statistic = json_data.get(rep.strip("{}"))
+            if not statistic:
+                return ""
+            feedback_text = feedback_text.replace(rep, str(statistic))
         return feedback_text
 
 

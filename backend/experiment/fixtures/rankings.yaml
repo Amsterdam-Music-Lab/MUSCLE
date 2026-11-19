@@ -1,36 +1,145 @@
+- model: action.condition
+  pk: percentile-eq-100
+  fields:
+    metric: percentile
+    operator: eq
+    value: 100
+- model: action.condition
+  pk: percentile-ge-95
+  fields:
+    metric: percentile
+    operator: ge
+    value: 95
+- model: action.condition
+  pk: percentile-ge-90
+  fields:
+    metric: percentile
+    operator: ge
+    value: 90
+- model: action.condition
+  pk: percentile-ge-80
+  fields:
+    metric: percentile
+    operator: ge
+    value: 80
+- model: action.condition
+  pk: percentile-ge-75
+  fields:
+    metric: percentile
+    operator: ge
+    value: 75
+- model: action.condition
+  pk: percentile-ge-60
+  fields:
+    metric: percentile
+    operator: ge
+    value: 60
+- model: action.condition
+  pk: percentile-ge-50
+  fields:
+    metric: percentile
+    operator: ge
+    value: 50
+- model: action.condition
+  pk: percentile-ge-25
+  fields:
+    metric: percentile
+    operator: ge
+    value: 25
+- model: action.condition
+  pk: percentile-ge-0
+  fields:
+    metric: percentile
+    operator: ge
+    value: 0
+- model: action.condition
+  pk: accumulative_percentile-ge-90
+  fields:
+    metric: accumulative_percentile
+    operator: ge
+    value: 90
+- model: action.condition
+  pk: accumulative_percentile-ge-75
+  fields:
+    metric: accumulative_percentile
+    operator: ge
+    value: 75
+- model: action.condition
+  pk: accumulative_percentile-ge-50
+  fields:
+    metric: accumulative_percentile
+    operator: ge
+    value: 50
+- model: action.condition
+  pk: accumulative_percentile-ge-0
+  fields:
+    metric: accumulative_percentile
+    operator: ge
+    value: 0
+- model: action.condition
+  pk: accumulative_score-ge-1000
+  fields:
+    metric: accumulative_score
+    operator: ge
+    value: 1000
+- model: action.condition
+  pk: accumulative_score-ge-600
+  fields:
+    metric: accumulative_score
+    operator: ge
+    value: 600
+- model: action.condition
+  pk: accumulative_score-ge-300
+  fields:
+    metric: accumulative_score
+    operator: ge
+    value: 300
+- model: action.condition
+  pk: accumulative_score-ge-200
+  fields:
+    metric: accumulative_score
+    operator: ge
+    value: 200
+- model: action.condition
+  pk: accumulative_score-ge-100
+  fields:
+    metric: accumulative_score
+    operator: ge
+    value: 100
+- model: action.condition
+  pk: accumulative_score-ge-0
+  fields:
+    metric: accumulative_score
+    operator: ge
+    value: 0
 - model: experiment.ranking
   fields:
-    identifier: generic-ranking
+    identifier: hooked-ranking
 - model: experiment.rank
   fields:
-    ranking: generic-ranking
+    ranking: hooked-ranking
     label: diamond
-    cutoff: 95.0
+    condition: percentile-ge-95
 - model: experiment.rank
   fields:
-    ranking: generic-ranking
+    ranking: hooked-ranking
     label: platinum
-    cutoff: 90.0
+    condition: percentile-ge-90
 - model: experiment.rank
   fields:
-    ranking: generic-ranking
+    ranking: hooked-ranking
     label: gold
-    cutoff: 75.0
+    condition: percentile-ge-75
 - model: experiment.rank
   fields:
-    ranking: generic-ranking
+    ranking: hooked-ranking
     label: silver
-    cutoff: 25.0
+    condition: percentile-ge-25
 - model: experiment.rank
   fields:
-    ranking: generic-ranking
+    ranking: hooked-ranking
     label: bronze
-    cutoff: 0.0
-- model: experiment.rank
-  fields:
-    ranking: generic-ranking
-    label: plastic
-    cutoff: -1.0
+    condition: percentile-ge-0
 - model: experiment.ranking
   fields:
     identifier: categorization-ranking
@@ -39,69 +148,88 @@
   fields:
     ranking: categorization-ranking
     label: platinum
-    cutoff: 100
+    condition: percentile-eq-100
     description: Congratulations! You did great and won a platinum medal!
 - model: experiment.rank
   pk: 32
   fields:
     ranking: categorization-ranking
     label: gold
-    cutoff: 80
+    condition: percentile-ge-80
     description: Congratulations! You did great and won a gold medal!
 - model: experiment.rank
   pk: 33
   fields:
     ranking: categorization-ranking
     label: silver
-    cutoff: 60
+    condition: percentile-ge-60
     description: Congratulations! You did very well and won a silver medal!
 - model: experiment.rank
   pk: 34
   fields:
     ranking: categorization-ranking
     label: bronze
-    cutoff: 0
+    condition: percentile-ge-0
     description: Congratulations! You did well and won a bronze medal!
 - model: experiment.ranking
   fields:
-    identifier: hooked-ranking
+    identifier: tunetwins-ranking
 - model: experiment.rank
-  pk: 41
   fields:
-    ranking: hooked-ranking
+    ranking: tunetwins-ranking
     label: diamond
-    feedback: ''
-    cutoff: 95.0
+    description: Supreme
+    description_zh_hans: 卓越级
+    condition: percentile-ge-90
 - model: experiment.rank
-  pk: 42
   fields:
-    ranking: hooked-ranking
-    label: platinum
-    cutoff: 90.0
-- model: experiment.rank
-  pk: 43
-  fields:
-    ranking: hooked-ranking
+    ranking: tunetwins-ranking
     label: gold
-    cutoff: 75.0
+    description: Advanced
+    description_zh_hans: 优秀级
+    condition: percentile-ge-75
 - model: experiment.rank
-  pk: 44
   fields:
-    ranking: hooked-ranking
+    ranking: tunetwins-ranking
     label: silver
-    cutoff: 25.0
+    description: Proficient
+    description_zh_hans: 进阶级
+    condition: percentile-ge-50
 - model: experiment.rank
-  pk: 45
   fields:
-    ranking: hooked-ranking
+    ranking: tunetwins-ranking
     label: bronze
-    cutoff: 0.0
+    description: Exploring
+    description_zh_hans: 探索级
+    condition: percentile-ge-0
 - model: experiment.rank
-  pk: 46
   fields:
-    ranking: hooked-ranking
-    label: plastic
-    cutoff: -1.0
+    ranking: tunetwins-ranking
+    label: diamond
+    description: Razor-Sharp Recognition
+    description_zh_hans: 一听即中
+    condition: accumulative_percentile-ge-90
+- model: experiment.rank
+  fields:
+    ranking: tunetwins-ranking
+    label: gold
+    description: High-Fidelity Recognition
+    description_zh_hans: 敏锐辨识
+    condition: accumulative_percentile-ge-75
+- model: experiment.rank
+  fields:
+    ranking: tunetwins-ranking
+    label: silver
+    description: Reliable Recognition
+    description_zh_hans: 从容识别
+    condition: accumulative_percentile-ge-50
+- model: experiment.rank
+  fields:
+    ranking: tunetwins-ranking
+    label: bronze
+    description: Untapped Potential
+    description_zh_hans: 无限可能
+    condition: accumulative_percentile-ge-0
 - model: experiment.ranking
   fields:
     identifier: toontjehoger-ranking
@@ -109,84 +237,30 @@
   fields:
     ranking: toontjehoger-ranking
     label: diamond
-    cutoff: 1000
+    condition: accumulative_score-ge-1000
 - model: experiment.rank
   fields:
     ranking: toontjehoger-ranking
     label: platinum
-    cutoff: 600
+    condition: accumulative_score-ge-600
 - model: experiment.rank
   fields:
     ranking: toontjehoger-ranking
     label: gold
-    cutoff: 300
+    condition: accumulative_score-ge-300
 - model: experiment.rank
   fields:
     ranking: toontjehoger-ranking
     label: silver
-    cutoff: 200
+    condition: accumulative_score-ge-200
 - model: experiment.rank
   fields:
     ranking: toontjehoger-ranking
     label: bronze
-    cutoff: 100
+    condition: accumulative_score-ge-100
 - model: experiment.rank
   fields:
     ranking: toontjehoger-ranking
     label: plastic
     description: Geen punten
-    cutoff: 0
-- model: experiment.ranking
-  fields:
-    identifier: tunetwins-block-ranking
-- model: experiment.rank
-  fields:
-    ranking: tunetwins-block-ranking
-    label: diamond
-    description: Supreme
-    cutoff: 90.0
-- model: experiment.rank
-  fields:
-    ranking: tunetwins-block-ranking
-    label: gold
-    description: Advanced
-    cutoff: 75.0
-- model: experiment.rank
-  fields:
-    ranking: tunetwins-block-ranking
-    label: silver
-    description: Proficient
-    cutoff: 50.0
-- model: experiment.rank
-  fields:
-    ranking: tunetwins-block-ranking
-    label: bronze
-    description: Exploring
-    cutoff: -1.0
-- model: experiment.ranking
-  fields:
-    identifier: tunetwins-block-ranking
-- model: experiment.rank
-  fields:
-    ranking: tunetwins-experiment-ranking
-    label: diamond
-    description: Razor-Sharp Recognition
-    cutoff: 90.0
-- model: experiment.rank
-  fields:
-    ranking: tunetwins-experiment-ranking
-    label: gold
-    description: High-Fidelity Recognition
-    cutoff: 75.0
-- model: experiment.rank
-  fields:
-    ranking: tunetwins-experiment-ranking
-    label: silver
-    description: Reliable Recognition
-    cutoff: 50.0
-- model: experiment.rank
-  fields:
-    ranking: tunetwins-experiment-ranking
-    label: bronze
-    description: Untapped Potential
-    cutoff: -1.0
+    condition: accumulative_score-ge-0
