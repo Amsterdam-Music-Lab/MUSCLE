@@ -24,7 +24,6 @@ from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.urls import reverse
-from django.utils import timezone
 
 from .utils import CsvStringBuilder, get_or_create_song
 from section.validators import (
