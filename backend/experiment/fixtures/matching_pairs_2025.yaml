@@ -263,11 +263,7 @@
   fields:
     final: tunetwins-final
     feedback_text: 64
-- model: action.condition
-  fields:
-    metric: rank
-    operator: eq
-    value: diamond
+
 - model: action.feedbacktext
   pk: 65
   fields:
@@ -279,11 +275,6 @@
   fields:
     final: tunetwins-final
     feedback_text: 65
-- model: action.condition
-  fields:
-    metric: rank
-    operator: eq
-    value: gold
 - model: action.feedbacktext
   pk: 66
   fields:
@@ -295,11 +286,6 @@
   fields:
     final: tunetwins-final
     feedback_text: 66
-- model: action.condition
-  fields:
-    metric: rank
-    operator: eq
-    value: silver
 - model: action.feedbacktext
   pk: 67
   fields:
@@ -313,11 +299,6 @@
   fields:
     final: tunetwins-final
     feedback_text: 67
-- model: action.condition
-  fields:
-    metric: strongest_domain
-    operator: eq
-    value: spectral
 - model: action.feedbacktext
   pk: 68
   fields:
@@ -329,11 +310,6 @@
   fields:
     final: tunetwins-final
     feedback_text: 68
-- model: action.condition
-  fields:
-    metric: strongest_domain
-    operator: eq
-    value: temporal
 - model: action.feedbacktext
   pk: 69
   fields:

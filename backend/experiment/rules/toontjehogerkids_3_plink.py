@@ -6,7 +6,6 @@ from django.template.loader import render_to_string
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.playback import PlayButtons, PlaybackSection
-from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.info import Info
 from experiment.actions.question import DropdownQuestion
@@ -16,7 +15,6 @@ from experiment.utils import non_breaking_spaces
 from result.utils import prepare_result
 from section.models import Section
 from session.models import Session
-from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_3_plink import ToontjeHoger3Plink
 from .toontjehogerkids_1_mozart import get_info_button
 
@@ -113,20 +111,11 @@ class ToontjeHogerKids3Plink(ToontjeHoger3Plink):
         return self.SCORE_MAIN_CORRECT if result.expected_response == result.given_response else self.SCORE_MAIN_WRONG
 
     def get_final_round(self, session):
-        # Finish session.
-        session.finish()
-
         # Score
         score = self.get_score_view(session)
 
         # Final
-        final_text = "Goed gedaan!" if session.final_score >= 4 * self.SCORE_MAIN_CORRECT else "Best lastig!"
-        final = FinalView(
-            session=session,
-            final_text=final_text,
-            rank=toontjehoger_ranks(session),
-            button=Button("Wat hebben we getest?", link=""),
-        )
+        final = self.get_final_view(session)
 
         # Info page
         debrief_message = "Hoe snel denk je dat je een popliedje kunt herkennen? Binnen tien seconden?\

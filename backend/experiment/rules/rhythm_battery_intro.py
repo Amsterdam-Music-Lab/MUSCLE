@@ -3,7 +3,6 @@ from django.utils.translation import gettext_lazy as _
 from .base import BaseRules
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
@@ -137,10 +136,7 @@ class RhythmBatteryIntro(BaseRules):
             message = _(
                 "Please keep the eventual sound level the same over the course of the experiment.")
             session.finish()
-            actions = [
-                Trial(playback, feedback_form),
-                FinalView(session, final_text=message),
-            ]
+            actions = [Trial(playback, feedback_form), self.get_final_view()]
             return actions
 
         view = Trial(playback, feedback_form=feedback_form)

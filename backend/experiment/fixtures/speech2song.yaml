@@ -16,9 +16,24 @@
     identifier: s2s
     rounds: 64
     bonus_points: 0
+    final: speech2song-final
     rules: SPEECH_TO_SONG
     playlists:
     - 55
+- model: action.final
+  pk: speech2song-final
+  fields:
+    title: End of experiment
+- model: action.feedbacktext
+  pk: 55
+  fields:
+    text: Thank you for contributing your time to science!
+    text_pt: Obrigado por dedicar o seu tempo à ciência!
+    text_zh_hans: 感谢您为科学研究贡献出宝贵的时间！
+- model: action.finalfeedback
+  fields:
+    final: speech2song-final
+    feeback_text: 55
 - model: section.playlist
   pk: 55
   fields:

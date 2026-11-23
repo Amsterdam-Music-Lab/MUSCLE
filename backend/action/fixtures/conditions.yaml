@@ -1,0 +1,187 @@
+- model: action.condition
+  pk: final_score-ge-100
+  fields:
+    metric: final_score
+    operator: ge
+    value: 100
+- model: action.condition
+  pk: final_score-ge-80
+  fields:
+    metric: final_score
+    operator: ge
+    value: 80
+- model: action.condition
+  pk: final_score-ge-75
+  fields:
+    metric: final_score
+    operator: ge
+    value: 75
+- model: action.condition
+  pk: final_score-ge-50
+  fields:
+    metric: final_score
+    operator: ge
+    value: 50
+- model: action.condition
+  pk: final_score-ge-40
+  fields:
+    metric: final_score
+    operator: ge
+    value: 40
+- model: action.condition
+  pk: final_score-ge-25
+  fields:
+    metric: final_score
+    operator: ge
+    value: 25
+- model: action.condition
+  pk: final_score-gt-0
+  fields:
+    metric: final_score
+    operator: gt
+    value: 0
+- model: action.condition
+  pk: n_sync_guessed-gt-0
+  fields:
+    metric: n_sync_guessed
+    operator: gt
+    value: 0
+- model: action.condition
+  fields:
+    metric: rank
+    operator: eq
+    value: diamond
+- model: action.condition
+  fields:
+    metric: rank
+    operator: eq
+    value: gold
+- model: action.condition
+  fields:
+    metric: rank
+    operator: eq
+    value: silver
+- model: action.condition
+  fields:
+    metric: strongest_domain
+    operator: eq
+    value: spectral
+- model: action.condition
+  fields:
+    metric: strongest_domain
+    operator: eq
+    value: temporal
+- model: action.condition
+  pk: percentile-eq-100
+  fields:
+    metric: percentile
+    operator: eq
+    value: 100
+- model: action.condition
+  pk: percentile-ge-95
+  fields:
+    metric: percentile
+    operator: ge
+    value: 95
+- model: action.condition
+  pk: percentile-ge-90
+  fields:
+    metric: percentile
+    operator: ge
+    value: 90
+- model: action.condition
+  pk: percentile-ge-80
+  fields:
+    metric: percentile
+    operator: ge
+    value: 80
+- model: action.condition
+  pk: percentile-ge-75
+  fields:
+    metric: percentile
+    operator: ge
+    value: 75
+- model: action.condition
+  pk: percentile-ge-60
+  fields:
+    metric: percentile
+    operator: ge
+    value: 60
+- model: action.condition
+  pk: percentile-ge-50
+  fields:
+    metric: percentile
+    operator: ge
+    value: 50
+- model: action.condition
+  pk: percentile-ge-25
+  fields:
+    metric: percentile
+    operator: ge
+    value: 25
+- model: action.condition
+  pk: percentile-ge-0
+  fields:
+    metric: percentile
+    operator: ge
+    value: 0
+- model: action.condition
+  pk: accumulative_percentile-ge-90
+  fields:
+    metric: accumulative_percentile
+    operator: ge
+    value: 90
+- model: action.condition
+  pk: accumulative_percentile-ge-75
+  fields:
+    metric: accumulative_percentile
+    operator: ge
+    value: 75
+- model: action.condition
+  pk: accumulative_percentile-ge-50
+  fields:
+    metric: accumulative_percentile
+    operator: ge
+    value: 50
+- model: action.condition
+  pk: accumulative_percentile-ge-0
+  fields:
+    metric: accumulative_percentile
+    operator: ge
+    value: 0
+- model: action.condition
+  pk: accumulative_score-ge-1000
+  fields:
+    metric: accumulative_score
+    operator: ge
+    value: 1000
+- model: action.condition
+  pk: accumulative_score-ge-600
+  fields:
+    metric: accumulative_score
+    operator: ge
+    value: 600
+- model: action.condition
+  pk: accumulative_score-ge-300
+  fields:
+    metric: accumulative_score
+    operator: ge
+    value: 300
+- model: action.condition
+  pk: accumulative_score-ge-200
+  fields:
+    metric: accumulative_score
+    operator: ge
+    value: 200
+- model: action.condition
+  pk: accumulative_score-ge-100
+  fields:
+    metric: accumulative_score
+    operator: ge
+    value: 100
+- model: action.condition
+  pk: accumulative_score-ge-0
+  fields:
+    metric: accumulative_score
+    operator: ge
+    value: 0

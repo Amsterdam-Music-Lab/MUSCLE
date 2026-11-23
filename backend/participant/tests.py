@@ -5,14 +5,12 @@ from django.test import Client, TestCase
 from experiment.models import Block
 from participant.models import Participant
 from participant.utils import get_participant, PARTICIPANT_KEY
-from question.models import QuestionList
-from question.banks import get_question_bank
 from result.models import Result
 from session.models import Session
 
 
 class ParticipantTest(TestCase):
-    fixtures = ["choice_lists", "goldsmiths_msi", "testing"]
+    fixtures = ["choice_lists", "goldsmiths_msi", "conditions", "rankings", "testing"]
 
     @classmethod
     def setUpTestData(cls):
@@ -194,11 +192,15 @@ class ParticipantTest(TestCase):
             participant=self.participant,
             finished_at=timezone.now(),
             final_score=30.0,
+            json_data={"percentile": 30.0},
         )
         these_scores = self.participant.scores_per_experiment()
         self.assertEqual(len(these_scores), 1)
         self.assertEqual(these_scores[0]['block_identifier'], "test-block")
-        self.assertEqual(these_scores[0]['rank'], {'text': 'silver', 'class': 'silver'})
+        self.assertEqual(
+            these_scores[0]['rank'],
+            {'label': 'Silver', 'className': 'silver', 'description': ''},
+        )
         self.assertEqual(these_scores[0]['score'], 30.0)
         self.assertEqual(these_scores[0]['date'], "today")
 

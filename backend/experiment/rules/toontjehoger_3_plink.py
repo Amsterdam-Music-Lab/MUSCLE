@@ -4,16 +4,15 @@ import re
 
 from django.template.loader import render_to_string
 
-from .toontjehoger_1_mozart import toontjehoger_ranks
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
 from experiment.actions.playback import PlayButtons, PlaybackSection
-from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.info import Info
 from experiment.actions.question import AutoCompleteQuestion, RadiosQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
+from experiment.rules.mixins import ToontjeHogerMixin
 from experiment.utils import non_breaking_spaces
 from result.utils import prepare_result
 from section.models import Playlist, Section
@@ -23,7 +22,7 @@ from .base import BaseRules
 logger = logging.getLogger(__name__)
 
 
-class ToontjeHoger3Plink(BaseRules):
+class ToontjeHoger3Plink(BaseRules, ToontjeHogerMixin):
     ID = 'TOONTJE_HOGER_3_PLINK'
     TITLE = ""
     SCORE_MAIN_CORRECT = 10
@@ -47,7 +46,9 @@ class ToontjeHoger3Plink(BaseRules):
             errors.append("Sections should have associated song objects.")
         artist_titles = sections.values_list("song__name", "song__artist").distinct()
         if len(artist_titles) != len(sections):
-            errors.append("Sections should have unique combinations of song.artist and song.name fields.")
+            errors.append(
+                "Sections should have unique combinations of song.artist and song.name fields."
+            )
         errors += self.validate_era_and_mood(sections)
         return errors
 
@@ -55,10 +56,16 @@ class ToontjeHoger3Plink(BaseRules):
         errors = []
         eras = sorted(sections.order_by("tag").values_list("tag", flat=True).distinct())
         if not all(re.match(r"[0-9]0s", e) for e in eras):
-            errors.append("The sections should be tagged with an era in the format [0-9]0s, e.g., 90s")
-        moods = sorted(sections.order_by("group").values_list("group", flat=True).distinct())
+            errors.append(
+                "The sections should be tagged with an era in the format [0-9]0s, e.g., 90s"
+            )
+        moods = sorted(
+            sections.order_by("group").values_list("group", flat=True).distinct()
+        )
         if "droevig" not in moods:
-            errors.append("The sections' groups should be indications of the songs' moods in Dutch")
+            errors.append(
+                "The sections' groups should be indications of the songs' moods in Dutch"
+            )
         return errors
 
     def get_intro_explainer(self, n_rounds):
@@ -86,7 +93,10 @@ class ToontjeHoger3Plink(BaseRules):
 
         # Round 1
         if rounds_passed == 0:
-            return [self.get_intro_explainer(session.block.rounds), *self.get_plink_round(session)]
+            return [
+                self.get_intro_explainer(session.block.rounds),
+                *self.get_plink_round(session),
+            ]
 
         # Round 2-blocks.rounds
         if rounds_passed < session.block.rounds:
@@ -146,19 +156,28 @@ class ToontjeHoger3Plink(BaseRules):
             emotion = section_details[1] if len(section_details) >= 2 else "?"
 
             # Construct final feedback message
-            question_part = "Het nummer komt uit de {} en de emotie is {}.".format(time_period, emotion)
+            question_part = "Het nummer komt uit de {} en de emotie is {}.".format(
+                time_period, emotion
+            )
             section_part = "Je hoorde {} van {}.".format(
                 non_breaking_spaces(section.song_name()),
                 non_breaking_spaces(section.artist_name()),
             )
 
             # The \n results in a linebreak
-            feedback = "{} {} \n {}".format(feedback_prefix, question_part, section_part)
+            feedback = "{} {} \n {}".format(
+                feedback_prefix, question_part, section_part
+            )
 
         config = {"show_total_score": True}
         round_number = session.get_rounds_passed()
-        score_title = "Ronde %(number)d / %(total)d" % {"number": round_number, "total": session.block.rounds}
-        return Score(session, config=config, feedback=feedback, score=score, title=score_title)
+        score_title = "Ronde %(number)d / %(total)d" % {
+            "number": round_number,
+            "total": session.block.rounds,
+        }
+        return Score(
+            session, config=config, feedback=feedback, score=score, title=score_title
+        )
 
     def get_plink_round(self, session: Session, present_score=False):
         next_round = []
@@ -179,7 +198,9 @@ class ToontjeHoger3Plink(BaseRules):
         trials = self.get_plink_trials(session, section, choices, expected_response)
         return [*next_round, *trials]
 
-    def get_plink_trials(self, session: Session, section: Section, choices: dict, expected_response: str) -> list:
+    def get_plink_trials(
+        self, session: Session, section: Section, choices: dict, expected_response: str
+    ) -> list:
         plink_trials = []
         question1 = AutoCompleteQuestion(
             identifier="plink",
@@ -216,7 +237,10 @@ class ToontjeHoger3Plink(BaseRules):
             )
             plink_trials.append(extra_questions_intro)
 
-        extra_trials = [self.get_era_question(session, section), self.get_emotion_question(session, section)]
+        extra_trials = [
+            self.get_era_question(session, section),
+            self.get_emotion_question(session, section),
+        ]
 
         return [*plink_trials, *extra_trials]
 
@@ -262,11 +286,15 @@ class ToontjeHoger3Plink(BaseRules):
 
     def calculate_score(self, result, data):
         """
-        Calculate score, based on the data field
+        Calculate score based on result data.
+        Plink has a more complex scoring system than other Toontjehoger rules.
         """
+
         if result.question_identifier == "plink":
             return (
-                self.SCORE_MAIN_CORRECT if result.expected_response == result.given_response else self.SCORE_MAIN_WRONG
+                self.SCORE_MAIN_CORRECT
+                if result.expected_response == result.given_response
+                else self.SCORE_MAIN_WRONG
             )
         elif result.question_identifier == "era":
             result.session.save_json_data({"extra_questions_intro_shown": True})
@@ -284,24 +312,11 @@ class ToontjeHoger3Plink(BaseRules):
             )
 
     def get_final_round(self, session: Session):
-        # Finish session.
-        session.finish()
-
         # Score
         score = self.get_score_view(session)
 
         # Final
-        final_text = (
-            "Goed gedaan, jouw muziekherkenning is uitstekend!"
-            if session.final_score >= 4 * self.SCORE_MAIN_CORRECT
-            else "Dat bleek toch even lastig!"
-        )
-        final = FinalView(
-            session=session,
-            final_text=final_text,
-            rank=toontjehoger_ranks(session),
-            button=Button("Wat hebben we getest?"),
-        )
+        final = self.get_final_view(session)
 
         # Info page
         body = render_to_string(join("info", "toontjehoger", "experiment3.html"))

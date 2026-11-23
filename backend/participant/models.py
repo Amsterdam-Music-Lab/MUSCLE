@@ -5,7 +5,6 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.db.models import Sum
 
-from question.models import QuestionList
 from result.models import Result
 
 
@@ -154,26 +153,31 @@ class Participant(models.Model):
                     print(f"{key} - {value}")
             ```
         """
+        from experiment.models import Experiment
+
         scores = []
 
         experiments = (
-            self.sessions.filter(finished_at__isnull=False, participant=self)
-            .values_list("block__experiment")
+            self.sessions.filter(finished_at__isnull=False)
+            .values_list("block__experiment", flat=True)
             .distinct()
         )
 
         # Create best rank/score data per experiment session
-        for experiment in experiments:
+        for experiment_pk in experiments:
+            experiment = Experiment.objects.get(pk=experiment_pk)
             top_session = (
-                experiment.get_played_sessions().order_by('-final_score').first()
+                experiment.get_played_sessions(self).order_by('-final_score').first()
             )
-
+            ranking = getattr(top_session.block, "ranking")
             scores.append(
                 {
                     "block_identifier": top_session.block.identifier,
-                    "rank": top_session.block.get_active_rank(
-                        top_session.json_data.get("scores")
-                    ).to_dict(),
+                    "rank": (
+                        ranking.get_active_rank(top_session.json_data).to_dict()
+                        if ranking
+                        else None
+                    ),
                     "score": top_session.final_score,
                     "date": naturalday(top_session.finished_at),
                 }

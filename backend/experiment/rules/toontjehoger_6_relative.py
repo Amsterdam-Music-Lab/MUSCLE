@@ -5,28 +5,26 @@ from django.template.loader import render_to_string
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.info import Info
 from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
+from experiment.rules.mixins import ToontjeHogerMixin
 from section.models import Playlist
 from session.models import Session
 from .base import BaseRules
-from .toontjehoger_1_mozart import toontjehoger_ranks
 
 from result.utils import prepare_result
 
 logger = logging.getLogger(__name__)
 
 
-class ToontjeHoger6Relative(BaseRules):
+class ToontjeHoger6Relative(BaseRules, ToontjeHogerMixin):
     ID = 'TOONTJE_HOGER_6_RELATIVE'
     TITLE = ""
     SCORE_CORRECT = 50
-    SCORE_WRONG = 0
 
     def validate_playlist(self, playlist: Playlist):
         ''' This is the original Toontjehoger6Relative playlist:
@@ -155,26 +153,12 @@ class ToontjeHoger6Relative(BaseRules):
         )
         return [trial]
 
-    def calculate_score(self, result, data):
-        return self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
-
     def get_final_round(self, session: Session):
-
-        # Finish session.
-        session.finish()
-
         # Score
         score = self.get_score(session)
 
         # Final
-        final_text = "Goed gedaan, jouw relatief gehoor is uitstekend!" if session.final_score >= 2 * \
-            self.SCORE_CORRECT else "Dat bleek toch even lastig!"
-        final = FinalView(
-            session=session,
-            final_text=final_text,
-            rank=toontjehoger_ranks(session),
-            button=Button('Wat hebben we getest?'),
-        )
+        final = self.get_final_view(session)
 
         # Info page
         body = render_to_string(

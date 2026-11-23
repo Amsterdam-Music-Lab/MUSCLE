@@ -5,7 +5,6 @@ from os.path import join
 from section.models import Playlist
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.html import HTML
 from experiment.actions.info import Info
@@ -13,6 +12,7 @@ from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
+from experiment.rules.mixins import ToontjeHogerMixin
 from result.utils import prepare_result
 from session.models import Session
 from .base import BaseRules
@@ -21,23 +21,10 @@ from .base import BaseRules
 logger = logging.getLogger(__name__)
 
 
-def toontjehoger_ranks(session: Session):
-    score = session.final_score
-    if score < 25:
-        return "PLASTIC"
-    elif score < 50:
-        return "BRONZE"
-    elif score < 75:
-        return "SILVER"
-    else:
-        return "GOLD"
-
-
-class ToontjeHoger1Mozart(BaseRules):
+class ToontjeHoger1Mozart(BaseRules, ToontjeHogerMixin):
     ID = "TOONTJE_HOGER_1_MOZART"
     TITLE = ""
     SCORE_CORRECT = 50
-    SCORE_WRONG = 0
 
     QUESTION_URL1 = "/images/experiments/toontjehoger/mozart-effect1.webp"
     QUESTION_URL2 = "/images/experiments/toontjehoger/mozart-effect2.webp"
@@ -202,14 +189,7 @@ class ToontjeHoger1Mozart(BaseRules):
 
         return [explainer]
 
-    def calculate_score(self, result, data):
-        score = self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
-        return score
-
     def get_final_round(self, session: Session):
-        # Finish session.
-        session.finish()
-
         # Answer explainer
         answer_explainer = self.get_answer_explainer(session, round=2)
 
@@ -217,17 +197,7 @@ class ToontjeHoger1Mozart(BaseRules):
         score = self.get_score(session)
 
         # Final
-        final_text = (
-            "Je hebt het uitstekend gedaan!"
-            if session.final_score >= 2 * self.SCORE_CORRECT
-            else "Dat bleek toch even lastig!"
-        )
-        final = FinalView(
-            session=session,
-            final_text=final_text,
-            rank=toontjehoger_ranks(session),
-            button=Button("Wat hebben we getest?"),
-        )
+        final = self.get_final_view(session)
 
         # Info page
         body = render_to_string(join("info", "toontjehoger", "experiment1.html"))

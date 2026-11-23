@@ -1,0 +1,40 @@
+- model: action.final
+  pk: hooked-final
+  fields:
+    title: End of experiment
+- model: action.feedbacktext
+  pk: 41
+  fields:
+    index: 1
+    condition: final_score-gt-0
+    text: Well done!
+    text_zh_hans: 太棒了！
+    alternative_text: Too bad!
+    alternative_text_zh_hans: 有点糟哦！
+- model: action.finalfeedback
+  fields:
+    final: hooked-final
+    feedback_text: 41
+- model: action.feedbacktext
+  pk: 42
+  fields:
+    index: 2
+    condition: n_sync_guessed-gt-0
+    text: It took you {mean_reaction_time} s to recognise a song on average, and you correctly identified {n_sync_correct} out of the {n_sync_guessed} songs you thought you knew.
+    text_zh_hans: 您平均花了 {mean_reaction_time} 秒识别出一首歌曲，并且在您认为您知道的 {n_sync_guessed} 首歌曲里, 您正确地识别出了 {n_sync_correct} 首。
+    alternative_text: You did not recognise any songs at first.
+    alternative_text_zh_hans: 您起初并没有识别出任何歌曲。
+- model: action.finalfeedback
+  fields:
+    final: hooked-final
+    feedback_text: 42
+- model: action.feedbacktext
+  pk: 43
+  fields:
+    index: 3
+    text: During the bonus rounds, you remembered {n_old_new_correct} of the {n_old_new} songs that came back.
+    text_zh_hans: 在奖励环节里，您记住了之前播放过的 {n_old_new} 首歌里的 {n_old_new_correct} 首歌曲。
+- model: action.finalfeedback
+  fields:
+    final: hooked-final
+    feedback_text: 43

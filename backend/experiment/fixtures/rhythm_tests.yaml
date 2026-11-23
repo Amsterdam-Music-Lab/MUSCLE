@@ -18,6 +18,17 @@
     rules: RHYTHM_BATTERY_INTRO
     playlists:
     - 0
+- model: action.final
+  pk: rhythm-intro-final
+- model: action.feedbacktext
+  pk: 0
+  fields:
+    text: Please keep the eventual sound level the same over the course of the experiment.
+    text_nl: Houd het volume gelijk gedurende het hele experiment.
+- model: action.finalfeedback
+  fields:
+    final: rhythm-intro-final
+    feedback_text: 0
 - model: experiment.phase
   pk: 2
   fields:
@@ -31,13 +42,11 @@
     experiment: 1
     identifier: anis
     rules: ANISOCHRONY
-    theme_config: null
+    final: anis-final
     playlists:
     - 1
 - model: action.final
-  pk: 1
-  fields:
-    block: 1
+  pk: anis-final
 - model: action.feedbacktext
   pk: 1
   fields:
@@ -51,7 +60,7 @@
       ##### ...veel dingen in de natuur regelmaat hebben zoals een metronoom? Onze hersenen gebruiken dit om ritme nog beter te verwerken!    
 - model: action.finalfeedback
   fields:
-    final: 1
+    final: anis-final
     feedback_text: 1
 - model: experiment.block
   pk: 2
@@ -59,18 +68,15 @@
     phase: 2
     experiment: 1
     index: 0
-    image: null
     identifier: bat
     rounds: 17
     bonus_points: 0
     rules: BEAT_ALIGNMENT
-    theme_config: null
+    final: bat-final
     playlists:
     - 2
 - model: action.final
-  pk: 2
-  fields:
-    block: 2
+  pk: bat-final
 - model: action.feedbacktext
   pk: 2
   fields:
@@ -84,7 +90,7 @@
       ##### ...meer dan 140.000 mensen in Engeland deze test hebben gedaan toen deze in ontwikkeling was?
 - model: action.finalfeedback
   fields:
-    final: 2
+    final: bat-final
     feedback_text: 2
 - model: experiment.block
   pk: 3
@@ -93,12 +99,11 @@
     phase: 2
     identifier: ddi
     rules: DURATION_DISCRIMINATION
+    final: ddi-final
     playlists:
     - 3
 - model: action.final
-  pk: 3
-  fields:
-    block: 3
+  pk: ddi-final
 - model: action.feedbacktext
   pk: 3
   fields:
@@ -113,7 +118,7 @@
       ##### ...uit onderzoek blijkt dat je prestatie op deze taak af kan hangen van de lengte van het 
 - model: action.finalfeedback
   fields:
-    final: 3
+    final: ddi-final
     feedback_text: 3
 - model: experiment.block
   pk: 4
@@ -122,12 +127,11 @@
     experiment: 1
     identifier: ddit
     rules: DURATION_DISCRIMINATION_TONE
+    final: ddit-final
     playlists:
     - 4
 - model: action.final
-  pk: 4
-  fields:
-    block: 4
+  pk: ddit-final
 - model: action.feedbacktext
   pk: 4
   fields:
@@ -143,7 +147,7 @@
       Dit komt goed van pas wanneer we naar ritmes luisteren in muziek.
 - model: action.finalfeedback
   fields:
-    final: 4
+    final: ddit-final
     feedback_text: 4
 - model: experiment.block
   pk: 5
@@ -152,12 +156,11 @@
     experiment: 1
     identifier: hbat_bfit
     rules: H_BAT
+    final: hbat-final
     playlists:
     - 5
 - model: action.final
-  pk: 5
-  fields:
-    block: 5
+  pk: hbat-final
 - model: action.feedbacktext
   pk: 5
   fields:
@@ -171,7 +174,7 @@
       ##### ...muzikanten ritmes vaak versnellen of vertragen om een specifiek gevoel over te brengen? We noemen dit **expressieve timing**.
 - model: action.finalfeedback
   fields:
-    final: 5
+    final: hbat-final
     feedback_text: 5
 - model: experiment.block
   pk: 6
@@ -180,12 +183,11 @@
     experiment: 1
     identifier: hbat_bit
     rules: H_BAT
+    final: hbat_bit-final
     playlists:
     - 5
 - model: action.final
-  pk: 6
-  fields:
-    block: 6
+  pk: hbat_bit-final
 - model: action.feedbacktext
   pk: 6
   fields:
@@ -201,7 +203,7 @@
        Dit stelt ons in staat mee te klappen met de muziek tijdens een concert en samen te dansen.
 - model: action.finalfeedback
   fields:
-    final: 6
+    final: hbat_bit-final
     feedback_text: 6
 - model: experiment.block
   pk: 7
@@ -210,12 +212,11 @@
     experiment: 1
     identifier: hbat_bst
     rules: BST
+    final: hbat_bst-final
     playlists:
     - 6
 - model: action.final
-  pk: 7
-  fields:
-    block: 7
+  pk: hbat_bst-final
 - model: action.feedbacktext
   pk: 7
   fields:
@@ -229,7 +230,7 @@
       ##### ...een mars en een wals maatsoorten zijn die veel in Westerse culturen voorkomen, maar in andere culturen ook veel complexere maatsoorten bestaan?
 - model: action.finalfeedback
   fields:
-    final: 7
+    final: hbat_bst-final
     feedback_text: 7
 - model: experiment.block
   pk: 8
@@ -239,12 +240,11 @@
     identifier: rhdis
     rounds: 40
     rules: RHYTHM_DISCRIMINATION
+    final: rhdis-final
     playlists:
     - 7
 - model: action.final
-  pk: 8
-  fields:
-    block: 8
+  pk: rhdis-final
 - model: action.feedbacktext
   pk: 8
   fields:
@@ -260,7 +260,7 @@
        en die maken veel lawaai. Het piepgeluid helpt mensen in de scanner om het ritme goed te kunnen horen.
 - model: action.finalfeedback
   fields:
-    final: 8
+    final: rhdis-final
     feedback_text: 8
 - model: experiment.phase
   pk: 3
@@ -273,11 +273,13 @@
     phase: 3
     experiment: 1
     identifier: rhythm_outro
+    final: rhythm-outro-final
     rules: RHYTHM_BATTERY_FINAL
 - model: action.final
-  pk: 9
+  pk: rhythm-outro-final
   fields:
-    block: 9
+    title: Thank you very much for participating!
+    title_nl: Hartelijk dank voor je deelname!
 - model: action.feedbacktext
   pk: 9
   fields:
@@ -289,6 +291,10 @@
       #### Heel veel dank voor je deelname!
       - We zijn heel blij dat je de tijd hebt genomen om ons te helpen uit te zoeken hoe mensen ritme verwerken.
       - Als je meer over ons onderzoek wilt weten, kijk dan op [www.fleurbouwer.nl](http://www.fleurbouwer.nl)
+- model: action.finalfeedback
+  fields:
+    final: rhythm-outro-final
+    feedback_text: 9
 - model: section.playlist
   pk: 0
   fields:

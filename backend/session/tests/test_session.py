@@ -15,6 +15,7 @@ class SessionTest(TestCase):
         "musicgens",
         "demographics",
         "testing",
+        "hooked",
         "thats_my_song",
     ]
 

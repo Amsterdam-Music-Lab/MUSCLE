@@ -62,29 +62,7 @@ class ThatsMySong(Hooked):
         # If the number of results equals the number of block.rounds,
         # close the session and return data for the final_score view.
         if round_number == session.block.rounds:
-            # Finish session.
-            session.finish()
-            session.save()
-
-            # Return a score and final score action.
-            session.finish()
-            return [
-                self.get_score(session, round_number),
-                FinalView(
-                    session=session,
-                    # final_text=self.final_score_message(session)
-                    # + " For more information about this experiment, visit the Vanderbilt University Medical Center Music Cognition Lab.",
-                    # rank=self.rank(session),
-                    # show_profile_link=True,
-                    # button=Button(
-                    #     _("Play again"),
-                    # ),
-                    # logo={
-                    #     "image": "/images/vumc_mcl_logo.png",
-                    #     "link": "https://www.vumc.org/music-cognition-lab/welcome",
-                    # },
-                ),
-            ]
+            return [self.get_score(session, round_number), self.get_final_view()]
 
         if round_number == 0:
             # get list of trials for demographic questions (first 2 questions)

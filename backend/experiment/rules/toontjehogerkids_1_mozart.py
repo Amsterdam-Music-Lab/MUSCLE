@@ -4,10 +4,9 @@ from os.path import join
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalView
 from experiment.actions.info import Info
 from session.models import Session
-from .toontjehoger_1_mozart import toontjehoger_ranks, ToontjeHoger1Mozart
+from .toontjehoger_1_mozart import ToontjeHoger1Mozart
 
 logger = logging.getLogger(__name__)
 
@@ -43,9 +42,6 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
         return "Je vouwt een papier en knipt er twee hoekjes af, precies zoals op het plaatje. Welke vorm krijgt het papier dan?"
 
     def get_final_round(self, session):
-        # Finish session.
-        session.finish()
-
         # Answer explainer
         answer_explainer = self.get_answer_explainer(session, round=2)
 
@@ -53,13 +49,7 @@ class ToontjeHogerKids1Mozart(ToontjeHoger1Mozart):
         score = self.get_score(session)
 
         # Final
-        final_text = "Goed gedaan!" if session.final_score >= 2 * self.SCORE_CORRECT else "Best lastig!"
-        final = FinalView(
-            session=session,
-            final_text=final_text,
-            rank=toontjehoger_ranks(session),
-            button=Button("Wat hebben we getest?", link=""),
-        )
+        final = self.get_final_view(session)
 
         # Info page
         debrief_message = "Merkte je dat de puzzel beter ging na het \

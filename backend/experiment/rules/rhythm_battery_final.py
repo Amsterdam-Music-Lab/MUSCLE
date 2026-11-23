@@ -56,15 +56,7 @@ class RhythmBatteryFinal(BaseRules):
         if questions:
             return [self.get_intro_explainer(), *questions]
         else:
-            rendered = render_to_string(self.debrief_form)
-            session.finish()
-            return FinalView(
-                session,
-                title=_("Thank you very much for participating!"),
-                final_text=rendered,
-                show_participant_link=self.show_participant_final,
-                show_participant_id_only=self.show_participant_final,
-            )
+            return self.get_final_view()
 
     def feedback_info(self):
         info = super().feedback_info()

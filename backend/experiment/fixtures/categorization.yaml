@@ -4,7 +4,6 @@
     name: Categorization
     identifier: cat
     active: true
-    ranking: categorization-ranking
 - model: experiment.phase
   pk: 31
   fields:
@@ -18,13 +17,13 @@
     identifier: cat
     rounds: 70
     bonus_points: 0
+    final: categorization-final
+    ranking: categorization-ranking
     rules: CATEGORIZATION
     playlists:
     - 31
 - model: action.final
-  pk: 31
-  fields:
-    block: 31
+  pk: categorization-final
 - model: action.feedbacktext
   pk: 31
   fields:
@@ -34,7 +33,7 @@
 - model: action.finalfeedback
   pk: 31
   fields:
-    final: 31
+    final: categorization-final
     feedback_text: 31
 - model: section.playlist
   pk: 31

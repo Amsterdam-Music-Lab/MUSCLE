@@ -5,7 +5,6 @@ from django.template.loader import render_to_string
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.html import HTML
 from experiment.actions.playback import Autoplay, PlaybackSection
@@ -349,19 +348,6 @@ class MusicalPreferences(BaseRules):
             return self.know_score.get(data.get("value"))
         else:
             return super().calculate_score(result, data)
-
-    def get_final_view(self, session: Session):
-        # finalize block
-        session.finish()
-        view = FinalView(
-            session,
-            title=_("End"),
-            final_text=_(
-                "Thank you for your participation and contribution to science!"
-            ),
-            feedback_info=self.feedback_info(),
-        )
-        return view
 
     def feedback_info(self):
         info = super().feedback_info()

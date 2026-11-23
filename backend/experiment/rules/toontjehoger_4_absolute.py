@@ -1,34 +1,31 @@
 import logging
 from os.path import join
-import re
 import random
 
 from django.template.loader import render_to_string
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalView
 from experiment.actions.info import Info
 from experiment.actions.form import Form
 from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
+from experiment.rules.mixins import ToontjeHogerMixin
 from experiment.utils import format_label, non_breaking_spaces
 from result.utils import prepare_result
 from section.models import Playlist
 from session.models import Session
 from .base import BaseRules
-from .toontjehoger_1_mozart import toontjehoger_ranks
 
 logger = logging.getLogger(__name__)
 
 
-class ToontjeHoger4Absolute(BaseRules):
+class ToontjeHoger4Absolute(BaseRules, ToontjeHogerMixin):
     ID = 'TOONTJE_HOGER_4_ABSOLUTE'
     TITLE = ""
     SCORE_CORRECT = 20
-    SCORE_WRONG = 0
     N_ROUNDS = 5
 
     def get_intro_explainer(self):
@@ -133,9 +130,6 @@ class ToontjeHoger4Absolute(BaseRules):
         )
         return [trial]
 
-    def calculate_score(self, result, data):
-        return self.SCORE_CORRECT if result.expected_response == result.given_response else self.SCORE_WRONG
-
     def get_score(self, session):
         # Feedback
         last_result = session.last_result()
@@ -160,26 +154,11 @@ class ToontjeHoger4Absolute(BaseRules):
         return [score]
 
     def get_final_round(self, session: Session):
-
-        # Finish session.
-        session.finish()
-
         # Score
         score = self.get_score(session)
 
         # Final
-        final_text = "Dat bleek toch even lastig!"
-        if session.final_score >= session.block.rounds * 0.8 * self.SCORE_CORRECT:
-            final_text = "Goed gedaan! Jouw absolute gehoor is uitstekend!"
-        elif session.final_score >= session.block.rounds * 0.5 * self.SCORE_CORRECT:
-            final_text = "Goed gedaan! Jouw absolute gehoor is best OK!"
-
-        final = FinalView(
-            session=session,
-            final_text=final_text,
-            rank=toontjehoger_ranks(session),
-            button=Button('Wat hebben we getest?'),
-        )
+        final = self.get_final_view(session)
 
         # Info page
         body = render_to_string(

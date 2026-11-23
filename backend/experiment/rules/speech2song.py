@@ -6,7 +6,6 @@ from .base import BaseRules
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import RadiosQuestion
@@ -159,16 +158,8 @@ class Speech2Song(BaseRules):
             group_id = 4
             is_speech = False
         else:
-            # Finish session
-            session.finish()
-            # Return a score and final score action
-            return [
-                FinalView(
-                    title=_('End of experiment'),
-                    session=session,
-                    final_text=_('Thank you for contributing your time to science!'),
-                )
-            ]
+            # Return a final score action
+            return [self.get_final_view()]
         if rounds_passed % 2 == 1:
             # even round: single representation (first round are questions only)
             actions.extend(self.next_single_representation(

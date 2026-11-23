@@ -481,9 +481,10 @@ class SocialMediaConfig(models.Model):
 class Ranking(models.Model):
     identifier = models.SlugField(primary_key=True, max_length=128)
 
-    def get_active_rank(self, json_data: dict) -> Optional["experiment.Rank"]:
+    def get_active_rank(self, json_data: dict) -> "experiment.Rank":
+        """get the rank based on the json_data. Fall back to a `plastic` Rank"""
         for rank_label in reversed(RANK_CHOICES):
-            ranks = self.ranks.filter(label=rank_label)
+            ranks = self.ranks.filter(label=rank_label[0])
             for rank in ranks:
                 if rank.condition.is_met(json_data):
                     return rank

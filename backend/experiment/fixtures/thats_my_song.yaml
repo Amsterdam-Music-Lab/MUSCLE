@@ -41,6 +41,7 @@
     identifier: thats_my_song
     rounds: 30
     bonus_points: 0
+    final: hooked-final
     rules: THATS_MY_SONG
     playlists:
     - 46

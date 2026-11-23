@@ -19,9 +19,30 @@
     identifier: th_mozart
     rounds: 2
     bonus_points: 0
+    final: toontjehoger-1-mozart-final
+    ranking: toontjehoger-block-ranking
     rules: TOONTJE_HOGER_1_MOZART
     playlists:
     - 11
+- model: action.button
+  pk: 11
+  fields:
+    label: Wat hebben we getest?
+    link: ""
+- model: action.final
+  pk: toontjehoger-1-mozart-final
+  fields:
+    button: 11
+- model: action.feedbacktext
+  pk: 11
+  fields:
+    condition: 11
+    text: Je hebt het uitstekend gedaan!
+    alternative_text: Dat bleek toch even lastig!
+- model: action.finalfeedback
+  fields:
+    final: toontjehoger-1-mozart-final
+    feedback_text: 11
 - model: experiment.block
   fields:
     phase: 11
@@ -31,9 +52,25 @@
     identifier: th_preverbal
     rounds: 2
     bonus_points: 0
+    ranking: toontjehoger-block-ranking
+    final: toontjehoger-2-preverbal-final
     rules: TOONTJE_HOGER_2_PREVERBAL
     playlists:
     - 12
+- model: action.final
+  pk: toontjehoger-2-preverbal-final
+  fields:
+    button: 11
+- model: action.feedbacktext
+  pk: 12
+  fields:
+    condition: final_score-ge-100
+    text: Goed gedaan! Je hebt beide vragen correct beantwoord!
+    alternative_text: Dat bleek toch even lastig!
+- model: action.finalfeedback
+  fields:
+    final: toontjehoger-2-preverbal-final
+    feedback_text: 12
 - model: experiment.block
   fields:
     phase: 11
@@ -43,9 +80,25 @@
     identifier: th_plink
     rounds: 10
     bonus_points: 0
+    ranking: toontjehoger-block-ranking
+    final: toontjehoger-3-plink-final
     rules: TOONTJE_HOGER_3_PLINK
     playlists:
     - 13
+- model: action.final
+  pk: toontjehoger-3-plink-final
+  fields:
+    button: 11
+- model: action.feedbacktext
+  pk: 13
+  fields:
+    condition: final_score-ge-40
+    text: Goed gedaan, jouw muziekherkenning is uitstekend!
+    alternative_text: Dat bleek toch even lastig!
+- model: action.finalfeedback
+  fields:
+    final: toontjehoger-3-plink-final
+    feedback_text: 13
 - model: experiment.block
   fields:
     phase: 11
@@ -55,9 +108,36 @@
     identifier: th_absolute
     rounds: 5
     bonus_points: 0
+    ranking: toontjehoger-block-ranking
+    final: toontjehoger-4-absolute-final
     rules: TOONTJE_HOGER_4_ABSOLUTE
     playlists:
     - 14
+- model: action.final
+  pk: toontjehoger-4-absolute-final
+  fields:
+    button: 11
+- model: action.feedbacktext
+  pk: 14
+  fields:
+    index: 1
+    condition: final_score-ge-80
+    text: Goed gedaan! Jouw absolute gehoor is uitstekend!
+- model: action.finalfeedback
+  fields:
+    final: toontjehoger-4-absolute-final
+    feedback_text: 14
+- model: action.feedbacktext
+  pk: 15
+  fields:
+    index: 2
+    condition: final_score-ge-50
+    text: Goed gedaan! Jouw absolute gehoor is best OK!
+    alternative_text: Dat bleek toch even lastig!
+- model: action.finalfeedback
+  fields:
+    final: toontjehoger-4-absolute-final
+    feedback_text: 15
 - model: experiment.block
   fields:
     phase: 11
@@ -67,10 +147,37 @@
     identifier: th_tempo
     rounds: 5
     bonus_points: 0
+    ranking: toontjehoger-block-ranking
+    final: toontjehoger-5-tempo-final
     rules: TOONTJE_HOGER_5_TEMPO
     theme_config: null
     playlists:
     - 15
+- model: action.final
+  pk: toontjehoger-5-tempo-final
+  fields:
+    button: 11
+- model: action.feedbacktext
+  pk: 16
+  fields:
+    index: 1
+    condition: final_score-ge-80
+    text: Goed gedaan! Jouw timing is uitstekend!
+- model: action.finalfeedback
+  fields:
+    final: toontjehoger-5-tempo-final
+    feedback_text: 16
+- model: action.feedbacktext
+  pk: 17
+  fields:
+    index: 2
+    condition: final_score-ge-50
+    text: Goed gedaan! Jouw timing is best OK!
+    alternative_text: Dat bleek toch even lastig!
+- model: action.finalfeedback
+  fields:
+    final: toontjehoger-5-tempo-final
+    feedback_text: 17
 - model: experiment.block
   fields:
     phase: 11
@@ -80,9 +187,25 @@
     identifier: th_relative
     rounds: 2
     bonus_points: 0
+    ranking: toontjehoger-block-ranking
+    final: toontjehoger-6-relative-final
     rules: TOONTJE_HOGER_6_RELATIVE
     playlists:
     - 16
+- model: action.final
+  pk: toontjehoger-6-relative-final
+  fields:
+    button: 11
+- model: action.feedbacktext
+  pk: 18
+  fields:
+    condition: final_score-ge-100
+    text: Goed gedaan, jouw relatief gehoor is uitstekend!
+    alternative_text: Dat bleek toch even lastig!
+- model: action.finalfeedback
+  fields:
+    final: toontjehoger-6-relative-final
+    feedback_text: 18
 - model: section.playlist
   pk: 11
   fields:

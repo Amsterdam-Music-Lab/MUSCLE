@@ -13,4 +13,5 @@
     phase: 4242
     experiment: 4242
     identifier: test-block
+    ranking: hooked-ranking
     rules: QUESTIONNAIRE

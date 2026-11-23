@@ -3,9 +3,7 @@ from django.template.loader import render_to_string
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalView
 from experiment.actions.info import Info
-from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_4_absolute import ToontjeHoger4Absolute
 from .toontjehogerkids_1_mozart import get_info_button
 
@@ -31,23 +29,11 @@ class ToontjeHogerKids4Absolute(ToontjeHoger4Absolute):
         return "Welke van deze twee stukjes muziek klinkt precies zo hoog of laag als jij 'm kent?"
 
     def get_final_round(self, session):
-        # Finish session.
-        session.finish()
-
         # Score
         score = self.get_score(session)
 
         # Final
-        final_text = "Best lastig!"
-        if session.final_score >= session.block.rounds * 0.5 * self.SCORE_CORRECT:
-            final_text = "Goed gedaan!"
-
-        final = FinalView(
-            session=session,
-            final_text=final_text,
-            rank=toontjehoger_ranks(session),
-            button=Button("Wat hebben we getest?", link=""),
-        )
+        final = self.get_final_view(session)
 
         # Info page
         debrief_message = (

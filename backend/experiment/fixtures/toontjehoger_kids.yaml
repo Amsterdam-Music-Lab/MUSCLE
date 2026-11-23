@@ -19,9 +19,30 @@
     identifier: thk_mozart
     rounds: 2
     bonus_points: 0
+    ranking: toontjehoger-block-ranking
+    final: toontjehoger-kids-1-mozart-final
     rules: TOONTJE_HOGER_KIDS_1_MOZART
     playlists:
     - 21
+- model: action.button
+  pk: 21
+  fields:
+    label: Wat hebben we getest?
+    link: ""
+- model: action.final
+  pk: toontjehoger-kids-final
+  fields:
+    button: 21
+- model: action.feedbacktext
+  pk: 21
+  fields:
+    condition: final_score-ge-100
+    text: Goed gedaan!
+    alternative_text: Best lastig!
+- model: action.finalfeedback
+  fields:
+    final: toontjehoger-kids-final
+    feedback_text: 21
 - model: experiment.block
   fields:
     phase: 21
@@ -31,6 +52,8 @@
     identifier: thk_preverbal
     rounds: 2
     bonus_points: 0
+    ranking: toontjehoger-block-ranking
+    final: toontjehoger-kids-final
     rules: TOONTJE_HOGER_KIDS_2_PREVERBAL
     playlists:
     - 22
@@ -43,9 +66,25 @@
     identifier: thk_plink
     rounds: 10
     bonus_points: 0
+    ranking: toontjehoger-block-ranking
+    final: toontjehoger-kids-3-plink-final
     rules: TOONTJE_HOGER_KIDS_3_PLINK
     playlists:
     - 23
+- model: action.final
+  pk: toontjehoger-kids-3-plink-final
+  fields:
+    button: 21
+- model: action.feedbacktext
+  pk: 23
+  fields:
+    condition: final_score-ge-40
+    text: Goed gedaan!
+    alternative_text: Best lastig!
+- model: action.finalfeedback
+  fields:
+    final: toontjehoger-kids-3-plink-final
+    feedback_text: 23
 - model: experiment.block
   fields:
     phase: 21
@@ -58,6 +97,20 @@
     rules: TOONTJE_HOGER_KIDS_4_ABSOLUTE
     playlists:
     - 24
+- model: action.final
+  pk: toontjehoger-kids-absolute&tempo-final
+  fields:
+    button: 21
+- model: action.feedbacktext
+  pk: 24
+  fields:
+    condition: final_score-ge-50
+    text: Goed gedaan!
+    alternative_text: Best lastig!
+- model: action.finalfeedback
+  fields:
+    final: toontjehoger-kids-absolute&tempo-final
+    feedback_text: 24
 - model: experiment.block
   fields:
     phase: 21
@@ -67,6 +120,8 @@
     identifier: thk_tempo
     rounds: 5
     bonus_points: 0
+    ranking: toontjehoger-block-ranking
+    final: toontjehoger-kids-absolute&tempo-final
     rules: TOONTJE_HOGER_KIDS_5_TEMPO
     theme_config: null
     playlists:
@@ -80,6 +135,8 @@
     identifier: thk_relative
     rounds: 2
     bonus_points: 0
+    ranking: toontjehoger-block-ranking
+    final: toontjehoger-kids-final
     rules: TOONTJE_HOGER_KIDS_6_RELATIVE
     playlists:
     - 26

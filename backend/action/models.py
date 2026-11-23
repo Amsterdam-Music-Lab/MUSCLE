@@ -70,6 +70,9 @@ class Button(models.Model):
         ),
     )
 
+    def __str__(self):
+        return self.label
+
     def to_dict(self):
         return {
             "label": self.label,
@@ -83,14 +86,16 @@ class Final(models.Model):
     title = models.CharField(
         max_length=128,
         blank=True,
-        default="End",
-        help_text=_("This text will be displayed in the title bar"),
+        default="",
+        help_text=_("This text will be displayed in the title bar. Defaults to `End`"),
     )
     score_label = models.CharField(
         max_length=16,
         blank=True,
-        default="points",
-        help_text=_("This short label will be displayed along with the score"),
+        default="",
+        help_text=_(
+            "This short label will be displayed along with the score. Defaults to `points`"
+        ),
     )
     visualization_type = models.CharField(
         choices=STATISTIC_VISUALIZATION_CHOICES,
@@ -98,9 +103,7 @@ class Final(models.Model):
         default=None,
         help_text=_("Select a visualization of the relative score."),
     )
-    button = models.OneToOneField(
-        Button, blank=True, null=True, on_delete=models.CASCADE
-    )
+    button = models.ForeignKey(Button, blank=True, null=True, on_delete=models.CASCADE)
 
     def convert_to_view(self, session: Session) -> dict:
         scores = session.json_data.get("scores")

@@ -17,8 +17,20 @@
     rounds: 64
     bonus_points: 0
     rules: MUSICAL_PREFERENCES
+    final: musical-preferences-final
     playlists:
     - 51
+- model: action.final
+  pk: musical-preferences-final
+- model: action.feedbacktext
+  pk: 50
+  fields:
+    text: Thank you for your participation and contribution to science!
+    text_zh_hans: 感谢您的参与以及对科学的贡献！
+- model: action.finalfeedback
+  fields:
+    final: musical-preferences-final
+    feedback_text: 50
 - model: section.playlist
   fields:
     name: AudioSetup

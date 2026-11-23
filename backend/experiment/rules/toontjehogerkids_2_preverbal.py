@@ -5,10 +5,8 @@ from django.template.loader import render_to_string
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalView
 from experiment.actions.info import Info
 from experiment.actions.score import Score
-from .toontjehoger_1_mozart import toontjehoger_ranks
 from .toontjehoger_2_preverbal import ToontjeHoger2Preverbal
 from .toontjehogerkids_1_mozart import get_info_button
 
@@ -77,20 +75,11 @@ class ToontjeHogerKids2Preverbal(ToontjeHoger2Preverbal):
         return "Hierboven zie je twee spectrogrammen van babyhuiltjes.  Eentje is een Duitse baby en eentje is een Franse baby. De talen Frans en Duits klinken heel anders. Kun jij bedenken welke van deze baby’s de Franse baby is?"
 
     def get_final_round(self, session):
-        # Finish session.
-        session.finish()
-
         # Score
         score = self.get_score(session, session.get_rounds_passed())
 
         # Final
-        final_text = "Goed gedaan!" if session.final_score >= 2 * self.SCORE_CORRECT else "Best lastig!"
-        final = FinalView(
-            session=session,
-            final_text=final_text,
-            rank=toontjehoger_ranks(session),
-            button=Button("Wat hebben we getest?", link=""),
-        )
+        final = self.get_final_view(session)
 
         # Info page
         debrief_message = "Had jij dat gedacht, dat Franse en Duitse baby's anders huilen? Waarom zouden ze dat doen denk je? Bekijk de filmpjes om dit uit te vinden!"
