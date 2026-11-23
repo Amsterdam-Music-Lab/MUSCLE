@@ -3,6 +3,7 @@
   fields:
     identifier: tunetwins
     active: true
+    replayable: true
 - model: experiment.timeline
   pk: 61
   fields:
@@ -263,7 +264,6 @@
   fields:
     final: tunetwins-final
     feedback_text: 64
-
 - model: action.feedbacktext
   pk: 65
   fields:

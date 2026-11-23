@@ -5,24 +5,21 @@ from participant.models import Participant
 from section.models import Playlist
 from session.models import Session
 
-class TestLikertExperiment(TestCase):
+class TestSimpleBlockExperiment(TestCase):
     fixtures = [
         "choice_lists",
         "demographics",
         "questions_china",
         "goldsmiths_msi",
         "musical_preferences",
+        "simple_experiments",
     ]
 
     @classmethod
     def setUpTestData(cls):
-        exp = Experiment.objects.create(identifier="likert_test")
-        phase = Phase.objects.create(experiment=exp)
         playlist = Playlist.objects.get(name="MusicalPreferences")
         playlist._update_sections()
-        block = Block.objects.create(
-            identifier="likert_test", phase=phase, rules="LIKERT_EXPERIMENT"
-        )
+        block = Block.objects.get(identifier="simple_block")
         cls.session = Session.objects.create(participant=Participant.objects.create(), block=block, playlist=playlist)
 
     def test_get_trial(self):

@@ -2,13 +2,12 @@ from unittest.mock import patch
 
 from django.test import TestCase
 
-from experiment.models import Block, Experiment, Phase
+from experiment.models import Block
 from participant.models import Participant
 from result.models import Result
 from section.models import Playlist, Section, Song
 from session.models import Session
 from experiment.actions.explainer import Explainer
-from experiment.actions.final import FinalView
 from experiment.actions.trial import Trial
 from experiment.rules.congosamediff import CongoSameDiff
 
@@ -44,7 +43,7 @@ class CongoSameDiffTest(TestCase):
         )
         with patch.object(self.session, 'get_rounds_passed', return_value=2):
             final_action = congo_same_diff.next_round(self.session)
-            assert isinstance(final_action, Final)
+            assert isinstance(final_action, dict)
 
     def test_next_round_practice_trial(self):
         congo_same_diff = CongoSameDiff()
@@ -103,13 +102,13 @@ class CongoSameDiffTest(TestCase):
             == 'Is the third sound the SAME or DIFFERENT as the first two sounds?'
         )
 
-    def test_get_final_round(self):
+    def test_get_final_view(self):
         congo_same_diff = CongoSameDiff()
-
-        final_action = congo_same_diff.get_final_round(self.session)
-
-        assert isinstance(final_action, Final)
-        assert final_action.final_text == 'Thank you for participating!'
+        final_view = congo_same_diff.get_final_view(self.session)
+        self.assertIsInstance(final_view, dict)
+        self.assertIn(
+            'Thank you for participating!', final_view.get("finalFeedbackText")
+        )
 
     def test_validate_playlist_trial_without_group(self):
         congo_same_diff = CongoSameDiff()

@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from experiment.actions.explainer import Explainer
-from experiment.models import Experiment, Block, Phase
+from experiment.models import Block
 from experiment.rules.rhythm_battery_final import RhythmBatteryFinal
 from participant.models import Participant
 from section.models import Playlist

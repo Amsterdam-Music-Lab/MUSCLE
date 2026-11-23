@@ -1,7 +1,5 @@
 from django.utils.translation import gettext_lazy as _
 
-from experiment.actions.button import Button
-from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.playlist import PlaylistSelection
 from experiment.actions.question import CheckBoxQuestion
@@ -62,7 +60,7 @@ class ThatsMySong(Hooked):
         # If the number of results equals the number of block.rounds,
         # close the session and return data for the final_score view.
         if round_number == session.block.rounds:
-            return [self.get_score(session, round_number), self.get_final_view()]
+            return [self.get_score(session, round_number), self.get_final_view(session)]
 
         if round_number == 0:
             # get list of trials for demographic questions (first 2 questions)

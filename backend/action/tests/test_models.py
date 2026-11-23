@@ -45,7 +45,7 @@ class ExplainerTest(TestCase):
 
 
 class FinalFeedbackTest(TestCase):
-    fixtures = ["rankings", "eurovision_2020"]
+    fixtures = ["conditions", "rankings", "hooked", "eurovision_2020"]
 
     def setUp(self):
         block = Block.objects.get(identifier="eurovision_2021")

@@ -8,7 +8,7 @@ from session.models import Session
 
 
 class TestToontjeHoger2Preverbal(TestCase):
-    fixtures = ["rankings", "toontjehoger", "toontjehoger_kids"]
+    fixtures = ["conditions", "rankings", "toontjehoger", "toontjehoger_kids"]
 
     @classmethod
     def setUpTestData(cls):

@@ -12,6 +12,9 @@ class TestModelBlock(TestCase):
         "goldsmiths_msi",
         "musicgens",
         "vanderbilt",
+        "hooked",
+        "conditions",
+        "rankings",
         "thats_my_song",
     ]
 
@@ -21,7 +24,7 @@ class TestModelBlock(TestCase):
 
 
 class TestModelExperiment(TestCase):
-    fixtures = ["rankings", "toontjehoger"]
+    fixtures = ["conditions", "rankings", "toontjehoger"]
 
     def test_verbose_name_plural(self):
         # Get the Experiment Meta class
@@ -62,7 +65,7 @@ class TestModelExperiment(TestCase):
 
     def test_is_replayable(self):
         experiment = Experiment.objects.first()
-        participant = Participant.objects.first()
+        participant = Participant.objects.create()
         self.assertFalse(experiment.is_finished(participant))
         blocks = experiment.associated_blocks()
         Session.objects.bulk_create(
@@ -77,11 +80,6 @@ class TestModelExperiment(TestCase):
         experiment.replayable = False
         experiment.save()
         self.assertTrue(experiment.is_finished(participant))
-
-    def test_get_active_rank(self):
-        experiment = Experiment.objects.get(identifier="toontjehoger")
-        scores = {"accumulative_score": 400}
-        self.assertEqual(experiment.get_active_rank(scores).label, "gold")
 
     def test_get_played_sessions_count(self):
         participant = Participant.objects.create()
@@ -121,49 +119,32 @@ class TestModelExperiment(TestCase):
 
 
 class RankingModelTest(TestCase):
-    fixtures = ["eurovision_2020", "rankings"]
+    fixtures = ["conditions", "rankings", "hooked", "eurovision_2020"]
 
     def test_get_active_rank(self):
         ranking = Ranking.objects.get(identifier="hooked-ranking")
-        self.assertEqual(ranking.get_active_rank(98.0).label, "diamond")
-        self.assertEqual(ranking.get_active_rank(90.0).label, "platinum")
-        self.assertEqual(ranking.get_active_rank(80.0).label, "gold")
-        self.assertEqual(ranking.get_active_rank(40.0).label, "silver")
-        self.assertEqual(ranking.get_active_rank(20.0).label, "bronze")
-        self.assertEqual(ranking.get_active_rank(None).label, "plastic")
-
-    def test_get_active_rank_with_feedback(self):
-        block = Block.objects.first()
-        participant = Participant.objects.create()
-        session = Session.objects.create(block=block, participant=participant)
-        session.save_json_data(
-            {
-                "scores": {
-                    "percentile": 80.0,
-                    "n_correct": 4,
-                    "n_total": 42,
-                    "song_sync_feedback": "You did not recognize any songs at first.",
-                }
-            }
+        self.assertEqual(ranking.get_active_rank({"percentile": 98.0}).label, "diamond")
+        self.assertEqual(
+            ranking.get_active_rank({"percentile": 90.0}).label, "platinum"
         )
-        ranking = Ranking.objects.get(identifier="hooked-ranking")
-        rank = ranking.get_active_rank(98.0, True)
-        self.assertEqual(rank.label, "bronze")
-        self.assertTrue(rank.get_feedback_text(session).startswith("Well done!"))
-
-
-class RankTest(TestCase):
-    fixtures = ["rankings", "testing"]
-
-    pass
+        self.assertEqual(ranking.get_active_rank({"percentile": 80.0}).label, "gold")
+        self.assertEqual(ranking.get_active_rank({"percentile": 40.0}).label, "silver")
+        self.assertEqual(ranking.get_active_rank({"percentile": 20.0}).label, "bronze")
+        self.assertEqual(ranking.get_active_rank({}).label, "plastic")
 
 
 class TimelineModelTest(TestCase):
-    fixtures = ["choice_lists", "demographics", "matching_pairs_2025"]
+    fixtures = [
+        "choice_lists",
+        "demographics",
+        "conditions",
+        "rankings",
+        "matching_pairs_2025",
+    ]
 
     def test_to_dict(self):
         timeline = Timeline.objects.first()
         steps = timeline.to_dict().get('steps')
         self.assertEqual(len(steps), 12)
-        self.assertEqual(steps[:3], ["", "", "star"])
-        self.assertEqual(steps[9:12], ["", "", "cup"])
+        self.assertEqual([s["image"] for s in steps[:3]], ["", "", "star"])
+        self.assertEqual([s["image"] for s in steps[9:12]], ["", "", "cup"])

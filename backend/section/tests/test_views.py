@@ -59,7 +59,7 @@ class GetSectionViewTest(TestCase):
 
 
 class SetPlaylistViewTest(TestCase):
-    fixtures = ["testing"]
+    fixtures = ["conditions", "rankings", "testing"]
 
     @classmethod
     def setUpTestData(cls):

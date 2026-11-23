@@ -12,7 +12,7 @@ from result.utils import handle_results
 from result.views import verify_session
 
 class ResultTest(TestCase):
-    fixtures = ["testing"]
+    fixtures = ["conditions", "rankings", "testing"]
 
     @classmethod
     def setUpTestData(cls):

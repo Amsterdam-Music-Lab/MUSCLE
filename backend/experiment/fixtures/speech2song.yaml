@@ -33,7 +33,7 @@
 - model: action.finalfeedback
   fields:
     final: speech2song-final
-    feeback_text: 55
+    feedback_text: 55
 - model: section.playlist
   pk: 55
   fields:

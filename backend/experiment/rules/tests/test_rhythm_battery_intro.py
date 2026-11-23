@@ -5,7 +5,6 @@ from session.models import Session
 from experiment.models import Block
 from experiment.rules.rhythm_battery_intro import RhythmBatteryIntro
 from experiment.actions.explainer import Explainer
-from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.playback import Playback
 from experiment.actions.trial import Trial
@@ -48,7 +47,7 @@ class RhythmBatteryIntroTest(TestCase):
         self.assertIsInstance(actions[0].playback, Playback)
         # Assuming no feedback form for the final round
         self.assertIsNone(actions[0].feedback_form)
-        self.assertIsInstance(actions[1], Final)
+        self.assertIsInstance(actions[1], dict)
 
     def test_next_round_does_not_throw_error(self):
         listening_conditions = RhythmBatteryIntro()

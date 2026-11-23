@@ -15,9 +15,21 @@
     identifier: congo-same-diff
     rounds: 4
     bonus_points: 0
+    final: congosamediff-final
     rules: CONGOSAMEDIFF
     playlists:
     - 71
+- model: action.final
+  pk: congosamediff-final
+  fields: {}
+- model: action.feedbacktext
+  pk: 71
+  fields:
+    text: Thank you for participating!
+- model: action.finalfeedback
+  fields:
+    final: congosamediff-final
+    feedback_text: 71
 - model: section.playlist
   pk: 71
   fields:

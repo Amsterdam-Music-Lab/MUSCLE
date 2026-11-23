@@ -1,13 +1,12 @@
 from django.test import TestCase
 
-from experiment.models import Block, Phase
+from experiment.models import Block
 from participant.models import Participant
 from result.models import Result
 from section.models import Playlist
 from session.models import Session
 
 from experiment.actions.explainer import Explainer
-from experiment.actions.final import FinalView
 from experiment.actions.trial import Trial
 from experiment.rules.speech2song import sound, Speech2Song
 from experiment.serializers import serialize_actions

@@ -4,6 +4,7 @@
     name: ToontjeHogerKids
     identifier: thk
     active: true
+    replayable: true
     ranking: toontjehoger-ranking
 - model: experiment.phase
   pk: 21
@@ -20,7 +21,7 @@
     rounds: 2
     bonus_points: 0
     ranking: toontjehoger-block-ranking
-    final: toontjehoger-kids-1-mozart-final
+    final: toontjehoger-kids-final
     rules: TOONTJE_HOGER_KIDS_1_MOZART
     playlists:
     - 21

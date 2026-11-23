@@ -9,7 +9,12 @@ import json
 
 
 class BeatAlignmentRuleTest(TestCase):
-    fixtures = ["choice_lists", "goldsmiths_msi", "demographics", "rhythm_tests"]
+    fixtures = [
+        "choice_lists",
+        "goldsmiths_msi",
+        "demographics",
+        "rhythm_tests",
+    ]
 
     @classmethod
     def setUpTestData(cls):

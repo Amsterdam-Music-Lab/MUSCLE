@@ -3,7 +3,7 @@ import json
 from django.test import TestCase
 
 from experiment.actions.playback import PlaybackSection
-from experiment.models import Block, Phase
+from experiment.models import Block
 from participant.models import Participant
 from result.models import Result
 from section.models import Playlist
@@ -11,7 +11,13 @@ from session.models import Session
 
 
 class MatchingPairsTest(TestCase):
-    fixtures = ["choice_lists", "demographics", "matching_pairs"]
+    fixtures = [
+        "choice_lists",
+        "demographics",
+        "conditions",
+        "rankings",
+        "matching_pairs",
+    ]
 
     @classmethod
     def setUpTestData(cls):

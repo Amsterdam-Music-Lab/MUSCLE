@@ -4,6 +4,7 @@
     name: ToontjeHoger
     identifier: toontjehoger
     active: true
+    replayable: true
     ranking: toontjehoger-ranking
 - model: experiment.phase
   pk: 11
@@ -36,7 +37,7 @@
 - model: action.feedbacktext
   pk: 11
   fields:
-    condition: 11
+    condition: final_score-ge-100
     text: Je hebt het uitstekend gedaan!
     alternative_text: Dat bleek toch even lastig!
 - model: action.finalfeedback

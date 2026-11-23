@@ -3,6 +3,7 @@
   fields:
     identifier: christmas_2020
     active: true
+    replayable: true
 - model: experiment.phase
   pk: 42
   fields:

@@ -3,6 +3,7 @@
   fields:
     identifier: mpairs
     active: true
+    replayable: true
 - model: experiment.phase
   pk: 60
   fields:

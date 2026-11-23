@@ -15,11 +15,13 @@
     phase: 1
     experiment: 1
     identifier: rhythm_intro
+    final: rhythm-intro-final
     rules: RHYTHM_BATTERY_INTRO
     playlists:
     - 0
 - model: action.final
   pk: rhythm-intro-final
+  fields: {}
 - model: action.feedbacktext
   pk: 0
   fields:
@@ -47,6 +49,7 @@
     - 1
 - model: action.final
   pk: anis-final
+  fields: {}
 - model: action.feedbacktext
   pk: 1
   fields:
@@ -57,7 +60,7 @@
     text_nl: |
       #### Goed gedaan! Je kon het verschil horen wanneer we een toon {difference} procent opschoven.
       ### Wist je dat...
-      ##### ...veel dingen in de natuur regelmaat hebben zoals een metronoom? Onze hersenen gebruiken dit om ritme nog beter te verwerken!    
+      ##### ...veel dingen in de natuur regelmaat hebben zoals een metronoom? Onze hersenen gebruiken dit om ritme nog beter te verwerken!
 - model: action.finalfeedback
   fields:
     final: anis-final
@@ -77,6 +80,7 @@
     - 2
 - model: action.final
   pk: bat-final
+  fields: {}
 - model: action.feedbacktext
   pk: 2
   fields:
@@ -104,6 +108,7 @@
     - 3
 - model: action.final
   pk: ddi-final
+  fields: {}
 - model: action.feedbacktext
   pk: 3
   fields:
@@ -115,7 +120,7 @@
     text_nl: |
       #### Goed gedaan! Je hoorde het verschil al als het ritme met maar {difference} procent vertraagde of versnelde!
       ### Wist je dat...
-      ##### ...uit onderzoek blijkt dat je prestatie op deze taak af kan hangen van de lengte van het 
+      ##### ...uit onderzoek blijkt dat je prestatie op deze taak af kan hangen van de lengte van het interval? Voor korte tijdsintervallen kun je nog kleinere verschillen horen dan voor lange intervallen.
 - model: action.finalfeedback
   fields:
     final: ddi-final
@@ -132,6 +137,7 @@
     - 4
 - model: action.final
   pk: ddit-final
+  fields: {}
 - model: action.feedbacktext
   pk: 4
   fields:
@@ -161,6 +167,7 @@
     - 5
 - model: action.final
   pk: hbat-final
+  fields: {}
 - model: action.feedbacktext
   pk: 5
   fields:
@@ -188,6 +195,7 @@
     - 5
 - model: action.final
   pk: hbat_bit-final
+  fields: {}
 - model: action.feedbacktext
   pk: 6
   fields:
@@ -217,6 +225,7 @@
     - 6
 - model: action.final
   pk: hbat_bst-final
+  fields: {}
 - model: action.feedbacktext
   pk: 7
   fields:
@@ -245,6 +254,7 @@
     - 7
 - model: action.final
   pk: rhdis-final
+  fields: {}
 - model: action.feedbacktext
   pk: 8
   fields:
@@ -304,7 +314,7 @@
   pk: 1
   fields:
     name: Anisochrony
-    csv: | 
+    csv: |
       default,0,0.0,3.050113378684807,ANIS/0.wav,0,0
       default,1,0.0,3.050113378684807,ANIS/1.wav,0,0
       default,10,0.0,3.050113378684807,ANIS/10.wav,0,0

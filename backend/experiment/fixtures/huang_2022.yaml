@@ -4,6 +4,7 @@
     identifier: huang_2022
     enforce_language: zh-hans
     active: true
+    replayable: true
 - model: experiment.phase
   pk: 43
   fields:
@@ -24,7 +25,7 @@
     - 44
     - 45
 - model: action.feedbacktext
-  pk: 43
+  pk: 44
   fields:
     index: 0
     text: Thank you for your contribution to science!
@@ -32,7 +33,7 @@
 - model: action.finalfeedback
   fields:
     final: hooked-final
-    feedback_text: 43
+    feedback_text: 44
 - model: section.playlist
   fields:
     name: AudioSetup

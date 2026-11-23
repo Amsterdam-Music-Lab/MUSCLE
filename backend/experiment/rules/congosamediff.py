@@ -5,7 +5,6 @@ from django.utils.translation import gettext_lazy as _
 from section.models import Playlist, Section
 from session.models import Session
 from experiment.actions.explainer import Explainer
-from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.playback import PlayButtons, PlaybackSection
 from experiment.actions.question import ButtonArrayQuestion

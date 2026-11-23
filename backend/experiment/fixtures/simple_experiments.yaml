@@ -1,0 +1,49 @@
+- model: experiment.experiment
+  pk: 81
+  fields:
+    identifier: simple_experiment
+    active: true
+- model: experiment.phase
+  pk: 81
+  fields:
+    experiment: 81
+- model: experiment.block
+  pk: 81
+  fields:
+    phase: 81
+    experiment: 81
+    index: 1
+    identifier: simple_block
+    final: simple-final
+    rules: SIMPLE_BLOCK
+- model: action.final
+  pk: simple-final
+  fields:
+    title: End of this part
+- model: action.feedbacktext
+  pk: 81
+  fields:
+    text: Thank you for your responses!
+- model: action.finalfeedback
+  fields:
+    final: simple-final
+    feedback_text: 81
+- model: experiment.experiment
+  pk: 82
+  fields:
+    identifier: two_questions
+    active: true
+- model: experiment.phase
+  pk: 82
+  fields:
+    experiment: 82
+- model: experiment.block
+  pk: 82
+  fields:
+    phase: 82
+    experiment: 82
+    index: 1
+    identifier: two_questions
+    final: simple-final
+    rules: TWO_QUESTIONS
+

@@ -3,6 +3,7 @@
   fields:
     identifier: eurovision_2021
     active: true
+    replayable: true
 - model: experiment.timeline
   pk: 41
   fields:

@@ -1,9 +1,7 @@
 from django.utils.translation import gettext_lazy as _
-from django.template.loader import render_to_string
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalView
 from question.banks import get_question_bank
 from session.models import Session
 from .base import BaseRules
@@ -56,7 +54,7 @@ class RhythmBatteryFinal(BaseRules):
         if questions:
             return [self.get_intro_explainer(), *questions]
         else:
-            return self.get_final_view()
+            return self.get_final_view(session)
 
     def feedback_info(self):
         info = super().feedback_info()

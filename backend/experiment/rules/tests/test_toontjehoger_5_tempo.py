@@ -10,7 +10,7 @@ from section.models import Playlist
 from session.models import Session
 
 class TestToontjeHoger5Tempo(TestCase):
-    fixtures = ["rankings", "toontjehoger"]
+    fixtures = ["conditions", "rankings", "toontjehoger"]
 
     @classmethod
     def setUpTestData(cls):
@@ -87,7 +87,7 @@ class TestToontjeHoger5Tempo(TestCase):
 
 
 class ToontjeHogerKids5TempoTest(TestCase):
-    fixtures = ["rankings", "toontjehoger_kids"]
+    fixtures = ["conditions", "rankings", "toontjehoger_kids"]
 
     @classmethod
     def setUpTestData(cls):

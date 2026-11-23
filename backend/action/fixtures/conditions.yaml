@@ -47,26 +47,31 @@
     operator: gt
     value: 0
 - model: action.condition
+  pk: rank-eq-diamond
   fields:
     metric: rank
     operator: eq
     value: diamond
 - model: action.condition
+  pk: rank-eq-gold
   fields:
     metric: rank
     operator: eq
     value: gold
 - model: action.condition
+  pk: rank-eq-silver
   fields:
     metric: rank
     operator: eq
     value: silver
 - model: action.condition
+  pk: strongest_domain-eq-spectral
   fields:
     metric: strongest_domain
     operator: eq
     value: spectral
 - model: action.condition
+  pk: strongest_domain-eq-temporal
   fields:
     metric: strongest_domain
     operator: eq

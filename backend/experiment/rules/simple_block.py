@@ -5,7 +5,6 @@ from django.utils.translation import gettext_lazy as _
 from action.models import Explainer
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer as ExplainerAction, Step
-from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.question import TextRangeQuestion
@@ -18,9 +17,9 @@ from session.models import Session
 logger = logging.getLogger(__name__)
 
 
-class TwoQuestions(BaseRules):
-    """ Simple experiment presenting an audio file with Likert scale"""
-    ID = "TWO_QUESTIONS"
+class SimpleBlock(BaseRules):
+    """ Simple block rules presenting an audio file with configurable question"""
+    ID = "SIMPLE_BLOCK"
 
     def get_intro_explainer(self, session: Session):
         """Explain the game"""
@@ -51,7 +50,7 @@ class TwoQuestions(BaseRules):
             )
 
     def next_round(self, session: Session):
-        round_number = session.result_set.count() / 2
+        round_number = session.get_rounds_passed()
         total_rounds = session.playlist.section_set.count()
         if round_number == 0:
             return [
@@ -60,61 +59,39 @@ class TwoQuestions(BaseRules):
             ]
         elif round_number == total_rounds:
             session.finish()
-            return [
-                FinalView(
-                    session,
-                    title=_("End of this part"),
-                    final_text=_("Thank you for your responses!"),
-                )
-            ]
+            return [self.get_final_view(session)]
         else:
             return [self.get_trial(session, total_rounds)]
 
     def get_trial(self, session, total_rounds):
-        question1_identifier = session.block.rules_config.get(
-            "question1_identifier", "question1_fallback_dummy"
+        question_identifier = session.block.rules_config.get(
+            "question_identifier", "question_fallback_dummy"
         )
         played_sections = session.result_set.filter(
-            question_identifier=question1_identifier
+            question_identifier=question_identifier
         ).values_list('section__id', flat=True)
-        question2_identifier = session.block.rules_config.get(
-            "question2_identifier", "question2_fallback_dummy"
-        )
         section = session.playlist.get_section(exclude={'pk__in': played_sections})
         playback = Autoplay(sections=[PlaybackSection(section)], show_animation=False)
         try:
-            question1 = Question.objects.get(
-                identifier=question1_identifier
+            question = Question.objects.get(
+                identifier=question_identifier
             ).convert_to_action()
         except:
-            question1 = self.get_fallback_question(question1_identifier)
-        question1.result_id = prepare_result(
-            question1_identifier,
-            session,
-            section=section,
-            scoring_rule=(
-                getattr(question1, "scoring_rule", "LIKERT")
-                if hasattr(question1, "scoring_rule")
-                else "LIKERT"
-            ),
+            question = TextRangeQuestion(
+                identifier=question_identifier,
+                explainer=_("Rate from lowest to highest"),
+                choices=[
+                    {"value": 1, "label": _("Lowest")},
+                    {"value": 2, "label": _("Low")},
+                    {"value": 3, "label": _("Medium")},
+                    {"value": 4, "label": _("High")},
+                    {"value": 5, "label": _("Highest")},
+                ],
+            )
+        question.result_id = prepare_result(
+            question_identifier, session, scoring_rule="LIKERT", section=section
         )
-        try:
-            question2 = Question.objects.get(
-                identifier=question2_identifier
-            ).convert_to_action()
-        except:
-            question2 = self.get_fallback_question(question2_identifier)
-        question2.result_id = prepare_result(
-            question2_identifier,
-            session,
-            section=section,
-            scoring_rule=(
-                getattr(question2, "scoring_rule", "LIKERT")
-                if hasattr(question2, "scoring_rule")
-                else "LIKERT"
-            ),
-        )
-        form = Form(form=[question1, question2])
+        form = Form(form=[question])
         return Trial(
             playback=playback,
             feedback_form=form,
@@ -122,17 +99,4 @@ class TwoQuestions(BaseRules):
             % {'round_number': len(played_sections), 'total_rounds': total_rounds},
             response_time=section.duration,
             listen_first=True,
-        )
-
-    def get_fallback_question(self, question_identifier: str) -> TextRangeQuestion:
-        return TextRangeQuestion(
-            identifier=question_identifier,
-            text=_("Rate from lowest to highest"),
-            choices=[
-                {"value": 1, "label": _("Lowest")},
-                {"value": 2, "label": _("Low")},
-                {"value": 3, "label": _("Medium")},
-                {"value": 4, "label": _("High")},
-                {"value": 5, "label": _("Highest")},
-            ],
         )

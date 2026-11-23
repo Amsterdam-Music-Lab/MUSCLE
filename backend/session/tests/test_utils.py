@@ -10,7 +10,7 @@ n_results = 10
 
 
 class SessionUtilsTest(TestCase):
-    fixtures = ["testing"]
+    fixtures = ["conditions", "rankings", "testing"]
 
     @classmethod
     def setUpTestData(cls):

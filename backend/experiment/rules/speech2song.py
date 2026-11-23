@@ -159,7 +159,7 @@ class Speech2Song(BaseRules):
             is_speech = False
         else:
             # Return a final score action
-            return [self.get_final_view()]
+            return [self.get_final_view(session)]
         if rounds_passed % 2 == 1:
             # even round: single representation (first round are questions only)
             actions.extend(self.next_single_representation(

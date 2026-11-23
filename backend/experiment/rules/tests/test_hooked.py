@@ -3,8 +3,8 @@ from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 from unittest.mock import Mock
 
+from action.models import Final
 from experiment.actions.explainer import Explainer
-from experiment.actions.final import FinalView
 from experiment.actions.score import Score
 from experiment.actions.trial import Trial
 from experiment.models import (
@@ -40,6 +40,9 @@ class HookedTest(TestCase):
         "tipi",
         "vanderbilt",
         "questions_hooked",
+        "conditions",
+        "rankings",
+        "hooked",
         "eurovision_2020",
     ]
 
@@ -59,8 +62,13 @@ class HookedTest(TestCase):
             experiment=experiment, url="https://app.amsterdammusiclab.nl/hooked"
         )
         phase = Phase.objects.create(experiment=experiment)
+        final = Final.objects.get(pk="hooked-final")
         block = Block.objects.create(
-            identifier="Hooked", rules="HOOKED", rounds=n_rounds, phase=phase
+            identifier="Hooked",
+            rules="HOOKED",
+            rounds=n_rounds,
+            phase=phase,
+            final=final,
         )
         QuestionList.objects.all().update(block=block)
         session = Session.objects.create(
@@ -129,7 +137,7 @@ class HookedTest(TestCase):
             elif i == n_rounds:
                 # final round
                 self.assertEqual(type(actions[0]), Score)
-                self.assertEqual(type(actions[1]), Final)
+                self.assertIsInstance(actions[1], dict)
 
 
 class EurovisionTest(TestCase):
@@ -140,6 +148,9 @@ class EurovisionTest(TestCase):
         "musicgens",
         "stomp",
         "tipi",
+        "conditions",
+        "rankings",
+        "hooked",
         "eurovision_2020",
         "questions_hooked",
     ]
@@ -218,6 +229,9 @@ class KuiperTest(TestCase):
         "musicgens",
         "stomp",
         "tipi",
+        "conditions",
+        "rankings",
+        "hooked",
         "eurovision_2020",
         "kuiper_2020",
         "questions_hooked",
@@ -307,6 +321,9 @@ class ThatsMySongTest(TestCase):
         "demographics",
         "musicgens",
         "vanderbilt",
+        "conditions",
+        "rankings",
+        "hooked",
         "thats_my_song",
     ]
 
@@ -320,14 +337,13 @@ class ThatsMySongTest(TestCase):
     def test_thats_my_song(self):
         tms_identifiers = get_question_bank('VANDERBILT_FIXED')
         block = Block.objects.get(identifier="thats_my_song")
-        block.add_default_question_lists()
         playlist = Playlist.objects.get(name="ThatsMySong")
         playlist._update_sections()
         session = Session.objects.create(
             block=block, participant=self.participant, playlist=playlist
         )
         rules = session.block_rules()
-        assert rules.feedback_info() is None
+        self.assertIsNone(rules.feedback_info())
 
         # need to add 1 to the index, as there is double round counted as 0 in the rules files
         for i in range(0, block.rounds + 1):
@@ -380,6 +396,9 @@ class Huang2022Test(TestCase):
         "demographics",
         "goldsmiths_msi",
         "questions_china",
+        "conditions",
+        "rankings",
+        "hooked",
         "huang_2022",
     ]
 

@@ -14,6 +14,8 @@ class SessionTest(TestCase):
         "vanderbilt",
         "musicgens",
         "demographics",
+        "conditions",
+        "rankings",
         "testing",
         "hooked",
         "thats_my_song",

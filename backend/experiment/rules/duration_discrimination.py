@@ -8,7 +8,6 @@ from section.models import Section
 from experiment.actions.button import Button
 from experiment.actions.playback import Autoplay, PlaybackSection
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.question import ButtonArrayQuestion
 from experiment.actions.trial import Trial

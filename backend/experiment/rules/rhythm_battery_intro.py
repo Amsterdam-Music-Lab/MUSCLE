@@ -133,10 +133,7 @@ class RhythmBatteryIntro(BaseRules):
             playback = Autoplay(
                 sections=[PlaybackSection(section)], instruction=instruction
             )
-            message = _(
-                "Please keep the eventual sound level the same over the course of the experiment.")
-            session.finish()
-            actions = [Trial(playback, feedback_form), self.get_final_view()]
+            actions = [Trial(playback, feedback_form), self.get_final_view(session)]
             return actions
 
         view = Trial(playback, feedback_form=feedback_form)

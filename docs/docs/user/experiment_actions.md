@@ -10,10 +10,6 @@
 
 ::: backend.experiment.actions.explainer
 
-## backend.experiment.actions.final
-
-::: backend.experiment.actions.final
-
 ## backend.experiment.actions.form
 
 ::: backend.experiment.actions.form

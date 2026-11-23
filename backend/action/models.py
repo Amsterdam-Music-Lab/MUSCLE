@@ -50,7 +50,7 @@ STATISTIC_VISUALIZATION_CHOICES = [
 
 class Button(models.Model):
     label = models.CharField(
-        max_length=16, help_text=_("Set the text displayed on the button")
+        max_length=32, help_text=_("Set the text displayed on the button")
     )
     color = models.CharField(
         max_length=20,
@@ -107,15 +107,15 @@ class Final(models.Model):
 
     def convert_to_view(self, session: Session) -> dict:
         scores = session.json_data.get("scores")
-        active_experiment = self.block.experiment
+        active_experiment = session.block.experiment
         timeline = (
             active_experiment.timeline
             if hasattr(active_experiment, "timeline")
             else None
         )
         active_rank = (
-            self.block.ranking.get_active_rank(session.json_data)
-            if hasattr(self.block, "ranking")
+            session.block.ranking.get_active_rank(session.json_data)
+            if getattr(session.block, "ranking")
             else None
         )
 

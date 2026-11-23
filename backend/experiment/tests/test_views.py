@@ -312,7 +312,7 @@ class TestExperimentViews(TestCase):
         self.assertEqual(response.json()["theme"]["name"], "new-theme")
         self.assertEqual(len(response.json()["theme"]["header"]["score"]), 3)
         self.assertEqual(response.json()["rounds"], 3)
-        self.assertEqual(response.json()["bonus_points"], 42)
+        self.assertEqual(response.json()["bonusPoints"], 42)
 
     def test_post_feedback(self):
         request = {"feedback": "I have a lot of feedback here"}

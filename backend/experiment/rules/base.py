@@ -160,12 +160,12 @@ class BaseRules(object):
                 "label": "%",
             },
             "total": {
-                "value": session.total_score(),
-                "label": session.block.final.score_label or _("points"),
+                "value": session.final_score,
+                "label": str(session.block.final.score_label) or str(_("points")),
             },
             "accumulative": {
                 "value": session.participant.accumulative_score(),
-                "label": session.block.final.score_label or _("points"),
+                "label": str(session.block.final.score_label) or str(_("points")),
             },
         }
 

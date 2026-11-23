@@ -8,7 +8,7 @@ from session.models import Session
 
 
 class ResultTest(TestCase):
-    fixtures = ["testing"]
+    fixtures = ["conditions", "rankings", "testing"]
 
     @classmethod
     def setUpTestData(cls):

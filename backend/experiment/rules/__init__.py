@@ -10,7 +10,7 @@ from .hbat_bst import BST
 from .hooked import Hooked
 from .huang_2022 import Huang2022
 from .kuiper_2020 import Kuiper2020
-from .likert import Likert
+from .simple_block import SimpleBlock
 from .matching_pairs import MatchingPairsGame
 from .matching_pairs_2025 import MatchingPairs2025
 from .musical_preferences import MusicalPreferences
@@ -33,7 +33,7 @@ from .toontjehogerkids_3_plink import ToontjeHogerKids3Plink
 from .toontjehogerkids_4_absolute import ToontjeHogerKids4Absolute
 from .toontjehogerkids_5_tempo import ToontjeHogerKids5Tempo
 from .toontjehogerkids_6_relative import ToontjeHogerKids6Relative
-from .two_questions import TwoQuestions
+from .two_questions_block import TwoQuestionsBlock
 
 # Rules available to this application
 # If you create new Rules, add them to the list
@@ -53,7 +53,7 @@ BLOCK_RULES = {
     HookedTeleTunes.ID: HookedTeleTunes,
     Huang2022.ID: Huang2022,
     Kuiper2020.ID: Kuiper2020,
-    Likert.ID: Likert,
+    SimpleBlock.ID: SimpleBlock,
     MatchingPairsGame.ID: MatchingPairsGame,
     MatchingPairs2025.ID: MatchingPairs2025,
     MusicalPreferences.ID: MusicalPreferences,
@@ -75,5 +75,5 @@ BLOCK_RULES = {
     ToontjeHogerKids4Absolute.ID: ToontjeHogerKids4Absolute,
     ToontjeHogerKids5Tempo.ID: ToontjeHogerKids5Tempo,
     ToontjeHogerKids6Relative.ID: ToontjeHogerKids6Relative,
-    TwoQuestions.ID: TwoQuestions,
+    TwoQuestionsBlock.ID: TwoQuestionsBlock,
 }

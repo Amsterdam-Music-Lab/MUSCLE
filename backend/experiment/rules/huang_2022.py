@@ -6,7 +6,6 @@ from django.conf import settings
 
 from experiment.actions.button import Button
 from experiment.actions.explainer import Explainer, Step
-from experiment.actions.final import FinalView
 from experiment.actions.form import Form
 from experiment.actions.html import HTML
 from experiment.actions.question import ButtonArrayQuestion

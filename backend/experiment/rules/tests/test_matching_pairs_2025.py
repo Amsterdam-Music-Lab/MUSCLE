@@ -5,14 +5,19 @@ from django.db.models import Avg
 from django.test import TestCase
 
 from experiment.models import Block, Experiment, Phase
-from experiment.actions.final import FinalView
 from participant.models import Participant
 from result.models import Result
 from section.models import Playlist, Song
 from session.models import Session
 
 class MatchingPairs2025Test(TestCase):
-    fixtures = ["choice_lists", "demographics", "matching_pairs_2025"]
+    fixtures = [
+        "choice_lists",
+        "demographics",
+        "conditions",
+        "rankings",
+        "matching_pairs_2025",
+    ]
 
     @classmethod
     def setUpTestData(cls):
@@ -285,9 +290,9 @@ class MatchingPairs2025Test(TestCase):
         session = Session.objects.create(
             participant=self.participant, block=self.block, final_score=100
         )
-        final_action = self.rules._get_final_actions(session)[0]
-        self.assertIsInstance(final_action, Final)
-        self.assertEqual(final_action.total_score, 100)
+        final_action = self.rules.get_final_view(session)
+        self.assertIsInstance(final_action, dict)
+        self.assertEqual(session.json_data.get("scores").get("total").get("value"), 100)
 
     def test_get_possible_conditions(self):
         possible_conditions = self.rules._get_possible_conditions(self.session)

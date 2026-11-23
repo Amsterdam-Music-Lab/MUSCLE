@@ -10,7 +10,12 @@ from session.models import Session
 
 
 class DDITest(TestCase):
-    fixtures = ["choice_lists", "goldsmiths_msi", "demographics", "rhythm_tests"]
+    fixtures = [
+        "choice_lists",
+        "goldsmiths_msi",
+        "demographics",
+        "rhythm_tests",
+    ]
 
     @classmethod
     def setUpTestData(cls):

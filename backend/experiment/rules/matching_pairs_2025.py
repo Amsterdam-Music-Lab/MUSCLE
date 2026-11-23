@@ -72,7 +72,7 @@ class MatchingPairs2025(MatchingPairsGame):
 
     def get_final_statistics(self, session: Session) -> dict:
         """The final statistics differ depending on whether the timeline is completed"""
-        played_sessions = session.participant.session_set.filter(
+        played_sessions = session.participant.sessions.filter(
             finished_at__isnull=False,
             block__in=session.block.phase.blocks.all(),
         )

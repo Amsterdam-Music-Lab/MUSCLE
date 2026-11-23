@@ -14,53 +14,325 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Button',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('label', models.CharField(help_text='Set the text displayed on the button', max_length=16)),
-                ('label_en', models.CharField(help_text='Set the text displayed on the button', max_length=16, null=True)),
-                ('label_nl', models.CharField(help_text='Set the text displayed on the button', max_length=16, null=True)),
-                ('label_es', models.CharField(help_text='Set the text displayed on the button', max_length=16, null=True)),
-                ('label_pt', models.CharField(help_text='Set the text displayed on the button', max_length=16, null=True)),
-                ('label_zh_hans', models.CharField(help_text='Set the text displayed on the button', max_length=16, null=True)),
-                ('label_tr', models.CharField(help_text='Set the text displayed on the button', max_length=16, null=True)),
-                ('label_de', models.CharField(help_text='Set the text displayed on the button', max_length=16, null=True)),
-                ('label_ja', models.CharField(help_text='Set the text displayed on the button', max_length=16, null=True)),
-                ('color', models.CharField(blank=True, choices=[('colorBackground', 'Background color'), ('colorGrey', 'Grey color'), ('colorNegative', 'Negative color'), ('colorNeutral1', 'Neutral color 1'), ('colorNeutral2', 'Neutral color 2'), ('colorNeutral3', 'Neutral color 3'), ('colorPositive', 'Positive color'), ('colorPrimary', 'Primary color'), ('colorSecondary', 'Secondary color'), ('colorText', 'Text color')], help_text='Set the color of the button, based on the theme. If not set, defaults to primary color.', max_length=20, null=True)),
-                ('link', models.CharField(blank=True, help_text="If clicking on a button should link to a specific url, set it here. Otherwise, the button will link back to the experiment's entrypoint.", max_length=100, null=True)),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
+                (
+                    'label',
+                    models.CharField(
+                        help_text='Set the text displayed on the button', max_length=32
+                    ),
+                ),
+                (
+                    'label_en',
+                    models.CharField(
+                        help_text='Set the text displayed on the button',
+                        max_length=32,
+                        null=True,
+                    ),
+                ),
+                (
+                    'label_nl',
+                    models.CharField(
+                        help_text='Set the text displayed on the button',
+                        max_length=32,
+                        null=True,
+                    ),
+                ),
+                (
+                    'label_es',
+                    models.CharField(
+                        help_text='Set the text displayed on the button',
+                        max_length=32,
+                        null=True,
+                    ),
+                ),
+                (
+                    'label_pt',
+                    models.CharField(
+                        help_text='Set the text displayed on the button',
+                        max_length=32,
+                        null=True,
+                    ),
+                ),
+                (
+                    'label_zh_hans',
+                    models.CharField(
+                        help_text='Set the text displayed on the button',
+                        max_length=32,
+                        null=True,
+                    ),
+                ),
+                (
+                    'label_tr',
+                    models.CharField(
+                        help_text='Set the text displayed on the button',
+                        max_length=32,
+                        null=True,
+                    ),
+                ),
+                (
+                    'label_de',
+                    models.CharField(
+                        help_text='Set the text displayed on the button',
+                        max_length=32,
+                        null=True,
+                    ),
+                ),
+                (
+                    'label_ja',
+                    models.CharField(
+                        help_text='Set the text displayed on the button',
+                        max_length=32,
+                        null=True,
+                    ),
+                ),
+                (
+                    'color',
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ('colorBackground', 'Background color'),
+                            ('colorGrey', 'Grey color'),
+                            ('colorNegative', 'Negative color'),
+                            ('colorNeutral1', 'Neutral color 1'),
+                            ('colorNeutral2', 'Neutral color 2'),
+                            ('colorNeutral3', 'Neutral color 3'),
+                            ('colorPositive', 'Positive color'),
+                            ('colorPrimary', 'Primary color'),
+                            ('colorSecondary', 'Secondary color'),
+                            ('colorText', 'Text color'),
+                        ],
+                        help_text='Set the color of the button, based on the theme. If not set, defaults to primary color.',
+                        max_length=20,
+                        null=True,
+                    ),
+                ),
+                (
+                    'link',
+                    models.CharField(
+                        blank=True,
+                        help_text="If clicking on a button should link to a specific url, set it here. Otherwise, the button will link back to the experiment's entrypoint.",
+                        max_length=100,
+                        null=True,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
             name='Condition',
             fields=[
-                ('identifier', models.CharField(blank=True, max_length=100, primary_key=True, serialize=False)),
-                ('metric', models.CharField(help_text='The metric to check: make sure this key is present in the json_data')),
-                ('operator', models.CharField(choices=[('eq', 'equals'), ('ne', 'different from'), ('gt', 'greater than'), ('ge', 'greater than or equal'), ('lt', 'lower than'), ('le', 'lower than or equal')], help_text='Choose the operator to check whether the condition is met', max_length=2)),
-                ('value', models.CharField(help_text='The value against which to compare. Can be string or integer.')),
+                (
+                    'identifier',
+                    models.CharField(
+                        blank=True, max_length=100, primary_key=True, serialize=False
+                    ),
+                ),
+                (
+                    'metric',
+                    models.CharField(
+                        help_text='The metric to check: make sure this key is present in the json_data'
+                    ),
+                ),
+                (
+                    'operator',
+                    models.CharField(
+                        choices=[
+                            ('eq', 'equals'),
+                            ('ne', 'different from'),
+                            ('gt', 'greater than'),
+                            ('ge', 'greater than or equal'),
+                            ('lt', 'lower than'),
+                            ('le', 'lower than or equal'),
+                        ],
+                        help_text='Choose the operator to check whether the condition is met',
+                        max_length=2,
+                    ),
+                ),
+                (
+                    'value',
+                    models.CharField(
+                        help_text='The value against which to compare. Can be string or integer.'
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
             name='FeedbackText',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('index', models.PositiveSmallIntegerField(default=0, help_text='Set the index to control the order of Feedbacks, in case you have multiple')),
-                ('text', models.TextField(help_text='This text will be shown when the condition is met, or if no condition is defined')),
-                ('text_en', models.TextField(help_text='This text will be shown when the condition is met, or if no condition is defined', null=True)),
-                ('text_nl', models.TextField(help_text='This text will be shown when the condition is met, or if no condition is defined', null=True)),
-                ('text_es', models.TextField(help_text='This text will be shown when the condition is met, or if no condition is defined', null=True)),
-                ('text_pt', models.TextField(help_text='This text will be shown when the condition is met, or if no condition is defined', null=True)),
-                ('text_zh_hans', models.TextField(help_text='This text will be shown when the condition is met, or if no condition is defined', null=True)),
-                ('text_tr', models.TextField(help_text='This text will be shown when the condition is met, or if no condition is defined', null=True)),
-                ('text_de', models.TextField(help_text='This text will be shown when the condition is met, or if no condition is defined', null=True)),
-                ('text_ja', models.TextField(help_text='This text will be shown when the condition is met, or if no condition is defined', null=True)),
-                ('alternative_text', models.TextField(blank=True, default='', help_text='Optional: This text will be shown when the condition is not met. Use curly braces around values in json_data to render them.')),
-                ('alternative_text_en', models.TextField(blank=True, default='', help_text='Optional: This text will be shown when the condition is not met. Use curly braces around values in json_data to render them.', null=True)),
-                ('alternative_text_nl', models.TextField(blank=True, default='', help_text='Optional: This text will be shown when the condition is not met. Use curly braces around values in json_data to render them.', null=True)),
-                ('alternative_text_es', models.TextField(blank=True, default='', help_text='Optional: This text will be shown when the condition is not met. Use curly braces around values in json_data to render them.', null=True)),
-                ('alternative_text_pt', models.TextField(blank=True, default='', help_text='Optional: This text will be shown when the condition is not met. Use curly braces around values in json_data to render them.', null=True)),
-                ('alternative_text_zh_hans', models.TextField(blank=True, default='', help_text='Optional: This text will be shown when the condition is not met. Use curly braces around values in json_data to render them.', null=True)),
-                ('alternative_text_tr', models.TextField(blank=True, default='', help_text='Optional: This text will be shown when the condition is not met. Use curly braces around values in json_data to render them.', null=True)),
-                ('alternative_text_de', models.TextField(blank=True, default='', help_text='Optional: This text will be shown when the condition is not met. Use curly braces around values in json_data to render them.', null=True)),
-                ('alternative_text_ja', models.TextField(blank=True, default='', help_text='Optional: This text will be shown when the condition is not met. Use curly braces around values in json_data to render them.', null=True)),
-                ('condition', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='action.condition')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
+                (
+                    'index',
+                    models.PositiveSmallIntegerField(
+                        default=0,
+                        help_text='Set the index to control the order of Feedbacks, in case you have multiple',
+                    ),
+                ),
+                (
+                    'text',
+                    models.TextField(
+                        help_text='This text will be shown when the condition is met, or if no condition is defined'
+                    ),
+                ),
+                (
+                    'text_en',
+                    models.TextField(
+                        help_text='This text will be shown when the condition is met, or if no condition is defined',
+                        null=True,
+                    ),
+                ),
+                (
+                    'text_nl',
+                    models.TextField(
+                        help_text='This text will be shown when the condition is met, or if no condition is defined',
+                        null=True,
+                    ),
+                ),
+                (
+                    'text_es',
+                    models.TextField(
+                        help_text='This text will be shown when the condition is met, or if no condition is defined',
+                        null=True,
+                    ),
+                ),
+                (
+                    'text_pt',
+                    models.TextField(
+                        help_text='This text will be shown when the condition is met, or if no condition is defined',
+                        null=True,
+                    ),
+                ),
+                (
+                    'text_zh_hans',
+                    models.TextField(
+                        help_text='This text will be shown when the condition is met, or if no condition is defined',
+                        null=True,
+                    ),
+                ),
+                (
+                    'text_tr',
+                    models.TextField(
+                        help_text='This text will be shown when the condition is met, or if no condition is defined',
+                        null=True,
+                    ),
+                ),
+                (
+                    'text_de',
+                    models.TextField(
+                        help_text='This text will be shown when the condition is met, or if no condition is defined',
+                        null=True,
+                    ),
+                ),
+                (
+                    'text_ja',
+                    models.TextField(
+                        help_text='This text will be shown when the condition is met, or if no condition is defined',
+                        null=True,
+                    ),
+                ),
+                (
+                    'alternative_text',
+                    models.TextField(
+                        blank=True,
+                        default='',
+                        help_text='Optional: This text will be shown when the condition is not met. Use curly braces around values in json_data to render them.',
+                    ),
+                ),
+                (
+                    'alternative_text_en',
+                    models.TextField(
+                        blank=True,
+                        default='',
+                        help_text='Optional: This text will be shown when the condition is not met. Use curly braces around values in json_data to render them.',
+                        null=True,
+                    ),
+                ),
+                (
+                    'alternative_text_nl',
+                    models.TextField(
+                        blank=True,
+                        default='',
+                        help_text='Optional: This text will be shown when the condition is not met. Use curly braces around values in json_data to render them.',
+                        null=True,
+                    ),
+                ),
+                (
+                    'alternative_text_es',
+                    models.TextField(
+                        blank=True,
+                        default='',
+                        help_text='Optional: This text will be shown when the condition is not met. Use curly braces around values in json_data to render them.',
+                        null=True,
+                    ),
+                ),
+                (
+                    'alternative_text_pt',
+                    models.TextField(
+                        blank=True,
+                        default='',
+                        help_text='Optional: This text will be shown when the condition is not met. Use curly braces around values in json_data to render them.',
+                        null=True,
+                    ),
+                ),
+                (
+                    'alternative_text_zh_hans',
+                    models.TextField(
+                        blank=True,
+                        default='',
+                        help_text='Optional: This text will be shown when the condition is not met. Use curly braces around values in json_data to render them.',
+                        null=True,
+                    ),
+                ),
+                (
+                    'alternative_text_tr',
+                    models.TextField(
+                        blank=True,
+                        default='',
+                        help_text='Optional: This text will be shown when the condition is not met. Use curly braces around values in json_data to render them.',
+                        null=True,
+                    ),
+                ),
+                (
+                    'alternative_text_de',
+                    models.TextField(
+                        blank=True,
+                        default='',
+                        help_text='Optional: This text will be shown when the condition is not met. Use curly braces around values in json_data to render them.',
+                        null=True,
+                    ),
+                ),
+                (
+                    'alternative_text_ja',
+                    models.TextField(
+                        blank=True,
+                        default='',
+                        help_text='Optional: This text will be shown when the condition is not met. Use curly braces around values in json_data to render them.',
+                        null=True,
+                    ),
+                ),
+                (
+                    'condition',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to='action.condition',
+                    ),
+                ),
             ],
             options={
                 'ordering': ['index'],
@@ -69,35 +341,239 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Final',
             fields=[
-                ('identifier', models.SlugField(max_length=64, primary_key=True, serialize=False)),
-                ('title', models.CharField(blank=True, default='', help_text='This text will be displayed in the title bar. Defaults to `End`', max_length=128)),
-                ('title_en', models.CharField(blank=True, default='', help_text='This text will be displayed in the title bar. Defaults to `End`', max_length=128, null=True)),
-                ('title_nl', models.CharField(blank=True, default='', help_text='This text will be displayed in the title bar. Defaults to `End`', max_length=128, null=True)),
-                ('title_es', models.CharField(blank=True, default='', help_text='This text will be displayed in the title bar. Defaults to `End`', max_length=128, null=True)),
-                ('title_pt', models.CharField(blank=True, default='', help_text='This text will be displayed in the title bar. Defaults to `End`', max_length=128, null=True)),
-                ('title_zh_hans', models.CharField(blank=True, default='', help_text='This text will be displayed in the title bar. Defaults to `End`', max_length=128, null=True)),
-                ('title_tr', models.CharField(blank=True, default='', help_text='This text will be displayed in the title bar. Defaults to `End`', max_length=128, null=True)),
-                ('title_de', models.CharField(blank=True, default='', help_text='This text will be displayed in the title bar. Defaults to `End`', max_length=128, null=True)),
-                ('title_ja', models.CharField(blank=True, default='', help_text='This text will be displayed in the title bar. Defaults to `End`', max_length=128, null=True)),
-                ('score_label', models.CharField(blank=True, default='', help_text='This short label will be displayed along with the score. Defaults to `points`', max_length=16)),
-                ('score_label_en', models.CharField(blank=True, default='', help_text='This short label will be displayed along with the score. Defaults to `points`', max_length=16, null=True)),
-                ('score_label_nl', models.CharField(blank=True, default='', help_text='This short label will be displayed along with the score. Defaults to `points`', max_length=16, null=True)),
-                ('score_label_es', models.CharField(blank=True, default='', help_text='This short label will be displayed along with the score. Defaults to `points`', max_length=16, null=True)),
-                ('score_label_pt', models.CharField(blank=True, default='', help_text='This short label will be displayed along with the score. Defaults to `points`', max_length=16, null=True)),
-                ('score_label_zh_hans', models.CharField(blank=True, default='', help_text='This short label will be displayed along with the score. Defaults to `points`', max_length=16, null=True)),
-                ('score_label_tr', models.CharField(blank=True, default='', help_text='This short label will be displayed along with the score. Defaults to `points`', max_length=16, null=True)),
-                ('score_label_de', models.CharField(blank=True, default='', help_text='This short label will be displayed along with the score. Defaults to `points`', max_length=16, null=True)),
-                ('score_label_ja', models.CharField(blank=True, default='', help_text='This short label will be displayed along with the score. Defaults to `points`', max_length=16, null=True)),
-                ('visualization_type', models.CharField(choices=[(None, '----'), ('error_bar', 'Error bar'), ('progress_bar', 'Progress bar')], default=None, help_text='Select a visualization of the relative score.', null=True)),
-                ('button', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='action.button')),
+                (
+                    'identifier',
+                    models.SlugField(max_length=64, primary_key=True, serialize=False),
+                ),
+                (
+                    'title',
+                    models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='This text will be displayed in the title bar. Defaults to `End`',
+                        max_length=128,
+                    ),
+                ),
+                (
+                    'title_en',
+                    models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='This text will be displayed in the title bar. Defaults to `End`',
+                        max_length=128,
+                        null=True,
+                    ),
+                ),
+                (
+                    'title_nl',
+                    models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='This text will be displayed in the title bar. Defaults to `End`',
+                        max_length=128,
+                        null=True,
+                    ),
+                ),
+                (
+                    'title_es',
+                    models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='This text will be displayed in the title bar. Defaults to `End`',
+                        max_length=128,
+                        null=True,
+                    ),
+                ),
+                (
+                    'title_pt',
+                    models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='This text will be displayed in the title bar. Defaults to `End`',
+                        max_length=128,
+                        null=True,
+                    ),
+                ),
+                (
+                    'title_zh_hans',
+                    models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='This text will be displayed in the title bar. Defaults to `End`',
+                        max_length=128,
+                        null=True,
+                    ),
+                ),
+                (
+                    'title_tr',
+                    models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='This text will be displayed in the title bar. Defaults to `End`',
+                        max_length=128,
+                        null=True,
+                    ),
+                ),
+                (
+                    'title_de',
+                    models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='This text will be displayed in the title bar. Defaults to `End`',
+                        max_length=128,
+                        null=True,
+                    ),
+                ),
+                (
+                    'title_ja',
+                    models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='This text will be displayed in the title bar. Defaults to `End`',
+                        max_length=128,
+                        null=True,
+                    ),
+                ),
+                (
+                    'score_label',
+                    models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='This short label will be displayed along with the score. Defaults to `points`',
+                        max_length=16,
+                    ),
+                ),
+                (
+                    'score_label_en',
+                    models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='This short label will be displayed along with the score. Defaults to `points`',
+                        max_length=16,
+                        null=True,
+                    ),
+                ),
+                (
+                    'score_label_nl',
+                    models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='This short label will be displayed along with the score. Defaults to `points`',
+                        max_length=16,
+                        null=True,
+                    ),
+                ),
+                (
+                    'score_label_es',
+                    models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='This short label will be displayed along with the score. Defaults to `points`',
+                        max_length=16,
+                        null=True,
+                    ),
+                ),
+                (
+                    'score_label_pt',
+                    models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='This short label will be displayed along with the score. Defaults to `points`',
+                        max_length=16,
+                        null=True,
+                    ),
+                ),
+                (
+                    'score_label_zh_hans',
+                    models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='This short label will be displayed along with the score. Defaults to `points`',
+                        max_length=16,
+                        null=True,
+                    ),
+                ),
+                (
+                    'score_label_tr',
+                    models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='This short label will be displayed along with the score. Defaults to `points`',
+                        max_length=16,
+                        null=True,
+                    ),
+                ),
+                (
+                    'score_label_de',
+                    models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='This short label will be displayed along with the score. Defaults to `points`',
+                        max_length=16,
+                        null=True,
+                    ),
+                ),
+                (
+                    'score_label_ja',
+                    models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='This short label will be displayed along with the score. Defaults to `points`',
+                        max_length=16,
+                        null=True,
+                    ),
+                ),
+                (
+                    'visualization_type',
+                    models.CharField(
+                        choices=[
+                            (None, '----'),
+                            ('error_bar', 'Error bar'),
+                            ('progress_bar', 'Progress bar'),
+                        ],
+                        default=None,
+                        help_text='Select a visualization of the relative score.',
+                        null=True,
+                    ),
+                ),
+                (
+                    'button',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to='action.button',
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
             name='FinalFeedback',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('feedback_text', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='action.feedbacktext')),
-                ('final', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='feedbacks', to='action.final')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
+                (
+                    'feedback_text',
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to='action.feedbacktext',
+                    ),
+                ),
+                (
+                    'final',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='feedbacks',
+                        to='action.final',
+                    ),
+                ),
             ],
         ),
     ]
