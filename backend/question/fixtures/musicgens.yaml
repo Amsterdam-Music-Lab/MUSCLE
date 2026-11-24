@@ -52,6 +52,7 @@
   pk: P03_1
   fields:
     text: I can tell when people sing out of tune.
+    text_es: Puedo distinguir cuando alguien canta desafinado.
     explainer: Please tell us how much you agree
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -101,6 +102,7 @@
   pk: P04_4
   fields:
     text: Music gives me shivers or goosebumps.
+    text_es: La música me da escalofríos o me pone la piel de gallina.
     explainer: Please tell us how much you agree
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -143,6 +145,7 @@
   pk: P05_5
   fields:
     text: I lose myself in music.
+    text_es: Me pierdo en la música.
     explainer: Please tell us how much you agree
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -184,6 +187,7 @@
   fields:
     text: I can tell when people sing or play out of time with the beat of the
       music.
+    text_es: Puedo decir cuando la gente canta o toca fuera del ritmo de la música.
     explainer: Please tell us how much you agree
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -208,6 +212,7 @@
   pk: P08_1
   fields:
     text: I can sing or play a song from memory.
+    text_es: Puedo cantar o tocar una canción de memoria.
     explainer: Please tell us how much you agree
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -240,6 +245,7 @@
   pk: P09_2
   fields:
     text: I am able to hit the right notes when I sing along with a recording.
+    text_es: Soy capaz de afinar correctamente cuando canto siguiendo una grabación.
     explainer: Please tell us how much you agree
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -380,6 +386,7 @@
   pk: P14_4
   fields:
     text: I have a piece of music stuck on repeat in my head.
+    text_es: Tengo una canción repitiéndose una y otra vez en mi cabeza.
     explainer: Please tell us how much you agree
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -388,6 +395,7 @@
   pk: P15_1
   fields:
     text: Music makes me dance.
+    text_es: La música me hace bailar.
     explainer: Please tell us how much you agree
     type: TextRangeQuestion
     profile_scoring_rule: LIKERT
@@ -487,6 +495,7 @@
   pk: PHENOTYPES_3
   fields:
     text: I have never been complimented for my talents as a musical performer.
+    text_es: Nunca he recibido elogios por mis habilidades como intérprete musical.
     explainer: ''
     type: TextRangeQuestion
     profile_scoring_rule: REVERSE_LIKERT

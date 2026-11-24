@@ -2,9 +2,10 @@ import json
 import logging
 from typing import Union
 
+from django.conf import settings
 from django.http import Http404, HttpRequest, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
-from django.utils.translation import gettext_lazy as _, get_language
+from django.utils.translation import activate, gettext_lazy as _, get_language
 from django.views.decorators.http import require_POST
 from django.views.generic.list import ListView
 from django_markup.markup import formatter
@@ -109,17 +110,22 @@ def get_experiment(
             {"error": "This experiment does not have phases and blocks configured"},
             status=500,
         )
+    if experiment.enforce_language:
+        activate(experiment.enforce_language)
     times_played_key = 'f"{identifier}-xplayed"'
     times_played = request.session.get(times_played_key, 0)
     for phase in phases:
         serialized_phase = serialize_phase(phase, participant, times_played)
         if serialized_phase:
-            return JsonResponse(
+            response = JsonResponse(
                 {
                     **serialize_experiment(experiment),
                     **serialized_phase,
                 }
             )
+            if experiment.enforce_language:
+                response.set_cookie(settings.LANGUAGE_COOKIE_NAME, get_language())
+            return response
     # if no phase was found, start from scratch with the minimum session count
     request.session[times_played_key] = _get_min_session_count(experiment, participant)
     return get_experiment(request, identifier)

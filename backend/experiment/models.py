@@ -2,6 +2,7 @@ from os.path import join
 from typing import Optional
 
 from django.db import models
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _, get_language
 from django.contrib.postgres.fields import ArrayField
 
@@ -79,6 +80,14 @@ class Experiment(models.Model):
     )
     theme_config = models.ForeignKey("theme.ThemeConfig", blank=True, null=True, on_delete=models.SET_NULL)
     active = models.BooleanField(default=True)
+    enforce_language = models.CharField(
+        choices=settings.LANGUAGES,
+        blank=True,
+        null=True,
+        help_text=_(
+            "Show this experiment always in this language. WARNING: Make sure all translation strings exist"
+        ),
+    )
     social_media_config: Optional["SocialMediaConfig"]
     phases: models.QuerySet["Phase"]
 

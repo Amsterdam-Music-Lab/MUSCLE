@@ -73,7 +73,7 @@ class Hooked(BaseRules):
     def get_intro_explainer(self):
         """Explain the game"""
         return Explainer(
-            instruction="How to Play",
+            instruction=_("How to Play"),
             steps=[
                 Step(
                     _(
